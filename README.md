@@ -1,4 +1,5 @@
 # Laravel Docs MCP Server
+[![smithery badge](https://smithery.ai/badge/@brianirish/laravel-docs-mcp)](https://smithery.ai/server/@brianirish/laravel-docs-mcp)
 
 A Model Context Protocol (MCP) server that provides access to Laravel documentation for AI assistants, language models, and other tools.
 
@@ -13,6 +14,14 @@ This project provides a server that enables AI assistants to access and search L
 - Support different Laravel versions (via command line option)
 
 ## Installation
+
+### Installing via Smithery
+
+To install Laravel Documentation Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@brianirish/laravel-docs-mcp):
+
+```bash
+npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
+```
 
 ### Prerequisites
 
