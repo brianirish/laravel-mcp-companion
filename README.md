@@ -1,127 +1,108 @@
 # Laravel Docs MCP Server
 [![smithery badge](https://smithery.ai/badge/@brianirish/laravel-docs-mcp)](https://smithery.ai/server/@brianirish/laravel-docs-mcp)
 
-A Model Context Protocol (MCP) server that provides access to Laravel documentation for AI assistants, language models, and other tools.
+A Model Context Protocol (MCP) server that provides access to Laravel documentation and package recommendations for AI assistants and language models.
 
 ## Overview
 
-This project provides a server that enables AI assistants to access and search Laravel documentation using the Model Context Protocol (MCP). It allows AI tools to:
+This server enables AI assistants to access Laravel documentation and package recommendations using the Model Context Protocol (MCP). It allows AI tools to:
 
-- List all available documentation files
-- Read specific documentation files
-- Search documentation for specific terms
-- Automatically fetch and update documentation from Laravel's GitHub repository
-- Support different Laravel versions (via command line option)
+- Access and search Laravel documentation
+- Receive package recommendations based on specific use cases
+- Get implementation guidance for popular Laravel packages
+- Automatically update documentation from Laravel's GitHub repository
 
 ## Installation
 
-### Installing via Smithery
-
-To install Laravel Documentation Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@brianirish/laravel-docs-mcp):
+### Quick Install via Smithery
 
 ```bash
 npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
 ```
 
-### Prerequisites
+### Manual Installation
 
-- Python 3.12 or higher
+#### Prerequisites
+- Python 3.12+
 - `uv` package manager (recommended)
 
-### Steps
+#### Steps
 
-1. Clone this repository:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/laravel-docs-mcp.git
+   cd laravel-docs-mcp
+   ```
 
-```bash
-git clone https://github.com/yourusername/laravel-docs-mcp.git
-cd laravel-docs-mcp
-```
-
-2. Create a virtual environment and install dependencies with `uv`:
-
-```bash
-# Create a virtual environment
-uv venv
-
-# Activate the virtual environment
-# On Linux/macOS
-source .venv/bin/activate
-# On Windows
-.venv\Scripts\activate
-
-# Install the package and its dependencies
-uv pip install .
-```
-
-3. The server will automatically fetch the latest Laravel 12 documentation from GitHub when first run.
+2. Set up environment and install dependencies:
+   ```bash
+   # Create and activate virtual environment
+   uv venv
+   source .venv/bin/activate  # Linux/macOS
+   # or
+   .venv\Scripts\activate     # Windows
+   
+   # Install dependencies
+   uv pip install .
+   ```
 
 ## Usage
 
 ### Starting the Server
 
-Run the server with:
-
 ```bash
 python laravel_docs_server.py
 ```
 
-The server can be stopped gracefully at any time by pressing Ctrl+C, which will trigger proper cleanup of resources.
+The server automatically fetches Laravel documentation on first run and can be stopped with Ctrl+C.
 
-#### Command Line Options
+### Command Line Options
 
-- `--docs-path PATH` - Path to Laravel documentation directory (default: ./docs)
-- `--server-name NAME` - Name of the MCP server (default: LaravelDocs)
-- `--log-level LEVEL` - Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO)
-- `--transport TYPE` - Transport mechanism: stdio, websocket, sse (default: stdio)
-- `--host HOST` - Host to bind to (for network transports)
-- `--port PORT` - Port to listen on (for network transports)
-- `--version VERSION` - Laravel version branch to use (default: 12.x)
-- `--update-docs` - Update documentation before starting server
-- `--force-update` - Force update of documentation even if already up to date
+| Option | Description |
+|--------|-------------|
+| `--docs-path PATH` | Documentation directory path (default: ./docs) |
+| `--server-name NAME` | Server name (default: LaravelDocs) |
+| `--log-level LEVEL` | Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO) |
+| `--transport TYPE` | Transport method: stdio, websocket, sse (default: stdio) |
+| `--host HOST` | Host to bind to (network transport) |
+| `--port PORT` | Port to listen on (network transport) |
+| `--version VERSION` | Laravel version branch (default: 12.x) |
+| `--update-docs` | Update documentation before starting |
+| `--force-update` | Force documentation update |
 
 Example with custom options:
-
 ```bash
-python laravel_docs_server.py --docs-path /path/to/docs --version 11.x --update-docs --log-level DEBUG --transport websocket --host localhost --port 8000
+python laravel_docs_server.py --docs-path /path/to/docs --version 11.x --update-docs --transport websocket --host localhost --port 8000
 ```
 
 ### Documentation Updater
 
-The server includes a documentation updater that can automatically fetch and update Laravel documentation from GitHub:
+You can update the documentation separately:
 
 ```bash
-# Update documentation separately
+# Update documentation
 python docs_updater.py --target-dir ./docs --version 12.x
 
-# Check if documentation needs updating without performing the update
+# Check if update is needed
 python docs_updater.py --check-only
 
-# Force update even if already up to date
+# Force update
 python docs_updater.py --force
 ```
 
-### Connecting to the Server
+## API Reference
 
-You can use the FastMCP client library to connect to the server:
+### Client Example
 
 ```python
 import asyncio
 from fastmcp import Client
 
 async def main():
-    # Connect to the server
-    client = Client("path/to/laravel_docs_server.py")  # STDIO transport
+    client = Client("path/to/laravel_docs_server.py")
     
     async with client:
-        # List available tools
-        tools = await client.list_tools()
-        print(f"Available tools: {tools}")
-        
-        # Update documentation
-        result = await client.call_tool("update_docs", {"version": "12.x"})
-        print(result)
-        
-        # List documentation files
+        # List documentation
         result = await client.call_tool("list_docs", {})
         print(result)
         
@@ -129,7 +110,12 @@ async def main():
         result = await client.call_tool("search_docs", {"query": "routing"})
         print(result)
         
-        # Read specific documentation
+        # Get package recommendations
+        result = await client.call_tool("get_package_recommendations", 
+                                       {"use_case": "implementing subscription billing"})
+        print(result)
+        
+        # Read documentation
         resource = await client.read_resource("laravel://routing.md")
         print(resource)
 
@@ -139,33 +125,42 @@ if __name__ == "__main__":
 
 ### Available Tools
 
-The server provides the following MCP tools:
+#### Documentation Tools
+- `list_docs()` - List all documentation files
+- `search_docs(query: str)` - Search documentation for specific terms
+- `update_docs(version: Optional[str], force: bool)` - Update documentation
+- `docs_info()` - Get documentation version information
 
-1. `list_docs()` - Lists all available documentation files
-2. `search_docs(query: str)` - Searches documentation for a specific term
-3. `update_docs(version: Optional[str], force: bool)` - Updates documentation from GitHub
-4. `docs_info()` - Shows information about the current documentation version
-5. `echo(message: str)` - Simple echo tool for testing connectivity
+#### Package Recommendation Tools
+- `get_package_recommendations(use_case: str)` - Get package recommendations for a use case
+- `get_package_info(package_name: str)` - Get details about a specific package
+- `get_package_categories(category: str)` - List packages in a specific category
+- `get_features_for_package(package: str)` - Get available features for a package
 
-### Available Resources
+### Resource Access
 
-Documentation files are available as resources with the URI format:
-
+Documentation files can be accessed as resources using:
 ```
 laravel://{path}
 ```
 
-Where `{path}` is the path to the documentation file relative to the docs directory.
+Examples:
+- `laravel://routing.md`
+- `laravel://authentication.md`
 
-Example:
-```
-laravel://routing.md
-laravel://authentication.md
-```
+## Features and Roadmap
 
-## Integration with AI Assistants
+Current Features:
+- ✅ Dynamic documentation updates from Laravel's GitHub repository
+- ✅ Graceful shutdown handling
+- ✅ Version flexibility through command-line options
+- ✅ Package recommendations based on use cases
+- ✅ Implementation guidance for common Laravel packages
+- ✅ Docker deployment support
 
-This MCP server is designed to work with AI assistants that support the Model Context Protocol. When properly configured, these assistants can use the documentation to provide more accurate answers about Laravel.
+Planned Features:
+- Multi-version support (access documentation for multiple Laravel versions simultaneously)
+- User project analysis for tailored recommendations
 
 ## License
 
@@ -173,16 +168,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contributing
 
-Contributions are welcome! Please see CONTRIBUTING.md for details.
-
-## Roadmap
-
-- ✅ **Dynamic Documentation Sourcing** - Automatically fetch and update documentation from Laravel's official GitHub repository
-- ✅ **Graceful Shutdown** - Handle termination signals properly for clean server shutdown
-- ✅ **Version Agnostic** - Support any Laravel version through command line options
-- **Docker Deployment** - Run the server as a containerized application for easier deployment and isolation
-- **Multi-version Support** - Access documentation for multiple Laravel versions (10.x, 11.x, 12.x) through a single server instance
+Contributions are welcome! See CONTRIBUTING.md for guidelines.
 
 ## Acknowledgements
 
 - Laravel for their excellent documentation
+- Laravel package authors for their contributions to the ecosystem
