@@ -1,14 +1,16 @@
-# Laravel 12 Docs MCP Server
+# Laravel Docs MCP Server
 
-A Model Context Protocol (MCP) server that provides access to Laravel 12 documentation for AI assistants, language models, and other tools.
+A Model Context Protocol (MCP) server that provides access to Laravel documentation for AI assistants, language models, and other tools.
 
 ## Overview
 
-This project provides a server that enables AI assistants to access and search Laravel 12 documentation using the Model Context Protocol (MCP). It allows AI tools to:
+This project provides a server that enables AI assistants to access and search Laravel documentation using the Model Context Protocol (MCP). It allows AI tools to:
 
 - List all available documentation files
 - Read specific documentation files
 - Search documentation for specific terms
+- Automatically fetch and update documentation from Laravel's GitHub repository
+- Support different Laravel versions (via command line option)
 
 ## Installation
 
@@ -16,7 +18,6 @@ This project provides a server that enables AI assistants to access and search L
 
 - Python 3.12 or higher
 - `uv` package manager (recommended)
-- Laravel 12 documentation files (markdown format)
 
 ### Steps
 
@@ -43,7 +44,7 @@ source .venv/bin/activate
 uv pip install .
 ```
 
-3. Ensure you have Laravel 12 documentation files in the `docs` directory. If not, you can download them from Laravel's official documentation repository.
+3. The server will automatically fetch the latest Laravel 12 documentation from GitHub when first run.
 
 ## Usage
 
@@ -55,19 +56,39 @@ Run the server with:
 python laravel_docs_server.py
 ```
 
+The server can be stopped gracefully at any time by pressing Ctrl+C, which will trigger proper cleanup of resources.
+
 #### Command Line Options
 
 - `--docs-path PATH` - Path to Laravel documentation directory (default: ./docs)
-- `--server-name NAME` - Name of the MCP server (default: Laravel12Docs)
+- `--server-name NAME` - Name of the MCP server (default: LaravelDocs)
 - `--log-level LEVEL` - Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO)
 - `--transport TYPE` - Transport mechanism: stdio, websocket, sse (default: stdio)
 - `--host HOST` - Host to bind to (for network transports)
 - `--port PORT` - Port to listen on (for network transports)
+- `--version VERSION` - Laravel version branch to use (default: 12.x)
+- `--update-docs` - Update documentation before starting server
+- `--force-update` - Force update of documentation even if already up to date
 
 Example with custom options:
 
 ```bash
-python laravel_docs_server.py --docs-path /path/to/docs --log-level DEBUG --transport websocket --host localhost --port 8000
+python laravel_docs_server.py --docs-path /path/to/docs --version 11.x --update-docs --log-level DEBUG --transport websocket --host localhost --port 8000
+```
+
+### Documentation Updater
+
+The server includes a documentation updater that can automatically fetch and update Laravel documentation from GitHub:
+
+```bash
+# Update documentation separately
+python docs_updater.py --target-dir ./docs --version 12.x
+
+# Check if documentation needs updating without performing the update
+python docs_updater.py --check-only
+
+# Force update even if already up to date
+python docs_updater.py --force
 ```
 
 ### Connecting to the Server
@@ -86,6 +107,10 @@ async def main():
         # List available tools
         tools = await client.list_tools()
         print(f"Available tools: {tools}")
+        
+        # Update documentation
+        result = await client.call_tool("update_docs", {"version": "12.x"})
+        print(result)
         
         # List documentation files
         result = await client.call_tool("list_docs", {})
@@ -109,7 +134,9 @@ The server provides the following MCP tools:
 
 1. `list_docs()` - Lists all available documentation files
 2. `search_docs(query: str)` - Searches documentation for a specific term
-3. `echo(message: str)` - Simple echo tool for testing connectivity
+3. `update_docs(version: Optional[str], force: bool)` - Updates documentation from GitHub
+4. `docs_info()` - Shows information about the current documentation version
+5. `echo(message: str)` - Simple echo tool for testing connectivity
 
 ### Available Resources
 
@@ -141,8 +168,10 @@ Contributions are welcome! Please see CONTRIBUTING.md for details.
 
 ## Roadmap
 
+- ✅ **Dynamic Documentation Sourcing** - Automatically fetch and update documentation from Laravel's official GitHub repository
+- ✅ **Graceful Shutdown** - Handle termination signals properly for clean server shutdown
+- ✅ **Version Agnostic** - Support any Laravel version through command line options
 - **Docker Deployment** - Run the server as a containerized application for easier deployment and isolation
-- **Dynamic Documentation Sourcing** - Automatically fetch and update documentation from Laravel's official GitHub repository
 - **Multi-version Support** - Access documentation for multiple Laravel versions (10.x, 11.x, 12.x) through a single server instance
 
 ## Acknowledgements

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Example client for Laravel 12 Docs MCP Server
+Example client for Laravel Docs MCP Server
 
-This script demonstrates how to connect to the Laravel 12 Docs MCP server
+This script demonstrates how to connect to the Laravel Docs MCP server
 and use its tools and resources.
 """
 
@@ -40,9 +40,27 @@ async def read_document(client, path):
     except Exception as e:
         print(f"Error reading document: {e}")
 
+async def update_documentation(client, version=None, force=False):
+    """Update the documentation from GitHub."""
+    print("\n=== UPDATING DOCUMENTATION ===\n")
+    params = {}
+    if version:
+        params["version"] = version
+    if force:
+        params["force"] = force
+    
+    result = await client.call_tool("update_docs", params)
+    print(result[0].text)
+
+async def show_docs_info(client):
+    """Show information about the documentation."""
+    print("\n=== DOCUMENTATION INFO ===\n")
+    result = await client.call_tool("docs_info", {})
+    print(result[0].text)
+
 async def main():
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description="Laravel 12 Docs MCP Client Example")
+    parser = argparse.ArgumentParser(description="Laravel Docs MCP Client Example")
     parser.add_argument(
         "--server", 
         type=str, 
@@ -59,10 +77,30 @@ async def main():
         type=str, 
         help="Path to documentation file to read (e.g., 'routing.md')"
     )
+    parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Update documentation from GitHub"
+    )
+    parser.add_argument(
+        "--version",
+        type=str,
+        help="Laravel version to use when updating (e.g., '12.x')"
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force update even if already up to date"
+    )
+    parser.add_argument(
+        "--info",
+        action="store_true",
+        help="Show documentation information"
+    )
     args = parser.parse_args()
     
     # Connect to the MCP server
-    print(f"Connecting to Laravel 12 Docs MCP server: {args.server}")
+    print(f"Connecting to Laravel Docs MCP server: {args.server}")
     client = Client(args.server)
     
     async with client:
@@ -77,6 +115,12 @@ async def main():
         print(f"Resource patterns: {[resource.pattern for resource in resources]}")
         
         # Run requested operations
+        if args.update:
+            await update_documentation(client, args.version, args.force)
+        
+        if args.info:
+            await show_docs_info(client)
+        
         await list_documentation(client)
         
         if args.search:
