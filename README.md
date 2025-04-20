@@ -4,7 +4,7 @@ A Model Context Protocol (MCP) server that provides access to Laravel 12 documen
 
 ## Overview
 
-This project provides a server that enables AI assistants like Claude to access and search Laravel 12 documentation using the Model Context Protocol (MCP). It allows AI tools to:
+This project provides a server that enables AI assistants to access and search Laravel 12 documentation using the Model Context Protocol (MCP). It allows AI tools to:
 
 - List all available documentation files
 - Read specific documentation files
@@ -129,7 +129,7 @@ laravel://authentication.md
 
 ## Integration with AI Assistants
 
-This MCP server is designed to work with AI assistants that support the Model Context Protocol, such as Claude. When properly configured, these assistants can use the documentation to provide more accurate answers about Laravel.
+This MCP server is designed to work with AI assistants that support the Model Context Protocol. When properly configured, these assistants can use the documentation to provide more accurate answers about Laravel.
 
 ## License
 
@@ -148,4 +148,3 @@ Contributions are welcome! Please see CONTRIBUTING.md for details.
 ## Acknowledgements
 
 - Laravel for their excellent documentation
-- Anthropic for the Model Context Protocol specification
