@@ -14,7 +14,7 @@ import re
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from fastmcp import FastMCP
 
 # Import documentation updater
@@ -372,10 +372,10 @@ def search_by_use_case(use_case: str) -> List[Dict]:
                     score += 1
         
         # Check package name and description
-        name_desc = (pkg_info.get('name', '') + ' ' + pkg_info.get('description', '')).lower()
+        name_desc = (str(pkg_info.get('name', '')) + ' ' + str(pkg_info.get('description', ''))).lower()
         for word in words:
             if word in name_desc:
-                score += 0.5
+                score += int(0.5)
         
         if score > 0:
             scores[pkg_id] = score
@@ -383,10 +383,10 @@ def search_by_use_case(use_case: str) -> List[Dict]:
     # Sort by score and return package info
     ranked_packages = []
     for pkg_id, score in sorted(scores.items(), key=lambda x: x[1], reverse=True):
-        pkg_info = PACKAGE_CATALOG[pkg_id].copy()
-        pkg_info['id'] = pkg_id
-        pkg_info['score'] = score
-        ranked_packages.append(pkg_info)
+        appendable_pkg_info: Dict[str, Any] = PACKAGE_CATALOG[pkg_id].copy()
+        appendable_pkg_info['id'] = pkg_id
+        appendable_pkg_info['score'] = score
+        ranked_packages.append(appendable_pkg_info)
     
     return ranked_packages
 
