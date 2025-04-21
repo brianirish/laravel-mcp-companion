@@ -161,6 +161,81 @@ FEATURE_MAP = {
     "inertiajs/inertia-laravel": ["vue-setup", "react-setup", "spa-navigation"]
 }
 
+# Tool descriptions for MCP tools
+TOOL_DESCRIPTIONS = {
+    "list_docs": """A comprehensive documentation indexing tool that provides access to all available Laravel documentation files. Use this tool to get a complete overview of the available documentation landscape before diving into specific topics.
+
+When to use this tool:
+- Getting started with Laravel documentation exploration
+- Creating a mental map of available resources
+- Planning which documentation sections to explore
+- Finding specific documentation file names
+- Understanding the organization of Laravel documentation""",
+
+    "search_docs": """A powerful search engine for finding specific information across the entire Laravel documentation. This tool allows precise querying to locate exact features, functions, or concepts within the documentation.
+
+When to use this tool:
+- Finding specific Laravel functionality or features
+- Researching how particular components work
+- Locating examples for implementation techniques
+- Exploring detailed API references
+- Discovering configuration options for Laravel features""",
+
+    "update_docs": """A documentation synchronization tool that ensures you have access to the latest Laravel documentation. This tool can target specific versions and force updates when necessary.
+
+When to use this tool:
+- Working with newer Laravel releases
+- Ensuring documentation reflects the latest features
+- Switching between different Laravel version documentation
+- Resolving documentation inconsistencies
+- Preparing for Laravel version migrations""",
+
+    "docs_info": """A metadata retrieval tool that provides information about the current documentation version and status. This tool helps understand the context and relevance of the documentation you're exploring.
+
+When to use this tool:
+- Verifying documentation version matches your project
+- Checking when documentation was last updated
+- Understanding which Laravel features are documented
+- Assessing documentation completeness
+- Planning for potential documentation updates""",
+
+    "get_package_recommendations": """An intelligent recommendation engine that suggests Laravel packages based on implementation needs. This tool analyzes your use case to provide contextually relevant package options.
+
+When to use this tool:
+- Starting a new Laravel implementation
+- Exploring solutions for specific functionality needs
+- Comparing alternative approaches to a problem
+- Discovering community-recommended packages
+- Finding specialized tools for particular use cases""",
+
+    "get_package_info": """A detailed package analysis tool that provides comprehensive information about specific Laravel packages. This tool helps evaluate packages for your implementation needs.
+
+When to use this tool:
+- Researching package capabilities and limitations
+- Checking package compatibility with your Laravel version
+- Understanding package dependencies and requirements
+- Evaluating package maintenance status and community support
+- Reviewing package documentation and usage instructions""",
+
+    "get_package_categories": """A categorical exploration tool that organizes Laravel packages by functionality domain. This tool helps discover related packages within specific application areas.
+
+When to use this tool:
+- Exploring available options within a functional domain
+- Comparing packages that solve similar problems
+- Discovering specialized packages for particular needs
+- Understanding how Laravel ecosystem addresses specific requirements
+- Finding alternatives to currently used packages""",
+
+    "get_features_for_package": """A feature inspection tool that provides detailed information about capabilities available within a specific package. This tool helps understand what a package can do before implementation.
+
+When to use this tool:
+- Understanding a package's complete feature set
+- Verifying a package meets all your requirements
+- Planning implementation based on available features
+- Comparing feature sets between similar packages
+- Discovering advanced capabilities you might leverage"""
+}
+
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -388,7 +463,7 @@ def main():
     mcp = FastMCP(args.server_name)
     
     # Register documentation tools
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["list_docs"])
     def list_docs() -> str:
         """List all available Laravel documentation files."""
         logger.debug("list_docs function called")
@@ -460,7 +535,7 @@ def main():
             logger.error(f"Error reading file {file_path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["search_docs"])
     def search_docs(query: str) -> str:
         """Search through all Laravel documentation for a specific term."""
         logger.debug(f"search_docs function called with query: {query}")
@@ -491,7 +566,7 @@ def main():
             logger.error(f"Error searching documentation: {str(e)}")
             return f"Error searching documentation: {str(e)}"
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["update_docs"])
     def update_docs(version: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
@@ -529,7 +604,7 @@ def main():
             logger.error(f"Error updating documentation: {str(e)}")
             return f"Error updating documentation: {str(e)}"
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["docs_info"])
     def docs_info() -> str:
         """Get information about the documentation version and status."""
         logger.debug("docs_info function called")
@@ -550,7 +625,7 @@ def main():
         )
     
     # Register package recommendation tools
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_recommendations"])
     def get_package_recommendations(use_case: str) -> str:
         """
         Get Laravel package recommendations based on a use case.
@@ -593,7 +668,7 @@ def main():
         
         return "\n".join(results)
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_info"])
     def get_package_info(package_name: str) -> str:
         """
         Get detailed information about a specific Laravel package.
@@ -616,7 +691,7 @@ def main():
         # Format the package information as markdown
         return format_package_recommendation(package)
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_categories"])
     def get_package_categories(category: str) -> str:
         """
         Get Laravel packages in a specific category.
@@ -661,7 +736,7 @@ def main():
         
         return "\n".join(results)
     
-    @mcp.tool()
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_features_for_package"])
     def get_features_for_package(package: str) -> str:
         """
         Get available features/implementations for a Laravel package.
