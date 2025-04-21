@@ -599,7 +599,7 @@ def main():
                     f"Message: {metadata.get('commit_message', 'unknown')}"
                 )
             else:
-                return f"Documentation update not performed or not needed"
+                return "Documentation update not performed or not needed"
         except Exception as e:
             logger.error(f"Error updating documentation: {str(e)}")
             return f"Error updating documentation: {str(e)}"
