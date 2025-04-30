@@ -20,14 +20,16 @@ jobs:
         pip install -e .
     - name: Check for documentation updates
       id: check-updates
+      continue-on-error: true
       run: |
         set +e
-        python docs_updater.py --check-only --version 12.x
+        python docs_updater.py --version 12.x
         UPDATE_NEEDED=$?
-        if [ $UPDATE_NEEDED -eq 1 ]; then 
+        if [ "$UPDATE_NEEDED" -eq 1 ]; then 
           echo "updates_available=true" >> $GITHUB_OUTPUT
+        else
+          echo "updates_available=false" >> $GITHUB_OUTPUT
         fi
-        exit 0  # Always exit with success
     - name: Close existing pull requests
       if: steps.check-updates.outputs.updates_available == 'true'
       uses: actions/github-script@v6
