@@ -21,8 +21,37 @@ jobs:
     - name: Check for documentation updates
       id: check-updates
       run: |
+        set +e
         python docs_updater.py --check-only --version 12.x
-        if [ $? -eq 1 ]; then echo "updates_available=true" >> $GITHUB_OUTPUT; fi
+        UPDATE_NEEDED=$?
+        if [ $UPDATE_NEEDED -eq 1 ]; then 
+          echo "updates_available=true" >> $GITHUB_OUTPUT
+        fi
+        exit 0  # Always exit with success
+    - name: Close existing pull requests
+      if: steps.check-updates.outputs.updates_available == 'true'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const pulls = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            head: 'update-laravel-docs'
+          });
+          
+          for (const pull of pulls.data) {
+            if (pull.title === 'Update Laravel documentation') {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pull.number,
+                state: 'closed'
+              });
+              console.log(`Closed existing PR #${pull.number}`);
+            }
+          }
     - name: Create Pull Request
       if: steps.check-updates.outputs.updates_available == 'true'
       uses: peter-evans/create-pull-request@v5

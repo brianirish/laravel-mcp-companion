@@ -122,7 +122,7 @@ class DocsUpdater:
         
         try:
             # Create a temporary directory
-            with tempfile.TemporaryDirectory() as temp_dir:
+            with tempfile.TemporaryDirectory(delete=False) as temp_dir:
                 temp_path = Path(temp_dir)
                 zip_path = temp_path / "laravel_docs.zip"
                 
@@ -142,7 +142,7 @@ class DocsUpdater:
                     zip_ref.extractall(temp_path)
                 
                 # Find the extracted directory (should be named like "docs-12.x")
-                extracted_dirs = [d for d in temp_path.iterdir() if d.is_dir() and d.name.startswith("docs-")]
+                extracted_dirs = [d for d in temp_path.iterdir() if d.is_dir() and (d.name.startswith(f"{self.repo.split('/')[-1]}-"))]
                 
                 if not extracted_dirs:
                     raise FileNotFoundError("Could not find extracted documentation directory")
@@ -222,6 +222,9 @@ class DocsUpdater:
                 "sync_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             }
             self.write_local_metadata(metadata)
+
+            shutil.rmtree(source_dir.parent)  # Remove the temporary directory
+            logger.debug(f"Removed temporary directory: {source_dir.parent}")
             
             logger.info(f"Documentation updated successfully to {self.version} ({latest_commit['sha'][:7]})")
             return True
