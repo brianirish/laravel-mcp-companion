@@ -525,6 +525,20 @@ public function middleware(): array
 
 Releasing a rate limited job back onto the queue will still increment the job's total number of `attempts`. You may wish to tune your `tries` and `maxExceptions` properties on your job class accordingly. Or, you may wish to use the [retryUntil method](#time-based-attempts) to define the amount of time until the job should no longer be attempted.
 
+Using the `releaseAfter` method, you may also specify the number of seconds that must elapse before the released job will be attempted again:
+
+```php
+/**
+ * Get the middleware the job should pass through.
+ *
+ * @return array<int, object>
+ */
+public function middleware(): array
+{
+    return [(new RateLimited('backups'))->releaseAfter(60)];
+}
+```
+
 If you do not want a job to be retried when it is rate limited, you may use the `dontRelease` method:
 
 ```php
@@ -705,7 +719,7 @@ public function middleware(): array
 }
 ```
 
-By default, this middleware will throttle every exception. You can modify this behaviour by invoking the `when` method when attaching the middleware to your job. The exception will then only be throttled if closure provided to the `when` method returns `true`:
+By default, this middleware will throttle every exception. You can modify this behavior by invoking the `when` method when attaching the middleware to your job. The exception will then only be throttled if the closure provided to the `when` method returns `true`:
 
 ```php
 use Illuminate\Http\Client\HttpClientException;
@@ -721,6 +735,23 @@ public function middleware(): array
     return [(new ThrottlesExceptions(10, 10 * 60))->when(
         fn (Throwable $throwable) => $throwable instanceof HttpClientException
     )];
+}
+```
+
+Unlike the `when` method, which releases the job back onto the queue or throws an exception, the `deleteWhen` method allows you to delete the job entirely when a given exception occurs:
+
+```php
+use App\Exceptions\CustomerDeletedException;
+use Illuminate\Queue\Middleware\ThrottlesExceptions;
+
+/**
+ * Get the middleware the job should pass through.
+ *
+ * @return array<int, object>
+ */
+public function middleware(): array
+{
+    return [(new ThrottlesExceptions(2, 10 * 60))->deleteWhen(CustomerDeletedException::class)];
 }
 ```
 
@@ -1239,8 +1270,10 @@ public function retryUntil(): DateTime
 }
 ```
 
+If both `retryUntil` and `tries` are defined, Laravel gives precedence to the `retryUntil` method.
+
 > [!NOTE]
-> You may also define a `tries` property or `retryUntil` method on your [queued event listeners](/docs/{{version}}/events#queued-event-listeners).
+> You may also define a `tries` property or `retryUntil` method on your [queued event listeners](/docs/{{version}}/events#queued-event-listeners) and [queued notifications](/docs/{{version}}/notifications#queueing-notifications).
 
 <a name="max-exceptions"></a>
 #### Max Exceptions
@@ -1803,6 +1836,14 @@ $podcast = App\Podcast::find(1);
 dispatch(function () use ($podcast) {
     $podcast->publish();
 });
+```
+
+To assign a name to the queued closure which may be used by queue reporting dashboards, as well as be displayed by the `queue:work` command, you may use the `name` method:
+
+```php
+dispatch(function () {
+    // ...
+})->name('Publish Podcast');
 ```
 
 Using the `catch` method, you may provide a closure that should be executed if the queued closure fails to complete successfully after exhausting all of your queue's [configured retry attempts](#max-job-attempts-and-timeout):

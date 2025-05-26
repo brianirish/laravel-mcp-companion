@@ -251,7 +251,7 @@ $response = Http::timeout(3)->get(/* ... */);
 
 If the given timeout is exceeded, an instance of `Illuminate\Http\Client\ConnectionException` will  be thrown.
 
-You may specify the maximum number of seconds to wait while trying to connect to a server using the `connectTimeout` method:
+You may specify the maximum number of seconds to wait while trying to connect to a server using the `connectTimeout` method. The default is 10 seconds:
 
 ```php
 $response = Http::connectTimeout(3)->get(/* ... */);
@@ -398,6 +398,8 @@ return Http::post(/* ... */)->throw(function (Response $response, RequestExcepti
 By default, `RequestException` messages are truncated to 120 characters when logged or reported. To customize or disable this behavior, you may utilize the `truncateRequestExceptionsAt` and `dontTruncateRequestExceptions` methods when configuring your application's exception handling behavior in your `bootstrap/app.php` file:
 
 ```php
+use Illuminate\Foundation\Configuration\Exceptions;
+
 ->withExceptions(function (Exceptions $exceptions) {
     // Truncate request exception messages to 240 characters...
     $exceptions->truncateRequestExceptionsAt(240);
@@ -828,7 +830,7 @@ use Illuminate\Http\Client\Events\RequestSending;
 class LogRequest
 {
     /**
-     * Handle the given event.
+     * Handle the event.
      */
     public function handle(RequestSending $event): void
     {

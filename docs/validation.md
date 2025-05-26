@@ -1117,6 +1117,8 @@ Below is a list of all available validation rules and their function:
 [Present With All](#rule-present-with-all)
 [Prohibited](#rule-prohibited)
 [Prohibited If](#rule-prohibited-if)
+[Prohibited If Accepted](#rule-prohibited-if-accepted)
+[Prohibited If Declined](#rule-prohibited-if-declined)
 [Prohibited Unless](#rule-prohibited-unless)
 [Prohibits](#rule-prohibits)
 [Required](#rule-required)
@@ -1506,8 +1508,8 @@ The example above will apply the `RFCValidation` and `DNSCheckValidation` valida
 
 <div class="content-list" markdown="1">
 
-- `rfc`: `RFCValidation` - Validate the email address according to RFC 5322.
-- `strict`: `NoRFCWarningsValidation` - Validate the email according to RFC 5322, rejecting trailing periods or multiple consecutive periods.
+- `rfc`: `RFCValidation` - Validate the email address according to [supported RFCs](https://github.com/egulias/EmailValidator?tab=readme-ov-file#supported-rfcs).
+- `strict`: `NoRFCWarningsValidation` - Validate the email according to [supported RFCs](https://github.com/egulias/EmailValidator?tab=readme-ov-file#supported-rfcs), failing when warnings are found (e.g. trailing periods and multiple consecutive periods).
 - `dns`: `DNSCheckValidation` - Ensure the email address's domain has a valid MX record.
 - `spoof`: `SpoofCheckValidation` - Ensure the email address does not contain homograph or deceptive Unicode characters.
 - `filter`: `FilterEmailValidation` - Ensure the email address is valid according to PHP's `filter_var` function.
@@ -1674,6 +1676,14 @@ You may explicitly specify the database column name that should be used by the `
 ```php
 'state' => Rule::exists('states', 'abbreviation'),
 ```
+
+Sometimes, you may wish to validate whether an array of values exists in the database. You can do so by adding both the `exists` and [array](#rule-array) rules to the field being validated:
+
+```php
+'states' => ['array', Rule::exists('states', 'abbreviation')],
+```
+
+When both of these rules are assigned to a field, Laravel will automatically build a single query to determine if all of the given values exist in the specified table.
 
 <a name="rule-extensions"></a>
 #### extensions:_foo_,_bar_,...
@@ -1996,6 +2006,15 @@ Validator::make($request->all(), [
     'role_id' => Rule::prohibitedIf(fn () => $request->user()->is_admin),
 ]);
 ```
+<a name="rule-prohibited-if-accepted"></a>
+#### prohibited_if_accepted:_anotherfield_,...
+
+The field under validation must be missing or empty if the _anotherfield_ field is equal to `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`.
+
+<a name="rule-prohibited-if-declined"></a>
+#### prohibited_if_declined:_anotherfield_,...
+
+The field under validation must be missing or empty if the _anotherfield_ field is equal to `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
 
 <a name="rule-prohibited-unless"></a>
 #### prohibited_unless:_anotherfield_,_value_,...
@@ -2232,7 +2251,7 @@ You may specify additional query conditions by customizing the query using the `
 'email' => Rule::unique('users')->where(fn (Builder $query) => $query->where('account_id', 1))
 ```
 
-**Ignoring Soft Deleteded Records in Unique Checks:**
+**Ignoring Soft Deleted Records in Unique Checks:**
 
 By default, the unique rule includes soft deleted records when determining uniqueness. To exclude soft deleted records from the uniqueness check, you may invoke the `withoutTrashed` method:
 
