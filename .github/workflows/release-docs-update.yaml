@@ -1,0 +1,99 @@
+name: Release After Docs Update
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+    paths:
+      - 'docs/**'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    # Only run if PR was merged (not just closed) and was a docs update
+    if: github.event.pull_request.merged == true && github.event.pull_request.title == 'Update Laravel documentation'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Needed for git describe to work
+        
+    - name: Get current version
+      id: current-version
+      run: |
+        # Get the latest tag, default to v0.0.0 if no tags exist
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+        
+        # Extract version numbers
+        VERSION=${LATEST_TAG#v}
+        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+        
+        # Increment patch version for docs updates
+        NEW_PATCH=$((PATCH + 1))
+        NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+        
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "Current version: $LATEST_TAG"
+        echo "New version: $NEW_VERSION"
+        
+    - name: Generate release notes
+      id: release-notes
+      run: |
+        # Extract changed docs files from the merged PR
+        CHANGED_FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '^docs/' | sed 's|^docs/||' | sed 's|\.md$||' | sort)
+        
+        # Create release notes
+        cat > release_notes.md << EOF
+        ## Laravel Documentation Update
+        
+        This release updates the Laravel documentation to the latest version.
+        
+        ### Updated Documentation Sections
+        $(echo "$CHANGED_FILES" | sed 's/^/- /')
+        
+        ### Changes
+        - Updated Laravel documentation to latest version
+        - Synchronized with upstream Laravel docs repository
+        
+        ---
+        *This release was automatically generated after documentation updates.*
+        EOF
+        
+        echo "Generated release notes:"
+        cat release_notes.md
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.current-version.outputs.new_version }}
+        release_name: ${{ steps.current-version.outputs.new_version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        
+    - name: Build and push Docker image
+      run: |
+        echo "Building Docker image for ${{ steps.current-version.outputs.new_version }}"
+        
+        # Login to GitHub Container Registry
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
+        # Build and tag image
+        docker build -t ghcr.io/${{ github.repository }}:${{ steps.current-version.outputs.new_version }} .
+        docker build -t ghcr.io/${{ github.repository }}:latest .
+        
+        # Push both tags
+        docker push ghcr.io/${{ github.repository }}:${{ steps.current-version.outputs.new_version }}
+        docker push ghcr.io/${{ github.repository }}:latest
+        
+        echo "✅ Published Docker images:"
+        echo "  - ghcr.io/${{ github.repository }}:${{ steps.current-version.outputs.new_version }}"
+        echo "  - ghcr.io/${{ github.repository }}:latest"

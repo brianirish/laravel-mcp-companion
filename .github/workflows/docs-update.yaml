@@ -73,6 +73,7 @@ jobs:
         git commit -m "Update Laravel documentation to latest version" || exit 0
     - name: Create Pull Request
       if: steps.check-updates.outputs.updates_available == 'true'
+      id: create-pr
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -80,3 +81,14 @@ jobs:
         title: 'Update Laravel documentation'
         body: 'Automated PR to update Laravel documentation to the latest version.'
         branch: update-laravel-docs
+    - name: Enable auto-merge and wait for checks
+      if: steps.check-updates.outputs.updates_available == 'true' && steps.create-pr.outputs.pull-request-number
+      run: |
+        # Enable auto-merge
+        gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
+        
+        # Wait for all checks to complete
+        echo "Waiting for all checks to complete..."
+        gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --watch
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

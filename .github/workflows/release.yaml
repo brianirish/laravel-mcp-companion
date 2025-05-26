@@ -6,6 +6,7 @@ permissions:
 on:
   release:
     types: [created]
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   deploy:

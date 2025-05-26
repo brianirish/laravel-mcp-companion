@@ -58,3 +58,26 @@ This is a Model Context Protocol (MCP) server that provides Laravel documentatio
 ### Metadata System
 - Stores sync information in `.metadata/sync_info.json`
 - Tracks commit SHA, sync time, and version information for documentation updates
+
+## GitHub Actions Workflows
+
+### Automated Documentation Updates
+- **`docs-update.yaml`**: Weekly automated documentation updates with auto-merge
+  - Runs every Monday at midnight UTC
+  - Creates PR for documentation updates
+  - Auto-merges after all checks pass (requires branch protection rules)
+  - Triggers automated release workflow
+
+### Automated Releases
+- **`release-docs-update.yaml`**: Automatic patch releases for documentation updates
+  - Triggers when docs update PR is merged
+  - Uses semantic versioning (patches for docs, manual for code changes)
+  - Builds and publishes Docker images to GitHub Container Registry
+  - Generates release notes with updated documentation sections
+
+### Branch Protection Requirements
+For auto-merge to work properly, configure these branch protection rules on `main`:
+- ✅ Require status checks to pass before merging
+- ✅ Require branches to be up to date before merging
+- ✅ Include administrators (recommended)
+- ✅ Allow auto-merge
