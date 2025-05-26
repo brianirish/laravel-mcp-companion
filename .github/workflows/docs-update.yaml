@@ -14,15 +14,21 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -e .
+        uv venv
+        source .venv/bin/activate
+        uv pip install -e .
     - name: Check for documentation updates
       id: check-updates
       continue-on-error: true
       run: |
         set +e
+        source .venv/bin/activate
         python docs_updater.py --version 12.x
         UPDATE_NEEDED=$?
         if [ "$UPDATE_NEEDED" -eq 1 ]; then 
@@ -54,6 +60,14 @@ jobs:
               console.log(`Closed existing PR #${pull.number}`);
             }
           }
+    - name: Commit updated documentation
+      if: steps.check-updates.outputs.updates_available == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/
+        git add docs/.metadata/
+        git commit -m "Update Laravel documentation to latest version" || exit 0
     - name: Create Pull Request
       if: steps.check-updates.outputs.updates_available == 'true'
       uses: peter-evans/create-pull-request@v5

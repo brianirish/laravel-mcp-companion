@@ -289,7 +289,7 @@ def main():
             return 0 if not needs_update else 1
         else:
             updated = updater.update(force=args.force)
-            return 0 if updated else 0
+            return 1 if updated else 0
     except KeyboardInterrupt:
         logger.info("Operation cancelled by user")
         return 130
