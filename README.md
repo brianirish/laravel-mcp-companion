@@ -1,5 +1,14 @@
 # Laravel Docs MCP Server
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/brianirish/laravel-docs-mcp)](https://github.com/brianirish/laravel-docs-mcp/releases)
+[![PyPI](https://img.shields.io/pypi/v/laravel-docs-mcp)](https://pypi.org/project/laravel-docs-mcp/)
+[![Python Version](https://img.shields.io/pypi/pyversions/laravel-docs-mcp)](https://pypi.org/project/laravel-docs-mcp/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/brianirish/laravel-docs-mcp/ci.yaml?branch=main&label=tests)](https://github.com/brianirish/laravel-docs-mcp/actions/workflows/ci.yaml)
+[![License](https://img.shields.io/github/license/brianirish/laravel-docs-mcp)](https://github.com/brianirish/laravel-docs-mcp/blob/main/LICENSE)
+[![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/brianirish/laravel-docs-mcp/pkgs/container/laravel-docs-mcp)
 [![smithery badge](https://smithery.ai/badge/@brianirish/laravel-docs-mcp)](https://smithery.ai/server/@brianirish/laravel-docs-mcp)
+[![GitHub Stars](https://img.shields.io/github/stars/brianirish/laravel-docs-mcp?style=social)](https://github.com/brianirish/laravel-docs-mcp)
+[![GitHub Forks](https://img.shields.io/github/forks/brianirish/laravel-docs-mcp?style=social)](https://github.com/brianirish/laravel-docs-mcp)
 
 > ⚠️ **Alpha Software** - This project is in early development. Features may not work as expected and breaking changes may occur without notice.
 

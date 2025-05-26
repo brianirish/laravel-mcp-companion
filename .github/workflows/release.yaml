@@ -78,6 +78,18 @@ jobs:
       packages: write
     steps:
     - uses: actions/checkout@v4
+    - name: Extract tag name
+      id: extract_tag
+      run: |
+        if [[ "${{ github.event_name }}" == "release" ]]; then
+          echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+        elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        else
+          # For manual triggers or other cases, use latest git tag or default
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+        fi
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
@@ -85,4 +97,4 @@ jobs:
         push: true
         tags: |
           ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
+          ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
