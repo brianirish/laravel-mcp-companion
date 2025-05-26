@@ -1,6 +1,6 @@
 [project]
 name = "laravel-docs-mcp"
-version = "0.1.0"
+version = "0.1.2"
 description = "Model Context Protocol (MCP) server for accessing and searching Laravel 12 documentation. Enables AI assistants and tools to query Laravel docs through a standardized interface."
 readme = "README.md"
 requires-python = ">=3.12"

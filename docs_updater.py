@@ -30,7 +30,7 @@ logger = logging.getLogger("laravel-docs-updater")
 GITHUB_API_URL = "https://api.github.com"
 LARAVEL_DOCS_REPO = "laravel/docs"
 DEFAULT_VERSION = "12.x"
-USER_AGENT = "Laravel-Docs-MCP/0.1.0"
+USER_AGENT = "Laravel-Docs-MCP/0.1.2"
 
 class DocsUpdater:
     """Handles downloading and updating Laravel documentation from GitHub."""
