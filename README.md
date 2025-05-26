@@ -31,7 +31,23 @@ This server enables AI assistants to access Laravel documentation and package re
 npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
 ```
 
-### Manual Installation
+### Install from PyPI
+
+```bash
+pip install laravel-docs-mcp
+```
+
+### Docker
+
+```bash
+# Pull and run the latest version
+docker run -p 8000:8000 ghcr.io/brianirish/laravel-docs-mcp:latest
+
+# Or run a specific version
+docker run -p 8000:8000 ghcr.io/brianirish/laravel-docs-mcp:v0.1.4
+```
+
+### Manual Installation from Source
 
 #### Prerequisites
 - Python 3.12+
@@ -41,7 +57,7 @@ npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/laravel-docs-mcp.git
+   git clone https://github.com/brianirish/laravel-docs-mcp.git
    cd laravel-docs-mcp
    ```
 
@@ -159,19 +175,43 @@ Examples:
 - `laravel://routing.md`
 - `laravel://authentication.md`
 
+## Automated Workflows
+
+This project includes several automated GitHub Actions workflows:
+
+### Daily Documentation Updates
+- **Trigger**: Every day at midnight UTC (can also be triggered manually)
+- **Process**: Checks for Laravel documentation updates → Creates PR → Auto-merges → Creates patch version tag
+- **Result**: Automatic patch releases when Laravel docs are updated
+
+### Release Publishing
+- **Trigger**: When version tags are pushed (e.g., `v0.1.4`)
+- **Process**: Builds packages → Publishes to PyPI → Builds and pushes Docker images to GHCR
+- **Result**: Synchronized releases across PyPI and Docker Hub
+
+### Dynamic Versioning
+- **Version Source**: Automatically derived from git tags using `hatch-vcs`
+- **Development Builds**: Get unique identifiers (e.g., `0.1.3.dev1+g75aec71`)
+- **Release Builds**: Clean version numbers matching tags (e.g., `0.1.4`)
+
 ## Features and Roadmap
 
 Current Features:
-- ✅ Dynamic documentation updates from Laravel's GitHub repository
-- ✅ Graceful shutdown handling
-- ✅ Version flexibility through command-line options
-- ✅ Package recommendations based on use cases
-- ✅ Implementation guidance for common Laravel packages
-- ✅ Docker deployment support
+- ✅ **Daily Documentation Updates**: Automatically syncs with Laravel's GitHub repository every day
+- ✅ **Dynamic Versioning**: Automatic version management based on git tags
+- ✅ **Automated Releases**: Patch releases triggered by documentation updates
+- ✅ **Multiple Deployment Options**: PyPI package, Docker images, and Smithery marketplace
+- ✅ **Package Recommendations**: Intelligent suggestions based on specific use cases
+- ✅ **Implementation Guidance**: Detailed information for common Laravel packages
+- ✅ **Flexible Configuration**: Support for multiple Laravel versions and transport methods
+- ✅ **Graceful Shutdown**: Proper cleanup and signal handling
 
 Planned Features:
-- Multi-version support (access documentation for multiple Laravel versions simultaneously)
-- User project analysis for tailored recommendations
+- 🔄 Multi-version support (access documentation for multiple Laravel versions simultaneously)
+- 🔍 User project analysis for tailored recommendations
+- 🚀 Enhanced search capabilities with semantic matching
+- 📊 Usage analytics and insights
+- 🔗 Additional Laravel ecosystem integrations
 
 ## License
 
