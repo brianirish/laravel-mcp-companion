@@ -1,6 +1,6 @@
 [project]
 name = "laravel-docs-mcp"
-version = "0.1.2"
+dynamic = ["version"]
 description = "Model Context Protocol (MCP) server for accessing and searching Laravel 12 documentation. Enables AI assistants and tools to query Laravel docs through a standardized interface."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -27,8 +27,11 @@ dependencies = [
 "Bug Tracker" = "https://github.com/brianirish/laravel-docs-mcp/issues"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.hatch.build.targets.wheel]
 packages = ["."]
