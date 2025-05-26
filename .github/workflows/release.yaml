@@ -49,25 +49,25 @@ jobs:
     - name: Publish distribution packages to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
 
-  publish-to-testpypi:
-    name: Publish to TestPyPI
-    needs: [build]
-    runs-on: ubuntu-latest
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/laravel-docs-mcp
-    permissions:
-      id-token: write
-    steps:
-    - name: Download all the dists
-      uses: actions/download-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
-    - name: Publish distribution packages to TestPyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://test.pypi.org/legacy/
+  # publish-to-testpypi:
+  #   name: Publish to TestPyPI
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: testpypi
+  #     url: https://test.pypi.org/p/laravel-docs-mcp
+  #   permissions:
+  #     id-token: write
+  #   steps:
+  #   - name: Download all the dists
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: python-package-distributions
+  #       path: dist/
+  #   - name: Publish distribution packages to TestPyPI
+  #     uses: pypa/gh-action-pypi-publish@release/v1
+  #     with:
+  #       repository-url: https://test.pypi.org/legacy/
 
   build-docker:
     name: Build and push Docker image
