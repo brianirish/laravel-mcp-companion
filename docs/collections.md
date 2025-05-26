@@ -417,7 +417,7 @@ $chunks->all();
 <a name="method-collapse"></a>
 #### `collapse()` {.collection-method}
 
-The `collapse` method collapses a collection of arrays into a single, flat collection:
+The `collapse` method collapses a collection of arrays or collections into a single, flat collection:
 
 ```php
 $collection = collect([
@@ -589,6 +589,10 @@ collect(['1'])->containsOneItem();
 collect(['1', '2'])->containsOneItem();
 
 // false
+
+collect([1, 2, 3])->containsOneItem(fn (int $item) => $item === 2);
+
+// true
 ```
 
 <a name="method-containsstrict"></a>
@@ -693,12 +697,10 @@ $collection = collect(['John Doe', 'Jane Doe']);
 $collection->dd();
 
 /*
-    Collection {
-        #items: array:2 [
-            0 => "John Doe"
-            1 => "Jane Doe"
-        ]
-    }
+    array:2 [
+        0 => "John Doe"
+        1 => "Jane Doe"
+    ]
 */
 ```
 
@@ -867,12 +869,10 @@ $collection = collect(['John Doe', 'Jane Doe']);
 $collection->dump();
 
 /*
-    Collection {
-        #items: array:2 [
-            0 => "John Doe"
-            1 => "Jane Doe"
-        ]
-    }
+    array:2 [
+        0 => "John Doe"
+        1 => "Jane Doe"
+    ]
 */
 ```
 
@@ -1488,7 +1488,7 @@ The `intersectUsing` method removes any values from the original collection that
 ```php
 $collection = collect(['Desk', 'Sofa', 'Chair']);
 
-$intersect = $collection->intersectUsing(['desk', 'chair', 'bookcase'], function ($a, $b) {
+$intersect = $collection->intersectUsing(['desk', 'chair', 'bookcase'], function (string $a, string $b) {
     return strcasecmp($a, $b);
 });
 
@@ -1536,7 +1536,7 @@ $intersect = $collection->intersectAssocUsing([
     'color' => 'blue',
     'size' => 'M',
     'material' => 'polyester',
-], function ($a, $b) {
+], function (string $a, string $b) {
     return strcasecmp($a, $b);
 });
 
@@ -2095,6 +2095,9 @@ $equalOrAboveThree->all();
 // [3, 4, 5, 6]
 ```
 
+> [!NOTE]
+> This method's behavior is modified when interacting with [Eloquent collections](/docs/{{version}}/eloquent-collections#method-partition).
+
 <a name="method-percentage"></a>
 #### `percentage()` {.collection-method}
 
@@ -2103,7 +2106,7 @@ The `percentage` method may be used to quickly determine the percentage of items
 ```php
 $collection = collect([1, 1, 2, 2, 2, 3]);
 
-$percentage = $collection->percentage(fn ($value) => $value === 1);
+$percentage = $collection->percentage(fn (int $value) => $value === 1);
 
 // 33.33
 ```
@@ -2111,7 +2114,7 @@ $percentage = $collection->percentage(fn ($value) => $value === 1);
 By default, the percentage will be rounded to two decimal places. However, you may customize this behavior by providing a second argument to the method:
 
 ```php
-$percentage = $collection->percentage(fn ($value) => $value === 1, precision: 3);
+$percentage = $collection->percentage(fn (int $value) => $value === 1, precision: 3);
 
 // 33.333
 ```
@@ -2251,7 +2254,7 @@ $plucked->all();
 <a name="method-pop"></a>
 #### `pop()` {.collection-method}
 
-The `pop` method removes and returns the last item from the collection:
+The `pop` method removes and returns the last item from the collection. If the collection is empty, `null` will be returned:
 
 ```php
 $collection = collect([1, 2, 3, 4, 5]);
@@ -3454,16 +3457,16 @@ This method has the same signature as the [unique](#method-unique) method; howev
 <a name="method-unless"></a>
 #### `unless()` {.collection-method}
 
-The `unless` method will execute the given callback unless the first argument given to the method evaluates to `true`:
+The `unless` method will execute the given callback unless the first argument given to the method evaluates to `true`. The collection instance and the first argument given to the `unless` method will be provided to the closure:
 
 ```php
 $collection = collect([1, 2, 3]);
 
-$collection->unless(true, function (Collection $collection) {
+$collection->unless(true, function (Collection $collection, bool $value) {
     return $collection->push(4);
 });
 
-$collection->unless(false, function (Collection $collection) {
+$collection->unless(false, function (Collection $collection, bool $value) {
     return $collection->push(5);
 });
 
@@ -3477,9 +3480,9 @@ A second callback may be passed to the `unless` method. The second callback will
 ```php
 $collection = collect([1, 2, 3]);
 
-$collection->unless(true, function (Collection $collection) {
+$collection->unless(true, function (Collection $collection, bool $value) {
     return $collection->push(4);
-}, function (Collection $collection) {
+}, function (Collection $collection, bool $value) {
     return $collection->push(5);
 });
 
@@ -3566,11 +3569,11 @@ The `when` method will execute the given callback when the first argument given 
 ```php
 $collection = collect([1, 2, 3]);
 
-$collection->when(true, function (Collection $collection, int $value) {
+$collection->when(true, function (Collection $collection, bool $value) {
     return $collection->push(4);
 });
 
-$collection->when(false, function (Collection $collection, int $value) {
+$collection->when(false, function (Collection $collection, bool $value) {
     return $collection->push(5);
 });
 
@@ -3584,9 +3587,9 @@ A second callback may be passed to the `when` method. The second callback will b
 ```php
 $collection = collect([1, 2, 3]);
 
-$collection->when(false, function (Collection $collection, int $value) {
+$collection->when(false, function (Collection $collection, bool $value) {
     return $collection->push(4);
-}, function (Collection $collection) {
+}, function (Collection $collection, bool $value) {
     return $collection->push(5);
 });
 

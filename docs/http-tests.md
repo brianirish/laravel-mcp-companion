@@ -961,6 +961,7 @@ Laravel's `Illuminate\Testing\TestResponse` class provides a variety of custom a
 
 [assertAccepted](#assert-accepted)
 [assertBadRequest](#assert-bad-request)
+[assertClientError](#assert-client-error)
 [assertConflict](#assert-conflict)
 [assertCookie](#assert-cookie)
 [assertCookieExpired](#assert-cookie-expired)
@@ -1003,6 +1004,7 @@ Laravel's `Illuminate\Testing\TestResponse` class provides a variety of custom a
 [assertPaymentRequired](#assert-payment-required)
 [assertPlainCookie](#assert-plain-cookie)
 [assertRedirect](#assert-redirect)
+[assertRedirectBack](#assert-redirect-back)
 [assertRedirectContains](#assert-redirect-contains)
 [assertRedirectToRoute](#assert-redirect-to-route)
 [assertRedirectToSignedRoute](#assert-redirect-to-signed-route)
@@ -1036,6 +1038,15 @@ Laravel's `Illuminate\Testing\TestResponse` class provides a variety of custom a
 
 </div>
 
+<a name="assert-accepted"></a>
+#### assertAccepted
+
+Assert that the response has an accepted (202) HTTP status code:
+
+```php
+$response->assertAccepted();
+```
+
 <a name="assert-bad-request"></a>
 #### assertBadRequest
 
@@ -1045,13 +1056,13 @@ Assert that the response has a bad request (400) HTTP status code:
 $response->assertBadRequest();
 ```
 
-<a name="assert-accepted"></a>
-#### assertAccepted
+<a name="assert-client-error"></a>
+#### assertClientError
 
-Assert that the response has an accepted (202) HTTP status code:
+Assert that the response has a client error (>= 400, < 500) HTTP status code:
 
 ```php
-$response->assertAccepted();
+$response->assertClientError();
 ```
 
 <a name="assert-conflict"></a>
@@ -1539,6 +1550,15 @@ Assert that the response is a redirect to the given URI:
 
 ```php
 $response->assertRedirect($uri = null);
+```
+
+<a name="assert-redirect-back"></a>
+#### assertRedirectBack
+
+Assert whether the response is redirecting back to the previous page:
+
+```php
+$response->assertRedirectBack();
 ```
 
 <a name="assert-redirect-contains"></a>

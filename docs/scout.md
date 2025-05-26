@@ -168,7 +168,7 @@ Additional settings and schema definitions for your Typesense collections can be
 <a name="preparing-data-for-storage-in-typesense"></a>
 #### Preparing Data for Storage in Typesense
 
-When utilizing Typesense, your searchable model's must define a `toSearchableArray` method that casts your model's primary key to a string and creation date to a UNIX timestamp:
+When utilizing Typesense, your searchable models must define a `toSearchableArray` method that casts your model's primary key to a string and creation date to a UNIX timestamp:
 
 ```php
 /**
@@ -176,7 +176,7 @@ When utilizing Typesense, your searchable model's must define a `toSearchableArr
  *
  * @return array<string, mixed>
  */
-public function toSearchableArray()
+public function toSearchableArray(): array
 {
     return array_merge($this->toArray(),[
         'id' => (string) $this->id,

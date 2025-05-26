@@ -648,8 +648,35 @@ Or, if you only need to use PHP to import a class, you may use the `@use` direct
 
 A second argument may be provided to the `@use` directive to alias the imported class:
 
-```php
+```blade
 @use('App\Models\Flight', 'FlightModel')
+```
+
+If you have multiple classes within the same namespace, you may group the imports of those classes:
+
+```blade
+@use('App\Models\{Flight, Airport}')
+```
+
+The `@use` directive also supports importing PHP functions and constants by prefixing the import path with the `function` or `const` modifiers:
+
+```blade
+@use(function App\Helpers\format_currency)
+@use(const App\Constants\MAX_ATTEMPTS)
+```
+
+Just like class imports, aliases are supported for functions and constants as well:
+
+```blade
+@use(function App\Helpers\format_currency, 'formatMoney')
+@use(const App\Constants\MAX_ATTEMPTS, 'MAX_TRIES')
+```
+
+Grouped imports are also supported with both function and const modifiers, allowing you to import multiple symbols from the same namespace in a single directive:
+
+```blade
+@use(function App\Helpers\{format_currency, format_date})
+@use(const App\Constants\{MAX_ATTEMPTS, DEFAULT_TIMEOUT})
 ```
 
 <a name="comments"></a>
