@@ -1,7 +1,9 @@
 # Laravel Docs MCP Server
 [![smithery badge](https://smithery.ai/badge/@brianirish/laravel-docs-mcp)](https://smithery.ai/server/@brianirish/laravel-docs-mcp)
 
-A Model Context Protocol (MCP) server that provides access to Laravel documentation and package recommendations for AI assistants and language models.
+> ⚠️ **Alpha Software** - This project is in early development. Features may not work as expected and breaking changes may occur without notice.
+
+An AI assistant for Laravel developers that provides access to the latest Laravel documentation and intelligent package recommendations through the Model Context Protocol (MCP). This enables AI tools to help you build Laravel applications with up-to-date information and best practices.
 
 ## Overview
 
