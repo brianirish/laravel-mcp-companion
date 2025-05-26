@@ -90,8 +90,14 @@ jobs:
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
           echo "tag=$TAG" >> $GITHUB_OUTPUT
         fi
+    - name: 🔑 Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         push: true
