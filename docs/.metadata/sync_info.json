@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "b8f6edf6564191b9c3cddcbaa17b898c98a2b995",
-  "commit_date": "2025-05-23T14:34:18Z",
-  "commit_message": "Clarify behavior of pop method when the collection is empty (#10436)",
-  "commit_url": "https://github.com/laravel/docs/commit/b8f6edf6564191b9c3cddcbaa17b898c98a2b995",
-  "sync_time": "2025-05-26T01:47:52Z"
+  "commit_sha": "10ca661ad531827702383dac4a4fa77e5975d7dd",
+  "commit_date": "2025-05-26T17:25:32Z",
+  "commit_message": "[12.x] Update Passport documentation (#10439)\n\n* fix a typo\n\n* formatting\n\n* Update passport.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/10ca661ad531827702383dac4a4fa77e5975d7dd",
+  "sync_time": "2025-05-27T02:15:41Z"
 }
