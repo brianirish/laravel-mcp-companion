@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "10ca661ad531827702383dac4a4fa77e5975d7dd",
-  "commit_date": "2025-05-26T17:25:32Z",
-  "commit_message": "[12.x] Update Passport documentation (#10439)\n\n* fix a typo\n\n* formatting\n\n* Update passport.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/10ca661ad531827702383dac4a4fa77e5975d7dd",
-  "sync_time": "2025-05-27T02:15:41Z"
+  "commit_sha": "8c05067e5f899d150e0c91e69dea289b7ea1407b",
+  "commit_date": "2025-05-27T21:44:04Z",
+  "commit_message": "[12.x] Add documentation for \"Rule::contains\" (#10457)\n\n* Add documentation for new \"contains\" validation rule\n\n* Update validation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/8c05067e5f899d150e0c91e69dea289b7ea1407b",
+  "sync_time": "2025-05-28T01:53:06Z"
 }
