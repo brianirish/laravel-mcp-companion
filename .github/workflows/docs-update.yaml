@@ -108,7 +108,7 @@ jobs:
       run: |
         echo "Waiting for auto-merge to complete..."
         sleep 30  # Give some time for the merge to happen
-    - name: Create new patch version tag
+    - name: Create new patch version tag and release
       run: |
         # Get the latest tag, default to v0.0.0 if no tags exist
         LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
@@ -125,3 +125,21 @@ jobs:
         echo "Creating new tag: $NEW_VERSION"
         git tag $NEW_VERSION
         git push origin $NEW_VERSION
+        
+        echo "Creating GitHub release: $NEW_VERSION"
+        # Create GitHub release (this triggers the release workflow)
+        gh release create $NEW_VERSION \
+          --title "$NEW_VERSION" \
+          --notes "## Laravel Documentation Update
+
+This release updates the Laravel documentation to the latest version.
+
+### Changes
+- Updated Laravel documentation to latest version  
+- Synchronized with upstream Laravel docs repository
+
+---
+*This release was automatically generated after documentation updates.*" \
+          --latest
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
