@@ -130,16 +130,19 @@ jobs:
         # Create GitHub release (this triggers the release workflow)
         gh release create $NEW_VERSION \
           --title "$NEW_VERSION" \
-          --notes "## Laravel Documentation Update
+          --notes "$(cat <<'EOF'
+## Laravel Documentation Update
 
 This release updates the Laravel documentation to the latest version.
 
 ### Changes
-- Updated Laravel documentation to latest version  
+- Updated Laravel documentation to latest version
 - Synchronized with upstream Laravel docs repository
 
 ---
-*This release was automatically generated after documentation updates.*" \
+*This release was automatically generated after documentation updates.*
+EOF
+)" \
           --latest
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
