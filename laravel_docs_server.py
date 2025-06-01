@@ -163,7 +163,7 @@ FEATURE_MAP = {
 
 # Tool descriptions for MCP tools
 TOOL_DESCRIPTIONS = {
-    "list_docs": """A comprehensive documentation indexing tool that provides access to all available Laravel documentation files. Use this tool to get a complete overview of the available documentation landscape before diving into specific topics.
+    "list_laravel_docs": """A comprehensive documentation indexing tool that provides access to all available Laravel documentation files. Use this tool to get a complete overview of the available documentation landscape before diving into specific topics.
 
 When to use this tool:
 - Getting started with Laravel documentation exploration
@@ -172,7 +172,7 @@ When to use this tool:
 - Finding specific documentation file names
 - Understanding the organization of Laravel documentation""",
 
-    "search_docs": """A powerful search engine for finding specific information across the entire Laravel documentation. This tool allows precise querying to locate exact features, functions, or concepts within the documentation.
+    "search_laravel_docs": """A powerful search engine for finding specific information across the entire Laravel documentation. This tool allows precise querying to locate exact features, functions, or concepts within the documentation.
 
 When to use this tool:
 - Finding specific Laravel functionality or features
@@ -181,7 +181,7 @@ When to use this tool:
 - Exploring detailed API references
 - Discovering configuration options for Laravel features""",
 
-    "update_docs": """A documentation synchronization tool that ensures you have access to the latest Laravel documentation. This tool can target specific versions and force updates when necessary.
+    "update_laravel_docs": """A documentation synchronization tool that ensures you have access to the latest Laravel documentation. This tool can target specific versions and force updates when necessary.
 
 When to use this tool:
 - Working with newer Laravel releases
@@ -190,7 +190,7 @@ When to use this tool:
 - Resolving documentation inconsistencies
 - Preparing for Laravel version migrations""",
 
-    "docs_info": """A metadata retrieval tool that provides information about the current documentation version and status. This tool helps understand the context and relevance of the documentation you're exploring.
+    "laravel_docs_info": """A metadata retrieval tool that provides information about the current documentation version and status. This tool helps understand the context and relevance of the documentation you're exploring.
 
 When to use this tool:
 - Verifying documentation version matches your project
@@ -199,7 +199,7 @@ When to use this tool:
 - Assessing documentation completeness
 - Planning for potential documentation updates""",
 
-    "get_package_recommendations": """An intelligent recommendation engine that suggests Laravel packages based on implementation needs. This tool analyzes your use case to provide contextually relevant package options.
+    "get_laravel_package_recommendations": """An intelligent recommendation engine that suggests Laravel packages based on implementation needs. This tool analyzes your use case to provide contextually relevant package options.
 
 When to use this tool:
 - Starting a new Laravel implementation
@@ -208,7 +208,7 @@ When to use this tool:
 - Discovering community-recommended packages
 - Finding specialized tools for particular use cases""",
 
-    "get_package_info": """A detailed package analysis tool that provides comprehensive information about specific Laravel packages. This tool helps evaluate packages for your implementation needs.
+    "get_laravel_package_info": """A detailed package analysis tool that provides comprehensive information about specific Laravel packages. This tool helps evaluate packages for your implementation needs.
 
 When to use this tool:
 - Researching package capabilities and limitations
@@ -217,7 +217,7 @@ When to use this tool:
 - Evaluating package maintenance status and community support
 - Reviewing package documentation and usage instructions""",
 
-    "get_package_categories": """A categorical exploration tool that organizes Laravel packages by functionality domain. This tool helps discover related packages within specific application areas.
+    "get_laravel_package_categories": """A categorical exploration tool that organizes Laravel packages by functionality domain. This tool helps discover related packages within specific application areas.
 
 When to use this tool:
 - Exploring available options within a functional domain
@@ -226,7 +226,7 @@ When to use this tool:
 - Understanding how Laravel ecosystem addresses specific requirements
 - Finding alternatives to currently used packages""",
 
-    "get_features_for_package": """A feature inspection tool that provides detailed information about capabilities available within a specific package. This tool helps understand what a package can do before implementation.
+    "get_features_for_laravel_package": """A feature inspection tool that provides detailed information about capabilities available within a specific package. This tool helps understand what a package can do before implementation.
 
 When to use this tool:
 - Understanding a package's complete feature set
@@ -325,7 +325,7 @@ def update_documentation(docs_path: Path, version: str, force: bool = False) -> 
         logger.error(f"Failed to update documentation: {str(e)}")
         return False
 
-def get_docs_metadata(docs_path: Path) -> Dict:
+def get_laravel_docs_metadata(docs_path: Path) -> Dict:
     """Get documentation metadata if available."""
     metadata_file = docs_path / ".metadata" / "sync_info.json"
     
@@ -463,10 +463,10 @@ def main():
     mcp = FastMCP(args.server_name)
     
     # Register documentation tools
-    @mcp.tool(description=TOOL_DESCRIPTIONS["list_docs"])
-    def list_docs() -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_docs"])
+    def list_laravel_docs() -> str:
         """List all available Laravel documentation files."""
-        logger.debug("list_docs function called")
+        logger.debug("list_laravel_docs function called")
         result = []
         
         try:
@@ -478,10 +478,10 @@ def main():
                     break
             
             if not md_files_exist:
-                return "No documentation files found. Use update_docs() to fetch documentation."
+                return "No documentation files found. Use update_laravel_docs() to fetch documentation."
             
             # Add metadata if available
-            metadata = get_docs_metadata(docs_path)
+            metadata = get_laravel_docs_metadata(docs_path)
             if metadata.get("version"):
                 result.append(f"Laravel Documentation (Version: {metadata['version']})")
                 result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
@@ -507,9 +507,9 @@ def main():
             return f"Error listing documentation files: {str(e)}"
     
     @mcp.resource("laravel://{path}")
-    def read_doc(path: str) -> str:
+    def read_laravel_doc(path: str) -> str:
         """Read a specific Laravel documentation file."""
-        logger.debug(f"read_doc function called with path: {path}")
+        logger.debug(f"read_laravel_doc function called with path: {path}")
         
         # Make sure the path ends with .md
         if not path.endswith('.md'):
@@ -535,10 +535,10 @@ def main():
             logger.error(f"Error reading file {file_path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["search_docs"])
-    def search_docs(query: str) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_docs"])
+    def search_laravel_docs(query: str) -> str:
         """Search through all Laravel documentation for a specific term."""
-        logger.debug(f"search_docs function called with query: {query}")
+        logger.debug(f"search_laravel_docs function called with query: {query}")
         
         if not query.strip():
             return "Search query cannot be empty"
@@ -566,8 +566,8 @@ def main():
             logger.error(f"Error searching documentation: {str(e)}")
             return f"Error searching documentation: {str(e)}"
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["update_docs"])
-    def update_docs(version: Optional[str] = None, force: bool = False) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["update_laravel_docs"])
+    def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
         
@@ -575,7 +575,7 @@ def main():
             version: Laravel version branch (e.g., "12.x")
             force: Force update even if already up to date
         """
-        logger.debug(f"update_docs function called (version: {version}, force: {force})")
+        logger.debug(f"update_laravel_docs function called (version: {version}, force: {force})")
         
         # Use provided version or default to the one specified at startup
         doc_version = version or args.version
@@ -591,7 +591,7 @@ def main():
             updated = updater.update(force=force)
             
             if updated:
-                metadata = get_docs_metadata(docs_path)
+                metadata = get_laravel_docs_metadata(docs_path)
                 return (
                     f"Documentation updated successfully to {doc_version}\n"
                     f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
@@ -604,15 +604,15 @@ def main():
             logger.error(f"Error updating documentation: {str(e)}")
             return f"Error updating documentation: {str(e)}"
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["docs_info"])
-    def docs_info() -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["laravel_docs_info"])
+    def laravel_docs_info() -> str:
         """Get information about the documentation version and status."""
-        logger.debug("docs_info function called")
+        logger.debug("laravel_docs_info function called")
         
-        metadata = get_docs_metadata(docs_path)
+        metadata = get_laravel_docs_metadata(docs_path)
         
         if "version" not in metadata:
-            return "No documentation metadata available. Use update_docs() to fetch documentation."
+            return "No documentation metadata available. Use update_laravel_docs() to fetch documentation."
         
         return (
             f"Laravel Documentation\n"
@@ -625,8 +625,8 @@ def main():
         )
     
     # Register package recommendation tools
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_recommendations"])
-    def get_package_recommendations(use_case: str) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"])
+    def get_laravel_package_recommendations(use_case: str) -> str:
         """
         Get Laravel package recommendations based on a use case.
         
@@ -668,8 +668,8 @@ def main():
         
         return "\n".join(results)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_info"])
-    def get_package_info(package_name: str) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_info"])
+    def get_laravel_package_info(package_name: str) -> str:
         """
         Get detailed information about a specific Laravel package.
         
@@ -691,8 +691,8 @@ def main():
         # Format the package information as markdown
         return format_package_recommendation(package)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_package_categories"])
-    def get_package_categories(category: str) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_categories"])
+    def get_laravel_package_categories(category: str) -> str:
         """
         Get Laravel packages in a specific category.
         
@@ -736,8 +736,8 @@ def main():
         
         return "\n".join(results)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_features_for_package"])
-    def get_features_for_package(package: str) -> str:
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_features_for_laravel_package"])
+    def get_features_for_laravel_package(package: str) -> str:
         """
         Get available features/implementations for a Laravel package.
         
