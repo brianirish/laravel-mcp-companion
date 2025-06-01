@@ -1,0 +1,8 @@
+{
+  "version": "10.x",
+  "commit_sha": "ac2e2577fe6f8c58f559bae2cfec37f29baeac66",
+  "commit_date": "2025-05-28T13:01:56Z",
+  "commit_message": "backport Laravel 11 dates to Laravel 10 docs (#10460)\n\nThis takes the latest dates from the Laravel 12 docs as they pertain to version 11 release and support dates and updates them in the Laravel 10 details",
+  "commit_url": "https://github.com/laravel/docs/commit/ac2e2577fe6f8c58f559bae2cfec37f29baeac66",
+  "sync_time": "2025-06-01T02:03:41Z"
+}

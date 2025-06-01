@@ -18,7 +18,7 @@ from typing import Dict, Optional, List, Any
 from fastmcp import FastMCP
 
 # Import documentation updater
-from docs_updater import DocsUpdater
+from docs_updater import DocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
 
 # Configure logging
@@ -27,6 +27,9 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("laravel-docs-mcp")
+
+# Get supported versions
+SUPPORTED_VERSIONS = get_cached_supported_versions()
 
 # Define the Laravel package catalog
 PACKAGE_CATALOG = {
@@ -282,8 +285,8 @@ def parse_arguments():
     parser.add_argument(
         "--version",
         type=str,
-        default="12.x",
-        help="Laravel version branch to use (default: 12.x)"
+        default=DEFAULT_VERSION,
+        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}). Supported: {', '.join(SUPPORTED_VERSIONS)}"
     )
     parser.add_argument(
         "--update-docs",
@@ -325,9 +328,38 @@ def update_documentation(docs_path: Path, version: str, force: bool = False) -> 
         logger.error(f"Failed to update documentation: {str(e)}")
         return False
 
-def get_laravel_docs_metadata(docs_path: Path) -> Dict:
+def get_version_from_path(path: str) -> tuple[str, str]:
+    """Extract version and relative path from a documentation path.
+    
+    Args:
+        path: Path like "12.x/blade.md" or "blade.md"
+        
+    Returns:
+        (version, relative_path): Tuple of version and path within that version
+    """
+    path_parts = Path(path).parts
+    
+    # Check if first part is a version
+    if path_parts and path_parts[0] in SUPPORTED_VERSIONS:
+        version = path_parts[0]
+        relative_path = str(Path(*path_parts[1:]))
+        return version, relative_path
+    
+    # Default to latest version if no version specified
+    return DEFAULT_VERSION, path
+
+def get_laravel_docs_metadata(docs_path: Path, version: Optional[str] = None) -> Dict:
     """Get documentation metadata if available."""
-    metadata_file = docs_path / ".metadata" / "sync_info.json"
+    if version:
+        metadata_file = docs_path / version / ".metadata" / "sync_info.json"
+    else:
+        # Try to find any version metadata
+        for v in SUPPORTED_VERSIONS:
+            metadata_file = docs_path / v / ".metadata" / "sync_info.json"
+            if metadata_file.exists():
+                break
+        else:
+            return {"status": "unknown", "message": "No metadata available"}
     
     if not metadata_file.exists():
         return {"status": "unknown", "message": "No metadata available"}
@@ -437,6 +469,11 @@ def main():
     docs_path = setup_docs_path(args.docs_path)
     logger.info(f"Using docs path: {docs_path}")
     
+    # Validate version
+    if args.version not in SUPPORTED_VERSIONS:
+        logger.error(f"Unsupported version: {args.version}. Supported versions: {', '.join(SUPPORTED_VERSIONS)}")
+        sys.exit(1)
+    
     # Update documentation if requested
     if args.update_docs or args.force_update:
         logger.info(f"Updating documentation (version: {args.version}, force: {args.force_update})")
@@ -464,42 +501,64 @@ def main():
     
     # Register documentation tools
     @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_docs"])
-    def list_laravel_docs() -> str:
-        """List all available Laravel documentation files."""
-        logger.debug("list_laravel_docs function called")
+    def list_laravel_docs(version: Optional[str] = None) -> str:
+        """List all available Laravel documentation files.
+        
+        Args:
+            version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
+        """
+        logger.debug(f"list_laravel_docs function called (version: {version})")
         result = []
         
         try:
-            # First, check if there are any docs at all
-            md_files_exist = False
-            for root, _, files in os.walk(docs_path):
-                if any(f.endswith('.md') for f in files):
-                    md_files_exist = True
-                    break
-            
-            if not md_files_exist:
-                return "No documentation files found. Use update_laravel_docs() to fetch documentation."
-            
-            # Add metadata if available
-            metadata = get_laravel_docs_metadata(docs_path)
-            if metadata.get("version"):
-                result.append(f"Laravel Documentation (Version: {metadata['version']})")
-                result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
-                result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
-                result.append("")
-            
-            # List all markdown files
-            for root, _, files in os.walk(docs_path):
-                rel_path = Path(root).relative_to(docs_path)
-                md_files = [f for f in files if f.endswith('.md')]
+            if version:
+                # List docs for specific version
+                version_path = docs_path / version
+                if not version_path.exists():
+                    return f"No documentation found for version {version}. Use update_laravel_docs() to fetch documentation."
                 
+                # Add metadata if available
+                metadata = get_laravel_docs_metadata(docs_path, version)
+                if metadata.get("version"):
+                    result.append(f"Laravel Documentation (Version: {metadata['version']})")
+                    result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
+                    result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
+                    result.append("")
+                
+                # List markdown files in this version
+                md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
                 if md_files:
-                    if str(rel_path) == '.':
-                        result.append("Root:")
-                    else:
-                        result.append(f"\n{rel_path}:")
-                    for file in md_files:
+                    result.append(f"Files in {version}:")
+                    for file in sorted(md_files):
                         result.append(f"  {file}")
+                else:
+                    result.append(f"No documentation files found in version {version}")
+            else:
+                # List all versions and their files
+                available_versions = []
+                for v in SUPPORTED_VERSIONS:
+                    version_path = docs_path / v
+                    if version_path.exists() and any(f.endswith('.md') for f in os.listdir(version_path) if os.path.isfile(version_path / f)):
+                        available_versions.append(v)
+                
+                if not available_versions:
+                    return "No documentation files found. Use update_laravel_docs() to fetch documentation."
+                
+                result.append("Available Laravel Documentation Versions:")
+                result.append("")
+                
+                for v in available_versions:
+                    version_path = docs_path / v
+                    metadata = get_laravel_docs_metadata(docs_path, v)
+                    
+                    result.append(f"## Version {v}")
+                    if metadata.get('sync_time'):
+                        result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
+                        result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
+                    
+                    md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
+                    result.append(f"Files: {len(md_files)} documentation files")
+                    result.append("")
             
             return "\n".join(result) if result else "No documentation files found"
         except Exception as e:
@@ -508,23 +567,31 @@ def main():
     
     @mcp.resource("laravel://{path}")
     def read_laravel_doc(path: str) -> str:
-        """Read a specific Laravel documentation file."""
+        """Read a specific Laravel documentation file.
+        
+        Args:
+            path: Path like "12.x/blade.md" or "blade.md" (defaults to latest version)
+        """
         logger.debug(f"read_laravel_doc function called with path: {path}")
         
+        # Extract version and relative path
+        version, relative_path = get_version_from_path(path)
+        
         # Make sure the path ends with .md
-        if not path.endswith('.md'):
-            path = f"{path}.md"
+        if not relative_path.endswith('.md'):
+            relative_path = f"{relative_path}.md"
         
-        file_path = docs_path / Path(path)
+        file_path = docs_path / version / relative_path
         
-        # Security check
-        if not is_safe_path(docs_path, file_path):
+        # Security check - ensure we stay within version directory
+        version_path = docs_path / version
+        if not is_safe_path(version_path, file_path):
             logger.warning(f"Access denied: {path} (attempted directory traversal)")
             return f"Access denied: {path} (attempted directory traversal)"
         
         if not file_path.exists():
             logger.warning(f"Documentation file not found: {file_path}")
-            return f"Documentation file not found: {path}"
+            return f"Documentation file not found: {path} (version: {version})"
         
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -536,9 +603,14 @@ def main():
             return f"Error reading file: {str(e)}"
     
     @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_docs"])
-    def search_laravel_docs(query: str) -> str:
-        """Search through all Laravel documentation for a specific term."""
-        logger.debug(f"search_laravel_docs function called with query: {query}")
+    def search_laravel_docs(query: str, version: Optional[str] = None) -> str:
+        """Search through Laravel documentation for a specific term.
+        
+        Args:
+            query: Search term to look for
+            version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
+        """
+        logger.debug(f"search_laravel_docs function called with query: {query}, version: {version}")
         
         if not query.strip():
             return "Search query cannot be empty"
@@ -547,21 +619,28 @@ def main():
         pattern = re.compile(re.escape(query), re.IGNORECASE)
         
         try:
-            for root, _, files in os.walk(docs_path):
-                for file in [f for f in files if f.endswith('.md')]:
-                    file_path = Path(root) / file
-                    rel_path = file_path.relative_to(docs_path)
-                    
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        if pattern.search(content):
-                            count = len(pattern.findall(content))
-                            results.append(f"{rel_path} ({count} matches)")
+            search_versions = [version] if version else SUPPORTED_VERSIONS
+            
+            for v in search_versions:
+                version_path = docs_path / v
+                if not version_path.exists():
+                    continue
+                
+                for file in os.listdir(version_path):
+                    if file.endswith('.md'):
+                        file_path = version_path / file
+                        
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            if pattern.search(content):
+                                count = len(pattern.findall(content))
+                                results.append(f"{v}/{file} ({count} matches)")
             
             if results:
                 return f"Found {len(results)} files containing '{query}':\n" + "\n".join(results)
             else:
-                return f"No results found for '{query}'"
+                search_scope = f"version {version}" if version else "all versions"
+                return f"No results found for '{query}' in {search_scope}"
         except Exception as e:
             logger.error(f"Error searching documentation: {str(e)}")
             return f"Error searching documentation: {str(e)}"
@@ -591,7 +670,7 @@ def main():
             updated = updater.update(force=force)
             
             if updated:
-                metadata = get_laravel_docs_metadata(docs_path)
+                metadata = get_laravel_docs_metadata(docs_path, doc_version)
                 return (
                     f"Documentation updated successfully to {doc_version}\n"
                     f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
@@ -605,24 +684,46 @@ def main():
             return f"Error updating documentation: {str(e)}"
     
     @mcp.tool(description=TOOL_DESCRIPTIONS["laravel_docs_info"])
-    def laravel_docs_info() -> str:
-        """Get information about the documentation version and status."""
-        logger.debug("laravel_docs_info function called")
+    def laravel_docs_info(version: Optional[str] = None) -> str:
+        """Get information about the documentation version and status.
         
-        metadata = get_laravel_docs_metadata(docs_path)
+        Args:
+            version: Specific Laravel version to get info for (e.g., "12.x"). If not provided, shows all versions.
+        """
+        logger.debug(f"laravel_docs_info function called (version: {version})")
         
-        if "version" not in metadata:
-            return "No documentation metadata available. Use update_laravel_docs() to fetch documentation."
-        
-        return (
-            f"Laravel Documentation\n"
-            f"Version: {metadata.get('version', 'unknown')}\n"
-            f"Last updated: {metadata.get('sync_time', 'unknown')}\n"
-            f"Commit SHA: {metadata.get('commit_sha', 'unknown')}\n"
-            f"Commit date: {metadata.get('commit_date', 'unknown')}\n"
-            f"Commit message: {metadata.get('commit_message', 'unknown')}\n"
-            f"GitHub URL: {metadata.get('commit_url', 'unknown')}"
-        )
+        if version:
+            metadata = get_laravel_docs_metadata(docs_path, version)
+            
+            if "version" not in metadata:
+                return f"No documentation metadata available for version {version}. Use update_laravel_docs() to fetch documentation."
+            
+            return (
+                f"Laravel Documentation (Version {version})\n"
+                f"Last updated: {metadata.get('sync_time', 'unknown')}\n"
+                f"Commit SHA: {metadata.get('commit_sha', 'unknown')}\n"
+                f"Commit date: {metadata.get('commit_date', 'unknown')}\n"
+                f"Commit message: {metadata.get('commit_message', 'unknown')}\n"
+                f"GitHub URL: {metadata.get('commit_url', 'unknown')}"
+            )
+        else:
+            # Show info for all available versions
+            result = ["Laravel Documentation Status\n"]
+            
+            for v in SUPPORTED_VERSIONS:
+                metadata = get_laravel_docs_metadata(docs_path, v)
+                if "version" in metadata:
+                    result.append(f"## Version {v}")
+                    result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
+                    result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
+                    result.append(f"Commit date: {metadata.get('commit_date', 'unknown')}")
+                    result.append("")
+                else:
+                    result.append(f"## Version {v}")
+                    result.append("Not available (use update_laravel_docs() to fetch)")
+                    result.append("")
+            
+            return "\n".join(result)
     
     # Register package recommendation tools
     @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"])
@@ -774,7 +875,7 @@ def main():
     # Log server startup
     logger.info(f"Starting Laravel Docs MCP Server ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
-    logger.info(f"Laravel version: {args.version}")
+    logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     
     # Get transport options
     transport_options = {}

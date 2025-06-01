@@ -93,7 +93,7 @@ The server automatically fetches Laravel documentation on first run and can be s
 | `--transport TYPE` | Transport method: stdio, websocket, sse (default: stdio) |
 | `--host HOST` | Host to bind to (network transport) |
 | `--port PORT` | Port to listen on (network transport) |
-| `--version VERSION` | Laravel version branch (default: 12.x) |
+| `--version VERSION` | Laravel version branch (default: latest available) |
 | `--update-docs` | Update documentation before starting |
 | `--force-update` | Force documentation update |
 
@@ -107,8 +107,14 @@ python laravel_docs_server.py --docs-path /path/to/docs --version 11.x --update-
 You can update the documentation separately:
 
 ```bash
-# Update documentation
-python docs_updater.py --target-dir ./docs --version 12.x
+# Update documentation for latest version
+python docs_updater.py --target-dir ./docs
+
+# Update specific version
+python docs_updater.py --target-dir ./docs --version 11.x
+
+# Update all supported versions
+python docs_updater.py --all-versions
 
 # Check if update is needed
 python docs_updater.py --check-only
@@ -153,27 +159,29 @@ if __name__ == "__main__":
 ### Available Tools
 
 #### Documentation Tools
-- `list_docs()` - List all documentation files
-- `search_docs(query: str)` - Search documentation for specific terms
-- `update_docs(version: Optional[str], force: bool)` - Update documentation
-- `docs_info()` - Get documentation version information
+- `list_laravel_docs(version: Optional[str])` - List documentation files (all versions or specific version)
+- `search_laravel_docs(query: str, version: Optional[str])` - Search documentation for specific terms
+- `update_laravel_docs(version: Optional[str], force: bool)` - Update documentation
+- `laravel_docs_info(version: Optional[str])` - Get documentation version information
 
 #### Package Recommendation Tools
-- `get_package_recommendations(use_case: str)` - Get package recommendations for a use case
-- `get_package_info(package_name: str)` - Get details about a specific package
-- `get_package_categories(category: str)` - List packages in a specific category
-- `get_features_for_package(package: str)` - Get available features for a package
+- `get_laravel_package_recommendations(use_case: str)` - Get package recommendations for a use case
+- `get_laravel_package_info(package_name: str)` - Get details about a specific package
+- `get_laravel_package_categories(category: str)` - List packages in a specific category
+- `get_features_for_laravel_package(package: str)` - Get available features for a package
 
 ### Resource Access
 
 Documentation files can be accessed as resources using:
 ```
 laravel://{path}
+laravel://{version}/{path}
 ```
 
 Examples:
-- `laravel://routing.md`
-- `laravel://authentication.md`
+- `laravel://routing.md` (uses latest version)
+- `laravel://11.x/authentication.md` (specific version)
+- `laravel://12.x/blade.md`
 
 ## Automated Workflows
 
@@ -197,6 +205,8 @@ This project includes several automated GitHub Actions workflows:
 ## Features and Roadmap
 
 Current Features:
+- ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
+- ✅ **Future-Proof Version Detection**: Automatically detects and supports new Laravel releases (13.x, 14.x, etc.)
 - ✅ **Daily Documentation Updates**: Automatically syncs with Laravel's GitHub repository every day
 - ✅ **Dynamic Versioning**: Automatic version management based on git tags
 - ✅ **Automated Releases**: Patch releases triggered by documentation updates
@@ -207,7 +217,6 @@ Current Features:
 - ✅ **Graceful Shutdown**: Proper cleanup and signal handling
 
 Planned Features:
-- 🔄 Multi-version support (access documentation for multiple Laravel versions simultaneously)
 - 🔍 User project analysis for tailored recommendations
 - 🚀 Enhanced search capabilities with semantic matching
 - 📊 Usage analytics and insights

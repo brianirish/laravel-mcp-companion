@@ -1,0 +1,8 @@
+{
+  "version": "7.x",
+  "commit_sha": "f5adf61d876bb83c3620be4702785cdd471859a5",
+  "commit_date": "2024-03-15T13:54:19Z",
+  "commit_message": "fix broken link (#9500)",
+  "commit_url": "https://github.com/laravel/docs/commit/f5adf61d876bb83c3620be4702785cdd471859a5",
+  "sync_time": "2025-06-01T02:03:38Z"
+}

@@ -7,9 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **IMPORTANT**: Always activate the virtual environment first with `source .venv/bin/activate` before running any Python commands.
 
 ### Development and Testing
-- **Run type checking**: `mypy .`
-- **Run linting**: `ruff check .`
-- **Format code**: `black .`
+- **Run type checking**: `mypy .` (temporarily install with `uv pip install mypy`)
+- **Run linting**: `ruff check .` (temporarily install with `uv pip install ruff`)
+- **Format code**: `black .` (temporarily install with `uv pip install black`)
 - **Run tests**: `pytest` (if tests are added)
 - **Run tests with coverage**: `pytest --cov` (if tests are added)
 
@@ -17,11 +17,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Basic server start**: `python laravel_docs_server.py`
 - **Start with documentation update**: `python laravel_docs_server.py --update-docs`
 - **Start with specific Laravel version**: `python laravel_docs_server.py --version 11.x`
-- **Full example**: `python laravel_docs_server.py --docs-path ./docs --version 12.x --update-docs --transport stdio`
+- **Full example**: `python laravel_docs_server.py --docs-path ./docs --version 11.x --update-docs --transport stdio`
 
 ### Documentation Management
-- **Update documentation**: `python docs_updater.py --target-dir ./docs --version 12.x`
-- **Force documentation update**: `python docs_updater.py --force`
+- **Update latest version**: `python docs_updater.py`
+- **Update specific version**: `python docs_updater.py --version 11.x`
+- **Update all versions**: `python docs_updater.py --all-versions`
+- **Force update**: `python docs_updater.py --force`
 - **Check if update needed**: `python docs_updater.py --check-only`
 
 ### Installation Commands
@@ -31,53 +33,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture
 
-This is a Model Context Protocol (MCP) server that provides Laravel documentation and package recommendations to AI assistants. The architecture consists of:
+This is a Model Context Protocol (MCP) server that provides Laravel documentation and package recommendations to AI assistants.
 
 ### Core Components
-- **`laravel_docs_server.py`**: Main MCP server implementing FastMCP with documentation and package recommendation tools
-- **`docs_updater.py`**: Handles automatic fetching/updating of Laravel docs from GitHub repository
-- **`shutdown_handler.py`**: Graceful shutdown handling for the server
-- **`docs/`**: Local storage for Laravel documentation files (auto-updated from laravel/docs repo)
+- **`laravel_docs_server.py`**: Main MCP server with documentation and package recommendation tools
+- **`docs_updater.py`**: Automatic fetching/updating of Laravel docs from GitHub
+- **`shutdown_handler.py`**: Graceful shutdown handling
+- **`docs/`**: Version-organized documentation storage (e.g., `docs/12.x/`, `docs/11.x/`)
 
 ### Key Features
-- **Documentation Tools**: `list_docs()`, `search_docs()`, `read_doc()` (via resources), `update_docs()`, `docs_info()`
-- **Package Recommendation Tools**: `get_package_recommendations()`, `get_package_info()`, `get_package_categories()`, `get_features_for_package()`
-- **Resource Access**: Documentation accessible via `laravel://{path}` URI scheme
-- **Version Management**: Supports multiple Laravel version branches (12.x, 11.x, etc.)
-- **Automatic Updates**: Can sync with Laravel's official docs repository
+- **Multi-Version Support**: Supports Laravel 6.x through latest (auto-detects new versions)
+- **Documentation Tools**: `list_laravel_docs()`, `search_laravel_docs()`, `update_laravel_docs()`, `laravel_docs_info()`
+- **Package Tools**: `get_laravel_package_recommendations()`, `get_laravel_package_info()`, `get_laravel_package_categories()`, `get_features_for_laravel_package()`
+- **Resource Access**: Documentation via `laravel://{path}` or `laravel://{version}/{path}`
+- **Dynamic Version Detection**: Automatically detects new Laravel releases via GitHub API
+- **Automatic Updates**: Daily sync with Laravel's official docs repository
 
-### Data Structures
-- **PACKAGE_CATALOG**: Hardcoded catalog of popular Laravel packages with descriptions, use cases, and categories
-- **FEATURE_MAP**: Maps packages to common implementation patterns
-- **TOOL_DESCRIPTIONS**: Detailed descriptions for when to use each MCP tool
+### Version System
+- **Supported Versions**: 6.x through latest (dynamically detected)
+- **Default Version**: Always latest available
+- **Directory Structure**: `docs/{version}/` with version-specific metadata
+- **Future-Proof**: Automatically supports new releases (13.x, 14.x, etc.)
 
-### Transport Support
-- Supports stdio (default), websocket, and SSE transports
-- Command-line configurable for different deployment scenarios
+### GitHub Actions
+- **Daily Updates**: `docs-update.yaml` runs daily, updates all versions, auto-merges PRs
+- **Auto Releases**: Creates patch releases when docs are updated
+- **Branch Protection**: Requires status checks, enables auto-merge
 
-### Metadata System
-- Stores sync information in `.metadata/sync_info.json`
-- Tracks commit SHA, sync time, and version information for documentation updates
+## Commit Style
 
-## GitHub Actions Workflows
+When asked to commit changes, use simple, direct commit messages without Claude Code attribution. Write as if the user wrote them. Use lowercase, be brief but clear about what changed.
 
-### Automated Documentation Updates
-- **`docs-update.yaml`**: Weekly automated documentation updates with auto-merge
-  - Runs every Monday at midnight UTC
-  - Creates PR for documentation updates
-  - Auto-merges after all checks pass (requires branch protection rules)
-  - Triggers automated release workflow
-
-### Automated Releases
-- **`release-docs-update.yaml`**: Automatic patch releases for documentation updates
-  - Triggers when docs update PR is merged
-  - Uses semantic versioning (patches for docs, manual for code changes)
-  - Builds and publishes Docker images to GitHub Container Registry
-  - Generates release notes with updated documentation sections
-
-### Branch Protection Requirements
-For auto-merge to work properly, configure these branch protection rules on `main`:
-- ✅ Require status checks to pass before merging
-- ✅ Require branches to be up to date before merging
-- ✅ Include administrators (recommended)
-- ✅ Allow auto-merge
+Examples:
+- "add multi-version laravel docs support"
+- "fix version detection api call"  
+- "update readme with new tool names"

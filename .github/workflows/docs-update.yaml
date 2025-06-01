@@ -34,7 +34,7 @@ jobs:
       run: |
         set +e
         source .venv/bin/activate
-        python docs_updater.py --version 12.x
+        python docs_updater.py --all-versions
         UPDATE_NEEDED=$?
         if [ "$UPDATE_NEEDED" -eq 1 ]; then 
           echo "updates_available=true" >> $GITHUB_OUTPUT

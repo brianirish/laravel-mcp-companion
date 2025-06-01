@@ -11,6 +11,7 @@ import logging
 import argparse
 import shutil
 import tempfile
+import re
 from pathlib import Path
 from typing import Dict
 import urllib.request
@@ -29,7 +30,65 @@ logger = logging.getLogger("laravel-docs-updater")
 # GitHub API URLs
 GITHUB_API_URL = "https://api.github.com"
 LARAVEL_DOCS_REPO = "laravel/docs"
-DEFAULT_VERSION = "12.x"
+USER_AGENT = "Laravel-Docs-MCP-Server (+https://github.com/brianirish/laravel-docs-mcp)"
+
+def get_supported_versions() -> list[str]:
+    """Get supported Laravel versions dynamically from GitHub API.
+    
+    Returns:
+        List of supported version branches (e.g., ['6.x', '7.x', '8.x', ...])
+    """
+    logger.debug("Fetching supported Laravel versions from GitHub API")
+    
+    url = f"{GITHUB_API_URL}/repos/{LARAVEL_DOCS_REPO}/branches"
+    
+    try:
+        request = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "application/vnd.github.v3+json"
+            }
+        )
+        
+        with urllib.request.urlopen(request) as response:
+            branches = json.loads(response.read().decode())
+            
+            # Filter for version branches (X.x format) starting from 6.x
+            version_branches = []
+            for branch in branches:
+                name = branch["name"]
+                if re.match(r'^\d+\.x$', name):
+                    major_version = int(name.split('.')[0])
+                    if major_version >= 6:
+                        version_branches.append(name)
+            
+            # Sort versions numerically
+            version_branches.sort(key=lambda v: int(v.split('.')[0]))
+            
+            if not version_branches:
+                logger.warning("No version branches found, falling back to hardcoded list")
+                return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
+            
+            logger.debug(f"Found {len(version_branches)} supported versions: {', '.join(version_branches)}")
+            return version_branches
+            
+    except Exception as e:
+        logger.warning(f"Error fetching versions from GitHub API: {str(e)}, falling back to hardcoded list")
+        return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
+
+# Cache supported versions to avoid repeated API calls
+_SUPPORTED_VERSIONS_CACHE = None
+
+def get_cached_supported_versions() -> list[str]:
+    """Get cached supported versions or fetch them if not cached."""
+    global _SUPPORTED_VERSIONS_CACHE
+    if _SUPPORTED_VERSIONS_CACHE is None:
+        _SUPPORTED_VERSIONS_CACHE = get_supported_versions()
+    return _SUPPORTED_VERSIONS_CACHE
+
+SUPPORTED_VERSIONS = get_cached_supported_versions()
+DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]  # Always use the latest version as default
 USER_AGENT = "Laravel-Docs-MCP-Server (+https://github.com/brianirish/laravel-docs-mcp)"
 
 class DocsUpdater:
@@ -48,8 +107,12 @@ class DocsUpdater:
         self.github_api_url = GITHUB_API_URL
         self.repo = LARAVEL_DOCS_REPO
         
+        # Create version-specific directory
+        self.version_dir = target_dir / version
+        self.version_dir.mkdir(parents=True, exist_ok=True)
+        
         # Create metadata directory if it doesn't exist
-        self.metadata_dir = target_dir / ".metadata"
+        self.metadata_dir = self.version_dir / ".metadata"
         self.metadata_dir.mkdir(exist_ok=True)
         self.metadata_file = self.metadata_dir / "sync_info.json"
     
@@ -167,7 +230,7 @@ class DocsUpdater:
             
             # Check if we already have the latest version
             if local_meta.get("version") == self.version and local_meta.get("commit_sha") == latest_commit["sha"]:
-                logger.info("Documentation is already up to date.")
+                logger.debug("Documentation is already up to date.")
                 return False
             
             # If we reach here, an update is needed
@@ -197,20 +260,20 @@ class DocsUpdater:
             # Download the documentation
             source_dir = self.download_documentation()
             
-            # Clear the target directory (except .metadata)
-            for item in self.target_dir.iterdir():
+            # Clear the version directory (except .metadata)
+            for item in self.version_dir.iterdir():
                 if item.name != ".metadata":
                     if item.is_dir():
                         shutil.rmtree(item)
                     else:
                         item.unlink()
             
-            # Copy files to the target directory
+            # Copy files to the version directory
             for item in source_dir.iterdir():
                 if item.is_dir():
-                    shutil.copytree(item, self.target_dir / item.name)
+                    shutil.copytree(item, self.version_dir / item.name)
                 else:
-                    shutil.copy2(item, self.target_dir / item.name)
+                    shutil.copy2(item, self.version_dir / item.name)
             
             # Update metadata
             metadata = {
@@ -247,7 +310,12 @@ def parse_arguments():
         "--version",
         type=str,
         default=DEFAULT_VERSION,
-        help=f"Laravel version branch to use (default: {DEFAULT_VERSION})"
+        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}). Supported: {', '.join(SUPPORTED_VERSIONS)}"
+    )
+    parser.add_argument(
+        "--all-versions",
+        action="store_true",
+        help="Update documentation for all supported versions"
     )
     parser.add_argument(
         "--force",
@@ -269,6 +337,31 @@ def parse_arguments():
     
     return parser.parse_args()
 
+def update_version(target_dir: Path, version: str, force: bool, check_only: bool) -> tuple[bool, bool]:
+    """Update documentation for a single version.
+    
+    Returns:
+        (success, updated): success indicates if operation completed without error,
+                           updated indicates if files were actually updated
+    """
+    try:
+        updater = DocsUpdater(target_dir, version)
+        
+        if check_only:
+            needs_update = updater.needs_update()
+            logger.info(f"Version {version}: {'needs' if needs_update else 'does not need'} updating.")
+            return True, needs_update
+        else:
+            updated = updater.update(force=force)
+            if updated:
+                logger.info(f"Version {version}: Updated successfully")
+            else:
+                logger.info(f"Version {version}: Already up to date")
+            return True, updated
+    except Exception as e:
+        logger.error(f"Version {version}: Update failed - {str(e)}")
+        return False, False
+
 def main():
     """Main entry point for the Laravel Docs Updater."""
     args = parse_arguments()
@@ -280,22 +373,42 @@ def main():
     target_dir = Path(args.target_dir).resolve()
     target_dir.mkdir(parents=True, exist_ok=True)
     
-    updater = DocsUpdater(target_dir, args.version)
+    # Validate version if not updating all
+    if not args.all_versions and args.version not in SUPPORTED_VERSIONS:
+        logger.error(f"Unsupported version: {args.version}. Supported versions: {', '.join(SUPPORTED_VERSIONS)}")
+        return 1
     
     try:
-        if args.check_only:
-            needs_update = updater.needs_update()
-            print(f"Documentation {'needs' if needs_update else 'does not need'} updating.")
-            return 0 if not needs_update else 1
+        if args.all_versions:
+            # Update all supported versions
+            all_success = True
+            any_updated = False
+            
+            for version in SUPPORTED_VERSIONS:
+                logger.info(f"Processing version {version}...")
+                success, updated = update_version(target_dir, version, args.force, args.check_only)
+                
+                if not success:
+                    all_success = False
+                if updated:
+                    any_updated = True
+            
+            if args.check_only:
+                return 0 if not any_updated else 1
+            else:
+                return 0 if all_success else 1
         else:
-            updated = updater.update(force=args.force)
-            return 1 if updated else 0
+            # Update single version
+            success, updated = update_version(target_dir, args.version, args.force, args.check_only)
+            
+            if args.check_only:
+                return 0 if not updated else 1
+            else:
+                return 0 if success else 1
+                
     except KeyboardInterrupt:
         logger.info("Operation cancelled by user")
         return 130
-    except Exception as e:
-        logger.error(f"Operation failed: {str(e)}")
-        return 1
 
 if __name__ == "__main__":
     sys.exit(main())
