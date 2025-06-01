@@ -135,21 +135,34 @@ async def main():
     client = Client("path/to/laravel_docs_server.py")
     
     async with client:
-        # List documentation
-        result = await client.call_tool("list_docs", {})
+        # List documentation for all versions
+        result = await client.call_tool("list_laravel_docs", {})
         print(result)
         
-        # Search documentation
-        result = await client.call_tool("search_docs", {"query": "routing"})
+        # List documentation for specific version
+        result = await client.call_tool("list_laravel_docs", {"version": "11.x"})
+        print(result)
+        
+        # Search documentation across all versions
+        result = await client.call_tool("search_laravel_docs", {"query": "routing"})
+        print(result)
+        
+        # Search in specific version
+        result = await client.call_tool("search_laravel_docs", 
+                                       {"query": "blade components", "version": "12.x"})
         print(result)
         
         # Get package recommendations
-        result = await client.call_tool("get_package_recommendations", 
+        result = await client.call_tool("get_laravel_package_recommendations", 
                                        {"use_case": "implementing subscription billing"})
         print(result)
         
-        # Read documentation
+        # Read documentation (latest version)
         resource = await client.read_resource("laravel://routing.md")
+        print(resource)
+        
+        # Read documentation (specific version)
+        resource = await client.read_resource("laravel://11.x/blade.md")
         print(resource)
 
 if __name__ == "__main__":
@@ -204,7 +217,7 @@ This project includes several automated GitHub Actions workflows:
 
 ## Features and Roadmap
 
-Current Features:
+### Current Features (v0.2.0)
 - ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
 - ✅ **Future-Proof Version Detection**: Automatically detects and supports new Laravel releases (13.x, 14.x, etc.)
 - ✅ **Daily Documentation Updates**: Automatically syncs with Laravel's GitHub repository every day
@@ -216,11 +229,14 @@ Current Features:
 - ✅ **Flexible Configuration**: Support for multiple Laravel versions and transport methods
 - ✅ **Graceful Shutdown**: Proper cleanup and signal handling
 
-Planned Features:
-- 🔍 User project analysis for tailored recommendations
-- 🚀 Enhanced search capabilities with semantic matching
-- 📊 Usage analytics and insights
-- 🔗 Additional Laravel ecosystem integrations
+### Upcoming Features
+- 🔧 **v0.3.0**: Comprehensive testing, performance optimization, enhanced error handling
+- 🔍 **v0.4.0**: Semantic search, code example extraction, cross-version comparison
+- 📦 **v0.5.0**: Extended Laravel ecosystem support, community package integration
+- 🎯 **v0.6.0**: Project analysis, personalized recommendations, migration assistance
+- 🚀 **v1.0.0**: The definitive Laravel documentation companion
+
+For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).
 
 ## License
 
