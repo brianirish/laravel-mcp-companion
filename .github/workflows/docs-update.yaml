@@ -35,11 +35,15 @@ jobs:
         set +e
         source .venv/bin/activate
         python docs_updater.py --all-versions
-        UPDATE_NEEDED=$?
-        if [ "$UPDATE_NEEDED" -eq 1 ]; then 
-          echo "updates_available=true" >> $GITHUB_OUTPUT
-        else
+        UPDATE_STATUS=$?
+        
+        # Check if any files were actually changed
+        if git diff --quiet docs/; then
           echo "updates_available=false" >> $GITHUB_OUTPUT
+          echo "No file changes detected"
+        else
+          echo "updates_available=true" >> $GITHUB_OUTPUT
+          echo "File changes detected"
         fi
     - name: Close existing pull requests
       if: steps.check-updates.outputs.updates_available == 'true'
