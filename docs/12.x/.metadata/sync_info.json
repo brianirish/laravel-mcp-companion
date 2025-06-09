@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "8c05067e5f899d150e0c91e69dea289b7ea1407b",
-  "commit_date": "2025-05-27T21:44:04Z",
-  "commit_message": "[12.x] Add documentation for \"Rule::contains\" (#10457)\n\n* Add documentation for new \"contains\" validation rule\n\n* Update validation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/8c05067e5f899d150e0c91e69dea289b7ea1407b",
-  "sync_time": "2025-06-01T01:58:21Z"
+  "commit_sha": "ee8f2805e6ef75d877eb8ffa20110e3b6e08b647",
+  "commit_date": "2025-06-09T17:42:02Z",
+  "commit_message": "[12.x] Format remaining tables (#10488)\n\n* Update authentication.md\n\n* Update pagination.md\n\n* Update passport.md\n\n* Update releases.md\n\n* Update scheduling.md",
+  "commit_url": "https://github.com/laravel/docs/commit/ee8f2805e6ef75d877eb8ffa20110e3b6e08b647",
+  "sync_time": "2025-06-09T18:34:48Z"
 }
