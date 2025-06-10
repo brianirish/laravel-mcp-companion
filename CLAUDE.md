@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 **IMPORTANT**: Always activate the virtual environment first with `source .venv/bin/activate` before running any Python commands.
+**IMPORTANT**: Never attribute Claude Code in git commits.
 
 ### Development and Testing
 - **Run type checking**: `mypy .` (temporarily install with `uv pip install mypy`)
@@ -30,6 +31,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Install dependencies**: `uv pip install .`
 - **Install development dependencies**: `uv pip install -r requirements-dev.txt`
 - **Create virtual environment**: `uv venv`
+
+**IMPORTANT**: Never attribute Claude Code in git commits.
 
 ## Architecture
 
@@ -61,6 +64,8 @@ This is a Model Context Protocol (MCP) server that provides Laravel documentatio
 - **Branch Protection**: Requires status checks, enables auto-merge
 
 ## Commit Style
+
+**IMPORTANT**: Never attribute Claude Code in git commits.
 
 When asked to commit changes, use simple, direct commit messages without Claude Code attribution. Write as if the user wrote them. Use lowercase, be brief but clear about what changed.
 
