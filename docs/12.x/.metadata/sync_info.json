@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "ee8f2805e6ef75d877eb8ffa20110e3b6e08b647",
-  "commit_date": "2025-06-09T17:42:02Z",
-  "commit_message": "[12.x] Format remaining tables (#10488)\n\n* Update authentication.md\n\n* Update pagination.md\n\n* Update passport.md\n\n* Update releases.md\n\n* Update scheduling.md",
-  "commit_url": "https://github.com/laravel/docs/commit/ee8f2805e6ef75d877eb8ffa20110e3b6e08b647",
-  "sync_time": "2025-06-09T18:34:48Z"
+  "commit_sha": "5070d927f4ca580c228cfa3936fd16c4ac58481d",
+  "commit_date": "2025-06-10T15:42:12Z",
+  "commit_message": "document compare",
+  "commit_url": "https://github.com/laravel/docs/commit/5070d927f4ca580c228cfa3936fd16c4ac58481d",
+  "sync_time": "2025-06-11T01:21:25Z"
 }
