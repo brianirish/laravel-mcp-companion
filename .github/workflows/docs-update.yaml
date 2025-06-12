@@ -141,4 +141,4 @@ jobs:
         # Manually trigger the release workflow since actions don't trigger other workflows
         gh workflow run release.yaml --ref $NEW_VERSION
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
