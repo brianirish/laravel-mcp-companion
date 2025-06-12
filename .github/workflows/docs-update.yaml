@@ -136,9 +136,6 @@ jobs:
           --title "$NEW_VERSION" \
           --notes "Laravel Documentation Update - Updated to latest version" \
           --latest
-        
-        echo "Triggering release workflow for $NEW_VERSION"
-        # Manually trigger the release workflow since actions don't trigger other workflows
-        gh workflow run release.yaml --ref $NEW_VERSION
+
       env:
         GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
