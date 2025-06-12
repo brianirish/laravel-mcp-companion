@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5070d927f4ca580c228cfa3936fd16c4ac58481d",
-  "commit_date": "2025-06-10T15:42:12Z",
-  "commit_message": "document compare",
-  "commit_url": "https://github.com/laravel/docs/commit/5070d927f4ca580c228cfa3936fd16c4ac58481d",
-  "sync_time": "2025-06-11T01:21:25Z"
+  "commit_sha": "a51a037d97cb0b9e927993b716d0b161e7a0934a",
+  "commit_date": "2025-06-11T13:00:28Z",
+  "commit_message": "add proper links (#10496)",
+  "commit_url": "https://github.com/laravel/docs/commit/a51a037d97cb0b9e927993b716d0b161e7a0934a",
+  "sync_time": "2025-06-12T02:03:01Z"
 }
