@@ -93,9 +93,16 @@ jobs:
         # Enable auto-merge
         gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
         
-        # Wait for all checks to complete
-        echo "Waiting for all checks to complete..."
-        gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --watch
+        # Check if there are any checks configured for this PR
+        echo "Checking for required status checks..."
+        CHECK_COUNT=$(gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --json state | jq '. | length')
+        
+        if [ "$CHECK_COUNT" -gt 0 ]; then
+          echo "Found $CHECK_COUNT checks. Waiting for all checks to complete..."
+          gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --watch
+        else
+          echo "No checks found. Auto-merge will proceed without waiting for checks."
+        fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
