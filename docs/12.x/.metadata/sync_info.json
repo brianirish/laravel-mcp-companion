@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a51a037d97cb0b9e927993b716d0b161e7a0934a",
-  "commit_date": "2025-06-11T13:00:28Z",
-  "commit_message": "add proper links (#10496)",
-  "commit_url": "https://github.com/laravel/docs/commit/a51a037d97cb0b9e927993b716d0b161e7a0934a",
-  "sync_time": "2025-06-12T02:03:01Z"
+  "commit_sha": "c60625a5aff0f468053aa804d48665d5379f03a8",
+  "commit_date": "2025-06-16T13:47:24Z",
+  "commit_message": "[12.x] Add `php artisan horizon:clear-metrics` command (#10504)\n\n* Update horizon.md\n\nInclude `php artisan horizon:clear-metrics` command\n\n* Update horizon.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/c60625a5aff0f468053aa804d48665d5379f03a8",
+  "sync_time": "2025-06-17T01:21:32Z"
 }
