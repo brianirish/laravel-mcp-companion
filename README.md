@@ -208,3 +208,6 @@ Contributions are welcome! See CONTRIBUTING.md for guidelines.
 
 - Laravel for their excellent documentation
 - Laravel package authors for their contributions to the ecosystem
+
+---
+*✅ Certified by [MCP Review](https://mcpreview.com/mcp-servers/brianirish/laravel-docs-mcp)*
