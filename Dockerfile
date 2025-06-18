@@ -17,5 +17,8 @@ RUN pip install --no-cache-dir fastmcp mcp[cli,client]
 # Default environment
 ENV PYTHONUNBUFFERED=1
 
-# Run the MCP server
-CMD ["python", "laravel_docs_server.py"]
+# Expose port for HTTP transport
+EXPOSE 8000
+
+# Run the MCP server with HTTP transport
+CMD ["python", "laravel_docs_server.py", "--transport", "sse", "--host", "0.0.0.0", "--port", "8000"]
