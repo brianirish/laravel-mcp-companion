@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "118eb1970420602073990b081b18bef59582c8b3",
-  "commit_date": "2025-06-17T17:18:10Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/118eb1970420602073990b081b18bef59582c8b3",
-  "sync_time": "2025-06-17T17:21:30Z"
+  "commit_sha": "2db745c10a3a367c6bcafb5bfe019fb5d3009ca9",
+  "commit_date": "2025-06-17T19:17:29Z",
+  "commit_message": "Missing semi-colon (#10509)",
+  "commit_url": "https://github.com/laravel/docs/commit/2db745c10a3a367c6bcafb5bfe019fb5d3009ca9",
+  "sync_time": "2025-06-18T01:20:43Z"
 }
