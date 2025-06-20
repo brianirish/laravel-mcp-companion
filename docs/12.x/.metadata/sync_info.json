@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a9716c300bff2a7c773ed46ca14afab5860fdfbe",
-  "commit_date": "2025-06-18T18:44:28Z",
-  "commit_message": "Add documentation for fromBase64() (#10514)\n\n* Add documentation for Str::of(...)->fromBase64()\n\n* Add documentation for Str::of(...)->fromBase64()\n\n* Apply suggestions\n\nCo-authored-by: Sebastian H\u00e4drich <11225821+shaedrich@users.noreply.github.com>\n\n* formatting\n\n---------\n\nCo-authored-by: Sebastian H\u00e4drich <11225821+shaedrich@users.noreply.github.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/a9716c300bff2a7c773ed46ca14afab5860fdfbe",
-  "sync_time": "2025-06-19T01:21:09Z"
+  "commit_sha": "f0dd01fbfc7a510da582efa03c6e1b31ef188aed",
+  "commit_date": "2025-06-19T17:19:05Z",
+  "commit_message": "Improve consistency and clarity in Filesystem Directories (#10515)",
+  "commit_url": "https://github.com/laravel/docs/commit/f0dd01fbfc7a510da582efa03c6e1b31ef188aed",
+  "sync_time": "2025-06-20T01:20:38Z"
 }
