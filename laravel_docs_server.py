@@ -1175,7 +1175,6 @@ def main():
         
         lines = content.split('\n')
         structure = []
-        current_section = []
         
         for line in lines:
             if line.startswith('#'):
@@ -1303,7 +1302,7 @@ def main():
                             'file': file,
                             'description': description
                         })
-                except:
+                except Exception:
                     relevant_files.append({'file': file, 'description': 'Unable to read description'})
         
         if not relevant_files:
