@@ -30,6 +30,8 @@ This application is written in a way to maximize the value out of GitHub Actions
 npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
 ```
 
+*Note: Smithery automatically configures your AI client. Skip to "First Run" below.*
+
 ### Install from PyPI
 
 ```bash
@@ -39,143 +41,79 @@ pip install laravel-docs-mcp
 ### Docker
 
 ```bash
-# Pull and run the latest version
-docker run -p 8000:8000 ghcr.io/brianirish/laravel-docs-mcp:latest
-
-# Or run a specific version
-docker run -p 8000:8000 ghcr.io/brianirish/laravel-docs-mcp:v0.1.4
+docker run ghcr.io/brianirish/laravel-docs-mcp:latest
 ```
-
-### Manual Installation from Source
-
-#### Prerequisites
-- Python 3.12+
-- `uv` package manager (recommended)
-
-#### Steps
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/brianirish/laravel-docs-mcp.git
-   cd laravel-docs-mcp
-   ```
-
-2. Set up environment and install dependencies:
-   ```bash
-   # Create and activate virtual environment
-   uv venv
-   source .venv/bin/activate  # Linux/macOS
-   # or
-   .venv\Scripts\activate     # Windows
-   
-   # Install dependencies
-   uv pip install .
-   ```
 
 ## Usage
 
-### Using with AI Clients
+### Smithery Installation
+No additional configuration needed - Smithery automatically sets up your AI client.
 
-Once installed, the MCP server integrates directly with your AI client (Claude Desktop, Cursor, etc.). The server provides Laravel documentation and package recommendation tools that your AI assistant can use automatically.
+### PyPI Installation
+Add this to your AI client's MCP configuration:
 
-### Smithery (Recommended)
-
-After installing via Smithery, the server is automatically configured with your AI client:
-
-```bash
-npx -y @smithery/cli install @brianirish/laravel-docs-mcp --client claude
+```json
+{
+  "mcpServers": {
+    "laravel-docs": {
+      "command": "python",
+      "args": ["laravel_docs_server.py"]
+    }
+  }
+}
 ```
 
-The server runs automatically when your AI client needs it. No manual startup required.
+### Docker Installation
+Add this to your AI client's MCP configuration:
 
-### Docker
-
-The Docker container runs the server immediately:
-
-```bash
-# Basic usage with default settings
-docker run ghcr.io/brianirish/laravel-docs-mcp:latest
-
-# Custom configuration with environment variables
-docker run -e LOG_LEVEL=DEBUG -e LARAVEL_VERSION=11.x ghcr.io/brianirish/laravel-docs-mcp:latest
-
-# Network transport for remote access
-docker run -p 8000:8000 ghcr.io/brianirish/laravel-docs-mcp:latest --transport websocket --host 0.0.0.0 --port 8000
+```json
+{
+  "mcpServers": {
+    "laravel-docs": {
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "ghcr.io/brianirish/laravel-docs-mcp:latest"]
+    }
+  }
+}
 ```
 
-### PyPI / Manual Installation
+### Custom Options
+For PyPI installations, add options to the args array:
 
-After installing from PyPI or source, start the server manually:
-
-```bash
-# Basic server start
-laravel-docs-server
-
-# Or if installed from source
-python laravel_docs_server.py
+```json
+{
+  "mcpServers": {
+    "laravel-docs": {
+      "command": "python",
+      "args": [
+        "laravel_docs_server.py",
+        "--version", "11.x",
+        "--log-level", "INFO",
+        "--update-docs"
+      ]
+    }
+  }
+}
 ```
 
-The server automatically fetches Laravel documentation on first run and can be stopped with Ctrl+C.
+### Available Options
 
-### Advanced Configuration
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--version VERSION` | Laravel version (e.g., "12.x", "11.x") | Latest |
+| `--docs-path PATH` | Documentation directory | `./docs` |
+| `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
+| `--update-docs` | Update documentation on startup | false |
+| `--force-update` | Force documentation update | false |
 
-For custom deployments, you can configure various options:
+### First Run
 
-| Option | Description |
-|--------|-------------|
-| `--docs-path PATH` | Documentation directory path (default: ./docs) |
-| `--server-name NAME` | Server name (default: LaravelDocs) |
-| `--log-level LEVEL` | Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO) |
-| `--transport TYPE` | Transport method: stdio, websocket, sse (default: stdio) |
-| `--host HOST` | Host to bind to (network transport) |
-| `--port PORT` | Port to listen on (network transport) |
-| `--version VERSION` | Laravel version branch (default: latest available) |
-| `--update-docs` | Update documentation before starting |
-| `--force-update` | Force documentation update |
+The server automatically downloads Laravel documentation on first use. This may take a few moments initially.
 
-Example with custom options:
-```bash
-python laravel_docs_server.py --docs-path /path/to/docs --version 11.x --update-docs --transport websocket --host localhost --port 8000
-```
-
-### Documentation Management
-
-Update documentation independently of the server:
-
-```bash
-# Update documentation for latest version
-python docs_updater.py --target-dir ./docs
-
-# Update specific version
-python docs_updater.py --target-dir ./docs --version 11.x
-
-# Update all supported versions
-python docs_updater.py --all-versions
-
-# Check if update is needed
-python docs_updater.py --check-only
-
-# Force update
-python docs_updater.py --force
-```
-
-## API Reference
-
-### Documentation Tools
-- `list_laravel_docs(version: Optional[str])` - List documentation files (all versions or specific version)
-- `search_laravel_docs(query: str, version: Optional[str])` - Search documentation for specific terms
-- `update_laravel_docs(version: Optional[str], force: bool)` - Update documentation
-- `laravel_docs_info(version: Optional[str])` - Get documentation version information
-
-### Package Recommendation Tools
-- `get_laravel_package_recommendations(use_case: str)` - Get package recommendations for a use case
-- `get_laravel_package_info(package_name: str)` - Get details about a specific package
-- `get_laravel_package_categories(category: str)` - List packages in a specific category
-- `get_features_for_laravel_package(package: str)` - Get available features for a package
 
 ## Features and Roadmap
 
-### Current Features (v0.2.0)
+### Current Features (v0.3.x)
 - ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
 - ✅ **Future-Proof Version Detection**: Automatically detects and supports new Laravel releases (13.x, 14.x, etc.)
 - ✅ **Daily Documentation Updates**: Automatically syncs with Laravel's GitHub repository every day
@@ -184,14 +122,14 @@ python docs_updater.py --force
 - ✅ **Multiple Deployment Options**: PyPI package, Docker images, and Smithery marketplace
 - ✅ **Package Recommendations**: Intelligent suggestions based on specific use cases
 - ✅ **Implementation Guidance**: Detailed information for common Laravel packages
-- ✅ **Flexible Configuration**: Support for multiple Laravel versions and transport methods
+- ✅ **Flexible Configuration**: Support for multiple Laravel versions
 - ✅ **Graceful Shutdown**: Proper cleanup and signal handling
 
 ### Upcoming Features
-- 🔧 **v0.3.0**: Comprehensive testing, performance optimization, enhanced error handling
-- 🔍 **v0.4.0**: Semantic search, code example extraction, cross-version comparison
-- 📦 **v0.5.0**: Extended Laravel ecosystem support, community package integration
-- 🎯 **v0.6.0**: Project analysis, personalized recommendations, migration assistance
+- 🔧 **v0.4.0**: Comprehensive testing, performance optimization, enhanced error handling
+- 🔍 **v0.5.0**: Semantic search, code example extraction, cross-version comparison
+- 📦 **v0.6.0**: Extended Laravel ecosystem support, community package integration
+- 🎯 **v0.7.0**: Project analysis, personalized recommendations, migration assistance
 - 🚀 **v1.0.0**: The definitive Laravel documentation companion
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).

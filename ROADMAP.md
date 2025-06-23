@@ -8,8 +8,8 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - ✅ Version-specific resource access and tools
 - ✅ Automated daily documentation updates
 
-## v0.3.0 - Core Stability & Testing
-**Target: Q1 2025**
+## v0.4.0 - Core Stability & Testing
+**Target: Q2 2025**
 
 ### Infrastructure
 - [ ] Comprehensive test suite (unit and integration tests)
@@ -22,7 +22,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Better error messages and user feedback
 - [ ] Documentation for self-hosting and customization
 
-## v0.4.0 - Enhanced Search & Discovery
+## v0.5.0 - Enhanced Search & Discovery
 **Target: Q2 2025**
 
 ### Smart Search
@@ -36,8 +36,8 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Improved package recommendation algorithms
 - [ ] Category-based browsing and filtering
 
-## v0.5.0 - Extended Laravel Ecosystem
-**Target: Q2 2025**
+## v0.6.0 - Extended Laravel Ecosystem
+**Target: Q3 2025**
 
 ### Expanded Coverage
 - [ ] Popular package documentation integration (Livewire, Inertia, etc.)
@@ -50,7 +50,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Automated package metadata collection
 - [ ] Community ratings and reviews integration
 
-## v0.6.0 - Project Intelligence
+## v0.7.0 - Project Intelligence
 **Target: Q3 2025**
 
 ### Project Analysis
@@ -64,8 +64,8 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Contextual suggestions based on project patterns
 - [ ] Custom package collections
 
-## v0.7.0 - Advanced Features
-**Target: Q3 2025**
+## v0.8.0 - Advanced Features
+**Target: Q4 2025**
 
 ### Interactive Documentation
 - [ ] Step-by-step implementation guides
@@ -78,7 +78,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Localized package recommendations
 - [ ] Regional Laravel community integration
 
-## v0.8.0 - Production Readiness
+## v0.9.0 - Production Readiness
 **Target: Q4 2025**
 
 ### Reliability & Scale
@@ -92,7 +92,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Privacy controls and data handling
 - [ ] Compliance with enterprise requirements
 
-## v0.9.0 - Integration & Ecosystem
+## v0.10.0 - Integration & Ecosystem
 **Target: Q4 2025**
 
 ### Developer Tools
