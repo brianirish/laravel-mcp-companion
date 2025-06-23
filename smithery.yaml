@@ -3,11 +3,51 @@
 startCommand:
   type: stdio
   configSchema:
-    # JSON Schema defining the configuration options for the MCP.
     type: object
     description: Configuration for starting the Laravel Docs MCP Server
-  commandFunction:
-    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
-    |-
-    (config) => ({ command: 'python', args: ['laravel_docs_server.py', '--transport', 'sse', '--host', '0.0.0.0', '--port', '8000'] })
-  exampleConfig: {}
+    properties:
+      docsPath:
+        type: string
+        description: Path to Laravel documentation directory
+        default: "./docs"
+      serverName:
+        type: string
+        description: Name of the MCP server
+        default: "LaravelDocs"
+      logLevel:
+        type: string
+        description: Logging level
+        enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        default: "INFO"
+      version:
+        type: string
+        description: Laravel version branch to use (e.g., '12.x', '11.x')
+        default: "12.x"
+      updateDocs:
+        type: boolean
+        description: Update documentation before starting server
+        default: false
+      forceUpdate:
+        type: boolean
+        description: Force update of documentation even if already up to date
+        default: false
+  commandFunction: |
+    (config) => {
+      const args = ['laravel_docs_server.py'];
+      
+      if (config.docsPath) args.push('--docs-path', config.docsPath);
+      if (config.serverName) args.push('--server-name', config.serverName);
+      if (config.logLevel) args.push('--log-level', config.logLevel);
+      if (config.version) args.push('--version', config.version);
+      if (config.updateDocs) args.push('--update-docs');
+      if (config.forceUpdate) args.push('--force-update');
+      
+      return { command: 'python', args };
+    }
+  exampleConfig:
+    docsPath: "./docs"
+    serverName: "LaravelDocs"
+    logLevel: "INFO"
+    version: "12.x"
+    updateDocs: false
+    forceUpdate: false
