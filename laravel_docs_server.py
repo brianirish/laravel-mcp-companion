@@ -32,6 +32,7 @@ logger = logging.getLogger("laravel-docs-mcp")
 SUPPORTED_VERSIONS = get_cached_supported_versions()
 
 # Define the Laravel package catalog
+# Updated PACKAGE_CATALOG with more Laravel packages
 PACKAGE_CATALOG = {
     "laravel/cashier": {
         "name": "Laravel Cashier",
@@ -148,95 +149,243 @@ PACKAGE_CATALOG = {
         ],
         "installation": "composer require inertiajs/inertia-laravel",
         "documentation_link": "laravel://inertia.md"
+    },
+    "laravel/horizon": {
+        "name": "Laravel Horizon",
+        "description": "Laravel Horizon provides a beautiful dashboard and code-driven configuration for your Redis queues. Horizon allows you to easily monitor key metrics of your queue system.",
+        "categories": ["queue", "monitoring", "redis", "dashboard"],
+        "use_cases": [
+            "Monitoring Redis queue performance",
+            "Managing queue workers and jobs",
+            "Tracking job failures and retries",
+            "Visualizing queue throughput and wait times"
+        ],
+        "installation": "composer require laravel/horizon",
+        "documentation_link": "laravel://horizon.md"
+    },
+    "laravel/telescope": {
+        "name": "Laravel Telescope",
+        "description": "Laravel Telescope makes a wonderful companion to your local Laravel development environment. Telescope provides insight into the requests, exceptions, database queries, queued jobs, mail, notifications, cache operations, scheduled tasks, variable dumps, and more.",
+        "categories": ["debugging", "monitoring", "development", "dashboard"],
+        "use_cases": [
+            "Debugging application requests and responses",
+            "Monitoring database queries and performance",
+            "Tracking exceptions and logs",
+            "Inspecting queued jobs and mail"
+        ],
+        "installation": "composer require laravel/telescope --dev",
+        "documentation_link": "laravel://telescope.md"
+    },
+    "laravel/jetstream": {
+        "name": "Laravel Jetstream",
+        "description": "Laravel Jetstream is a beautifully designed application starter kit for Laravel and provides the perfect starting point for your next Laravel application. Jetstream provides the implementation for your application's login, registration, email verification, two-factor authentication, session management, API via Laravel Sanctum, and optional team management features.",
+        "categories": ["authentication", "frontend", "scaffolding", "teams"],
+        "use_cases": [
+            "Building applications with team support",
+            "Implementing two-factor authentication",
+            "Creating API tokens for users",
+            "Setting up profile management"
+        ],
+        "installation": "composer require laravel/jetstream",
+        "documentation_link": "laravel://starter-kits/jetstream.md"
+    },
+    "laravel/octane": {
+        "name": "Laravel Octane",
+        "description": "Laravel Octane supercharges your application's performance by serving your application using high-powered application servers, including Swoole and RoadRunner.",
+        "categories": ["performance", "server", "optimization"],
+        "use_cases": [
+            "Dramatically improving application performance",
+            "Running Laravel with persistent application state",
+            "Handling thousands of requests per second",
+            "Reducing server costs through efficiency"
+        ],
+        "installation": "composer require laravel/octane",
+        "documentation_link": "laravel://octane.md"
+    },
+    "laravel/socialite": {
+        "name": "Laravel Socialite",
+        "description": "Laravel Socialite provides an expressive, fluent interface to OAuth authentication with Facebook, Twitter, Google, LinkedIn, GitHub, GitLab, and Bitbucket.",
+        "categories": ["authentication", "oauth", "social"],
+        "use_cases": [
+            "Implementing social login (Google, Facebook, etc.)",
+            "OAuth authentication with third-party providers",
+            "Simplifying social media integration",
+            "User registration via social accounts"
+        ],
+        "installation": "composer require laravel/socialite",
+        "documentation_link": "laravel://socialite.md"
+    },
+    "spatie/laravel-medialibrary": {
+        "name": "Spatie Media Library",
+        "description": "This package can associate all sorts of media files with Eloquent models. It provides a simple API to work with.",
+        "categories": ["media", "files", "uploads", "storage"],
+        "use_cases": [
+            "Managing file uploads and attachments",
+            "Creating image thumbnails and conversions",
+            "Organizing media collections",
+            "Handling file storage across different disks"
+        ],
+        "installation": "composer require spatie/laravel-medialibrary",
+        "documentation_link": "https://spatie.be/docs/laravel-medialibrary"
+    },
+    "laravel/excel": {
+        "name": "Laravel Excel (Maatwebsite)",
+        "description": "Supercharged Excel exports and imports in Laravel. A simple, but elegant Laravel wrapper around PhpSpreadsheet exports and imports.",
+        "categories": ["excel", "export", "import", "files"],
+        "use_cases": [
+            "Exporting data to Excel files",
+            "Importing Excel data into database",
+            "Generating complex Excel reports",
+            "Processing CSV files"
+        ],
+        "installation": "composer require maatwebsite/excel",
+        "documentation_link": "https://laravel-excel.com"
+    },
+    "barryvdh/laravel-debugbar": {
+        "name": "Laravel Debugbar",
+        "description": "This is a package to integrate PHP Debug Bar with Laravel. It includes a ServiceProvider to register the debugbar and attach it to the output.",
+        "categories": ["debugging", "development", "profiling"],
+        "use_cases": [
+            "Debugging database queries",
+            "Profiling application performance",
+            "Inspecting views and route information",
+            "Monitoring memory usage"
+        ],
+        "installation": "composer require barryvdh/laravel-debugbar --dev",
+        "documentation_link": "https://github.com/barryvdh/laravel-debugbar"
+    },
+    "laravel/cashier-paddle": {
+        "name": "Laravel Cashier Paddle",
+        "description": "Laravel Cashier Paddle provides an expressive, fluent interface to Paddle's subscription billing services.",
+        "categories": ["payment", "billing", "subscription"],
+        "use_cases": [
+            "Implementing Paddle payment integration",
+            "Managing SaaS subscriptions",
+            "Handling international payments and taxes",
+            "Processing one-time purchases"
+        ],
+        "installation": "composer require laravel/cashier-paddle",
+        "documentation_link": "laravel://billing.md#paddle-billing"
     }
 }
 
-# Feature map for Laravel packages
+# Updated FEATURE_MAP with more implementation details
 FEATURE_MAP = {
-    "laravel/cashier": ["subscription", "one-time-payment", "webhook-handling"],
-    "laravel/sanctum": ["api-authentication", "token-abilities", "spa-authentication"],
-    "laravel/scout": ["basic-search", "meilisearch-setup", "custom-engines"],
-    "livewire/livewire": ["basic-component", "form-validation", "real-time-search"],
-    "laravel/fortify": ["basic-setup", "two-factor-auth", "email-verification"],
-    "laravel/passport": ["oauth-setup", "token-scopes", "client-credentials"],
-    "laravel/breeze": ["blade-setup", "react-setup", "vue-setup"],
-    "spatie/laravel-permission": ["basic-setup", "role-management", "policies-integration"],
-    "inertiajs/inertia-laravel": ["vue-setup", "react-setup", "spa-navigation"]
+    "laravel/cashier": ["subscription-setup", "one-time-payments", "webhook-handling", "subscription-swapping", "trial-periods", "invoice-generation"],
+    "laravel/sanctum": ["spa-authentication", "api-tokens", "token-abilities", "mobile-auth", "token-revocation"],
+    "laravel/scout": ["basic-search", "algolia-driver", "meilisearch-driver", "custom-engines", "search-filters", "pagination"],
+    "livewire/livewire": ["components", "data-binding", "actions", "validation", "file-uploads", "polling", "events"],
+    "laravel/fortify": ["login", "registration", "password-reset", "email-verification", "two-factor-auth", "profile-update"],
+    "laravel/passport": ["oauth-server", "password-grant", "client-credentials", "authorization-code", "token-scopes", "personal-tokens"],
+    "laravel/breeze": ["blade-views", "react-setup", "vue-setup", "inertia-setup", "api-setup", "dark-mode"],
+    "spatie/laravel-permission": ["roles", "permissions", "direct-permissions", "role-hierarchy", "middleware", "blade-directives"],
+    "inertiajs/inertia-laravel": ["setup", "routing", "shared-data", "asset-versioning", "ssr", "form-helper"],
+    "laravel/horizon": ["configuration", "metrics", "failed-jobs", "job-retries", "tags", "notifications"],
+    "laravel/telescope": ["entries", "filtering", "pruning", "authorization", "custom-watchers"],
+    "laravel/jetstream": ["profile", "api-tokens", "teams", "team-permissions", "billing-integration"],
+    "laravel/octane": ["swoole-setup", "roadrunner-setup", "state-management", "concurrent-tasks", "cache-optimization"],
+    "laravel/socialite": ["provider-setup", "scopes", "optional-parameters", "stateless-auth", "custom-providers"],
+    "spatie/laravel-medialibrary": ["conversions", "collections", "s3-upload", "responsive-images", "media-streams"],
+    "laravel/excel": ["exports", "imports", "queued-exports", "multiple-sheets", "csv-handling", "styling"],
+    "barryvdh/laravel-debugbar": ["query-debugging", "timeline", "exceptions", "views-data", "route-info"]
 }
 
-# Tool descriptions for MCP tools
+# Updated TOOL_DESCRIPTIONS with new tools
 TOOL_DESCRIPTIONS = {
-    "list_laravel_docs": """A comprehensive documentation indexing tool that provides access to all available Laravel documentation files. Use this tool to get a complete overview of the available documentation landscape before diving into specific topics.
+    "list_laravel_docs": """Lists all available Laravel documentation files across versions. Essential for discovering what documentation exists before diving into specific topics.
 
-When to use this tool:
-- Getting started with Laravel documentation exploration
-- Creating a mental map of available resources
-- Planning which documentation sections to explore
-- Finding specific documentation file names
-- Understanding the organization of Laravel documentation""",
+When to use:
+- Initial exploration of Laravel documentation
+- Finding available documentation files
+- Checking which versions have specific documentation
+- Getting an overview of documentation coverage""",
 
-    "search_laravel_docs": """A powerful search engine for finding specific information across the entire Laravel documentation. This tool allows precise querying to locate exact features, functions, or concepts within the documentation.
+    "read_laravel_doc_content": """Reads the complete content of a specific Laravel documentation file. This is the primary tool for accessing actual documentation content.
 
-When to use this tool:
-- Finding specific Laravel functionality or features
-- Researching how particular components work
-- Locating examples for implementation techniques
-- Exploring detailed API references
-- Discovering configuration options for Laravel features""",
+When to use:
+- Reading full documentation for a feature
+- Getting complete implementation details
+- Accessing code examples from docs
+- Understanding concepts in depth""",
 
-    "update_laravel_docs": """A documentation synchronization tool that ensures you have access to the latest Laravel documentation. This tool can target specific versions and force updates when necessary.
+    "search_laravel_docs": """Searches for specific terms across all Laravel documentation files. Returns file names and match counts.
 
-When to use this tool:
-- Working with newer Laravel releases
-- Ensuring documentation reflects the latest features
-- Switching between different Laravel version documentation
-- Resolving documentation inconsistencies
-- Preparing for Laravel version migrations""",
+When to use:
+- Finding which files mention a specific feature
+- Quick lookup of where topics are discussed
+- Discovering related documentation files""",
 
-    "laravel_docs_info": """A metadata retrieval tool that provides information about the current documentation version and status. This tool helps understand the context and relevance of the documentation you're exploring.
+    "search_laravel_docs_with_context": """Advanced search that returns matching text with surrounding context. Shows exactly how terms are used in documentation.
 
-When to use this tool:
-- Verifying documentation version matches your project
-- Checking when documentation was last updated
-- Understanding which Laravel features are documented
-- Assessing documentation completeness
-- Planning for potential documentation updates""",
+When to use:
+- Understanding how a feature is described
+- Finding specific code examples
+- Getting quick answers without reading full files
+- Seeing usage context for technical terms""",
 
-    "get_laravel_package_recommendations": """An intelligent recommendation engine that suggests Laravel packages based on implementation needs. This tool analyzes your use case to provide contextually relevant package options.
+    "get_doc_structure": """Extracts the table of contents and structure from a documentation file. Shows headers and brief content previews.
 
-When to use this tool:
-- Starting a new Laravel implementation
-- Exploring solutions for specific functionality needs
-- Comparing alternative approaches to a problem
-- Discovering community-recommended packages
-- Finding specialized tools for particular use cases""",
+When to use:
+- Understanding document organization
+- Finding specific sections within large files
+- Getting a quick overview before deep reading
+- Navigating to relevant parts of documentation""",
 
-    "get_laravel_package_info": """A detailed package analysis tool that provides comprehensive information about specific Laravel packages. This tool helps evaluate packages for your implementation needs.
+    "browse_docs_by_category": """Discovers documentation files related to specific categories like 'frontend', 'database', or 'authentication'.
 
-When to use this tool:
-- Researching package capabilities and limitations
-- Checking package compatibility with your Laravel version
-- Understanding package dependencies and requirements
-- Evaluating package maintenance status and community support
-- Reviewing package documentation and usage instructions""",
+When to use:
+- Exploring all docs for a particular domain
+- Finding related documentation files
+- Learning about category-specific features
+- Discovering documentation you didn't know existed""",
 
-    "get_laravel_package_categories": """A categorical exploration tool that organizes Laravel packages by functionality domain. This tool helps discover related packages within specific application areas.
+    "update_laravel_docs": """Updates documentation from the official Laravel GitHub repository. Ensures access to the latest documentation changes.
 
-When to use this tool:
-- Exploring available options within a functional domain
-- Comparing packages that solve similar problems
-- Discovering specialized packages for particular needs
-- Understanding how Laravel ecosystem addresses specific requirements
-- Finding alternatives to currently used packages""",
+When to use:
+- Working with newly released Laravel versions
+- Ensuring documentation is current
+- Resolving missing documentation issues
+- Syncing after Laravel updates""",
 
-    "get_features_for_laravel_package": """A feature inspection tool that provides detailed information about capabilities available within a specific package. This tool helps understand what a package can do before implementation.
+    "laravel_docs_info": """Provides metadata about documentation versions, including last update times and commit information.
 
-When to use this tool:
-- Understanding a package's complete feature set
-- Verifying a package meets all your requirements
-- Planning implementation based on available features
-- Comparing feature sets between similar packages
-- Discovering advanced capabilities you might leverage"""
+When to use:
+- Checking documentation freshness
+- Verifying version compatibility
+- Understanding documentation state
+- Troubleshooting sync issues""",
+
+    "get_laravel_package_recommendations": """Intelligently recommends Laravel packages based on described use cases or implementation needs.
+
+When to use:
+- Starting new feature implementation
+- Finding packages for specific functionality
+- Discovering ecosystem solutions
+- Comparing implementation approaches""",
+
+    "get_laravel_package_info": """Provides comprehensive details about a specific Laravel package including installation and use cases.
+
+When to use:
+- Learning about a specific package
+- Getting installation instructions
+- Understanding package capabilities
+- Checking package categories""",
+
+    "get_laravel_package_categories": """Lists all packages within a specific functional category.
+
+When to use:
+- Exploring packages by domain
+- Comparing similar packages
+- Finding category-specific solutions
+- Discovering package alternatives""",
+
+    "get_features_for_laravel_package": """Details common implementation features and patterns for a specific package.
+
+When to use:
+- Planning package implementation
+- Understanding feature scope
+- Learning implementation patterns
+- Discovering package capabilities"""
 }
 
 def parse_arguments():
@@ -871,7 +1020,304 @@ def main():
             results.append("The AI can generate example code for this implementation based on best practices.")
         
         return "\n".join(results)
-    
+
+    @mcp.tool(description="Read the full content of a specific Laravel documentation file")
+    def read_laravel_doc_content(filename: str, version: Optional[str] = None) -> str:
+        """
+        Read a specific Laravel documentation file.
+        
+        Args:
+            filename: Name of the file (e.g., 'mix.md', 'vite.md')
+            version: Laravel version (e.g., '12.x'). Defaults to latest.
+        
+        Returns:
+            Full markdown content of the documentation file
+        """
+        logger.debug(f"read_laravel_doc_content called: {filename}, version: {version}")
+        
+        if not version:
+            version = DEFAULT_VERSION
+        
+        if not filename.endswith('.md'):
+            filename = f"{filename}.md"
+        
+        file_path = docs_path / version / filename
+        
+        version_path = docs_path / version
+        if not is_safe_path(version_path, file_path):
+            return f"Access denied: {filename}"
+        
+        if not file_path.exists():
+            # Try to list available files to help the user
+            available = [f for f in os.listdir(version_path) if f.endswith('.md')][:10]
+            return f"File not found: {filename} in version {version}. Available files: {', '.join(available)}..."
+        
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        except Exception as e:
+            logger.error(f"Error reading file {file_path}: {str(e)}")
+            return f"Error reading file: {str(e)}"
+
+
+    @mcp.tool(description="Search Laravel docs with context snippets")
+    def search_laravel_docs_with_context(
+        query: str, 
+        version: Optional[str] = None,
+        context_length: int = 200
+    ) -> str:
+        """
+        Search through Laravel documentation with context snippets.
+        
+        Args:
+            query: Search term
+            version: Specific version or None for all
+            context_length: Characters of context to show (default: 200)
+        
+        Returns:
+            Search results with context snippets
+        """
+        logger.debug(f"search_with_context: query={query}, version={version}")
+        
+        if not query.strip():
+            return "Search query cannot be empty"
+        
+        results = []
+        patterns = [
+            re.compile(r'\b' + re.escape(query) + r'\b', re.IGNORECASE),  # Exact word
+            re.compile(re.escape(query), re.IGNORECASE)  # Substring match
+        ]
+        
+        search_versions = [version] if version else SUPPORTED_VERSIONS
+        
+        for v in search_versions:
+            version_path = docs_path / v
+            if not version_path.exists():
+                continue
+            
+            for file in os.listdir(version_path):
+                if not file.endswith('.md'):
+                    continue
+                    
+                file_path = version_path / file
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        
+                    # Try patterns in order
+                    matches = []
+                    for pattern in patterns:
+                        for match in pattern.finditer(content):
+                            start = max(0, match.start() - context_length // 2)
+                            end = min(len(content), match.end() + context_length // 2)
+                            
+                            # Find line boundaries for cleaner snippets
+                            while start > 0 and content[start] not in '\n.!?':
+                                start -= 1
+                            while end < len(content) and content[end] not in '\n.!?':
+                                end += 1
+                            
+                            snippet = content[start:end].strip()
+                            # Highlight the match
+                            snippet = pattern.sub(f"**{match.group()}**", snippet)
+                            
+                            matches.append({
+                                'line': content[:match.start()].count('\n') + 1,
+                                'snippet': snippet
+                            })
+                            
+                            if len(matches) >= 3:  # Limit matches per file
+                                break
+                        
+                        if matches:
+                            break
+                    
+                    if matches:
+                        results.append({
+                            'file': f"{v}/{file}",
+                            'matches': matches
+                        })
+                        
+                except Exception as e:
+                    logger.error(f"Error searching {file_path}: {str(e)}")
+        
+        # Format results
+        if not results:
+            return f"No results found for '{query}'"
+        
+        output = [f"Found '{query}' in {len(results)} files:\n"]
+        
+        for result in results[:10]:  # Limit total results
+            output.append(f"## {result['file']}")
+            for i, match in enumerate(result['matches'][:2]):  # Show first 2 matches
+                output.append(f"\nLine {match['line']}:")
+                output.append(f"...{match['snippet']}...")
+            output.append("")
+        
+        return "\n".join(output)
+
+
+    @mcp.tool(description="Get the structure and sections of a documentation file")
+    def get_doc_structure(filename: str, version: Optional[str] = None) -> str:
+        """
+        Get the table of contents / structure of a documentation file.
+        
+        Args:
+            filename: Documentation file name
+            version: Laravel version
+        
+        Returns:
+            Structured outline of the document
+        """
+        content = read_laravel_doc_content(filename, version)
+        if content.startswith("Error") or content.startswith("File not found"):
+            return content
+        
+        lines = content.split('\n')
+        structure = []
+        current_section = []
+        
+        for line in lines:
+            if line.startswith('#'):
+                # Extract header
+                level = len(line) - len(line.lstrip('#'))
+                header = line.strip('#').strip()
+                indent = "  " * (level - 1)
+                structure.append(f"{indent}- {header}")
+                
+                # Get first paragraph after header as preview
+                for next_line in lines[lines.index(line)+1:]:
+                    if next_line.strip() and not next_line.startswith('#'):
+                        preview = next_line.strip()[:100]
+                        if len(next_line.strip()) > 100:
+                            preview += "..."
+                        structure.append(f"{indent}  {preview}")
+                        break
+        
+        return f"Structure of {filename}:\n\n" + "\n".join(structure)
+
+
+    def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
+        """
+        Simple fuzzy search implementation.
+        Returns matches with similarity scores.
+        """
+        from difflib import SequenceMatcher
+        
+        query_lower = query.lower()
+        text_lower = text.lower()
+        words = text_lower.split()
+        matches = []
+        
+        # Check each word in the text
+        for i, word in enumerate(words):
+            similarity = SequenceMatcher(None, query_lower, word).ratio()
+            if similarity >= threshold:
+                # Get context around the match
+                start = max(0, i - 10)
+                end = min(len(words), i + 10)
+                context = ' '.join(words[start:end])
+                
+                matches.append({
+                    'score': similarity,
+                    'word': word,
+                    'context': context,
+                    'position': sum(len(w) + 1 for w in words[:i])
+                })
+        
+        # Also check for multi-word matches
+        query_words = query_lower.split()
+        if len(query_words) > 1:
+            for i in range(len(words) - len(query_words) + 1):
+                phrase = ' '.join(words[i:i+len(query_words)])
+                similarity = SequenceMatcher(None, query_lower, phrase).ratio()
+                if similarity >= threshold:
+                    start = max(0, i - 5)
+                    end = min(len(words), i + len(query_words) + 5)
+                    context = ' '.join(words[start:end])
+                    
+                    matches.append({
+                        'score': similarity,
+                        'word': phrase,
+                        'context': context,
+                        'position': sum(len(w) + 1 for w in words[:i])
+                    })
+        
+        return sorted(matches, key=lambda x: x['score'], reverse=True)
+
+
+    @mcp.tool(description="Browse Laravel documentation by category")
+    def browse_docs_by_category(category: str, version: Optional[str] = None) -> str:
+        """
+        Browse documentation files by category.
+        
+        Args:
+            category: Category like 'frontend', 'database', 'authentication', etc.
+            version: Laravel version
+        
+        Returns:
+            List of relevant documentation files
+        """
+        # Category mappings
+        categories = {
+            'frontend': ['vite', 'mix', 'blade', 'frontend', 'asset', 'css', 'javascript'],
+            'database': ['eloquent', 'database', 'migrations', 'seeding', 'query'],
+            'authentication': ['authentication', 'authorization', 'sanctum', 'passport', 'fortify'],
+            'api': ['api', 'sanctum', 'passport', 'routes', 'controllers'],
+            'testing': ['testing', 'dusk', 'mocking', 'http-tests'],
+            'deployment': ['deployment', 'forge', 'vapor', 'octane'],
+        }
+        
+        # Find relevant keywords for the category
+        keywords = categories.get(category.lower(), [category.lower()])
+        
+        version = version or DEFAULT_VERSION
+        version_path = docs_path / version
+        
+        if not version_path.exists():
+            return f"Documentation not found for version {version}"
+        
+        relevant_files = []
+        
+        for file in os.listdir(version_path):
+            if not file.endswith('.md'):
+                continue
+            
+            # Check if filename matches any keyword
+            file_lower = file.lower()
+            if any(keyword in file_lower for keyword in keywords):
+                # Get first few lines as description
+                file_path = version_path / file
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        lines = f.readlines()[:10]
+                        description = ""
+                        for line in lines:
+                            if line.strip() and not line.startswith('#'):
+                                description = line.strip()[:150]
+                                if len(line.strip()) > 150:
+                                    description += "..."
+                                break
+                        
+                        relevant_files.append({
+                            'file': file,
+                            'description': description
+                        })
+                except:
+                    relevant_files.append({'file': file, 'description': 'Unable to read description'})
+        
+        if not relevant_files:
+            return f"No documentation found for category '{category}' in version {version}"
+        
+        output = [f"Documentation for '{category}' in Laravel {version}:\n"]
+        for item in relevant_files:
+            output.append(f"**{item['file']}**")
+            if item['description']:
+                output.append(f"  {item['description']}")
+            output.append("")
+        
+        return "\n".join(output)
+        
     # Log server startup
     logger.info(f"Starting Laravel Docs MCP Server ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
