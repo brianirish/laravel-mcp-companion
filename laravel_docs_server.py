@@ -14,7 +14,7 @@ import re
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, Optional, List, Any
+from typing import Dict, Optional, List, Any, cast
 from fastmcp import FastMCP
 
 # Import documentation updater
@@ -1149,9 +1149,10 @@ def main():
         
         for result in results[:10]:  # Limit total results
             output.append(f"## {result['file']}")
-            for i, match in enumerate(result['matches'][:2]):  # Show first 2 matches
-                output.append(f"\nLine {match['line']}:")
-                output.append(f"...{match['snippet']}...")
+            for i, match_result in enumerate(result['matches'][:2]):  # Show first 2 matches
+                match_dict = cast(Dict[str, Any], match_result)
+                output.append(f"\nLine {match_dict['line']}:")
+                output.append(f"...{match_dict['snippet']}...")
             output.append("")
         
         return "\n".join(output)
