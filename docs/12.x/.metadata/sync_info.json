@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "84b720160d5ee80455b6b562df5f734b03a68ccb",
-  "commit_date": "2025-06-22T23:35:20Z",
-  "commit_message": "only use and document the `limit` and `offset` methods (#10516)\n\n`skip()` and `take()` are alias methods to `offset()` and `limit()`. IMO we should only use and document the main methods, not the aliases.  This will encourage more performant coding, just like we now do in `laravel/framework`.\n\nIF it's decided we still want to mention the aliases, I'd recommended listing them second as the alternatives.  I can make that change if desired.",
-  "commit_url": "https://github.com/laravel/docs/commit/84b720160d5ee80455b6b562df5f734b03a68ccb",
-  "sync_time": "2025-06-23T01:25:51Z"
+  "commit_sha": "60cbbad87c35f694cba0b4d69716df58e13c0bcd",
+  "commit_date": "2025-06-23T22:47:45Z",
+  "commit_message": "[12.x] Add the failed method to queued mailables. (#10518)\n\n* Add the failed method to queued mailables.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/60cbbad87c35f694cba0b4d69716df58e13c0bcd",
+  "sync_time": "2025-06-24T01:21:45Z"
 }
