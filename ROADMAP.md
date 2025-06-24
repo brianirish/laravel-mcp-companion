@@ -1,85 +1,133 @@
-# Laravel Docs MCP Server - Roadmap
+# Laravel MCP Companion - Roadmap
 
 This roadmap outlines the planned development path toward v1.0.0 and beyond.
 
-## Current Version: v0.2.0
-- ✅ Multi-version Laravel documentation support (6.x through latest)
-- ✅ Future-proof version detection via GitHub API
-- ✅ Version-specific resource access and tools
-- ✅ Automated daily documentation updates
+## Mission Statement
 
-## v0.4.0 - Core Stability & Testing
+**Laravel MCP Companion** is a documentation aggregator and navigator designed specifically for **junior and intermediate Laravel developers**. Rather than generating content, we centralize and organize existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable and searchable through MCP.
+
+## Current Version: v0.4.0
+- ✅ **Laravel MCP Companion**: Rebranded as comprehensive documentation aggregator and navigator
+- ✅ **Multi-version Laravel documentation** support (6.x through latest)
+- ✅ **Enhanced content retrieval** and search capabilities
+- ✅ **Package recommendation system** with 50+ curated packages
+- ✅ **Context-aware search** with surrounding text snippets
+- ✅ **Document structure extraction** and category browsing
+- ✅ **Future-proof version detection** via GitHub API
+- ✅ **Automated daily documentation updates**
+- ✅ **Streamlined distribution** via Docker and Smithery (PyPI removed)
+- ✅ **Documentation aggregator strategy** formalized and implemented
+
+## v0.5.0 - Laravel Ecosystem Documentation
 **Target: Q2 2025**
 
-### Infrastructure
-- [ ] Comprehensive test suite (unit and integration tests)
-- [ ] Performance optimization and caching improvements
-- [ ] Enhanced error handling and recovery mechanisms
-- [ ] Configuration management system
+### Official Laravel Ecosystem Integration
+- [ ] Laravel Sanctum documentation aggregation
+- [ ] Laravel Cashier documentation and examples
+- [ ] Laravel Scout search documentation
+- [ ] Laravel Horizon queue monitoring docs
+- [ ] Laravel Telescope debugging docs
+- [ ] Laravel Sail development environment docs
+- [ ] Laravel Valet local development docs
 
-### Developer Experience
-- [ ] Improved logging and debugging capabilities
-- [ ] Better error messages and user feedback
-- [ ] Documentation for self-hosting and customization
+### Laravel Services Documentation
+- [ ] Laravel Forge server management documentation
+- [ ] Laravel Vapor serverless deployment docs
+- [ ] Laravel Envoyer deployment documentation
+- [ ] Laravel Nova admin panel documentation
 
-## v0.5.0 - Enhanced Search & Discovery
-**Target: Q2 2025**
+### Infrastructure Improvements
+- [ ] Enhanced documentation indexing and search
+- [ ] Better error handling and recovery mechanisms
+- [ ] Performance optimization for large documentation sets
 
-### Smart Search
-- [ ] Semantic search with AI-powered context understanding
-- [ ] Code example extraction from documentation
-- [ ] Cross-version comparison tools
-- [ ] Related content suggestions
-
-### Content Enhancement
-- [ ] Structured data extraction from Laravel docs
-- [ ] Improved package recommendation algorithms
-- [ ] Category-based browsing and filtering
-
-## v0.6.0 - Extended Laravel Ecosystem
+## v0.6.0 - Community Package Documentation
 **Target: Q3 2025**
 
-### Expanded Coverage
-- [ ] Popular package documentation integration (Livewire, Inertia, etc.)
-- [ ] Community package discovery and recommendations
-- [ ] Framework comparison guides
-- [ ] Best practices and anti-patterns library
+### Major Community Packages
+- [ ] Spatie package documentation (Permission, Media Library, Backup, etc.)
+- [ ] Livewire documentation and examples
+- [ ] Inertia.js Laravel integration documentation
+- [ ] Filament admin panel documentation
+- [ ] Laravel Debugbar documentation
+- [ ] Laravel IDE Helper documentation
 
-### Package Intelligence
-- [ ] Package compatibility matrix across Laravel versions
-- [ ] Automated package metadata collection
-- [ ] Community ratings and reviews integration
+### Smart Navigation
+- [ ] Use case → documentation mapping system
+- [ ] Package combination integration guides
+- [ ] Installation and setup documentation aggregation
+- [ ] Cross-package compatibility documentation
 
-## v0.7.0 - Project Intelligence
-**Target: Q3 2025**
+### Enhanced Discovery
+- [ ] "I need X" → relevant documentation finder
+- [ ] Related package documentation suggestions
+- [ ] Learning path documentation organization
 
-### Project Analysis
-- [ ] Laravel project scanning and analysis
-- [ ] Version-specific recommendations based on project setup
-- [ ] Migration assistant for Laravel upgrades
-- [ ] Dependency conflict detection
-
-### Personalization
-- [ ] User preference learning
-- [ ] Contextual suggestions based on project patterns
-- [ ] Custom package collections
-
-## v0.8.0 - Advanced Features
+## v0.7.0 - Community Learning Resources
 **Target: Q4 2025**
 
-### Interactive Documentation
-- [ ] Step-by-step implementation guides
-- [ ] Interactive code examples with live editing
-- [ ] Tutorial and learning path recommendations
-- [ ] Integration with Laravel's official learning resources
+### Curated Community Content
+- [ ] Laravel News article index and summaries
+- [ ] Spatie.be blog tutorial aggregation
+- [ ] High-quality community tutorial indexing
+- [ ] Laravel conference talk references
 
-### Multi-Language Support
-- [ ] Documentation in multiple languages
-- [ ] Localized package recommendations
-- [ ] Regional Laravel community integration
+### Official Learning Resources
+- [ ] Laravel Bootcamp step-by-step guide integration
+- [ ] Laracasts topic discovery (index only)
+- [ ] Official Laravel blog feature announcements
+- [ ] Laravel certification exam topic coverage
 
-## v0.9.0 - Production Readiness
-**Target: Q4 2025**
+### Documentation Enhancement
+- [ ] Multi-source documentation cross-referencing
+- [ ] Tutorial difficulty level classification
+- [ ] Package learning resource aggregation
+- [ ] Setup and configuration guide centralization
+
+## v0.8.0 - Advanced Documentation Features
+**Target: Q1 2026**
+
+### Smart Documentation Discovery
+- [ ] Advanced search across all aggregated sources
+- [ ] Topic clustering and related content discovery
+- [ ] Version-specific documentation filtering
+- [ ] Package ecosystem documentation mapping
+
+### Integration and Setup Guides
+- [ ] Package combination setup documentation
+- [ ] Environment-specific configuration guides
+- [ ] Common integration pattern documentation
+- [ ] Troubleshooting guide aggregation
+
+### Content Organization
+- [ ] Learning path documentation sequences
+- [ ] Skill-level appropriate content filtering
+- [ ] Use case documentation categorization
+- [ ] Quick reference guide aggregation
+
+## v0.9.0 - Ecosystem Intelligence
+**Target: Q1 2026**
+
+### Real-Time Documentation Updates
+- [ ] Package documentation change tracking
+- [ ] Laravel release documentation updates
+- [ ] Community content freshness monitoring
+- [ ] Deprecated documentation flagging
+
+### Community Intelligence
+- [ ] Package popularity and health metrics
+- [ ] Documentation quality indicators
+- [ ] Community recommendation aggregation
+- [ ] Maintainer activity and support metrics
+
+### Advanced Navigation
+- [ ] Multi-criteria documentation search
+- [ ] Cross-reference documentation linking
+- [ ] Documentation completeness indicators
+- [ ] Alternative solution documentation discovery
+
+## v0.10.0 - Production Readiness
+**Target: Q2 2026**
 
 ### Reliability & Scale
 - [ ] Rate limiting and quota management
@@ -92,8 +140,8 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Privacy controls and data handling
 - [ ] Compliance with enterprise requirements
 
-## v0.10.0 - Integration & Ecosystem
-**Target: Q4 2025**
+## v0.11.0 - Integration & Ecosystem
+**Target: Q2 2026**
 
 ### Developer Tools
 - [ ] VS Code extension
@@ -106,14 +154,14 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] CI/CD pipeline integration
 - [ ] Docker and containerization improvements
 
-## v1.0.0 - The Definitive Laravel Documentation Companion
-**Target: Q1 2026**
+## v1.0.0 - The Complete Laravel Documentation Navigator
+**Target: Q3 2026**
 
 ### Core Pillars
-- [ ] **Rock-Solid Reliability**: Zero crashes, graceful error handling
-- [ ] **Intelligent Assistance**: Context-aware help beyond simple search
-- [ ] **Project-Aware**: Understanding of user's specific Laravel setup
-- [ ] **Comprehensive Coverage**: Full Laravel ecosystem support
+- [ ] **Comprehensive Coverage**: 95% of Laravel ecosystem documentation aggregated
+- [ ] **Smart Discovery**: Find the right documentation for any Laravel need
+- [ ] **Junior-Friendly**: Perfect documentation navigator for new Laravel developers
+- [ ] **Always Current**: Real-time synchronization with all documentation sources
 
 ### Launch Features
 - [ ] Analytics and usage insights
@@ -122,11 +170,11 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Comprehensive documentation and tutorials
 
 ### Success Metrics for v1.0.0
-- Support for 95% of Laravel use cases
+- Documentation coverage for 95% of common Laravel development scenarios
 - Sub-100ms response times for documentation queries
-- 99.9% uptime for hosted services
-- Active community of contributors
-- Integration with major Laravel development workflows
+- 200+ curated packages with complete documentation integration
+- Aggregation of 500+ high-quality tutorial and guide resources
+- Recognition as the go-to documentation resource for junior Laravel developers
 
 ## Beyond v1.0.0
 

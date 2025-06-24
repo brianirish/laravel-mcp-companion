@@ -30,7 +30,7 @@ logger = logging.getLogger("laravel-docs-updater")
 # GitHub API URLs
 GITHUB_API_URL = "https://api.github.com"
 LARAVEL_DOCS_REPO = "laravel/docs"
-USER_AGENT = "Laravel-Docs-MCP-Server (+https://github.com/brianirish/laravel-docs-mcp)"
+USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
 def get_supported_versions() -> list[str]:
     """Get supported Laravel versions dynamically from GitHub API.
@@ -89,7 +89,7 @@ def get_cached_supported_versions() -> list[str]:
 
 SUPPORTED_VERSIONS = get_cached_supported_versions()
 DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]  # Always use the latest version as default
-USER_AGENT = "Laravel-Docs-MCP-Server (+https://github.com/brianirish/laravel-docs-mcp)"
+USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
 class DocsUpdater:
     """Handles downloading and updating Laravel documentation from GitHub."""

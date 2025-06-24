@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Laravel Documentation MCP Server
+Laravel MCP Companion
 
 This server provides Laravel documentation and package recommendations via the Model Context Protocol (MCP).
 It allows AI assistants and other tools to access and search Laravel documentation, as well as
@@ -26,7 +26,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger("laravel-docs-mcp")
+logger = logging.getLogger("laravel-mcp-companion")
 
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
@@ -402,8 +402,8 @@ def parse_arguments():
     parser.add_argument(
         "--server-name",
         type=str,
-        default="LaravelDocs",
-        help="Name of the MCP server (default: LaravelDocs)"
+        default="LaravelMCPCompanion",
+        help="Name of the MCP server (default: LaravelMCPCompanion)"
     )
     parser.add_argument(
         "--log-level",
@@ -608,7 +608,7 @@ def format_package_recommendation(package: Dict) -> str:
     return "\n".join(result)
 
 def main():
-    """Main entry point for the Laravel Docs MCP Server."""
+    """Main entry point for the Laravel MCP Companion."""
     args = parse_arguments()
     
     # Set logging level
@@ -1319,7 +1319,7 @@ def main():
         return "\n".join(output)
         
     # Log server startup
-    logger.info(f"Starting Laravel Docs MCP Server ({args.server_name})")
+    logger.info(f"Starting Laravel MCP Companion ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
     logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     

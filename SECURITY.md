@@ -4,13 +4,13 @@
 
 If you discover a security vulnerability in this project, please report it by creating a **private security advisory** on GitHub:
 
-1. Go to the [Security tab](https://github.com/brianirish/laravel-docs-mcp/security) of this repository
+1. Go to the [Security tab](https://github.com/brianirish/laravel-mcp-companion/security) of this repository
 2. Click "Report a vulnerability" 
 3. Provide details about the vulnerability
 
 This will create a private discussion that only you and I can see until we decide how to handle it.
 
-For non-security bugs, please use the regular [issue tracker](https://github.com/brianirish/laravel-docs-mcp/issues).
+For non-security bugs, please use the regular [issue tracker](https://github.com/brianirish/laravel-mcp-companion/issues).
 
 ## Scope
 

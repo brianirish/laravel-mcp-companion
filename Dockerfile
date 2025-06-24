@@ -17,4 +17,4 @@ RUN pip install --upgrade pip && \
 ENV PYTHONUNBUFFERED=1
 
 # Run the MCP server with HTTP transport
-CMD ["python", "laravel_docs_server.py"]
+CMD ["python", "laravel_mcp_companion.py"]

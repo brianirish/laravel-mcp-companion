@@ -33,7 +33,7 @@ startCommand:
         default: false
   commandFunction: |
     (config) => {
-      const args = ['laravel_docs_server.py'];
+      const args = ['laravel_mcp_companion.py'];
       
       if (config.docsPath) args.push('--docs-path', config.docsPath);
       if (config.serverName) args.push('--server-name', config.serverName);

@@ -1,4 +1,4 @@
-# Contributing to Laravel 12 Docs MCP Server
+# Contributing to Laravel MCP Companion
 
 Thank you for considering contributing to this project! Here's how you can help.
 
