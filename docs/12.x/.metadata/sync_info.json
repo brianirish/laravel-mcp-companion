@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "60cbbad87c35f694cba0b4d69716df58e13c0bcd",
-  "commit_date": "2025-06-23T22:47:45Z",
-  "commit_message": "[12.x] Add the failed method to queued mailables. (#10518)\n\n* Add the failed method to queued mailables.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/60cbbad87c35f694cba0b4d69716df58e13c0bcd",
-  "sync_time": "2025-06-24T01:21:45Z"
+  "commit_sha": "f22bb81a2bb997441069324a588de198cbc5c2e9",
+  "commit_date": "2025-06-24T16:11:51Z",
+  "commit_message": "[12.x] Add proper link (#10530)\n\n* Add proper links\n\n* Update helpers.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/f22bb81a2bb997441069324a588de198cbc5c2e9",
+  "sync_time": "2025-06-25T01:28:15Z"
 }
