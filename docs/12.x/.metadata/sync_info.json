@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "f22bb81a2bb997441069324a588de198cbc5c2e9",
-  "commit_date": "2025-06-24T16:11:51Z",
-  "commit_message": "[12.x] Add proper link (#10530)\n\n* Add proper links\n\n* Update helpers.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/f22bb81a2bb997441069324a588de198cbc5c2e9",
-  "sync_time": "2025-06-25T01:28:15Z"
+  "commit_sha": "8085ccfb1e01266100b897eeebe2018e2c3d923e",
+  "commit_date": "2025-06-25T09:38:21Z",
+  "commit_message": "[12.x] Add broadcast_if and broadcast_unless methods to helpers (#10533)\n\n* Add broadcast_if and broadcast_unless to helpers\n\n* add links\n\n* Update helpers.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/8085ccfb1e01266100b897eeebe2018e2c3d923e",
+  "sync_time": "2025-06-26T01:21:10Z"
 }
