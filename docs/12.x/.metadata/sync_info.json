@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "f22bb81a2bb997441069324a588de198cbc5c2e9",
-  "commit_date": "2025-06-24T16:11:51Z",
-  "commit_message": "[12.x] Add proper link (#10530)\n\n* Add proper links\n\n* Update helpers.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/f22bb81a2bb997441069324a588de198cbc5c2e9",
-  "sync_time": "2025-06-25T01:28:15Z"
+  "commit_sha": "388799f067a30bc0e0996e8d33fd1576548d1ece",
+  "commit_date": "2025-06-26T16:44:41Z",
+  "commit_message": "Improve consistency in _if and _unless functions (#10537)",
+  "commit_url": "https://github.com/laravel/docs/commit/388799f067a30bc0e0996e8d33fd1576548d1ece",
+  "sync_time": "2025-06-27T01:22:05Z"
 }
