@@ -352,7 +352,7 @@ class DocumentationAutoDiscovery:
         if headers is None:
             headers = {"User-Agent": USER_AGENT}
         
-        last_exception = None
+        last_exception: Optional[Exception] = None
         
         for attempt in range(self.max_retries + 1):
             try:
@@ -701,14 +701,14 @@ class ExternalDocsFetcher:
             
             content = f"# {service_name} - {section.replace('-', ' ').title()}\n\n"
             content += f"*Note: {service_name} documentation requires authentication to access.*\n\n"
-            content += f"## Overview\n\n"
+            content += "## Overview\n\n"
             content += f"This section covers {section.replace('-', ' ')} functionality in {service_name}.\n\n"
-            content += f"## Documentation Access\n\n"
+            content += "## Documentation Access\n\n"
             content += f"To access the complete {service_name} documentation:\n\n"
             content += f"1. Visit [{service_name}]({base_url.replace('/docs/1.0', '')})\n"
-            content += f"2. Sign in to your account\n"
-            content += f"3. Navigate to the documentation section\n\n"
-            content += f"## Common Use Cases\n\n"
+            content += "2. Sign in to your account\n"
+            content += "3. Navigate to the documentation section\n\n"
+            content += "## Common Use Cases\n\n"
             
             if service == "vapor":
                 if section == "getting-started":
@@ -827,13 +827,13 @@ class ExternalDocsFetcher:
                 # Log warning but don't create fake content
                 logger.warning(f"Content extraction failed for {service}/{section} - content too short or invalid")
                 processed_content += f"*Content extraction failed for {service.title()} {section}.*\n"
-                processed_content += f"*This may indicate a URL redirect or parsing issue.*\n\n"
-                processed_content += f"*Please visit the official documentation at the source URL above.*\n\n"
+                processed_content += "*This may indicate a URL redirect or parsing issue.*\n\n"
+                processed_content += "*Please visit the official documentation at the source URL above.*\n\n"
                 processed_content += f"<!-- Content length: {len(content_text.strip()) if content_text else 0} characters -->\n"
         except Exception as e:
             logger.warning(f"Error processing HTML content for {service}/{section}: {str(e)}")
             processed_content += f"*Content processing error: {str(e)}*\n\n"
-            processed_content += f"*Please visit the official documentation at the source URL above.*\n\n"
+            processed_content += "*Please visit the official documentation at the source URL above.*\n\n"
         
         return processed_content
     
@@ -1072,7 +1072,7 @@ class ExternalDocsFetcher:
             headers = {"User-Agent": USER_AGENT}
         
         retries = max_retries if max_retries is not None else self.max_retries
-        last_exception = None
+        last_exception: Optional[Union[urllib.error.HTTPError, urllib.error.URLError, Exception]] = None
         
         for attempt in range(retries + 1):
             try:
@@ -1148,13 +1148,13 @@ class DocsUpdater:
         self.metadata_dir.mkdir(exist_ok=True)
         self.metadata_file = self.metadata_dir / "sync_info.json"
     
-    def get_latest_commit(self, max_retries: int = 3) -> Dict:
+    def get_latest_commit(self, max_retries: int = 3) -> Dict[str, str]:
         """Get information about the latest commit on the specified branch."""
         logger.debug(f"Getting latest commit info for {self.repo} on branch {self.version}")
         
         url = f"{self.github_api_url}/repos/{self.repo}/branches/{self.version}"
         
-        last_exception = None
+        last_exception: Optional[Exception] = None
         for attempt in range(max_retries + 1):
             try:
                 request = urllib.request.Request(
@@ -1209,6 +1209,8 @@ class DocsUpdater:
         # This should never be reached, but just in case
         if last_exception:
             raise last_exception
+        else:
+            raise RuntimeError(f"Failed to get latest commit after {max_retries + 1} attempts")
     
     def read_local_metadata(self) -> Dict:
         """Read local metadata about the last sync."""
@@ -1253,7 +1255,6 @@ class DocsUpdater:
                 
                 # Retry mechanism for downloading
                 max_retries = 3
-                last_exception = None
                 
                 for attempt in range(max_retries + 1):
                     try:
@@ -1266,7 +1267,6 @@ class DocsUpdater:
                             shutil.copyfileobj(response, out_file)
                         break  # Success, exit retry loop
                     except Exception as e:
-                        last_exception = e
                         if attempt < max_retries:
                             wait_time = min(30, (2 ** attempt) + random.uniform(0, 2))
                             logger.warning(f"Download failed on attempt {attempt + 1}/{max_retries + 1}, retrying in {wait_time:.1f}s: {str(e)}")
@@ -1421,7 +1421,7 @@ class MultiSourceDocsUpdater:
         else:
             return self.external_fetcher.fetch_all_services(force=force)
     
-    def update_all(self, force_core: bool = False, force_external: bool = False) -> Dict[str, Union[bool, Dict[str, bool]]]:
+    def update_all(self, force_core: bool = False, force_external: bool = False) -> Dict[str, object]:
         """
         Update all documentation sources.
         
@@ -1434,7 +1434,7 @@ class MultiSourceDocsUpdater:
         """
         logger.info("Starting comprehensive documentation update")
         
-        results = {
+        results: Dict[str, object] = {
             "core": False,
             "external": {}
         }
@@ -1448,8 +1448,13 @@ class MultiSourceDocsUpdater:
             
             # Log summary
             core_status = "updated" if results["core"] else "up-to-date"
-            external_count = sum(1 for success in results["external"].values() if success)
-            total_external = len(results["external"])
+            external_results = results["external"]
+            if isinstance(external_results, dict):
+                external_count = sum(1 for success in external_results.values() if success)
+                total_external = len(external_results)
+            else:
+                external_count = 0
+                total_external = 0
             
             logger.info(f"Documentation update complete: Core {core_status}, External {external_count}/{total_external} services")
             
@@ -1458,9 +1463,9 @@ class MultiSourceDocsUpdater:
         
         return results
     
-    def get_all_documentation_status(self) -> Dict:
+    def get_all_documentation_status(self) -> Dict[str, Dict]:
         """Get status information for all documentation sources."""
-        status = {
+        status: Dict[str, Dict] = {
             "core": {},
             "external": {}
         }
@@ -1482,6 +1487,8 @@ class MultiSourceDocsUpdater:
             try:
                 cache_valid = self.external_fetcher.is_cache_valid(service)
                 service_info = self.external_fetcher.get_service_info(service)
+                if service_info is None:
+                    continue
                 
                 # Try to read cache metadata
                 metadata_path = self.external_fetcher.get_cache_metadata_path(service)
@@ -1489,7 +1496,7 @@ class MultiSourceDocsUpdater:
                     try:
                         with open(metadata_path, 'r') as f:
                             metadata = json.load(f)
-                    except:
+                    except Exception:
                         metadata = {}
                 else:
                     metadata = {}
@@ -1506,7 +1513,7 @@ class MultiSourceDocsUpdater:
         
         return status
     
-    def needs_update(self, check_external: bool = True) -> Dict[str, bool]:
+    def needs_update(self, check_external: bool = True) -> Dict[str, Union[bool, Dict[str, bool]]]:
         """
         Check which documentation sources need updating.
         
@@ -1516,7 +1523,7 @@ class MultiSourceDocsUpdater:
         Returns:
             Dictionary indicating which sources need updates
         """
-        needs_update = {
+        needs_update: Dict[str, Union[bool, Dict[str, bool]]] = {
             "core": False,
             "external": {}
         }
@@ -1530,12 +1537,14 @@ class MultiSourceDocsUpdater:
         
         # Check external documentation
         if check_external:
-            for service in self.external_fetcher.list_available_services():
-                try:
-                    needs_update["external"][service] = not self.external_fetcher.is_cache_valid(service)
-                except Exception as e:
-                    logger.warning(f"Error checking {service} documentation status: {str(e)}")
-                    needs_update["external"][service] = True
+            external_dict = needs_update["external"]
+            if isinstance(external_dict, dict):
+                for service in self.external_fetcher.list_available_services():
+                    try:
+                        external_dict[service] = not self.external_fetcher.is_cache_valid(service)
+                    except Exception as e:
+                        logger.warning(f"Error checking {service} documentation status: {str(e)}")
+                        external_dict[service] = True
         
         return needs_update
 
@@ -1669,7 +1678,7 @@ def main():
                 print(f"  Last Updated: {core_status.get('last_updated', 'unknown')}")
                 print(f"  Commit: {core_status.get('commit_sha', 'unknown')[:7]}")
             
-            print(f"\nExternal Services:")
+            print("\nExternal Services:")
             for service, info in status["external"].items():
                 if "error" in info:
                     print(f"  {service}: Error - {info['error']}")
@@ -1692,10 +1701,10 @@ def main():
                                 discovered_count = metadata.get('discovered_count', 0)
                                 print(f"    Auto-Discovery: ✅ {discovery_method} ({discovered_count} sections)")
                                 if metadata.get('manual_fallback'):
-                                    print(f"    Fallback: Used manual configuration (auto-discovery failed)")
+                                    print("    Fallback: Used manual configuration (auto-discovery failed)")
                             else:
-                                print(f"    Auto-Discovery: ❌ disabled (using manual configuration)")
-                        except:
+                                print("    Auto-Discovery: ❌ disabled (using manual configuration)")
+                        except Exception:
                             pass
             return 0
         
@@ -1721,7 +1730,6 @@ def main():
         if args.all_versions:
             # Update all supported versions (core only)
             all_success = True
-            any_updated = False
             
             for version in SUPPORTED_VERSIONS:
                 logger.info(f"Processing version {version}...")
@@ -1730,8 +1738,6 @@ def main():
                 
                 if not success:
                     all_success = False
-                else:
-                    any_updated = True
             
             return 0 if all_success else 1
             
