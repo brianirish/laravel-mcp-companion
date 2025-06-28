@@ -15,10 +15,12 @@ import argparse
 import json
 from pathlib import Path
 from typing import Dict, Optional, List, Any, cast
+from functools import lru_cache
+import threading
 from fastmcp import FastMCP
 
 # Import documentation updater
-from docs_updater import DocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
+from docs_updater import DocsUpdater, MultiSourceDocsUpdater, ExternalDocsFetcher, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
 
 # Configure logging
@@ -30,6 +32,11 @@ logger = logging.getLogger("laravel-mcp-companion")
 
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
+
+# Global caches for performance optimization
+_file_content_cache = {}
+_search_result_cache = {}
+_cache_lock = threading.Lock()
 
 # Define the Laravel package catalog
 # Updated PACKAGE_CATALOG with more Laravel packages
@@ -266,6 +273,66 @@ PACKAGE_CATALOG = {
         ],
         "installation": "composer require laravel/cashier-paddle",
         "documentation_link": "laravel://billing.md#paddle-billing"
+    },
+    "laravel/forge": {
+        "name": "Laravel Forge",
+        "description": "Laravel Forge is a server management and site deployment service. Provision and deploy unlimited PHP applications on DigitalOcean, Linode, Vultr, Amazon, Hetzner and more.",
+        "categories": ["deployment", "server-management", "devops", "hosting"],
+        "use_cases": [
+            "Automated server provisioning and management",
+            "Zero-downtime application deployments",
+            "SSL certificate management and renewal",
+            "Database and queue management",
+            "Server monitoring and backups",
+            "Team collaboration on server management"
+        ],
+        "installation": "Web service - No installation required",
+        "documentation_link": "laravel-external://forge/introduction"
+    },
+    "laravel/vapor": {
+        "name": "Laravel Vapor",
+        "description": "Laravel Vapor is a serverless deployment platform for Laravel, powered by AWS Lambda. Deploy infinitely scalable Laravel applications without managing servers.",
+        "categories": ["deployment", "serverless", "aws", "scaling"],
+        "use_cases": [
+            "Serverless Laravel application deployment",
+            "Auto-scaling based on traffic",
+            "Cost-effective hosting for variable workloads",
+            "Global content distribution",
+            "Database and queue management on AWS",
+            "CI/CD integration for serverless apps"
+        ],
+        "installation": "Web service - No installation required",
+        "documentation_link": "laravel-external://vapor/introduction"
+    },
+    "laravel/envoyer": {
+        "name": "Laravel Envoyer",
+        "description": "Laravel Envoyer provides zero-downtime deployment for PHP applications. Deploy your code without bringing your application offline.",
+        "categories": ["deployment", "ci-cd", "automation"],
+        "use_cases": [
+            "Zero-downtime application deployments",
+            "Automated deployment pipelines",
+            "Rollback capabilities for failed deployments",
+            "Integration with GitHub, GitLab, and Bitbucket",
+            "Team deployment management",
+            "Deployment notifications and monitoring"
+        ],
+        "installation": "Web service - No installation required",
+        "documentation_link": "laravel-external://envoyer/introduction"
+    },
+    "laravel/nova": {
+        "name": "Laravel Nova",
+        "description": "Laravel Nova is a beautifully designed administration panel for Laravel. Carefully crafted by the creators of Laravel to make you the most productive developer in the galaxy.",
+        "categories": ["admin", "dashboard", "cms", "backend"],
+        "use_cases": [
+            "Building administrative dashboards",
+            "Managing application data with elegant interfaces",
+            "Creating custom admin tools and workflows",
+            "User and permission management",
+            "Content management systems",
+            "Business intelligence and reporting"
+        ],
+        "installation": "composer require laravel/nova",
+        "documentation_link": "laravel-external://nova/installation"
     }
 }
 
@@ -287,7 +354,11 @@ FEATURE_MAP = {
     "laravel/socialite": ["provider-setup", "scopes", "optional-parameters", "stateless-auth", "custom-providers"],
     "spatie/laravel-medialibrary": ["conversions", "collections", "s3-upload", "responsive-images", "media-streams"],
     "laravel/excel": ["exports", "imports", "queued-exports", "multiple-sheets", "csv-handling", "styling"],
-    "barryvdh/laravel-debugbar": ["query-debugging", "timeline", "exceptions", "views-data", "route-info"]
+    "barryvdh/laravel-debugbar": ["query-debugging", "timeline", "exceptions", "views-data", "route-info"],
+    "laravel/forge": ["server-provisioning", "site-deployment", "ssl-management", "database-management", "queue-management", "backups", "monitoring"],
+    "laravel/vapor": ["serverless-deployment", "environment-management", "database-setup", "queue-configuration", "storage-management", "cli-deployment"],
+    "laravel/envoyer": ["deployment-setup", "zero-downtime-deployment", "rollback", "notifications", "heartbeats", "team-management"],
+    "laravel/nova": ["resource-management", "custom-fields", "actions", "filters", "lenses", "metrics", "authorization"]
 }
 
 # Updated TOOL_DESCRIPTIONS with new tools
@@ -385,7 +456,39 @@ When to use:
 - Planning package implementation
 - Understanding feature scope
 - Learning implementation patterns
-- Discovering package capabilities"""
+- Discovering package capabilities""",
+
+    "update_external_laravel_docs": """Updates documentation for external Laravel services like Forge, Vapor, Envoyer, and Nova.
+
+When to use:
+- Fetching latest Laravel service documentation
+- Accessing official Laravel service guides
+- Getting documentation for Laravel hosting/deployment services
+- Updating cached external documentation""",
+
+    "list_laravel_services": """Lists all available Laravel services with external documentation support.
+
+When to use:
+- Discovering available Laravel services
+- Finding external documentation sources
+- Understanding Laravel ecosystem services
+- Checking service documentation availability""",
+
+    "search_external_laravel_docs": """Searches through external Laravel service documentation.
+
+When to use:
+- Finding specific information in service docs
+- Searching across multiple Laravel services
+- Looking for deployment or hosting guidance
+- Finding service-specific features""",
+
+    "get_laravel_service_info": """Provides detailed information about a specific Laravel service.
+
+When to use:
+- Learning about a specific Laravel service
+- Getting service documentation overview
+- Understanding service capabilities
+- Checking service documentation status"""
 }
 
 def parse_arguments():
@@ -466,6 +569,62 @@ def setup_docs_path(user_path: Optional[str] = None) -> Path:
 def is_safe_path(base_path: Path, path: Path) -> bool:
     """Check if a path is safe (doesn't escape the base directory)."""
     return base_path in path.absolute().parents or base_path == path.absolute()
+
+@lru_cache(maxsize=100)
+def get_file_content_cached(file_path: str) -> str:
+    """
+    Get file content with caching.
+    
+    Args:
+        file_path: Absolute path to the file
+        
+    Returns:
+        File content as string
+    """
+    try:
+        path_obj = Path(file_path)
+        if not path_obj.exists():
+            return f"File not found: {file_path}"
+        
+        # Check file modification time for cache invalidation
+        mtime = path_obj.stat().st_mtime
+        cache_key = f"{file_path}:{mtime}"
+        
+        with _cache_lock:
+            if cache_key in _file_content_cache:
+                return _file_content_cache[cache_key]
+        
+        # Read file content
+        with open(path_obj, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Cache the content
+        with _cache_lock:
+            # Clear old cache entries for this file
+            keys_to_remove = [k for k in _file_content_cache.keys() if k.startswith(f"{file_path}:")]
+            for key in keys_to_remove:
+                del _file_content_cache[key]
+            
+            # Add new cache entry
+            _file_content_cache[cache_key] = content
+            
+            # Limit cache size
+            if len(_file_content_cache) > 200:
+                # Remove oldest entries
+                oldest_keys = list(_file_content_cache.keys())[:50]
+                for key in oldest_keys:
+                    del _file_content_cache[key]
+        
+        return content
+    except Exception as e:
+        logger.error(f"Error reading file {file_path}: {str(e)}")
+        return f"Error reading file: {str(e)}"
+
+def clear_file_cache():
+    """Clear the file content cache."""
+    with _cache_lock:
+        _file_content_cache.clear()
+        _search_result_cache.clear()
 
 def update_documentation(docs_path: Path, version: str, force: bool = False) -> bool:
     """Update the documentation if needed or forced."""
@@ -648,6 +807,9 @@ def main():
     # Create the MCP server
     mcp = FastMCP(args.server_name)
     
+    # Initialize multi-source documentation updater
+    multi_updater = MultiSourceDocsUpdater(docs_path, args.version)
+    
     # Register documentation tools
     @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_docs"])
     def list_laravel_docs(version: Optional[str] = None) -> str:
@@ -743,31 +905,41 @@ def main():
             return f"Documentation file not found: {path} (version: {version})"
         
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+            content = get_file_content_cached(str(file_path))
+            if not content.startswith("Error") and not content.startswith("File not found"):
                 logger.debug(f"Successfully read file: {file_path} ({len(content)} bytes)")
-                return content
+            return content
         except Exception as e:
             logger.error(f"Error reading file {file_path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
     @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_docs"])
-    def search_laravel_docs(query: str, version: Optional[str] = None) -> str:
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True) -> str:
         """Search through Laravel documentation for a specific term.
         
         Args:
             query: Search term to look for
             version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
+            include_external: Whether to include external Laravel services documentation in search
         """
-        logger.debug(f"search_laravel_docs function called with query: {query}, version: {version}")
+        logger.debug(f"search_laravel_docs function called with query: {query}, version: {version}, include_external: {include_external}")
         
         if not query.strip():
             return "Search query cannot be empty"
         
-        results = []
+        # Check cache for search results
+        cache_key = f"search:{query}:{version}:{include_external}"
+        with _cache_lock:
+            if cache_key in _search_result_cache:
+                logger.debug(f"Returning cached search results for: {query}")
+                return _search_result_cache[cache_key]
+        
+        core_results = []
+        external_results = []
         pattern = re.compile(re.escape(query), re.IGNORECASE)
         
         try:
+            # Search core Laravel documentation
             search_versions = [version] if version else SUPPORTED_VERSIONS
             
             for v in search_versions:
@@ -779,17 +951,69 @@ def main():
                     if file.endswith('.md'):
                         file_path = version_path / file
                         
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            content = f.read()
+                        content = get_file_content_cached(str(file_path))
+                        if not content.startswith("Error") and not content.startswith("File not found"):
                             if pattern.search(content):
                                 count = len(pattern.findall(content))
-                                results.append(f"{v}/{file} ({count} matches)")
+                                core_results.append(f"{v}/{file} ({count} matches)")
             
-            if results:
-                return f"Found {len(results)} files containing '{query}':\n" + "\n".join(results)
+            # Search external documentation if requested
+            if include_external:
+                external_dir = multi_updater.external_fetcher.external_dir
+                if external_dir.exists():
+                    for service_dir in external_dir.iterdir():
+                        if service_dir.is_dir():
+                            service_name = service_dir.name
+                            service_matches = []
+                            
+                            for file_path in service_dir.glob("*.md"):
+                                try:
+                                    content = get_file_content_cached(str(file_path))
+                                    if not content.startswith("Error") and not content.startswith("File not found"):
+                                        if pattern.search(content):
+                                            count = len(pattern.findall(content))
+                                            service_matches.append(f"{file_path.name} ({count} matches)")
+                                except Exception as e:
+                                    logger.warning(f"Error searching {file_path}: {str(e)}")
+                                    continue
+                            
+                            if service_matches:
+                                external_results.append(f"**{service_name.title()}:** {', '.join(service_matches)}")
+            
+            # Format combined results
+            response = []
+            
+            if core_results or external_results:
+                response.append(f"Search results for '{query}':")
+                response.append("")
+                
+                if core_results:
+                    response.append(f"**Core Laravel Documentation ({len(core_results)} files):**")
+                    for result in core_results:
+                        response.append(f"  - {result}")
+                    response.append("")
+                
+                if external_results:
+                    response.append(f"**External Laravel Services ({len(external_results)} services):**")
+                    for result in external_results:
+                        response.append(f"  - {result}")
+                
+                result = "\n".join(response)
             else:
-                search_scope = f"version {version}" if version else "all versions"
-                return f"No results found for '{query}' in {search_scope}"
+                search_scope = f"version {version}" if version else "all sources"
+                result = f"No results found for '{query}' in {search_scope}"
+            
+            # Cache the search result
+            with _cache_lock:
+                _search_result_cache[cache_key] = result
+                # Limit cache size
+                if len(_search_result_cache) > 100:
+                    # Remove oldest entries
+                    oldest_keys = list(_search_result_cache.keys())[:20]
+                    for key in oldest_keys:
+                        del _search_result_cache[key]
+            
+            return result
         except Exception as e:
             logger.error(f"Error searching documentation: {str(e)}")
             return f"Error searching documentation: {str(e)}"
@@ -819,6 +1043,10 @@ def main():
             updated = updater.update(force=force)
             
             if updated:
+                # Clear caches when documentation is updated
+                clear_file_cache()
+                get_file_content_cached.cache_clear()
+                
                 metadata = get_laravel_docs_metadata(docs_path, doc_version)
                 return (
                     f"Documentation updated successfully to {doc_version}\n"
@@ -1064,7 +1292,8 @@ def main():
     def search_laravel_docs_with_context(
         query: str, 
         version: Optional[str] = None,
-        context_length: int = 200
+        context_length: int = 200,
+        include_external: bool = True
     ) -> str:
         """
         Search through Laravel documentation with context snippets.
@@ -1073,21 +1302,24 @@ def main():
             query: Search term
             version: Specific version or None for all
             context_length: Characters of context to show (default: 200)
+            include_external: Whether to include external Laravel services documentation
         
         Returns:
             Search results with context snippets
         """
-        logger.debug(f"search_with_context: query={query}, version={version}")
+        logger.debug(f"search_with_context: query={query}, version={version}, include_external={include_external}")
         
         if not query.strip():
             return "Search query cannot be empty"
         
-        results = []
+        core_results = []
+        external_results = []
         patterns = [
             re.compile(r'\b' + re.escape(query) + r'\b', re.IGNORECASE),  # Exact word
             re.compile(re.escape(query), re.IGNORECASE)  # Substring match
         ]
         
+        # Search core Laravel documentation
         search_versions = [version] if version else SUPPORTED_VERSIONS
         
         for v in search_versions:
@@ -1133,27 +1365,99 @@ def main():
                             break
                     
                     if matches:
-                        results.append({
+                        core_results.append({
                             'file': f"{v}/{file}",
-                            'matches': matches
+                            'matches': matches,
+                            'source': 'core'
                         })
                         
                 except Exception as e:
                     logger.error(f"Error searching {file_path}: {str(e)}")
         
-        # Format results
-        if not results:
+        # Search external documentation if requested
+        if include_external:
+            external_dir = multi_updater.external_fetcher.external_dir
+            if external_dir.exists():
+                for service_dir in external_dir.iterdir():
+                    if service_dir.is_dir():
+                        service_name = service_dir.name
+                        
+                        for file_path in service_dir.glob("*.md"):
+                            try:
+                                with open(file_path, 'r', encoding='utf-8') as f:
+                                    content = f.read()
+                                
+                                # Try patterns in order
+                                matches = []
+                                for pattern in patterns:
+                                    for match in pattern.finditer(content):
+                                        start = max(0, match.start() - context_length // 2)
+                                        end = min(len(content), match.end() + context_length // 2)
+                                        
+                                        # Find line boundaries for cleaner snippets
+                                        while start > 0 and content[start] not in '\n.!?':
+                                            start -= 1
+                                        while end < len(content) and content[end] not in '\n.!?':
+                                            end += 1
+                                        
+                                        snippet = content[start:end].strip()
+                                        # Highlight the match
+                                        snippet = pattern.sub(f"**{match.group()}**", snippet)
+                                        
+                                        matches.append({
+                                            'line': content[:match.start()].count('\n') + 1,
+                                            'snippet': snippet
+                                        })
+                                        
+                                        if len(matches) >= 2:  # Limit matches per external file
+                                            break
+                                    
+                                    if matches:
+                                        break
+                                
+                                if matches:
+                                    external_results.append({
+                                        'file': f"{service_name}/{file_path.name}",
+                                        'matches': matches,
+                                        'source': 'external'
+                                    })
+                                    
+                            except Exception as e:
+                                logger.error(f"Error searching external file {file_path}: {str(e)}")
+        
+        # Combine and format results
+        all_results = core_results + external_results
+        
+        if not all_results:
             return f"No results found for '{query}'"
         
-        output = [f"Found '{query}' in {len(results)} files:\n"]
+        output = [f"Found '{query}' with context in {len(all_results)} files:\n"]
         
-        for result in results[:10]:  # Limit total results
-            output.append(f"## {result['file']}")
-            for i, match_result in enumerate(result['matches'][:2]):  # Show first 2 matches
-                match_dict = cast(Dict[str, Any], match_result)
-                output.append(f"\nLine {match_dict['line']}:")
-                output.append(f"...{match_dict['snippet']}...")
-            output.append("")
+        # Show core results first
+        core_count = len(core_results)
+        external_count = len(external_results)
+        
+        if core_count > 0:
+            output.append(f"**Core Laravel Documentation ({core_count} files):**\n")
+            
+            for result in core_results[:5]:  # Limit core results
+                output.append(f"### {result['file']}")
+                for i, match_result in enumerate(result['matches'][:2]):  # Show first 2 matches
+                    match_dict = cast(Dict[str, Any], match_result)
+                    output.append(f"\n*Line {match_dict['line']}:*")
+                    output.append(f"...{match_dict['snippet']}...")
+                output.append("")
+        
+        if external_count > 0:
+            output.append(f"**External Laravel Services ({external_count} files):**\n")
+            
+            for result in external_results[:5]:  # Limit external results
+                output.append(f"### {result['file']}")
+                for i, match_result in enumerate(result['matches'][:1]):  # Show first match only for external
+                    match_dict = cast(Dict[str, Any], match_result)
+                    output.append(f"\n*Line {match_dict['line']}:*")
+                    output.append(f"...{match_dict['snippet']}...")
+                output.append("")
         
         return "\n".join(output)
 
@@ -1317,6 +1621,285 @@ def main():
             output.append("")
         
         return "\n".join(output)
+
+    # Register external documentation tools
+    @mcp.tool(description=TOOL_DESCRIPTIONS["update_external_laravel_docs"])
+    def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
+        """
+        Update documentation for external Laravel services.
+        
+        Args:
+            services: List of services to update (forge, vapor, envoyer, nova). If None, updates all.
+            force: Force update even if cache is valid
+            
+        Returns:
+            Status of the update operation
+        """
+        logger.info(f"Updating external Laravel services documentation (services: {services}, force: {force})")
+        
+        try:
+            if services:
+                # Validate service names
+                available_services = multi_updater.external_fetcher.list_available_services()
+                invalid_services = [s for s in services if s not in available_services]
+                if invalid_services:
+                    return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
+                
+                results = multi_updater.update_external_docs(services=services, force=force)
+            else:
+                results = multi_updater.update_external_docs(force=force)
+            
+            # Clear caches if any services were updated successfully
+            successful = [service for service, success in results.items() if success]
+            failed = [service for service, success in results.items() if not success]
+            
+            if successful:
+                clear_file_cache()
+                get_file_content_cached.cache_clear()
+            
+            response = []
+            response.append(f"External Laravel Services Documentation Update Results:")
+            response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
+            
+            if successful:
+                response.append(f"\nSuccessful: {', '.join(successful)}")
+            
+            if failed:
+                response.append(f"\nFailed: {', '.join(failed)}")
+                response.append(f"Note: Some services may require additional setup or may be temporarily unavailable.")
+            
+            return "\n".join(response)
+        except Exception as e:
+            logger.error(f"Error updating external documentation: {str(e)}")
+            return f"Error updating external documentation: {str(e)}"
+
+    @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_services"])
+    def list_laravel_services() -> str:
+        """
+        List all available Laravel services with external documentation.
+        
+        Returns:
+            List of available Laravel services
+        """
+        logger.debug("Listing available Laravel services")
+        
+        try:
+            services = multi_updater.external_fetcher.list_available_services()
+            response = ["Available Laravel Services:\n"]
+            
+            for service in services:
+                service_info = multi_updater.external_fetcher.get_service_info(service)
+                if service_info:
+                    service_type = service_info.get('type', 'unknown')
+                    if hasattr(service_type, 'value'):
+                        service_type = service_type.value
+                    
+                    response.append(f"## {service_info.get('name', service)}")
+                    response.append(f"**ID:** {service}")
+                    response.append(f"**Type:** {service_type}")
+                    
+                    if 'base_url' in service_info:
+                        response.append(f"**Documentation URL:** {service_info['base_url']}")
+                    elif 'repo' in service_info:
+                        response.append(f"**GitHub Repository:** {service_info['repo']}")
+                    
+                    # Check cache status
+                    cache_valid = multi_updater.external_fetcher.is_cache_valid(service)
+                    response.append(f"**Cache Status:** {'Valid' if cache_valid else 'Needs Update'}")
+                    response.append("")
+            
+            return "\n".join(response)
+        except Exception as e:
+            logger.error(f"Error listing Laravel services: {str(e)}")
+            return f"Error listing Laravel services: {str(e)}"
+
+    @mcp.tool(description=TOOL_DESCRIPTIONS["search_external_laravel_docs"])
+    def search_external_laravel_docs(query: str, services: Optional[List[str]] = None) -> str:
+        """
+        Search through external Laravel service documentation.
+        
+        Args:
+            query: Search term to look for
+            services: List of services to search. If None, searches all cached services.
+            
+        Returns:
+            Search results from external documentation
+        """
+        logger.debug(f"Searching external Laravel docs for: {query}")
+        
+        if not query.strip():
+            return "Search query cannot be empty"
+        
+        try:
+            external_dir = multi_updater.external_fetcher.external_dir
+            
+            if not external_dir.exists():
+                return "No external documentation found. Use update_external_laravel_docs() to fetch documentation first."
+            
+            # Determine which services to search
+            if services:
+                available_services = multi_updater.external_fetcher.list_available_services()
+                invalid_services = [s for s in services if s not in available_services]
+                if invalid_services:
+                    return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
+                search_services = services
+            else:
+                search_services = [d.name for d in external_dir.iterdir() if d.is_dir()]
+            
+            results = []
+            pattern = re.compile(re.escape(query), re.IGNORECASE)
+            
+            for service in search_services:
+                service_dir = external_dir / service
+                if not service_dir.exists():
+                    continue
+                
+                service_matches = []
+                for file_path in service_dir.glob("*.md"):
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            if pattern.search(content):
+                                count = len(pattern.findall(content))
+                                service_matches.append(f"{file_path.name} ({count} matches)")
+                    except Exception as e:
+                        logger.warning(f"Error searching {file_path}: {str(e)}")
+                        continue
+                
+                if service_matches:
+                    results.append(f"**{service.title()}:**")
+                    for match in service_matches:
+                        results.append(f"  - {match}")
+                    results.append("")
+            
+            if results:
+                return f"Found '{query}' in external Laravel service documentation:\n\n" + "\n".join(results)
+            else:
+                return f"No results found for '{query}' in external Laravel service documentation."
+        except Exception as e:
+            logger.error(f"Error searching external documentation: {str(e)}")
+            return f"Error searching external documentation: {str(e)}"
+
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_service_info"])
+    def get_laravel_service_info(service: str) -> str:
+        """
+        Get detailed information about a specific Laravel service.
+        
+        Args:
+            service: Service name (forge, vapor, envoyer, nova)
+            
+        Returns:
+            Detailed information about the service
+        """
+        logger.debug(f"Getting information for Laravel service: {service}")
+        
+        try:
+            service_info = multi_updater.external_fetcher.get_service_info(service)
+            
+            if not service_info:
+                available_services = multi_updater.external_fetcher.list_available_services()
+                return f"Service '{service}' not found. Available services: {', '.join(available_services)}"
+            
+            response = []
+            response.append(f"# {service_info.get('name', service)}")
+            response.append("")
+            
+            # Service type and source
+            service_type = service_info.get('type', 'unknown')
+            if hasattr(service_type, 'value'):
+                service_type = service_type.value
+            response.append(f"**Type:** {service_type}")
+            
+            if 'base_url' in service_info:
+                response.append(f"**Documentation URL:** {service_info['base_url']}")
+                if 'sections' in service_info:
+                    response.append(f"**Available Sections:** {', '.join(service_info['sections'])}")
+            elif 'repo' in service_info:
+                response.append(f"**GitHub Repository:** {service_info['repo']}")
+                response.append(f"**Branch:** {service_info.get('branch', 'main')}")
+            
+            # Cache information
+            cache_valid = multi_updater.external_fetcher.is_cache_valid(service)
+            response.append(f"**Cache Status:** {'Valid' if cache_valid else 'Needs Update'}")
+            
+            # Try to get cache metadata
+            metadata_path = multi_updater.external_fetcher.get_cache_metadata_path(service)
+            if metadata_path.exists():
+                try:
+                    with open(metadata_path, 'r') as f:
+                        metadata = json.load(f)
+                    
+                    if 'cached_at' in metadata:
+                        import datetime
+                        cache_time = datetime.datetime.fromtimestamp(metadata['cached_at'])
+                        response.append(f"**Last Fetched:** {cache_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    
+                    if 'success_rate' in metadata:
+                        response.append(f"**Success Rate:** {metadata['success_rate']:.1%}")
+                    
+                    if 'fetched_sections' in metadata:
+                        response.append(f"**Fetched Sections:** {', '.join(metadata['fetched_sections'])}")
+                except Exception:
+                    pass
+            
+            response.append("")
+            response.append("Use `update_external_laravel_docs()` to fetch or refresh this service's documentation.")
+            
+            return "\n".join(response)
+        except Exception as e:
+            logger.error(f"Error getting service info: {str(e)}")
+            return f"Error getting service info: {str(e)}"
+
+    @mcp.resource("laravel-external://{service}/{path}")
+    def read_external_laravel_doc(service: str, path: str) -> str:
+        """
+        Read a specific external Laravel service documentation file.
+        
+        Args:
+            service: Service name (forge, vapor, envoyer, nova)
+            path: Path to the documentation file within the service
+        """
+        logger.debug(f"Reading external Laravel doc: {service}/{path}")
+        
+        try:
+            # Validate service
+            if service not in multi_updater.external_fetcher.list_available_services():
+                available_services = multi_updater.external_fetcher.list_available_services()
+                return f"Service '{service}' not found. Available: {', '.join(available_services)}"
+            
+            # Get service directory
+            service_dir = multi_updater.external_fetcher.get_service_cache_path(service)
+            
+            # Make sure the path ends with .md
+            if not path.endswith('.md'):
+                path = f"{path}.md"
+            
+            file_path = service_dir / path
+            
+            # Security check - ensure we stay within service directory
+            if not is_safe_path(service_dir, file_path):
+                return f"Access denied: {service}/{path} (path traversal attempted)"
+            
+            if not file_path.exists():
+                # List available files to help user
+                available_files = []
+                try:
+                    available_files = [f.name for f in service_dir.glob("*.md")][:10]
+                except:
+                    pass
+                
+                if available_files:
+                    return f"File not found: {service}/{path}. Available files: {', '.join(available_files)}"
+                else:
+                    return f"File not found: {service}/{path}. No documentation cached for {service}. Use update_external_laravel_docs(['{service}']) to fetch documentation."
+            
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                logger.debug(f"Successfully read external file: {file_path} ({len(content)} bytes)")
+                return content
+        except Exception as e:
+            logger.error(f"Error reading external file {service}/{path}: {str(e)}")
+            return f"Error reading file: {str(e)}"
         
     # Log server startup
     logger.info(f"Starting Laravel MCP Companion ({args.server_name})")

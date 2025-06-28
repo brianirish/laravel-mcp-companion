@@ -30,8 +30,15 @@ jobs:
       run: |
         set +e
         source .venv/bin/activate
-        python docs_updater.py --all-versions
+        
+        # Run documentation update with auto-discovery enabled
+        echo "Starting documentation update with auto-discovery..."
+        python docs_updater.py --all-versions --log-level INFO
         UPDATE_STATUS=$?
+        
+        # Check external services status to report auto-discovery results
+        echo "Checking external services status..."
+        python docs_updater.py --status --external-only
         
         # Check if any files were actually changed
         if git diff --quiet docs/; then
@@ -40,6 +47,16 @@ jobs:
         else
           echo "updates_available=true" >> $GITHUB_OUTPUT
           echo "File changes detected"
+          
+          # Count changes for reporting
+          CHANGED_FILES=$(git diff --name-only docs/ | wc -l)
+          echo "Found $CHANGED_FILES changed documentation files"
+          
+          # Check for new external docs
+          NEW_EXTERNAL_FILES=$(git diff --name-status docs/external/ | grep "^A" | wc -l)
+          if [ "$NEW_EXTERNAL_FILES" -gt 0 ]; then
+            echo "Auto-discovery found $NEW_EXTERNAL_FILES new external documentation files"
+          fi
         fi
     - name: Close existing pull requests
       if: steps.check-updates.outputs.updates_available == 'true'
@@ -81,7 +98,23 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: 'Update Laravel documentation to latest version'
         title: 'Update Laravel documentation'
-        body: 'Automated PR to update Laravel documentation to the latest version.'
+        body: |
+          Automated PR to update Laravel documentation to the latest version.
+          
+          ## Auto-Discovery Status
+          This update includes enhancements with auto-discovery for external Laravel services:
+          - ✅ **Laravel Forge** - Auto-discovery enabled for comprehensive section detection
+          - ✅ **Laravel Vapor** - Auto-discovery enabled with Mintlify navigation parsing  
+          - ✅ **Laravel Envoyer** - Auto-discovery enabled with redirect validation
+          - ✅ **Laravel Nova** - Auto-discovery enabled with version detection
+          
+          ## Changes Included
+          - Core Laravel documentation updates for all supported versions
+          - External Laravel services documentation with auto-discovered sections
+          - Enhanced content validation and quality scoring
+          - Improved fallback mechanisms for manual configuration
+          
+          Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
         branch: update-laravel-docs
     - name: Enable auto-merge and wait for checks
       if: steps.check-updates.outputs.updates_available == 'true' && steps.create-pr.outputs.pull-request-number

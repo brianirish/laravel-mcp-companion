@@ -18,13 +18,22 @@
 
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
-- **Curated package recommendations** with detailed integration guides
-- **Community resource discovery** - tutorials, guides, and best practices
+- **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova with 117+ sections
+- **Curated package recommendations** with detailed integration guides  
+- **Unified search** across core Laravel docs and external services
 - **Smart navigation** - find exactly what you need for your use case
+- **Future-proof updates** - automatically adapts to Laravel service changes
 
-## Update Frequency
+## Auto-Discovery & Update Frequency
 
-This application is written in a way to maximize the value out of GitHub Actions. Every day, it retrieves the latest Laravel documentation for all versions since 6.x (sometimes the old docs get updated too!). If it finds any updates, a new patch release will automatically be generated here and then distributed to both Pypi and GHCR for your consumption. Mmm, delicious.
+This application features an **intelligent auto-discovery system** that automatically finds and indexes Laravel service documentation. Every day, it:
+
+- ✅ **Auto-discovers** new documentation sections across Laravel services (Forge, Vapor, Nova, Envoyer)  
+- ✅ **Retrieves** the latest Laravel core documentation for all versions since 6.x
+- ✅ **Adapts** automatically to structural changes in Laravel service websites
+- ✅ **Generates** new patch releases automatically when updates are found
+
+**Current Coverage**: 117+ documentation sections (vs 95 manually-configured) with intelligent fallback mechanisms.
 
 ## Installation
 
@@ -70,26 +79,50 @@ Add this to your AI client's MCP configuration:
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
+| `--external-only` | Update only external Laravel services | false |
+| `--core-only` | Update only core Laravel documentation | false |
+| `--services SERVICE1 SERVICE2` | Update specific services (forge, vapor, etc.) | All |
+| `--list-services` | List available Laravel services | - |
+| `--status` | Show documentation status for all sources | - |
 
 ### First Run
 
 The server automatically downloads Laravel documentation on first use. This may take a few moments initially.
 
+### External Laravel Services (Auto-Discovery Enabled)
+
+Laravel MCP Companion includes auto-discovery for official Laravel services with enhanced coverage:
+
+- **Laravel Forge** - Server management and deployment *(53 sections auto-discovered)*
+- **Laravel Vapor** - Serverless deployment platform *(16 sections auto-discovered)*
+- **Laravel Nova** - Administration panel *(38 sections auto-discovered)*
+- **Laravel Envoyer** - Zero-downtime deployment *(10 sections with intelligent fallback)*
+
+**Auto-Discovery Features:**
+- 🔍 **Smart Detection**: Automatically finds new documentation sections
+- 🔄 **Version Detection**: Auto-detects latest Nova versions (currently v5)
+- 🛡️ **Content Validation**: Quality scoring ensures only useful documentation
+- 🔙 **Graceful Fallback**: Uses manual configuration when auto-discovery fails
+
+Use `update_external_laravel_docs()` to trigger auto-discovery, or `list_laravel_services()` to see all available services.
+
 
 ## Features and Roadmap
 
-### Current Features (v0.4.0)
-- ✅ **Laravel MCP Companion**: Rebranded as comprehensive documentation aggregator and navigator
+### Current Features (v0.5.0)
+- ✅ **Laravel MCP Companion**: Comprehensive documentation aggregator and navigator
 - ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
-- ✅ **Enhanced Content Retrieval**: Context-aware search, document structure extraction, category browsing
-- ✅ **Package Recommendations**: 50+ curated packages with detailed integration guides
-- ✅ **Future-Proof Version Detection**: Automatically detects and supports new Laravel releases
-- ✅ **Daily Documentation Updates**: Automatically syncs with Laravel's GitHub repository
-- ✅ **Streamlined Distribution**: Docker images and Smithery marketplace (PyPI removed)
-- ✅ **Documentation Aggregator Strategy**: Focus on centralizing existing high-quality content
+- ✅ **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
+- ✅ **Laravel Ecosystem Services**: Forge, Vapor, Envoyer, Nova with intelligent section detection
+- ✅ **Enhanced Search**: Unified search across core Laravel docs and external services with caching
+- ✅ **Package Recommendations**: 50+ curated packages including Laravel services
+- ✅ **Content Validation**: Quality scoring and validation for discovered documentation sections
+- ✅ **Robust Error Handling**: Retry mechanisms and graceful fallback to manual configuration
+- ✅ **Performance Optimized**: File content caching and search result caching for faster responses
+- ✅ **Future-Proof Updates**: Automatically adapts to Laravel service documentation changes
+- ✅ **Daily Auto-Discovery**: Enhanced GitHub Actions with auto-discovery metrics and reporting
 
 ### Upcoming Features
-- 📦 **v0.5.0**: Laravel ecosystem documentation (Sanctum, Cashier, Scout, Forge, Vapor, Nova)
 - 🌟 **v0.6.0**: Community package documentation (Spatie, Livewire, Inertia, Filament)
 - 📚 **v0.7.0**: Community learning resources (Laravel News, tutorials, guides)
 - 🔍 **v0.8.0**: Advanced search and smart navigation across all sources

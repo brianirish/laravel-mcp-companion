@@ -4,7 +4,7 @@ startCommand:
   type: stdio
   configSchema:
     type: object
-    description: Configuration for starting the Laravel Docs MCP Server
+    description: Configuration for starting the Laravel MCP Companion
     properties:
       docsPath:
         type: string
@@ -13,7 +13,7 @@ startCommand:
       serverName:
         type: string
         description: Name of the MCP server
-        default: "LaravelDocs"
+        default: "LaravelMCPCompanion"
       logLevel:
         type: string
         description: Logging level
@@ -31,6 +31,14 @@ startCommand:
         type: boolean
         description: Force update of documentation even if already up to date
         default: false
+      externalOnly:
+        type: boolean
+        description: Update only external Laravel services documentation
+        default: false
+      coreOnly:
+        type: boolean
+        description: Update only core Laravel documentation
+        default: false
   commandFunction: |
     (config) => {
       const args = ['laravel_mcp_companion.py'];
@@ -41,13 +49,17 @@ startCommand:
       if (config.version) args.push('--version', config.version);
       if (config.updateDocs) args.push('--update-docs');
       if (config.forceUpdate) args.push('--force-update');
+      if (config.externalOnly) args.push('--external-only');
+      if (config.coreOnly) args.push('--core-only');
       
       return { command: 'python', args };
     }
   exampleConfig:
     docsPath: "./docs"
-    serverName: "LaravelDocs"
+    serverName: "LaravelMCPCompanion"
     logLevel: "INFO"
     version: "12.x"
     updateDocs: false
     forceUpdate: false
+    externalOnly: false
+    coreOnly: false
