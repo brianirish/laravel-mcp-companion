@@ -20,7 +20,7 @@ import threading
 from fastmcp import FastMCP
 
 # Import documentation updater
-from docs_updater import DocsUpdater, MultiSourceDocsUpdater, ExternalDocsFetcher, get_cached_supported_versions, DEFAULT_VERSION
+from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
 
 # Configure logging
@@ -34,8 +34,8 @@ logger = logging.getLogger("laravel-mcp-companion")
 SUPPORTED_VERSIONS = get_cached_supported_versions()
 
 # Global caches for performance optimization
-_file_content_cache = {}
-_search_result_cache = {}
+_file_content_cache: Dict[str, str] = {}
+_search_result_cache: Dict[str, str] = {}
 _cache_lock = threading.Lock()
 
 # Define the Laravel package catalog
@@ -1658,7 +1658,7 @@ def main():
                 get_file_content_cached.cache_clear()
             
             response = []
-            response.append(f"External Laravel Services Documentation Update Results:")
+            response.append("External Laravel Services Documentation Update Results:")
             response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
             
             if successful:
@@ -1666,7 +1666,7 @@ def main():
             
             if failed:
                 response.append(f"\nFailed: {', '.join(failed)}")
-                response.append(f"Note: Some services may require additional setup or may be temporarily unavailable.")
+                response.append("Note: Some services may require additional setup or may be temporarily unavailable.")
             
             return "\n".join(response)
         except Exception as e:
@@ -1885,7 +1885,7 @@ def main():
                 available_files = []
                 try:
                     available_files = [f.name for f in service_dir.glob("*.md")][:10]
-                except:
+                except Exception:
                     pass
                 
                 if available_files:
