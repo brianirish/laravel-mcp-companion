@@ -482,7 +482,7 @@ $value = Arr::float($array, 'name');
 <a name="method-array-forget"></a>
 #### `Arr::forget()` {.collection-method}
 
-The `Arr::forget` method removes a given key / value pair from a deeply nested array using "dot" notation:
+The `Arr::forget` method removes a given key / value pairs from a deeply nested array using "dot" notation:
 
 ```php
 use Illuminate\Support\Arr;
@@ -3072,7 +3072,7 @@ To invoke a callback more than once, you may specify the number of iterations th
 Benchmark::dd(fn () => User::count(), iterations: 10); // 0.5 ms
 ```
 
-Sometimes, you may want to benchmark the execution of a callback while still obtaining the value returned by the callback. The `value` method will return a tuple containing the value returned by the callback and the amount of milliseconds it took to execute the callback:
+Sometimes, you may want to benchmark the execution of a callback while still obtaining the value returned by the callback. The `value` method will return a tuple containing the value returned by the callback and the number of milliseconds it took to execute the callback:
 
 ```php
 [$count, $duration] = Benchmark::value(fn () => User::count());
@@ -3415,7 +3415,7 @@ Sleep::assertNeverSlept();
 Sleep::assertInsomniac();
 ```
 
-Sometimes it may be useful to perform an action whenever a fake sleep occurs in your application code. To achieve this, you may provide a callback to the `whenFakingSleep` method. In the following example, we use Laravel's [time manipulation helpers](/docs/{{version}}/mocking#interacting-with-time) to instantly progress time by the duration of each sleep:
+Sometimes it may be useful to perform an action whenever a fake sleep occurs. To achieve this, you may provide a callback to the `whenFakingSleep` method. In the following example, we use Laravel's [time manipulation helpers](/docs/{{version}}/mocking#interacting-with-time) to instantly progress time by the duration of each sleep:
 
 ```php
 use Carbon\CarbonInterval as Duration;
