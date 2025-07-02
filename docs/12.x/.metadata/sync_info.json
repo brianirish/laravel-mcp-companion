@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "873c949f1a40e4d99bd76389a9901ac39b451dc0",
-  "commit_date": "2025-06-28T17:21:17Z",
-  "commit_message": "[12.x] Add the orderByDesc method (#10539)\n\n* Add the orderByDesc method.\n\n* Update queries.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/873c949f1a40e4d99bd76389a9901ac39b451dc0",
-  "sync_time": "2025-06-29T01:38:09Z"
+  "commit_sha": "7fd84ae1b51f0961c61ea8d33d34b4d5028b18b8",
+  "commit_date": "2025-07-01T16:46:28Z",
+  "commit_message": "[12.x] document the password reset `cache` driver (#10534)\n\n* document the password reset `cache` driver\n\ndocument https://github.com/laravel/framework/pull/53428\n\nI modeled the wording and organization after the `session.md` docs for hopefully a little consistency.\n\n* add note about how we key the entries\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/7fd84ae1b51f0961c61ea8d33d34b4d5028b18b8",
+  "sync_time": "2025-07-02T01:21:49Z"
 }
