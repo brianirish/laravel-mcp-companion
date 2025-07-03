@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "873c949f1a40e4d99bd76389a9901ac39b451dc0",
-  "commit_date": "2025-06-28T17:21:17Z",
-  "commit_message": "[12.x] Add the orderByDesc method (#10539)\n\n* Add the orderByDesc method.\n\n* Update queries.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/873c949f1a40e4d99bd76389a9901ac39b451dc0",
-  "sync_time": "2025-06-29T01:38:09Z"
+  "commit_sha": "84413739f127e00727a102c4994551108e62cff7",
+  "commit_date": "2025-07-02T22:59:19Z",
+  "commit_message": "[12.x] Add section on assigning middleware to resource routes (#10553)\n\n* Add section on assigning middleware to resource routes\n\n* Update note formatting for middleware order in controllers documentation\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/84413739f127e00727a102c4994551108e62cff7",
+  "sync_time": "2025-07-03T01:21:49Z"
 }
