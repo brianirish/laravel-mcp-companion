@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       updates_available: ${{ steps.check-updates.outputs.updates_available }}
+      pr_number: ${{ steps.create-pr.outputs.pull-request-number }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -140,14 +141,36 @@ jobs:
     needs: [check-update]
     if: needs.check-update.outputs.updates_available == 'true'
     steps:
+    - name: Wait for PR to be merged
+      id: wait-for-merge
+      run: |
+        PR_NUMBER="${{ needs.check-update.outputs.pr_number }}"
+        if [ -z "$PR_NUMBER" ]; then
+          echo "No PR number available"
+          exit 1
+        fi
+        
+        # Wait up to 10 minutes for the PR to be merged
+        for i in {1..40}; do
+          PR_STATE=$(gh pr view $PR_NUMBER --json state,mergedAt -q '.state')
+          if [ "$PR_STATE" = "MERGED" ]; then
+            echo "PR $PR_NUMBER has been merged!"
+            # Get the merge commit SHA
+            MERGE_COMMIT=$(gh pr view $PR_NUMBER --json mergeCommit -q '.mergeCommit.oid')
+            echo "merge_commit=$MERGE_COMMIT" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "PR state: $PR_STATE. Waiting... (attempt $i/40)"
+          sleep 15
+        done
+        echo "PR was not merged within timeout"
+        exit 1
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: main  # Make sure we're on main after the merge
-    - name: Wait for auto-merge to complete
-      run: |
-        echo "Waiting for auto-merge to complete..."
-        sleep 30  # Give some time for the merge to happen
+        ref: ${{ steps.wait-for-merge.outputs.merge_commit }}
     - name: Create new patch version tag and release
       run: |
         # Get the latest tag, default to v0.0.0 if no tags exist
