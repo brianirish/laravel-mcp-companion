@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "84413739f127e00727a102c4994551108e62cff7",
-  "commit_date": "2025-07-02T22:59:19Z",
-  "commit_message": "[12.x] Add section on assigning middleware to resource routes (#10553)\n\n* Add section on assigning middleware to resource routes\n\n* Update note formatting for middleware order in controllers documentation\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/84413739f127e00727a102c4994551108e62cff7",
-  "sync_time": "2025-07-03T01:21:49Z"
+  "commit_sha": "7b8ff9a05d0430022cdac899b69edd8b2ebdcb43",
+  "commit_date": "2025-07-03T20:19:21Z",
+  "commit_message": "Add missing imports to artisan.md (#10562)",
+  "commit_url": "https://github.com/laravel/docs/commit/7b8ff9a05d0430022cdac899b69edd8b2ebdcb43",
+  "sync_time": "2025-07-04T01:21:29Z"
 }

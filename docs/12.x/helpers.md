@@ -113,6 +113,8 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [Number::format](#method-number-format)
 [Number::ordinal](#method-number-ordinal)
 [Number::pairs](#method-number-pairs)
+[Number::parseInt](#method-number-parse-int)
+[Number::parseFloat](#method-number-parse-float)
 [Number::percentage](#method-number-percentage)
 [Number::spell](#method-number-spell)
 [Number::spellOrdinal](#method-number-spell-ordinal)
@@ -311,7 +313,7 @@ $value = Arr::boolean($array, 'name');
 <a name="method-array-collapse"></a>
 #### `Arr::collapse()` {.collection-method}
 
-The `Arr::collapse` method collapses an array of arrays into a single array:
+The `Arr::collapse` method collapses an array of arrays or collections into a single array:
 
 ```php
 use Illuminate\Support\Arr;
@@ -1728,6 +1730,40 @@ $result = Number::pairs(25, 10, offset: 0);
 // [[0, 10], [10, 20], [20, 25]]
 ```
 
+<a name="method-number-parse-int"></a>
+#### `Number::parseInt()` {.collection-method}
+
+The `Number::parseInt` method parse a string into an integer according to the specified locale:
+
+```php
+use Illuminate\Support\Number;
+
+$result = Number::parseInt('10.123');
+
+// (int) 10
+
+$result = Number::parseInt('10,123', locale: 'fr');
+
+// (int) 10
+```
+
+<a name="method-number-parse-float"></a>
+#### `Number::parseFloat()` {.collection-method}
+
+The `Number::parseFloat` method parse a string into a float according to the specified locale:
+
+```php
+use Illuminate\Support\Number;
+
+$result = Number::parseFloat('10');
+
+// (float) 10.0
+
+$result = Number::parseFloat('10', locale: 'fr');
+
+// (float) 10.0
+```
+
 <a name="method-number-percentage"></a>
 #### `Number::percentage()` {.collection-method}
 
@@ -2245,7 +2281,7 @@ blank(false);
 // false
 ```
 
-For the inverse of `blank`, see the [filled](#method-filled) method.
+For the inverse of `blank`, see the [filled](#method-filled) function.
 
 <a name="method-broadcast"></a>
 #### `broadcast()` {.collection-method}
@@ -2389,6 +2425,8 @@ The `decrypt` function [decrypts](/docs/{{version}}/encryption) the given value.
 $password = decrypt($value);
 ```
 
+For the inverse of `decrypt`, see the [encrypt](#method-encrypt) function.
+
 <a name="method-dd"></a>
 #### `dd()` {.collection-method}
 
@@ -2441,6 +2479,8 @@ The `encrypt` function [encrypts](/docs/{{version}}/encryption) the given value.
 ```php
 $secret = encrypt('my-secret-value');
 ```
+
+For the inverse of `encrypt`, see the [decrypt](#method-decrypt) function.
 
 <a name="method-env"></a>
 #### `env()` {.collection-method}
@@ -2508,7 +2548,7 @@ filled(collect());
 // false
 ```
 
-For the inverse of `filled`, see the [blank](#method-blank) method.
+For the inverse of `filled`, see the [blank](#method-blank) function.
 
 <a name="method-info"></a>
 #### `info()` {.collection-method}
