@@ -141,6 +141,9 @@ jobs:
     needs: [check-update]
     if: needs.check-update.outputs.updates_available == 'true'
     steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Wait for PR to be merged
       id: wait-for-merge
       run: |
@@ -167,10 +170,10 @@ jobs:
         exit 1
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        ref: ${{ steps.wait-for-merge.outputs.merge_commit }}
+    - name: Checkout merge commit
+      run: |
+        git fetch origin
+        git checkout ${{ steps.wait-for-merge.outputs.merge_commit }}
     - name: Create new patch version tag and release
       run: |
         # Get the latest tag, default to v0.0.0 if no tags exist
