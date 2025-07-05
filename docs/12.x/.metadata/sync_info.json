@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "7b8ff9a05d0430022cdac899b69edd8b2ebdcb43",
-  "commit_date": "2025-07-03T20:19:21Z",
-  "commit_message": "Add missing imports to artisan.md (#10562)",
-  "commit_url": "https://github.com/laravel/docs/commit/7b8ff9a05d0430022cdac899b69edd8b2ebdcb43",
-  "sync_time": "2025-07-04T02:34:43Z"
+  "commit_sha": "6e19bf5621c427fcb32e757d3d1138d73aefc523",
+  "commit_date": "2025-07-04T16:24:20Z",
+  "commit_message": "[12.x] Add new string methods (#10569)\n\n* wip\n\n* wip",
+  "commit_url": "https://github.com/laravel/docs/commit/6e19bf5621c427fcb32e757d3d1138d73aefc523",
+  "sync_time": "2025-07-05T01:18:48Z"
 }
