@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "6e19bf5621c427fcb32e757d3d1138d73aefc523",
-  "commit_date": "2025-07-04T16:24:20Z",
-  "commit_message": "[12.x] Add new string methods (#10569)\n\n* wip\n\n* wip",
-  "commit_url": "https://github.com/laravel/docs/commit/6e19bf5621c427fcb32e757d3d1138d73aefc523",
-  "sync_time": "2025-07-05T01:18:48Z"
+  "commit_sha": "7adad40baab695486242f27d77e715dc1170b250",
+  "commit_date": "2025-07-07T14:24:36Z",
+  "commit_message": "[12.x] Add whereJsonContainsKey and whereJsonDoesntContainKey methods (#10573)\n\n* Add whereJsonContainsKey and whereJsonDoesntContainKey methods.\n\n* Update queries.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/7adad40baab695486242f27d77e715dc1170b250",
+  "sync_time": "2025-07-08T01:22:26Z"
 }
