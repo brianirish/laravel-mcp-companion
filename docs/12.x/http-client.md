@@ -57,7 +57,7 @@ The `Illuminate\Http\Client\Response` object also implements the PHP `ArrayAcces
 return Http::get('http://example.com/users/1')['name'];
 ```
 
-In addition to the response methods listed above, the following methods may be used to determine if the response has a given status code:
+In addition to the response methods listed above, the following methods may be used to determine if the response has a specific status code:
 
 ```php
 $response->ok() : bool;                  // 200 OK
@@ -87,7 +87,7 @@ The HTTP client also allows you to construct request URLs using the [URI templat
 Http::withUrlParameters([
     'endpoint' => 'https://laravel.com',
     'page' => 'docs',
-    'version' => '11.x',
+    'version' => '12.x',
     'topic' => 'validation',
 ])->get('{+endpoint}/{page}/{version}/{topic}');
 ```
