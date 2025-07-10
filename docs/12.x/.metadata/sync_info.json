@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "10e0cacd168bd6a2fe9606365bccec4d6a11563a",
-  "commit_date": "2025-07-08T17:46:50Z",
-  "commit_message": "Added PhpStorm and Firebase Studio to IDEs (#10585)\n\n* adding jetbrains + firebase studio to IDEs\n\n* vs code first. added cursor",
-  "commit_url": "https://github.com/laravel/docs/commit/10e0cacd168bd6a2fe9606365bccec4d6a11563a",
-  "sync_time": "2025-07-09T01:23:24Z"
+  "commit_sha": "e473f8cece1cbf8dd8287ab020421335db90c63b",
+  "commit_date": "2025-07-09T21:25:36Z",
+  "commit_message": "[12.x] Adds `whereValueBetween` documentation (#10587)\n\n* [12.x] Adds `whereValueBetween` documentation\n\n* Update queries.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/e473f8cece1cbf8dd8287ab020421335db90c63b",
+  "sync_time": "2025-07-10T01:23:24Z"
 }
