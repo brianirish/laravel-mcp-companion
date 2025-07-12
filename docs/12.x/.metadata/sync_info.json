@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e473f8cece1cbf8dd8287ab020421335db90c63b",
-  "commit_date": "2025-07-09T21:25:36Z",
-  "commit_message": "[12.x] Adds `whereValueBetween` documentation (#10587)\n\n* [12.x] Adds `whereValueBetween` documentation\n\n* Update queries.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/e473f8cece1cbf8dd8287ab020421335db90c63b",
-  "sync_time": "2025-07-10T01:23:24Z"
+  "commit_sha": "f52fc17d93bcfe5c46fa19014b1d16280e78827d",
+  "commit_date": "2025-07-11T21:49:53Z",
+  "commit_message": "Fix outdated URLs in Mail (#10595)",
+  "commit_url": "https://github.com/laravel/docs/commit/f52fc17d93bcfe5c46fa19014b1d16280e78827d",
+  "sync_time": "2025-07-12T01:25:44Z"
 }
