@@ -2,4 +2,5 @@ ruff
 mypy
 pytest
 pytest-cov
+pytest-asyncio
 black
