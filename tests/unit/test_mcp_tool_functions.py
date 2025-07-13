@@ -1,16 +1,8 @@
 """Unit tests for actual MCP tool functions exposed to AI assistants."""
 
-import pytest
-import json
-import os
-from pathlib import Path
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch
 
 import laravel_mcp_companion
-from laravel_mcp_companion import (
-    PACKAGE_CATALOG,
-    FEATURE_MAP
-)
 # Import the standalone functions from mcp_tools
 from mcp_tools import (
     list_laravel_docs_impl,
@@ -18,10 +10,7 @@ from mcp_tools import (
     search_laravel_docs_impl,
     search_laravel_docs_with_context_impl,
     get_doc_structure_impl,
-    browse_docs_by_category_impl,
-    SUPPORTED_VERSIONS,
-    DEFAULT_VERSION,
-    clear_caches
+    browse_docs_by_category_impl
 )
 
 

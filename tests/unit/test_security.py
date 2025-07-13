@@ -1,9 +1,8 @@
 """Unit tests for security and safety functions."""
 
 import pytest
-import tempfile
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from laravel_mcp_companion import is_safe_path, get_version_from_path
 import laravel_mcp_companion
@@ -307,11 +306,6 @@ class TestErrorHandling:
 
     def test_error_handling_in_get_version_from_path(self):
         """Test error handling in version parsing."""
-        # Test with various malformed inputs
-        malformed_inputs = [
-            None,  # This would cause TypeError
-        ]
-        
         # The function should handle string inputs, but test edge cases
         edge_cases = [
             "12.x" + "/" * 1000 + "file.md",  # Very long path

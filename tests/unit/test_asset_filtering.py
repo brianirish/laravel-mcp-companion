@@ -1,5 +1,4 @@
 """Tests for asset file filtering in documentation fetching."""
-import pytest
 from docs_updater import DocumentationAutoDiscovery
 
 

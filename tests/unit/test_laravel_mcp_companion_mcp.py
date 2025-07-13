@@ -1,8 +1,7 @@
 """Unit tests for Laravel MCP Companion MCP framework integration."""
 
 import pytest
-from pathlib import Path
-from typing import Dict, Any, Callable, Optional, List
+from typing import Dict, Any, Callable, Optional
 from unittest.mock import MagicMock, patch
 import argparse
 
@@ -10,9 +9,7 @@ from laravel_mcp_companion import (
     validate_version,
     setup_server_environment,
     handle_documentation_update,
-    configure_mcp_server,
-    SUPPORTED_VERSIONS,
-    TOOL_DESCRIPTIONS
+    configure_mcp_server
 )
 from docs_updater import MultiSourceDocsUpdater
 

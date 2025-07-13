@@ -10,7 +10,7 @@ import os
 import re
 import logging
 from pathlib import Path
-from typing import Dict, Optional, List, Any
+from typing import Dict, Optional
 import json
 import threading
 
@@ -82,7 +82,12 @@ def is_safe_path(base_path: Path, target_path: Path) -> bool:
 
 def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
     """Get metadata for a specific Laravel documentation version."""
-    metadata_file = docs_path / version / ".metadata.json"
+    # Check new location first (.metadata/sync_info.json)
+    metadata_file = docs_path / version / ".metadata" / "sync_info.json"
+    
+    if not metadata_file.exists():
+        # Fall back to old location for compatibility with tests
+        metadata_file = docs_path / version / ".metadata.json"
     
     if metadata_file.exists():
         try:

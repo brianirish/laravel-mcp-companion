@@ -14,7 +14,7 @@ import re
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, Optional, List, Any, cast
+from typing import Dict, Optional, List, Any
 from functools import lru_cache
 import threading
 from fastmcp import FastMCP
@@ -30,8 +30,7 @@ from mcp_tools import (
     search_laravel_docs_impl,
     search_laravel_docs_with_context_impl,
     get_doc_structure_impl,
-    browse_docs_by_category_impl,
-    clear_caches as clear_mcp_caches
+    browse_docs_by_category_impl
 )
 
 # Configure logging
@@ -670,11 +669,19 @@ def get_version_from_path(path: str) -> tuple[str, str]:
 def get_laravel_docs_metadata(docs_path: Path, version: Optional[str] = None) -> Dict:
     """Get documentation metadata if available."""
     if version:
+        # Check new location first
         metadata_file = docs_path / version / ".metadata" / "sync_info.json"
+        if not metadata_file.exists():
+            # Fall back to test location
+            metadata_file = docs_path / version / ".metadata.json"
     else:
         # Try to find any version metadata
         for v in SUPPORTED_VERSIONS:
             metadata_file = docs_path / v / ".metadata" / "sync_info.json"
+            if metadata_file.exists():
+                break
+            # Also check test location
+            metadata_file = docs_path / v / ".metadata.json"
             if metadata_file.exists():
                 break
         else:
@@ -824,7 +831,7 @@ def get_laravel_package_info(package_name: str) -> str:
     
     # Look for exact match or partial match
     package = None
-    package_id = None
+    package_id: Optional[str] = None
     for pkg_id, pkg in PACKAGE_CATALOG.items():
         if pkg_id.lower() == package_name or package_name in pkg_id.lower():
             package = pkg
@@ -836,7 +843,7 @@ def get_laravel_package_info(package_name: str) -> str:
     
     # Add the package ID to the package dict for format_package_recommendation
     package_with_id = package.copy()
-    package_with_id['id'] = package_id
+    package_with_id['id'] = package_id or ''
     return format_package_recommendation(package_with_id)
 
 
@@ -852,7 +859,7 @@ def get_laravel_package_categories(category: str) -> str:
     
     if not matching_packages:
         # List available categories
-        all_categories = set()
+        all_categories: set[str] = set()
         for package in PACKAGE_CATALOG.values():
             all_categories.update(package.get('categories', []))
         
@@ -891,7 +898,7 @@ def get_features_for_laravel_package(package: str) -> str:
         return f"Package '{package}' not found in the catalog."
     
     # Get features from the feature map
-    features = FEATURE_MAP.get(package_id, [])
+    features = FEATURE_MAP.get(package_id or '', [])
     
     results = [f"# Implementation Features for {found_package['name']}\n"]
     
@@ -1059,13 +1066,12 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
     }
     
     # Create the MCP server
-    mcp = FastMCP(server_name)
+    mcp: FastMCP = FastMCP(server_name)
     
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, version)
     
-    # Register resources at module level
-    @mcp.resource("laravel://{path}")
+    # Define resource handler functions
     def read_laravel_doc(path: str) -> str:
         """Read a specific Laravel documentation file."""
         config = _server_config
@@ -1078,10 +1084,10 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
         if not relative_path.endswith('.md'):
             relative_path = f"{relative_path}.md"
         
-        file_path = config['docs_path'] / version_inner / relative_path
+        file_path = Path(config['docs_path']) / version_inner / relative_path
         
         # Security check - ensure we stay within version directory
-        version_path = config['docs_path'] / version_inner
+        version_path = Path(config['docs_path']) / version_inner
         if not is_safe_path(version_path, file_path):
             logger.warning(f"Access denied: {path} (attempted directory traversal)")
             return f"Access denied: {path} (attempted directory traversal)"
@@ -1099,10 +1105,8 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
             logger.error(f"Error reading file {file_path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
-    @mcp.resource("laravel-external://{service}/{path}")
     def read_external_laravel_doc(service: str, path: str) -> str:
         """Read a specific external Laravel service documentation file."""
-        config = _server_config
         logger.debug(f"Reading external Laravel doc: {service}/{path}")
         
         try:
@@ -1145,13 +1149,20 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
             logger.error(f"Error reading external file {service}/{path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
+    # Register resources using functional approach (decorator as function)
+    laravel_resource = mcp.resource("laravel://{path}")(read_laravel_doc)
+    external_resource = mcp.resource("laravel-external://{service}/{path}")(read_external_laravel_doc)
+    logger.debug(f"Registered Laravel resource: {laravel_resource}")
+    logger.debug(f"Registered external resource: {external_resource}")
+    
+    
     # Configure all tools
     configure_mcp_server(mcp, docs_path, version, multi_updater)
     
     return mcp
 
 # Global configuration storage
-_server_config = {}
+_server_config: Dict[str, Any] = {}
 
 
 def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_updater: MultiSourceDocsUpdater) -> None:

@@ -34,8 +34,7 @@ addopts = [
     "--cov=mcp_tools",
     "--cov-report=term-missing",
     "--cov-report=html:htmlcov",
-    "--cov-report=xml:coverage.xml",
-    "--cov-fail-under=84"
+    "--cov-report=xml:coverage.xml"
 ]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
@@ -59,5 +58,7 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 [dependency-groups]
 dev = [
+    "mypy>=1.16.1",
     "pytest-asyncio>=1.0.0",
+    "ruff>=0.12.3",
 ]

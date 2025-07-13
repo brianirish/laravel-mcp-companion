@@ -1,10 +1,8 @@
 """Unit tests for Laravel MCP Companion tool functions."""
 
 import pytest
-import json
-import tempfile
 from pathlib import Path
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
 
 import laravel_mcp_companion
 from laravel_mcp_companion import (
@@ -199,7 +197,7 @@ class TestUtilityFunctions:
             mock_path_instance.parent.__truediv__ = MagicMock(return_value=mock_path_instance)
             mock_path_instance.resolve.return_value = mock_path_instance
             
-            result = laravel_mcp_companion.setup_docs_path()
+            laravel_mcp_companion.setup_docs_path()
             
             mock_path_instance.mkdir.assert_called_once_with(parents=True, exist_ok=True)
 
@@ -212,7 +210,7 @@ class TestUtilityFunctions:
             mock_path.return_value = mock_path_instance
             mock_path_instance.resolve.return_value = mock_path_instance
             
-            result = laravel_mcp_companion.setup_docs_path(custom_path)
+            laravel_mcp_companion.setup_docs_path(custom_path)
             
             mock_path.assert_called_with(custom_path)
             mock_path_instance.mkdir.assert_called_once_with(parents=True, exist_ok=True)

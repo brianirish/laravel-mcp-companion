@@ -1,6 +1,5 @@
 """Pytest configuration and fixtures for Laravel MCP Companion tests."""
 
-import os
 import tempfile
 import json
 import pytest

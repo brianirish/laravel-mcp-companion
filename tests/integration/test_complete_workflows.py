@@ -1,13 +1,10 @@
 """Integration tests for complete Laravel MCP Companion workflows."""
 
 import pytest
-import json
-import tempfile
-from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import laravel_mcp_companion
-from docs_updater import DocsUpdater, MultiSourceDocsUpdater
+from docs_updater import DocsUpdater
 
 
 @pytest.mark.integration
@@ -20,8 +17,7 @@ class TestDocumentationWorkflows:
         from mcp_tools import (
             list_laravel_docs_impl,
             search_laravel_docs_impl,
-            read_laravel_doc_content_impl,
-            get_laravel_docs_metadata
+            read_laravel_doc_content_impl
         )
         
         # Setup: Mock the updater to simulate successful update
@@ -98,7 +94,7 @@ class TestDocumentationWorkflows:
 
     def test_external_documentation_workflow(self, test_external_docs_dir):
         """Test external documentation fetching and reading workflow."""
-        from docs_updater import ExternalDocsFetcher, MultiSourceDocsUpdater
+        from docs_updater import ExternalDocsFetcher
         
         # Create an external docs fetcher
         external_fetcher = ExternalDocsFetcher(test_external_docs_dir.parent)
@@ -109,7 +105,7 @@ class TestDocumentationWorkflows:
         assert "vapor" in services
         
         # Step 2: Update external documentation (simulate)
-        with patch.object(external_fetcher, 'fetch_laravel_service_docs', return_value=True) as mock_fetch:
+        with patch.object(external_fetcher, 'fetch_laravel_service_docs', return_value=True):
             result = external_fetcher.fetch_laravel_service_docs("forge")
             assert result is True
             
@@ -141,7 +137,7 @@ class TestErrorRecoveryWorkflows:
             
             # Should handle error gracefully
             try:
-                result = updater.update(force=False)
+                updater.update(force=False)
             except Exception as e:
                 # Error is expected
                 assert "Network error" in str(e)
@@ -285,7 +281,6 @@ class TestCachingWorkflows:
     def test_cache_invalidation_workflow(self, test_docs_dir):
         """Test cache invalidation during documentation updates."""
         from mcp_tools import clear_caches, _file_content_cache, _search_result_cache
-        from docs_updater import DocsUpdater
         
         # Populate caches
         _file_content_cache["test"] = "cached_content"
@@ -310,7 +305,6 @@ class TestSecurityWorkflows:
     def test_path_traversal_protection_workflow(self, test_docs_dir):
         """Test path traversal protection across different operations."""
         from mcp_tools import read_laravel_doc_content_impl
-        from laravel_mcp_companion import is_safe_path
         
         # Setup safe file
         version_dir = test_docs_dir / "12.x"

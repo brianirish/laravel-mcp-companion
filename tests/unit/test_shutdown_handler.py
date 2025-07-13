@@ -2,7 +2,6 @@
 
 import pytest
 import signal
-import os
 from unittest.mock import patch, MagicMock, call
 
 from shutdown_handler import GracefulShutdown

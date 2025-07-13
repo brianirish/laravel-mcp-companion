@@ -2,13 +2,9 @@
 
 import pytest
 import sys
-import argparse
-from pathlib import Path
-from unittest.mock import patch, MagicMock, call
-import tempfile
+from unittest.mock import patch, MagicMock
 
 from laravel_mcp_companion import main, parse_arguments
-from tests.unit.test_laravel_mcp_companion_mcp import MockFastMCP
 
 
 class TestParseArguments:
