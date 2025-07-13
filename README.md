@@ -4,6 +4,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/releases)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/brianirish/laravel-mcp-companion/ci.yaml?branch=main&label=tests)](https://github.com/brianirish/laravel-mcp-companion/actions/workflows/ci.yaml)
+[![Coverage](https://codecov.io/gh/brianirish/laravel-mcp-companion/branch/main/graph/badge.svg)](https://codecov.io/gh/brianirish/laravel-mcp-companion)
 [![License](https://img.shields.io/github/license/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/blob/main/LICENSE)
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/brianirish/laravel-mcp-companion/pkgs/container/laravel-mcp-companion)
 [![smithery badge](https://smithery.ai/badge/@brianirish/laravel-mcp-companion)](https://smithery.ai/server/@brianirish/laravel-mcp-companion)
@@ -109,7 +110,7 @@ Use `update_external_laravel_docs()` to trigger auto-discovery, or `list_laravel
 
 ## Features and Roadmap
 
-### Current Features (v0.5.0)
+### Current Features (v0.6.0)
 - ✅ **Laravel MCP Companion**: Comprehensive documentation aggregator and navigator
 - ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
 - ✅ **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
@@ -121,11 +122,13 @@ Use `update_external_laravel_docs()` to trigger auto-discovery, or `list_laravel
 - ✅ **Performance Optimized**: File content caching and search result caching for faster responses
 - ✅ **Future-Proof Updates**: Automatically adapts to Laravel service documentation changes
 - ✅ **Daily Auto-Discovery**: Enhanced GitHub Actions with auto-discovery metrics and reporting
+- ✅ **Comprehensive Test Suite**: 84% code coverage with unit, integration, and security tests
+- ✅ **Asset Filtering**: Prevents CSS/JS files from being saved as documentation
 
 ### Upcoming Features
-- 🌟 **v0.6.0**: Community package documentation (Spatie, Livewire, Inertia, Filament)
-- 📚 **v0.7.0**: Community learning resources (Laravel News, tutorials, guides)
-- 🔍 **v0.8.0**: Advanced search and smart navigation across all sources
+- 🌟 **v0.7.0**: Community package documentation (Spatie, Livewire, Inertia, Filament)
+- 📚 **v0.8.0**: Community learning resources (Laravel News, tutorials, guides)
+- 🔍 **v0.9.0**: Advanced search and smart navigation across all sources
 - 🚀 **v1.0.0**: The complete Laravel documentation navigator
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).

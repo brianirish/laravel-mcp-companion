@@ -114,6 +114,10 @@ class DocumentationAutoDiscovery:
         self.max_retries = max_retries
         self.request_delay = request_delay
         
+        # Common asset file extensions and patterns to exclude
+        self.asset_extensions = {'.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'}
+        self.asset_patterns = {'/_next/', '/static/', '/assets/', '/images/', '/fonts/', '/favicon'}
+        
     def discover_sections(self, service: str, service_config: Dict) -> List[str]:
         """
         Discover documentation sections for a given service.
@@ -153,6 +157,31 @@ class DocumentationAutoDiscovery:
             logger.error(f"Error during auto-discovery for {service}: {str(e)}")
             return []
     
+    def _is_asset_file(self, path: str) -> bool:
+        """
+        Check if a path represents an asset file (CSS, JS, images, etc.).
+        
+        Args:
+            path: URL path to check
+            
+        Returns:
+            True if the path is an asset file, False otherwise
+        """
+        # Remove query parameters for extension check
+        clean_path = path.split('?')[0].lower()
+        
+        # Check if path contains common asset directories
+        for pattern in self.asset_patterns:
+            if pattern in clean_path:
+                return True
+        
+        # Check file extension
+        for ext in self.asset_extensions:
+            if clean_path.endswith(ext):
+                return True
+                
+        return False
+    
     def _discover_forge_sections(self, config: Dict, rules: Dict) -> List[str]:
         """Discover Forge documentation sections by parsing the docs index page."""
         base_url = config["base_url"]
@@ -167,8 +196,15 @@ class DocumentationAutoDiscovery:
             doc_links = re.findall(r'href="(/docs/[^"]*)"', content, re.IGNORECASE)
             
             for link in doc_links:
+                # Remove query parameters if present
+                clean_link = link.split('?')[0]
+                
+                # Check if this is an asset file (CSS, JS, images, etc.)
+                if self._is_asset_file(clean_link):
+                    continue
+                    
                 # Remove the /docs/ prefix to get the section name
-                section = link.replace('/docs/', '')
+                section = clean_link.replace('/docs/', '')
                 if section and section not in sections:
                     sections.append(section)
                     
@@ -255,7 +291,7 @@ class DocumentationAutoDiscovery:
                     # Filter for documentation paths (exclude external links, assets, etc.)
                     if (path.startswith('/') and 
                         not path.startswith('//') and 
-                        not path.endswith(('.css', '.js', '.png', '.jpg', '.svg')) and
+                        not self._is_asset_file(path) and
                         path != '/'):
                         
                         section = path.lstrip('/')
@@ -639,6 +675,11 @@ class ExternalDocsFetcher:
         fetched_sections = []
         
         for section in sections:
+            # Double-check that this isn't an asset file
+            if self.auto_discovery._is_asset_file(section):
+                logger.debug(f"Skipping asset file: {section}")
+                continue
+                
             section_url = f"{base_url}/{section}"
             section_file = target_dir / f"{section}.md"
             

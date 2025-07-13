@@ -6,7 +6,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 
 **Laravel MCP Companion** is a documentation aggregator and navigator designed specifically for **junior and intermediate Laravel developers**. Rather than generating content, we centralize and organize existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable and searchable through MCP.
 
-## Current Version: v0.5.0
+## Current Version: v0.6.0
 - ✅ **Laravel MCP Companion**: Comprehensive documentation aggregator and navigator
 - ✅ **Multi-version Laravel documentation** support (6.x through latest)
 - ✅ **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
@@ -18,6 +18,8 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - ✅ **Automated daily documentation updates** with auto-discovery metrics
 - ✅ **Streamlined distribution** via Docker and Smithery
 - ✅ **Documentation aggregator strategy** with intelligent auto-discovery implementation
+- ✅ **Comprehensive test suite** with 84% code coverage
+- ✅ **Asset filtering** to prevent non-documentation files from being saved
 
 ## ✅ v0.5.0 - Laravel Ecosystem Documentation (COMPLETED)
 **Released: Q2 2025**
@@ -40,8 +42,24 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - ✅ **Performance optimization** with intelligent caching and respectful web scraping
 - ✅ **GitHub Actions enhancement** with auto-discovery metrics and reporting
 
-## v0.6.0 - Community Package Documentation
-**Target: Q3 2025**
+## ✅ v0.6.0 - Test Coverage & Quality Improvements (COMPLETED)
+**Released: Q3 2025**
+
+### Testing Infrastructure ✅
+- ✅ **Comprehensive Test Suite**: Increased test coverage from 34% to 84%
+- ✅ **Refactored Architecture**: Extracted testable components for better modularity
+- ✅ **Integration Tests**: Added tests using FastMCP's Client class
+- ✅ **Security Tests**: Added path traversal protection tests
+- ✅ **Async Test Support**: Added pytest-asyncio for async testing
+
+### Quality Improvements ✅
+- ✅ **Asset Filtering**: Fixed CSS/JS files being saved as documentation
+- ✅ **Code Organization**: Created mcp_tools.py for standalone tool implementations
+- ✅ **Test Coverage Monitoring**: Integrated with CI/CD pipeline
+- ✅ **Project Metadata**: Updated pyproject.toml with proper metadata
+
+## v0.7.0 - Community Package Documentation
+**Target: Q4 2025**
 
 ### Official Laravel Ecosystem Integration
 - [ ] Laravel Sanctum documentation aggregation  
@@ -71,7 +89,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Related package documentation suggestions
 - [ ] Learning path documentation organization
 
-## v0.7.0 - Community Learning Resources
+## v0.8.0 - Community Learning Resources
 **Target: Q4 2025**
 
 ### Curated Community Content
@@ -92,7 +110,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Package learning resource aggregation
 - [ ] Setup and configuration guide centralization
 
-## v0.8.0 - Advanced Documentation Features
+## v0.9.0 - Advanced Documentation Features
 **Target: Q1 2026**
 
 ### Smart Documentation Discovery
@@ -113,7 +131,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Use case documentation categorization
 - [ ] Quick reference guide aggregation
 
-## v0.9.0 - Ecosystem Intelligence
+## v0.10.0 - Ecosystem Intelligence
 **Target: Q1 2026**
 
 ### Real-Time Documentation Updates
@@ -134,7 +152,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Documentation completeness indicators
 - [ ] Alternative solution documentation discovery
 
-## v0.10.0 - Production Readiness
+## v0.11.0 - Production Readiness
 **Target: Q2 2026**
 
 ### Reliability & Scale
@@ -148,7 +166,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - [ ] Privacy controls and data handling
 - [ ] Compliance with enterprise requirements
 
-## v0.11.0 - Integration & Ecosystem
+## v0.12.0 - Integration & Ecosystem
 **Target: Q2 2026**
 
 ### Developer Tools
