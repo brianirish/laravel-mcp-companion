@@ -55,10 +55,8 @@ class TestMCPIntegration:
             
             # Verify result
             assert result is not None
-            # The result is a list of responses
-            assert len(result) > 0
-            # The actual content is in result[0].content
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "blade.md" in content
             assert "eloquent.md" in content
             assert "routing.md" in content
@@ -78,8 +76,8 @@ class TestMCPIntegration:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "eloquent.md" in content
     
     @pytest.mark.asyncio
@@ -91,8 +89,8 @@ class TestMCPIntegration:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "Laravel Documentation (Version 12.x)" in content
             assert "Commit SHA: abc123" in content
     
@@ -107,8 +105,8 @@ class TestMCPIntegration:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "Laravel Packages for: authentication" in content
     
     # Removed test_read_nonexistent_doc - it was testing FastMCP's URI resolution, not our code.
@@ -158,8 +156,8 @@ class TestMCPExternalDocumentation:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "Available Laravel Services" in content
     
     @pytest.mark.asyncio
@@ -190,8 +188,8 @@ class TestMCPPackageTools:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "Laravel Sanctum" in content
     
     @pytest.mark.asyncio
@@ -205,8 +203,8 @@ class TestMCPPackageTools:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             assert "Laravel Packages for Category: authentication" in content
     
     @pytest.mark.asyncio
@@ -220,8 +218,8 @@ class TestMCPPackageTools:
             
             # Verify result
             assert result is not None
-            assert len(result) > 0
-            content = result[0].content if hasattr(result[0], 'content') else str(result[0])
+            # FastMCP 2.10+ returns CallToolResult with .content attribute
+            content = result.content if hasattr(result, 'content') else str(result)
             # Either features are listed or "No specific features" message
             assert ("Implementation Features for" in content or 
                    "No specific features listed" in content)

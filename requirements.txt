@@ -1,2 +1,2 @@
-fastmcp>=2.9.2
-mcp[cli,client]>=1.9.4
+fastmcp>=2.10.5
+mcp[cli,client]>=1.11.0
