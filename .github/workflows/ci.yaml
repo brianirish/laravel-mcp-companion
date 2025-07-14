@@ -31,7 +31,7 @@ jobs:
     - name: Type check with mypy
       run: mypy --ignore-missing-imports .
     - name: Run tests with pytest
-      run: pytest --verbose
+      run: pytest --cov --cov-branch --cov-report=xml
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       if: success()
