@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#197f766b7e7c5975786b786f7c75377a7674)
+[Support](/cdn-cgi/l/email-protection#ccaaa3beaba98ca0adbeadbaa9a0e2afa3a1)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationGet StartedForge CLI[Documentation](/docs/introduction)[Chang
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Get Started# Forge CLI
 
@@ -323,7 +327,6 @@ forge php:restart 8.4  # Restarts PHP 8.4
 You may use the `{resource}:shell` command to quickly access a command line shell that lets you interact with a given resource:
 
 CopyAsk AI```
-forge database:shell
-forge database:shell m
+forge 
 
 *[Content truncated for length]*

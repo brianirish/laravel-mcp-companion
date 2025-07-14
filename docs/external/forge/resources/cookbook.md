@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#096f667b6e6c4965687b687f6c65276a6664)
+[Support](/cdn-cgi/l/email-protection#f2949d809597b29e93809384979edc919d9f)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationResourcesCookbook[Documentation](/docs/introduction)[Changelo
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Resources# Cookbook
 

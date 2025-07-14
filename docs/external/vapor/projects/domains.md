@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#c0b6a1b0afb280aca1b2a1b6a5aceea3afad)
+[Support](/cdn-cgi/l/email-protection#7f091e0f100d3f131e0d1e091a13511c1012)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationProjectsDomains[Documentation](/introduction)[Knowledge Base]
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Projects# Domains
 
@@ -224,7 +228,6 @@ YesNo[Development](/projects/development)[Queues](/resources/queues)On this page
 - [Custom DNS Records](#custom-dns-records)
 - [Requesting SSL Certificates](#requesting-ssl-certificates)
 - [Attaching Domains To Environments](#attaching-domains-to-environments)
-- [Multiple Domains](#multiple-domains)
-- [Wildcard Subdomain
+- [Multiple Domains](#multipl
 
 *[Content truncated for length]*

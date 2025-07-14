@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#d9bfb6abbebc99b5b8abb8afbcb5f7bab6b4)
+[Support](/cdn-cgi/l/email-protection#781e170a1f1d3814190a190e1d14561b1715)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationServersServer Providers[Documentation](/docs/introduction)[Ch
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Servers# Server Providers
 
@@ -216,8 +220,6 @@ In addition, you should review the following server requirements:
 
 - The server requirements **should meet** the following criteria or more: 1 CPU Core with 1GHz, 1GB RAM, and 10GB Disk space.
 
-- The server **must have** curl installed.
-
-- Ensure that no firewall 
+- The server **must have** curl i
 
 *[Content truncated for length]*

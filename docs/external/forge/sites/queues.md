@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#d1b7bea3b6b491bdb0a3b0a7b4bdffb2bebc)
+[Support](/cdn-cgi/l/email-protection#e88e879a8f8da884899a899e8d84c68b8785)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationSitesQueues[Documentation](/docs/introduction)[Changelog](/do
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Sites# Queues
 

@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#64020b16030124080516051201084a070b09)
+[Support](/cdn-cgi/l/email-protection#9ef8f1ecf9fbdef2ffecffe8fbf2b0fdf1f3)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationSitesApplications[Documentation](/docs/introduction)[Changelo
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Sites# Applications
 
@@ -187,6 +191,6 @@ When disabling Reverb, Forge will remove the daemon and ensure the public hostna
 
 ## [​](#inertia-server-side-rendering)Inertia Server Side Rendering
 
-You may quickly enable or disable the Inertia SSR daemon via the “Inertia SSR” toggle. Forge will cre
+You may quickly enable or disable the Inertia SSR daemon via the
 
 *[Content truncated for length]*

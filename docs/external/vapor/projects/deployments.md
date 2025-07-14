@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#a2d4c3d2cdd0e2cec3d0c3d4c7ce8cc1cdcf)
+[Support](/cdn-cgi/l/email-protection#fb8d9a8b9489bb979a899a8d9e97d5989496)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationProjectsDeployments[Documentation](/introduction)[Knowledge B
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Projects# Deployments
 
@@ -227,6 +231,6 @@ npm run build -- --mode staging
 
 ### [​](#code-splitting-%2F-dynamic-imports-with-mix)Code Splitting / Dynamic Imports With Mix
 
-If you are taking advantage of JavaScript dynamic imports and code splitting in your project via Laravel Mix, you will need to let Webpack know where the child chunks will be loaded from for each deployment. To accomplish this, you can take advantage of the `ASSET_URL` variable that Laravel Vapor injects into your environment du
+If you are taking advantage of JavaScript dynamic imports and code splitting in your project via Laravel Mix, you will need to let Webpack know where the child chunks will be loaded from for each deployment. To accomplish this, you can take advantage of the `ASSET_URL` variable that Laravel Vapor 
 
 *[Content truncated for length]*
