@@ -111,19 +111,12 @@ Use `update_external_laravel_docs()` to trigger auto-discovery, or `list_laravel
 ## Features and Roadmap
 
 ### Current Features (v0.6.0)
-- ✅ **Laravel MCP Companion**: Comprehensive documentation aggregator and navigator
-- ✅ **Multi-Version Support**: Access documentation for Laravel 6.x through latest version simultaneously
-- ✅ **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
-- ✅ **Laravel Ecosystem Services**: Forge, Vapor, Envoyer, Nova with intelligent section detection
-- ✅ **Enhanced Search**: Unified search across core Laravel docs and external services with caching
-- ✅ **Package Recommendations**: 50+ curated packages including Laravel services
-- ✅ **Content Validation**: Quality scoring and validation for discovered documentation sections
-- ✅ **Robust Error Handling**: Retry mechanisms and graceful fallback to manual configuration
-- ✅ **Performance Optimized**: File content caching and search result caching for faster responses
-- ✅ **Future-Proof Updates**: Automatically adapts to Laravel service documentation changes
-- ✅ **Daily Auto-Discovery**: Enhanced GitHub Actions with auto-discovery metrics and reporting
-- ✅ **Comprehensive Test Suite**: 84% code coverage with unit, integration, and security tests
-- ✅ **Asset Filtering**: Prevents CSS/JS files from being saved as documentation
+- ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
+- ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
+- ✅ **Smart package recommendations** - Curated Laravel ecosystem packages
+- ✅ **Unified search** - One search across all documentation sources
+- ✅ **Daily updates** - Automatic sync with latest documentation
+- ✅ **Battle-tested** - Comprehensive test suite ensures reliability
 
 ### Upcoming Features
 - 🌟 **v0.7.0**: Community package documentation (Spatie, Livewire, Inertia, Filament)
