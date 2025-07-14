@@ -37,6 +37,11 @@ jobs:
         python docs_updater.py --all-versions --log-level INFO
         UPDATE_STATUS=$?
         
+        # Update external services documentation
+        echo "Updating external services documentation..."
+        python docs_updater.py --external-only --log-level INFO
+        EXTERNAL_STATUS=$?
+        
         # Check external services status to report auto-discovery results
         echo "Checking external services status..."
         python docs_updater.py --status --external-only
@@ -73,7 +78,8 @@ jobs:
           });
           
           for (const pull of pulls.data) {
-            if (pull.title === 'Update Laravel documentation') {
+            if (pull.title === 'Update Laravel documentation' || 
+                pull.title === 'Update Laravel and external services documentation') {
               await github.rest.pulls.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -90,17 +96,17 @@ jobs:
         git config --local user.name "GitHub Action"
         git add docs/
         git add docs/.metadata/
-        git commit -m "Update Laravel documentation to latest version" || exit 0
+        git commit -m "Update Laravel and external services documentation" || exit 0
     - name: Create Pull Request
       if: steps.check-updates.outputs.updates_available == 'true'
       id: create-pr
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: 'Update Laravel documentation to latest version'
-        title: 'Update Laravel documentation'
+        commit-message: 'Update Laravel and external services documentation'
+        title: 'Update Laravel and external services documentation'
         body: |
-          Automated PR to update Laravel documentation to the latest version.
+          Automated PR to update Laravel and external services documentation to the latest version.
           
           ## Auto-Discovery Status
           This update includes enhancements with auto-discovery for external Laravel services:
@@ -196,7 +202,7 @@ jobs:
         # Create GitHub release
         gh release create $NEW_VERSION \
           --title "$NEW_VERSION" \
-          --notes "Laravel Documentation Update - Updated to latest version" \
+          --notes "Documentation Update - Updated Laravel and external services documentation to latest version" \
           --latest
 
       env:
