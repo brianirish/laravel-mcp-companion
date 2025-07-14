@@ -1,8 +1,7 @@
 {
   "service": "forge",
   "fetched_sections": [
-    "_next/static/css/19e66b131dc509b0.css",
-    "_next/static/css/89aa2d69bda1867a.css",
+    "abuse",
     "accounts/api",
     "accounts/circles",
     "accounts/cookbook",
@@ -53,11 +52,11 @@
     "sites/the-basics",
     "sites/user-isolation"
   ],
-  "total_sections": 53,
-  "success_rate": 0.9622641509433962,
+  "total_sections": 50,
+  "success_rate": 1.0,
   "discovery_method": "auto-discovery",
   "auto_discovery_enabled": true,
-  "discovered_count": 53,
+  "discovered_count": 50,
   "manual_fallback": false,
-  "cached_at": 1751039210.524627
+  "cached_at": 1752459004.7172177
 }

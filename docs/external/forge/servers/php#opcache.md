@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#94f2fbe6f3f1d4f8f5e6f5e2f1f8baf7fbf9)
+[Support](/cdn-cgi/l/email-protection#badcd5c8dddffad6dbc8dbccdfd694d9d5d7)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationServersPHP[Documentation](/docs/introduction)[Changelog](/doc
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Servers# PHP
 

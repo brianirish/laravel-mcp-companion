@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#94e2f5e4fbe6d4f8f5e6f5e2f1f8baf7fbf9)
+[Support](/cdn-cgi/l/email-protection#e29483928d90a28e83908394878ecc818d8f)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationProjectsEnvironments[Documentation](/introduction)[Knowledge 
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Projects# Environments
 
@@ -230,6 +234,6 @@ When an environment is in maintenance mode, the environment’s custom domain wi
 
 ### [​](#customizing-the-maintenance-mode-screen)Customizing The Maintenance Mode Screen
 
-You may customize the maintenance mode splash screen fo
+You may customize the m
 
 *[Content truncated for length]*

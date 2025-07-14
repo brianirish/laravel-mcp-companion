@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#bdcbdccdd2cffdd1dccfdccbd8d193ded2d0)
+[Support](/cdn-cgi/l/email-protection#5b2d3a2b34291b373a293a2d3e3775383436)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationResourcesQueues[Documentation](/introduction)[Knowledge Base]
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Resources# Queues
 
@@ -231,6 +235,6 @@ In order to view details of failed jobs in the Vapor dashboard, your application
 
 ## [​](#failed-jobs)Failed Jobs
 
-Vapor automatically keeps track of failed job attempts using your environment’s configured cache driver. This allows Vapor to ensure the correct number of failed attempts is accessible by your application, even if a queued job does no
+Vapor automatically keeps track of failed job attempts using your environment’s configured cache driver. This allows Vapor to ensure the correct number of failed attempts is accessible by your applicati
 
 *[Content truncated for length]*

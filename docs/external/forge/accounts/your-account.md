@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#781e170a1f1d3814190a190e1d14561b1715)
+[Support](/cdn-cgi/l/email-protection#690f061b0e0c2905081b081f0c05470a0604)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -73,6 +73,10 @@ Search...NavigationAccountsYour Account[Documentation](/docs/introduction)[Chang
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
 
+##### Other
+
+- [Abuse](/docs/abuse)
+
 Accounts# Your Account
 
 Learn how to manage your Forge account, including updating your profile information, securing your account with Two Factor Authentication, managing authenticated sessions, deleting your account, sharing your account’s servers with other users, receiving invoices via email, accessing previous invoices, and adding business receipts.
@@ -97,7 +101,7 @@ When enabling 2FA, Forge will display:
 
 The recovery codes should be stored securely and can be used if you no longer have access to your 2FA device, thus it is recommended to not store your recovery codes exclusively on the device that you use for 2FA. Each recovery code can only be used once. You may re-generate the recovery codes at any time from your account’s dashboard.
 
-If you have configured 2FA on your account and lose access to your it and your recovery codes, you will need to email [[email protected]](/cdn-cgi/l/email-protection#12747d607577527e73607364777e3c717d7f) to reset it by confirming your identity.
+If you have configured 2FA on your account and lose access to your it and your recovery codes, you will need to email [[email protected]](/cdn-cgi/l/email-protection#791f160b1e1c3915180b180f1c15571a1614) to reset it by confirming your identity.
 
 We recommend using the [Google Authenticator](https://support.google.com/accounts/answer/1066447) application on your smartphone to manage your Forge 2FA configuration.
 

@@ -5,7 +5,7 @@
 ---
 
 - [Envoyer home page](https://envoyer.io)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#a4c1cad2cbddc1d6e4c8c5d6c5d2c1c88ac7cbc9)
+[Support](/cdn-cgi/l/email-protection#24414a524b5d415664484556455241480a474b49)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://envoyer.io)
 - [Dashboard](https://envoyer.io)

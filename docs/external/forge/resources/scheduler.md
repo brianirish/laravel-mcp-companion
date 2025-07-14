@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#3a5c55485d5f7a565b485b4c5f5614595557)
+[Support](/cdn-cgi/l/email-protection#93f5fce1f4f6d3fff2e1f2e5f6ffbdf0fcfe)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationResourcesScheduler[Documentation](/docs/introduction)[Changel
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Resources# Scheduler
 

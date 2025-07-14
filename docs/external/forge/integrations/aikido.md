@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#365059445153765a57445740535a1855595b)
+[Support](/cdn-cgi/l/email-protection#a5c3cad7c2c0e5c9c4d7c4d3c0c98bc6cac8)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -73,6 +73,10 @@ Search...NavigationIntegrationsAikido[Documentation](/docs/introduction)[Changel
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
 
+##### Other
+
+- [Abuse](/docs/abuse)
+
 Integrations# Aikido
 
 Aikido provides security scanning with Forge integration.
@@ -99,7 +103,7 @@ The Aikido integration is only supported for GitHub, GitLab, GitLab Self-Hosted,
 
 Was this page helpful?
 
-YesNo[Sentry](/docs/integrations/sentry)On this page
+YesNo[Sentry](/docs/integrations/sentry)[Abuse](/docs/abuse)On this page
 - [Overview](#overview)
 - [Connect with Aikido](#connect-with-aikido)
 - [Viewing Aikido Findings](#viewing-aikido-findings)

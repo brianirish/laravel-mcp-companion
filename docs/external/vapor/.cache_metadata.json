@@ -1,6 +1,7 @@
 {
   "service": "vapor",
   "fetched_sections": [
+    "abuse",
     "integrations/sentry",
     "introduction",
     "introduction#permissions",
@@ -17,11 +18,11 @@
     "resources/queues",
     "resources/storage"
   ],
-  "total_sections": 16,
-  "success_rate": 0.9375,
+  "total_sections": 17,
+  "success_rate": 0.9411764705882353,
   "discovery_method": "auto-discovery",
   "auto_discovery_enabled": true,
-  "discovered_count": 16,
+  "discovered_count": 17,
   "manual_fallback": false,
-  "cached_at": 1751039182.76318
+  "cached_at": 1752459008.5549443
 }

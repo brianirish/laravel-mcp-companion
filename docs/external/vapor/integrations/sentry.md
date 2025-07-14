@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#f18790819e83b19d90839087949ddf929e9c)
+[Support](/cdn-cgi/l/email-protection#4e382f3e213c0e222f3c2f382b22602d2123)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationIntegrationsSentry[Documentation](/introduction)[Knowledge Ba
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Integrations# Sentry
 
@@ -72,7 +76,7 @@ Vapor does not automatically install Sentry into your Laravel application. You s
 
 Was this page helpful?
 
-YesNo[Logs](/resources/logs)On this page
+YesNo[Logs](/resources/logs)[Abuse](/abuse)On this page
 - [Overview](#overview)
 - [Connect with Sentry](#connect-with-sentry)
 - [Creating Sentry Projects](#creating-sentry-projects)

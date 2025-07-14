@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#7e18110c191b3e121f0c1f081b12501d1113)
+[Support](/cdn-cgi/l/email-protection#3d5b524f5a587d515c4f5c4b5851135e5250)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -72,6 +72,10 @@ Search...NavigationServersCookbook[Documentation](/docs/introduction)[Changelog]
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+
+##### Other
+
+- [Abuse](/docs/abuse)
 
 Servers# Cookbook
 
@@ -225,6 +229,6 @@ If Forge is not able to connect to your server, you will not be able to manage i
 
 ## [​](#%E2%80%9Dtoo-many-open-files%E2%80%9D-error)”Too Many Open Files” Error
 
-If you are receiving an error stating that your server h
+If you are receivin
 
 *[Content truncated for length]*

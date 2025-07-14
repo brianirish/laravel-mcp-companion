@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#82f4e3f2edf0c2eee3f0e3f4e7eeace1edef)
+[Support](/cdn-cgi/l/email-protection#1f697e6f706d5f737e6d7e697a73317c7072)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationGet StartedIntroduction[Documentation](/introduction)[Knowled
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Get Started# Introduction
 
@@ -238,6 +242,6 @@ CopyAsk AI```
                 "cloudformation:CreateStack",
                 "cloudformation:DeleteStack",
                 "cloudformation:DescribeStacks",
-                "cloudformation:UpdateStac
+          
 
 *[Content truncated for length]*

@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#bdcbdccdd2cffdd1dccfdccbd8d193ded2d0)
+[Support](/cdn-cgi/l/email-protection#3e485f4e514c7e525f4c5f485b52105d5153)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)
@@ -36,6 +36,10 @@ Search...NavigationResourcesDatabases[Documentation](/introduction)[Knowledge Ba
 ##### Integrations
 
 - [Sentry](/integrations/sentry)
+
+##### Other
+
+- [Abuse](/abuse)
 
 Resources# Databases
 
@@ -221,6 +225,6 @@ You may use the `database:password` CLI command to rotate the password of a data
 
 ## [​](#scaling-databases)Scaling Databases
 
-You may scale fixed size databases via the Vapor UI’s database detail screen or the `database:scale` CLI command. When scaling a fixed size database, the database will be unavailable, and the amount of time it takes to scale the database could vary based on the size of the database. Therefore, you should place your application in maintenance
+You may scale fixed size databases via the Vapor UI’s database detail screen or the `database:scale` CLI command. When scaling a fixed size database, the database will be unavailable, and the amount of time it takes to scale the database could vary based on the size of the database. Therefore, you should place
 
 *[Content truncated for length]*
