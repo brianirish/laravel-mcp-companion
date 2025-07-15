@@ -36,7 +36,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-Sending email doesn't have to be complicated. Laravel provides a clean, simple email API powered by the popular [Symfony Mailer](https://symfony.com/doc/current/mailer.html) component. Laravel and Symfony Mailer provide drivers for sending email via SMTP, Mailgun, Postmark, Resend, Amazon SES, and `sendmail`, allowing you to quickly get started sending mail through a local or cloud based service of your choice.
+Sending email doesn't have to be complicated. Laravel provides a clean, simple email API powered by the popular [Symfony Mailer](https://symfony.com/doc/current/mailer.html) component. Laravel and Symfony Mailer provide drivers for sending email via SMTP, Mailgun, Postmark, Resend, Amazon SES, and `sendmail`, allowing you to quickly get started sending mail through a local or cloud-based service of your choice.
 
 <a name="configuration"></a>
 ### Configuration
@@ -87,7 +87,7 @@ After configuring your application's default mailer, add the following options t
 ],
 ```
 
-If you are not using the United States [Mailgun region](https://documentation.mailgun.com/en/latest/api-intro.html#mailgun-regions), you may define your region's endpoint in the `services` configuration file:
+If you are not using the United States [Mailgun region](https://documentation.mailgun.com/docs/mailgun/api-reference/#mailgun-regions), you may define your region's endpoint in the `services` configuration file:
 
 ```php
 'mailgun' => [
@@ -253,6 +253,7 @@ To accomplish this, you should define a mailer within your application's `mail` 
             'mailgun',
             'sendmail',
         ],
+        'retry_after' => 60,
     ],
 
     // ...
@@ -278,6 +279,7 @@ The `roundrobin` transport allows you to distribute your mailing workload across
             'ses',
             'postmark',
         ],
+        'retry_after' => 60,
     ],
 
     // ...
@@ -1462,6 +1464,10 @@ class LogMessage
 Laravel includes a variety of mail transports; however, you may wish to write your own transports to deliver email via other services that Laravel does not support out of the box. To get started, define a class that extends the `Symfony\Component\Mailer\Transport\AbstractTransport` class. Then, implement the `doSend` and `__toString` methods on your transport:
 
 ```php
+<?php
+
+namespace App\Mail;
+
 use MailchimpTransactional\ApiClient;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
@@ -1506,7 +1512,7 @@ class MailchimpTransport extends AbstractTransport
 }
 ```
 
-Once you've defined your custom transport, you may register it via the `extend` method provided by the `Mail` facade. Typically, this should be done within the `boot` method of your application's `AppServiceProvider` service provider. A `$config` argument will be passed to the closure provided to the `extend` method. This argument will contain the configuration array defined for the mailer in the application's `config/mail.php` configuration file:
+Once you've defined your custom transport, you may register it via the `extend` method provided by the `Mail` facade. Typically, this should be done within the `boot` method of your application's `AppServiceProvider`. A `$config` argument will be passed to the closure provided to the `extend` method. This argument will contain the configuration array defined for the mailer in the application's `config/mail.php` configuration file:
 
 ```php
 use App\Mail\MailchimpTransport;
@@ -1551,7 +1557,7 @@ Once the Brevo mailer package has been installed, you may add an entry for your 
 
 ```php
 'brevo' => [
-    'key' => 'your-api-key',
+    'key' => env('BREVO_API_KEY'),
 ],
 ```
 
