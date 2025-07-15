@@ -160,7 +160,7 @@ jobs:
         fi
         
         # Wait up to 10 minutes for the PR to be merged
-        for i in {1..40}; do
+        for i in {1..80}; do
           PR_STATE=$(gh pr view $PR_NUMBER --json state,mergedAt -q '.state')
           if [ "$PR_STATE" = "MERGED" ]; then
             echo "PR $PR_NUMBER has been merged!"
@@ -169,7 +169,7 @@ jobs:
             echo "merge_commit=$MERGE_COMMIT" >> $GITHUB_OUTPUT
             exit 0
           fi
-          echo "PR state: $PR_STATE. Waiting... (attempt $i/40)"
+          echo "PR state: $PR_STATE. Waiting... (attempt $i/80)"
           sleep 15
         done
         echo "PR was not merged within timeout"
