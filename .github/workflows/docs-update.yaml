@@ -16,6 +16,12 @@ jobs:
       pr_number: ${{ steps.create-pr.outputs.pull-request-number }}
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Ensure we have latest main branch
+      run: |
+        git fetch origin main
+        git reset --hard origin/main
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -89,6 +95,18 @@ jobs:
               console.log(`Closed existing PR #${pull.number}`);
             }
           }
+          
+          // Delete the remote branch if it exists
+          try {
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'heads/update-laravel-docs'
+            });
+            console.log('Deleted existing remote branch update-laravel-docs');
+          } catch (error) {
+            console.log('No existing remote branch to delete or error deleting:', error.message);
+          }
     - name: Commit updated documentation
       if: steps.check-updates.outputs.updates_available == 'true'
       run: |
@@ -123,6 +141,7 @@ jobs:
           
           Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
         branch: update-laravel-docs
+        update-method: rebase
     - name: Enable auto-merge and wait for checks
       if: steps.check-updates.outputs.updates_available == 'true' && steps.create-pr.outputs.pull-request-number
       run: |
