@@ -48,29 +48,47 @@ npx -y @smithery/cli install @brianirish/laravel-mcp-companion --client claude
 
 *Note: Smithery automatically configures your AI client. Skip to "First Run" below.*
 
+### Claude Desktop
+
+1. **Open Claude Desktop Settings**
+   - Click Claude menu → Settings → Developer → Edit Config
+
+2. **Add to your configuration file:**
+   ```json
+   {
+     "mcpServers": {
+       "laravel-mcp-companion": {
+         "command": "docker",
+         "args": ["run", "--rm", "-i", "ghcr.io/brianirish/laravel-mcp-companion:latest"]
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Desktop** for changes to take effect
+
+**Config file locations:**
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+### Claude Code
+
+Use the `claude mcp add` command:
+
+```bash
+# Add with Docker
+claude mcp add laravel-mcp-companion docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest
+
+# Or add to project-specific config (for team sharing)
+claude mcp add laravel-mcp-companion docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --scope project
+```
+
+The `--scope project` option creates a `.mcp.json` file in your project root that can be committed to version control.
+
 ### Docker
 
 ```bash
 docker run ghcr.io/brianirish/laravel-mcp-companion:latest
-```
-
-## Usage
-
-### Smithery Installation
-No additional configuration needed - Smithery automatically sets up your AI client.
-
-### Docker Installation
-Add this to your AI client's MCP configuration:
-
-```json
-{
-  "mcpServers": {
-    "laravel-mcp-companion": {
-      "command": "docker",
-      "args": ["run", "--rm", "-i", "ghcr.io/brianirish/laravel-mcp-companion:latest"]
-    }
-  }
-}
 ```
 
 ### Available Options
@@ -87,27 +105,6 @@ Add this to your AI client's MCP configuration:
 | `--services SERVICE1 SERVICE2` | Update specific services (forge, vapor, etc.) | All |
 | `--list-services` | List available Laravel services | - |
 | `--status` | Show documentation status for all sources | - |
-
-### First Run
-
-The server automatically downloads Laravel documentation on first use. This may take a few moments initially.
-
-### External Laravel Services (Auto-Discovery Enabled)
-
-Laravel MCP Companion includes auto-discovery for official Laravel services with enhanced coverage:
-
-- **Laravel Forge** - Server management and deployment *(53 sections auto-discovered)*
-- **Laravel Vapor** - Serverless deployment platform *(16 sections auto-discovered)*
-- **Laravel Nova** - Administration panel *(38 sections auto-discovered)*
-- **Laravel Envoyer** - Zero-downtime deployment *(10 sections with intelligent fallback)*
-
-**Auto-Discovery Features:**
-- 🔍 **Smart Detection**: Automatically finds new documentation sections
-- 🔄 **Version Detection**: Auto-detects latest Nova versions (currently v5)
-- 🛡️ **Content Validation**: Quality scoring ensures only useful documentation
-- 🔙 **Graceful Fallback**: Uses manual configuration when auto-discovery fails
-
-Use `update_external_laravel_docs()` to trigger auto-discovery, or `list_laravel_services()` to see all available services.
 
 
 ## Features and Roadmap
@@ -132,7 +129,6 @@ For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbrianirish%2Flaravel-mcp-companion.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbrianirish%2Flaravel-mcp-companion?ref=badge_large)
 
 ## Contributing
@@ -143,6 +139,3 @@ Contributions are welcome! See CONTRIBUTING.md for guidelines.
 
 - Laravel for their excellent documentation
 - Laravel package authors for their contributions to the ecosystem
-
----
-*✅ Certified by [MCP Review](https://mcpreview.com/mcp-servers/brianirish/laravel-mcp-companion)*
