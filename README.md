@@ -19,6 +19,23 @@
 
 ✨ **Perfect for developers making the most of the Laravel ecosystem**
 
+## Why Laravel MCP Companion?
+
+| Feature | Laravel MCP Companion | Context7 |
+|---------|:--------------------:|:--------:|
+| **Instant documentation retrieval** (zero latency) | ✅ | ❌ |
+| **Laravel multi-version support** (6.x - latest) | ✅ | ❌ |
+| **Laravel service docs** (Forge, Vapor, Nova, Envoyer) | ✅ | ❌ |
+| **Curated Laravel package recommendations** | ✅ | ❌ |
+| **Offline documentation access** | ✅ | ❌ |
+| **Pre-processed markdown** (saves tokens) | ✅ | ❌ |
+| **No internet requests during use** | ✅ | ❌ |
+| **Laravel-specific search** | ✅ | ❌ |
+| **Auto-discovery of service docs** | ✅ | ❌ |
+| **General documentation** (non-Laravel) | ❌ | ✅ |
+
+*While Context7 excels at general documentation retrieval, Laravel MCP Companion is purpose-built for Laravel developers with faster, offline-capable, Laravel-specific features.*
+
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
 - **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova with 117+ sections
@@ -46,7 +63,7 @@ This application features an **intelligent auto-discovery system** that automati
 npx -y @smithery/cli install @brianirish/laravel-mcp-companion --client claude
 ```
 
-*Note: Smithery automatically configures your AI client. Skip to "First Run" below.*
+*Note: Smithery automatically configures your AI client.*
 
 ### Claude Desktop
 
@@ -85,13 +102,20 @@ claude mcp add laravel-mcp-companion docker run --rm -i ghcr.io/brianirish/larav
 
 The `--scope project` option creates a `.mcp.json` file in your project root that can be committed to version control.
 
-### Docker
+### Configuration Options
+
+These options can be used with the Docker command. For example:
 
 ```bash
-docker run ghcr.io/brianirish/laravel-mcp-companion:latest
-```
+# Update docs for Laravel 11.x only
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --version 11.x
 
-### Available Options
+# Force update all documentation
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-update
+
+# Update only Forge and Vapor services
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --services forge vapor
+```
 
 | Option | Description | Default |
 |--------|-------------|---------|
@@ -109,7 +133,7 @@ docker run ghcr.io/brianirish/laravel-mcp-companion:latest
 
 ## Features and Roadmap
 
-### Current Features (v0.6.0)
+### Current Features
 - ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
 - ✅ **Smart package recommendations** - Curated Laravel ecosystem packages
