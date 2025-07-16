@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "de973a5a67f683f5f3128835ef94b5344bbb04bf",
-  "commit_date": "2025-07-14T13:29:07Z",
-  "commit_message": "Fix hyphenation of cloud-based for grammatical correctness (#10601)",
-  "commit_url": "https://github.com/laravel/docs/commit/de973a5a67f683f5f3128835ef94b5344bbb04bf",
-  "sync_time": "2025-07-15T01:28:24Z"
+  "commit_sha": "2fc3ac7cb75eaa8537e73713000ada6048cb980a",
+  "commit_date": "2025-07-15T21:25:00Z",
+  "commit_message": "Improve Testing Mailable Content section (#10617)",
+  "commit_url": "https://github.com/laravel/docs/commit/2fc3ac7cb75eaa8537e73713000ada6048cb980a",
+  "sync_time": "2025-07-16T01:25:30Z"
 }

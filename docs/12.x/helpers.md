@@ -655,7 +655,7 @@ $isList = Arr::isList(['product' => ['name' => 'Desk', 'price' => 100]]);
 <a name="method-array-join"></a>
 #### `Arr::join()` {.collection-method}
 
-The `Arr::join` method joins array elements with a string. Using this method's second argument, you may also specify the joining string for the final element of the array:
+The `Arr::join` method joins array elements with a string. Using this method's third argument, you may also specify the joining string for the final element of the array:
 
 ```php
 use Illuminate\Support\Arr;
@@ -1502,7 +1502,7 @@ data_forget($data, 'products.*.price');
 <a name="method-head"></a>
 #### `head()` {.collection-method}
 
-The `head` function returns the first element in the given array:
+The `head` function returns the first element in the given array. If the array is empty, `false` will be returned:
 
 ```php
 $array = [100, 200, 300];
@@ -1515,7 +1515,7 @@ $first = head($array);
 <a name="method-last"></a>
 #### `last()` {.collection-method}
 
-The `last` function returns the last element in the given array:
+The `last` function returns the last element in the given array. If the array is empty, `false` will be returned:
 
 ```php
 $array = [100, 200, 300];
@@ -2511,7 +2511,7 @@ event(new UserRegistered($user));
 The `fake` function resolves a [Faker](https://github.com/FakerPHP/Faker) singleton from the container, which can be useful when creating fake data in model factories, database seeding, tests, and prototyping views:
 
 ```blade
-@for($i = 0; $i < 10; $i++)
+@for ($i = 0; $i < 10; $i++)
     <dl>
         <dt>Name</dt>
         <dd>{{ fake()->name() }}</dd>

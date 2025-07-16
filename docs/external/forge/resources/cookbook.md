@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#f2949d809597b29e93809384979edc919d9f)
+[Support](/cdn-cgi/l/email-protection#4f29203d282a0f232e3d2e392a23612c2022)
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
