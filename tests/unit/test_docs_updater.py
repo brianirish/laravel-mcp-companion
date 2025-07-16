@@ -552,6 +552,37 @@ class TestExternalDocsFetcher:
         assert "- Item 1" in text_content
         assert "`composer install`" in text_content
 
+    def test_html_to_text_support_link_filtering(self, external_docs_fetcher):
+        """Test that Support links with email protection are filtered out."""
+        html_content = """
+        <div>
+            <a href="https://forge.laravel.com">Laravel Forge home page</a>
+            <a href="/cdn-cgi/l/email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8">Support</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="https://support.laravel.com">Support</a>
+            <a href="/cdn-cgi/l/email-protection#123456">Contact Us</a>
+        </div>
+        """
+        
+        text_content = external_docs_fetcher._html_to_text(html_content)
+        
+        # Regular links should be converted
+        assert "[Laravel Forge home page](https://forge.laravel.com)" in text_content
+        assert "[Dashboard](/dashboard)" in text_content
+        
+        # Support link without email protection should be kept
+        assert "[Support](https://support.laravel.com)" in text_content
+        
+        # Other link with email protection but not Support text should be kept
+        assert "[Contact Us](/cdn-cgi/l/email-protection#123456)" in text_content
+        
+        # Support links with email protection should be removed entirely
+        assert "email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8" not in text_content
+        # Check that the word "Support" doesn't appear with email protection link
+        support_count = text_content.count("[Support]")
+        # Should only have the one Support link without email protection
+        assert support_count == 1
+
     def test_process_service_html(self, external_docs_fetcher, sample_html_content):
         """Test service HTML processing."""
         processed = external_docs_fetcher._process_service_html(

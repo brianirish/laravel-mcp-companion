@@ -1054,8 +1054,16 @@ class ExternalDocsFetcher:
         # Convert emphasis/italic
         html_content = re.sub(r'<(em|i)[^>]*>(.*?)</\1>', r'*\2*', html_content, flags=re.DOTALL | re.IGNORECASE)
         
-        # Convert links
-        html_content = re.sub(r'<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>', r'[\2](\1)', html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Convert links - but remove Support links with email protection
+        def convert_link(match):
+            href = match.group(1)
+            text = match.group(2)
+            # Skip Support links with email protection (they contain /cdn-cgi/l/email-protection)
+            if text.strip() == 'Support' and '/cdn-cgi/l/email-protection' in href:
+                return ''  # Remove the link entirely
+            return f'[{text}]({href})'
+        
+        html_content = re.sub(r'<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>', convert_link, html_content, flags=re.DOTALL | re.IGNORECASE)
         
         # Remove remaining HTML tags
         html_content = re.sub(r'<[^>]+>', '', html_content)
