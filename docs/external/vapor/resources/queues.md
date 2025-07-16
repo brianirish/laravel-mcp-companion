@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Vapor home page](https://vapor.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#5b2d3a2b34291b373a293a2d3e3775383436)
+[Support](/cdn-cgi/l/email-protection#631502130c11230f02110215060f4d000c0e)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://vapor.laravel.com)
 - [Dashboard](https://vapor.laravel.com)

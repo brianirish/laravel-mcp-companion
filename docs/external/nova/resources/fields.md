@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#751b1a031435191407140310195b161a18)
+[Support](/cdn-cgi/l/email-protection#a3cdccd5c2e3cfc2d1c2d5c6cf8dc0ccce)
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
