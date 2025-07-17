@@ -1,4 +1,4 @@
 fastmcp>=2.10.5
 mcp[cli,client]>=1.11.0
-markdownify>=0.11.6
-beautifulsoup4>=4.12.0
+markdownify>=1.1.0
+beautifulsoup4>=4.13.4
