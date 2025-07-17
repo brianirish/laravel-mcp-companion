@@ -17,8 +17,6 @@
 
 **Laravel MCP Companion** is a comprehensive documentation aggregator and navigator for the Laravel ecosystem. Rather than generating content, it centralizes and organizes existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable through your AI assistant.
 
-✨ **Perfect for developers making the most of the Laravel ecosystem**
-
 ## Why Laravel MCP Companion?
 
 | Feature | Laravel MCP Companion | Context7 |
@@ -38,7 +36,7 @@
 
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
-- **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova with 117+ sections
+- **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova
 - **Curated package recommendations** with detailed integration guides  
 - **Unified search** across core Laravel docs and external services
 - **Smart navigation** - find exactly what you need for your use case
