@@ -53,8 +53,6 @@ This application features an **intelligent auto-discovery system** that automati
 - ✅ **Adapts** automatically to structural changes in Laravel service websites
 - ✅ **Generates** new patch releases automatically when updates are found
 
-**Current Coverage**: 117+ documentation sections (vs 95 manually-configured) with intelligent fallback mechanisms.
-
 ## Installation
 
 ### Quick Install via Smithery
