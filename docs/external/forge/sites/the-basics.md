@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#e2848d908587a28e83908394878ecc818d8f)
+
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -189,6 +189,8 @@ When you are ready to transition your application to an official domain name, yo
 
 ### [​](#nginx-configuration)Nginx Configuration
 
-Below is an example of the default Nginx site configuration that is used by Laravel Forge. [Additional Nginx templates](/docs/servers/nginx-templates) may be created in Forge using
+Below is an example of the default Nginx site configuration that is used by Laravel Forge. [Additional Nginx templates](/docs/servers/nginx-templates) may be created in Forge using the “Nginx Templates” panel within your server’s management dashboard.
+
+Co
 
 *[Content truncated for length]*

@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#ef89809d888aaf838e9d8e998a83c18c8082)
+
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -220,6 +220,8 @@ In addition, you should review the following server requirements:
 
 - The server requirements **should meet** the following criteria or more: 1 CPU Core with 1GHz, 1GB RAM, and 10GB Disk space.
 
-- The server **must have** curl i
+- The server **must have** curl installed.
+
+- Ensure that no firewall or security group is throttling reques
 
 *[Content truncated for length]*
