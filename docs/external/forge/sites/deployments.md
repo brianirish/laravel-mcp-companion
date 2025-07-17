@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#91f7fee3f6f4d1fdf0e3f0e7f4fdbff2fefc)
+
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -185,6 +185,6 @@ Additional data may be passed to your deployment script via query parameters pas
 
 There are 4 reserved parameters you may use to pass Forge information when triggering a deployment:
 
-- `forge_deploy_branch`: The bran
+- `forge_deploy_branch`: The branch that contains the commit. Forge will only trigger a deployment if the br
 
 *[Content truncated for length]*

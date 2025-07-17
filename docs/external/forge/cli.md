@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#a5c3cad7c2c0e5c9c4d7c4d3c0c98bc6cac8)
+
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -327,6 +327,8 @@ forge php:restart 8.4  # Restarts PHP 8.4
 You may use the `{resource}:shell` command to quickly access a command line shell that lets you interact with a given resource:
 
 CopyAsk AI```
-forge 
+forge database:shell
+forge database:shell my-database-name
+forge database:shell m
 
 *[Content truncated for length]*

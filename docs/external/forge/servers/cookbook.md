@@ -5,7 +5,7 @@
 ---
 
 - [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#c4a2abb6a3a184a8a5b6a5b2a1a8eaa7aba9)
+
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
@@ -229,6 +229,6 @@ If Forge is not able to connect to your server, you will not be able to manage i
 
 ## [​](#%E2%80%9Dtoo-many-open-files%E2%80%9D-error)”Too Many Open Files” Error
 
-If you are receivin
+If you are receiving an error stating that your server has “too many open files”, you likely n
 
 *[Content truncated for length]*
