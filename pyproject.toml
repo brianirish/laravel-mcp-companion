@@ -1,6 +1,6 @@
 [project]
 name = "laravel-mcp-companion"
-version = "0.6.0"
+version = "0.6.4"
 description = "A Laravel developer's MCP companion. Get the absolute best advice, recommendations, and up-to-date documentation for the entire Laravel ecosystem."
 authors = [{name = "Brian Irish", email = "irishb@gmail.com"}]
 readme = "README.md"
