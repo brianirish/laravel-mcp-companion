@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#1977766f785975786b786f7c75377a7674)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationActionsDefining Actions[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Actions
+
+Defining Actions
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,7 +92,9 @@ Search...NavigationActionsDefining Actions[Documentation](/docs/v5/installation)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Actions# Defining Actions
+Actions
+
+# Defining Actions
 
 Defining actions in Nova
 
@@ -82,27 +102,45 @@ Nova actions allow you to perform custom tasks on one or more Eloquent models. F
 
 Once an action has been attached to a resource definition, you may initiate it from the resource’s index or detail pages:
 
+![Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action.png)
+
 If an action is enabled for display on the resource’s table row, you may also initiate the action from the resource’s action dropdown menu via the resource index page. These actions are referred to as “Inline Actions”:
 
-## [​](#overview)Overview
+![Inline Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/inline-actions.png)
+
+## [​](#overview) Overview
 
 Nova actions may be generated using the `nova:action` Artisan command. By default, all actions are placed in the `app/Nova/Actions` directory:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:action EmailAccountProfile
 
 ```
 
 You may generate a [destructive action](/docs/_sites/nova-laravel/v5/actions/defining-actions#destructive-actions) by passing the `--destructive` option:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:action DeleteUserData --destructive
 
 ```
 
 To learn how to define Nova actions, let’s look at an example. In this example, we’ll define an action that sends an email message to a user or group of users:
 
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
+app/Nova/Actions/EmailAccountProfile.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova\Actions;
 
 use App\Models\AccountData;
@@ -148,11 +186,17 @@ The most important method of an action is the `handle` method. The `handle` meth
 
 Within the `handle` method, you may perform whatever tasks are necessary to complete the action. You are free to update database records, send emails, call other services, etc. The sky is the limit!
 
-#### [​](#action-titles)Action Titles
+#### [​](#action-titles) Action Titles
 
 Typically, Nova utilizes the action’s class name to determine the displayable name of the action that should be shown in the action selection menu. If you would like to change the displayable name of the action, you may define a `name` property on the action class:
 
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
+app/Nova/Actions/EmailAccountProfile.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The displayable name of the action.
  *
@@ -162,13 +206,15 @@ public $name = 'Send Account Profile via E-mail';
 
 ```
 
-### [​](#destructive-actions)Destructive Actions
+### [​](#destructive-actions) Destructive Actions
 
 You may designate an action as destructive or dangerous by defining an action class that extends `Laravel\Nova\Actions\DestructiveAction`. This will change the color of the action’s confirm button to red:
 
+![Destructive Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action-destructive.png)
+
 When a destructive action is added to a resource that has an associated authorization policy, the policy’s `delete` method must return `true` in order for the action to run.
 
-### [​](#action-callbacks)Action Callbacks
+### [​](#action-callbacks) Action Callbacks
 
 The `Action::then` method should not be utilized if your action is queued. To achieve similar functionality when using queued actions, you should leverage Nova’s [action batching callbacks](/docs/_sites/nova-laravel/v5/actions/defining-actions#job-batching).
 
@@ -178,7 +224,13 @@ The `then` methods accepts a closure which will be invoked when the action has f
 
 For example, note that the following action’s `handle` method returns the `$models` it receives:
 
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
+app/Nova/Actions/EmailAccountProfile.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\AccountData;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
@@ -201,7 +253,13 @@ public function handle(ActionFields $fields, Collection $models): Collection
 
 When registering this action on a resource, we may use the `then` callback to access the returned models and interact with them after the action has finished executing:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use App\Nova\Actions\EmailAccountProfile;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -225,13 +283,21 @@ public function actions(NovaRequest $request): array
 
 ```
 
-## [​](#action-fields)Action Fields
+## [​](#action-fields) Action Fields
 
 Sometimes you may wish to gather additional information from the user before dispatching an action. For this reason, Nova allows you to attach most of Nova’s supported [fields](./../resources/fields) directly to an action. When the action is initiated, Nova will prompt the user to provide input for the fields:
 
+![Action Field](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action-field.png)
+
 To add a field to an action, add the field to the array of fields returned by the action’s `fields` method:
 
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
+app/Nova/Actions/EmailAccountProfile.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -253,38 +319,15 @@ public function fields(NovaRequest $request): array
 
 Finally, within your action’s `handle` method, you may access your fields using dynamic accessors on the provided `ActionFields` instance:
 
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
-use App\Models\AccountData;
-use Illuminate\Support\Collection;
-use Laravel\Nova\Fields\ActionFields;
+app/Nova/Actions/EmailAccountProfile.php
 
-// ...
+Copy
 
-/**
- * Perform the action on the given models.
- *
- * @return mixed
- */
-public function handle(ActionFields $fields, Collection $models)
-{
-    foreach ($models as $model) {
-        (new AccountData($model))->send($fields->subject);
-    }
-}
+Ask AI
 
 ```
-
-#### [​](#action-fields-default-values)Action Fields Default Values
-
-You may use the `default` method to set the default value for an action field:
-
-app/Nova/Actions/EmailAccountProfile.phpCopyAsk AI```
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ...
-
-/**
- * Get the fields availa
+use App\Models\AccountData;
+use Illuminate\Support\Collection;
+use Laravel\Nova\Fields\ActionFiel
 
 *[Content truncated for length]*

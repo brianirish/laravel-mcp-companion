@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationResourcesScheduler[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Scheduler
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,46 +93,60 @@ Search...NavigationResourcesScheduler[Documentation](/docs/introduction)[Changel
 
 - [Abuse](/docs/abuse)
 
-Resources# Scheduler
+Resources
+
+# Scheduler
 
 Learn how to configure and manage scheduled jobs on your Forge server.
 
-## [​](#scheduled-jobs)Scheduled Jobs
+## [​](#scheduled-jobs) Scheduled Jobs
 
 Scheduled jobs may be configured to run commands at a specified interval. Forge provides several common defaults, or you may enter a custom Cron schedule for a command.
 
 You can create scheduled jobs through the Forge dashboard via the **Schedule** tab for the server’s management dashboard. When creating a new scheduled job, you’ll need to provide:
 
 - The command to run, for example `php /home/forge/default/artisan schedule:run`.
-
 - The user to run the command as, for example `forge`.
-
 - The frequency to run the command at.
 
 If your scheduled job is not running, you should ensure that the path to the command is correct.
 
-### [​](#laravel-scheduled-jobs)Laravel Scheduled Jobs
+### [​](#laravel-scheduled-jobs) Laravel Scheduled Jobs
 
 If you have deployed a Laravel application and are using Laravel’s [scheduler feature](https://laravel.com/docs/scheduling), you will need to create a scheduled job to run the Laravel `schedule:run` Artisan command. This job should be configured to execute **every minute**.
 
-### [​](#default-scheduled-jobs)Default Scheduled Jobs
+### [​](#default-scheduled-jobs) Default Scheduled Jobs
 
 As part of the provisioning process, Forge will automatically configure two scheduled jobs:
 
 - `composer self-update` (Nightly)
-
 - Ubuntu package cleanup (Weekly)
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to create and manage scheduled jobs by granting the `server:create-schedulers` and `server:delete-schedulers` permissions.
 
 Was this page helpful?
 
-YesNo[Network](/docs/resources/network)[Integrations](/docs/resources/integrations)On this page
+YesNo
+
+[Network](/docs/resources/network)[Integrations](/docs/resources/integrations)
+
+On this page
+
 - [Scheduled Jobs](#scheduled-jobs)
 - [Laravel Scheduled Jobs](#laravel-scheduled-jobs)
 - [Default Scheduled Jobs](#default-scheduled-jobs)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationServersMonitoring[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Servers
+
+Monitoring
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,71 +93,70 @@ Search...NavigationServersMonitoring[Documentation](/docs/introduction)[Changelo
 
 - [Abuse](/docs/abuse)
 
-Servers# Monitoring
+Servers
+
+# Monitoring
 
 Learn how to configure server monitoring in Forge.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge can be configured to monitor the following metrics on your server and email you when their state changes:
 
 - CPU Load Average
-
 - Used Disk Space
-
 - Used Memory
 
 Server monitoring is only available on our “business” plan.
 
-## [​](#monitor-types)Monitor Types
+## [​](#monitor-types) Monitor Types
 
-### [​](#cpu-load-average)CPU Load Average
+### [​](#cpu-load-average) CPU Load Average
 
 The **CPU Load Average** monitor will track the server’s load average. This is based on the average system load over a one minute interval.
 
-### [​](#used-disk-space)Used Disk Space
+### [​](#used-disk-space) Used Disk Space
 
 The **Used Disk Space** monitor tracks the amount of disk space that has been used on the primary drive.
 
-### [​](#used-memory)Used Memory
+### [​](#used-memory) Used Memory
 
 The **Used Memory** monitor tracks how much of the RAM is in active use.
 
-## [​](#creating-monitors)Creating Monitors
+## [​](#creating-monitors) Creating Monitors
 
 You may configure a new monitor from the **Monitoring** tab within a server’s management dashboard. Below is a brief overview of how to create and configure a monitoring metric:
 
-- Select the metric to monitor.
-
-- Select whether the value of the metric should be `>=` or `<=` a threshold.
-
-- Enter the threshold percentage that the metric would need to meet before notifying you.
-
-- Enter how long (in minutes) the metric needs to exceed the threshold criteria for before you are notified.
-
-- Enter an email address to notify when the monitor’s state changes.
-
-- Click **Install Monitor**.
+1. Select the metric to monitor.
+2. Select whether the value of the metric should be `>=` or `<=` a threshold.
+3. Enter the threshold percentage that the metric would need to meet before notifying you.
+4. Enter how long (in minutes) the metric needs to exceed the threshold criteria for before you are notified.
+5. Enter an email address to notify when the monitor’s state changes.
+6. Click **Install Monitor**.
 
 Once the monitor is installed, your server will begin collecting metric data and notify you once the state changes.
 
-Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `[[email protected]](/cdn-cgi/l/email-protection)`.
+Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `[email protected]`.
 
-### [​](#stat-collection-frequencies)Stat Collection Frequencies
+### [​](#stat-collection-frequencies) Stat Collection Frequencies
 
 The CPU Load and Used Memory metric data will be collected every minute. The Disk Space metric will be collected hourly.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 The ability to manage server monitors is split into two permissions:
 
 - `server:create-monitors`
-
 - `server:delete-monitors`
 
 Was this page helpful?
 
-YesNo[Database Backups](/docs/servers/backups)[Cookbook](/docs/servers/cookbook)On this page
+YesNo
+
+[Database Backups](/docs/servers/backups)[Cookbook](/docs/servers/cookbook)
+
+On this page
+
 - [Overview](#overview)
 - [Monitor Types](#monitor-types)
 - [CPU Load Average](#cpu-load-average)
@@ -151,4 +166,14 @@ YesNo[Database Backups](/docs/servers/backups)[Cookbook](/docs/servers/cookbook)
 - [Stat Collection Frequencies](#stat-collection-frequencies)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

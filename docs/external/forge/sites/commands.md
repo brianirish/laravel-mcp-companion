@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesCommands[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+Commands
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,20 +93,26 @@ Search...NavigationSitesCommands[Documentation](/docs/introduction)[Changelog](/
 
 - [Abuse](/docs/abuse)
 
-Sites# Commands
+Sites
+
+# Commands
 
 Learn how to run arbitrary commands from the Commands panel.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 You may execute arbitrary Bash commands from the Commands panel. Commands are executed from within the site’s root directory, e.g. `/home/forge/site.com`. If you need to run commands within another directory you may prefix the command with a `cd` operation:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 cd bin && ./run-command.sh
 
 ```
 
-## [​](#running-commands)Running Commands
+## [​](#running-commands) Running Commands
 
 Commands can be executed from the Site’s **Commands** panel.
 
@@ -98,41 +120,51 @@ Sites that were created with the **General PHP / Laravel** project type will aut
 
 Commands are not executed within a tty, which means that input / passwords cannot be provided.
 
-## [​](#command-history)Command History
+## [​](#command-history) Command History
 
 The last 10 previously executed commands will be shown within the **Command History** table. Alongside the command that was run, Forge will also display:
 
 - The user who initiated the command. This is particularly helpful when using Forge within [Circles](/docs/accounts/circles).
-
 - The command that was executed.
-
 - The date and time of execution.
-
 - The status of the command.
 
 From the Command History table, it’s also possible to view the output of the command and re-run the command.
 
-## [​](#commands-vs-recipes)Commands vs. Recipes
+## [​](#commands-vs-recipes) Commands vs. Recipes
 
 While [Recipes](/docs/servers/recipes.md) also allow you to run arbitrary Bash scripts on your servers, Commands differ in a few, but important ways:
 
 - Recipes run at a server level. In other words, they cannot dynamically change into a site’s directory unless you already know the directory ahead of time.
-
 - Recipes can run using the `root` user. Commands only run as the site’s user, which in most cases will be `forge` unless the site is “isolated”.
-
 - Recipes are better equipped for running larger Bash scripts. Commands focus on running short commands, such as `php artisan config:cache`.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to run arbitrary commands in a site’s directory by granting the `site:manage-commands` permission.
 
 Was this page helpful?
 
-YesNo[Deployments](/docs/sites/deployments)[Packages](/docs/sites/packages)On this page
+YesNo
+
+[Deployments](/docs/sites/deployments)[Packages](/docs/sites/packages)
+
+On this page
+
 - [Overview](#overview)
 - [Running Commands](#running-commands)
 - [Command History](#command-history)
 - [Commands vs. Recipes](#commands-vs-recipes)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

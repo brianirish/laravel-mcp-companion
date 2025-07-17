@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationServersSSH Keys / Git Access[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Servers
+
+SSH Keys / Git Access
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,26 +93,32 @@ Search...NavigationServersSSH Keys / Git Access[Documentation](/docs/introductio
 
 - [Abuse](/docs/abuse)
 
-Servers# SSH Keys / Git Access
+Servers
+
+# SSH Keys / Git Access
 
 Learn how to manage SSH keys on your Forge servers.
 
-## [​](#account-ssh-keys)Account SSH Keys
+## [​](#account-ssh-keys) Account SSH Keys
 
 When provisioning a new server Forge will automatically add any of your [account’s SSH keys](/docs/accounts/ssh) to the server. This means that you can SSH onto your server without using a password:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 ssh forge@IP_ADDRESS
 
 ```
 
-## [​](#server-ssh-key-%2F-git-project-access)Server SSH Key / Git Project Access
+## [​](#server-ssh-key-%2F-git-project-access) Server SSH Key / Git Project Access
 
 When a server is provisioned, an SSH key is generated for the server. This key is stored at `~/.ssh/id_rsa` and its public key counterpart is stored at `~/.ssh/id_rsa.pub`. When creating a server, you will have the option to add this key to your connected source control providers. By doing so, the server will be able to clone any repository that your source control account has access to.
 
 Alternatively, you may opt-out of having this key added to your source control providers by un-checking the **Add Server’s SSH Key To Source Control Providers** option when creating a server. When opting-out, you will need to use site-level [Deploy Keys](/docs/_sites/forge-laravel/servers/ssh#deploy-keys) in order to grant your server access to specific repositories on a source control provider such as GitHub, GitLab, or Bitbucket.
 
-### [​](#deploy-keys)Deploy Keys
+### [​](#deploy-keys) Deploy Keys
 
 Sometimes you may wish to only grant the Forge user access to a specific repository. This is typically accomplished by adding an SSH key to that repository’s “Deploy Keys” on the repository’s GitHub, GitLab, or Bitbucket dashboard.
 
@@ -106,9 +128,24 @@ You are also free to use Deploy Keys even on servers that have their SSH key att
 
 Was this page helpful?
 
-YesNo[Root Access / Security](/docs/servers/provisioning-process)[PHP](/docs/servers/php)On this page
+YesNo
+
+[Root Access / Security](/docs/servers/provisioning-process)[PHP](/docs/servers/php)
+
+On this page
+
 - [Account SSH Keys](#account-ssh-keys)
 - [Server SSH Key / Git Project Access](#server-ssh-key-%2F-git-project-access)
 - [Deploy Keys](#deploy-keys)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

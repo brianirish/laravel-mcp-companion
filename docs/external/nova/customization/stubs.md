@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#81efeef7e0c1ede0f3e0f7e4edafe2eeec)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperStubs[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Stubs
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,7 +92,9 @@ Search...NavigationDigging DeeperStubs[Documentation](/docs/v5/installation)[Kno
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Stubs
+Digging Deeper
+
+# Stubs
 
 Customize the stubs used by Nova to generate various classes.
 
@@ -82,7 +102,11 @@ When creating new resources, actions, filters, lens and metrics, Nova will publi
 
 To publish the stubs used by Nova to generate various classes, execute the following command:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:stubs
 
 ```
@@ -95,8 +119,24 @@ To learn more about stub customization, please consult the [Laravel documentatio
 
 Was this page helpful?
 
-YesNo[Localization](/docs/v5/customization/localization)[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+YesNo
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[Localization](/docs/v5/customization/localization)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

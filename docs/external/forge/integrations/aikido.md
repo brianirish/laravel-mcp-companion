@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationIntegrationsAikido[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Integrations
+
+Aikido
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,15 +93,17 @@ Search...NavigationIntegrationsAikido[Documentation](/docs/introduction)[Changel
 
 - [Abuse](/docs/abuse)
 
-Integrations# Aikido
+Integrations
+
+# Aikido
 
 Aikido provides security scanning with Forge integration.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 [Aikido](https://aikido.dev) provides security scanning for repositories. Forge has partnered with Aikido to allow for a seamless integration with your Forge sites.
 
-## [​](#connect-with-aikido)Connect with Aikido
+## [​](#connect-with-aikido) Connect with Aikido
 
 Before you can use Aikido with Forge, you must connect your Forge account to an Aikido account.
 To do this, visit the [Aikido panel](https://forge.laravel.com/user-profile/aikido) in the Forge dashboard.
@@ -95,17 +113,34 @@ Clicking “Connect Aikido” will allow you to connect your Forge account to an
 You can connect multiple Aikido workspaces to a single Forge account, each representing a different organization or group in your source control provider.
 This can be managed from the [Aikido panel](https://forge.laravel.com/user-profile/aikido) within Forge.
 
-## [​](#viewing-aikido-findings)Viewing Aikido Findings
+## [​](#viewing-aikido-findings) Viewing Aikido Findings
 
 When viewing a site in the Forge dashboard, the top security findings will be displayed on the Aikido tab.
+
+![Screenshot showing the top security findings](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/aikido-top-security-findings.png)
 
 The Aikido integration is only supported for GitHub, GitLab, GitLab Self-Hosted, and Bitbucket.
 
 Was this page helpful?
 
-YesNo[Sentry](/docs/integrations/sentry)[Abuse](/docs/abuse)On this page
+YesNo
+
+[Sentry](/docs/integrations/sentry)[Abuse](/docs/abuse)
+
+On this page
+
 - [Overview](#overview)
 - [Connect with Aikido](#connect-with-aikido)
 - [Viewing Aikido Findings](#viewing-aikido-findings)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationResourcesIntegrations[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Integrations
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,35 +93,52 @@ Search...NavigationResourcesIntegrations[Documentation](/docs/introduction)[Chan
 
 - [Abuse](/docs/abuse)
 
-Resources# Integrations
+Resources
+
+# Integrations
 
 Learn how to configure and manage third-party integrations on your Forge server.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge provides a few third-party integrations that you can install on your server to provide additional features to your server. We’ll discuss each of these below.
 
-## [​](#monitoring-integrations)Monitoring Integrations
+## [​](#monitoring-integrations) Monitoring Integrations
 
-### [​](#blackfire-io)Blackfire.io
+### [​](#blackfire-io) Blackfire.io
 
 [Blackfire](https://blackfire.io/) provides thorough PHP application profiling and is our recommended solution for monitoring your PHP application’s performance. After providing your server ID and token, Blackfire will be installed and configured for your server.
 
-### [​](#papertrail)Papertrail
+### [​](#papertrail) Papertrail
 
 [Papertrail](https://papertrailapp.com/) provides hosted log monitoring and searching for your PHP application. If you are using Laravel, just configure your application to use the `syslog` driver.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to configure and manage integrations by granting the `server:manage-php` permission.
 
 Was this page helpful?
 
-YesNo[Scheduler](/docs/resources/scheduler)[Cookbook](/docs/resources/cookbook)On this page
+YesNo
+
+[Scheduler](/docs/resources/scheduler)[Cookbook](/docs/resources/cookbook)
+
+On this page
+
 - [Overview](#overview)
 - [Monitoring Integrations](#monitoring-integrations)
 - [Blackfire.io](#blackfire-io)
 - [Papertrail](#papertrail)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#8fe1e0f9eecfe3eefdeef9eae3a1ece0e2)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationResourcesThe Basics[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+The Basics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,26 +92,38 @@ Search...NavigationResourcesThe Basics[Documentation](/docs/v5/installation)[Kno
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Resources# The Basics
+Resources
+
+# The Basics
 
 Learn how to define, register, and customize Nova resources.
 
-## [​](#introduction)Introduction
+## [​](#introduction) Introduction
 
 Laravel Nova is a beautiful administration dashboard for Laravel applications. Of course, the primary feature of Nova is the ability to administer your underlying database records using Eloquent. Nova accomplishes this by allowing you to define a Nova “resource” that corresponds to each Eloquent model in your application.
 
-## [​](#defining-resources)Defining Resources
+## [​](#defining-resources) Defining Resources
 
 By default, Nova resources are stored in the `app/Nova` directory of your application. You may generate a new resource using the `nova:resource` Artisan command:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:resource Post
 
 ```
 
 The most basic and fundamental property of a resource is its `model` property. This property tells Nova which Eloquent model the resource corresponds to:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 class Post extends Resource
@@ -113,26 +143,17 @@ Freshly created Nova resources only contain an `ID` field definition. Don’t wo
 Nova contains a few reserved words which may not be used for resource names:
 
 - Card
-
 - Dashboard
-
 - Field
-
 - Impersonate
-
 - Metric
-
 - Resource
-
 - Search
-
 - Script
-
 - Style
-
 - Tool
 
-## [​](#registering-resources)Registering Resources
+## [​](#registering-resources) Registering Resources
 
 By default, all resources within the `app/Nova` directory will automatically be registered with Nova. You are not required to manually register them.
 
@@ -142,7 +163,13 @@ Before resources are available within your Nova dashboard, they must first be re
 
 There are two approaches to manually registering resources. You may use the `resourcesIn` method to instruct Nova to register all Nova resources within a given directory. Alternatively, you may use the `resources` method to manually register individual resources:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use App\Nova\User;
 use App\Nova\Post;
 
@@ -165,11 +192,19 @@ protected function resources(): void
 
 Once your resources are registered with Nova, they will be available in the Nova sidebar:
 
+![Nova Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
+
 Dashboard
 
 If you do not want a resource to appear in the sidebar, you may override the `displayInNavigation` property of your resource class:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Indicates if the resource should be displayed in the sidebar.
  *
@@ -179,11 +214,17 @@ public static $displayInNavigation = false;
 
 ```
 
-#### [​](#customizing-resource-menus)Customizing Resource Menus
+#### [​](#customizing-resource-menus) Customizing Resource Menus
 
 You can customize the resource’s menu by defining a `menu` method on your resource class:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Http\Request;
 
 // ...
@@ -205,11 +246,17 @@ public function menu(Request $request)
 
 Please refer to the documentation on [menu customization](./../customization/menus) for more information.
 
-## [​](#grouping-resources)Grouping Resources
+## [​](#grouping-resources) Grouping Resources
 
 If you would like to separate resources into different sidebar groups, you may override the `group` property of your resource class:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The logical group associated with the resource.
  *
@@ -219,15 +266,21 @@ public static $group = 'Admin';
 
 ```
 
-## [​](#resource-table-style-customization)Resource Table Style Customization
+## [​](#resource-table-style-customization) Resource Table Style Customization
 
 Nova supports a few visual customization options for your resources.
 
-### [​](#table-styles)Table Styles
+### [​](#table-styles) Table Styles
 
 Sometimes it’s convenient to show more data on your resource index tables. To accomplish this, you can use the “tight” table style option designed to increase the visual density of your table rows. To accomplish this, override the static `$tableStyle` property or the static `tableStyle` method on your resource class:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The visual style used for the table. Available options are 'tight' and 'default'.
  *
@@ -239,13 +292,21 @@ public static $tableStyle = 'tight';
 
 This will display your table rows with less visual height, enabling more data to be shown:
 
+![Tight Table Style](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-tight-table.png)
+
 Tight Table Style
 
-### [​](#column-borders)Column Borders
+### [​](#column-borders) Column Borders
 
 You can instruct Nova to display column borders by overriding the static `$showColumnBorders` property or the static `showColumnBorders` method on your resource class:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Whether to show borders for each column on the X-axis.
  *
@@ -257,13 +318,23 @@ public static $showColumnBorders = true;
 
 Setting this property to `true` will instruct Nova to display the table with borders on every table item:
 
+![Table Column Borders](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-column-borders.png)
+
 Table Column Borders
 
-## [​](#resource-table-click-action)Resource Table Click Action
+## [​](#resource-table-click-action) Resource Table Click Action
 
 By default, when clicking on a resource table row, Nova will navigate to the detail view for the resource. However, you may want Nova to navigate to the edit form instead. You can customize this behavior by changing the `clickAction` property or the static `clickAction` method on your resource class:
 
-PropertyMethodCopyAsk AI```
+Property
+
+Method
+
+Copy
+
+Ask AI
+
+```
 /**
  * The click action to use when clicking on the resource in the table.
  *
@@ -277,13 +348,19 @@ public static $clickAction = 'edit';
 
 Choosing the `select` option will select the resource row’s checkbox. The `ignore` option instructs Nova to ignore click events altogether.
 
-## [​](#eager-loading)Eager Loading
+## [​](#eager-loading) Eager Loading
 
 If you routinely need to access a resource’s relationships within your fields, [resource title](./../search/global-search#title-subtitle-attributes), or [resource subtitle](./../search/global-search#title-subtitle-attributes), it may be a good idea to add the relationship to the `with` property of your resource. This property instructs Nova to always eager load the listed relationships when retrieving the resource.
 
 For example, if you access a `Post` resource’s `user` relationship within the `Post` resource’s `subtitle` method, you should add the `user` relationship to the `Post` resource’s `with` property:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The relationships that should be eager loaded on index queries.
  *
@@ -293,16 +370,6 @@ public static $with = ['user'];
 
 ```
 
-## [​](#resource-default-attribute-values)Resource Default Attribute Values
-
-By default, Laravel Nova will utilize the [default attribute values defined by Eloquent](https://laravel.com/docs/eloquent#default-attribute-values) over any default values set on each Field during resource creation. If you need to override the default values within a resource, you can do so by overriding the resource’s `defaultAttributes` method:
-
-CopyAsk AI```
-/**
- * Get the default atrtributes for the model represented by the resource.
- *
- * @return array<string, mixed>
- */
-publ
+## [​](#resource-default-attribute-values) Resourc
 
 *[Content truncated for length]*

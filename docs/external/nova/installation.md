@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#3856574e597854594a594e5d54165b5755)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationGet StartedInstallation[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Get Started
+
+Installation
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,52 +92,49 @@ Search...NavigationGet StartedInstallation[Documentation](/docs/v5/installation)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Get Started# Installation
+Get Started
+
+# Installation
 
 Learn how to install Laravel Nova into your Laravel application.
 
 [## Purchase Nova
 
-Purchase a license for Laravel Nova
+Purchase a license for Laravel Nova](https://nova.laravel.com)[## Learn More
 
-](https://nova.laravel.com)[## Learn More
+Watch the free Nova series on Laracasts](https://laracasts.com/series/laravel-nova-mastery-2023-edition)
 
-Watch the free Nova series on Laracasts
-
-](https://laracasts.com/series/laravel-nova-mastery-2023-edition)
-## [​](#requirements)Requirements
+## [​](#requirements) Requirements
 
 Laravel Nova has a few minimum requirements you should be aware of before installing:
 
 - Composer 2
-
 - Laravel Framework 10.x, 11.x, or 12.x
-
 - Inertia.js 2.x
-
 - Laravel Mix 6.x
-
 - Node.js (Version 18.x+)
-
 - NPM 9.x
 
-## [​](#browser-support)Browser Support
+## [​](#browser-support) Browser Support
 
 Nova supports modern versions of the following browsers:
 
 - Apple Safari
-
 - Google Chrome
-
 - Microsoft Edge
-
 - Mozilla Firefox
 
-## [​](#installing-nova-via-composer)Installing Nova via Composer
+## [​](#installing-nova-via-composer) Installing Nova via Composer
 
 You may install Nova as a Composer package via our private Satis repository. To get started, add the Nova repository to your application’s `composer.json` file:
 
-composer.jsonCopyAsk AI```
+composer.json
+
+Copy
+
+Ask AI
+
+```
 "repositories": [
     {
         "type": "composer",
@@ -131,14 +146,24 @@ composer.jsonCopyAsk AI```
 
 Or, you may use the following CLI command to add the Composer repository to your `composer.json` file:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 composer config repositories.nova '{"type": "composer", "url": "https://nova.laravel.com"}' --file composer.json
 
 ```
 
 Next, you may add `laravel/nova` to your list of required packages in your `composer.json` file:
 
-composer.jsonCopyAsk AI```
+composer.json
+
+Copy
+
+Ask AI
+
+```
 "require": {
     "php": "^8.2",
     "laravel/framework": "^12.0",
@@ -149,7 +174,11 @@ composer.jsonCopyAsk AI```
 
 After your `composer.json` file has been updated, run the `composer update` command in your console terminal:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 composer update --prefer-dist
 
 ```
@@ -158,14 +187,22 @@ When running `composer update`, you will be prompted to provide a username and p
 
 To avoid manually typing these credentials, you may create a [Composer auth.json file](https://getcomposer.org/doc/articles/http-basic-authentication) while using your [license key](https://nova.laravel.com/licenses) in place of your password:
 
-CopyAsk AI```
-composer config http-basic.nova.laravel.com [[email protected]](/cdn-cgi/l/email-protection) your-license-key
+Copy
+
+Ask AI
+
+```
+composer config http-basic.nova.laravel.com [email protected] your-license-key
 
 ```
 
 Finally, run the `nova:install` and `migrate` Artisan commands. The `nova:install` command will install Nova’s service provider and public assets within your application:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:install
 
 php artisan migrate
@@ -174,7 +211,13 @@ php artisan migrate
 
 The default `App\Nova\User` Nova resource references the `App\Models\User` model. If you place your models in a different directory or namespace, you should adjust this value within the resource:
 
-app/Nova/User.phpCopyAsk AI```
+app/Nova/User.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 class User extends Resource
@@ -191,81 +234,102 @@ class User extends Resource
 
 If your application’s `users` table is empty or you want to create a new user, you can run the `nova:user` Artisan command:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:user
 
 ```
 
 That’s it! Next, you may navigate to your application’s `/nova` path in your browser and you should be greeted with the Nova dashboard which includes links to various parts of this documentation.
 
-## [​](#registering-a-nova-license-key-and-production-url)Registering a Nova License Key and Production URL
+## [​](#registering-a-nova-license-key-and-production-url) Registering a Nova License Key and Production URL
 
 Nova requires a license key and a production URL to be used in production environments. Nova will check your license key and the current host against the values from the license details found in your Nova account.
 
-You can generate license keys and register the production URL for your project inside the license’s page on your Nova account at [https://nova.laravel.com/licenses](https://nova.laravel.com/licenses):
+You can generate license keys and register the production URL for your project inside the license’s page on your Nova account at <https://nova.laravel.com/licenses>:
+
+![Registering your production site](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/register-site.png)
 
 You can register a wildcard subdomain for your production URL for use in multi-tenant scenarios (e.g. `*.laravel.com`).
 
 You can register your license key by setting the `NOVA_LICENSE_KEY` variable to `.env` file or `license_key` option in your `config/nova.php` configuration file:
 
-.envconfig/nova.phpCopyAsk AI```
+.env
+
+config/nova.php
+
+Copy
+
+Ask AI
+
+```
 NOVA_LICENSE_KEY=
 
 ```
 
-### [​](#verifying-your-nova-license-key-configuration)Verifying Your Nova License Key Configuration
+### [​](#verifying-your-nova-license-key-configuration) Verifying Your Nova License Key Configuration
 
 To verify everything has been configured correctly, you should run the `nova:check-license` command:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:check-license
 
 ```
 
-## [​](#authenticating-nova-in-ci-environments)Authenticating Nova in CI Environments
+## [​](#authenticating-nova-in-ci-environments) Authenticating Nova in CI Environments
 
 It’s not recommended to store your Composer `auth.json` file inside your project’s source control repository. However, there may be times you wish to download Nova inside a CI environment like [GitHub Actions](https://github.com/features/actions). For instance, you may wish to run tests for any custom tools you create.
 
 To authenticate Nova in these situations, you can use Composer’s `config` command to set the configuration option inside your CI system’s pipeline, injecting environment variables containing your Nova username and license key:
 
-GitHub ActionsCopyAsk AI```
+GitHub Actions
+
+Copy
+
+Ask AI
+
+```
 composer config http-basic.nova.laravel.com "${secrets.NOVA_USERNAME}" "${secrets.NOVA_LICENSE_KEY}"
 
 ```
 
-## [​](#using-nova-on-development-and-staging-domains)Using Nova on Development and Staging Domains
+## [​](#using-nova-on-development-and-staging-domains) Using Nova on Development and Staging Domains
 
 Since Nova can be used in local and staging development environments, Nova will not check your license key when used on `localhost` or local TLDs like those specified in [IETF RFC 2606](https://datatracker.ietf.org/doc/html/rfc2606#page-2):
 
 - `.test`
-
 - `.example`
-
 - `.invalid`
-
 - `.localhost`
-
 - `.local`
 
 Nova will also not check the current license key when the subdomain is one of these commonly-used staging subdomains:
 
 - `staging.`
-
 - `stage.`
-
 - `test.`
-
 - `testing.`
-
 - `dev.`
-
 - `development.`
 
-## [​](#authorizing-access-to-nova)Authorizing Access to Nova
+## [​](#authorizing-access-to-nova) Authorizing Access to Nova
 
 Within your `app/Providers/NovaServiceProvider.php` file, there is a `gate` method. This authorization gate controls access to Nova in **non-local** environments. By default, any user can access the Nova dashboard when the current application environment is `local`. You are free to modify this gate as needed to restrict access to your Nova installation:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Support\Facades\Gate;
 
 // ...
@@ -279,21 +343,23 @@ protected function gate(): void
 {
     Gate::define('viewNova', function ($user) {
         return in_array($user->email, [
-            '[[email protected]](/cdn-cgi/l/email-protection)',
+            '[email protected]',
         ]);
     });
 }
 
 ```
 
-## [​](#customization)Customization
+## [​](#customization) Customization
 
-### [​](#branding)Branding
+### [​](#branding) Branding
 
 Although Nova’s interface is intended to be an isolated part of your application that is managed by Nova, you can make some small customizations to the branding logo and color used by Nova to make the interface more cohesive with the rest of your application.
 
-#### [​](#brand-logo)Brand Logo
+![Branding](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/branding.png)
 
-To customize the logo used at the top left of the Nova interface, you may specify a configuration value for the `brand.logo` configuration item within your application’s `config/nova.php` configuration file. This configuration value should contain an absolute path to the SVG file of the logo you would lik
+#### [​](#brand-logo) Brand Logo
+
+To customize th
 
 *[Content truncated for length]*

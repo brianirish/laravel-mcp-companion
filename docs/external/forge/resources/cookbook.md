@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationResourcesCookbook[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Cookbook
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,15 +93,17 @@ Search...NavigationResourcesCookbook[Documentation](/docs/introduction)[Changelo
 
 - [Abuse](/docs/abuse)
 
-Resources# Cookbook
+Resources
+
+# Cookbook
 
 Common issues and solutions for Laravel Forge.
 
-## [​](#scheduled-jobs-not-running)Scheduled Jobs Not Running
+## [​](#scheduled-jobs-not-running) Scheduled Jobs Not Running
 
 It’s important to be aware that one single misconfigured scheduled job will break **all jobs** in the scheduler. You should verify that your frequency and commands are correct using a tool such as [Crontab.guru](https://crontab.guru).
 
-## [​](#deleted-ssh-firewall-rule)Deleted SSH Firewall Rule
+## [​](#deleted-ssh-firewall-rule) Deleted SSH Firewall Rule
 
 If you have deleted the firewall rule (typically port 22) from the Forge UI or directly on the server, Forge will be unable to connect to the server and will be unable to re-create this rule for you.
 
@@ -93,14 +111,34 @@ To fix this, you will need to access the server directly via your provider and m
 
 Forge uses `ufw` for the firewall, so once you’ve connected to the server you need to run the following as `root`:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 ufw allow 22
 
 ```
+
 Was this page helpful?
 
-YesNo[Integrations](/docs/resources/integrations)[Envoyer](/docs/integrations/envoyer)On this page
+YesNo
+
+[Integrations](/docs/resources/integrations)[Envoyer](/docs/integrations/envoyer)
+
+On this page
+
 - [Scheduled Jobs Not Running](#scheduled-jobs-not-running)
 - [Deleted SSH Firewall Rule](#deleted-ssh-firewall-rule)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

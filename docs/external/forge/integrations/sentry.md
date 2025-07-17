@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationIntegrationsSentry[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Integrations
+
+Sentry
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,20 +93,24 @@ Search...NavigationIntegrationsSentry[Documentation](/docs/introduction)[Changel
 
 - [Abuse](/docs/abuse)
 
-Integrations# Sentry
+Integrations
+
+# Sentry
 
 Sentry provides error monitoring and tracing for Laravel apps with Forge integration for creating Sentry organizations.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 [Sentry](https://sentry.io) provides error monitoring and tracing for Laravel applications. Forge has partnered with Sentry to allow you to create new Sentry organizations without leaving Forge.
 
 After creating your Sentry organization, you may easily add Sentry error monitoring to any of your Forge powered sites.
 
-## [​](#connect-with-sentry)Connect with Sentry
+## [​](#connect-with-sentry) Connect with Sentry
 
 Before you can use Sentry with Forge, you must connect your Forge account to a Sentry account. To do this,
 visit the [Sentry panel](https://forge.laravel.com/user-profile/sentry) in the Forge dashboard.
+
+![Connect with Sentry User Profile form](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/sentry-user-profile.png)
 
 Clicking “Connect with Sentry” will create a new, Forge-linked Sentry organization with the email address shown under
 “Sentry Account Email”. You will receive an email from Sentry confirming your new organization.
@@ -98,10 +118,12 @@ Clicking “Connect with Sentry” will create a new, Forge-linked Sentry organi
 It is not possible to use an existing Sentry organization with the Forge integration. Forge created Sentry projects will be added
 to the new organization.
 
-## [​](#creating-sentry-projects)Creating Sentry Projects
+## [​](#creating-sentry-projects) Creating Sentry Projects
 
 Forge allows you to create new Sentry projects directly from the Forge dashboard. To create a new Sentry project,
 visit the site’s Sentry dashboard.
+
+![Sentry Panel](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/sentry-project-form.png)
 
 Clicking “Create Sentry Project” will create a new project within the server owner’s connected Sentry organization.
 
@@ -110,16 +132,31 @@ Once the project is created, you will be provided with a DSN key that you may us
 Forge does not automatically install Sentry into your Laravel application. You should install the
 [Sentry SDK for Laravel](https://github.com/getsentry/sentry-laravel) via Composer and define the `SENTRY_DSN` environment variable.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 The ability to manage a site’s Sentry project is determined by the `site:manage-integrations` permission.
 
 Was this page helpful?
 
-YesNo[Envoyer](/docs/integrations/envoyer)[Aikido](/docs/integrations/aikido)On this page
+YesNo
+
+[Envoyer](/docs/integrations/envoyer)[Aikido](/docs/integrations/aikido)
+
+On this page
+
 - [Overview](#overview)
 - [Connect with Sentry](#connect-with-sentry)
 - [Creating Sentry Projects](#creating-sentry-projects)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

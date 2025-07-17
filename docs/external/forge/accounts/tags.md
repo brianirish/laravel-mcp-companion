@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationAccountsTags[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Accounts
+
+Tags
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,24 +93,41 @@ Search...NavigationAccountsTags[Documentation](/docs/introduction)[Changelog](/d
 
 - [Abuse](/docs/abuse)
 
-Accounts# Tags
+Accounts
+
+# Tags
 
 Learn how to use tags to categorize servers and sites.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 “Tagging” your servers and sites can make them easier to manage, especially if you have many servers / sites. Servers can be tagged via the server dashboard’s **Settings** tab’s **Server Settings** section, while sites can be tagged via the site **Settings** tab.
 
 You may delete tags and their associations from Forge’s [tags dashboard](https://forge.laravel.com/user-profile/tags).
 
-## [​](#searching-for-tagged-servers-%2F-sites)Searching For Tagged Servers / Sites
+## [​](#searching-for-tagged-servers-%2F-sites) Searching For Tagged Servers / Sites
 
 Once servers and sites have been tagged, you may filter by those tags via Forge’s search bar located in the top navigation panel of the Forge dashboard. Alternatively, you may filter by your tags from the Forge [active server list](https://forge.laravel.com/servers).
 
 Was this page helpful?
 
-YesNo[API](/docs/accounts/api)[Troubleshooting](/docs/accounts/cookbook)On this page
+YesNo
+
+[API](/docs/accounts/api)[Troubleshooting](/docs/accounts/cookbook)
+
+On this page
+
 - [Overview](#overview)
 - [Searching For Tagged Servers / Sites](#searching-for-tagged-servers-%2F-sites)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

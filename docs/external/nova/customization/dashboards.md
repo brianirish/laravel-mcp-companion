@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#7917160f183915180b180f1c15571a1614)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperDashboards[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Dashboards
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,19 +92,29 @@ Search...NavigationDigging DeeperDashboards[Documentation](/docs/v5/installation
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Dashboards
+Digging Deeper
+
+# Dashboards
 
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](./../metrics/defining-metrics) and [cards](../customization/cards).
 
-### [​](#default-dashboard)Default Dashboard
+![Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
+
+### [​](#default-dashboard) Default Dashboard
 
 Nova ships with a default `App\Nova\Dashboards\Main` dashboard class containing a `cards` method. You can customize which cards are present on the default dashboard via this method:
 
-app/Nova/Dashboards/Main.phpCopyAsk AI```
+app/Nova/Dashboards/Main.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova\Dashboards;
 
 use Laravel\Nova\Cards\Help;
@@ -111,18 +139,28 @@ class Main extends Dashboard
 
 More information regarding dashboard metrics can be found [within our documentation on metrics](../metrics/registering-metrics#dashboard-metrics).
 
-## [​](#defining-dashboards)Defining Dashboards
+## [​](#defining-dashboards) Defining Dashboards
 
 Custom dashboards may be generated using the `nova:dashboard` Artisan command. By default, all new dashboards will be placed in the `app/Nova/Dashboards` directory:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:dashboard UserInsights
 
 ```
 
 Once your dashboard class has been generated, you’re ready to customize it. Each dashboard class contains a `cards` method. This method should return an array of card or metric classes:
 
-app/Nova/Dashboards/UserInsights.phpCopyAsk AI```
+app/Nova/Dashboards/UserInsights.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova\Dashboards;
 
 use Laravel\Nova\Dashboard;
@@ -147,11 +185,17 @@ class UserInsights extends Dashboard
 
 ```
 
-#### [​](#dashboard-names)Dashboard Names
+#### [​](#dashboard-names) Dashboard Names
 
 By default, Nova will use the dashboard’s class name to determine the displayable name of your dashboard that should be placed in the left-side navigation bar. You may customize the name of the dashboard displayed in the left-side navigation bar by overriding the `name` method within your dashboard class:
 
-app/Nova/Dashboards/UserInsights.phpCopyAsk AI```
+app/Nova/Dashboards/UserInsights.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable name of the dashboard.
  *
@@ -164,11 +208,17 @@ public function name()
 
 ```
 
-#### [​](#dashboard-uri-keys)Dashboard URI Keys
+#### [​](#dashboard-uri-keys) Dashboard URI Keys
 
 If you need to change the URI of the dashboard, you may override the dashboard class’ `uriKey` method. Of course, the URI represents the browser location that Nova will navigate to in when you click on the dashboard link in the left-side navigation bar:
 
-app/Nova/Dashboards/UserInsights.phpCopyAsk AI```
+app/Nova/Dashboards/UserInsights.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the URI key of the dashboard.
  *
@@ -181,11 +231,17 @@ public function uriKey()
 
 ```
 
-## [​](#registering-dashboards)Registering Dashboards
+## [​](#registering-dashboards) Registering Dashboards
 
 To register a dashboard, add the dashboard to the array returned by the `dashboards` method of your application’s `App/Providers/NovaServiceProvider` class. Once you have added the dashboard to this method, it will become available for navigation in Nova’s left-side navigation bar:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
@@ -206,11 +262,17 @@ protected function dashboards(): array
 
 ```
 
-#### [​](#customizing-dashboard-menus)Customizing Dashboard Menus
+#### [​](#customizing-dashboard-menus) Customizing Dashboard Menus
 
 You can customize the dashboard’s menu by defining a `menu` method on your dashboard class:
 
-app/Nova/Dashboards/UserInsights.phpCopyAsk AI```
+app/Nova/Dashboards/UserInsights.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Http\Request;
 
 // ...
@@ -231,11 +293,17 @@ public function menu(Request $request)
 
 Please refer to the documentation on [menu customization](./menus) for more information.
 
-### [​](#refreshing-dashboard-metrics)Refreshing Dashboard Metrics
+### [​](#refreshing-dashboard-metrics) Refreshing Dashboard Metrics
 
 Occasionally, you may wish to refresh all the metrics’ values inside your dashboard. You may do this by enabling the refresh button by using the `showRefreshButton` method on the dashboard instance:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
@@ -256,11 +324,17 @@ protected function dashboards(): array
 
 ```
 
-### [​](#authorization)Authorization
+### [​](#authorization) Authorization
 
 If you would like to only expose a given dashboard to certain users, you may invoke the `canSee` method when registering your dashboard. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\User;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
@@ -286,7 +360,13 @@ protected function dashboards(): array
 
 In the example above, we are using Laravel’s `Authorizable` trait’s can method on our `User` model to determine if the authorized user is authorized for the `viewUserInsights` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\User;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
@@ -307,19 +387,20 @@ protected function dashboards(): array
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)On this page
+YesNo
+
+[Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)
+
+On this page
+
 - [Overview](#overview)
 - [Default Dashboard](#default-dashboard)
 - [Defining Dashboards](#defining-dashboards)
 - [Dashboard Names](#dashboard-names)
 - [Dashboard URI Keys](#dashboard-uri-keys)
-- [Registering Dashboards](#registering-dashboards)
-- [Customizing Dashboard Menus](#customizing-dashboard-menus)
-- [Refreshing Dashboard Metrics](#refreshing-dashboard-metrics)
-- [Authorization](#authorization)
-
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](h
+- [Registering Dashboards](#registering-dashboard
 
 *[Content truncated for length]*

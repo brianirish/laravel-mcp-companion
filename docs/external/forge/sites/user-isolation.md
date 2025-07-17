@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesUser Isolation[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+User Isolation
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,11 +93,13 @@ Search...NavigationSitesUser Isolation[Documentation](/docs/introduction)[Change
 
 - [Abuse](/docs/abuse)
 
-Sites# User Isolation
+Sites
+
+# User Isolation
 
 Learn how to isolate your sites on Laravel Forge.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 By default, Forge uses the default `forge` user that is created as part of the server’s initial provisioning process for all deployments, daemons, scheduled jobs, PHP-FPM, and other processes.
 
@@ -89,26 +107,45 @@ Via Forge’s “User Isolation” feature, Forge will create a separate user fo
 
 The `forge` user is considered a “super user” and is therefore able to read all files within isolated user directories.
 
-## [​](#sudo-access)Sudo Access
+## [​](#sudo-access) Sudo Access
 
 Like the `forge` user, newly created isolated users also have limited sudo access. They may reload the PHP-FPM services requiring a password:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 sudo -S service php8.1-fpm reload
 
 ```
 
 If you need further sudo access, you should log in as the `forge` user and switch to the `root` user using the `sudo su` or the `sudo -i` command.
 
-## [​](#connecting-via-sftp)Connecting Via SFTP
+## [​](#connecting-via-sftp) Connecting Via SFTP
 
 You can connect to your server via SFTP as the isolated user. We recommend using an SFTP client such as [Transmit](https://panic.com/transmit/) or [Filezilla](https://filezilla-project.org/). However, before getting started, you should first [upload your SSH key to the server](/docs/accounts/ssh) for the isolated user.
 
 Was this page helpful?
 
-YesNo[SSL](/docs/sites/ssl)[Cookbook](/docs/sites/cookbook)On this page
+YesNo
+
+[SSL](/docs/sites/ssl)[Cookbook](/docs/sites/cookbook)
+
+On this page
+
 - [Overview](#overview)
 - [Sudo Access](#sudo-access)
 - [Connecting Via SFTP](#connecting-via-sftp)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

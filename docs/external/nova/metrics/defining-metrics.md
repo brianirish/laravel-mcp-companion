@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#610f0e1700210d00130017040d4f020e0c)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationMetricsDefining Metrics[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Metrics
+
+Defining Metrics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,7 +92,9 @@ Search...NavigationMetricsDefining Metrics[Documentation](/docs/v5/installation)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Metrics# Defining Metrics
+Metrics
+
+# Defining Metrics
 
 Learn how to define metrics in Nova.
 
@@ -82,13 +102,19 @@ Nova metrics allow you to quickly gain insight on key business indicators for yo
 
 Nova offers several types of built-in metrics: value, trend, partition, and progress. We’ll examine each type of metric and demonstrate their usage below.
 
-## [​](#value-metrics)Value Metrics
+## [​](#value-metrics) Value Metrics
 
 Value metrics display a single value and, if desired, its change compared to a previous time interval. For example, a value metric might display the total number of users created in the last thirty days compared with the previous thirty days:
 
+![Value Metric](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/value.png)
+
 Value metrics may be generated using the `nova:value` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:value NewUsers
 
 ```
@@ -97,7 +123,13 @@ Once your value metric class has been generated, you’re ready to customize it.
 
 In this example, we are using the `count` helper, which will automatically perform a `count` query against the specified Eloquent model for the selected range, as well as automatically retrieve the count for the “previous” range:
 
-app/Nova/Metrics/NewUsers.phpCopyAsk AI```
+app/Nova/Metrics/NewUsers.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova\Metrics;
 
 use App\Models\User;
@@ -135,15 +167,21 @@ class NewUsers extends Value
 
 ```
 
-### [​](#value-query-types)Value Query Types
+### [​](#value-query-types) Value Query Types
 
 Value metrics don’t only ship with a `count` helper. You may also use a variety of other aggregate functions when building your metric. Let’s explore each of them now.
 
-#### [​](#average)Average
+#### [​](#average) Average
 
 The `average` method may be used to calculate the average of a given column compared to the previous time interval / range:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Post;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -160,11 +198,17 @@ public function calculate(NovaRequest $request): ValueResult
 
 ```
 
-#### [​](#sum)Sum
+#### [​](#sum) Sum
 
 The `sum` method may be used to calculate the sum of a given column compared to the previous time interval / range:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -181,11 +225,17 @@ public function calculate(NovaRequest $request): ValueResult
 
 ```
 
-#### [​](#max)Max
+#### [​](#max) Max
 
 The `max` method may be used to calculate the maximum value of a given column compared to the previous time interval / range:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -202,11 +252,17 @@ public function calculate(NovaRequest $request): ValueResult
 
 ```
 
-#### [​](#min)Min
+#### [​](#min) Min
 
 The `min` method may be used to calculate the minimum value of a given column compared to the previous time interval / range:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -223,11 +279,17 @@ public function calculate(NovaRequest $request): ValueResult
 
 ```
 
-### [​](#value-ranges)Value Ranges
+### [​](#value-ranges) Value Ranges
 
 Every value metric class contains a `ranges` method. This method determines the ranges that will be available in the value metric’s range selection menu. The array’s keys determine the number of days that should be included in the query, while the values determine the “human readable” text that will be placed in the range selection menu. Of course, you are not required to define any ranges at all:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Nova;
 
 /**
@@ -252,11 +314,17 @@ public function ranges(): array
 
 You may customize these ranges to suit your needs; however, if you are using the built-in “Today”, “Yesterday”, “Month To Date”, “Quarter To Date”, “Year To Date”, or “All Time” ranges, you should not change their keys.
 
-### [​](#zero-result-values)Zero Result Values
+### [​](#zero-result-values) Zero Result Values
 
 By default, Nova will handle results of `0` as a result containing no data. This may not always be correct, which is why you can use the `allowZeroResult` method to indicate that `0` is a valid value result:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
 
@@ -273,11 +341,17 @@ public function calculate(NovaRequest $request): ValueResult
 
 ```
 
-### [​](#formatting-the-value)Formatting the Value
+### [​](#formatting-the-value) Formatting the Value
 
 You can add a prefix and / or suffix to the Value metric’s result by invoking the `prefix` and `suffix` methods when returning the `ValueResult` instance:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -298,7 +372,13 @@ public function calculate(NovaRequest $request): ValueResult
 
 You may also use the `currency` method to specify that a given value result represents a currency value:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -308,17 +388,6 @@ use Laravel\Nova\Metrics\ValueResult;
 /**
  * Calculate the value of the metric.
  */
-public function calculate(NovaRequest $request): ValueResult
-{
-    return $this->max(
-        $request, Order::class, column: 'total',
-    )->currency(); 
-}
-
-```
-
-By default, the currency symbol will be `$`, but you may also specify your own currency symbol by passing the symbol as an argument to the `currency` method:
-
-
+public function calculate(NovaRequest $
 
 *[Content truncated for length]*

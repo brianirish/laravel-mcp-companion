@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationGet StartedForge SDK[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Get Started
+
+Forge SDK
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,48 +93,59 @@ Search...NavigationGet StartedForge SDK[Documentation](/docs/introduction)[Chang
 
 - [Abuse](/docs/abuse)
 
-Get Started# Forge SDK
+Get Started
+
+# Forge SDK
 
 A PHP SDK for interacting with Laravel Forge.
 
 [## Forge SDK
 
-View the Forge SDK on GitHub
+View the Forge SDK on GitHub](https://github.com/laravel/forge-sdk)[## Forge API
 
-](https://github.com/laravel/forge-sdk)[## Forge API
+View the Forge API Documentation](https://forge.laravel.com/api-documentation)
 
-View the Forge API Documentation
-
-](https://forge.laravel.com/api-documentation)
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 The [Laravel Forge SDK](https://github.com/laravel/forge-sdk) provides an expressive interface for interacting with Forge’s API and managing Laravel Forge servers.
 
-## [​](#installation)Installation
+## [​](#installation) Installation
 
 To install the SDK in your project you need to require the package via composer:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 composer require laravel/forge-sdk
 
 ```
 
-## [​](#upgrading)Upgrading
+## [​](#upgrading) Upgrading
 
 When upgrading to a new major version of Forge SDK, it’s important that you carefully review [the upgrade guide](https://github.com/laravel/forge-sdk/blob/master/UPGRADE.md).
 
-## [​](#basic-usage)Basic Usage
+## [​](#basic-usage) Basic Usage
 
 You can create an instance of the SDK like so:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $forge = new Laravel\Forge\Forge(TOKEN_HERE);
 
 ```
 
 Using the `Forge` instance you may perform multiple actions as well as retrieve the different resources Forge’s API provides:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $servers = $forge->servers();
 
 ```
@@ -127,14 +154,22 @@ This will give you an array of servers that you have access to, where each serve
 
 You may also retrieve a single server using:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $server = $forge->server(SERVER_ID_HERE);
 
 ```
 
 On multiple actions supported by this SDK you may need to pass some parameters, for example when creating a new server:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $server = $forge->createServer([
     "provider"=> ServerProviders::DIGITAL_OCEAN,
     "credential_id"=> 1,
@@ -156,7 +191,11 @@ Notice that this request for example will only start the server creation process
 
 Some SDK methods however wait for the action to complete on Forge’s end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
 
 ```
@@ -165,23 +204,47 @@ This method will ping Forge servers every 5 seconds and see if the newly created
 
 You can easily stop this behaviour by setting the `$wait` argument to false:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
 
 ```
 
 You can also set the desired timeout value:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
 
 ```
+
 Was this page helpful?
 
-YesNo[Forge CLI](/docs/cli)[Your Account](/docs/accounts/your-account)On this page
+YesNo
+
+[Forge CLI](/docs/cli)[Your Account](/docs/accounts/your-account)
+
+On this page
+
 - [Overview](#overview)
 - [Installation](#installation)
 - [Upgrading](#upgrading)
 - [Basic Usage](#basic-usage)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationServersRecipes[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Servers
+
+Recipes
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,68 +93,70 @@ Search...NavigationServersRecipes[Documentation](/docs/introduction)[Changelog](
 
 - [Abuse](/docs/abuse)
 
-Servers# Recipes
+Servers
+
+# Recipes
 
 Save and run common Bash scripts across your servers.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Recipes allow you to save common Bash scripts and run them across any of your servers. For example, you could save a recipe to install MongoDB so you can conveniently run it on future servers. The output of the recipe will be emailed to you.
 
-## [​](#creating-recipes)Creating Recipes
+## [​](#creating-recipes) Creating Recipes
 
 You can create your own recipe from the [Recipes dashboard](https://forge.laravel.com/recipes). When creating a new recipe you will be asked to supply:
 
 - The name of the recipe
-
 - The operating system user that the script should be run as
-
 - The recipe script contents
 
-### [​](#variables)Variables
+### [​](#variables) Variables
 
 Forge provides a few variables that can be used to make your recipe more dynamic. You are free to use any of these variables within your recipe’s script:
 
 - `{{server_id}}` - The ID of the server that the recipe is running on
-
 - `{{server_name}}` - The name of the server that the recipe is running on
-
 - `{{ip_address}}` - The public IP address of the server
-
 - `{{private_ip_address}}` - The private IP address of the server
-
 - `{{username}}` - The server user who is running the script
-
 - `{{db_password}}` - The database password for the server the script is running on
-
 - `{{server_type}}` - The type of the server that the recipe is running on, i.e. one of the following…
-
-`"app"`
-
-- `"cache"`
-
-- `"database"`
-
-- `"loadbalancer"`
-
-- `"meilisearch"`
-
-- `"web"`
-
-- `"worker"`
+  - `"app"`
+  - `"cache"`
+  - `"database"`
+  - `"loadbalancer"`
+  - `"meilisearch"`
+  - `"web"`
+  - `"worker"`
 
 When using these variables, you should ensure that they exactly match the syntax shown above.
 
-## [​](#running-recipes)Running Recipes
+## [​](#running-recipes) Running Recipes
 
 When running a recipe, you will be presented with options that allow you to have the output of the recipe emailed to you and allow you to configure which servers the recipe will run on.
 
 Was this page helpful?
 
-YesNo[Packages](/docs/servers/packages)[Load Balancing](/docs/servers/load-balancing)On this page
+YesNo
+
+[Packages](/docs/servers/packages)[Load Balancing](/docs/servers/load-balancing)
+
+On this page
+
 - [Overview](#overview)
 - [Creating Recipes](#creating-recipes)
 - [Variables](#variables)
 - [Running Recipes](#running-recipes)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

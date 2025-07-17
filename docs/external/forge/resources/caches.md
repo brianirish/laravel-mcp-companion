@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationResourcesCaches[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Caches
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,19 +93,25 @@ Search...NavigationResourcesCaches[Documentation](/docs/introduction)[Changelog]
 
 - [Abuse](/docs/abuse)
 
-Resources# Caches
+Resources
+
+# Caches
 
 Learn how to connect to Redis and Memcache on your Forge server.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 When provisioning an [App Server](/docs/servers/types#app-servers) or a [Cache Server](/docs/servers/types#cache-servers), Forge will automatically install [Memcache](https://www.memcached.org/) and [Redis](https://redis.io/). By default, neither of these services are exposed to the public and may only be accessed from within your server.
 
-## [​](#connecting-to-redis)Connecting To Redis
+## [​](#connecting-to-redis) Connecting To Redis
 
 Redis and Memcache are both available via `127.0.0.1` and their default ports.
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 MEMCACHED_HOST=127.0.0.1
 MEMCACHED_PORT=11211
 
@@ -99,15 +121,32 @@ REDIS_PORT=6379
 
 ```
 
-## [​](#external-connections)External Connections
+## [​](#external-connections) External Connections
 
 All Forge servers require SSH key authentication and are not able to be accessed using passwords. Therefore, when selecting the SSH key to use during authentication, ensure that you select your private SSH key. For example, when connecting to Redis using the [TablePlus](https://tableplus.com/) database client:
 
+![Connecting to Redis with TablePlus](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/redis-gui.png)
+
 Was this page helpful?
 
-YesNo[Databases](/docs/resources/databases)[Network](/docs/resources/network)On this page
+YesNo
+
+[Databases](/docs/resources/databases)[Network](/docs/resources/network)
+
+On this page
+
 - [Overview](#overview)
 - [Connecting To Redis](#connecting-to-redis)
 - [External Connections](#external-connections)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

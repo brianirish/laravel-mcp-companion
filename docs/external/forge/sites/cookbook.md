@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesCookbook[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+Cookbook
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,19 +93,21 @@ Search...NavigationSitesCookbook[Documentation](/docs/introduction)[Changelog](/
 
 - [Abuse](/docs/abuse)
 
-Sites# Cookbook
+Sites
+
+# Cookbook
 
 Common tasks and solutions for managing your Forge sites.
 
-## [​](#site-is-stuck-deploying)Site Is Stuck Deploying
+## [​](#site-is-stuck-deploying) Site Is Stuck Deploying
 
 Rarely, your application may get stuck in a “deploying” state. When this occurs, you can reset the deployment state at the top right of the site management panel using the **Self Help** drop-down menu.
 
-## [​](#using-user-isolation-with-existing-sites)Using User Isolation With Existing Sites
+## [​](#using-user-isolation-with-existing-sites) Using User Isolation With Existing Sites
 
 It is not currently possible to use isolated users to manage existing sites that have already been created without user isolation. Instead, you will need to create a new site with the user isolation option enabled.
 
-## [​](#uncommitted-commits-during-deployment)Uncommitted Commits During Deployment
+## [​](#uncommitted-commits-during-deployment) Uncommitted Commits During Deployment
 
 This error may occur when files under source control within the site directory have been changed by the application and will be overwritten by the fresh deployment.
 
@@ -99,9 +117,24 @@ You should also review your application and correct any parts of the application
 
 Was this page helpful?
 
-YesNo[User Isolation](/docs/sites/user-isolation)[Daemons](/docs/resources/daemons)On this page
+YesNo
+
+[User Isolation](/docs/sites/user-isolation)[Daemons](/docs/resources/daemons)
+
+On this page
+
 - [Site Is Stuck Deploying](#site-is-stuck-deploying)
 - [Using User Isolation With Existing Sites](#using-user-isolation-with-existing-sites)
 - [Uncommitted Commits During Deployment](#uncommitted-commits-during-deployment)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesRedirects[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+Redirects
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,45 +93,51 @@ Search...NavigationSitesRedirects[Documentation](/docs/introduction)[Changelog](
 
 - [Abuse](/docs/abuse)
 
-Sites# Redirects
+Sites
+
+# Redirects
 
 Configure redirects for your sites.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge allows you to configure redirects that can be configured to automatically redirect visitors from one page to another. These redirect rules can be created via the “Redirects” tab of the site’s management dashboard.
 
-## [​](#creating-redirects)Creating Redirects
+## [​](#creating-redirects) Creating Redirects
 
 Redirects are wrappers around Nginx’s [`rewrite` rules](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#rewrite) and can use the full redirect syntax supported by Nginx, including regular expressions. For example, you could use `^/$` to only match the root of the domain.
 
-## [​](#temporary-vs-permanent-redirects)Temporary vs. Permanent Redirects
+## [​](#temporary-vs-permanent-redirects) Temporary vs. Permanent Redirects
 
 Forge supports two types of redirects:
 
 - Permanent (HTTP Status Code 301)
-
 - Temporary (HTTP Status Code 302)
 
 Although both of these redirect types are typically invisible to the user, the browser will treat them differently and it is important to know the difference.
 
-### [​](#temporary-redirects)Temporary Redirects
+### [​](#temporary-redirects) Temporary Redirects
 
 When the browser encounters a temporary redirect, it will take you to the destination and forget that it was redirected from the original page. If you were to change the destination page and then visited the original page again, the browser would see the new redirect location and take you there.
 
-### [​](#permanent-redirects)Permanent Redirects
+### [​](#permanent-redirects) Permanent Redirects
 
 With a permanent redirect, the browser will remember that it was redirected away from the original page. To save making another network request, the next time the browser visits the original page, it will see that it was redirected and immediately visit that page instead.
 
 Although you can change the destination of a permanent redirect, you will need to clear the browser cache before you visit the original page again. It’s considered bad practice to change a permanent redirect, so be careful when doing so.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to create and manage redirects by granting the `site:manage-redirects` permission.
 
 Was this page helpful?
 
-YesNo[Security Rules](/docs/sites/security-rules)[SSL](/docs/sites/ssl)On this page
+YesNo
+
+[Security Rules](/docs/sites/security-rules)[SSL](/docs/sites/ssl)
+
+On this page
+
 - [Overview](#overview)
 - [Creating Redirects](#creating-redirects)
 - [Temporary vs. Permanent Redirects](#temporary-vs-permanent-redirects)
@@ -123,4 +145,14 @@ YesNo[Security Rules](/docs/sites/security-rules)[SSL](/docs/sites/ssl)On this p
 - [Permanent Redirects](#permanent-redirects)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

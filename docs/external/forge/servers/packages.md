@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationServersPackages[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Servers
+
+Packages
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,57 +93,62 @@ Search...NavigationServersPackages[Documentation](/docs/introduction)[Changelog]
 
 - [Abuse](/docs/abuse)
 
-Servers# Packages
+Servers
+
+# Packages
 
 Manage Composer credentials on your server.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge allows you to manage the “http-basic” portion of the selected server user’s `auth.json` Composer configuration file. The provided credentials are only stored on the server being managed by Forge - not in Forge itself.
 
-## [​](#global-composer-credentials)Global Composer Credentials
+## [​](#global-composer-credentials) Global Composer Credentials
 
 The Composer credentials that you can manage on the server level will apply to all sites that are served by the same Ubuntu user account. For example, if you have two sites installed under the `forge` user, both these sites will benefit from the globally stored credentials. If you need fine-grained control, please see the [Packages](/docs/sites/packages) documentation for sites.
 
-## [​](#user-selection)User Selection
+## [​](#user-selection) User Selection
 
 If you have sites configured with user isolation, you will first need to select the appropriate server user. The `auth.json` file is global within each individual server user account.
 
-## [​](#managing-credentials)Managing Credentials
+## [​](#managing-credentials) Managing Credentials
 
 Forge makes it easy to manage Composer credentials across all sites on your server. You can add, remove, and update credentials directly from the Forge UI.
 
-### [​](#add-credentials)Add Credentials
+### [​](#add-credentials) Add Credentials
 
 Additional credentials can be added by clicking the “Add Credentials” button. You need to provide:
 
 - Repository URL - this is how Composer matches the credentials to the package for which the provider wants to authenticate users
-
 - Username - this is often an email address, but can also be any kind of unique identifier that the provider of the package uses
-
 - Password - this is generally the password associated with the username, however in some case, this may also be a license key
 
 Click “Save” in order to store these credentials in the user’s global Composer configuration directory (`~/.config/composer/auth.json`).
 
-### [​](#remove-credentials)Remove Credentials
+### [​](#remove-credentials) Remove Credentials
 
 In order to remove Composer credentials, you can click on the red **X** button.
 
 After removing credentials, you must click “Save” in order to update the credentials configuration on the server.
 
-### [​](#update-credentials)Update Credentials
+### [​](#update-credentials) Update Credentials
 
 Any credentials that are shown on the screen can be updated with any new adequate value.
 
 After updating the credential, you must click “Save” in order to update the credentials configuration on the server.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 The ability to manage a server’s Composer packages is determined by the `server:manage-packages` permission. This permission will also allow the circle member to manage a site’s Composer packages too.
 
 Was this page helpful?
 
-YesNo[PHP](/docs/servers/php)[Recipes](/docs/servers/recipes)On this page
+YesNo
+
+[PHP](/docs/servers/php)[Recipes](/docs/servers/recipes)
+
+On this page
+
 - [Overview](#overview)
 - [Global Composer Credentials](#global-composer-credentials)
 - [User Selection](#user-selection)
@@ -137,4 +158,14 @@ YesNo[PHP](/docs/servers/php)[Recipes](/docs/servers/recipes)On this page
 - [Update Credentials](#update-credentials)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

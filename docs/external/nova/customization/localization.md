@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#9cf2f3eafddcf0fdeefdeaf9f0b2fff3f1)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperLocalization[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Localization
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,32 +92,44 @@ Search...NavigationDigging DeeperLocalization[Documentation](/docs/v5/installati
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Localization
+Digging Deeper
+
+# Localization
 
 Learn how to localize your Nova application.
 
-### [​](#overview)Overview
+### [​](#overview) Overview
 
 Nova may be fully localized using Laravel’s [localization services](https://laravel.com/docs/localization). After running the `nova:install` command during installation. Your application will contain a `lang/vendor/nova` translation directory.
 
 Within this directory, you may customize the `en.json` file or create a new JSON translation file for your language. In addition, the `en` directory contains a few additional validation translation lines that are utilized by Nova.
 
-#### [​](#creating-new-localization-files)Creating New Localization Files
+#### [​](#creating-new-localization-files) Creating New Localization Files
 
 To quickly create a new translation file for your language, you may execute the `nova:translate` Artisan command. This command will simply copy the default `en.json` translation file, allowing you to begin translating the strings into your own language:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:translate es
 
 ```
 
-#### [​](#user-locale-overrides)User Locale Overrides
+#### [​](#user-locale-overrides) User Locale Overrides
 
 Laravel Nova frontend libraries, including the browser, Numbro.js, Luxon, and other libraries will utilize the locale value available via `app()->getLocale()` by default. However, if your application is only using ISO 639-1 language codes (`en`), you may wish to consider migrating your languages to IETF language tags (`en-US`, `en-GB`) for wider support across the various frontend libraries used by Nova.
 
 To map your existing locales to IETF language tags, you may use the `Nova::userLocale` method. Typically, you should invoke this method in the `boot` method of your application’s `NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -118,11 +148,17 @@ public function boot(): void
 
 ```
 
-### [​](#resources)Resources
+### [​](#resources) Resources
 
 Resource names may be localized by overriding the `label` and `singularLabel` methods on the resource class:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable label of the resource.
  *
@@ -147,7 +183,13 @@ public static function singularLabel()
 
 To customize labels for the resource’s create and update buttons, you may override the `createButtonLabel` and `updateButtonLabel` methods on the resource:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the text for the create resource button.
  *
@@ -170,11 +212,15 @@ public static function updateButtonLabel()
 
 ```
 
-### [​](#fields)Fields
+### [​](#fields) Fields
 
 Field names may be localized when you attach the field to your resource. The first argument to all fields is its display name, which you may customize. For example, you might localize the title of an email address field like so:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -183,11 +229,15 @@ Text::make(__('Email Address'), 'email_address'),
 
 ```
 
-### [​](#relationships)Relationships
+### [​](#relationships) Relationships
 
 Relationship field names may be customized by localizing the first argument passed to their field definition. The second and third arguments to Nova relationship fields are the relationship method name and the related Nova resource, respectively:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use App\Nova\Post;
 use Laravel\Nova\Fields\HasMany;
 
@@ -199,7 +249,13 @@ HasMany::make(__('Posts'), 'posts', Post::class),
 
 In addition, you should also override the `label` and `singularLabel` methods on the related resource:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable label of the resource.
  *
@@ -222,11 +278,17 @@ public static function singularLabel()
 
 ```
 
-### [​](#filters)Filters
+### [​](#filters) Filters
 
 Filter names may be localized by overriding the `name` method on the filter class:
 
-app/Nova/Filters/~Filter.phpCopyAsk AI```
+app/Nova/Filters/~Filter.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable name of the filter.
  *
@@ -239,11 +301,17 @@ public function name()
 
 ```
 
-### [​](#lenses)Lenses
+### [​](#lenses) Lenses
 
 Lens names may be localized by overriding the `name` method on the lens class:
 
-app/Nova/Lenses/~Lens.phpCopyAsk AI```
+app/Nova/Lenses/~Lens.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable name of the lens.
  *
@@ -256,11 +324,17 @@ public function name()
 
 ```
 
-### [​](#actions)Actions
+### [​](#actions) Actions
 
 Action names may be localized by overriding the `name` method on the action class:
 
-app/Nova/Actions/~Action.phpCopyAsk AI```
+app/Nova/Actions/~Action.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable name of the action.
  *
@@ -273,11 +347,17 @@ public function name()
 
 ```
 
-### [​](#metrics)Metrics
+### [​](#metrics) Metrics
 
 Metric names may be localized by overriding the `name` method on the metric class:
 
-app/Nova/Metrics/~Metric.phpCopyAsk AI```
+app/Nova/Metrics/~Metric.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the displayable name of the metric.
  *
@@ -290,11 +370,17 @@ public function name()
 
 ```
 
-### [​](#frontend)Frontend
+### [​](#frontend) Frontend
 
 To propagate your localizations to the frontend, you should call the `Nova::translations` method within your `NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -311,7 +397,13 @@ public function boot(): void
 
 You may also pass an array of key / value pairs representing each localization:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -330,7 +422,15 @@ public function boot(): void
 
 As in Laravel, you may use the `__` helper within your custom Vue components to access these translations. To accomplish this, add the following mixins to your Inertia page component or Vue component:
 
-Option APIComposition APICopyAsk AI```
+Option API
+
+Composition API
+
+Copy
+
+Ask AI
+
+```
 <template>
   <h2>{{ __('Total Users') }}</h2>
 </template>
@@ -346,9 +446,15 @@ export default {
 </script>
 
 ```
+
 Was this page helpful?
 
-YesNo[Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)On this page
+YesNo
+
+[Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)
+
+On this page
+
 - [Overview](#overview)
 - [Creating New Localization Files](#creating-new-localization-files)
 - [User Locale Overrides](#user-locale-overrides)
@@ -361,10 +467,8 @@ YesNo[Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs
 - [Metrics](#metrics)
 - [Frontend](#frontend)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
-
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/in
 
 *[Content truncated for length]*

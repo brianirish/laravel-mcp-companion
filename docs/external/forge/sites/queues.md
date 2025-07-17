@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesQueues[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+Queues
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,21 +93,23 @@ Search...NavigationSitesQueues[Documentation](/docs/introduction)[Changelog](/do
 
 - [Abuse](/docs/abuse)
 
-Sites# Queues
+Sites
+
+# Queues
 
 Manage Laravel queue workers.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge’s site management dashboard allows you to easily create as many Laravel queue workers as you like. Queue workers will automatically be monitored by Supervisor, and will be restarted if they crash. All workers will start automatically if the server is restarted.
 
-## [​](#creating-a-queue-worker)Creating A Queue Worker
+## [​](#creating-a-queue-worker) Creating A Queue Worker
 
 You can create a new queue worker within the site’s management dashboard. The “New Worker” form is a wrapper around the Laravel queue feature. You can read more about queues in the [full Laravel queue documentation](https://laravel.com/docs/queues).
 
 When creating a new queue worker, you may [select a version of PHP](/docs/servers/php) that is already installed on the server. The selected version of PHP will be used to execute the queue worker.
 
-## [​](#laravel-horizon)Laravel Horizon
+## [​](#laravel-horizon) Laravel Horizon
 
 If your Laravel application is using [Laravel Horizon](https://laravel.com/docs/horizon), you should not setup queue workers as described above. Instead, you may enable Horizon on Forge using Forge’s “daemon” feature.
 
@@ -101,35 +119,58 @@ Next, add the `php artisan horizon:terminate` Artisan command to your site’s d
 
 Finally, if you wish to use Horizon’s [metrics graphs](https://laravel.com/docs/master/horizon#metrics), you should configure the scheduled job for `horizon:snapshot` in your application code. In addition, you should define a [Scheduler task](/docs/resources/scheduler#scheduled-jobs) within Forge for the `php artisan schedule:run` Artisan command if you have not already done so.
 
-## [​](#restarting-queue-workers-after-deployment)Restarting Queue Workers After Deployment
+## [​](#restarting-queue-workers-after-deployment) Restarting Queue Workers After Deployment
 
 When deploying your application, it is important that your existing queue workers or Horizon processes reflect the latest changes to your application. This can be achieved by gracefully restarting these services from your deployment script:
 
 When using queue workers:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $FORGE_PHP artisan queue:restart
 
 ```
 
 When using Horizon:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 $FORGE_PHP artisan horizon:terminate
 
 ```
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to create and manage queue workers by granting the `site:manage-queues` permission.
 
 Was this page helpful?
 
-YesNo[Packages](/docs/sites/packages)[Security Rules](/docs/sites/security-rules)On this page
+YesNo
+
+[Packages](/docs/sites/packages)[Security Rules](/docs/sites/security-rules)
+
+On this page
+
 - [Overview](#overview)
 - [Creating A Queue Worker](#creating-a-queue-worker)
 - [Laravel Horizon](#laravel-horizon)
 - [Restarting Queue Workers After Deployment](#restarting-queue-workers-after-deployment)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

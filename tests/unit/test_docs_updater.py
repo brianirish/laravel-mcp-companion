@@ -576,12 +576,12 @@ class TestExternalDocsFetcher:
         # Other link with email protection but not Support text should be kept
         assert "[Contact Us](/cdn-cgi/l/email-protection#123456)" in text_content
         
-        # Support links with email protection should be removed entirely
+        # Support links with email protection should have link removed but text kept
         assert "email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8" not in text_content
-        # Check that the word "Support" doesn't appear with email protection link
-        support_count = text_content.count("[Support]")
-        # Should only have the one Support link without email protection
-        assert support_count == 1
+        # Check that we have both Support texts - one as plain text, one as a link
+        assert text_content.count("Support") == 2  # Plain text Support + linked Support
+        assert "[Support](https://support.laravel.com)" in text_content  # Good Support link kept
+        assert "[Support](/cdn-cgi/l/email-protection" not in text_content  # Bad Support link removed
 
     def test_process_service_html(self, external_docs_fetcher, sample_html_content):
         """Test service HTML processing."""

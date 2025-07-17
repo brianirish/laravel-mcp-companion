@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#c3adacb5a283afa2b1a2b5a6afeda0acae)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperAssets[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Assets
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,19 +92,25 @@ Search...NavigationDigging DeeperAssets[Documentation](/docs/v5/installation)[Kn
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Assets
+Digging Deeper
+
+# Assets
 
 Learn how to extend or add additional functionality to Nova.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Assets allow you to extend or add additional functionality to Nova without the overhead of cards or resource tools. For example, you may wish to override a custom error component to match your branding or intercept Inertia interactions and provide additional data to routes.
 
-## [​](#defining-assets)Defining Assets
+## [​](#defining-assets) Defining Assets
 
 Assets may be generated using the `nova:asset` Artisan command. By default, all new assets will be placed in the `nova-components` directory of your application. When generating an asset using the `nova:asset` command, the asset name you pass to the command should follow the Composer `vendor/package` format:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:asset acme/analytics
 
 ```
@@ -95,15 +119,19 @@ When generating an asset, Nova will prompt you to install the assets NPM depende
 
 Nova assets include all of the scaffolding necessary to build your asset. Each asset even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
 
-## [​](#registering-assets)Registering Assets
+## [​](#registering-assets) Registering Assets
 
 Nova assets are automatically loaded through the use of Laravel’s auto-loader, so no additional registration is required.
 
-## [​](#compiling-assets)Compiling Assets
+## [​](#compiling-assets) Compiling Assets
 
 Your Nova asset contains a `webpack.mix.js` file, which is generated when Nova creates your custom asset. You may build your custom asset using the NPM `dev` and `prod` commands:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 # Compile your assets for local development...
 npm run dev
 
@@ -114,20 +142,42 @@ npm run prod
 
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 npm run watch
 
 ```
+
 Was this page helpful?
 
-YesNo[CSS / JavaScript](/docs/v5/customization/frontend)[Localization](/docs/v5/customization/localization)On this page
+YesNo
+
+[CSS / JavaScript](/docs/v5/customization/frontend)[Localization](/docs/v5/customization/localization)
+
+On this page
+
 - [Overview](#overview)
 - [Defining Assets](#defining-assets)
 - [Registering Assets](#registering-assets)
 - [Compiling Assets](#compiling-assets)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

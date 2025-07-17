@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#1a74756c7b5a767b687b6c7f7634797577)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationResourcesField Panels[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Field Panels
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,13 +92,23 @@ Search...NavigationResourcesField Panels[Documentation](/docs/v5/installation)[K
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Resources# Field Panels
+Resources
+
+# Field Panels
 
 If your resource contains many fields, your resource “detail” page can become crowded. For that reason, you may choose to break up groups of fields into their own “panels”:
 
+![Field Panel Example](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/panels.png)
+
 You may accomplish this by creating a new `Panel` instance within the `fields` method of a resource. Each panel requires a name and an array of fields that belong to that panel:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
@@ -108,11 +136,15 @@ public function fields(NovaRequest $request): array
 
 ```
 
-### [​](#limiting-displayed-fields)Limiting Displayed Fields
+### [​](#limiting-displayed-fields) Limiting Displayed Fields
 
 You may limit the amount of fields shown in a panel by default using the `limit` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Panel;
 
 // ...
@@ -127,11 +159,15 @@ Panel::make('Profile', [
 
 Panels with a defined field limit will display a **Show All Fields** button in order to allow the user to view all of the defined fields when needed.
 
-### [​](#collapsible-panels)Collapsible Panels
+### [​](#collapsible-panels) Collapsible Panels
 
 You may allow field panels to be collapsible by invoking the `collapsible` method when defining the panel. This method utilizes JavaScript’s `localStorage` feature to remember the current state of the panel between requests:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Panel;
 
 // ...
@@ -146,7 +182,11 @@ Panel::make('Profile', [
 
 You may indicate that a panel should always be collapsed by default via the `collapsedByDefault` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Panel;
 
 // ...
@@ -159,13 +199,21 @@ Panel::make('Profile', [
 
 ```
 
-## [​](#tabs)Tabs
+## [​](#tabs) Tabs
 
 The `Tab` panel allows you to organize resource fields and relationships within tab panels:
 
+![Tab Panel](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/tab-panel.png)
+
 To create a tab panel when defining your resource’s fields, provide the tab group title and array of tabs to the `Tab::group` method. Each individual tab may be constructed using `Tab::make` and receives a tab title and array of fields:
 
-app/Nova/Event.phpCopyAsk AI```
+app/Nova/Event.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
@@ -213,11 +261,15 @@ public function fields(NovaRequest $request): array
 
 ```
 
-### [​](#omitting-tab-group-titles)Omitting Tab Group Titles
+### [​](#omitting-tab-group-titles) Omitting Tab Group Titles
 
 Tab group titles may be omitted by simply providing `fields` to the `Tab::group` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Tabs\Tab;
 
 // ...
@@ -228,16 +280,34 @@ Tab::group(fields: [
 ]),
 
 ```
+
 Was this page helpful?
 
-YesNo[Repeater Fields](/docs/v5/resources/repeater-fields)[Relationships](/docs/v5/resources/relationships)On this page
+YesNo
+
+[Repeater Fields](/docs/v5/resources/repeater-fields)[Relationships](/docs/v5/resources/relationships)
+
+On this page
+
 - [Limiting Displayed Fields](#limiting-displayed-fields)
 - [Collapsible Panels](#collapsible-panels)
 - [Tabs](#tabs)
 - [Omitting Tab Group Titles](#omitting-tab-group-titles)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

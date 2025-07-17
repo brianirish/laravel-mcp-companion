@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#2648495047664a47544750434a0845494b)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationResourcesDate Fields[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Date Fields
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,13 +92,19 @@ Search...NavigationResourcesDate Fields[Documentation](/docs/v5/installation)[Kn
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Resources# Date Fields
+Resources
+
+# Date Fields
 
 Date fields allow you to collect and display date and time information.
 
 Nova offers two types of date fields: `Date` and `DateTime`. As you may have guessed, the `Date` field does not store time information while the `DateTime` field does:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 
@@ -91,13 +115,17 @@ DateTime::make('Created At'),
 
 ```
 
-### [​](#options)Options
+### [​](#options) Options
 
-#### [​](#steps)Steps
+#### [​](#steps) Steps
 
 By default, Nova will set a minimum “step” of 1 day for `Date` fields and 1 second for `DateTime` fields. You may modify the “step” value for both of these fields by providing an integer or `Carbon\CarbonInterval` to the field’s `step` methods:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Carbon\CarbonInterval;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
@@ -112,11 +140,15 @@ DateTime::make('Published At')->step(CarbonInterval::minutes(1)),
 
 ```
 
-#### [​](#minimum-and-maximum-values)Minimum and Maximum Values
+#### [​](#minimum-and-maximum-values) Minimum and Maximum Values
 
 Sometimes you may wish to explicitly define minimum and maximum values for `Date` or `DateTime` fields. This can be done by passing a valid date expression, a date format supported by `strtotime`, or an instance of `Carbon\CarbonInterface` to the `min` and `max` methods of these fields:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Carbon\Carbon;
 use Laravel\Nova\Fields\Date;
 
@@ -132,17 +164,23 @@ Date::make('Expired On')
 
 ```
 
-### [​](#timezones)Timezones
+### [​](#timezones) Timezones
 
 By default, Nova users will always see dates presented in your application’s “server-side” timezone as defined by the `timezone` configuration option in your application’s `config/app.php` configuration file.
 
-#### [​](#customizing-the-timezone)Customizing the Timezone
+#### [​](#customizing-the-timezone) Customizing the Timezone
 
 Sometimes you may wish to explicitly define the Nova user’s timezone instead of using the application’s timezone configuration. For example, perhaps your application allows users to select their own timezone so that they always see consistent date timezones even when traveling around the world.
 
 To accomplish this, you may use the `Nova::userTimezone` method. Typically you should call this method in the `boot` method of your application’s `NovaServiceProvider`:
 
-app/Nova/NovaServiceProvider.phpCopyAsk AI```
+app/Nova/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Nova;
 use Illuminate\Http\Request;
 
@@ -161,17 +199,35 @@ public function boot(): void
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Dependent Fields](/docs/v5/resources/dependent-fields)[File Fields](/docs/v5/resources/file-fields)On this page
+YesNo
+
+[Dependent Fields](/docs/v5/resources/dependent-fields)[File Fields](/docs/v5/resources/file-fields)
+
+On this page
+
 - [Options](#options)
 - [Steps](#steps)
 - [Minimum and Maximum Values](#minimum-and-maximum-values)
 - [Timezones](#timezones)
 - [Customizing the Timezone](#customizing-the-timezone)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

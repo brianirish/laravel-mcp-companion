@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#9bf5f4edfadbf7fae9faedfef7b5f8f4f6)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperCards[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Cards
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,19 +92,25 @@ Search...NavigationDigging DeeperCards[Documentation](/docs/v5/installation)[Kno
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Cards
+Digging Deeper
+
+# Cards
 
 Learn how to build custom cards for your Nova application.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Cards are similar to resource tools, but are small, miniature tools that are typically displayed at the top of your dashboard, resource index, or resource detail pages. In fact, if you have used [Nova metrics](./../metrics/defining-metrics), you have already seen Nova cards. Custom Nova cards allow you to build your own, metric-sized tools.
 
-## [​](#defining-cards)Defining Cards
+## [​](#defining-cards) Defining Cards
 
 Cards may be generated using the `nova:card` Artisan command. By default, all new cards will be placed in the `nova-components` directory of your application. When generating a card using the `nova:card` command, the card name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a traffic analytics card, we might run the following command:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 php artisan nova:card acme/analytics
 
 ```
@@ -95,11 +119,17 @@ When generating a card, Nova will prompt you to install the card’s NPM depende
 
 Nova cards include all of the scaffolding necessary to build your card. Each card even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
 
-## [​](#registering-cards)Registering Cards
+## [​](#registering-cards) Registering Cards
 
 Nova cards may be registered in your resource’s `cards` method. This method returns an array of cards available to the resource. To register your card, add your card to the array of cards returned by this method:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 use Acme\Analytics\Analytics;
@@ -122,11 +152,17 @@ class Post extends Resource
 
 ```
 
-### [​](#authorization)Authorization
+### [​](#authorization) Authorization
 
 If you would like to only expose a given card to certain users, you may invoke the `canSee` method when registering your card. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 use Acme\Analytics\Analytics;
 
 // ...
@@ -147,11 +183,17 @@ public function cards(NovaRequest $request)
 
 ```
 
-### [​](#card-options)Card Options
+### [​](#card-options) Card Options
 
 Often, you will need to allow the consumer’s of your card to customize run-time configuration options on the card. You may do this by exposing methods on your card class. These methods may call the card’s underlying `withMeta` method to add information to the card’s metadata, which will be available within your `Card.vue` component. The `withMeta` method accepts an array of key / value options:
 
-nova-components/Analytics/src/Analytics.phpCopyAsk AI```
+nova-components/Analytics/src/Analytics.php
+
+Copy
+
+Ask AI
+
+```
 namespace Acme\Analytics;
 
 use Laravel\Nova\Card;
@@ -175,27 +217,35 @@ class Analytics extends Card
 
 After registering your custom card, don’t forget to actually call any custom option methods you defined:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 (new Acme\Analytics\Analytics)->currentVisitors(),
 
 ```
 
-#### [​](#accessing-card-options)Accessing Card Options
+#### [​](#accessing-card-options) Accessing Card Options
 
 Your card’s `Card.vue` component receives a `card` Vue `prop`. This property provides access to any card options that may be available on the card:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 const currentVisitors = this.card.currentVisitors;
 
 ```
 
-## [​](#building-cards)Building Cards
+## [​](#building-cards) Building Cards
 
 Each card generated by Nova includes its own service provider and “card” class. Using the `analytics` card as an example, the card class will be located at `src/Analytics.php`.
 
 The card’s service provider is also located within the `src` directory of the card, and is registered in the `extra` section of your card’s `composer.json` file so that it will be auto-loaded by Laravel.
 
-### [​](#routing)Routing
+### [​](#routing) Routing
 
 Often, you will need to define Laravel routes that are called by your card via [Nova.request](./frontend#nova-requests). When Nova generates your card, it creates a `routes/api.php` routes file. If needed, you may use this file to define any routes your card requires.
 
@@ -203,17 +253,23 @@ All routes within this file are automatically defined inside a route group by yo
 
 When building routes for your card, you should **always** add authorization to these routes using Laravel gates or policies.
 
-## [​](#assets)Assets
+## [​](#assets) Assets
 
 When Nova generates your card, `resources/js` and `resources/css` directories are generated for you. These directories contain your card’s JavaScript and CSS stylesheets. The primary files of interest in these directories are: `resources/js/components/Card.vue` and `resources/css/card.css`.
 
 The `Card.vue` file is a single-file Vue component that contains your card’s front-end. From this file, you are free to build your card however you want. Your card can make HTTP requests using Axios via [Nova.request](./frontend#nova-requests).
 
-### [​](#registering-assets)Registering Assets
+### [​](#registering-assets) Registering Assets
 
 Your Nova card’s service provider registers your card’s compiled assets so that they will be available to the Nova front-end:
 
-nova-components/Analytics/src/CardServiceProvider.phpCopyAsk AI```
+nova-components/Analytics/src/CardServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Bootstrap any application services.
  */
@@ -236,7 +292,11 @@ public function boot(): void
 
 Alternatively you can also explicitly register `script` and `style` using the following code:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 Nova::serving(function (ServingNova $event) {
 -   Nova::mix('acme-analytic', __DIR__.'/../dist/mix-manifest.json');
 +   Nova::script('acme-analytic', __DIR__.'/../dist/js/card.js');
@@ -248,19 +308,10 @@ Nova::serving(function (ServingNova $event) {
 
 Your component is bootstrapped and registered in the `resources/js/card.js` file. You are free to modify this file or register additional components here as needed.
 
-### [​](#compiling-assets)Compiling Assets
+### [​](#compiling-assets) Compiling Assets
 
 Your Nova resource card contains a `webpack.mix.js` file, which is generated when Nova creates your card. You may build your card using the NPM `dev` and `prod` commands:
 
-CopyAsk AI```
-# Compile your assets for local development...
-npm run dev
 
-# Compile and minify your assets...
-npm run prod
-
-```
-
-In addition, you may run the NPM `watch` comma
 
 *[Content truncated for length]*

@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#b9d7d6cfd8f9d5d8cbd8cfdcd597dad6d4)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationSearchThe Basics[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Search
+
+The Basics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,15 +92,25 @@ Search...NavigationSearchThe Basics[Documentation](/docs/v5/installation)[Knowle
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Search# The Basics
+Search
+
+# The Basics
 
 Learn how to define searchable columns for your Nova resources.
 
-## [​](#searchable-columns)Searchable Columns
+## [​](#searchable-columns) Searchable Columns
 
 To define which resource fields are searchable, you may assign an array of database columns to the `search` property or `searchableColumns` method of your resource class. This array includes the `id` column by default:
 
-PropertyMethodCopyAsk AI```
+Property
+
+Method
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 class Post extends Resource 
@@ -103,13 +131,19 @@ class Post extends Resource
 
 If you are using Nova’s Scout integration, the `$search` property has no effect on your search results and may be ignored. You should manage the searchable columns within the Algolia or Meilisearch dashboard.
 
-## [​](#full-text-indexes)Full-Text Indexes
+## [​](#full-text-indexes) Full-Text Indexes
 
 Typically, Nova searches your database columns using simple `LIKE` clauses. However, if you are using MySQL or Postgres, you may take advantage of any full-text indexes you have defined. To do so, you should define a `searchableColumns` method on your Nova resource class instead of defining a `$search` property.
 
 The `searchableColumns` method should return an array of columns that are searchable. You may include an instance of `Laravel\Nova\Query\Search\SearchableText` within this array to instruct Nova to utilize your full-text indexes when querying a given column:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Query\Search\SearchableText;
 
 // ... 
@@ -128,7 +162,13 @@ public static function searchableColumns()
 
 The array returned by the `searchableColumns` method can also include raw SQL expressions, which allow you to search through derived columns:
 
-app/Nova/User.phpCopyAsk AI```
+app/Nova/User.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Support\Facades\DB;
 
 // ...
@@ -145,13 +185,19 @@ public static function searchableColumns()
 
 ```
 
-## [​](#searching-relationships)Searching Relationships
+## [​](#searching-relationships) Searching Relationships
 
 Laravel Nova also allows you to search against a resource’s related models. For example, imagine a `Post` model that is related to a `User` model via an `author` relatonship. You may indicate that this relationship data should be considered when searching for users by returning an instance of `Laravel\Nova\Query\Search\SearchableRelation` from your resource’s `searchableColumns` method.
 
 If the `searchableColumns` method does not exist on your resource, you should define it. Once the `searchableColumns` method has been defined, you may remove the `$search` property from your resource:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Query\Search\SearchableRelation;
 
 // ...
@@ -170,7 +216,13 @@ public static function searchableColumns()
 
 For convenience, you may define a relationship that should be searched by adding the field to your resource’s `$search` property using “dot notation”:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The columns that should be searched.
  *
@@ -182,11 +234,17 @@ public static $search = [
 
 ```
 
-### [​](#morphto-relationships)MorphTo Relationships
+### [​](#morphto-relationships) MorphTo Relationships
 
 “Morph to” relationships can be made searchable by returning an instance of `Laravel\Nova\Query\Search\SearchableMorphToRelation` from your resource’s `searchableColumns` method. The `SearchableMorphToRelation` class allows you to specify which types of morphed models should be searched:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use App\Nova\Post;
 use Laravel\Nova\Query\Search\SearchableMorphToRelation;
 
@@ -204,13 +262,19 @@ public static function searchableColumns()
 
 ```
 
-## [​](#searching-json-data)Searching JSON Data
+## [​](#searching-json-data) Searching JSON Data
 
 If the database table associated with your resource includes a column that contains a JSON string, you may instruct Nova to search within the JSON string by returning a `Laravel\Nova\Query\Search\SearchableJson` instance from your resource’s `searchableColumns` method.
 
 If the `searchableColumns` method does not exist on your resource, you should define it. Once the `searchableColumns` method has been defined, you may remove the `$search` property from your resource:
 
-app/Nova/UserProfile.phpCopyAsk AI```
+app/Nova/UserProfile.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Query\Search\SearchableJson;
 
 // ...
@@ -226,17 +290,35 @@ public static function searchableColumns()
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Authorization](/docs/v5/resources/authorization)[Global Search](/docs/v5/search/global-search)On this page
+YesNo
+
+[Authorization](/docs/v5/resources/authorization)[Global Search](/docs/v5/search/global-search)
+
+On this page
+
 - [Searchable Columns](#searchable-columns)
 - [Full-Text Indexes](#full-text-indexes)
 - [Searching Relationships](#searching-relationships)
 - [MorphTo Relationships](#morphto-relationships)
 - [Searching JSON Data](#searching-json-data)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

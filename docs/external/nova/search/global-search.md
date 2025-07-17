@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#5836372e391834392a392e3d34763b3735)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationSearchGlobal Search[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Search
+
+Global Search
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,21 +92,33 @@ Search...NavigationSearchGlobal Search[Documentation](/docs/v5/installation)[Kno
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Search# Global Search
+Search
+
+# Global Search
 
 Learn how to use Nova’s global search feature to search across all your resources.
 
 Nova not only allows you to search within specific resources and relationships, you may also globally search across all your resources using the global search input located within the top-navigation bar of the Nova administration panel:
 
+![Global Search](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/global-search.png)
+
 You can focus the global search input by pressing `/` (forward slash) on your keyboard. Pressing `ESC` (the escape key) will also close the global search input.
 
-## [​](#title-%2F-subtitle-attributes)Title / Subtitle Attributes
+## [​](#title-%2F-subtitle-attributes) Title / Subtitle Attributes
 
 When a resource is shown within the search results, the results will display the “title” of the resource. For example, a `User` resource may specify the `name` attribute as its title. Then, when the resource is shown within the global search results, that attribute will be displayed.
 
 To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
 
-PropertyMethodCopyAsk AI```
+Property
+
+Method
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 class Team extends Resource 
@@ -105,13 +135,21 @@ class Team extends Resource
 
 You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](./../resources/fields#avatar-field) field to the resource.
 
-### [​](#subtitles)Subtitles
+### [​](#subtitles) Subtitles
 
 You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:
 
+![Global Search](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/global-search.png)
+
 To define a resource’s subtitle, you should override the `subtitle` method of the resource:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Get the search result subtitle for the resource.
  *
@@ -126,13 +164,19 @@ public function subtitle()
 
 If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource’s [eager load array](./../resources/the-basics#eager-loadings).
 
-## [​](#customization)Customization
+## [​](#customization) Customization
 
-### [​](#limiting-global-search-results)Limiting Global Search Results
+### [​](#limiting-global-search-results) Limiting Global Search Results
 
 You can limit the number of results that are returned via global search for a given resource by overriding the `globalSearchResults` property on the resource:
 
-app/Nova/Post.phpCopyAsk AI```
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * The maximum number of results to include when searching globally.
  *
@@ -142,11 +186,17 @@ public static $globalSearchResults = 5;
 
 ```
 
-### [​](#global-search-debounce)Global Search Debounce
+### [​](#global-search-debounce) Global Search Debounce
 
 You can configure the debounce timing of the global search field using the `Nova::globalSearchDebounce` method. Normally, this method should be called from within your application’s `NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -159,11 +209,17 @@ public function boot(): void
 
 ```
 
-### [​](#custom-avatars-%2F-covers)Custom Avatars / Covers
+### [​](#custom-avatars-%2F-covers) Custom Avatars / Covers
 
 If you are building a [custom field](./../customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
 
-app/Nova/Team.phpCopyAsk AI```
+app/Nova/Team.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Nova;
 
 class Team extends Resource 
@@ -181,11 +237,17 @@ class Team extends Resource
 
 ```
 
-## [​](#disabling-global-search-for-a-resource)Disabling Global Search for a Resource
+## [​](#disabling-global-search-for-a-resource) Disabling Global Search for a Resource
 
 By default, all Nova resources are globally searchable; however, you may exclude a given resource from the global search by overriding the `globallySearchable` property on the resource:
 
-app/Nova/Team.phpCopyAsk AI```
+app/Nova/Team.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Indicates if the resource should be globally searchable.
  *
@@ -195,11 +257,17 @@ public static $globallySearchable = false;
 
 ```
 
-## [​](#disabling-global-search-globally)Disabling Global Search Globally
+## [​](#disabling-global-search-globally) Disabling Global Search Globally
 
 If you wish to completely disable global search inside of Nova, you can call the `withoutGlobalSearch` method from your `App/Providers/NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -211,9 +279,15 @@ public function boot(): void
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)On this page
+YesNo
+
+[The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)
+
+On this page
+
 - [Title / Subtitle Attributes](#title-%2F-subtitle-attributes)
 - [Subtitles](#subtitles)
 - [Customization](#customization)
@@ -223,8 +297,20 @@ YesNo[The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search
 - [Disabling Global Search for a Resource](#disabling-global-search-for-a-resource)
 - [Disabling Global Search Globally](#disabling-global-search-globally)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

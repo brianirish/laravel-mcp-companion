@@ -880,53 +880,43 @@ class ExternalDocsFetcher:
     
     def _extract_html_content(self, html_content: str) -> str:
         """
-        Extract readable content from HTML.
-        This is a basic implementation using regex patterns.
+        Extract readable content from HTML using markdownify.
+        Simplified approach that leverages markdownify's built-in HTML parsing.
         """
-        # Remove script and style tags
-        html_content = re.sub(r'<script[^>]*>.*?</script>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
-        html_content = re.sub(r'<style[^>]*>.*?</style>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
+        try:
+            from bs4 import BeautifulSoup
+        except ImportError:
+            logger.warning("BeautifulSoup not installed, using simple extraction")
+            # Fallback to just converting the entire HTML
+            text_content = self._html_to_text(html_content)
+            return text_content[:10000] if len(text_content) > 10000 else text_content
         
-        # Look for main content containers (Laravel docs specific patterns)
-        content_patterns = [
-            r'<main[^>]*>(.*?)</main>',
-            r'<article[^>]*>(.*?)</article>',
-            # Mintlify patterns (used by Vapor)
-            r'<div[^>]*class="[^"]*prose[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*class="[^"]*prose-lg[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*class="[^"]*prose-gray[^"]*"[^>]*>(.*?)</div>',
-            # Standard Laravel docs patterns  
-            r'<div[^>]*class="[^"]*markdown[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*class="[^"]*content[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*class="[^"]*documentation[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*id="[^"]*content[^"]*"[^>]*>(.*?)</div>',
-            r'<div[^>]*data-docs-content[^>]*>(.*?)</div>',
+        # Parse HTML with BeautifulSoup for better content extraction
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # Try to find main content areas
+        content_areas = [
+            soup.find('main'),
+            soup.find('article'),
+            soup.find('div', class_=re.compile(r'prose|content|documentation|markdown', re.I)),
+            soup.find('div', id=re.compile(r'content|docs|documentation', re.I)),
+            soup.find('section', class_=re.compile(r'content|docs', re.I)),
         ]
         
-        extracted_content = None
-        for pattern in content_patterns:
-            matches = re.findall(pattern, html_content, flags=re.DOTALL | re.IGNORECASE)
-            if matches:
-                # Combine multiple matches (useful for sites like Mintlify with multiple prose sections)
-                extracted_content = '\n\n'.join(matches)
+        # Use the first valid content area found
+        content_html = None
+        for area in content_areas:
+            if area and len(str(area)) > 200:  # Ensure it has substantial content
+                content_html = str(area)
                 break
         
-        # If no specific content container found, try to get body content
-        if not extracted_content:
-            body_match = re.search(r'<body[^>]*>(.*?)</body>', html_content, flags=re.DOTALL | re.IGNORECASE)
-            if body_match:
-                extracted_content = body_match.group(1)
+        # If no specific content area found, use the body
+        if not content_html:
+            body = soup.find('body')
+            content_html = str(body) if body else html_content
         
-        # If still no content, use the entire HTML
-        if not extracted_content:
-            extracted_content = html_content
-        
-        # Basic HTML to text conversion
-        text_content = self._html_to_text(extracted_content)
-        
-        # Clean up the text
-        text_content = re.sub(r'\n\s*\n\s*\n', '\n\n', text_content)  # Remove excessive newlines
-        text_content = text_content.strip()
+        # Convert to markdown
+        text_content = self._html_to_text(content_html)
         
         # Limit length to prevent extremely long outputs
         if len(text_content) > 10000:
@@ -1028,50 +1018,59 @@ class ExternalDocsFetcher:
     
     def _html_to_text(self, html_content: str) -> str:
         """
-        Convert HTML to readable text with basic markdown-like formatting.
+        Convert HTML to Markdown using markdownify.
         """
-        # Convert headings
-        html_content = re.sub(r'<h([1-6])[^>]*>(.*?)</h\1>', lambda m: '#' * int(m.group(1)) + ' ' + m.group(2) + '\n\n', html_content, flags=re.IGNORECASE)
+        try:
+            from markdownify import markdownify as md
+            from bs4 import BeautifulSoup
+        except ImportError:
+            logger.error("markdownify not installed. Please install it with: pip install markdownify")
+            # Fallback to basic conversion
+            return re.sub(r'<[^>]+>', '', html_content)
         
-        # Convert paragraphs
-        html_content = re.sub(r'<p[^>]*>(.*?)</p>', r'\1\n\n', html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Parse HTML and remove script and style elements completely
+        soup = BeautifulSoup(html_content, 'html.parser')
         
-        # Convert line breaks
-        html_content = re.sub(r'<br[^>]*/?>', '\n', html_content, flags=re.IGNORECASE)
+        # Remove all script and style tags and their contents
+        for tag in soup(['script', 'style']):
+            tag.decompose()
         
-        # Convert lists
-        html_content = re.sub(r'<li[^>]*>(.*?)</li>', r'- \1\n', html_content, flags=re.DOTALL | re.IGNORECASE)
-        html_content = re.sub(r'<[ou]l[^>]*>', '\n', html_content, flags=re.IGNORECASE)
-        html_content = re.sub(r'</[ou]l>', '\n', html_content, flags=re.IGNORECASE)
+        # Get the cleaned HTML
+        cleaned_html = str(soup)
         
-        # Convert code blocks
-        html_content = re.sub(r'<pre[^>]*><code[^>]*>(.*?)</code></pre>', r'```\n\1\n```\n', html_content, flags=re.DOTALL | re.IGNORECASE)
-        html_content = re.sub(r'<code[^>]*>(.*?)</code>', r'`\1`', html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Convert HTML to Markdown with specific options
+        markdown = md(
+            cleaned_html,
+            strip=['nav', 'header', 'footer', 'aside', 'meta', 'link'],
+            heading_style='ATX',  # Use # style headings
+            bullets='-',  # Use - for unordered lists
+            code_language='',  # Don't assume code language
+            escape_asterisks=False,  # Don't escape asterisks
+            escape_underscores=False,  # Don't escape underscores
+            escape_misc=False,  # Don't escape other special chars
+            autolinks=True,  # Convert URLs to links automatically
+        )
         
-        # Convert strong/bold
-        html_content = re.sub(r'<(strong|b)[^>]*>(.*?)</\1>', r'**\2**', html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Post-process to handle Support links with email protection
+        markdown = re.sub(
+            r'\[Support\]\(/cdn-cgi/l/email-protection[^)]+\)',
+            'Support',
+            markdown
+        )
         
-        # Convert emphasis/italic
-        html_content = re.sub(r'<(em|i)[^>]*>(.*?)</\1>', r'*\2*', html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Remove any remaining inline JavaScript patterns
+        markdown = re.sub(r'\(self\.__next_s=self\.__next_s\|\|\[\]\)\.push[^\n]+', '', markdown)
+        markdown = re.sub(r'\(function\s+[a-zA-Z]\([^)]*\)\s*\{[^}]+\}\)[^\n]*', '', markdown)
         
-        # Convert links - but remove Support links with email protection
-        def convert_link(match):
-            href = match.group(1)
-            text = match.group(2)
-            # Skip Support links with email protection (they contain /cdn-cgi/l/email-protection)
-            if text.strip() == 'Support' and '/cdn-cgi/l/email-protection' in href:
-                return ''  # Remove the link entirely
-            return f'[{text}]({href})'
+        # Remove CSS blocks that might have been left
+        markdown = re.sub(r'h1,\s*h2,\s*h3,\s*h4\s*\{[^}]+\}', '', markdown)
+        markdown = re.sub(r'\.[a-zA-Z0-9-]+\s*\{[^}]+\}', '', markdown)
+        markdown = re.sub(r'#[a-zA-Z0-9-]+\s*>\s*[^{]+\{[^}]+\}', '', markdown)
         
-        html_content = re.sub(r'<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>', convert_link, html_content, flags=re.DOTALL | re.IGNORECASE)
+        # Clean up excessive newlines
+        markdown = re.sub(r'\n\s*\n\s*\n', '\n\n', markdown)
         
-        # Remove remaining HTML tags
-        html_content = re.sub(r'<[^>]+>', '', html_content)
-        
-        # Decode HTML entities
-        html_content = html.unescape(html_content)
-        
-        return html_content
+        return markdown.strip()
     
     def fetch_all_services(self, force: bool = False) -> Dict[str, bool]:
         """

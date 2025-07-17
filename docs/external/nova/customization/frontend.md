@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#0d63627b6c4d616c7f6c7b6861236e6260)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperCSS / JavaScript[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+CSS / JavaScript
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,28 +92,38 @@ Search...NavigationDigging DeeperCSS / JavaScript[Documentation](/docs/v5/instal
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# CSS / JavaScript
+Digging Deeper
+
+# CSS / JavaScript
 
 Learn how to customize the CSS and JavaScript of your Nova application.
 
 When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers that are globally available to your JavaScript components.
 
-### [​](#nova-requests)Nova Requests
+### [​](#nova-requests) Nova Requests
 
 You may use the `Nova.request()` method to make XHR requests to backend routes provided by your application or custom tools, cards, and fields. The `Nova.request()` method is powered by [Axios](https://github.com/axios/axios) and offers the same API. However, the `Nova.request()` method configures its own instance of Axios that has pre-configured interceptors to properly handle and redirect on `401`, `403`, and `500` level HTTP server responses:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 Nova.request().get('/nova-vendor/stripe-inspector/endpoint').then(response => {
     // ...
 })
 
 ```
 
-### [​](#manual-navigation)Manual Navigation
+### [​](#manual-navigation) Manual Navigation
 
 The global `Nova` JavaScript object offers a `visit` method that may be invoked to navigate to other URLs within your Nova dashboard:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 // Navigate to User's detail page...
 Nova.visit(`/resources/users/${userId}`)
 
@@ -106,18 +134,26 @@ Nova.visit({ url: 'https://nova.laravel.com', remote: true })
 
 The `visit` method accepts an array of navigation options as its second argument. As the `visit` method uses Inertia’s own `visit` method behind the scenes, all of [Inertia’s `visit` options](https://legacy.inertiajs.com/manual-visits) are supported by Nova’s `visit` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 Nova.visit(`/resources/users/${userId}`, {
   onFinish: () => Nova.success(`User ${userId} detail page.`)
 })
 
 ```
 
-### [​](#event-bus)Event Bus
+### [​](#event-bus) Event Bus
 
 The global `Nova` JavaScript object may be used as an event bus by your custom components. The bus provides the following methods, which correspond to and have the same behavior as the event methods provided by [tiny-emitter](https://www.npmjs.com/package/tiny-emitter):
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 Nova.$on(event, callback)
 Nova.$once(event, callback)
 Nova.$off(event, callback)
@@ -125,21 +161,29 @@ Nova.$emit(event, [...args])
 
 ```
 
-### [​](#notifications)Notifications
+### [​](#notifications) Notifications
 
 You may display toast notification to users of your custom frontend components by calling the `success`, `error`, `info`, or `warning` methods on the global `Nova` object:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 Nova.success('It worked!')
 Nova.error('It failed!')
 
 ```
 
-### [​](#shortcuts)Shortcuts
+### [​](#shortcuts) Shortcuts
 
 Nova provides two convenience methods for managing keyboard shortcuts, powered by [Mousetrap](https://craig.is/killing/mice). You may use these methods within your custom components to register and unregister shortcuts:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 // Add a single keyboard shortcut...
 Nova.addShortcut('ctrl+k', event => {
     // Callback...
@@ -163,11 +207,15 @@ Nova.disableShortcut(['ctrl+k', 'command+k'])
 
 ```
 
-### [​](#global-variables)Global Variables
+### [​](#global-variables) Global Variables
 
 The global `Nova` JavaScript object’s `config` method allows you to get the current Nova `base` path and `userId` configuration values:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 const userId = Nova.config('userId');
 const basePath = Nova.config('base');
 
@@ -175,7 +223,13 @@ const basePath = Nova.config('base');
 
 However, you are free to add additional values to this object using the `Nova::provideToScript` method. You may call this method within a `Nova::serving` listener, which should typically be registered in the `boot` method of your application or custom component’s service provider:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 
@@ -201,20 +255,30 @@ public function boot()
 
 Once the variable has been provided to Nova via the `provideToScript` method, you may access it using the global `Nova` JavaScript object’s `config` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 const driver = Nova.config('mail_driver');
 
 ```
 
-### [​](#localizations)Localizations
+### [​](#localizations) Localizations
 
 Localization strings can be passed to the frontend via your `NovaServiceProvider`. To learn more, please consult the [full custom localization documentation](./localization#frontend).
 
-### [​](#using-nova-mixins)Using Nova Mixins
+### [​](#using-nova-mixins) Using Nova Mixins
 
 Custom Nova tools, resource tools, cards, and other custom packages that are being developed within a `nova-components` directory of a Laravel application can utilize `laravel-nova` mixins by importing `nova.mix.js` Mix Extension from the Nova Devtool installation that is located within your root application’s `vendor` directory. This extension should be placed in your package’s `webpack.mix.js`:
 
-webpack.mix.jsCopyAsk AI```
+webpack.mix.js
+
+Copy
+
+Ask AI
+
+```
 let mix = require('laravel-mix')
 mix.extend('nova', new require('laravel-nova-devtool'))
 
@@ -229,24 +293,42 @@ mix
 
 Laravel Nova’s assets are built using **lockfile** version `3` and require NPM 9+.
 
-### [​](#vue-devtools)Vue DevTools
+### [​](#vue-devtools) Vue DevTools
 
 The following feature require the `laravel/nova-devtool` Composer package to be installed:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 composer require --dev "laravel/nova-devtool"
 
 ```
 
 By default, Nova’s JavaScript is compiled for production. As such, you will not be able to access the Vue DevTools out of the box without compiling Nova’s JavaScript for development. To accomplish this, you may issue the following terminal commands from the root of your Nova project:
 
-ApplicationPackageCopyAsk AI```
+Application
+
+Package
+
+Copy
+
+Ask AI
+
+```
 php artisan nova:enable-vue-devtool
 
 ```
+
 Was this page helpful?
 
-YesNo[Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)On this page
+YesNo
+
+[Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)
+
+On this page
+
 - [Nova Requests](#nova-requests)
 - [Manual Navigation](#manual-navigation)
 - [Event Bus](#event-bus)
@@ -257,8 +339,20 @@ YesNo[Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/as
 - [Using Nova Mixins](#using-nova-mixins)
 - [Vue DevTools](#vue-devtools)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#026c6d7463426e63706374676e2c616d6f)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperNotifications[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Notifications
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,21 +92,29 @@ Search...NavigationDigging DeeperNotifications[Documentation](/docs/v5/installat
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Notifications
+Digging Deeper
+
+# Notifications
 
 Learn how to send notifications to Nova users.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Nova notifications allow you to notify Nova users of events within your application, such as a report being ready to download or of an invoice that needs attention. Nova notifications are displayed within a slide-out menu that can be accessed via the “bell” icon within Nova’s top navigation menu.
 
-## [​](#sending-notifications)Sending Notifications
+![Notifications](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/notifications.png)
+
+## [​](#sending-notifications) Sending Notifications
 
 To send a notification, you simply need to send a `NovaNotification` instance to a user’s `notify` method. Of course, before getting started, you should ensure that your user model is [notifiable](https://laravel.com/docs/notifications).
 
 Nova notifications may be generated via the `NovaNotification` class, which provides convenient methods like `message`, `action`, `icon`, and `type`. The currently supported notification types include `success`, `error`, `warning`, and `info`:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\URL;
 
@@ -106,7 +132,11 @@ $request->user()->notify(
 
 You may also send a Nova notification by including the `NovaChannel` in the array of channels returned by a notification’s `via` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\Notifications\NovaChannel;
 use Laravel\Nova\URL;
@@ -140,11 +170,15 @@ public function toNova()
 
 ```
 
-#### [​](#opening-remote-action-urls-in-new-tabs)Opening Remote Action URLs in New Tabs
+#### [​](#opening-remote-action-urls-in-new-tabs) Opening Remote Action URLs in New Tabs
 
 When defining a notification action, the `openInNewTab` method may be invoked to instruct Nova to open the given URL in a new browser tab:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 return (new NovaNotification)
     ->action(
         'Download', URL::remote('https://example.com/report.pdf')
@@ -152,15 +186,21 @@ return (new NovaNotification)
 
 ```
 
-#### [​](#notification-icons)Notification Icons
+#### [​](#notification-icons) Notification Icons
 
 Nova utilizes the free [Heroicons](https://heroicons.com/) icon set by [Steve Schoger](https://twitter.com/steveschoger). Therefore, you may simply specify the name of one of these icons when providing the icon name to the Nova notification’s `icon` method.
 
-## [​](#disabling-notifications)Disabling Notifications
+## [​](#disabling-notifications) Disabling Notifications
 
 If you wish to completely disable notifications inside Nova, you can call the `withoutNotifications` method from your `App/Providers/NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -173,12 +213,18 @@ public function boot(): void
 
 ```
 
-## [​](#enabling-unread-notifications-count)Enabling Unread Notifications Count
+## [​](#enabling-unread-notifications-count) Enabling Unread Notifications Count
 
 By default, Nova shows a visual indicator when there are unread notifications inside the notification center.
 If you would like Nova to show the number of unread notifications, you can call the `showUnreadCountInNotificationCenter` method from your `App/Providers/NovaServiceProvider`:
 
-app/Providers/NovaServiceProvider.phpCopyAsk AI```
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 /**
  * Boot any application services.
  */
@@ -190,9 +236,15 @@ public function boot(): void
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)On this page
+YesNo
+
+[Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)
+
+On this page
+
 - [Overview](#overview)
 - [Sending Notifications](#sending-notifications)
 - [Opening Remote Action URLs in New Tabs](#opening-remote-action-urls-in-new-tabs)
@@ -200,8 +252,20 @@ YesNo[Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customizatio
 - [Disabling Notifications](#disabling-notifications)
 - [Enabling Unread Notifications Count](#enabling-unread-notifications-count)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

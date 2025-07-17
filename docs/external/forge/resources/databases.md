@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationResourcesDatabases[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Databases
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,121 +93,111 @@ Search...NavigationResourcesDatabases[Documentation](/docs/introduction)[Changel
 
 - [Abuse](/docs/abuse)
 
-Resources# Databases
+Resources
+
+# Databases
 
 Learn how to manage databases on your Forge server.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 When provisioning a new Forge server you may choose to install an [App Server](/docs/servers/types#app-servers) or a [Database Server](/docs/servers/types#database-servers). You can then use the Forge dashboard to manage databases, users, and permissions.
 
-## [​](#creating-servers-with-databases)Creating Servers With Databases
+## [​](#creating-servers-with-databases) Creating Servers With Databases
 
 When creating a new server, you can select to install a supported database server:
 
 - MySQL (8.0)
-
 - MariaDB (10.6)
-
 - MariaDB (10.11)
-
 - PostgreSQL (12)
-
 - PostgreSQL (13)
-
 - PostgreSQL (14)
-
 - PostgreSQL (15)
-
 - PostgreSQL (16)
 
 As part of the provisioning process, Forge will automatically install the selected database server and create a default `forge` database, `forge` user, and a secure, randomly-generated password. The database password will be shown upon creating the server alongside the root password. These passwords will also be emailed to you.
 
-### [​](#installing-databases-later)Installing Databases Later
+### [​](#installing-databases-later) Installing Databases Later
 
 If you later decide to that you need to install a database on your server, you can do so through the server’s **Databases** management tab. Once installed, you will then be able to manage your database via Forge.
 
 If you created a “Web Server”, you will not be able to install a database on that server at any point. Web servers are provisioned with the minimum amount of software needed to serve your PHP application only. If you need a database and web server on the same server, you should provision an “App Server”.
 
-## [​](#changing-the-root-%2F-forge-database-password)Changing the Root / Forge Database Password
+## [​](#changing-the-root-%2F-forge-database-password) Changing the Root / Forge Database Password
 
 To reset the `root` and `forge` database user passwords, you may use the password reset functionality provided by Forge’s **Databases** management tab.
 
 You should not change the `root` or `forge` database user passwords manually or outside of the Forge dashboard. Doing so will prevent Forge from being able to connect to or manage your database.
 
-## [​](#connecting-to-databases-via-a-gui-client)Connecting To Databases Via A GUI Client
+## [​](#connecting-to-databases-via-a-gui-client) Connecting To Databases Via A GUI Client
 
 By default, database connections require SSH key authentication and are not able to be accessed using passwords. Therefore, when using a GUI database client to connect to your Forge database, you will need to use SSH authentication.
 
 When selecting the SSH key to use during authentication, **ensure that you select your private SSH key**. For example, when using the [TablePlus](https://tableplus.com) database client:
 
-### [​](#using-the-database-connection-url)Using The Database Connection URL
+![Connecting to a database with TablePlus](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/db-gui.png)
+
+### [​](#using-the-database-connection-url) Using The Database Connection URL
 
 Some clients, such as TablePlus, allow you to connect to a database via a connection URL. Forge automatically generates this connection URL for you and you can use it to connect to your database. Note that the password is not included in this URL, so you should provide your password manually within your database client’s GUI.
 
-## [​](#connecting-to-a-database-on-another-forge-server)Connecting To A Database On Another Forge Server
+## [​](#connecting-to-a-database-on-another-forge-server) Connecting To A Database On Another Forge Server
 
 You can utilize [Forge’s server network feature](/docs/resources/network#server-network) to connect one server’s application to a database on another server within the same network.
 
 If both the server hosting your application and the server hosting the external database [meet the requirements](/docs/resources/network#server-network) for internal network connections, you may follow these steps to establish the database connection:
 
-- Allow access from your application’s web server to the database server:
+1. Allow access from your application’s web server to the database server:
+   - Navigate to the Network settings of your application’s web server: `https://forge.laravel.com/servers/<serverID>/networks`.
+   - Under the Server Network section of the page, enable the connection to the server of the external database.
+2. Next, update your application’s environment configuration:
+   - Visit your site’s environment page at `https://forge.laravel.com/servers/<serverID>/sites/<siteID>/environment`
+   - Set the database host to the external server’s private IP address.
+   - Update the database credential variables to match those of the external database.
 
-Navigate to the Network settings of your application’s web server: `https://forge.laravel.com/servers/<serverID>/networks`.
-
-- Under the Server Network section of the page, enable the connection to the server of the external database.
-
-- Next, update your application’s environment configuration:
-
-Visit your site’s environment page at `https://forge.laravel.com/servers/<serverID>/sites/<siteID>/environment`
-
-- Set the database host to the external server’s private IP address.
-
-- Update the database credential variables to match those of the external database.
-
-## [​](#managing-your-databases-within-forge)Managing Your Databases Within Forge
+## [​](#managing-your-databases-within-forge) Managing Your Databases Within Forge
 
 For servers running MySQL, MariaDB, and PostgreSQL, Forge offers some advanced features which allows it to manage your databases and database users easily. We’ll discuss these features below.
 
-### [​](#creating-databases)Creating Databases
+### [​](#creating-databases) Creating Databases
 
 You can create a new database through the server’s **Database** tab within Forge. At a minimum, you must supply the name of your new database. The `forge` user will be able to access the database automatically.
 
-### [​](#syncing-databases)Syncing Databases
+### [​](#syncing-databases) Syncing Databases
 
 For consistency, you should use Forge to manage your databases and database users. However, if you created databases outside of the Forge dashboard, you can manually sync them into the Forge dashboard using the **Sync Databases** button on your Forge database management panel.
 
 When syncing databases, some database names that are reserved by the database engine will not be synced, including:
 
 - `mysql`
-
 - `information_schema`
-
 - `peformance_schema`
-
 - `sys`
-
 - `postgres`
-
 - `template0`
-
 - `template1`
 
-### [​](#creating-database-users)Creating Database Users
+### [​](#creating-database-users) Creating Database Users
 
 You can create extra database users through the Forge dashboard’s database panel. To do so, you’ll need to provide the username, password, and select the databases that the new user can access.
 
-## [​](#upgrading-databases)Upgrading Databases
+## [​](#upgrading-databases) Upgrading Databases
 
 Forge does not provide the ability to upgrade your database server software automatically. If you wish to upgrade your database server, you will need to complete this manually.
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to create and manage databases **and** database users by granting the `server:create-databases` and `server:delete-databases` permissions.
 
 Was this page helpful?
 
-YesNo[Daemons](/docs/resources/daemons)[Caches](/docs/resources/caches)On this page
+YesNo
+
+[Daemons](/docs/resources/daemons)[Caches](/docs/resources/caches)
+
+On this page
+
 - [Overview](#overview)
 - [Creating Servers With Databases](#creating-servers-with-databases)
 - [Installing Databases Later](#installing-databases-later)
@@ -206,4 +212,10 @@ YesNo[Daemons](/docs/resources/daemons)[Caches](/docs/resources/caches)On this p
 - [Upgrading Databases](#upgrading-databases)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agree
+
+*[Content truncated for length]*

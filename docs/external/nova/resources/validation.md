@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#503e3f2631103c31223126353c7e333f3d)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationResourcesValidation[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Resources
+
+Validation
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,19 +92,27 @@ Search...NavigationResourcesValidation[Documentation](/docs/v5/installation)[Kno
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Resources# Validation
+Resources
+
+# Validation
 
 Nova provides a variety of ways to validate your resource fields.
 
 Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it’s a cinch to attach all of the Laravel validation rules you’re familiar with to your Nova resource fields. Let’s get started.
 
-## [​](#rules)Rules
+## [​](#rules) Rules
 
-### [​](#attaching-rules)Attaching Rules
+### [​](#attaching-rules) Attaching Rules
 
 When defining a field on a resource, you may use the `rules` method to attach [validation rules](https://laravel.com/docs/validation#available-validation-rules) to the field:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -110,7 +136,11 @@ public function fields(NovaRequest $request): array
 
 Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
@@ -124,7 +154,11 @@ Text::make('State')
 
 You may also provide rules to the `rules` method via an array or Closure:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
@@ -143,7 +177,11 @@ Text::make('State')->rules(fn ($request) => [
 
 Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -158,11 +196,15 @@ Text::make('State')
 
 ```
 
-### [​](#creation-rules)Creation Rules
+### [​](#creation-rules) Creation Rules
 
 If you would like to define rules that only apply when a resource is being created, you may use the `creationRules` method:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -174,11 +216,15 @@ Text::make('Email')
 
 ```
 
-### [​](#update-rules)Update Rules
+### [​](#update-rules) Update Rules
 
 Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the `updateRules` method. If necessary, you may use `resourceId` place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
 
-CopyAsk AI```
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -191,21 +237,25 @@ Text::make('Email')
 
 ```
 
-## [​](#after-validation-hooks)After Validation Hooks
+## [​](#after-validation-hooks) After Validation Hooks
 
 Nova also provides several methods that allow you to perform tasks after a resource has been validated, providing the opportunity to perform more custom validation before the resource is persisted to the database:
 
 - [`afterValidation`](/docs/_sites/nova-laravel/v5/resources/validation#after-validation-method)
-
 - [`afterCreationValidation`](/docs/_sites/nova-laravel/v5/resources/validation#after-creation-validation-method)
-
 - [`afterUpdateValidation`](/docs/_sites/nova-laravel/v5/resources/validation#after-update-validation-method)
 
-#### [​](#the-aftervalidation-method)The `afterValidation` Method
+#### [​](#the-aftervalidation-method) The `afterValidation` Method
 
 The `afterValidation` method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling `afterCreationValidation` or `afterUpdateValidation`:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -227,11 +277,17 @@ protected static function afterValidation(
 
 ```
 
-#### [​](#the-aftercreationvalidation-method)The `afterCreationValidation` Method
+#### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
 
 The `afterCreationValidation` method will be called after a resource that is being created has been validated:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -253,11 +309,17 @@ protected static function afterCreationValidation(
 
 ```
 
-#### [​](#the-afterupdatevalidation-method)The `afterUpdateValidation` Method
+#### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
 
 The `afterUpdateValidation` method will be called after a resource that is being updated has been validated:
 
-app/Nova/~Resource.phpCopyAsk AI```
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -278,9 +340,15 @@ protected static function afterUpdateValidation(
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)On this page
+YesNo
+
+[Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)
+
+On this page
+
 - [Rules](#rules)
 - [Attaching Rules](#attaching-rules)
 - [Creation Rules](#creation-rules)
@@ -290,8 +358,20 @@ YesNo[Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/r
 - [The afterCreationValidation Method](#the-aftercreationvalidation-method)
 - [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

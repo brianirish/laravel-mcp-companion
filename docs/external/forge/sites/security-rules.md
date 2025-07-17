@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationSitesSecurity Rules[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Sites
+
+Security Rules
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,39 +93,46 @@ Search...NavigationSitesSecurity Rules[Documentation](/docs/introduction)[Change
 
 - [Abuse](/docs/abuse)
 
-Sites# Security Rules
+Sites
+
+# Security Rules
 
 Configure password protection on your sites.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 Forge can configure password protection on your sites using [basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). You can choose whether to protect your entire site or a specific path.
 
-## [​](#managing-security-rules)Managing Security Rules
+## [​](#managing-security-rules) Managing Security Rules
 
-### [​](#creating-a-security-rule)Creating a Security Rule
+### [​](#creating-a-security-rule) Creating a Security Rule
 
 You may create a new Security Rule from your site’s management dashboard in Forge. You must supply a security rule name, which some browsers will display in their authentication prompt, as well as at least one set of credentials. If you need to add multiple credentials, you can click the **+** button to add a new username and password combination.
 
 Once you’ve configured your security rule, click the **Add Security Rule** button.
 
-## [​](#credentials)Credentials
+## [​](#credentials) Credentials
 
-Forge creates a unique `.htpasswd` file for each security rule, meaning each secured path may have its own set of credentials. This also means that you will need to re-enter the same credentials when securing multiple paths. If you need to modify the credentials, you can find the `.htpasswd` file at `/etc/nginx/forge-conf/.../server/.htpasswd-{ruleId}` on your servers.
+Forge creates a unique `.htpasswd` file for each security rule, meaning each secured path may have its own set of credentials. This also means that you will need to re-enter the same credentials when securing multiple paths. If you need to modify the credentials, you can find the `.htpasswd` file at `/etc/nginx/forge-conf/.../server/` on your servers.
 
 Forge does not store your security Rule passwords on our servers.
 
-## [​](#customization)Customization
+## [​](#customization) Customization
 
 Nginx allows you to add further access restrictions such as allowing and denying access to users by IP address. Forge does not provide the ability to configure this, but you are free to customize your own protected site configuration. Forge creates a `/etc/nginx/forge-conf/.../server/protected_site-{ruleId}.conf` configuration file for protected sites. You can read more about Nginx and basic access authentication [in the Nginx documentation](https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/#).
 
-## [​](#circle-permissions)Circle Permissions
+## [​](#circle-permissions) Circle Permissions
 
 You may grant a circle member authority to create and manage security rules by granting the `site:manage-security` permission.
 
 Was this page helpful?
 
-YesNo[Queues](/docs/sites/queues)[Redirects](/docs/sites/redirects)On this page
+YesNo
+
+[Queues](/docs/sites/queues)[Redirects](/docs/sites/redirects)
+
+On this page
+
 - [Overview](#overview)
 - [Managing Security Rules](#managing-security-rules)
 - [Creating a Security Rule](#creating-a-security-rule)
@@ -117,4 +140,14 @@ YesNo[Queues](/docs/sites/queues)[Redirects](/docs/sites/redirects)On this page
 - [Customization](#customization)
 - [Circle Permissions](#circle-permissions)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

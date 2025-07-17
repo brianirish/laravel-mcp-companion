@@ -4,14 +4,32 @@
 
 ---
 
-- [Laravel Nova home page](https://nova.laravel.com)v5Search...⌘KAsk AI
-[Support](/cdn-cgi/l/email-protection#630d0c1502230f02110215060f4d000c0e)
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
 
-Search...NavigationDigging DeeperImpersonation[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Digging Deeper
+
+Impersonation
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/nova)
+
 ##### Get Started
 
 - [Installation](/docs/v5/installation)
@@ -74,19 +92,27 @@ Search...NavigationDigging DeeperImpersonation[Documentation](/docs/v5/installat
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
 
-Digging Deeper# Impersonation
+Digging Deeper
+
+# Impersonation
 
 Learn how to impersonate other users in your application.
 
-## [​](#overview)Overview
+## [​](#overview) Overview
 
 After deploying your application to production, you may occasionally need to “impersonate” another user of your application in order to debug problems your customers are reporting. Thankfully, Nova includes built-in functionality to handle this exact scenario.
 
-## [​](#enabling-impersonation)Enabling Impersonation
+## [​](#enabling-impersonation) Enabling Impersonation
 
 To enable user impersonation, add the `Laravel\Nova\Auth\Impersonatable` trait to your application’s `User` model:
 
-app/Models/User.phpCopyAsk AI```
+app/Models/User.php
+
+Copy
+
+Ask AI
+
+```
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -107,11 +133,19 @@ class User extends Authenticatable
 
 Once the `Impersonatable` trait has been added to your application’s `User` model, an “Impersonate” action will be available via the inline action menu for the corresponding resource:
 
-### [​](#customizing-impersonation-authorization)Customizing Impersonation Authorization
+![Impersonation](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/impersonate.png)
+
+### [​](#customizing-impersonation-authorization) Customizing Impersonation Authorization
 
 By default, any user that has permission to view the Nova dashboard can impersonate any other user. However, you may customize who can impersonate other users and what users can be impersonated by defining `canImpersonate` and `canBeImpersonated` methods on your application’s `Impersonatable` model:
 
-app/Models/User.phpCopyAsk AI```
+app/Models/User.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Support\Facades\Gate;
 
 // ...
@@ -138,11 +172,17 @@ public function canBeImpersonated()
 
 ```
 
-## [​](#inspecting-impersonation-state)Inspecting Impersonation State
+## [​](#inspecting-impersonation-state) Inspecting Impersonation State
 
 By resolving an implementation of the `Laravel\Nova\Contracts\ImpersonatesUsers` interface via Laravel’s service container, you can inspect the current impersonation state of the application:
 
-routes/web.phpCopyAsk AI```
+routes/web.php
+
+Copy
+
+Ask AI
+
+```
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -156,17 +196,22 @@ Route::get('/impersonation', function (Request $request, ImpersonatesUsers $impe
 
 ```
 
-## [​](#impersonation-events)Impersonation Events
+## [​](#impersonation-events) Impersonation Events
 
 By default, you add additional customisation by using available events for Impersonations:
 
 - `Laravel\Nova\Events\StartedImpersonating`
-
 - `Laravel\Nova\Events\StoppedImpersonating`
 
-For example, you may want to log impersonation events, which you can register listeners for in the `boot` method of your application’s `AppServiceProvider` or  `EventServiceProvider`:
+For example, you may want to log impersonation events, which you can register listeners for in the `boot` method of your application’s `AppServiceProvider` or `EventServiceProvider`:
 
-app/Providers/EventServiceProvider.phpCopyAsk AI```
+app/Providers/EventServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
 use Illuminate\Support\Facades\Event;
 use Laravel\Nova\Events\StartedImpersonating;
 use Laravel\Nova\Events\StoppedImpersonating;
@@ -190,17 +235,35 @@ public function boot(): void
 }
 
 ```
+
 Was this page helpful?
 
-YesNo[Authentication](/docs/v5/customization/authentication)[Tools](/docs/v5/customization/tools)On this page
+YesNo
+
+[Authentication](/docs/v5/customization/authentication)[Tools](/docs/v5/customization/tools)
+
+On this page
+
 - [Overview](#overview)
 - [Enabling Impersonation](#enabling-impersonation)
 - [Customizing Impersonation Authorization](#customizing-impersonation-authorization)
 - [Inspecting Impersonation State](#inspecting-impersonation-state)
 - [Impersonation Events](#impersonation-events)
 
-[Laravel Nova home page](https://nova.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)Platform
+[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
 
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)Legal and Compliance
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+Platform
+
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

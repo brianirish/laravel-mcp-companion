@@ -4,13 +4,29 @@
 
 ---
 
-- [Laravel Forge home page](https://forge.laravel.com)Search...⌘KAsk AI
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
 
+Search...
+
+⌘KAsk AI
+
+- Support
 - [Dashboard](https://forge.laravel.com)
 - [Dashboard](https://forge.laravel.com)
 
-Search...NavigationAccountsTroubleshooting[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)- [Community](https://discord.com/invite/laravel)
+Search...
+
+Navigation
+
+Accounts
+
+Troubleshooting
+
+[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
+
+- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com/forge)
+
 ##### Get Started
 
 - [Introduction](/docs/introduction)
@@ -77,24 +93,41 @@ Search...NavigationAccountsTroubleshooting[Documentation](/docs/introduction)[Ch
 
 - [Abuse](/docs/abuse)
 
-Accounts# Troubleshooting
+Accounts
+
+# Troubleshooting
 
 Account Troubleshooting
 
-## [​](#forge-is-unable-to-access-git-repository)Forge Is Unable To Access Git Repository
+## [​](#forge-is-unable-to-access-git-repository) Forge Is Unable To Access Git Repository
 
 There are several reasons Forge may not be able to access your GitHub, GitLab, or Bitbucket repository. First, you should try refreshing the source control API token that is linked to Forge via your account profile’s “Source Control” tab.
 
 Forge attempts to access your repository using your source control provider’s API. The API credentials that will be used are the credentials tied to the account of the person who **owns** the Forge server. If a Forge server is shared with you via a circle, it will use the circle **owner’s** API credentials. You should ensure this person has full access to the repository on GitHub.
 
-### [​](#github-organization-repositories)GitHub Organization Repositories
+### [​](#github-organization-repositories) GitHub Organization Repositories
 
-Sometimes, if the repository is an organization repository, you will need to grant Forge access to that organization. You may do that using the following link: [https://github.com/settings/connections/applications/fdb28071bd05daebc122](https://github.com/settings/connections/applications/fdb28071bd05daebc122)
+Sometimes, if the repository is an organization repository, you will need to grant Forge access to that organization. You may do that using the following link: <https://github.com/settings/connections/applications/fdb28071bd05daebc122>
 
 Was this page helpful?
 
-YesNo[Tags](/docs/accounts/tags)[Server Providers](/docs/servers/providers)On this page
+YesNo
+
+[Tags](/docs/accounts/tags)[Server Providers](/docs/servers/providers)
+
+On this page
+
 - [Forge Is Unable To Access Git Repository](#forge-is-unable-to-access-git-repository)
 - [GitHub Organization Repositories](#github-organization-repositories)
 
-[Laravel Forge home page](https://forge.laravel.com)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)AssistantResponses are generated using AI and may contain mistakes.
+[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.
