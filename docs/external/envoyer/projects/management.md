@@ -101,12 +101,12 @@ If you no longer need the project, you may delete it via the project settings da
 
 Deleting your project is an irreversible action, and we will be unable to recover the project’s settings for you.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Your Account](/accounts/your-account)[Servers](/projects/servers)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

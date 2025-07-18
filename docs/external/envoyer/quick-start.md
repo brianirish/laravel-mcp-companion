@@ -126,12 +126,12 @@ Envoyer will attempt to connect to each server and clone the code of the chosen 
 
 Congratulations, you’ve just successfully completed your first zero downtime deployment.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Introduction](/introduction)[Source Control](/accounts/source-control)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

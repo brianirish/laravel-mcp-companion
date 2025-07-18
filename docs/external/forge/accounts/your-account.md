@@ -117,7 +117,7 @@ When enabling 2FA, Forge will display:
 
 The recovery codes should be stored securely and can be used if you no longer have access to your 2FA device, thus it is recommended to not store your recovery codes exclusively on the device that you use for 2FA. Each recovery code can only be used once. You may re-generate the recovery codes at any time from your account’s dashboard.
 
-If you have configured 2FA on your account and lose access to your it and your recovery codes, you will need to email [[email protected]](/cdn-cgi/l/email-protection#94f2fbe6f3f1d4f8f5e6f5e2f1f8baf7fbf9) to reset it by confirming your identity.
+If you have configured 2FA on your account and lose access to your it and your recovery codes, you will need to email [[email protected]](/cdn-cgi/l/email-protection#7f19100d181a3f131e0d1e091a13511c1012) to reset it by confirming your identity.
 
 We recommend using the [Google Authenticator](https://support.google.com/accounts/answer/1066447) application on your smartphone to manage your Forge 2FA configuration.
 

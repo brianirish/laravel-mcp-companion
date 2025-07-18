@@ -49,12 +49,12 @@ On a project’s **Collaborators** tab, you can click the **Add Collaborator** b
 
 Only project owners are able to manage project collaborators.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Notifications](/projects/notifications)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

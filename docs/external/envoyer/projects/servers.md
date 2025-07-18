@@ -89,12 +89,12 @@ When storing user uploaded files in an Envoyer deployed Laravel application, you
 
 If you are not using Laravel, you will essentially follow the same process. However, you will need to manually create a `storage` directory in the deployment path of your application (the same directory level as the `current` symbolic link).
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Management](/projects/management)[Deployment Hooks](/projects/deployment-hooks)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

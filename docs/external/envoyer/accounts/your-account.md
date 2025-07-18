@@ -72,12 +72,12 @@ You can delete your account at any time from the [Account page](https://envoyer.
 
 Deleting your account will cancel your subscription and delete all of your account’s data. **Your data, including billing information, will not be recoverable**; however, your servers will be preserved.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Source Control](/accounts/source-control)[Management](/projects/management)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

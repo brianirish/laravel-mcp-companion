@@ -22,7 +22,7 @@ wheels = [
 
 [[package]]
 name = "laravel-mcp-companion"
-version = "0.6.0"
+version = "0.6.4"
 source = { virtual = "." }
 
 [package.dev-dependencies]

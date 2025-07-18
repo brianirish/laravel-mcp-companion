@@ -79,12 +79,12 @@ $schedule->command('foo')->thenPing('http://beats.envoyer.io/heartbeat-id');
 
 ```
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Deployment Hooks](/projects/deployment-hooks)[Notifications](/projects/notifications)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

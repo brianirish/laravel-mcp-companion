@@ -94,12 +94,12 @@ Envoyer is not necessary for applications running [Laravel Octane](https://githu
 
 Our [Terms of Service](https://envoyer.io/terms) and [Privacy Policy](https://envoyer.io/privacy) provide details on the terms, conditions, and privacy practices for using Envoyer.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Quick Start](/quick-start)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

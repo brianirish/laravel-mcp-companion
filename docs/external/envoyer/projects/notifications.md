@@ -52,12 +52,12 @@ Envoyer supports a variety of notification channels, and you are welcome to conf
 
 After you have selected a channel, you will be asked to provide a name for the channel, webhook URL, or email address. Once you’ve finished providing this information, click **Add Channel** to confirm.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Heartbeats](/projects/heartbeats)[Collaborators](/projects/collaborators)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

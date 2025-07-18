@@ -79,12 +79,12 @@ You may unlink providers at any time by clicking the **Unlink** button next to t
 
 If you unlink a source control provider, you will be unable to make new deployments for projects that are connected to that provider. Existing deployments will be unaffected.
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Quick Start](/quick-start)[Your Account](/accounts/your-account)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

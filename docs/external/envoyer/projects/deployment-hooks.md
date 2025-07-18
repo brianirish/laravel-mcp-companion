@@ -103,12 +103,12 @@ Other available variables are:
 
 Variables can be written with or without a space inside of the curly braces. For example, `{{ variable }}` is the same as `{{variable}}`
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
-
 Was this page helpful?
 
 YesNo
 
 [Servers](/projects/servers)[Heartbeats](/projects/heartbeats)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.

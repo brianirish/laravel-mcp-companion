@@ -99,7 +99,7 @@ Other
 
 Help us keep Laravel Forge safe by reporting any abuse, security concerns, or violations.
 
-Please email us at [[email protected]](/cdn-cgi/l/email-protection#d7a4b2b4a2a5bea3ae97bbb6a5b6a1b2bbf9b4b8ba)
+Please email us at [[email protected]](/cdn-cgi/l/email-protection#5a293f392f28332e231a363b283b2c3f3674393537)
 
 Was this page helpful?
 
