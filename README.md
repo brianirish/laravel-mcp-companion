@@ -37,18 +37,20 @@
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
 - **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova
+- **Community package documentation** - Spatie, Livewire, Inertia, Filament
 - **Curated package recommendations** with detailed integration guides  
-- **Unified search** across core Laravel docs and external services
+- **Unified search** across core Laravel docs, services, and packages
 - **Smart navigation** - find exactly what you need for your use case
 - **Future-proof updates** - automatically adapts to Laravel service changes
 
 ## Auto-Discovery & Update Frequency
 
-This application features an **intelligent auto-discovery system** that automatically finds and indexes Laravel service documentation. Every day, it:
+This application features an **intelligent auto-discovery system** that automatically finds and indexes Laravel documentation. Every day, it:
 
 - ✅ **Auto-discovers** new documentation sections across Laravel services (Forge, Vapor, Nova, Envoyer)  
 - ✅ **Retrieves** the latest Laravel core documentation for all versions since 6.x
-- ✅ **Adapts** automatically to structural changes in Laravel service websites
+- ✅ **Fetches** community package documentation (Spatie, Livewire, Inertia, Filament)
+- ✅ **Adapts** automatically to structural changes in documentation websites
 - ✅ **Generates** new patch releases automatically when updates are found
 
 ## Installation
@@ -111,6 +113,9 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 
 # Update only Forge and Vapor services
 docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --services forge vapor
+
+# Update only Livewire and Filament packages
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --packages livewire filament
 ```
 
 | Option | Description | Default |
@@ -122,8 +127,11 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --services fo
 | `--force-update` | Force documentation update | false |
 | `--external-only` | Update only external Laravel services | false |
 | `--core-only` | Update only core Laravel documentation | false |
+| `--packages-only` | Update only community package documentation | false |
 | `--services SERVICE1 SERVICE2` | Update specific services (forge, vapor, etc.) | All |
+| `--packages PACKAGE1 PACKAGE2` | Update specific packages (spatie, livewire, etc.) | All |
 | `--list-services` | List available Laravel services | - |
+| `--list-packages` | List available community packages | - |
 | `--status` | Show documentation status for all sources | - |
 
 
@@ -132,13 +140,13 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --services fo
 ### Current Features
 - ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
+- ✅ **Community package docs** - Documentation for Spatie, Livewire, Inertia, Filament
 - ✅ **Smart package recommendations** - Curated Laravel ecosystem packages
 - ✅ **Unified search** - One search across all documentation sources
 - ✅ **Daily updates** - Automatic sync with latest documentation
 - ✅ **Battle-tested** - Comprehensive test suite ensures reliability
 
 ### Upcoming Features
-- 🌟 **v0.7.0**: Community package documentation (Spatie, Livewire, Inertia, Filament)
 - 📚 **v0.8.0**: Community learning resources (Laravel News, tutorials, guides)
 - 🔍 **v0.9.0**: Advanced search and smart navigation across all sources
 - 🚀 **v1.0.0**: The complete Laravel documentation navigator
