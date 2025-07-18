@@ -42,7 +42,9 @@ class TestCommunityPackageFetcher:
         assert "livewire" in packages
         assert "inertia" in packages
         assert "filament" in packages
-        assert len(packages) == 4
+        assert "debugbar" in packages
+        assert "ide-helper" in packages
+        assert len(packages) == 6
     
     def test_get_package_cache_path(self, fetcher, temp_dir):
         """Test getting package cache path."""
@@ -207,9 +209,9 @@ More content"""
             
             results = fetcher.fetch_all_packages()
             
-            assert len(results) == 4
+            assert len(results) == 6
             assert all(results.values())
-            assert mock_fetch.call_count == 4
+            assert mock_fetch.call_count == 6
     
     def test_process_jsx_to_markdown(self, fetcher):
         """Test JSX content extraction to markdown."""
@@ -367,8 +369,10 @@ More content"""
         """Test that the simplified --update parameter updates everything."""
         # The --update parameter should update all packages
         available_packages = fetcher.list_available_packages()
-        assert len(available_packages) == 4  # All packages should be updated
+        assert len(available_packages) == 6  # All packages should be updated
         assert "spatie" in available_packages
         assert "livewire" in available_packages
         assert "inertia" in available_packages
         assert "filament" in available_packages
+        assert "debugbar" in available_packages
+        assert "ide-helper" in available_packages
