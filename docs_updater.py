@@ -2455,9 +2455,16 @@ class MultiSourceDocsUpdater:
                 else:
                     metadata = {}
                 
+                # Get the type value safely
+                package_type = package_info.get("type", DocumentationSourceType.COMMUNITY_PACKAGE)
+                if hasattr(package_type, 'value'):
+                    type_value = package_type.value
+                else:
+                    type_value = str(package_type) if package_type else "community_package"
+                
                 status["packages"][package] = {
                     "name": package_info.get("name", package),
-                    "type": package_info.get("type", DocumentationSourceType.COMMUNITY_PACKAGE).value if hasattr(package_info.get("type"), 'value') else str(package_info.get("type", "community_package")),
+                    "type": type_value,
                     "cache_valid": cache_valid,
                     "last_fetched": metadata.get("cache_time", "never"),
                     "sections_count": metadata.get("sections_count", 0)
@@ -2466,18 +2473,20 @@ class MultiSourceDocsUpdater:
                 # For Spatie, include sub-packages
                 if package == "spatie" and "packages" in package_info:
                     status["packages"][package]["sub_packages"] = {}
-                    for sub_pkg, sub_info in package_info["packages"].items():
-                        sub_metadata_path = self.package_fetcher.get_cache_metadata_path("spatie", sub_pkg)
-                        if sub_metadata_path.exists():
-                            try:
-                                with open(sub_metadata_path, 'r') as f:
-                                    sub_metadata = json.load(f)
-                                status["packages"][package]["sub_packages"][sub_pkg] = {
-                                    "name": sub_info.get("name", sub_pkg),
-                                    "sections_count": sub_metadata.get("sections_count", 0)
-                                }
-                            except Exception:
-                                pass
+                    packages_dict = package_info.get("packages", {})
+                    if isinstance(packages_dict, dict):
+                        for sub_pkg, sub_info in packages_dict.items():
+                            sub_metadata_path = self.package_fetcher.get_cache_metadata_path("spatie", sub_pkg)
+                            if sub_metadata_path.exists():
+                                try:
+                                    with open(sub_metadata_path, 'r') as f:
+                                        sub_metadata = json.load(f)
+                                    status["packages"][package]["sub_packages"][sub_pkg] = {
+                                        "name": sub_info.get("name", sub_pkg),
+                                        "sections_count": sub_metadata.get("sections_count", 0)
+                                    }
+                                except Exception:
+                                    pass
                 
             except Exception as e:
                 status["packages"][package] = {"error": str(e)}
