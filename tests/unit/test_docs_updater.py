@@ -6,7 +6,7 @@ import tempfile
 import zipfile
 import io
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, Mock, mock_open
 import urllib.error
 
 from docs_updater import (
@@ -15,6 +15,7 @@ from docs_updater import (
     MultiSourceDocsUpdater,
     DocumentationAutoDiscovery,
     DocumentationSourceType,
+    CommunityPackageFetcher,
     get_supported_versions,
     get_cached_supported_versions,
     SUPPORTED_VERSIONS,
@@ -706,6 +707,94 @@ class TestExternalDocsFetcher:
             # All services should be attempted
             assert mock_fetch.call_count == 4  # forge, vapor, envoyer, nova
     
+    def test_create_placeholder_documentation_vapor(self, external_docs_fetcher, temp_dir):
+        """Test creating placeholder documentation for Vapor."""
+        service_config = {
+            "name": "Laravel Vapor",
+            "base_url": "https://docs.vapor.build",
+            "sections": ["getting-started", "projects", "deployments"]
+        }
+        service_dir = external_docs_fetcher.get_service_cache_path("vapor")
+        
+        result = external_docs_fetcher._create_placeholder_documentation("vapor", service_config, service_dir)
+        
+        assert result is True
+        
+        # Check that files were created
+        assert (service_dir / "getting-started.md").exists()
+        assert (service_dir / "projects.md").exists()
+        assert (service_dir / "deployments.md").exists()
+        
+        # Check content of getting-started
+        content = (service_dir / "getting-started.md").read_text()
+        assert "Laravel Vapor - Getting Started" in content
+        assert "requires authentication to access" in content
+        assert "Setting up serverless Laravel applications" in content
+        assert "Configuring AWS Lambda deployment" in content
+        
+        # Check metadata was saved
+        metadata_path = external_docs_fetcher.get_cache_metadata_path("vapor")
+        assert metadata_path.exists()
+        metadata = json.loads(metadata_path.read_text())
+        assert metadata["type"] == "placeholder"
+        assert metadata["service"] == "vapor"
+        assert metadata["success_rate"] == 1.0
+    
+    def test_create_placeholder_documentation_envoyer(self, external_docs_fetcher, temp_dir):
+        """Test creating placeholder documentation for Envoyer."""
+        service_config = {
+            "name": "Laravel Envoyer",
+            "base_url": "https://docs.envoyer.io/docs/1.0",
+            "sections": ["getting-started", "projects", "deployments"]
+        }
+        service_dir = external_docs_fetcher.get_service_cache_path("envoyer")
+        
+        result = external_docs_fetcher._create_placeholder_documentation("envoyer", service_config, service_dir)
+        
+        assert result is True
+        
+        # Check that files were created
+        assert (service_dir / "getting-started.md").exists()
+        assert (service_dir / "projects.md").exists()
+        assert (service_dir / "deployments.md").exists()
+        
+        # Check content of deployments
+        content = (service_dir / "deployments.md").read_text()
+        assert "Laravel Envoyer - Deployments" in content
+        assert "requires authentication to access" in content
+        assert "Configuring deployment hooks" in content
+        assert "Managing deployment history" in content
+        
+        # Check URL replacement
+        assert "Visit [Laravel Envoyer](https://docs.envoyer.io)" in content
+    
+    def test_create_placeholder_documentation_generic_sections(self, external_docs_fetcher, temp_dir):
+        """Test creating placeholder documentation with generic sections."""
+        service_config = {
+            "name": "Test Service",
+            "base_url": "https://test.example.com/docs",
+            "sections": ["api-reference", "custom-section"]
+        }
+        service_dir = external_docs_fetcher.get_service_cache_path("test_service")
+        
+        result = external_docs_fetcher._create_placeholder_documentation("test_service", service_config, service_dir)
+        
+        assert result is True
+        
+        # Check that files were created
+        assert (service_dir / "api-reference.md").exists()
+        assert (service_dir / "custom-section.md").exists()
+        
+        # Check generic content
+        content = (service_dir / "api-reference.md").read_text()
+        assert "Test Service - Api Reference" in content
+        assert "This section covers api reference functionality" in content
+        assert "requires authentication to access" in content
+        
+        # Should not have specific use cases for unknown service/section
+        assert "Setting up serverless" not in content
+        assert "zero-downtime deployment" not in content
+    
 
 
 class TestDocumentationAutoDiscovery:
@@ -1015,6 +1104,117 @@ class TestMultiSourceDocsUpdater:
         result = multi_source_updater.update_external_docs(services=["unknown_service"])
         
         assert result == {"unknown_service": False}
+    
+    @patch.object(CommunityPackageFetcher, 'list_available_packages')
+    @patch.object(ExternalDocsFetcher, 'get_cache_metadata_path')
+    @patch.object(ExternalDocsFetcher, 'get_service_info')
+    @patch.object(ExternalDocsFetcher, 'is_cache_valid')
+    @patch.object(ExternalDocsFetcher, 'list_available_services')
+    @patch.object(DocsUpdater, 'read_local_metadata')
+    def test_get_all_documentation_status_complete(self, mock_core_metadata, 
+                                                   mock_list_services, mock_is_cache_valid,
+                                                   mock_get_service_info, mock_get_cache_path,
+                                                   mock_list_packages, multi_source_updater):
+        """Test getting complete documentation status."""
+        # Mock core documentation status
+        mock_core_metadata.return_value = {
+            "sync_time": "2024-01-15T10:00:00Z",
+            "commit_sha": "abc123"
+        }
+        
+        # Mock external services
+        mock_list_services.return_value = ["forge", "vapor"]
+        mock_is_cache_valid.return_value = True
+        mock_get_service_info.side_effect = [
+            {"name": "Laravel Forge", "type": "laravel_service"},
+            {"name": "Laravel Vapor", "type": "laravel_service"}
+        ]
+        
+        # Mock cache metadata paths
+        mock_metadata_path = Mock()
+        mock_metadata_path.exists.return_value = True
+        mock_get_cache_path.return_value = mock_metadata_path
+        
+        # Mock metadata file content
+        with patch('builtins.open', mock_open(read_data='{"cached_at": 1234567890, "success_rate": "100%"}')):
+            with patch('json.load', return_value={"cached_at": 1234567890, "success_rate": "100%"}):
+                # Mock packages
+                mock_list_packages.return_value = []
+                
+                status = multi_source_updater.get_all_documentation_status()
+        
+        assert "core" in status
+        assert status["core"]["version"] == "12.x"
+        assert status["core"]["available"] is True
+        assert status["core"]["last_updated"] == "2024-01-15T10:00:00Z"
+        assert status["core"]["commit_sha"] == "abc123"
+        
+        assert "external" in status
+        assert "forge" in status["external"]
+        assert status["external"]["forge"]["name"] == "Laravel Forge"
+        assert status["external"]["forge"]["cache_valid"] is True
+        
+        assert "vapor" in status["external"]
+        assert status["external"]["vapor"]["name"] == "Laravel Vapor"
+    
+    @patch.object(CommunityPackageFetcher, 'list_available_packages')
+    @patch.object(ExternalDocsFetcher, 'get_service_info')
+    @patch.object(ExternalDocsFetcher, 'is_cache_valid')
+    @patch.object(ExternalDocsFetcher, 'list_available_services')
+    @patch.object(DocsUpdater, 'read_local_metadata')
+    def test_get_all_documentation_status_no_metadata(self, mock_core_metadata,
+                                                      mock_list_services, mock_is_cache_valid,
+                                                      mock_get_service_info, mock_list_packages,
+                                                      multi_source_updater):
+        """Test status when no metadata exists."""
+        # Mock no core metadata
+        mock_core_metadata.return_value = {}
+        
+        # Mock external services with no cache
+        mock_list_services.return_value = ["forge"]
+        mock_is_cache_valid.return_value = False
+        mock_get_service_info.return_value = {"name": "Laravel Forge", "type": "laravel_service"}
+        
+        # Mock packages
+        mock_list_packages.return_value = []
+        
+        # Mock non-existent metadata file
+        with patch.object(multi_source_updater.external_fetcher, 'get_cache_metadata_path') as mock_path:
+            mock_metadata_path = Mock()
+            mock_metadata_path.exists.return_value = False
+            mock_path.return_value = mock_metadata_path
+            
+            status = multi_source_updater.get_all_documentation_status()
+        
+        assert status["core"]["available"] is False
+        assert status["external"]["forge"]["cache_valid"] is False
+        assert status["external"]["forge"]["last_fetched"] == "never"
+    
+    @patch.object(CommunityPackageFetcher, 'list_available_packages')
+    @patch.object(ExternalDocsFetcher, 'list_available_services')
+    @patch.object(DocsUpdater, 'read_local_metadata')
+    def test_get_all_documentation_status_with_errors(self, mock_core_metadata,
+                                                      mock_list_services, mock_list_packages,
+                                                      multi_source_updater):
+        """Test status when errors occur."""
+        # Mock core metadata error
+        mock_core_metadata.side_effect = Exception("Core metadata error")
+        
+        # Mock external services
+        mock_list_services.return_value = ["forge"]
+        
+        # Mock packages
+        mock_list_packages.return_value = []
+        
+        # Mock service info error
+        with patch.object(multi_source_updater.external_fetcher, 'get_service_info',
+                         side_effect=Exception("Service info error")):
+            status = multi_source_updater.get_all_documentation_status()
+        
+        # Should handle errors gracefully
+        assert "error" in status["core"]
+        assert status["core"]["error"] == "Core metadata error"
+        assert "error" in status["external"]["forge"]
 
 
 class TestVersionSupport:
@@ -1236,7 +1436,7 @@ class TestMainFunction:
             result = main()
             
             assert result == 0
-            mock_updater.update_all.assert_called_once_with(force_core=False, force_external=False)
+            mock_updater.update_all.assert_called_once_with(force_core=False, force_external=False, force_packages=False)
     
     @patch('docs_updater.MultiSourceDocsUpdater')
     def test_main_status_command(self, mock_updater_class):
@@ -1259,7 +1459,8 @@ class TestMainFunction:
                     "type": "laravel_service",
                     "success_rate": 1.0  # Numeric value, not string
                 }
-            }
+            },
+            "packages": {}
         }
         mock_updater_class.return_value = mock_updater
         
@@ -1296,7 +1497,12 @@ class TestMainFunction:
         test_args = ['docs_updater.py', '--services', 'forge']
         
         mock_updater = MagicMock()
-        mock_updater.update_external_docs.return_value = {"forge": True}
+        # The --services parameter now calls update_all() instead of update_external_docs()
+        mock_updater.update_all.return_value = {
+            'core': {'11.x': True},
+            'external': {'forge': True},
+            'packages': {}
+        }
         mock_updater_class.return_value = mock_updater
         
         with patch.object(sys, 'argv', test_args), \
@@ -1305,7 +1511,7 @@ class TestMainFunction:
             result = main()
             
             assert result == 0
-            mock_updater.update_external_docs.assert_called_with(services=['forge'], force=False)
+            mock_updater.update_all.assert_called_with(force_core=False, force_external=False, force_packages=False)
     
     def test_main_with_exception(self):
         """Test main function handling exceptions."""

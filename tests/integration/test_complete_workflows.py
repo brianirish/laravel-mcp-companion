@@ -36,7 +36,7 @@ class TestDocumentationWorkflows:
                 }
                 
                 # Step 1: Update documentation (simulate with DocsUpdater)
-                updater = DocsUpdater(test_docs_dir, "12.x")
+                updater = mock_updater
                 update_result = updater.update(force=False)
                 assert update_result is True
                 
