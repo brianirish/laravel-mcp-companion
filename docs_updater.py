@@ -99,6 +99,7 @@ class DocumentationSourceType(Enum):
     GITHUB_REPO = "github_repo"
     DIRECT_URL = "direct_url"
     LARAVEL_SERVICE = "laravel_service"
+    COMMUNITY_PACKAGE = "community_package"
 
 class DocumentationAutoDiscovery:
     """Handles automatic discovery of documentation sections from Laravel services."""
@@ -1419,6 +1420,841 @@ class DocsUpdater:
             logger.error(f"Error updating documentation: {str(e)}")
             raise
 
+
+class CommunityPackageFetcher:
+    """Handles fetching documentation from community Laravel packages."""
+    
+    def __init__(self, target_dir: Path, cache_duration: int = 86400, max_retries: int = 3):
+        """
+        Initialize the community package documentation fetcher.
+        
+        Args:
+            target_dir: Directory where package docs should be stored
+            cache_duration: Cache duration in seconds (default: 24 hours)
+            max_retries: Maximum number of retry attempts for failed requests
+        """
+        self.target_dir = target_dir
+        self.cache_duration = cache_duration
+        self.max_retries = max_retries
+        self.packages_dir = target_dir / "packages"
+        self.packages_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Community packages documentation sources
+        self.community_packages = {
+            "spatie": {
+                "name": "Spatie Packages",
+                "type": DocumentationSourceType.COMMUNITY_PACKAGE,
+                "base_url": "https://spatie.be/docs",
+                "packages": {
+                    "laravel-permission": {
+                        "name": "Laravel Permission",
+                        "docs_url": "https://spatie.be/docs/laravel-permission/v6/introduction",
+                        "version_pattern": r'/v(\d+)/',
+                        "sections": [
+                            "introduction", "installation-laravel", "basic-usage/basic-usage",
+                            "basic-usage/role-permissions", "basic-usage/direct-permissions",
+                            "basic-usage/multiple-guards", "basic-usage/teams-permissions",
+                            "basic-usage/blade-directives", "basic-usage/artisan",
+                            "basic-usage/middleware", "basic-usage/wildcard-permissions",
+                            "advanced-usage/cache", "advanced-usage/extending",
+                            "advanced-usage/exceptions", "advanced-usage/seeding",
+                            "advanced-usage/testing", "api/models", "api/traits"
+                        ]
+                    },
+                    "laravel-medialibrary": {
+                        "name": "Laravel Media Library",
+                        "docs_url": "https://spatie.be/docs/laravel-medialibrary/v11/introduction",
+                        "version_pattern": r'/v(\d+)/',
+                        "sections": [
+                            "introduction", "installation-setup", "basic-usage/associating-files",
+                            "basic-usage/retrieving-media", "converting-images/defining-conversions",
+                            "converting-images/retrieving-converted-images", "responsive-images",
+                            "downloading-media/downloading-a-single-file", "advanced-usage/using-s3"
+                        ]
+                    },
+                    "laravel-backup": {
+                        "name": "Laravel Backup",
+                        "docs_url": "https://spatie.be/docs/laravel-backup/v9/introduction",
+                        "version_pattern": r'/v(\d+)/',
+                        "sections": [
+                            "introduction", "installation-and-setup", "backing-up/overview",
+                            "backing-up/events", "cleaning-up-old-backups/overview",
+                            "sending-notifications/overview", "monitoring-health/overview"
+                        ]
+                    }
+                }
+            },
+            "livewire": {
+                "name": "Livewire",
+                "type": DocumentationSourceType.COMMUNITY_PACKAGE,
+                "base_url": "https://livewire.laravel.com/docs",
+                "sections": [
+                    "quickstart", "installation", "components", "properties", "actions",
+                    "forms", "lifecycle-hooks", "nesting", "events", "security",
+                    "uploads", "downloads", "validation", "pagination",
+                    "redirecting", "wire-model", "wire-click", "wire-submit", 
+                    "wire-loading", "wire-transition", "wire-poll", "wire-init", 
+                    "wire-dirty", "wire-offline", "alpine", "morphing", "teleport",
+                    "lazy", "locked", "computed-properties", "url", "navigate", 
+                    "offline", "testing", "troubleshooting", "javascript"
+                ]
+            },
+            "inertia": {
+                "name": "Inertia.js",
+                "type": DocumentationSourceType.GITHUB_REPO,
+                "repo": "inertiajs/inertiajs.com",
+                "branch": "master",
+                "docs_path": "resources/js/Pages",
+                "sections": [
+                    "how-it-works", "who-is-it-for", "the-protocol",
+                    "server-side-setup", "client-side-setup", "pages", "responses", 
+                    "redirects", "routing", "title-and-meta", "links", "manual-visits", 
+                    "forms", "file-uploads", "validation", "shared-data", "partial-reloads", 
+                    "scroll-management", "authentication", "authorization", "csrf-protection",
+                    "error-handling", "asset-versioning", "progress-indicators",
+                    "remembering-state", "server-side-rendering", "testing"
+                ]
+            },
+            "filament": {
+                "name": "Filament",
+                "type": DocumentationSourceType.COMMUNITY_PACKAGE,
+                "base_url": "https://filamentphp.com/docs",
+                "version": "3.x",
+                "sections": [
+                    "panels/installation", "panels/configuration", "panels/resources/getting-started",
+                    "panels/resources/listing-records", "panels/resources/creating-records",
+                    "panels/resources/editing-records", "panels/resources/viewing-records",
+                    "panels/resources/deleting-records", "panels/resources/custom-pages",
+                    "panels/resources/relation-managers", "panels/resources/widgets",
+                    "panels/pages", "panels/dashboard", "panels/navigation",
+                    "panels/users", "panels/tenancy", "panels/plugins",
+                    "forms/fields/getting-started", "forms/fields/text-input",
+                    "forms/fields/select", "forms/fields/checkbox", "forms/fields/toggle",
+                    "forms/fields/radio", "forms/fields/date-time-picker",
+                    "forms/fields/file-upload", "forms/fields/rich-editor",
+                    "forms/fields/markdown-editor", "forms/fields/repeater",
+                    "forms/fields/builder", "forms/fields/tags-input",
+                    "forms/fields/textarea", "forms/fields/key-value",
+                    "forms/fields/color-picker", "forms/fields/hidden",
+                    "forms/fields/placeholder", "forms/fields/fieldset",
+                    "forms/layout/getting-started", "forms/layout/grid",
+                    "forms/layout/tabs", "forms/layout/wizard",
+                    "forms/validation", "forms/advanced",
+                    "tables/columns/getting-started", "tables/columns/text",
+                    "tables/columns/icon", "tables/columns/image", "tables/columns/badge",
+                    "tables/columns/tags", "tables/columns/toggle",
+                    "tables/filters", "tables/actions", "tables/bulk-actions",
+                    "tables/summaries", "tables/grouping", "tables/advanced",
+                    "actions/overview", "actions/prebuilt-actions", "actions/modals",
+                    "notifications/overview", "notifications/sending-notifications",
+                    "notifications/database-notifications", "widgets/overview"
+                ]
+            },
+            "debugbar": {
+                "name": "Laravel Debugbar",
+                "type": DocumentationSourceType.COMMUNITY_PACKAGE,
+                "base_url": "https://laraveldebugbar.com",
+                "sections": [
+                    "installation", "usage", "features", "collectors"
+                ]
+            },
+            "ide-helper": {
+                "name": "Laravel IDE Helper",
+                "type": DocumentationSourceType.GITHUB_REPO,
+                "repo": "barryvdh/laravel-ide-helper",
+                "branch": "master",
+                "file": "README.md"
+            }
+        }
+    
+    def get_package_cache_path(self, package: str, subpackage: Optional[str] = None) -> Path:
+        """Get the cache directory path for a package."""
+        if subpackage:
+            package_dir = self.packages_dir / package / subpackage
+        else:
+            package_dir = self.packages_dir / package
+        package_dir.mkdir(parents=True, exist_ok=True)
+        return package_dir
+    
+    def get_cache_metadata_path(self, package: str, subpackage: Optional[str] = None) -> Path:
+        """Get the cache metadata file path for a package."""
+        cache_dir = self.get_package_cache_path(package, subpackage)
+        return cache_dir / ".metadata" / "cache.json"
+    
+    def is_cache_valid(self, package: str, subpackage: Optional[str] = None) -> bool:
+        """Check if the cache for a package is still valid."""
+        metadata_path = self.get_cache_metadata_path(package, subpackage)
+        
+        if not metadata_path.exists():
+            return False
+        
+        try:
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+            
+            cache_time = metadata.get("cache_time", 0)
+            current_time = time.time()
+            
+            if current_time - cache_time > self.cache_duration:
+                logger.debug(f"Cache expired for {package}/{subpackage or 'all'}")
+                return False
+            
+            return True
+        except Exception as e:
+            logger.warning(f"Error reading cache metadata for {package}: {str(e)}")
+            return False
+    
+    def fetch_package_docs(self, package: str, force: bool = False) -> bool:
+        """
+        Fetch documentation for a community package.
+        
+        Args:
+            package: Package name (spatie, livewire, inertia, filament)
+            force: Force refresh even if cache is valid
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        if package not in self.community_packages:
+            logger.error(f"Unknown package: {package}")
+            return False
+        
+        # Check cache validity
+        if not force and self.is_cache_valid(package):
+            logger.info(f"Using cached documentation for {package}")
+            return True
+        
+        logger.info(f"Fetching documentation for {package}")
+        package_config = self.community_packages[package]
+        
+        try:
+            if package == "spatie":
+                return self._fetch_spatie_docs(package_config)
+            elif package == "livewire":
+                return self._fetch_livewire_docs(package_config)
+            elif package == "inertia":
+                return self._fetch_inertia_docs(package_config)
+            elif package == "filament":
+                return self._fetch_filament_docs(package_config)
+            elif package == "debugbar":
+                return self._fetch_debugbar_docs(package_config)
+            elif package == "ide-helper":
+                return self._fetch_ide_helper_docs(package_config)
+            else:
+                logger.error(f"No fetch method implemented for package: {package}")
+                return False
+        except Exception as e:
+            logger.error(f"Error fetching {package} documentation: {str(e)}")
+            return False
+    
+    def _fetch_spatie_docs(self, config: Dict) -> bool:
+        """Fetch documentation for Spatie packages."""
+        success_count = 0
+        packages = config.get("packages", {})
+        
+        for package_key, package_info in packages.items():
+            try:
+                logger.info(f"Fetching Spatie {package_info['name']} documentation")
+                package_dir = self.get_package_cache_path("spatie", package_key)
+                
+                base_url = package_info["docs_url"].rsplit('/', 1)[0]
+                sections = package_info.get("sections", [])
+                
+                fetched_sections = 0
+                for section in sections:
+                    section_url = f"{base_url}/{section}"
+                    content = self._fetch_and_process_content(section_url, "spatie", section)
+                    
+                    if content:
+                        # Save the processed content
+                        file_path = package_dir / f"{section.replace('/', '-')}.md"
+                        file_path.parent.mkdir(parents=True, exist_ok=True)
+                        
+                        with open(file_path, 'w', encoding='utf-8') as f:
+                            f.write(content)
+                        
+                        fetched_sections += 1
+                
+                if fetched_sections > 0:
+                    # Update cache metadata
+                    metadata = {
+                        "cache_time": time.time(),
+                        "package": package_key,
+                        "name": package_info['name'],
+                        "sections_count": fetched_sections,
+                        "base_url": base_url
+                    }
+                    
+                    metadata_path = self.get_cache_metadata_path("spatie", package_key)
+                    metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(metadata_path, 'w') as f:
+                        json.dump(metadata, f, indent=2)
+                    
+                    success_count += 1
+                    logger.info(f"Successfully fetched {fetched_sections} sections for Spatie {package_info['name']}")
+                
+            except Exception as e:
+                logger.error(f"Error fetching Spatie {package_key} documentation: {str(e)}")
+        
+        return success_count > 0
+    
+    def _fetch_livewire_docs(self, config: Dict) -> bool:
+        """Fetch Livewire documentation."""
+        base_url = config["base_url"]
+        sections = config.get("sections", [])
+        package_dir = self.get_package_cache_path("livewire")
+        
+        fetched_sections = 0
+        for section in sections:
+            try:
+                section_url = f"{base_url}/{section}"
+                content = self._fetch_and_process_content(section_url, "livewire", section)
+                
+                if content:
+                    file_path = package_dir / f"{section}.md"
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    
+                    fetched_sections += 1
+            except Exception as e:
+                logger.warning(f"Error fetching Livewire section {section}: {str(e)}")
+        
+        if fetched_sections > 0:
+            # Update cache metadata
+            metadata = {
+                "cache_time": time.time(),
+                "package": "livewire",
+                "name": config['name'],
+                "sections_count": fetched_sections,
+                "base_url": base_url
+            }
+            
+            metadata_path = self.get_cache_metadata_path("livewire")
+            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+            
+            logger.info(f"Successfully fetched {fetched_sections} sections for Livewire")
+            return True
+        
+        return False
+    
+    def _fetch_inertia_docs(self, config: Dict) -> bool:
+        """Fetch Inertia.js documentation from GitHub repository."""
+        repo = config["repo"]
+        branch = config["branch"]
+        docs_path = config["docs_path"]
+        sections = config.get("sections", [])
+        package_dir = self.get_package_cache_path("inertia")
+        
+        fetched_sections = 0
+        for section in sections:
+            try:
+                # Map section names to JSX file names
+                jsx_filename = f"{section}.jsx"
+                github_url = f"https://raw.githubusercontent.com/{repo}/{branch}/{docs_path}/{jsx_filename}"
+                
+                logger.debug(f"Fetching {section} from {github_url}")
+                
+                request = urllib.request.Request(
+                    github_url,
+                    headers={"User-Agent": "Laravel-MCP-Companion/1.0"}
+                )
+                
+                with urllib.request.urlopen(request) as response:
+                    jsx_content = response.read().decode('utf-8')
+                
+                # Extract content from JSX file and convert to markdown
+                markdown_content = self._process_jsx_to_markdown(jsx_content, section)
+                
+                if markdown_content:
+                    file_path = package_dir / f"{section}.md"
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(f"# Inertia - {section.replace('-', ' ').title()}\n\n")
+                        f.write(f"Source: https://inertiajs.com/{section}\n\n")
+                        f.write(markdown_content)
+                    
+                    fetched_sections += 1
+                    logger.debug(f"Successfully processed {section}")
+                else:
+                    logger.warning(f"No content extracted from {section}")
+                    
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    logger.warning(f"Inertia section {section} not found (404)")
+                else:
+                    logger.warning(f"HTTP error fetching Inertia section {section}: {e}")
+            except Exception as e:
+                logger.warning(f"Error fetching Inertia section {section}: {str(e)}")
+        
+        if fetched_sections > 0:
+            # Update cache metadata
+            metadata = {
+                "cache_time": time.time(),
+                "package": "inertia",
+                "name": config['name'],
+                "sections_count": fetched_sections,
+                "source_type": "github_repo",
+                "repo": repo,
+                "branch": branch,
+                "docs_path": docs_path
+            }
+            
+            metadata_path = self.get_cache_metadata_path("inertia")
+            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+            
+            logger.info(f"Successfully fetched {fetched_sections} sections for Inertia.js from GitHub")
+            return True
+        
+        return False
+    
+    def _process_jsx_to_markdown(self, jsx_content: str, section: str) -> Optional[str]:
+        """
+        Process JSX content and extract documentation text to markdown.
+        
+        Args:
+            jsx_content: Raw JSX file content
+            section: Section name for context
+            
+        Returns:
+            Extracted markdown content or None if no content found
+        """
+        try:
+            import re
+            
+            # Remove import statements and React component structure
+            content = jsx_content
+            
+            # Remove imports
+            content = re.sub(r'^import\s+.*?from\s+.*?[;\n]', '', content, flags=re.MULTILINE)
+            
+            # Remove export statements
+            content = re.sub(r'^export\s+.*?[;\n]', '', content, flags=re.MULTILINE)
+            
+            # Extract text content from JSX elements
+            text_content = []
+            
+            # Extract headings (both standard and custom components)
+            heading_patterns = [
+                r'<[Hh]([1-6])[^>]*>(.*?)</[Hh][1-6]>',  # Standard h1-h6
+                r'<H([1-6])[^>]*>(.*?)</H[1-6]>',         # Custom H1-H6 components
+            ]
+            
+            for pattern in heading_patterns:
+                headings = re.findall(pattern, content, re.DOTALL)
+                for level, text in headings:
+                    clean_text = self._clean_jsx_text(text)
+                    if clean_text.strip():
+                        text_content.append(f"{'#' * int(level)} {clean_text}\n")
+            
+            # Extract paragraphs (both standard and custom components)
+            paragraph_patterns = [
+                r'<[Pp][^>]*>(.*?)</[Pp]>',  # Standard p tags
+                r'<P[^>]*>(.*?)</P>',        # Custom P components
+            ]
+            
+            for pattern in paragraph_patterns:
+                paragraphs = re.findall(pattern, content, re.DOTALL)
+                for para in paragraphs:
+                    clean_text = self._clean_jsx_text(para)
+                    if clean_text.strip():
+                        text_content.append(f"{clean_text}\n")
+            
+            # Extract code blocks (both standard and custom components)
+            code_patterns = [
+                r'<pre[^>]*><code[^>]*>(.*?)</code></pre>',  # Standard code blocks
+                r'<Code[^>]*>(.*?)</Code>',                   # Custom Code components
+                r'<code[^>]*>(.*?)</code>',                   # Inline code
+            ]
+            
+            for pattern in code_patterns:
+                code_blocks = re.findall(pattern, content, re.DOTALL)
+                for code in code_blocks:
+                    clean_code = self._clean_jsx_text(code)
+                    if clean_code.strip():
+                        if '\n' in clean_code:
+                            text_content.append(f"```\n{clean_code}\n```\n")
+                        else:
+                            text_content.append(f"`{clean_code}`")
+            
+            # Extract list items
+            list_items = re.findall(r'<li[^>]*>(.*?)</li>', content, re.DOTALL)
+            for item in list_items:
+                clean_text = self._clean_jsx_text(item)
+                if clean_text.strip():
+                    text_content.append(f"- {clean_text}")
+            
+            # Extract strong/bold text
+            strong_patterns = [
+                r'<strong[^>]*>(.*?)</strong>',
+                r'<Strong[^>]*>(.*?)</Strong>',
+                r'<b[^>]*>(.*?)</b>',
+            ]
+            
+            for pattern in strong_patterns:
+                strong_texts = re.findall(pattern, content, re.DOTALL)
+                for text in strong_texts:
+                    clean_text = self._clean_jsx_text(text)
+                    if clean_text.strip():
+                        text_content.append(f"**{clean_text}**")
+            
+            # Extract links
+            link_patterns = [
+                r'<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)</a>',
+                r'<A[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)</A>',
+            ]
+            
+            for pattern in link_patterns:
+                links = re.findall(pattern, content, re.DOTALL)
+                for href, link_text in links:
+                    clean_text = self._clean_jsx_text(link_text)
+                    if clean_text.strip():
+                        text_content.append(f"[{clean_text}]({href})")
+            
+            # Extract any remaining text content from string literals (but exclude JSX markup)
+            # Look for strings that appear to be documentation content
+            string_content = re.findall(r'["`\']([^"`\']{30,})["`\']', content)
+            for text in string_content:
+                # Skip if it looks like code, imports, JSX, or other non-documentation content
+                if not any(pattern in text.lower() for pattern in [
+                    'import', 'export', 'from', 'require', 'function', 'const', 'let', 'var', 
+                    '===', '!==', '=>', 'return', 'props', 'component', '</', '/>', 'jsx', 'react'
+                ]):
+                    clean_text = text.strip()
+                    if clean_text and len(clean_text.split()) > 5:  # At least 5 words
+                        # Don't add if it's already covered by component extraction
+                        if not any(clean_text in existing for existing in text_content):
+                            text_content.append(f"{clean_text}\n")
+            
+            if text_content:
+                # Remove duplicates while preserving order
+                seen = set()
+                unique_content = []
+                for item in text_content:
+                    item_clean = item.strip()
+                    if item_clean and item_clean not in seen:
+                        # Skip if it looks like JSX remnants
+                        if not any(jsx_marker in item_clean for jsx_marker in ['<', '>', '{', '}', 'return (', '=>', 'export default']):
+                            seen.add(item_clean)
+                            unique_content.append(item)
+                
+                return '\n'.join(unique_content)
+            else:
+                logger.debug(f"No extractable content found in {section} JSX file")
+                return None
+                
+        except Exception as e:
+            logger.warning(f"Error processing JSX content for {section}: {str(e)}")
+            return None
+    
+    def _clean_jsx_text(self, text: str) -> str:
+        """Clean JSX text content of React syntax and HTML entities."""
+        import re
+        
+        # Remove JSX curly braces and expressions
+        text = re.sub(r'\{[^}]*\}', '', text)
+        
+        # Remove HTML tags
+        text = re.sub(r'<[^>]*>', '', text)
+        
+        # Decode HTML entities
+        import html
+        text = html.unescape(text)
+        
+        # Clean up whitespace
+        text = re.sub(r'\s+', ' ', text)
+        text = text.strip()
+        
+        return text
+    
+    def _fetch_filament_docs(self, config: Dict) -> bool:
+        """Fetch Filament documentation."""
+        base_url = config["base_url"]
+        version = config.get("version", "3.x")
+        sections = config.get("sections", [])
+        package_dir = self.get_package_cache_path("filament")
+        
+        fetched_sections = 0
+        for section in sections:
+            try:
+                section_url = f"{base_url}/{version}/{section}"
+                content = self._fetch_and_process_content(section_url, "filament", section)
+                
+                if content:
+                    file_path = package_dir / f"{section.replace('/', '-')}.md"
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    
+                    fetched_sections += 1
+            except Exception as e:
+                logger.warning(f"Error fetching Filament section {section}: {str(e)}")
+        
+        if fetched_sections > 0:
+            # Update cache metadata
+            metadata = {
+                "cache_time": time.time(),
+                "package": "filament",
+                "name": config['name'],
+                "version": version,
+                "sections_count": fetched_sections,
+                "base_url": base_url
+            }
+            
+            metadata_path = self.get_cache_metadata_path("filament")
+            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+            
+            logger.info(f"Successfully fetched {fetched_sections} sections for Filament")
+            return True
+        
+        return False
+    
+    def _fetch_debugbar_docs(self, config: Dict) -> bool:
+        """Fetch Laravel Debugbar documentation from website."""
+        base_url = config["base_url"]
+        sections = config.get("sections", [])
+        package_dir = self.get_package_cache_path("debugbar")
+        
+        fetched_sections = 0
+        for section in sections:
+            try:
+                section_url = f"{base_url}/{section}/"
+                content = self._fetch_and_process_content(section_url, "debugbar", section)
+                
+                if content:
+                    file_path = package_dir / f"{section}.md"
+                    file_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    
+                    fetched_sections += 1
+            except Exception as e:
+                logger.warning(f"Error fetching Debugbar section {section}: {str(e)}")
+        
+        if fetched_sections > 0:
+            # Update cache metadata
+            metadata = {
+                "cache_time": time.time(),
+                "package": "debugbar",
+                "name": config['name'],
+                "sections_count": fetched_sections,
+                "base_url": base_url
+            }
+            
+            metadata_path = self.get_cache_metadata_path("debugbar")
+            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+            
+            logger.info(f"Successfully fetched {fetched_sections} sections for Laravel Debugbar")
+            return True
+        
+        return False
+    
+    def _fetch_ide_helper_docs(self, config: Dict) -> bool:
+        """Fetch Laravel IDE Helper documentation from GitHub README."""
+        repo = config["repo"]
+        branch = config.get("branch", "master")
+        file = config.get("file", "README.md")
+        package_dir = self.get_package_cache_path("ide-helper")
+        
+        try:
+            # Fetch README from GitHub
+            github_url = f"https://raw.githubusercontent.com/{repo}/{branch}/{file}"
+            
+            logger.info(f"Fetching IDE Helper documentation from {github_url}")
+            
+            request = urllib.request.Request(
+                github_url,
+                headers={"User-Agent": USER_AGENT}
+            )
+            
+            with urllib.request.urlopen(request) as response:
+                content = response.read().decode('utf-8')
+            
+            # Process the README content
+            if content:
+                # Add header
+                header = f"# {config['name']}\n\n"
+                header += f"Source: https://github.com/{repo}\n\n"
+                header += "---\n\n"
+                
+                # Save the processed content
+                file_path = package_dir / "readme.md"
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(header + content)
+                
+                # Update cache metadata
+                metadata = {
+                    "cache_time": time.time(),
+                    "package": "ide-helper",
+                    "name": config['name'],
+                    "source_type": "github_readme",
+                    "repo": repo,
+                    "branch": branch,
+                    "file": file
+                }
+                
+                metadata_path = self.get_cache_metadata_path("ide-helper")
+                metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(metadata_path, 'w') as f:
+                    json.dump(metadata, f, indent=2)
+                
+                logger.info(f"Successfully fetched documentation for Laravel IDE Helper")
+                return True
+                
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                logger.error(f"IDE Helper README not found at {github_url}")
+            else:
+                logger.error(f"HTTP error fetching IDE Helper documentation: {e}")
+        except Exception as e:
+            logger.error(f"Error fetching IDE Helper documentation: {str(e)}")
+        
+        return False
+    
+    def _fetch_and_process_content(self, url: str, package: str, section: str) -> Optional[str]:
+        """Fetch and process content from a URL."""
+        try:
+            # Use markdownify for HTML to Markdown conversion
+            from markdownify import markdownify as md
+            from bs4 import BeautifulSoup
+            
+            request = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": USER_AGENT,
+                    "Accept": "text/html,application/xhtml+xml"
+                }
+            )
+            
+            with urllib.request.urlopen(request, timeout=30) as response:
+                content_bytes = response.read()
+                content = content_bytes.decode('utf-8')
+            
+            # Parse with BeautifulSoup
+            soup = BeautifulSoup(content, 'html.parser')
+            
+            # Remove navigation, header, footer elements
+            for tag in soup.find_all(['nav', 'header', 'footer', 'aside']):
+                tag.decompose()
+            
+            # Try to find main content area
+            main_content = None
+            
+            # Package-specific selectors
+            if package == "inertia":
+                # Inertia uses div with id="top" for main content
+                main_content = soup.find('div', id='top')
+                if not main_content:
+                    logger.debug(f"Could not find #top div for Inertia on {url}")
+            elif package == "filament":
+                # Filament might use different selectors
+                main_content = soup.select_one('.docs-content, .prose, main')
+            elif package == "debugbar":
+                # Debugbar documentation site selectors
+                main_content = soup.select_one('.prose, .content, main, article')
+            
+            # If no package-specific selector worked, try common selectors
+            if not main_content:
+                content_selectors = [
+                    '#top',  # Try #top first as it seems common
+                    'main', 'article', '[role="main"]', '.content', '.docs-content',
+                    '.documentation', '#content', '.prose', '.markdown-body'
+                ]
+                
+                for selector in content_selectors:
+                    main_content = soup.select_one(selector)
+                    if main_content:
+                        logger.debug(f"Found content using selector: {selector}")
+                        break
+            
+            if not main_content:
+                logger.warning(f"Could not find main content area for {url}, using body")
+                main_content = soup.find('body') or soup
+            
+            # Convert to markdown
+            markdown_content = md(str(main_content), strip=['a'], code_language='php')
+            
+            # Clean up the content
+            markdown_content = self._clean_markdown_content(markdown_content)
+            
+            # Check if we got any actual content
+            if len(markdown_content.strip()) < 50:
+                logger.warning(f"Very little content extracted from {url} (len: {len(markdown_content.strip())})")
+                # Log first 200 chars of HTML to debug
+                html_preview = str(main_content)[:500]
+                logger.debug(f"HTML preview: {html_preview}")
+            
+            # Add metadata header
+            header = f"# {package.title()} - {section.replace('-', ' ').title()}\n\n"
+            header += f"Source: {url}\n\n"
+            
+            return header + markdown_content
+            
+        except Exception as e:
+            logger.error(f"Error fetching content from {url}: {str(e)}")
+            return None
+    
+    def _clean_markdown_content(self, content: str) -> str:
+        """Clean up markdown content."""
+        # Remove excessive blank lines
+        content = re.sub(r'\n{3,}', '\n\n', content)
+        
+        # Fix code blocks
+        content = re.sub(r'```\s*\n', '```\n', content)
+        
+        # Remove trailing whitespace
+        content = '\n'.join(line.rstrip() for line in content.split('\n'))
+        
+        return content.strip()
+    
+    def list_available_packages(self) -> List[str]:
+        """List all available community packages."""
+        return list(self.community_packages.keys())
+    
+    def fetch_all_packages(self, force: bool = False) -> Dict[str, bool]:
+        """
+        Fetch documentation for all community packages.
+        
+        Args:
+            force: Force refresh even if cache is valid
+            
+        Returns:
+            Dictionary mapping package names to success status
+        """
+        results = {}
+        
+        for package in self.list_available_packages():
+            logger.info(f"Processing community package: {package}")
+            results[package] = self.fetch_package_docs(package, force=force)
+        
+        # Log summary
+        success_count = sum(1 for success in results.values() if success)
+        total_count = len(results)
+        logger.info(f"Community package documentation update complete: {success_count}/{total_count} packages")
+        
+        return results
+
+
 class MultiSourceDocsUpdater:
     """Handles updating documentation from multiple sources including core Laravel and external services."""
     
@@ -1438,6 +2274,9 @@ class MultiSourceDocsUpdater:
         
         # Initialize external docs fetcher
         self.external_fetcher = ExternalDocsFetcher(target_dir)
+        
+        # Initialize community package fetcher
+        self.package_fetcher = CommunityPackageFetcher(target_dir)
     
     def update_core_docs(self, force: bool = False) -> bool:
         """Update core Laravel documentation."""
@@ -1469,22 +2308,49 @@ class MultiSourceDocsUpdater:
         else:
             return self.external_fetcher.fetch_all_services(force=force)
     
-    def update_all(self, force_core: bool = False, force_external: bool = False) -> Dict[str, object]:
+    def update_package_docs(self, packages: Optional[List[str]] = None, force: bool = False) -> Dict[str, bool]:
+        """
+        Update community package documentation.
+        
+        Args:
+            packages: List of specific packages to update. If None, updates all.
+            force: Force refresh even if cache is valid
+            
+        Returns:
+            Dictionary mapping package names to success status
+        """
+        logger.info("Updating community package documentation")
+        
+        if packages:
+            results = {}
+            for package in packages:
+                if package in self.package_fetcher.community_packages:
+                    results[package] = self.package_fetcher.fetch_package_docs(package, force=force)
+                else:
+                    logger.error(f"Unknown package: {package}")
+                    results[package] = False
+            return results
+        else:
+            return self.package_fetcher.fetch_all_packages(force=force)
+    
+    def update_all(self, force_core: bool = False, force_external: bool = False, force_packages: bool = False) -> Dict[str, object]:
         """
         Update all documentation sources.
         
         Args:
             force_core: Force update of core documentation
             force_external: Force update of external documentation
+            force_packages: Force update of community packages
             
         Returns:
-            Dictionary with results for core and external updates
+            Dictionary with results for core, external, and package updates
         """
         logger.info("Starting comprehensive documentation update")
         
         results: Dict[str, object] = {
             "core": False,
-            "external": {}
+            "external": {},
+            "packages": {}
         }
         
         try:
@@ -1494,9 +2360,14 @@ class MultiSourceDocsUpdater:
             # Update external services documentation
             results["external"] = self.update_external_docs(force=force_external)
             
+            # Update community package documentation
+            results["packages"] = self.update_package_docs(force=force_packages)
+            
             # Log summary
             core_status = "updated" if results["core"] else "up-to-date"
             external_results = results["external"]
+            package_results = results["packages"]
+            
             if isinstance(external_results, dict):
                 external_count = sum(1 for success in external_results.values() if success)
                 total_external = len(external_results)
@@ -1504,7 +2375,14 @@ class MultiSourceDocsUpdater:
                 external_count = 0
                 total_external = 0
             
-            logger.info(f"Documentation update complete: Core {core_status}, External {external_count}/{total_external} services")
+            if isinstance(package_results, dict):
+                package_count = sum(1 for success in package_results.values() if success)
+                total_packages = len(package_results)
+            else:
+                package_count = 0
+                total_packages = 0
+            
+            logger.info(f"Documentation update complete: Core {core_status}, External {external_count}/{total_external} services, Packages {package_count}/{total_packages}")
             
         except Exception as e:
             logger.error(f"Error during comprehensive documentation update: {str(e)}")
@@ -1515,7 +2393,8 @@ class MultiSourceDocsUpdater:
         """Get status information for all documentation sources."""
         status: Dict[str, Dict] = {
             "core": {},
-            "external": {}
+            "external": {},
+            "packages": {}
         }
         
         # Get core documentation status
@@ -1559,21 +2438,67 @@ class MultiSourceDocsUpdater:
             except Exception as e:
                 status["external"][service] = {"error": str(e)}
         
+        # Get community package documentation status
+        for package in self.package_fetcher.list_available_packages():
+            try:
+                cache_valid = self.package_fetcher.is_cache_valid(package)
+                package_info = self.package_fetcher.community_packages.get(package, {})
+                
+                # Try to read cache metadata
+                metadata_path = self.package_fetcher.get_cache_metadata_path(package)
+                if metadata_path.exists():
+                    try:
+                        with open(metadata_path, 'r') as f:
+                            metadata = json.load(f)
+                    except Exception:
+                        metadata = {}
+                else:
+                    metadata = {}
+                
+                status["packages"][package] = {
+                    "name": package_info.get("name", package),
+                    "type": package_info.get("type", DocumentationSourceType.COMMUNITY_PACKAGE).value if hasattr(package_info.get("type"), 'value') else str(package_info.get("type", "community_package")),
+                    "cache_valid": cache_valid,
+                    "last_fetched": metadata.get("cache_time", "never"),
+                    "sections_count": metadata.get("sections_count", 0)
+                }
+                
+                # For Spatie, include sub-packages
+                if package == "spatie" and "packages" in package_info:
+                    status["packages"][package]["sub_packages"] = {}
+                    for sub_pkg, sub_info in package_info["packages"].items():
+                        sub_metadata_path = self.package_fetcher.get_cache_metadata_path("spatie", sub_pkg)
+                        if sub_metadata_path.exists():
+                            try:
+                                with open(sub_metadata_path, 'r') as f:
+                                    sub_metadata = json.load(f)
+                                status["packages"][package]["sub_packages"][sub_pkg] = {
+                                    "name": sub_info.get("name", sub_pkg),
+                                    "sections_count": sub_metadata.get("sections_count", 0)
+                                }
+                            except Exception:
+                                pass
+                
+            except Exception as e:
+                status["packages"][package] = {"error": str(e)}
+        
         return status
     
-    def needs_update(self, check_external: bool = True) -> Dict[str, Union[bool, Dict[str, bool]]]:
+    def needs_update(self, check_external: bool = True, check_packages: bool = True) -> Dict[str, Union[bool, Dict[str, bool]]]:
         """
         Check which documentation sources need updating.
         
         Args:
             check_external: Whether to check external services
+            check_packages: Whether to check community packages
             
         Returns:
             Dictionary indicating which sources need updates
         """
         needs_update: Dict[str, Union[bool, Dict[str, bool]]] = {
             "core": False,
-            "external": {}
+            "external": {},
+            "packages": {}
         }
         
         # Check core documentation
@@ -1593,6 +2518,17 @@ class MultiSourceDocsUpdater:
                     except Exception as e:
                         logger.warning(f"Error checking {service} documentation status: {str(e)}")
                         external_dict[service] = True
+        
+        # Check community package documentation
+        if check_packages:
+            packages_dict = needs_update["packages"]
+            if isinstance(packages_dict, dict):
+                for package in self.package_fetcher.list_available_packages():
+                    try:
+                        packages_dict[package] = not self.package_fetcher.is_cache_valid(package)
+                    except Exception as e:
+                        logger.warning(f"Error checking {package} documentation status: {str(e)}")
+                        packages_dict[package] = True
         
         return needs_update
 
@@ -1629,25 +2565,46 @@ def parse_arguments():
         help="Only check if update is needed, don't perform update"
     )
     parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Update all documentation (Laravel core, services, and community packages)"
+    )
+    parser.add_argument(
         "--external-only",
         action="store_true",
-        help="Only update external Laravel services documentation"
+        help="Only update external Laravel services documentation (deprecated: use --update)"
     )
     parser.add_argument(
         "--core-only",
         action="store_true",
-        help="Only update core Laravel documentation"
+        help="Only update core Laravel documentation (deprecated: use --update)"
+    )
+    parser.add_argument(
+        "--packages-only",
+        action="store_true",
+        help="Only update community package documentation (deprecated: use --update)"
     )
     parser.add_argument(
         "--services",
         type=str,
         nargs="+",
-        help="Specific Laravel services to update (forge, vapor, envoyer, nova)"
+        help="Specific Laravel services to update (deprecated: use --update)"
+    )
+    parser.add_argument(
+        "--packages",
+        type=str,
+        nargs="+",
+        help="Specific community packages to update (deprecated: use --update)"
     )
     parser.add_argument(
         "--list-services",
         action="store_true",
         help="List all available Laravel services"
+    )
+    parser.add_argument(
+        "--list-packages",
+        action="store_true",
+        help="List all available community packages"
     )
     parser.add_argument(
         "--status",
@@ -1689,6 +2646,26 @@ def update_version(target_dir: Path, version: str, force: bool, check_only: bool
         logger.error(f"Version {version}: Update failed - {str(e)}")
         return False, False
 
+def handle_update_command(args, updater):
+    """Handle the unified --update command - updates everything."""
+    # Just update all documentation
+    results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
+    
+    core_success = results["core"]
+    external_results = results["external"]
+    package_results = results.get("packages", {})
+    external_success_count = sum(1 for success in external_results.values() if success)
+    external_total = len(external_results)
+    package_success_count = sum(1 for success in package_results.values() if success)
+    package_total = len(package_results)
+    
+    logger.info(f"Complete documentation update: Core {'successful' if core_success else 'failed'}, External {external_success_count}/{external_total}, Packages {package_success_count}/{package_total}")
+    
+    # Return success if core succeeded and at least some external services/packages succeeded
+    overall_success = core_success and ((external_success_count > 0 or external_total == 0) or (package_success_count > 0 or package_total == 0))
+    return 0 if overall_success else 1
+
+
 def main():
     """Main entry point for the Laravel Docs Updater."""
     args = parse_arguments()
@@ -1711,6 +2688,19 @@ def main():
             for service in services:
                 info = updater.external_fetcher.get_service_info(service)
                 print(f"  {service}: {info.get('name', service)}")
+            return 0
+        
+        # Handle list packages command
+        if args.list_packages:
+            packages = updater.package_fetcher.list_available_packages()
+            print("Available Community Packages:")
+            for package in packages:
+                info = updater.package_fetcher.community_packages.get(package, {})
+                print(f"  {package}: {info.get('name', package)}")
+                # Show sub-packages for Spatie
+                if package == "spatie" and "packages" in info:
+                    for sub_pkg, sub_info in info["packages"].items():
+                        print(f"    - {sub_pkg}: {sub_info.get('name', sub_pkg)}")
             return 0
         
         # Handle status command
@@ -1754,6 +2744,22 @@ def main():
                                 print("    Auto-Discovery: ❌ disabled (using manual configuration)")
                         except Exception:
                             pass
+            
+            print("\nCommunity Packages:")
+            for package, info in status["packages"].items():
+                if "error" in info:
+                    print(f"  {package}: Error - {info['error']}")
+                else:
+                    print(f"  {package} ({info.get('name', package)}):")
+                    print(f"    Cache Valid: {info.get('cache_valid', False)}")
+                    print(f"    Sections: {info.get('sections_count', 0)}")
+                    
+                    # Show sub-packages for Spatie
+                    if package == "spatie" and "sub_packages" in info:
+                        print("    Sub-packages:")
+                        for sub_pkg, sub_info in info["sub_packages"].items():
+                            print(f"      - {sub_info.get('name', sub_pkg)}: {sub_info.get('sections_count', 0)} sections")
+            
             return 0
         
         # Validate version if not updating all
@@ -1769,12 +2775,24 @@ def main():
             print("External Services:")
             for service, needs in needs_update["external"].items():
                 print(f"  {service}: {'needs update' if needs else 'up to date'}")
+            print("Community Packages:")
+            for package, needs in needs_update["packages"].items():
+                print(f"  {package}: {'needs update' if needs else 'up to date'}")
             
             # Return 1 if any updates needed, 0 if all up to date
-            any_needs_update = needs_update["core"] or any(needs_update["external"].values())
+            any_needs_update = needs_update["core"] or any(needs_update["external"].values()) or any(needs_update["packages"].values())
             return 1 if any_needs_update else 0
         
-        # Handle specific update modes
+        # Handle new unified --update parameter
+        if args.update:
+            return handle_update_command(args, updater)
+        
+        # Handle deprecated parameters - all now just update everything
+        if args.external_only or args.core_only or args.packages_only or args.packages or args.services:
+            logger.warning("Deprecated parameter used. Please use --update instead.")
+            return handle_update_command(args, updater)
+        
+        # Handle specific update modes (deprecated but still supported)
         if args.all_versions:
             # Update all supported versions (core only)
             all_success = True
@@ -1788,45 +2806,23 @@ def main():
                     all_success = False
             
             return 0 if all_success else 1
-            
-        elif args.external_only:
-            # Update only external services
-            if args.services:
-                results = updater.update_external_docs(services=args.services, force=args.force)
-            else:
-                results = updater.update_external_docs(force=args.force)
-            
-            success_count = sum(1 for success in results.values() if success)
-            total_count = len(results)
-            logger.info(f"External documentation update: {success_count}/{total_count} services successful")
-            return 0 if success_count == total_count else 1
-            
-        elif args.core_only:
-            # Update only core documentation
-            success = updater.update_core_docs(force=args.force)
-            return 0 if success else 1
-            
-        elif args.services:
-            # Update specific services only
-            results = updater.update_external_docs(services=args.services, force=args.force)
-            success_count = sum(1 for success in results.values() if success)
-            total_count = len(results)
-            logger.info(f"Service documentation update: {success_count}/{total_count} services successful")
-            return 0 if success_count == total_count else 1
         
         else:
-            # Default: update both core and external
-            results = updater.update_all(force_core=args.force, force_external=args.force)
+            # Default: update all (core, external services, and packages)
+            results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
             
             core_success = results["core"]
             external_results = results["external"]
+            package_results = results.get("packages", {})
             external_success_count = sum(1 for success in external_results.values() if success)
             external_total = len(external_results)
+            package_success_count = sum(1 for success in package_results.values() if success)
+            package_total = len(package_results)
             
-            logger.info(f"Complete documentation update: Core {'successful' if core_success else 'failed'}, External {external_success_count}/{external_total}")
+            logger.info(f"Complete documentation update: Core {'successful' if core_success else 'failed'}, External {external_success_count}/{external_total}, Packages {package_success_count}/{package_total}")
             
-            # Return success if core succeeded and at least some external services succeeded
-            overall_success = core_success and (external_success_count > 0 or external_total == 0)
+            # Return success if core succeeded and at least some external services/packages succeeded
+            overall_success = core_success and ((external_success_count > 0 or external_total == 0) or (package_success_count > 0 or package_total == 0))
             return 0 if overall_success else 1
                 
     except KeyboardInterrupt:
