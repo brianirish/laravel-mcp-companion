@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "2fc3ac7cb75eaa8537e73713000ada6048cb980a",
-  "commit_date": "2025-07-15T21:25:00Z",
-  "commit_message": "Improve Testing Mailable Content section (#10617)",
-  "commit_url": "https://github.com/laravel/docs/commit/2fc3ac7cb75eaa8537e73713000ada6048cb980a",
-  "sync_time": "2025-07-16T01:25:30Z"
+  "commit_sha": "37b513606d6566439920facd4603b6b251dea105",
+  "commit_date": "2025-07-18T16:04:11Z",
+  "commit_message": "Fix doesntStartWith incorrect test results when passing array of values (#10624)",
+  "commit_url": "https://github.com/laravel/docs/commit/37b513606d6566439920facd4603b6b251dea105",
+  "sync_time": "2025-07-19T01:23:18Z"
 }
