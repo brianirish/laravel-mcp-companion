@@ -24,6 +24,8 @@ Hello , welcome to your first Inertia app!
 
 Given the page above, you can render the page by returning an Inertia response from a controller or route. In this example, let's assume this page is stored at resources/js/Pages/User/Show.vue resources/js/Pages/User/Show.jsx resources/js/Pages/User/Show.svelte within a Laravel application.
 
+If you attempt to render a page that does not exist, the response will typically be a blank screen. To prevent this, you may set the inertia.ensure_pages_exist configuration option to true. The Laravel adapter will then throw an Inertia\ComponentNotFoundException when a page cannot be found.
+
 While not required, for most projects it makes sense to create a site layout that all of your pages can extend. You may have noticed in our page example above that we're wrapping the page content within a component. Here's an example of such a component:
 
 As you can see, there is nothing Inertia specific within this template. This is just a typical Vue React Svelte component.
@@ -45,6 +47,9 @@ You can even go a step further and conditionally set the default page layout bas
 `resources/js/Pages/User/Show.vue`
 `resources/js/Pages/User/Show.jsx`
 `resources/js/Pages/User/Show.svelte`
+`inertia.ensure_pages_exist`
+`true`
+`Inertia\ComponentNotFoundException`
 `Layout`
 `name`
 `resolve()`

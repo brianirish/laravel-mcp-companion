@@ -48,6 +48,8 @@ When a form has been successfully submitted, the wasSuccessful property will be 
 
 To reset the form's values back to their default values, you can use the reset() method.
 
+Sometimes, you may want to restore your form fields to their default values and clear any validation errors at the same time. Instead of calling reset() and clearErrors() separately, you can use the resetAndClearErrors() method, which combines both actions into a single call.
+
 If your form's default values become outdated, you can use the defaults() method to update them. Then, the form will be reset to the correct values the next time the reset() method is invoked.
 
 To determine if a form has any changes, you may use the isDirty property.
@@ -87,6 +89,7 @@ If there are form validation errors, they are available via the errors property.
 `true`
 `recentlySuccessful`
 `reset()`
+`resetAndClearErrors()`
 `defaults()`
 `isDirty`
 `cancel()`
@@ -135,3 +138,15 @@ Some other error for the bar field.
 
               // Reset specific fields...
               $form.reset(
+
+// Reset the form and clear all errors...
+              form.resetAndClearErrors()
+
+              // Reset specific fields and clear their errors...
+              form.resetAndClearErrors(
+
+// Reset the form and clear all errors...
+              $form.resetAndClearErrors()
+
+              // Reset specific fields and clear their errors...
+              $form.resetAndClearErrors(

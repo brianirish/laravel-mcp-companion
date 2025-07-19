@@ -48,9 +48,11 @@ When making visits, Inertia automatically adds a new entry into the browser hist
 
 You can use the router.push and router.replace method to make client-side visits. This method is useful when you want to update the browser's history without making a server request.
 
-All of the parameters are optional. By default, all passed paramaters will be merged with the current page. This means you are responsible for overriding the current page's URL, component, and props.
+All of the parameters are optional. By default, all passed paramaters (except errorBag) will be merged with the current page. This means you are responsible for overriding the current page's URL, component, and props.
 
 If you need access to the current page's props you can pass a function to the props option. This function will receive the current page's props as an argument and should return the new props.
+
+The errorBag option allows you to specify which error bag to use when handling validation errors in the onError callback.
 
 By default, page visits to the same page create a fresh page component instance. This causes any local state, such as form inputs, scroll positions, and focus states to be lost.
 
@@ -111,6 +113,8 @@ It's also possible to return a promise from the onSuccess() and onError() callba
 `replace`
 `router.push`
 `router.replace`
+`errorBag`
+`onError`
 `reload`
 `false`
 `only`
