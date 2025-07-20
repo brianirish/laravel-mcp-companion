@@ -4,267 +4,163 @@
 
 ---
 
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+Cookbook - Laravel Forge
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "forge-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 24 182 155;
+    --primary-light: 24 182 155;
+    --primary-dark: 24 182 155;
+    --background-light: 255 255 255;
+    --background-dark: 9 12 14;
+    --gray-50: 243 248 247;
+    --gray-100: 238 243 242;
+    --gray-200: 223 228 227;
+    --gray-300: 206 211 210;
+    --gray-400: 159 164 163;
+    --gray-500: 112 117 116;
+    --gray-600: 80 85 84;
+    --gray-700: 63 68 67;
+    --gray-800: 38 42 42;
+    --gray-900: 23 28 27;
+    --gray-950: 10 15 14;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Dashboard](https://forge.laravel.com)
-- [Dashboard](https://forge.laravel.com)
-
-Search...
-
-Navigation
-
-Servers
-
-Cookbook
-
-[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
-
-##### Get Started
-
-- [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
-
-##### Accounts
-
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
-
-##### Servers
-
-- [Server Providers](/docs/servers/providers)
-- [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
-- [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
-- [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
-
-##### Sites
-
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
-- [Deployments](/docs/sites/deployments)
-- [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
-- [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
-
-##### Resources
-
-- [Daemons](/docs/resources/daemons)
-- [Databases](/docs/resources/databases)
-- [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
-- [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
-
-##### Integrations
-
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-
-##### Other
-
-- [Abuse](/docs/abuse)
-
-Servers
-
-# Cookbook
-
-Common tasks and solutions for managing your Forge server.
-
-## [​](#restarting-php-fpm) Restarting PHP FPM
-
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
+Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationServersCookbookDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseServersCookbookCommon tasks and solutions for managing your Forge server.​Restarting PHP FPM
 When configuring your server, Forge configures FPM so that it can be restarted without using your server’s “sudo” password. To do so, you should issue the following command. Of course, you should adjust the PHP version to match the version of PHP installed on your machine:
-
-Copy
-
-Ask AI
-
-```
-touch /tmp/fpmlock 2>/dev/null || true
+CopyAsk AItouch /tmp/fpmlock 2&gt;/dev/null || true
 ( flock -w 10 9 || exit 1
-    echo 'Restarting FPM...'; sudo -S service $FORGE_PHP_FPM reload ) 9</tmp/fpmlock
+    echo &#x27;Restarting FPM...&#x27;; sudo -S service $FORGE_PHP_FPM reload ) 9&lt;/tmp/fpmlock
 
-```
+flock is used to prevent concurrent php-fpm reloads. Without a lock, simultaneous restart attempts could lead to race conditions, brief service interruptions, or inconsistent process states.
+​Resetting The forge User Sudo Password
+Forge does not store your server’s forge user sudo password and is therefore unable to reset it for you. To reset the forge user sudo password, you’ll need to contact your server provider and regain SSH access to your server as the root user.
+Once you are connected to your server as the root user, you should run the passwd forge command to redefine the forge user sudo password.
+​Digital Ocean
+If your servers are managed by DigitalOcean, the following steps should assist you in resetting the forge user’s sudo password using Digital Ocean’s dashboard.
 
-`flock` is used to prevent concurrent php-fpm reloads. Without a lock, simultaneous restart attempts could lead to race conditions, brief service interruptions, or inconsistent process states.
 
-## [​](#resetting-the-forge-user-sudo-password) Resetting The `forge` User Sudo Password
+First, on DigitalOcean’s dashboard, click on the server name. Then, within the “Access” tab, click on “Reset Root Password”. Usually, this operation restarts the server and sends the new root user’s sudo password to your DigitalOcean account’s associated email address.
 
-Forge does not store your server’s `forge` user sudo password and is therefore unable to reset it for you. To reset the `forge` user sudo password, you’ll need to contact your server provider and regain SSH access to your server as the `root` user.
 
-Once you are connected to your server as the `root` user, you should run the `passwd forge` command to redefine the `forge` user sudo password.
+Next, still on the “Access” tab, click on “Launch Droplet Console” to gain access to your server terminal as the root user. During this step, you will be asked to redefine the root user’s sudo password.
 
-#### [​](#digital-ocean) Digital Ocean
 
-If your servers are managed by DigitalOcean, the following steps should assist you in resetting the `forge` user’s sudo password using Digital Ocean’s dashboard.
+Finally, execute the passwd forge terminal command as the root userto redefine the forge user’s sudo password.
 
-1. First, on DigitalOcean’s dashboard, click on the server name. Then, within the “Access” tab, click on “Reset Root Password”. Usually, this operation restarts the server and sends the new `root` user’s sudo password to your DigitalOcean account’s associated email address.
-2. Next, still on the “Access” tab, click on “Launch Droplet Console” to gain access to your server terminal as the `root` user. During this step, you will be asked to redefine the `root` user’s sudo password.
-3. Finally, execute the `passwd forge` terminal command as the `root` userto redefine the `forge` user’s sudo password.
 
-## [​](#upgrading-composer) Upgrading Composer
-
+​Upgrading Composer
 The latest version of Composer is installed by Forge when a new server is provisioned. However, as your server ages, you may wish to upgrade the installed version of Composer. You may do so using the following command:
-
-Copy
-
-Ask AI
-
-```
-composer self-update --2
-
-```
+CopyAsk AIcomposer self-update --2
 
 This will instruct Composer to update itself and specifically select version 2. If your application is not compatible with Composer 2, you can roll back to Composer 1 at any time:
-
-Copy
-
-Ask AI
-
-```
-composer self-update --1
-
-```
+CopyAsk AIcomposer self-update --1
 
 Servers are provisioned with a Scheduled job that updates Composer. You should delete and recreate the existing job via the server’s “Scheduled Jobs” tab after upgrading Composer.
-
-## [​](#upgrading-nginx) Upgrading Nginx
-
+​Upgrading Nginx
 The latest version of Nginx is installed by Forge when a new server is provisioned. However, as your server ages, you may wish to upgrade the installed version of Nginx. You may do so using the following commands:
-
-Copy
-
-Ask AI
-
-```
-sudo apt-get install -y --only-upgrade nginx
+CopyAsk AIsudo apt-get install -y --only-upgrade nginx
 sudo nginx -v
 sudo service nginx restart
 
-```
-
 You should upgrade the Nginx version on your server at your own risk. Upgrading the version of Nginx installed on your server may cause downtime or conflict with other installed software.
-
-## [​](#upgrading-node-js) Upgrading Node.js
-
+​Upgrading Node.js
 The latest LTS version of Node.js is installed by Forge when it is provisioning a new server. However, as your server ages, you may wish to upgrade the version of Node.js:
-
-Copy
-
-Ask AI
-
-```
-sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y ca-certificates curl gnupg
+CopyAsk AIsudo apt-get update --allow-releaseinfo-change &amp;&amp; sudo apt-get install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 NODE_MAJOR=22
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-sudo apt-get update --allow-releaseinfo-change && sudo apt-get install nodejs -y
+echo &quot;deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main&quot; | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update --allow-releaseinfo-change &amp;&amp; sudo apt-get install nodejs -y
 
-```
-
-[Node.js version information](https://nodejs.org/en/about/previous-releases/)
-
-## [​](#upgrading-npm) Upgrading npm
-
+Node.js version information
+​Upgrading npm
 The latest version of npm is installed by Forge when provisioning new servers. However, you may upgrade the installed version of npm using the following commands:
+CopyAsk AIsudo npm install npm@latest -g
 
-Copy
+​Upgrading Meilisearch
+If you would like to install the latest Meilisearch binaries on your server, please follow the official Meilisearch upgrade guide.
+On most Forge servers, the Meilisearch binary is installed at /usr/local/bin/meilisearch and the database is stored at /var/lib/meilisearch.
+​Expanding Server Disk Space
+When you increase your server’s disk size through your VPS provider, the additional space is not automatically available to your Ubuntu filesystem. You will need to expand the operating system’s filesystem to use the newly allocated space.
+We strongly recommend creating a backup or snapshot of your server through your VPS provider before proceeding with disk expansion operations. While these commands are generally safe, disk operations carry inherent risks.
+​Checking Current Disk Usage
+First, check your current disk usage to identify which partition needs expansion:
+CopyAsk AIdf -h
 
-Ask AI
+This command will show you all mounted filesystems and their usage. Look for the partition that’s running low on space (typically /).
+​Expanding the Filesystem
+Most Forge servers use standard partitions without LVM (Logical Volume Manager). If your system uses LVM, the disk expansion process is different and requires additional steps using the pvresize and lvextend commands.
+For standard, non-LVM systems, follow these steps:
 
-```
-sudo npm install npm@latest -g
 
-```
+First, check your partition table:
+CopyAsk AIsudo fdisk -l
 
-## [​](#upgrading-meilisearch) Upgrading Meilisearch
 
-If you would like to install the latest Meilisearch binaries on your server, please follow [the official Meilisearch upgrade guide](https://www.meilisearch.com/docs/learn/update_and_migration/updating).
 
-On most Forge servers, the Meilisearch binary is installed at `/usr/local/bin/meilisearch` and the database is stored at `/var/lib/meilisearch`.
+If the partition needs to be expanded, use the growpart command:
+CopyAsk AI# Install growpart if it is not available...
+sudo apt-get update &amp;&amp; sudo apt-get install -y cloud-guest-utils
 
-## [​](#digitalocean-droplet-limit-exceeded) DigitalOcean Droplet Limit Exceeded
+# Grow the partition...
+sudo growpart /dev/vda1  # Replace with your actual device and partition number (e.g., /dev/sda1, /dev/xvda1)
 
-This error is returned by [DigitalOcean](https://digitalocean.com) when you have reached a limit on how many droplets you can create. You can ask DigitalOcean to increase your droplet limit by contacting their support. Once they have increased your limit, you may create servers in Forge.
 
-## [​](#aws-provisioned-servers-are-disappearing) AWS Provisioned Servers Are Disappearing
 
-To ensure Forge works correctly with AWS, please review [these requirements](/docs/servers/providers#amazon-aws-api-access).
+Resize the filesystem:
+CopyAsk AI# For ext4 filesystems...
+sudo resize2fs /dev/vda1  # Replace with your actual device (e.g., /dev/sda1, /dev/xvda1)
 
-## [​](#server-disconnected) Server Disconnected
+# For XFS filesystems...
+sudo xfs_growfs /
 
-There are several reasons why your server may have a “disconnected” status. We encourage you to check these common solutions before contacting support:
 
-- Verify that the server is powered on via your server provider’s dashboard. If the server is powered off, you should restart it using your **provider’s dashboard**.
-- Verify that the public IP address of the server is known to Forge (the public IP address may change between reboots of the actual VPS).
-- Verify that the Forge generated public key for the server is included in the `/root/.ssh/authorized_keys` and `/home/forge/.ssh/authorized_keys` files. This key is available via the “Settings” tab of your server’s Forge management panel.
-- If your server is behind a firewall, make sure you have [allowed Forge’s IP addresses to access the server](/docs/introduction#forge-ip-addresses).
-- If you removed Port 22 from the server’s firewall rules, you will need to contact your server provider and ask them to restore the rule. Removing this rule prevents Forge from accessing your server via SSH.
-- Remove any private keys or other lines that do not contain a valid public key from the `/root/.ssh/authorized_keys` and `/home/forge/.ssh/authorized_keys` files.
 
-If you are still experiencing connectivity issues, you should also verify that the permissions and ownership of the following directories and files are correct:
+​Verifying the Expansion
+After completing the expansion, verify that the additional space is available:
+CopyAsk AIdf -h
 
-Copy
+The filesystem should now show the increased capacity.
+​Troubleshooting
+“No space left on device” Error
+If you encounter an error like mkdir: cannot create directory &#x27;/tmp/growpart.xxxx&#x27;: No space left on device, your root filesystem is completely full, preventing even basic commands from running. You will need to free up some temporary space first:
+CopyAsk AI# Clear apt cache...
+sudo apt-get clean
 
-Ask AI
+# Clear journal logs (keep only last 50M)...
+sudo journalctl --vacuum-size=50M
 
-```
-# Fixes the "root" user (run as root)
+# Remove old snap versions...
+sudo sh -c &#x27;snap list --all | grep disabled | awk &quot;{print \$1, \$3}&quot; | while read name rev; do snap remove &quot;$name&quot; --revision=&quot;$rev&quot;; done&#x27;
 
-chown root:root /root
-chown -R root:root /root/.ssh
-chmod 700 /root/.ssh
-chmod 600 /root/.ssh/authorized_keys
+# Check if you now have space...
+df -h /
 
-# Fixes the "forge" user
-
-chown forge:forge /home/forge
-chown -R forge:forge /home/forge/.ssh
-chmod 700 /home/forge/.ssh
-chmod 600 /home/forge/.ssh/authorized_keys
-
-```
-
-If, after trying all of the above solutions, Forge is still unable to connect to your server but you can still SSH to the server, please run the following command as the `root` user and share the output with Forge support:
-
-Copy
-
-Ask AI
-
-```
-grep 'sshd' /var/log/auth.log | tail -n 10
-
-```
-
-If Forge is not able to connect to your server, you will not be able to manage it thro
-
-*[Content truncated for length]*
+Once you created free space

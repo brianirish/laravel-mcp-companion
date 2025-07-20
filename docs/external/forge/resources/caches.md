@@ -4,149 +4,65 @@
 
 ---
 
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+Caches - Laravel Forge
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "forge-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 24 182 155;
+    --primary-light: 24 182 155;
+    --primary-dark: 24 182 155;
+    --background-light: 255 255 255;
+    --background-dark: 9 12 14;
+    --gray-50: 243 248 247;
+    --gray-100: 238 243 242;
+    --gray-200: 223 228 227;
+    --gray-300: 206 211 210;
+    --gray-400: 159 164 163;
+    --gray-500: 112 117 116;
+    --gray-600: 80 85 84;
+    --gray-700: 63 68 67;
+    --gray-800: 38 42 42;
+    --gray-900: 23 28 27;
+    --gray-950: 10 15 14;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Dashboard](https://forge.laravel.com)
-- [Dashboard](https://forge.laravel.com)
-
-Search...
-
-Navigation
-
-Resources
-
-Caches
-
-[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
-
-##### Get Started
-
-- [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
-
-##### Accounts
-
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
-
-##### Servers
-
-- [Server Providers](/docs/servers/providers)
-- [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
-- [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
-- [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
-
-##### Sites
-
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
-- [Deployments](/docs/sites/deployments)
-- [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
-- [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
-
-##### Resources
-
-- [Daemons](/docs/resources/daemons)
-- [Databases](/docs/resources/databases)
-- [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
-- [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
-
-##### Integrations
-
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-
-##### Other
-
-- [Abuse](/docs/abuse)
-
-Resources
-
-# Caches
-
-Learn how to connect to Redis and Memcache on your Forge server.
-
-## [​](#overview) Overview
-
-When provisioning an [App Server](/docs/servers/types#app-servers) or a [Cache Server](/docs/servers/types#cache-servers), Forge will automatically install [Memcache](https://www.memcached.org/) and [Redis](https://redis.io/). By default, neither of these services are exposed to the public and may only be accessed from within your server.
-
-## [​](#connecting-to-redis) Connecting To Redis
-
-Redis and Memcache are both available via `127.0.0.1` and their default ports.
-
-Copy
-
-Ask AI
-
-```
-MEMCACHED_HOST=127.0.0.1
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
+Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationResourcesCachesDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseResourcesCachesLearn how to connect to Redis and Memcache on your Forge server.​Overview
+When provisioning an App Server or a Cache Server, Forge will automatically install Memcache and Redis. By default, neither of these services are exposed to the public and may only be accessed from within your server.
+​Connecting To Redis
+Redis and Memcache are both available via 127.0.0.1 and their default ports.
+CopyAsk AIMEMCACHED_HOST=127.0.0.1
 MEMCACHED_PORT=11211
 
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 
-```
-
-## [​](#external-connections) External Connections
-
-All Forge servers require SSH key authentication and are not able to be accessed using passwords. Therefore, when selecting the SSH key to use during authentication, ensure that you select your private SSH key. For example, when connecting to Redis using the [TablePlus](https://tableplus.com/) database client:
-
-![Connecting to Redis with TablePlus](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/redis-gui.png)
-
-Was this page helpful?
-
-YesNo
-
-[Databases](/docs/resources/databases)[Network](/docs/resources/network)
-
-On this page
-
-- [Overview](#overview)
-- [Connecting To Redis](#connecting-to-redis)
-- [External Connections](#external-connections)
-
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+​External Connections
+All Forge servers require SSH key authentication and are not able to be accessed using passwords. Therefore, when selecting the SSH key to use during authentication, ensure that you select your private SSH key. For example, when connecting to Redis using the TablePlus database client:
+Was this page helpful?YesNoDatabasesNetworkOn this pageOverviewConnecting To RedisExternal ConnectionsLaravel Forge home pagexgithubdiscordlinkedinTerm of ServicePrivacy PolicyData Processing Agreement (DPA)xgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    p: \"p\",\n    pre: \"pre\",\n    span: \"span\",\n    ..._provideComponents(),\n    ...props.components\n  }, {CodeBlock, Heading, ZoomImage} = _components;\n  if (!CodeBlock) _missingMdxReference(\"CodeBlock\", true);\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  if (!ZoomImage) _missingMdxReference(\"ZoomImage\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsx(Heading, {\n      level: \"2\",\n      id: \"overview\",\n      isAtRootLevel: \"true\",\n      children: \"Overview\"\n    }), \"\\n\", _jsxs(_components.p, {\n      children: [\"When provisioning an \", _jsx(_components.a, {\n        href: \"/servers/types#app-servers\",\n        children: \"App Server\"\n      }), \" or a \", _jsx(_components.a, {\n        href: \"/servers/types#cache-servers\",\n        children: \"Cache Server\"\n      }), \", Forge will automatically install \", _jsx(_components.a, {\n        href: \"https://www.memcached.org/\",\n        children: \"Memcache\"\n      }), \" and \", _jsx(_components.a, {\n        href: \"https://redis.io/\",\n        children: \"Redis\"\n      }), \". By default, neither of these services are exposed to the public and may only be accessed from within your server.\"]\n    }), \"\\n\", _jsx(Heading, {\n      level: \"2\",\n      id: \"connecting-to-redis\",\n      isAtRootLevel: \"true\",\n      children: \"Connecting To Redis\"\n    }), \"\\n\", _jsxs(_components.p, {\n      children: [\"Redis and Memcache are both available via \", _jsx(_components.code, {\n        children: \"127.0.0.1\"\n      }), \" and their default ports.\"]\n    }), \"\\n\", _jsx(CodeBlock, {\n      numberOfLines: \"6\",\n      language: \"shellscript\",\n      children: _jsx(_components.pre, {\n        className: \"shiki shiki-themes github-light-default dark-plus\",\n        style: {\n          backgroundColor: \"transparent\",\n          \"--shiki-dark-bg\": \"transparent\",\n          color: \"#1f2328\",\n          \"--shiki-dark\": \"#f3f7f6\"\n        },\n        language: \"shellscript\",\n        children: _jsxs(_components.code, {\n          language: \"shellscript\",\n          numberOfLines: \"6\",\n          children: [_jsxs(_components.span, {\n            className: \"line\",\n            children: [_jsx(_components.span, {\n              style: {\n                color: \"#1F2328\",\n                \"--shiki-dark\": \"#9CDCFE\"\n              },\n              children: \"MEMCACHED_HOST\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#CF222E\",\n                \"--shiki-dark\": \"#f3f7f6\"\n              },\n              children: \"=\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#0A3069\",\n                \"--shiki-dark\": \"#CE9178\"\n              },\n              children: \"127.0.0.1\"\n            })]\n          }), \"\\n\", _jsxs(_components.span, {\n            className: \"line\",\n            children: [_jsx(_components.span, {\n              style: {\n                color: \"#1F2328\",\n                \"--shiki-dark\": \"#9CDCFE\"\n              },\n              children: \"MEMCACHED_PORT\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#CF222E\",\n                \"--shiki-dark\": \"#f3f7f6\"\n              },\n              children: \"=\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#0A3069\",\n                \"--shiki-dark\": \"#CE9178\"\n              },\n              children: \"11211\"\n            })]\n          }), \"\\n\", _jsx(_components.span, {\n            className: \"line\"\n          }), \"\\n\", _jsxs(_components.span, {\n            className: \"line\",\n            children: [_jsx(_components.span, {\n              style: {\n                color: \"#1F2328\",\n                \"--shiki-dark\": \"#9CDCFE\"\n              },\n              children: \"REDIS_HOST\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#CF222E\",\n                \"--shiki-dark\": \"#f3f7f6\"\n              },\n              children: \"=\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#0A3069\",\n                \"--shiki-dark\": \"#CE9178\"\n              },\n              children: \"127.0.0.1\"\n            })]\n          }), \"\\n\", _jsxs(_components.span, {\n            className: \"line\",\n            children: [_jsx(_components.span, {\n              style: {\n                color: \"#1F2328\",\n                \"--shiki-dark\": \"#9CDCFE\"\n              },\n              children: \"REDIS_PASSWORD\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#CF222E\",\n                \"--shiki-dark\": \"#f3f7f6\"\n              },\n              children: \"=\"\n            }), _jsx(_components.span, {\n              style: {\n                color: \"#0A3069\",\n                \"--shiki-dark\": \"#CE9178\"\n              },\n              children: \"null\"\n            })]\n          }), \"\\n\", _jsxs(_components.span, {\n            className: \"line\",\n            children: [_jsx(_components.span, {\n              style: {\n                color: \"#1F2328\",\n                \"--shiki-dark\": \"#9CDCFE\"\n              },\n              children: \"REDIS_PORT\"\n            }), _jsx(_components.span, {\n              style: {\n              

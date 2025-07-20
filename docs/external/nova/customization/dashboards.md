@@ -4,118 +4,63 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Dashboards - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Digging Deeper
-
-Dashboards
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Digging Deeper
-
-# Dashboards
-
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperDashboardsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsDigging DeeperDashboardsNova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.​Overview
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.
 
-## [​](#overview) Overview
-
-Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](./../metrics/defining-metrics) and [cards](../customization/cards).
-
-![Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
-
-### [​](#default-dashboard) Default Dashboard
-
-Nova ships with a default `App\Nova\Dashboards\Main` dashboard class containing a `cards` method. You can customize which cards are present on the default dashboard via this method:
-
-app/Nova/Dashboards/Main.php
-
-Copy
-
-Ask AI
-
-```
-namespace App\Nova\Dashboards;
+​Default Dashboard
+Nova ships with a default App\Nova\Dashboards\Main dashboard class containing a cards method. You can customize which cards are present on the default dashboard via this method:
+app/Nova/Dashboards/Main.phpCopyAsk AInamespace App\Nova\Dashboards;
 
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Dashboards\Main as Dashboard;
@@ -125,7 +70,7 @@ class Main extends Dashboard
     /**
      * Get the cards that should be displayed on the Nova dashboard.
      *
-     * @return array<int, \Laravel\Nova\Card>
+     * @return array&lt;int, \Laravel\Nova\Card&gt;
      */
     public function cards(): array
     {
@@ -135,33 +80,13 @@ class Main extends Dashboard
     }
 }
 
-```
+More information regarding dashboard metrics can be found within our documentation on metrics.
+​Defining Dashboards
+Custom dashboards may be generated using the nova:dashboard Artisan command. By default, all new dashboards will be placed in the app/Nova/Dashboards directory:
+CopyAsk AIphp artisan nova:dashboard UserInsights
 
-More information regarding dashboard metrics can be found [within our documentation on metrics](../metrics/registering-metrics#dashboard-metrics).
-
-## [​](#defining-dashboards) Defining Dashboards
-
-Custom dashboards may be generated using the `nova:dashboard` Artisan command. By default, all new dashboards will be placed in the `app/Nova/Dashboards` directory:
-
-Copy
-
-Ask AI
-
-```
-php artisan nova:dashboard UserInsights
-
-```
-
-Once your dashboard class has been generated, you’re ready to customize it. Each dashboard class contains a `cards` method. This method should return an array of card or metric classes:
-
-app/Nova/Dashboards/UserInsights.php
-
-Copy
-
-Ask AI
-
-```
-namespace App\Nova\Dashboards;
+Once your dashboard class has been generated, you’re ready to customize it. Each dashboard class contains a cards method. This method should return an array of card or metric classes:
+app/Nova/Dashboards/UserInsights.phpCopyAsk AInamespace App\Nova\Dashboards;
 
 use Laravel\Nova\Dashboard;
 use App\Nova\Metrics\TotalUsers;
@@ -172,7 +97,7 @@ class UserInsights extends Dashboard
     /**
      * Get the cards for the dashboard.
      *
-     * @return array<int, \Laravel\Nova\Card>
+     * @return array&lt;int, \Laravel\Nova\Card&gt;
      */
     public function cards(): array
     {
@@ -183,66 +108,33 @@ class UserInsights extends Dashboard
     }
 }
 
-```
-
-#### [​](#dashboard-names) Dashboard Names
-
-By default, Nova will use the dashboard’s class name to determine the displayable name of your dashboard that should be placed in the left-side navigation bar. You may customize the name of the dashboard displayed in the left-side navigation bar by overriding the `name` method within your dashboard class:
-
-app/Nova/Dashboards/UserInsights.php
-
-Copy
-
-Ask AI
-
-```
-/**
+​Dashboard Names
+By default, Nova will use the dashboard’s class name to determine the displayable name of your dashboard that should be placed in the left-side navigation bar. You may customize the name of the dashboard displayed in the left-side navigation bar by overriding the name method within your dashboard class:
+app/Nova/Dashboards/UserInsights.phpCopyAsk AI/**
  * Get the displayable name of the dashboard.
  *
  * @return \Stingable|string
  */
 public function name()
 {
-    return 'User Insights';
+    return &#x27;User Insights&#x27;;
 }
 
-```
-
-#### [​](#dashboard-uri-keys) Dashboard URI Keys
-
-If you need to change the URI of the dashboard, you may override the dashboard class’ `uriKey` method. Of course, the URI represents the browser location that Nova will navigate to in when you click on the dashboard link in the left-side navigation bar:
-
-app/Nova/Dashboards/UserInsights.php
-
-Copy
-
-Ask AI
-
-```
-/**
+​Dashboard URI Keys
+If you need to change the URI of the dashboard, you may override the dashboard class’ uriKey method. Of course, the URI represents the browser location that Nova will navigate to in when you click on the dashboard link in the left-side navigation bar:
+app/Nova/Dashboards/UserInsights.phpCopyAsk AI/**
  * Get the URI key of the dashboard.
  *
  * @return string
  */
 public function uriKey()
 {
-    return 'user-insights-improved';
+    return &#x27;user-insights-improved&#x27;;
 }
 
-```
-
-## [​](#registering-dashboards) Registering Dashboards
-
-To register a dashboard, add the dashboard to the array returned by the `dashboards` method of your application’s `App/Providers/NovaServiceProvider` class. Once you have added the dashboard to this method, it will become available for navigation in Nova’s left-side navigation bar:
-
-app/Providers/NovaServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Dashboards\Main;
+​Registering Dashboards
+To register a dashboard, add the dashboard to the array returned by the dashboards method of your application’s App/Providers/NovaServiceProvider class. Once you have added the dashboard to this method, it will become available for navigation in Nova’s left-side navigation bar:
+app/Providers/NovaServiceProvider.phpCopyAsk AIuse App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
 // ...
@@ -250,7 +142,7 @@ use App\Nova\Dashboards\UserInsights;
 /**
  * Get the dashboards that should be listed in the Nova sidebar.
  *
- * @return array<int, \Laravel\Nova\Dashboard>
+ * @return array&lt;int, \Laravel\Nova\Dashboard&gt;
  */
 protected function dashboards(): array
 {
@@ -260,20 +152,9 @@ protected function dashboards(): array
     ];
 }
 
-```
-
-#### [​](#customizing-dashboard-menus) Customizing Dashboard Menus
-
-You can customize the dashboard’s menu by defining a `menu` method on your dashboard class:
-
-app/Nova/Dashboards/UserInsights.php
-
-Copy
-
-Ask AI
-
-```
-use Illuminate\Http\Request;
+​Customizing Dashboard Menus
+You can customize the dashboard’s menu by defining a menu method on your dashboard class:
+app/Nova/Dashboards/UserInsights.phpCopyAsk AIuse Illuminate\Http\Request;
 
 // ...
 
@@ -284,27 +165,15 @@ use Illuminate\Http\Request;
  */
 public function menu(Request $request)
 {
-    return parent::menu($request)->withBadge(function () {
-        return 'NEW!';
+    return parent::menu($request)-&gt;withBadge(function () {
+        return &#x27;NEW!&#x27;;
     });
 }
 
-```
-
-Please refer to the documentation on [menu customization](./menus) for more information.
-
-### [​](#refreshing-dashboard-metrics) Refreshing Dashboard Metrics
-
-Occasionally, you may wish to refresh all the metrics’ values inside your dashboard. You may do this by enabling the refresh button by using the `showRefreshButton` method on the dashboard instance:
-
-app/Providers/NovaServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Dashboards\Main;
+Please refer to the documentation on menu customization for more information.
+​Refreshing Dashboard Metrics
+Occasionally, you may wish to refresh all the metrics’ values inside your dashboard. You may do this by enabling the refresh button by using the showRefreshButton method on the dashboard instance:
+app/Providers/NovaServiceProvider.phpCopyAsk AIuse App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
 // ...
@@ -312,30 +181,19 @@ use App\Nova\Dashboards\UserInsights;
 /**
  * Get the dashboards that should be listed in the Nova sidebar.
  *
- * @return array<int, \Laravel\Nova\Dashboard>
+ * @return array&lt;int, \Laravel\Nova\Dashboard&gt;
  */
 protected function dashboards(): array
 {
     return [
         Main::make(),
-        UserInsights::make()->showRefreshButton(),
+        UserInsights::make()-&gt;showRefreshButton(),
     ];
 }
 
-```
-
-### [​](#authorization) Authorization
-
-If you would like to only expose a given dashboard to certain users, you may invoke the `canSee` method when registering your dashboard. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
-
-app/Providers/NovaServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User;
+​Authorization
+If you would like to only expose a given dashboard to certain users, you may invoke the canSee method when registering your dashboard. The canSee method accepts a closure which should return true or false. The closure will receive the incoming HTTP request:
+app/Providers/NovaServiceProvider.phpCopyAsk AIuse App\Models\User;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
@@ -344,30 +202,20 @@ use App\Nova\Dashboards\UserInsights;
 /**
  * Get the dashboards that should be listed in the Nova sidebar.
  *
- * @return array<int, \Laravel\Nova\Dashboard>
+ * @return array&lt;int, \Laravel\Nova\Dashboard&gt;
  */
 protected function dashboards(): array
 {
     return [
         Main::make(),
-        UserInsights::make()->canSee(function ($request) {
-            return $request->user()->can('viewUserInsights', User::class);
+        UserInsights::make()-&gt;canSee(function ($request) {
+            return $request-&gt;user()-&gt;can(&#x27;viewUserInsights&#x27;, User::class);
         }),
     ];
 }
 
-```
-
-In the example above, we are using Laravel’s `Authorizable` trait’s can method on our `User` model to determine if the authorized user is authorized for the `viewUserInsights` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
-
-app/Providers/NovaServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User;
+In the example above, we are using Laravel’s Authorizable trait’s can method on our User model to determine if the authorized user is authorized for the viewUserInsights action. However, since proxying to authorization policy methods is a common use-case for canSee, you may use the canSeeWhen method to achieve the same behavior. The canSeeWhen method has the same method signature as the Illuminate\Foundation\Auth\Access\Authorizable trait’s can method:
+app/Providers/NovaServiceProvider.phpCopyAsk AIuse App\Models\User;
 use App\Nova\Dashboards\Main;
 use App\Nova\Dashboards\UserInsights;
 
@@ -376,31 +224,13 @@ use App\Nova\Dashboards\UserInsights;
 /**
  * Get the dashboards that should be listed in the Nova sidebar.
  *
- * @return array<int, \Laravel\Nova\Dashboard>
+ * @return array&lt;int, \Laravel\Nova\Dashboard&gt;
  */
 protected function dashboards(): array
 {
     return [
         Main::make(),
-        UserInsights::make()->canSeeWhen('viewUserInsights', User::class),
+        UserInsights::make()-&gt;canSeeWhen(&#x27;viewUserInsights&#x27;, User::class),
     ];
 }
-
-```
-
-Was this page helpful?
-
-YesNo
-
-[Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)
-
-On this page
-
-- [Overview](#overview)
-- [Default Dashboard](#default-dashboard)
-- [Defining Dashboards](#defining-dashboards)
-- [Dashboard Names](#dashboard-names)
-- [Dashboard URI Keys](#dashboard-uri-keys)
-- [Registering Dashboards](#registering-dashboard
-
-*[Content truncated for length]*
+Was this page helpful?YesNoRegistering MetricsMenusOn this pageOverviewDefault DashboardDefining DashboardsDashboard NamesDashboard URI KeysRegistering DashboardsCustomizing Dashboard MenusRefreshing Dashboard MetricsAuthorizationLaravel Nova home pagexgithubdiscordlinkedinPlatformDashboardStatusLegal and ComplianceTerm of ServicePrivacy PolicyxgithubdiscordlinkedinAssistantResponses are generated using AI and may co

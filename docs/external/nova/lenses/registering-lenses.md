@@ -4,119 +4,66 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Registering Lenses - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Lenses
-
-Registering Lenses
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Lenses
-
-# Registering Lenses
-
-Learn how to register lenses in your Nova application.
-
-Once you have defined a lens, you are ready to attach it to a resource. Each resource generated by Nova contains a `lenses` method. To attach a lens to a resource, you should simply add it to the array of lenses returned by this method:
-
-Construct
-
-Make
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationLensesRegistering LensesDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsLensesRegistering LensesLearn how to register lenses in your Nova application.Once you have defined a lens, you are ready to attach it to a resource. Each resource generated by Nova contains a lenses method. To attach a lens to a resource, you should simply add it to the array of lenses returned by this method:
+ConstructMakeCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the lenses available for the resource.
  *
- * @return array<int, \Laravel\Nova\Lenses\Lens>
+ * @return array&lt;int, \Laravel\Nova\Lenses\Lens&gt;
  */
 public function lenses(NovaRequest $request): array
 {
@@ -125,20 +72,9 @@ public function lenses(NovaRequest $request): array
     ];
 }
 
-```
-
-## [​](#authorization) Authorization
-
-If you would like to only expose a given lens to certain users, you may invoke the `canSee` method when registering your lens. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
-
-app/Nova/User.php
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User as UserModel;
+​Authorization
+If you would like to only expose a given lens to certain users, you may invoke the canSee method when registering your lens. The canSee method accepts a closure which should return true or false. The closure will receive the incoming HTTP request:
+app/Nova/User.phpCopyAsk AIuse App\Models\User as UserModel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -146,30 +82,22 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the lenses available for the resource.
  *
- * @return array<int, \Laravel\Nova\Lenses\Lens>
+ * @return array&lt;int, \Laravel\Nova\Lenses\Lens&gt;
  */
 public function lenses(NovaRequest $request): array
 {
     return [
         Lenses\MostValuableUsers::make()
-            ->canSee(function ($request) {
-                return $request->user()->can(
-                    'viewValuableUsers', UserModel::class
+            -&gt;canSee(function ($request) {
+                return $request-&gt;user()-&gt;can(
+                    &#x27;viewValuableUsers&#x27;, UserModel::class
                 );
             }),
     ];
 }
 
-```
-
-In the example above, we are using Laravel’s `Authorizable` trait’s `can` method on our `User` model to determine if the authorized user is authorized for the `viewValuableUsers` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User as UserModel;
+In the example above, we are using Laravel’s Authorizable trait’s can method on our User model to determine if the authorized user is authorized for the viewValuableUsers action. However, since proxying to authorization policy methods is a common use-case for canSee, you may use the canSeeWhen method to achieve the same behavior. The canSeeWhen method has the same method signature as the Illuminate\Foundation\Auth\Access\Authorizable trait’s can method:
+CopyAsk AIuse App\Models\User as UserModel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -177,44 +105,15 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the lenses available for the resource.
  *
- * @return array<int, \Laravel\Nova\Lenses\Lens>
+ * @return array&lt;int, \Laravel\Nova\Lenses\Lens&gt;
  */
 public function lenses(NovaRequest $request): array
 {
     return [
         Lenses\MostValuableUsers::make()
-            ->canSeeWhen(
-                'viewValuableUsers', User::class
+            -&gt;canSeeWhen(
+                &#x27;viewValuableUsers&#x27;, User::class
             ),
     ];
 }
-
-```
-
-Was this page helpful?
-
-YesNo
-
-[Defining Lenses](/docs/v5/lenses/defining-lenses)[Defining Actions](/docs/v5/actions/defining-actions)
-
-On this page
-
-- [Authorization](#authorization)
-
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Platform
-
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
-Legal and Compliance
-
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+Was this page helpful?YesNoDefining LensesDefining ActionsOn this pageAuthorizationLaravel Nova home pagexgithubdiscordlinkedinPlatformDashboardStatusLegal and ComplianceTerm of ServicePrivacy PolicyxgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    code: \"code\",\n    p: \"p\",\n    pre: \"pre\",\n    span: \"span\",\n    ..._provideComponents(),\n    ...props.components\n  }, {CodeBlock, CodeGroup, Heading} = _components;\n  if (!CodeBlock) _missingMdxReference(\"CodeBlock\", true);\n  if (!CodeGroup) _missingMdxReference(\"CodeGroup\", true);\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsxs(_components.p, {\n      children: [\"Once you have defined a lens, you are ready to attach it to a resource. Each resource generated by Nova contains a \", _jsx(_components.code, {\n        children: \"lenses\"\n      }), \" method. To attach a lens to a resource, you should simply add it to the array of lenses returned by this method:\"]\n    }), \"\\n\", _jsxs(CodeGroup, {\n      children: [_jsx(CodeBlock, {\n        filename: \"Construct\",\n        numberOfLines: \"15\",\n        language: \"php\",\n        children: _jsx(_components.pre, {\n          className: \"shiki shiki-themes github-light-default dark-plus\",\n          style: {\n            backgroundColor: \"transparent\",\n            \"--shiki-dark-bg\": \"transparent\",\n            color: \"#1f2328\",\n            \"--shiki-dark\": \"#f3f7f6\"\n          },\n          language: \"php\",\n          children: _jsxs(_components.code, {\n            language: \"php\",\n            numberOfLines: \"15\",\n            children: [_jsxs(_components.span, {\n              className: \"line\",\n              children: [_jsx(_components.span, {\n                style: {\n                  color: \"#CF222E\",\n                  \"--shiki-dark\": \"#9cdcfe\"\n                },\n                children: \"use\"\n              }), _jsx(_components.span, {\n                style: {\n                  color: \"#0550AE\",\n                  \"--shiki-dark\": \"#f3f7f6\"\n                },\n                children: \" Laravel\\\\Nova\\\\Http\\\\Requests\\\\\"\n              }), _jsx(_components.span, {\n                style: {\n                  color: \"#0550AE\",\n                  \"--shiki-dark\": \"#4EC9B0\"\n                },\n                children: \"NovaRequest\"\n              }), _jsx(_components.span, {\n                style: {\n                  color: \"#1F2328\",\n                  \"--shiki-dark\": \"#f3f7f6\"\n                },\n                children: \";\"\n              })]\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\"\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\",\n              children: _jsx(_components.span, {\n                style: {\n                  color: \"#6E7781\",\n                  \"--shiki-dark\": \"#6A9955\"\n                },\n                children: \"// ...\"\n              })\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\"\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\",\n              children: _jsx(_components.span, {\n                style: {\n                  color: \"#6E7781\",\n                  \"--shiki-dark\": \"#6A9955\"\n                },\n                children: \"/**\"\n              })\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\",\n              children: _jsx(_components.span, {\n                style: {\n                  color: \"#6E7781\",\n                  \"--shiki-dark\": \"#6A9955\"\n                },\n                children: \" * Get the lenses available for the resource.\"\n              })\n            }), \"\\n\", _jsx(_components.span, {\n              className: \"line\",\n              children: _jsx(_components.span, {\n                style: {\n                  color: \"#6E7781\",\n                  \"--shiki-dark\": \"#6A9955\"\n                },\n                children: \" *\"\n              })\n            }), \"\\n\

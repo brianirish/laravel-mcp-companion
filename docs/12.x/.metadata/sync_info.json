@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "37b513606d6566439920facd4603b6b251dea105",
-  "commit_date": "2025-07-18T16:04:11Z",
-  "commit_message": "Fix doesntStartWith incorrect test results when passing array of values (#10624)",
-  "commit_url": "https://github.com/laravel/docs/commit/37b513606d6566439920facd4603b6b251dea105",
-  "sync_time": "2025-07-19T01:23:18Z"
+  "commit_sha": "8e8a37f201d1f7f20f6a952f7cb61166c1ba9fe7",
+  "commit_date": "2025-07-19T19:25:06Z",
+  "commit_message": "Fix punctuation (#10627)",
+  "commit_url": "https://github.com/laravel/docs/commit/8e8a37f201d1f7f20f6a952f7cb61166c1ba9fe7",
+  "sync_time": "2025-07-20T01:42:21Z"
 }

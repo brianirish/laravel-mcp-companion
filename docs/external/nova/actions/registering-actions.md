@@ -4,112 +4,59 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Registering Actions - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Actions
-
-Registering Actions
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Actions
-
-# Registering Actions
-
-Registering actions in Nova.
-
-Once you have defined an action, you are ready to attach it to a resource. Each resource generated by Nova contains an `actions` method. To attach an action to a resource, you should simply add it to the array of actions returned by this method:
-
-Construct
-
-Make
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Actions\EmailAccountProfile;
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationActionsRegistering ActionsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsActionsRegistering ActionsRegistering actions in Nova.Once you have defined an action, you are ready to attach it to a resource. Each resource generated by Nova contains an actions method. To attach an action to a resource, you should simply add it to the array of actions returned by this method:
+ConstructMakeCopyAsk AIuse App\Nova\Actions\EmailAccountProfile;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -117,7 +64,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
@@ -126,20 +73,9 @@ public function actions(NovaRequest $request): array
     ];
 }
 
-```
-
-## [​](#authorization) Authorization
-
-If you would like to only expose a given action to certain users, you may invoke the `canSee` method when registering your action. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User as UserModel;
+​Authorization
+If you would like to only expose a given action to certain users, you may invoke the canSee method when registering your action. The canSee method accepts a closure which should return true or false. The closure will receive the incoming HTTP request:
+app/Nova/~Resource.phpCopyAsk AIuse App\Models\User as UserModel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -147,203 +83,132 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
     return [
         Actions\EmailAccountProfile::make()
-            ->canSee(function ($request) {
-                return $request->user()->can(
-                    'emailAnyAccountProfile', UserModel::class
+            -&gt;canSee(function ($request) {
+                return $request-&gt;user()-&gt;can(
+                    &#x27;emailAnyAccountProfile&#x27;, UserModel::class
                 );
             }),
     ];
 }
 
-```
-
 You may also use a variety of request methods to get the currently selected resources:
-
-| Method | Return Type | Description |
-| --- | --- | --- |
-| `allResourcesSelected` | `bool` | Returns `true` if “Select all” selected. |
-| `selectedResourceIds` | `\Illuminate\Support\Collection|null` | Returns `null` if “Select all” selected or returns a collection of selected resource IDs. |
-| `selectedResources` | `\Illuminate\Support\Collection|null` | Returns `null` if “Select all” selected or returns a collection of resource models. |
-
-### [​](#resource-specific-authorization) Resource Specific Authorization
-
-Sometimes a user may be able to “see” that an action exists but only “run” that action against certain resources. You may use the `canRun` method in conjunction with the `canSee` method to have full control over authorization in this scenario. The callback passed to the `canRun` method receives the incoming HTTP request as well as the model the user would like to run the action against:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+MethodReturn TypeDescriptionallResourcesSelectedboolReturns true if “Select all” selected.selectedResourceIds\Illuminate\Support\Collection|nullReturns null if “Select all” selected or returns a collection of selected resource IDs.selectedResources\Illuminate\Support\Collection|nullReturns null if “Select all” selected or returns a collection of resource models.
+​Resource Specific Authorization
+Sometimes a user may be able to “see” that an action exists but only “run” that action against certain resources. You may use the canRun method in conjunction with the canSee method to have full control over authorization in this scenario. The callback passed to the canRun method receives the incoming HTTP request as well as the model the user would like to run the action against:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
     return [
         Actions\EmailAccountProfile::make()
-            ->canSee(function ($request) {
+            -&gt;canSee(function ($request) {
                 return true;
-            })->canRun(function ($request, $user) {
-                return $request->user()->can('emailAccountProfile', $user);
+            })-&gt;canRun(function ($request, $user) {
+                return $request-&gt;user()-&gt;can(&#x27;emailAccountProfile&#x27;, $user);
             }),
     ];
 }
 
-```
-
-### [​](#authorization-via-resource-policy) Authorization via Resource Policy
-
-In addition to the `canSee` and `canRun` authorization methods, Nova will also determine if the resource’s corresponding model policy has `runAction` and `runDestructiveAction` methods. Finally, Nova will determine if the user is authorized to `update` the model or, in the case of destructive actions, `delete` the model based on the model’s policy methods.
-
+​Authorization via Resource Policy
+In addition to the canSee and canRun authorization methods, Nova will also determine if the resource’s corresponding model policy has runAction and runDestructiveAction methods. Finally, Nova will determine if the user is authorized to update the model or, in the case of destructive actions, delete the model based on the model’s policy methods.
 The priority for authorizing the execution of a Nova action is best explained by the following list of steps:
 
-1. Use the return value of the action’s `canRun` method if the method is defined.
-2. Use the return value of the underlying model policy’s `runAction` or `runDestructiveAction` methods if those methods have been defined.
-3. Use the return value of the underlying model policy’s `update` or `delete` methods if those methods have been defined.
-4. Otherwise, return `false`.
+Use the return value of the action’s canRun method if the method is defined.
+Use the return value of the underlying model policy’s runAction or runDestructiveAction methods if those methods have been defined.
+Use the return value of the underlying model policy’s update or delete methods if those methods have been defined.
+Otherwise, return false.
 
-## [​](#action-visibility) Action Visibility
-
+​Action Visibility
 By default, actions are visible on both the resource index and detail pages. However, you may customize an action’s visibility by invoking one of the following methods on the action when registering your action with a particular resource:
 
-- `onlyOnIndex`
-- `exceptOnIndex`
-- `showOnIndex`
-- `onlyOnDetail`
-- `exceptOnDetail`
-- `showOnDetail`
-- `onlyInline`
-- `exceptInline`
-- `showInline`
+onlyOnIndex
+exceptOnIndex
+showOnIndex
+onlyOnDetail
+exceptOnDetail
+showOnDetail
+onlyInline
+exceptInline
+showInline
 
-### [​](#inline-actions) Inline Actions
-
-Inline actions are actions that are displayed directly on the index table row of a given resource. You may specify that an action should be available inline by calling the `showInline` method when attaching the action to the resource:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Inline Actions
+Inline actions are actions that are displayed directly on the index table row of a given resource. You may specify that an action should be available inline by calling the showInline method when attaching the action to the resource:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
     return [
         Actions\ConsolidateTransaction::make()
-            ->showInline(),
+            -&gt;showInline(),
     ];
 }
 
-```
-
-## [​](#standalone-actions) Standalone Actions
-
-Typically, actions are executed against resources selected on a resource index or detail page. However, sometimes you may have an action that does not require any resources / models to run. In these situations, you may register the action as a “standalone” action by invoking the `standalone` method when registering the action. These actions always receives an empty collection of models in their `handle` method:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Standalone Actions
+Typically, actions are executed against resources selected on a resource index or detail page. However, sometimes you may have an action that does not require any resources / models to run. In these situations, you may register the action as a “standalone” action by invoking the standalone method when registering the action. These actions always receives an empty collection of models in their handle method:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
     return [
         Actions\InviteUser::make()
-            ->standalone(),
+            -&gt;standalone(),
     ];
 }
 
-```
-
-## [​](#sole-actions) Sole Actions
-
-Sometimes you may have actions that should only ever be run on a single resource / model. By registering the action as a `sole` action, Nova will only display the action when a single resource is selected. Sole actions still receive a collection in their `handle` method, but the collection will only contain a single model:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Sole Actions
+Sometimes you may have actions that should only ever be run on a single resource / model. By registering the action as a sole action, Nova will only display the action when a single resource is selected. Sole actions still receive a collection in their handle method, but the collection will only contain a single model:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the actions available for the resource.
  *
- * @return array<int, \Laravel\Nova\Actions\Action>
+ * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
  */
 public function actions(NovaRequest $request): array
 {
     return [
         Actions\BanUser::make()
-            ->sole(),
+            -&gt;sole(),
     ];
 }
 
-```
-
-## [​](#pivot-actions) Pivot Actions
-
-Typically, actions operate on a resource. However, you may also attach actions to `belongsToMany` fields so that they can operate on pivot / intermediate table records. To accomplish this, you may chain the `actions` method onto your field’s definition:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Fields\BelongsToMany;
+​Pivot Actions
+Typically, actions operate on a resource. However, you may also attach actions to belongsToMany fields so that they can operate on pivot / intermediate table records. To accomplish this, you may chain the actions method onto your field’s definition:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Fields\BelongsToMany;
 
 // ...
 
-BelongsToMany::make('Roles')
-    ->actions(fn () => [new Actions\MarkAsActive]),
-
-```
+BelongsToMany::make(&#x27;Roles&#x27;)
+    -&gt;actions(fn () =&gt; [new Actions\MarkAsActive]),
 
 Once the action has been attached to the field, you will be able to select the action and execute it from the relationship index on the parent resource’s detail page.
-
-#### [​](#custom-pivot-action-name) Custom Pivot Action Name
-
-By default, the pivot actions within the action dropdown menu will be gr
-
-*[Content truncated for length]*
+​Custom 

@@ -4,114 +4,60 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Registering Metrics - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Metrics
-
-Registering Metrics
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Metrics
-
-# Registering Metrics
-
-Learn how to register metrics in Nova.
-
-## [​](#overview) Overview
-
-Once you have defined a metric, you are ready to attach it to a resource. Each resource generated by Nova contains a `cards` method. To attach a metric to a resource, you should simply add it to the array of metrics / cards returned by this method:
-
-Construct
-
-Make
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Metrics\UsersPerDay;
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationMetricsRegistering MetricsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsMetricsRegistering MetricsLearn how to register metrics in Nova.​Overview
+Once you have defined a metric, you are ready to attach it to a resource. Each resource generated by Nova contains a cards method. To attach a metric to a resource, you should simply add it to the array of metrics / cards returned by this method:
+ConstructMakeCopyAsk AIuse App\Nova\Metrics\UsersPerDay;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -119,7 +65,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the cards available for the resource.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
@@ -128,48 +74,27 @@ public function cards(NovaRequest $request): array
     ];
 }
 
-```
-
-### [​](#detail-metrics) Detail Metrics
-
-In addition to placing metrics on the resource index page, you may also attach a metric to the resource detail page. For example, if you are building a podcasting application, you may wish to display the total number of podcasts created by a specific user over time. To instruct a metric to be displayed on the detail page instead of the index page, invoke the `onlyOnDetail` method when registering your metric:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Detail Metrics
+In addition to placing metrics on the resource index page, you may also attach a metric to the resource detail page. For example, if you are building a podcasting application, you may wish to display the total number of podcasts created by a specific user over time. To instruct a metric to be displayed on the detail page instead of the index page, invoke the onlyOnDetail method when registering your metric:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the cards available for the request.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
     return [
         Metrics\PodcastCount::make()
-            ->onlyOnDetail(),
+            -&gt;onlyOnDetail(),
     ];
 }
 
-```
-
-Of course, you will need to modify your metric’s query to only gather metric data on the resource for which it is currently being displayed. To accomplish this, your metric’s `calculate` method may access the `resourceId` property on the incoming `$request`:
-
-app/Nova/Metrics/~Metric.php
-
-Copy
-
-Ask AI
-
-```
-use App\Models\Podcast;
+Of course, you will need to modify your metric’s query to only gather metric data on the resource for which it is currently being displayed. To accomplish this, your metric’s calculate method may access the resourceId property on the incoming $request:
+app/Nova/Metrics/~Metric.phpCopyAsk AIuse App\Models\Podcast;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\TrendResult;
 
@@ -180,33 +105,22 @@ use Laravel\Nova\Metrics\TrendResult;
  */
 public function calculate(NovaRequest $request): TrendResult
 {
-    return $this->count(
+    return $this-&gt;count(
         $request, 
-        Podcast::where('user_id', $request->resourceId)
+        Podcast::where(&#x27;user_id&#x27;, $request-&gt;resourceId)
     );
 }
 
-```
-
-### [​](#dashboard-metrics) Dashboard Metrics
-
-You are also free to add metrics to your primary Nova “dashboard”, which is the default page that Nova displays after login. By default, this page displays some helpful links to the Nova documentation via the built-in `Help` card. To add a metric to your dashboard, add the metric to the array of cards returned by the `cards` method of your Dashboard class:
-
-app/Nova/Dashbaords/~Dashboard.php
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Metrics\NewUsers;
+​Dashboard Metrics
+You are also free to add metrics to your primary Nova “dashboard”, which is the default page that Nova displays after login. By default, this page displays some helpful links to the Nova documentation via the built-in Help card. To add a metric to your dashboard, add the metric to the array of cards returned by the cards method of your Dashboard class:
+app/Nova/Dashbaords/~Dashboard.phpCopyAsk AIuse App\Nova\Metrics\NewUsers;
 
 // ...
 
 /**
  * Get the cards that should be displayed on the Nova dashboard.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(): array
 {
@@ -215,195 +129,116 @@ public function cards(): array
     ];
 }
 
-```
-
-## [​](#authorization) Authorization
-
-If you would like to only expose a given metric to certain users, you may invoke the `canSee` method when registering your metric. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User;
+​Authorization
+If you would like to only expose a given metric to certain users, you may invoke the canSee method when registering your metric. The canSee method accepts a closure which should return true or false. The closure will receive the incoming HTTP request:
+CopyAsk AIuse App\Models\User;
 use App\Nova\Metrics\UsersPerDay;
 
 // ...
 
 UsersPerDay::make()
-    ->canSee(function ($request) {
-        return $request->user()->can('viewUsersPerDay', User::class);
+    -&gt;canSee(function ($request) {
+        return $request-&gt;user()-&gt;can(&#x27;viewUsersPerDay&#x27;, User::class);
     }),
 
-```
-
-In the example above, we are using Laravel’s `Authorizable` trait’s `can` method on our `User` model to determine if the authorized user is authorized for the `viewUsersPerDay` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
-
-Copy
-
-Ask AI
-
-```
-use App\Models\User;
+In the example above, we are using Laravel’s Authorizable trait’s can method on our User model to determine if the authorized user is authorized for the viewUsersPerDay action. However, since proxying to authorization policy methods is a common use-case for canSee, you may use the canSeeWhen method to achieve the same behavior. The canSeeWhen method has the same method signature as the Illuminate\Foundation\Auth\Access\Authorizable trait’s can method:
+CopyAsk AIuse App\Models\User;
 use App\Nova\Metrics\UsersPerDay;
 
 // ...
 
 UsersPerDay::make()
-    ->canSeeWhen(
-        'viewUsersPerDay', User::class
+    -&gt;canSeeWhen(
+        &#x27;viewUsersPerDay&#x27;, User::class
     ),
 
-```
-
-## [​](#default-metric-range) Default Metric Range
-
-You may wish to initially load a certain metric range by default. You can pass the range’s array key to the `defaultRange` method of the metric to accomplish this:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Default Metric Range
+You may wish to initially load a certain metric range by default. You can pass the range’s array key to the defaultRange method of the metric to accomplish this:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the cards available for the request.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
     return [
         Metrics\NewUsers::make()
-            ->defaultRange('YTD'),
+            -&gt;defaultRange(&#x27;YTD&#x27;),
     ];
 }
 
-```
-
-## [​](#metric-sizes) Metric Sizes
-
-By default, metrics take up one-third of the Nova content area. However, you are free to make them larger. To accomplish this, call the `width` method when registering the metric:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+​Metric Sizes
+By default, metrics take up one-third of the Nova content area. However, you are free to make them larger. To accomplish this, call the width method when registering the metric:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the cards available for the request.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
     return [
         // Two-thirds of the content area...
-        Metrics\UsersPerDay::make()->width('2/3'),
+        Metrics\UsersPerDay::make()-&gt;width(&#x27;2/3&#x27;),
 
         // Full width...
-        Metrics\UsersPerDay::make()->width('full'),
+        Metrics\UsersPerDay::make()-&gt;width(&#x27;full&#x27;),
     ];
 }
 
-```
-
-When the metric width is set to `full`, the height of the card will become dynamic. You may explicitly define this behaviour by calling the `fixedHeight` or `dynamicHeight` methods:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+When the metric width is set to full, the height of the card will become dynamic. You may explicitly define this behaviour by calling the fixedHeight or dynamicHeight methods:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the cards available for the request.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
     return [
-        Metrics\UsersPerDay::make()->width('full')->fixedHeight(),
-        Metrics\UsersPerDay::make()->width('full')->dynamicHeight(),
+        Metrics\UsersPerDay::make()-&gt;width(&#x27;full&#x27;)-&gt;fixedHeight(),
+        Metrics\UsersPerDay::make()-&gt;width(&#x27;full&#x27;)-&gt;dynamicHeight(),
     ];
 }
 
-```
+​Metric Help Text / Tooltips
+Sometimes a metric needs to offer the user more context about how the value is calculated or other details related to the metric’s value. To provide this context, Nova allows you to define a help text “tooltip”, which can be registered similarly to Field Help Text:
 
-## [​](#metric-help-text-%2F-tooltips) Metric Help Text / Tooltips
-
-Sometimes a metric needs to offer the user more context about how the value is calculated or other details related to the metric’s value. To provide this context, Nova allows you to define a help text “tooltip”, which can be registered similarly to [Field Help Text](./../resources/fields#field-help-text):
-
-![Metric Help Tooltip](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/metric-tooltip-help.png)
-
-To enable the tooltip, invoke the `help` method while registering your metric. The `help` method receives the help text as its only argument:
-
-app/Nova/~Resource.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Http\Requests\NovaRequest;
+To enable the tooltip, invoke the help method while registering your metric. The help method receives the help text as its only argument:
+app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
 
 /**
  * Get the cards available for the request.
  *
- * @return array<int, \Laravel\Nova\Card>
+ * @return array&lt;int, \Laravel\Nova\Card&gt;
  */
 public function cards(NovaRequest $request): array
 {
     return [
         Metrics\TotalUsers::make()
-            ->help('This is calculated using all users that are active and not banned.'),
+            -&gt;help(&#x27;This is calculated using all users that are active and not banned.&#x27;),
     ];
 }
 
-```
-
-You may also use HTML when defining your help text. For example, you may pass a rendered Blade template to the `help` method:
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Metrics\TotalUsers;
+You may also use HTML when defining your help text. For example, you may pass a rendered Blade template to the help method:
+CopyAsk AIuse App\Nova\Metrics\TotalUsers;
 
 // ...
 
 TotalUsers::make()
-    ->help(view('nova.metrics.total-users.tooltip')->render()),
+    -&gt;help(view(&#x27;nova.metrics.total-users.tooltip&#x27;)-&gt;render()),
 
-```
-
-## [​](#refreshing-metrics) Refreshing Metrics
-
-Laravel Nova will automatically fetch updated results (without requiring the user to refresh the page) for metrics attached to a resource based on following events:
-
-| Event | Behaviour |
-| --- | --- |
-| Resourc
-
-*[Content truncated for length]*
+​Refreshing Metrics
+Laravel Nova will automatically fetch updated results 
