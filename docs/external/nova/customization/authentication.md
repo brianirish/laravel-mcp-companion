@@ -4,164 +4,94 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Authentication - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Digging Deeper
-
-Authentication
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Digging Deeper
-
-# Authentication
-
-Learn how to customize the Nova authentication logic.
-
-Nova utilizes [Laravel Fortify](https://laravel.com/docs/fortify) and offers two-factor authentication, email address verification, and password confirmation. By default, these features are not enabled but can be enabled with just a few changes to your application’s `app/Providers/NovaServiceProvider.php` file.
-
-### [​](#using-nova-as-your-application%E2%80%99s-default-login) Using Nova as Your Application’s Default Login
-
-Sometimes you might want to use Nova as the default authentication UI for your application. To accomplish this, you should enable Nova’s authentication and password reset routes within the `routes` method of your application’s `App\Providers\NovaServiceProvider` class:
-
-Copy
-
-Ask AI
-
-```
-/**
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperAuthenticationDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsDigging DeeperAuthenticationLearn how to customize the Nova authentication logic.Nova utilizes Laravel Fortify and offers two-factor authentication, email address verification, and password confirmation. By default, these features are not enabled but can be enabled with just a few changes to your application’s app/Providers/NovaServiceProvider.php file.
+​Using Nova as Your Application’s Default Login
+Sometimes you might want to use Nova as the default authentication UI for your application. To accomplish this, you should enable Nova’s authentication and password reset routes within the routes method of your application’s App\Providers\NovaServiceProvider class:
+CopyAsk AI/**
  * Register the Nova routes.
  */
 protected function routes(): void
 {
     Nova::routes()
-        ->withAuthenticationRoutes(default: true)
-        ->withPasswordResetRoutes()
-        ->register();
+        -&gt;withAuthenticationRoutes(default: true)
+        -&gt;withPasswordResetRoutes()
+        -&gt;register();
 }
 
-```
-
-### [​](#using-custom-authentication-routes) Using Custom Authentication Routes
-
+​Using Custom Authentication Routes
 Alternatively, you can disable Nova’s authentication and password reset routes and instead provide Nova with your application’s own authentication route paths. This will instruct Nova where to redirect unauthenticated users:
-
-Copy
-
-Ask AI
-
-```
-/**
+CopyAsk AI/**
  * Register the Nova routes.
  */
 protected function routes(): void
 {
     Nova::routes()
-        ->withoutAuthenticationRoutes(
-            login: '/login', 
-            logout: '/logout',
+        -&gt;withoutAuthenticationRoutes(
+            login: &#x27;/login&#x27;, 
+            logout: &#x27;/logout&#x27;,
         )
-        ->withoutPasswordResetRoutes(
-            forgotPassword: '/forgot-password', 
-            resetPassword: '/reset-password',
+        -&gt;withoutPasswordResetRoutes(
+            forgotPassword: &#x27;/forgot-password&#x27;, 
+            resetPassword: &#x27;/reset-password&#x27;,
         )
-        ->register();
+        -&gt;register();
 }
 
-```
-
-### [​](#enabling-two-factor-authentication) Enabling Two Factor Authentication
-
-To allow your users to authenticate with two-factor authentication, you will need to update your application’s `User` model and `App\Providers\NovaServiceProvider` service provider.
-
-First, add the `Laravel\Fortify\TwoFactorAuthenticatable` trait to your application’s `User` model:
-
-Copy
-
-Ask AI
-
-```
-<?php
+​Enabling Two Factor Authentication
+To allow your users to authenticate with two-factor authentication, you will need to update your application’s User model and App\Providers\NovaServiceProvider service provider.
+First, add the Laravel\Fortify\TwoFactorAuthenticatable trait to your application’s User model:
+CopyAsk AI&lt;?php
 
 namespace App\Models;
 
@@ -176,16 +106,8 @@ class User extends Authenticatable
     // ...
 }
 
-```
-
-Next, update the `routes` method in your application’s `App\Providers\NovaServiceProvider` class to enable two-factor authentication:
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Fortify\Features;
+Next, update the routes method in your application’s App\Providers\NovaServiceProvider class to enable two-factor authentication:
+CopyAsk AIuse Laravel\Fortify\Features;
 use Laravel\Nova\Nova;
 
 // ...
@@ -196,44 +118,26 @@ use Laravel\Nova\Nova;
 protected function fortify(): void
 {
     Nova::fortify()
-        ->features([
+        -&gt;features([
             Features::updatePasswords(),
             // Features::emailVerification(),
             Features::twoFactorAuthentication([
-                'confirm' => true,
-                'confirmPassword' => true
+                &#x27;confirm&#x27; =&gt; true,
+                &#x27;confirmPassword&#x27; =&gt; true
             ]),
         ])
-        ->register();
+        -&gt;register();
 }
 
-```
-
-Finally, run the `nova:publish` Artisan command to publish the required Fortify migrations. Then, run the `migrate` command:
-
-Copy
-
-Ask AI
-
-```
-php artisan nova:publish
+Finally, run the nova:publish Artisan command to publish the required Fortify migrations. Then, run the migrate command:
+CopyAsk AIphp artisan nova:publish
 
 php artisan migrate
 
-```
-
-Once completed, Nova users will be able to access a new **User Security** page from the User Menu. Please refer to Fortify’s [two-factor authentication documentation](https://laravel.com/docs/fortify#two-factor-authentication) for more information.
-
-### [​](#enabling-email-verification) Enabling Email Verification
-
-Nova also includes support for requiring email verification for newly registered users. To enable this feature, you should uncomment the relevant entry in the `features` configuration item in the `fortify` method of your application’s `App\Provider\NovaServiceProvider` class:
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Fortify\Features;
+Once completed, Nova users will be able to access a new User Security page from the User Menu. Please refer to Fortify’s two-factor authentication documentation for more information.
+​Enabling Email Verification
+Nova also includes support for requiring email verification for newly registered users. To enable this feature, you should uncomment the relevant entry in the features configuration item in the fortify method of your application’s App\Provider\NovaServiceProvider class:
+CopyAsk AIuse Laravel\Fortify\Features;
 use Laravel\Nova\Nova;
 
 // ...
@@ -244,24 +148,16 @@ use Laravel\Nova\Nova;
 protected function fortify(): void
 {
     Nova::fortify()
-        ->features([
+        -&gt;features([
             Features::updatePasswords(),
             Features::emailVerification(),
-            // Features::twoFactorAuthentication(['confirm' => true, 'confirmPassword' => true]),
+            // Features::twoFactorAuthentication([&#x27;confirm&#x27; =&gt; true, &#x27;confirmPassword&#x27; =&gt; true]),
         ])
-        ->register();
+        -&gt;register();
 }
 
-```
-
-Next, you should ensure that your `User` model implements the `Illuminate\Contracts\Auth\MustVerifyEmail` interface:
-
-Copy
-
-Ask AI
-
-```
-<?php
+Next, you should ensure that your User model implements the Illuminate\Contracts\Auth\MustVerifyEmail interface:
+CopyAsk AI&lt;?php
 
 namespace App\Models;
 
@@ -276,51 +172,11 @@ class User extends Authenticatable implements MustVerifyEmail
     // ...
 }
 
-```
-
-Finally, to secure the Nova page from being used by unverified users, you can add the `Laravel\Nova\Http\Middleware\EnsureEmailIsVerified` middleware to the `api_middleware` configuration key in your application’s `config/nova.php` configuration file:
-
-Copy
-
-Ask AI
-
-```
-'api_middleware' => [
-    'nova',
+Finally, to secure the Nova page from being used by unverified users, you can add the Laravel\Nova\Http\Middleware\EnsureEmailIsVerified middleware to the api_middleware configuration key in your application’s config/nova.php configuration file:
+CopyAsk AI&#x27;api_middleware&#x27; =&gt; [
+    &#x27;nova&#x27;,
     \Laravel\Nova\Http\Middleware\Authenticate::class,
     \Laravel\Nova\Http\Middleware\EnsureEmailIsVerified::class,
     \Laravel\Nova\Http\Middleware\Authorize::class,
 ],
-
-```
-
-Was this page helpful?
-
-YesNo
-
-[Notifications](/docs/v5/customization/notifications)[Impersonation](/docs/v5/customization/impersonation)
-
-On this page
-
-- [Using Nova as Your Application’s Default Login](#using-nova-as-your-application%E2%80%99s-default-login)
-- [Using Custom Authentication Routes](#using-custom-authentication-routes)
-- [Enabling Two Factor Authentication](#enabling-two-factor-authentication)
-- [Enabling Email Verification](#enabling-email-verification)
-
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Platform
-
-[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
-Legal and Compliance
-
-[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+Was this page helpful?YesNoNotificationsImpersonationOn this pageUsing Nova as Your Application’s Default LoginUsing Custom Authentication RoutesEnabling Two Factor AuthenticationEnabling Email VerificationLaravel Nova home pagexgithubdiscordlinkedinPlatformDashboardStatusLegal and ComplianceTerm of ServicePrivacy PolicyxgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    p: \"p\",\n    pre: \"pre\",\n    span: \"span\",\n    strong: \"strong\",\n    ..._provideComponents(),\n    ...props.components\n  }, {CodeBlock, Heading} = _components;\n  if (!CodeBlock) _missingMdxReference(\"CodeBlock\", true);\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsxs(_components.p, {\n      children: [\"Nova utilizes \", _jsx(_components.a, {\n        href: \"https://laravel.com/docs/fortify\",\n        children: \"Laravel Fortify\"\n      }), \" and offers two-factor authentication, email address verification, and password confirmation. By default, these features are not enabled but can be enabled with just a few changes to your application’s \", _jsx(_components.code, {\n        children: \"app/Providers/NovaServiceProvider.php\"\n      }), \" file.\"]\n    }), \"\\n\", _jsx(Heading, {\n      level: \"3\",\n      id: \"using-nova-as-your-application%E2%80%99s-default-login\",\n      isAtRootLevel: \"true\",\n      children: \"Using Nova as Your Application’s Default Login\"\n    }), \"\\n\", _jsxs(_components.p, {\n      children: [\"Sometimes you might want to use Nova as the default authentication UI for your application. To accomplish this, you should enable Nova’s a

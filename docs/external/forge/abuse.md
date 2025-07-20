@@ -4,117 +4,52 @@
 
 ---
 
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+Report Abuse - Laravel Forge
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "forge-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 24 182 155;
+    --primary-light: 24 182 155;
+    --primary-dark: 24 182 155;
+    --background-light: 255 255 255;
+    --background-dark: 9 12 14;
+    --gray-50: 243 248 247;
+    --gray-100: 238 243 242;
+    --gray-200: 223 228 227;
+    --gray-300: 206 211 210;
+    --gray-400: 159 164 163;
+    --gray-500: 112 117 116;
+    --gray-600: 80 85 84;
+    --gray-700: 63 68 67;
+    --gray-800: 38 42 42;
+    --gray-900: 23 28 27;
+    --gray-950: 10 15 14;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Dashboard](https://forge.laravel.com)
-- [Dashboard](https://forge.laravel.com)
-
-Search...
-
-Navigation
-
-Other
-
-Report Abuse
-
-[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
-
-##### Get Started
-
-- [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
-
-##### Accounts
-
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
-
-##### Servers
-
-- [Server Providers](/docs/servers/providers)
-- [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
-- [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
-- [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
-
-##### Sites
-
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
-- [Deployments](/docs/sites/deployments)
-- [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
-- [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
-
-##### Resources
-
-- [Daemons](/docs/resources/daemons)
-- [Databases](/docs/resources/databases)
-- [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
-- [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
-
-##### Integrations
-
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-
-##### Other
-
-- [Abuse](/docs/abuse)
-
-Other
-
-# Report Abuse
-
-Help us keep Laravel Forge safe by reporting any abuse, security concerns, or violations.
-
-Please email us at [[email protected]](/cdn-cgi/l/email-protection#5a293f392f28332e231a363b283b2c3f3674393537)
-
-Was this page helpful?
-
-YesNo
-
-[Aikido](/docs/integrations/aikido)
-
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
+Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationOtherReport AbuseDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseOtherReport AbuseHelp us keep Laravel Forge safe by reporting any abuse, security concerns, or violations.Please email us at [email&#160;protected]Was this page helpful?YesNoAikidoLaravel Forge home pagexgithubdiscordlinkedinTerm of ServicePrivacy PolicyData Processing Agreement (DPA)xgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    p: \"p\",\n    ..._provideComponents(),\n    ...props.components\n  };\n  return _jsxs(_components.p, {\n    children: [\"Please email us at \", _jsx(_components.a, {\n      href: \"mailto:security@laravel.com\",\n      children: \"security@laravel.com\"\n    })]\n  });\n}\nfunction MDXContent(props = {}) {\n  const {wrapper: MDXLayout} = {\n    ..._provideComponents(),\n    ...props.components\n  };\n  return MDXLayout ? _jsx(MDXLayout, {\n    ...props,\n    children: _jsx(_createMdxContent, {\n      ...props\n    })\n  }) : _createMdxContent(props);\n}\nreturn {\n  default: MDXContent\n};\n","frontmatter":{},"scope":{"config":{"$schema":"https://mintlify.com/docs.json","theme":"mint","name":"Laravel Forge","colors":{"primary":"#18B69B","light":"#18B69B","dark":"#18B69B"},"favicon":"/favicon.png","navigation":{"tabs":[{"tab":"Documentation","groups":[{"group":"Get Started","pages":["introduction","cli","sdk"]},{"group":"Accounts","pages":["accounts/your-account","accounts/circles","accounts/source-control","accounts/ssh","accounts/api","accounts/tags","accounts/cookbook"]},{"group":"Servers","pages":["servers/providers","servers/types","servers/management","servers/provisioning-process","servers/ssh","servers/php","servers/packages","servers/recipes","servers/load-balancing","servers/nginx-templates","servers/backups","servers/monitoring","servers/cookbook"]},{"group":"Sites","pages":["sites/the-basics","sites/applications","sites/deployments","sites/commands","sites/packages","sites/queues","sites/security-rules","sites/redirects","sites/ssl","sites/user-isolation","sites/cookbook"]},{"group":"Resources","pages":["resources/daemons","resources/databases","resources/caches","resources/network","resources/scheduler","resources/integrations","resources/cookbook"]},{"group":"Integrations","pages":["integrations/envoyer","integrations/sentry","integrations/aikido"]},{"group":"Other","pages":["abuse"]}]},{"tab":"Changelog","groups":[{"group":"","pages":["changelog/changelog"]}]}],"global":{"anchors":[{"anchor":"Community","href":"https://discord.com/invite/laravel","icon":"discord"},{"anchor":"Blog","href":"https://blog.laravel.com/forge","icon":"newspaper"}]}},"logo":{"light":"https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg","dark":"https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg","href":"https://forge.laravel.com"},"api":{"playground":{"display":"simple"},"examples":{"languages":["php","bash","javascript","go"]}},"background":{"decoration":"windows"},"navbar":{"links":[{"label":"Support","href":"mailto:forge@laravel.com"}],"primary":{"type":"button","label":"Dashboard","href":"https://forge.laravel.com"}},"footer":{"socials":{"x":"https://x.com/laravelphp","github":"https://github.com/laravel","discord":"https://discord.com/invite/laravel","linkedin":"https://linkedin.com/company/laravel"},"links":[{"header":"Legal and Compliance","items":[{"label":"Term of Service","href":"https://forge.laravel.com/terms-of-service"},{"label":"Privacy Policy","href":"https://forge.laravel.com/privacy-policy"},{"label":"Data Processing Agreement (DPA)","href":"https://forge.laravel.com/data-processing-agreement"}]}]},"integrations":{"fathom":{"siteId":"UZINDLYX"},"posthog":{"apiKey":"phc_FMim8XOwk9B4lf2tE4wViqxdGUhFAqJ4fNlgHYvI3Xz"}},"fonts":{"heading":{"family":"Figtree"},"body":{"family":"Figtree"}},"redirects":[{"destination":"/integrations/envoyer","source":"/sites/envoyer","_id":"687bd1a923d4016b8612ac00"},{"destination":"/introduction","source":"/introduction.html","_id":"687bd1a923d4016b8612ac01"},{"destination":"/cli","source":"/cli.html","_id":"687bd1a923d4016b8612ac02"},{"destination":"/sdk","source":"/sdk.html","_id":"687bd1a923d4016b8612ac03"},{"destination":"/accounts/your-account","source":"/accounts/your-account.html","_id":"687bd1a923d4016b8612ac04"},{"destination":"/accounts/circles","source":"/accounts/circles.html","_id":"687bd1a923d4016b8612ac05"},{"destination":"/accounts/source-control","source":"/accounts/source-control.html","_id":"687bd1a923d4016b8612ac06"},{"destination":"/accounts/ssh","source":"/accounts/ssh.html","_id":"687bd1a923d4016b8612ac07"},{"destination":"/accounts/api","source":"/accounts/api.html","_id":"687bd1a923d4016b8612ac08"},{"destination":"/accounts/cookbook","source":"/accounts/cookbook.html","_id":"687bd1a923d4016b8612ac09"},{"destination":"/accounts/tags","source":"/accounts/tags.html","_id":"687bd1a923d4016b8612ac0a"},{"destination":"/servers/providers","source":"/servers/providers.html","_id":"687bd1a923d4016b8612ac0b"},{"destination":"/servers/types","source":"/servers/types.html","_id":"687bd1a923d4016b8612ac0c"},{"destination":"/servers/management","source":"/servers/management.html","_id":"687bd1a923d4016b8612ac0d"},{"destination":"/servers/provisioning-process","source":"/servers/provisioning-process.html","_id":"687bd1a923d4016b8612ac0e"},{"destination":"/servers/ssh","source":"/servers/ssh.html","_id":"687bd1a923d4016b8612ac0f"},{"destination":"/servers/php","source":"/servers/php.html","_id":"687bd1a923d4016b8612ac10"},{"destination":"/servers/packages","source":"/servers/packages.html","_id":"687bd1a923d4016b8612ac11"},{"destination":"/servers/recipes","source":"/servers/recipes.html","_id":"687bd1a923d4016b8612ac12"},{"destination":"/servers/load-balancing","source":"/servers/load-balancing.html","_id":"687bd1a923d4016b8612ac13"},{"destination":"/servers/nginx-templates","source":"/servers/nginx-templates.html","_id":"687bd1a923d4016b8612ac14"},{"destination":"/servers/backups","source":"/servers/backups.html","_id":"687bd1a923d4016b8612ac15"},{"destination":"/servers/monitoring","source":"/servers/monitoring.html","_id":"687bd1a923d4016b8612ac16"},{"destination":"/servers/cookbook","source":"/servers/cookbook.html","_id":"687bd1a923d4016b8612ac17"},{"destination":"/sites/the-basics","source":"/sites/the-basics.html","_id":"687bd1a923d4016b8612ac18"},{"destination":"/sites/applications","source":"/sites/applications.html","_id":"687bd1a923d4016b8612ac19"},{"destination":"/sites/deployments","source":"/sites/deployments.html","_id":"687bd1a923d4016b8612ac1a"},{"destination":"/sites/commands","source":"/sites/commands.html","_id":"687bd1a923d4016b8612ac1b"},{"destination":"/sites/packages"

@@ -4,131 +4,67 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/logo/dark.svg)](https://nova.laravel.com)
+Defining Lenses - Laravel Nova
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "nova-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 75 162 227;
+    --primary-light: 75 162 227;
+    --primary-dark: 75 162 227;
+    --background-light: 255 255 255;
+    --background-dark: 10 12 15;
+    --gray-50: 245 247 249;
+    --gray-100: 240 242 244;
+    --gray-200: 224 227 229;
+    --gray-300: 208 210 212;
+    --gray-400: 160 163 165;
+    --gray-500: 114 116 118;
+    --gray-600: 82 84 86;
+    --gray-700: 64 67 69;
+    --gray-800: 39 42 44;
+    --gray-900: 25 27 29;
+    --gray-950: 12 15 17;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-v5
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-
-Search...
-
-Navigation
-
-Lenses
-
-Defining Lenses
-
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
-
-##### Get Started
-
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-
-##### Resources
-
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-
-##### Search
-
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-
-##### Filters
-
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-
-##### Lenses
-
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
-##### Actions
-
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-
-##### Metrics
-
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
-##### Digging Deeper
-
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
-
-Lenses
-
-# Defining Lenses
-
-Learn how to define lenses in Nova.
-
-While similar to filters, Nova lenses allow you to fully customize the underlying resource Eloquent query. For example, you may want to list of all your application’s users sorted by their total lifetime revenue:
-
-![Lens](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/lens.png)
+#footer > div > div:nth-of-type(n+2) {
+    display: none;
+}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationLensesDefining LensesDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsLensesDefining LensesLearn how to define lenses in Nova.While similar to filters, Nova lenses allow you to fully customize the underlying resource Eloquent query. For example, you may want to list of all your application’s users sorted by their total lifetime revenue:
 
 Creating such a list may require you to join to additional tables and perform aggregate functions within the query. If it sounds complicated, don’t worry - this is exactly the type of situation lenses are designed to solve.
+​Overview
+To create a lens, you may use the nova:lens Artisan command. By default, Nova will place newly generated lenses in the app/Nova/Lenses directory:
+CopyAsk AIphp artisan nova:lens MostValuableUsers
 
-## [​](#overview) Overview
-
-To create a lens, you may use the `nova:lens` Artisan command. By default, Nova will place newly generated lenses in the `app/Nova/Lenses` directory:
-
-Copy
-
-Ask AI
-
-```
-php artisan nova:lens MostValuableUsers
-
-```
-
-Each lens generated by Nova contains several methods. However, the two methods we are currently concerned with are the `query` and `fields` methods. The `query` method is responsible for building the Eloquent query that is needed to retrieve the desired data, while the `fields` method returns an array of fields that should be displayed when viewing the lens.
-
-To learn more, let’s take a look at a complete lens definition that displays users and their lifetime revenue. As you can see in the example below, the `query` method will take advantage of the `withFilters` and `withOrdering` methods offered by the `LensRequest` in order to instruct Nova to also apply any selected filters and ordering constraints to the query:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-namespace App\Nova\Lenses;
+Each lens generated by Nova contains several methods. However, the two methods we are currently concerned with are the query and fields methods. The query method is responsible for building the Eloquent query that is needed to retrieve the desired data, while the fields method returns an array of fields that should be displayed when viewing the lens.
+To learn more, let’s take a look at a complete lens definition that displays users and their lifetime revenue. As you can see in the example below, the query method will take advantage of the withFilters and withOrdering methods offered by the LensRequest in order to instruct Nova to also apply any selected filters and ordering constraints to the query:
+app/Nova/Lenses/MostValuableUsers.phpCopyAsk AInamespace App\Nova\Lenses;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -148,14 +84,14 @@ class MostValuableUsers extends Lens
      */
     public static function query(LensRequest $request, Builder $query): Builder|Paginator
     {
-        return $request->withOrdering($request->withFilters(
-            $query->select(self::columns())
-                ->join('licenses', 'users.id', '=', 'licenses.user_id')
-                ->groupBy('users.id', 'users.name')
-                ->withCasts([
-                    'revenue' => 'float',
+        return $request-&gt;withOrdering($request-&gt;withFilters(
+            $query-&gt;select(self::columns())
+                -&gt;join(&#x27;licenses&#x27;, &#x27;users.id&#x27;, &#x27;=&#x27;, &#x27;licenses.user_id&#x27;)
+                -&gt;groupBy(&#x27;users.id&#x27;, &#x27;users.name&#x27;)
+                -&gt;withCasts([
+                    &#x27;revenue&#x27; =&gt; &#x27;float&#x27;,
                 ])
-        ), fn ($query) => $query->orderBy('revenue', 'desc'));
+        ), fn ($query) =&gt; $query-&gt;orderBy(&#x27;revenue&#x27;, &#x27;desc&#x27;));
     }
 
     /**
@@ -164,25 +100,25 @@ class MostValuableUsers extends Lens
     protected static function columns(): array
     {
         return [
-            'users.id',
-            'users.name',
-            DB::raw('sum(licenses.price) as revenue'),
+            &#x27;users.id&#x27;,
+            &#x27;users.name&#x27;,
+            DB::raw(&#x27;sum(licenses.price) as revenue&#x27;),
         ];
     }
 
     /**
      * Get the fields available to the lens.
      *
-     * @return array<int, \Laravel\Nova\Fields\Field>
+     * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
      */
     public function fields(NovaRequest $request): array
     {
         return [
-            ID::make('ID', 'id'),
-            Text::make('Name', 'name'),
+            ID::make(&#x27;ID&#x27;, &#x27;id&#x27;),
+            Text::make(&#x27;Name&#x27;, &#x27;name&#x27;),
 
-            Number::make('Revenue', 'revenue', function ($value) {
-                return '$'.number_format($value, 2);
+            Number::make(&#x27;Revenue&#x27;, &#x27;revenue&#x27;, function ($value) {
+                return &#x27;$&#x27;.number_format($value, 2);
             }),
         ];
     }
@@ -190,7 +126,7 @@ class MostValuableUsers extends Lens
     /**
      * Get the cards available for the lens.
      *
-     * @return array<int, \Laravel\Nova\Card>
+     * @return array&lt;int, \Laravel\Nova\Card&gt;
      */
     public function cards(NovaRequest $request): array
     {
@@ -200,7 +136,7 @@ class MostValuableUsers extends Lens
     /**
      * Get the filters available for the lens.
      *
-     * @return array<int, \Laravel\Nova\Filters\Filter>
+     * @return array&lt;int, \Laravel\Nova\Filters\Filter&gt;
      */
     public function filters(NovaRequest $request): array
     {
@@ -210,7 +146,7 @@ class MostValuableUsers extends Lens
     /**
      * Get the actions available for the lens.
      *
-     * @return array<int, \Laravel\Nova\Actions\Action>
+     * @return array&lt;int, \Laravel\Nova\Actions\Action&gt;
      */
     public function actions(NovaRequest $request): array
     {
@@ -224,28 +160,15 @@ class MostValuableUsers extends Lens
      */
     public function uriKey()
     {
-        return 'most-profitable-users';
+        return &#x27;most-profitable-users&#x27;;
     }
 }
 
-```
-
-As you can see in the example above, the `query` method has full control of the Eloquent query used to retrieve the lens data. The `fields` method may leverage any of Nova’s fields in order to appropriately display the data retrieved by the query.
-
-In this example, the `columns` method has been extracted from the `query` method for readability. It is not “required” and is not a “feature” of lenses.
-
-When writing your lens query, you should always try to include the resource’s ID as a selected column. If the ID is not included, Nova will not be able to display the “Select All Matching” option for the lens. In addition, the resource deletion menu will not be available.
-
-#### [​](#query-helpers) Query Helpers
-
-The `withOrdering` and `withFilters` methods are used to apply orderings and filters to lens queries and should always be applied in the `query` method. Both methods accept the `$query` as the first parameter, and the `withOrdering` method accepts a closure as its second parameter. The closure passed to the `withOrdering` method should apply the default ordering to the query that will be applied if no other ordering has been selected from the Nova dashboard:
-
-Copy
-
-Ask AI
-
-```
-use Illuminate\Contracts\Database\Eloquent\Builder;
+As you can see in the example above, the query method has full control of the Eloquent query used to retrieve the lens data. The fields method may leverage any of Nova’s fields in order to appropriately display the data retrieved by the query.
+In this example, the columns method has been extracted from the query method for readability. It is not “required” and is not a “feature” of lenses.When writing your lens query, you should always try to include the resource’s ID as a selected column. If the ID is not included, Nova will not be able to display the “Select All Matching” option for the lens. In addition, the resource deletion menu will not be available.
+​Query Helpers
+The withOrdering and withFilters methods are used to apply orderings and filters to lens queries and should always be applied in the query method. Both methods accept the $query as the first parameter, and the withOrdering method accepts a closure as its second parameter. The closure passed to the withOrdering method should apply the default ordering to the query that will be applied if no other ordering has been selected from the Nova dashboard:
+CopyAsk AIuse Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\Paginator;
 use Laravel\Nova\Http\Requests\LensRequest;
 
@@ -256,86 +179,29 @@ use Laravel\Nova\Http\Requests\LensRequest;
  */
 public static function query(LensRequest $request, Builder $query): Builder|Paginator
 {
-    return $request->withOrdering(
-        $request->withFilters($query),
-        fn ($query) => $query->latest()
+    return $request-&gt;withOrdering(
+        $request-&gt;withFilters($query),
+        fn ($query) =&gt; $query-&gt;latest()
     );
 }
 
-```
-
-## [​](#lens-polling) Lens Polling
-
-Nova can automatically fetch the latest records for a lens at a specified interval via polling. To enable polling, overwrite the `polling` property of your lens class:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-/**
+​Lens Polling
+Nova can automatically fetch the latest records for a lens at a specified interval via polling. To enable polling, overwrite the polling property of your lens class:
+app/Nova/Lenses/MostValuableUsers.phpCopyAsk AI/**
  * Indicates whether the lens should automatically poll for new records.
  *
  * @var bool
  */
 public static $polling = true;
 
-```
-
-To customize the polling interval, you may override the `pollingInterval` property on your lens class. The `pollingInterval` defines the number of seconds Nova should wait before fetching new records:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-/**
+To customize the polling interval, you may override the pollingInterval property on your lens class. The pollingInterval defines the number of seconds Nova should wait before fetching new records:
+app/Nova/Lenses/MostValuableUsers.phpCopyAsk AI/**
  * The interval (in seconds) at which Nova should poll for new lens.
  *
  * @var int
  */
 public static $pollingInterval = 5;
 
-```
-
-### [​](#toggling-lens-polling) Toggling Lens Polling
-
-By default, when lens polling is enabled, there is no way to disable polling once the page has loaded. However, you can instruct Nova to display a start / stop polling toggle button by defining a `showPollingToggle` property on your lens class as `true`:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-/**
- * Indicates whether to show the polling toggle button inside Nova.
- *
- * @var bool
- */
-public static $showPollingToggle = true;
-
-```
-
-## [​](#lens-filters) Lens Filters
-
-Each Nova lens also contains a `filters` method. This method allows you to attach any of your existing [filters](./../filters/defining-filters) to the lens:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Filters\UserType;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ...
-
-*[Content truncated for length]*
+​Toggling Lens Polling
+By default, when lens polling is enabled, there is no way to disable polling once the page has loaded. However, you can instruct Nova to display a start / stop polling toggle button by defining a showPollingToggle property on your lens class as true:
+app/Nova/Lense

@@ -4,209 +4,108 @@
 
 ---
 
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
+Server Types - Laravel Forge
+              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
+              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
+              document.documentElement.style.setProperty('--font-weight-body-custom', '');
+            
+    (function() {
+      try {
+        var bannerKey = "forge-laravel-bannerDismissed";
+        var bannerContent = undefined;
+        
+        if (!bannerContent) {
+          document.documentElement.setAttribute('data-banner-state', 'hidden');
+          return;
+        }
+        
+        var dismissedValue = localStorage.getItem(bannerKey);
+        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
+        
+        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
+      } catch (e) {
+        document.documentElement.setAttribute('data-banner-state', 'hidden');
+      }
+    })();
+  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+    --primary: 24 182 155;
+    --primary-light: 24 182 155;
+    --primary-dark: 24 182 155;
+    --background-light: 255 255 255;
+    --background-dark: 9 12 14;
+    --gray-50: 243 248 247;
+    --gray-100: 238 243 242;
+    --gray-200: 223 228 227;
+    --gray-300: 206 211 210;
+    --gray-400: 159 164 163;
+    --gray-500: 112 117 116;
+    --gray-600: 80 85 84;
+    --gray-700: 63 68 67;
+    --gray-800: 38 42 42;
+    --gray-900: 23 28 27;
+    --gray-950: 10 15 14;
+  }h1, h2, h3, h4 {
+    font-weight: 600 !important;
+}
 
-Search...
-
-⌘KAsk AI
-
-- Support
-- [Dashboard](https://forge.laravel.com)
-- [Dashboard](https://forge.laravel.com)
-
-Search...
-
-Navigation
-
-Servers
-
-Server Types
-
-[Documentation](/docs/introduction)[Changelog](/docs/changelog/changelog)
-
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
-
-##### Get Started
-
-- [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
-
-##### Accounts
-
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
-
-##### Servers
-
-- [Server Providers](/docs/servers/providers)
-- [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
-- [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
-- [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
-
-##### Sites
-
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
-- [Deployments](/docs/sites/deployments)
-- [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
-- [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
-
-##### Resources
-
-- [Daemons](/docs/resources/daemons)
-- [Databases](/docs/resources/databases)
-- [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
-- [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
-
-##### Integrations
-
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-
-##### Other
-
-- [Abuse](/docs/abuse)
-
-Servers
-
-# Server Types
-
-Learn about the different types of servers you can provision with Forge.
-
-## [​](#introduction) Introduction
-
+.codeblock-dark div:not(:last-child) {
+    color: #fafafa;
+}
+Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationServersServer TypesDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseServersServer TypesLearn about the different types of servers you can provision with Forge.​Introduction
 Forge supports provisioning several different types of servers:
 
-- Application Servers
-- Web Servers
-- Worker Servers
-- Load Balancers
-- Database Servers
-- Cache Servers
+Application Servers
+Web Servers
+Worker Servers
+Load Balancers
+Database Servers
+Cache Servers
 
 Below, we will discuss each of these server types in more detail.
-
-## [​](#server-types) Server Types
-
+​Server Types
 For reference, here is a breakdown of what is offered by each server type:
-
-| Type | Nginx | PHP | MySQL / Postgres / MariaDB | Redis, Memcached | Node.js | Meilisearch |
-| --- | --- | --- | --- | --- | --- | --- |
-| App Server | ✅ | ✅ | ✅ | ✅ | ✅ |  |
-| Web Server | ✅ | ✅ |  |  | ✅ |  |
-| Database Server |  |  | ✅ |  |  |  |
-| Cache Server |  |  |  | ✅ |  |  |
-| Worker Server |  | ✅ |  |  |  |  |
-| MeiliSearch Server |  |  |  |  |  | ✅ |
-| Load Balancer | ✅ |  |  |  |  |  |
-
-### [​](#app-servers) App Servers
-
+TypeNginxPHPMySQL / Postgres / MariaDBRedis, MemcachedNode.jsMeilisearchApp Server✅✅✅✅✅Web Server✅✅✅Database Server✅Cache Server✅Worker Server✅MeiliSearch Server✅Load Balancer✅
+​App Servers
 Application servers are designed to include everything you need to deploy a typical Laravel / PHP application within a single server. Therefore, they are provisioned with the following software:
 
-- PHP
-- Nginx
-- MySQL / Postgres / MariaDB (if selected)
-- Redis
-- Memcached
-- Node.js
-- Supervisor
+PHP
+Nginx
+MySQL / Postgres / MariaDB (if selected)
+Redis
+Memcached
+Node.js
+Supervisor
 
 Application servers are the most typical type of server provisioned on Laravel Forge. If you’re unsure which server type you need, most likely you should provision an application server. As you need to scale your application, you may look at provisioning dedicated servers for services such as your database or caching, but starting with an App server is recommended.
+​Web Servers
+Web servers contain the web server software you need to deploy a typical Laravel / PHP application, but they do not contain a database or cache. Therefore, these servers are meant to be networked to other dedicated database and cache servers. Web servers are provisioned with the following software:
 
-### [​](#web-servers) Web Servers
+PHP
+Nginx
+Node.js
+Supervisor
 
-Web servers contain the web server software you need to deploy a typical Laravel / PHP application, but they do not contain a database or cache. Therefore, these servers are meant to be [networked to](./../resources/network.md) other dedicated database and cache servers. Web servers are provisioned with the following software:
+​Database Servers
+Database servers are intended to function as dedicated MySQL / Postgres / MariaDB servers for your application. These servers are meant to be accessed by a dedicated application or web server via Forge’s network management features. Database servers are provisioned with the following software, based on your selections during the server’s creation:
 
-- PHP
-- Nginx
-- Node.js
-- Supervisor
+MySQL, MariaDB, or PostgreSQL
 
-### [​](#database-servers) Database Servers
+​Cache Servers
+Cache servers are intended to function as dedicated Redis / Memcached servers for your application. These servers are meant to be accessed by a dedicated application or web server via Forge’s network management features. Cache servers are provisioned with the following software:
 
-Database servers are intended to function as dedicated MySQL / Postgres / MariaDB servers for your application. These servers are meant to be accessed by a dedicated application or web server via Forge’s [network management features](./../resources/network.md). Database servers are provisioned with the following software, based on your selections during the server’s creation:
+Redis
+Memcached
 
-- MySQL, MariaDB, or PostgreSQL
-
-### [​](#cache-servers) Cache Servers
-
-Cache servers are intended to function as dedicated Redis / Memcached servers for your application. These servers are meant to be accessed by a dedicated application or web server via Forge’s [network management features](./../resources/network.md). Cache servers are provisioned with the following software:
-
-- Redis
-- Memcached
-
-### [​](#worker-servers) Worker Servers
-
+​Worker Servers
 Worker servers are intended to function as dedicated PHP queue workers for your application. These servers are intended to be networked to your web servers, do not include Nginx, and are not accessible via HTTP. Worker servers are provisioned with the following software:
 
-- PHP
-- Supervisor
+PHP
+Supervisor
 
-### [​](#meilisearch-servers) Meilisearch Servers
-
-Meilisearch servers install [Meilisearch](https://meilisearch.com) to provide a blazingly fast search service to your application. They are intended to be connected to another server, and communicate via a [private network](./../resources/network.md#server-network).
-
-A Meilisearch server will only display and manage one [Site](/docs/sites/the-basics). You cannot create or delete other sites on this server. When connecting to the Meilisearch server from a web or application server, you should connect to it via its private IP address.
-
-### [​](#load-balancers) Load Balancers
-
+​Meilisearch Servers
+Meilisearch servers install Meilisearch to provide a blazingly fast search service to your application. They are intended to be connected to another server, and communicate via a private network.
+A Meilisearch server will only display and manage one Site. You cannot create or delete other sites on this server. When connecting to the Meilisearch server from a web or application server, you should connect to it via its private IP address.
+​Load Balancers
 Load balancers are meant to distribute incoming web traffic across your servers. To do so, load balancers use Nginx as a “reverse proxy” to evenly distribute the incoming traffic. Therefore, load balancers are only provisioned with Nginx.
-
-Once provisioned you may [configure your load balancer](/docs/servers/load-balancing) to meet your needs.
-
-Was this page helpful?
-
-YesNo
-
-[Server Providers](/docs/servers/providers)[Management](/docs/servers/management)
-
-On this page
-
-- [Introduction](#introduction)
-- [Server Types](#server-types)
-- [App Servers](#app-servers)
-- [Web Servers](#web-servers)
-- [Database Servers](#database-servers)
-- [Cache Servers](#cache-servers)
-- [Worker Servers](#worker-servers)
-- [Meilisearch Servers](#meilisearch-servers)
-- [Load Balancers](#load-balancers)
-
-[Laravel Forge home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/logo/logo.svg)](https://forge.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-[Term of Service](https://forge.laravel.com/terms-of-service)[Privacy Policy](https://forge.laravel.com/privacy-policy)[Data Processing Agreement (DPA)](https://forge.laravel.com/data-processing-agreement)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+Once provisioned you may configure your load balancer to meet your needs.Was this page helpful?YesNoServer ProvidersManagementOn this pageIntroductionServer TypesApp ServersWeb ServersDatabase ServersCache ServersWorker ServersMeilisearch ServersLoad BalancersLaravel Forge home pagexgithubdiscordlinkedinTerm of ServicePrivacy PolicyData Processing Agreement (DPA)xgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    li: \"li\",\n    p: \"p\",\n    ul: \"ul\",\n    ..._provideComponents(),\n    ...props.components\n  }, {Heading} = _components;\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsx(Heading, {\n      level: \"2\",\n      id: \"introduction\",\n      isAtRootLevel: \"true\",\n      children: \"Introduction\"\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"Forge supports provisioning several different types of servers:\"\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"Application Servers\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Web Servers\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Worker Servers\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Load Balancers\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Database Servers\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Cache Servers\"\n      }), \"\\n\"]\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"Below, we will discuss each of these server types in more detail.\"\n    }), \"\\n\", _jsx(Heading, {\n      level: \"2\",\n      id: \"server-types\",\n      isAtRootLevel: \"true\",\n      children: \"Server Types\"\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"For reference, here is a breakdown of what is offered by each server type:\"\n    }), \"\\n\", _jsxs(\"table\", {\n      children: [_jsx(\"thead\", {\n        children: _jsxs(\"tr\", {\n          children: [_jsx(\"th\", {\n            children: \"Type\"\n          }), _jsx(\"th\", {\n            children: \"Nginx\"\n          }), _jsx(\"th\", {\n            children: \"PHP\"\n          }), _jsx(\"th\", {\n            children: \"MySQL / Postgres / MariaDB\"\n          }), _jsx(\"th\", {\n            children: \"Redis, Memcached\"\n          }), _jsx(\"th\", {\n            children: \"Node.js\"\n          }), _jsx(\"th\", {\n            children: \"Meilisearch\"\n          })]\n        })\n      }), _jsxs(\"tbody\", {\n        children: [_jsxs(\"tr\", {\n          children: [_jsx(\"td\", {\n            scope: \"col\",\n            children: \"App Server\"\n          }), _jsx(\"td\", {\n            align: \"middle\",\n            children: \"✅\"\n          }), _jsx(\"td\", {\n            align: \"middle\",\n            children: \"✅\"\n          }), _jsx(\"td\", {\n            align: \"middle\",\n            children: \"✅\"\n          }), _jsx(\"td\", {\n            align: \"middle\",\n            children: \"✅\"\n          }), _jsx(\"td\", {\n            align: \"middle\",\n            children: \"✅\"\n          }), _jsx(\"td\", {\n            align: \"middle\"\n          })]\n        }), _jsxs(\"tr\", {\n          children: [_jsx(\"td\", {\n  
