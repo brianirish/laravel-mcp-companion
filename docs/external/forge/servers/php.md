@@ -70,7 +70,7 @@ The version you wish to uninstall is not the server’s default version on the C
 The version you wish to uninstall is not used by any sites.
 
 ​CLI
-When an additional version of PHP has been installed, you may reference it on the CLI via phpx.x, replacing the x.x with the version number (e.g. php8.1). The php binary will always point to the active CLI version (if changed from the default).
+When an additional version of PHP has been installed, you may reference it on the CLI via phpx.x, replacing the x.x with the version number (e.g. php8.4). The php binary will always point to the active CLI version (if changed from the default).
 ​Default PHP Installation
 The “default” PHP version is the version of PHP that will be used by default when creating a new site on the server.
 When selecting a new version of PHP as your server’s “default” version, the PHP versions used by existing sites will not be updated.
