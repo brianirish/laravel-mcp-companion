@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "8e8a37f201d1f7f20f6a952f7cb61166c1ba9fe7",
-  "commit_date": "2025-07-19T19:25:06Z",
-  "commit_message": "Fix punctuation (#10627)",
-  "commit_url": "https://github.com/laravel/docs/commit/8e8a37f201d1f7f20f6a952f7cb61166c1ba9fe7",
-  "sync_time": "2025-07-20T01:42:21Z"
+  "commit_sha": "959677ceed407801e48087206102a743eaeafe0f",
+  "commit_date": "2025-07-21T20:57:29Z",
+  "commit_message": "Make \"User Preferred Locales\" h4 (#10632)",
+  "commit_url": "https://github.com/laravel/docs/commit/959677ceed407801e48087206102a743eaeafe0f",
+  "sync_time": "2025-07-22T01:26:25Z"
 }

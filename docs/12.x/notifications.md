@@ -36,7 +36,6 @@
 - [SMS Notifications](#sms-notifications)
     - [Prerequisites](#sms-prerequisites)
     - [Formatting SMS Notifications](#formatting-sms-notifications)
-    - [Unicode Content](#unicode-content)
     - [Customizing the "From" Number](#customizing-the-from-number)
     - [Adding a Client Reference](#adding-a-client-reference)
     - [Routing SMS Notifications](#routing-sms-notifications)
@@ -1604,7 +1603,7 @@ Notification::locale('es')->send(
 ```
 
 <a name="user-preferred-locales"></a>
-### User Preferred Locales
+#### User Preferred Locales
 
 Sometimes, applications store each user's preferred locale. By implementing the `HasLocalePreference` contract on your notifiable model, you may instruct Laravel to use this stored locale when sending a notification:
 

@@ -82,8 +82,14 @@ CopyAsk AIecho &quot;${APP_NAME} is deploying...&quot;
 Deployments may make your site unavailable for a brief moment. If you need absolutely zero downtime during deployments, check out Envoyer.
 ​PHP Versions
 If you have installed multiple versions of PHP on your server, your deploy script may need to be updated to use the correct version of PHP.
-By default, php will always point to the active version of PHP used on the CLI. If you need to use a different version of PHP, you must use phpx.x where x.x reflects on the version used (e.g. php8.1) when invoking PHP commands.
+By default, php will always point to the active version of PHP used on the CLI. If you need to use a different version of PHP, you must use phpx.x where x.x reflects on the version used (e.g. php8.4) when invoking PHP commands.
 The deployment script for newly created sites uses the $FORGE_PHP environment variable. This environment variable will always contain the current PHP binary configured for the site, so no additional changes are needed to your deployment script when using this variable and switching your site’s PHP version.
+​Restarting Daemons During Deployment
+When deploying applications that use daemons (such as Next.js applications), you may need to restart the daemon to ensure it picks up your code changes. You can do this by adding the restart command to your deployment script:
+CopyAsk AI# Restart your daemon (replace 12345 with your daemon&#x27;s ID)...
+sudo supervisorctl restart daemon-12345:*
+
+You can find your daemon’s ID in the Forge dashboard under your server’s Daemons tab.
 ​Environment Variables
 Forge will automatically inject the following environment variables into your deployment script at runtime:
 KeyDescriptionFORGE_COMPOSERThe path to the Composer installation.FORGE_CUSTOM_DEPLOYWhether the deployment was triggered with a custom deployment trigger request.FORGE_DEPLOY_AUTHORThe author of the commit.FORGE_DEPLOY_COMMITThe Git hash of the commit being deployed.FORGE_DEPLOY_MESSAGEThe Git commit message.FORGE_DEPLOYMENT_IDThe Forge assigned ID of this deployment.FORGE_MANUAL_DEPLOYWhether the deploy was triggered by clicking “Deploy Now”.FORGE_PHP_FPMThe PHP-FPM process name that is being used by Forge.FORGE_PHPThe php binary that is being used by the Forge site or server.FORGE_QUICK_DEPLOYWhether the deploy was triggered by a source control provider webhook.FORGE_REDEPLOYWhether this is a re-deployed commit.FORGE_SERVER_IDThe ID of the Forge server that is being deployed to.FORGE_SITE_BRANCHThe name of the branch that is being deployed.FORGE_SITE_IDThe ID of the Forge site that is being deployed to.FORGE_SITE_PATHThe root of the deployment path, e.g. /home/forge/mysite.comFORGE_SITE_USERThe name of the user deploying the site.
@@ -104,6 +110,4 @@ So far, we have discussed deploying Forge sites from the Forge UI or by using Fo
 To execute a Forge deployment from a CI platform, you may use Deployment Triggers or Forge CLI.
 ​Using Deployment Triggers
 You may execute a deployment at any time by instructing your CI platform to make a GET or POST request to the “Deployment Trigger URL” displayed in your site’s details.
-Although you can refresh the site token at any time, you will need to update any services which are using this URL after refreshing the token.
-Additional data may be passed to your deployment script via query parameters passed to the deployment trigger URL. For example, when passing the following query parameters ?token=abc1234&amp;env=staging, Forge will automatically inject a custom FORGE_VAR_ENV variable that will evaluate to &quot;staging&quot;.
-There are 4 reserved parameters you may use to pass Forge information whe
+Although you can refresh the site token at any time, you
