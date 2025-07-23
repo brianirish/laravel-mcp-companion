@@ -4,31 +4,12 @@
 
 ---
 
-CSS / JavaScript - Laravel Nova
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "nova-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+CSS / JavaScript - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 75 162 227;
     --primary-light: 75 162 227;
     --primary-dark: 75 162 227;
@@ -45,7 +26,7 @@ CSS / JavaScript - Laravel Nova
     --gray-800: 39 42 44;
     --gray-900: 25 27 29;
     --gray-950: 12 15 17;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperCSS / JavaScriptDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
@@ -55,7 +36,7 @@ CSS / JavaScript - Laravel Nova
 
 #footer > div > div:nth-of-type(n+2) {
     display: none;
-}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperCSS / JavaScriptDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsDigging DeeperCSS / JavaScriptLearn how to customize the CSS and JavaScript of your Nova application.When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers that are globally available to your JavaScript components.
+}On this pageNova RequestsManual NavigationEvent BusNotificationsShortcutsGlobal VariablesLocalizationsUsing Nova MixinsVue DevToolsDigging DeeperCSS / JavaScriptLearn how to customize the CSS and JavaScript of your Nova application.When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers that are globally available to your JavaScript components.
 ​Nova Requests
 You may use the Nova.request() method to make XHR requests to backend routes provided by your application or custom tools, cards, and fields. The Nova.request() method is powered by Axios and offers the same API. However, the Nova.request() method configures its own instance of Axios that has pre-configured interceptors to properly handle and redirect on 401, 403, and 500 level HTTP server responses:
 CopyAsk AINova.request().get(&#x27;/nova-vendor/stripe-inspector/endpoint&#x27;).then(response =&gt; {
@@ -130,35 +111,4 @@ public function boot()
 {
     parent::boot();
 
-    Nova::serving(function (ServingNova $event) {
-        Nova::provideToScript([
-            &#x27;mail_driver&#x27; =&gt; config(&#x27;mail.default&#x27;),
-        ]);
-    });
-}
-
-Once the variable has been provided to Nova via the provideToScript method, you may access it using the global Nova JavaScript object’s config method:
-CopyAsk AIconst driver = Nova.config(&#x27;mail_driver&#x27;);
-
-​Localizations
-Localization strings can be passed to the frontend via your NovaServiceProvider. To learn more, please consult the full custom localization documentation.
-​Using Nova Mixins
-Custom Nova tools, resource tools, cards, and other custom packages that are being developed within a nova-components directory of a Laravel application can utilize laravel-nova mixins by importing nova.mix.js Mix Extension from the Nova Devtool installation that is located within your root application’s vendor directory. This extension should be placed in your package’s webpack.mix.js:
-webpack.mix.jsCopyAsk AIlet mix = require(&#x27;laravel-mix&#x27;)
-mix.extend(&#x27;nova&#x27;, new require(&#x27;laravel-nova-devtool&#x27;))
-
-mix
-  .setPublicPath(&#x27;dist&#x27;)
-  .js(&#x27;resources/js/card.js&#x27;, &#x27;js&#x27;)
-  .vue({ version: 3 })
-  .css(&#x27;resources/css/card.css&#x27;, &#x27;css&#x27;)
-  .nova(&#x27;acme/analytics&#x27;)
-
-Laravel Nova’s assets are built using lockfile version 3 and require NPM 9+.
-​Vue DevTools
-The following feature require the laravel/nova-devtool Composer package to be installed:
-CopyAsk AIcomposer require --dev &quot;laravel/nova-devtool&quot;
-
-By default, Nova’s JavaScript is compiled for production. As such, you will not be able to access the Vue DevTools out of the box without compiling Nova’s JavaScript for development. To accomplish this, you may issue the following terminal commands from the root of your Nova project:
-ApplicationPackageCopyAsk AIphp artisan nova:enable-vue-devtool
-Was this page helpful?YesNoFiltersAssetsOn this pageNova RequestsManual NavigationEvent BusNotificationsShortcutsGlobal VariablesLocalizationsUsing Nova MixinsVue DevToolsLaravel Nova home pagexgithubdiscordlinkedinPlatformDashboardStatusLegal and ComplianceTerm of ServicePrivacy PolicyxgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    p: \"p\",\n    pre: \"pre\",\n    span: \"span\",\n    strong: \"strong\",\n    ..._provideComponents(),\n    ...props.components\n  }, {CodeBlock, CodeGroup, Heading, Note} = _components;\n  if (!CodeBlock) _missingMdxReference(\"CodeBlock\", true);\n  if (!CodeGroup) _missingMdxReference(\"CodeGroup\", true);\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  if (!Note) _missingMdxReference(\"Note\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsx(_components.p, {\n      children: \"When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers
+ 

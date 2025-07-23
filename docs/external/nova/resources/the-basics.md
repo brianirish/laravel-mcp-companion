@@ -4,31 +4,12 @@
 
 ---
 
-The Basics - Laravel Nova
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "nova-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+The Basics - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 75 162 227;
     --primary-light: 75 162 227;
     --primary-dark: 75 162 227;
@@ -45,7 +26,7 @@ The Basics - Laravel Nova
     --gray-800: 39 42 44;
     --gray-900: 25 27 29;
     --gray-950: 12 15 17;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesThe BasicsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
@@ -55,7 +36,7 @@ The Basics - Laravel Nova
 
 #footer > div > div:nth-of-type(n+2) {
     display: none;
-}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesThe BasicsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsResourcesThe BasicsLearn how to define, register, and customize Nova resources.​Introduction
+}On this pageIntroductionDefining ResourcesRegistering ResourcesCustomizing Resource MenusGrouping ResourcesResource Table Style CustomizationTable StylesColumn BordersResource Table Click ActionEager LoadingResource Default Attribute ValuesResource ReplicationResource EventsResource HooksPreventing ConflictsDisabling Traffic CopResource PollingToggling Resource PollingRedirectionAfter Creating RedirectionAfter Updating RedirectionAfter Deletion RedirectionPaginationCustomizing PaginationCSV ExportResource Index Search DebounceKeyboard ShortcutsResourcesThe BasicsLearn how to define, register, and customize Nova resources.​Introduction
 Laravel Nova is a beautiful administration dashboard for Laravel applications. Of course, the primary feature of Nova is the ability to administer your underlying database records using Eloquent. Nova accomplishes this by allowing you to define a Nova “resource” that corresponds to each Eloquent model in your application.
 ​Defining Resources
 By default, Nova resources are stored in the app/Nova directory of your application. You may generate a new resource using the nova:resource Artisan command:
@@ -129,73 +110,4 @@ app/Nova/Post.phpCopyAsk AIuse Illuminate\Http\Request;
 /**
  * Get the menu that should represent the resource.
  *
- * @param  \Illuminate\Http\Request  $request
- * @return \Laravel\Nova\Menu\MenuItem
- */
-public function menu(Request $request)
-{
-    return parent::menu($request)-&gt;withBadge(function () {
-        return static::$model::count();
-    });
-}
-
-Please refer to the documentation on menu customization for more information.
-​Grouping Resources
-If you would like to separate resources into different sidebar groups, you may override the group property of your resource class:
-app/Nova/Post.phpCopyAsk AI/**
- * The logical group associated with the resource.
- *
- * @var string
- */
-public static $group = &#x27;Admin&#x27;;
-
-​Resource Table Style Customization
-Nova supports a few visual customization options for your resources.
-​Table Styles
-Sometimes it’s convenient to show more data on your resource index tables. To accomplish this, you can use the “tight” table style option designed to increase the visual density of your table rows. To accomplish this, override the static $tableStyle property or the static tableStyle method on your resource class:
-app/Nova/Post.phpCopyAsk AI/**
- * The visual style used for the table. Available options are &#x27;tight&#x27; and &#x27;default&#x27;.
- *
- * @var string
- */
-public static $tableStyle = &#x27;tight&#x27;;
-
-This will display your table rows with less visual height, enabling more data to be shown:
-Tight Table Style
-​Column Borders
-You can instruct Nova to display column borders by overriding the static $showColumnBorders property or the static showColumnBorders method on your resource class:
-app/Nova/Post.phpCopyAsk AI/**
- * Whether to show borders for each column on the X-axis.
- *
- * @var bool
- */
-public static $showColumnBorders = true;
-
-Setting this property to true will instruct Nova to display the table with borders on every table item:
-Table Column Borders
-​Resource Table Click Action
-By default, when clicking on a resource table row, Nova will navigate to the detail view for the resource. However, you may want Nova to navigate to the edit form instead. You can customize this behavior by changing the clickAction property or the static clickAction method on your resource class:
-PropertyMethodCopyAsk AI/**
- * The click action to use when clicking on the resource in the table.
- *
- * Can be one of: &#x27;detail&#x27; (default), &#x27;edit&#x27;, &#x27;select&#x27;, &#x27;preview&#x27;, or &#x27;ignore&#x27;.
- *
- * @var string
- */
-public static $clickAction = &#x27;edit&#x27;;
-
-Choosing the select option will select the resource row’s checkbox. The ignore option instructs Nova to ignore click events altogether.
-​Eager Loading
-If you routinely need to access a resource’s relationships within your fields, resource title, or resource subtitle, it may be a good idea to add the relationship to the with property of your resource. This property instructs Nova to always eager load the listed relationships when retrieving the resource.
-For example, if you access a Post resource’s user relationship within the Post resource’s subtitle method, you should add the user relationship to the Post resource’s with property:
-app/Nova/Post.phpCopyAsk AI/**
- * The relationships that should be eager loaded on index queries.
- *
- * @var array
- */
-public static $with = [&#x27;user&#x27;];
-
-​Resource Default Attribute Values
-By default, Laravel Nova will utilize the default attribute values defined by Eloquent over any default values set on each Field during resource creation. If you need to override the default values within a resource, you can do so by overriding the resource’s defaultAttributes method:
-CopyAsk AI/**
- * Get the default atrtributes for the model represented by th
+ * @param  \Ill

@@ -4,31 +4,12 @@
 
 ---
 
-Forge CLI - Laravel Forge
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "forge-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Forge CLI - Laravel Forge(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"forge-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 24 182 155;
     --primary-light: 24 182 155;
     --primary-dark: 24 182 155;
@@ -45,14 +26,14 @@ Forge CLI - Laravel Forge
     --gray-800: 38 42 42;
     --gray-900: 23 28 27;
     --gray-950: 10 15 14;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationGet StartedForge CLIDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuse(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
 .codeblock-dark div:not(:last-child) {
     color: #fafafa;
 }
-Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationGet StartedForge CLIDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseGet StartedForge CLIForge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.Forge CLIView the Forge CLI on GitHubForge APIView the Forge API Documentation
+On this pageOverviewInstallationGet StartedAuthenticatingCurrent Server &amp; Switching ServersSSH Key AuthenticationSitesInitiating DeploymentsUpdating Environment VariablesViewing Application LogsReviewing Deployment Output / LogsRunning CommandsTinkerResourcesChecking Resource StatusViewing Resources LogsRestarting ResourcesConnecting To Resources LocallyGet StartedForge CLIForge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.Forge CLIView the Forge CLI on GitHubForge APIView the Forge API Documentation
 ​Overview
 Forge provides a command-line tool that you may use to manage your Forge servers, sites, and resources from the command-line.
 ​Installation
@@ -114,79 +95,4 @@ CopyAsk AIforge env:pull
 forge env:pull pestphp.com
 forge env:pull pestphp.com .env
 
-Once this command has been executed the site’s environment file will be placed in your current directory. To update the site’s environment variables, simply open and edit this file. When you are done editing the variables, use the env:push command to push the variables back to your site:
-CopyAsk AIforge env:push
-forge env:push pestphp.com
-forge env:push pestphp.com .env
-
-If your site is utilizing Laravel’s “configuration caching” feature or has queue workers, the new variables will not be utilized until the site is deployed again.
-​Viewing Application Logs
-You may also view a site’s logs directly from the command-line. To do so, use the site:logs command:
-CopyAsk AIforge site:logs
-forge site:logs --follow              # View logs in realtime
-
-forge site:logs example.com
-forge site:logs example.com --follow  # View logs in realtime
-
-​Reviewing Deployment Output / Logs
-When a deployment fails, you may review the output / logs via the Forge UI’s deployment history screen. You may also review the output at any time on the command-line using the deploy:logs command. If the deploy:logs command is called with no additional arguments, the logs for the latest deployment will be displayed. Or, you may pass the deployment ID to the deploy:logs command to display the logs for a particular deployment:
-CopyAsk AIforge deploy:logs
-
-forge deploy:logs 12345
-
-​Running Commands
-Sometimes you may wish to run an arbitrary shell command against a site. The command command will prompt you for the command you would like to run. The command will be run relative to the site’s root directory.
-CopyAsk AIforge command
-
-forge command example.com
-
-forge command example.com --command=&quot;php artisan inspire&quot;
-
-​Tinker
-As you may know, all Laravel applications include “Tinker” by default. To enter a Tinker environment on a remote server using the Forge CLI, run the tinker command:
-CopyAsk AIforge tinker
-
-forge tinker example.com
-
-​Resources
-Forge provisions servers with a variety of resources and additional software, such as Nginx, MySQL, etc. You may use the Forge CLI to perform common actions on those resources.
-​Checking Resource Status
-To check the current status of a resource, you may use the {resource}:status command:
-CopyAsk AIforge daemon:status
-forge database:status
-
-forge nginx:status
-
-forge php:status      # View PHP status (default PHP version)
-forge php:status 8.4  # View PHP 8.4 status
-
-​Viewing Resources Logs
-You may also view logs directly from the command-line. To do so, use the {resource}:logs command:
-CopyAsk AIforge daemon:logs
-forge daemon:logs --follow  # View logs in realtime
-
-forge database:logs
-
-forge nginx:logs         # View error logs
-forge nginx:logs access  # View access logs
-
-forge php:logs           # View PHP logs (default PHP version)
-forge php:logs 8.4       # View PHP 8.4 logs
-
-​Restarting Resources
-Resources may be restarted using the {resource}:restart command:
-CopyAsk AIforge daemon:restart
-
-forge database:restart
-
-forge nginx:restart
-
-forge php:restart      # Restarts PHP (default PHP version)
-forge php:restart 8.4  # Restarts PHP 8.4
-
-​Connecting To Resources Locally
-You may use the {resource}:shell command to quickly access a command line shell that lets you interact with a given resource:
-CopyAsk AIforge database:shell
-forge database:shell my-database-name
-forge database:shell my-database-name --user=my-user
-Was this page helpful?YesNoIntroductionForge SDKOn this pageOverviewInstallationGet StartedAuthenticatingCurrent Server &amp; Switching ServersSS
+Once this command has been executed the site’s environment file will be placed in yo

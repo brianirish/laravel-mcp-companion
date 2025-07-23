@@ -4,31 +4,12 @@
 
 ---
 
-File Fields - Laravel Nova
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "nova-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+File Fields - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 75 162 227;
     --primary-light: 75 162 227;
     --primary-dark: 75 162 227;
@@ -45,7 +26,7 @@ File Fields - Laravel Nova
     --gray-800: 39 42 44;
     --gray-900: 25 27 29;
     --gray-950: 12 15 17;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesFile FieldsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
@@ -55,7 +36,7 @@ File Fields - Laravel Nova
 
 #footer > div > div:nth-of-type(n+2) {
     display: none;
-}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesFile FieldsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsResourcesFile FieldsLearn how to work with file fields in Nova.Nova offers several types of file fields: File, Image, Avatar, VaporFile, and VaporImage. The File field is the most basic form of file upload field, and is the base class for both the Image and Avatar fields. In the following documentation, we will explore each of these fields and discuss their similarities and differences.
+}On this pageOverviewDefining the FieldDisabling File DownloadsHow Files Are StoredThe Local DiskImagesAvatarsStoring MetadataPruning &amp; DeletionCustomizationCustomizing File StorageCustomizing the Name / PathCustomizing the Entire Storage ProcessInvokablesCustomizing File DeletionInvokablesCustomizing PreviewsCustomizing ThumbnailsCustomizing DownloadsDownloading Large Files With Temporary URLsCustomizing Accepted File TypesResourcesFile FieldsLearn how to work with file fields in Nova.Nova offers several types of file fields: File, Image, Avatar, VaporFile, and VaporImage. The File field is the most basic form of file upload field, and is the base class for both the Image and Avatar fields. In the following documentation, we will explore each of these fields and discuss their similarities and differences.
 ​Overview
 To illustrate the behavior of Nova file upload fields, let’s assume our application’s users can upload “profile photos” to their account. So, our users database table will have a profile_photo column. This column will contain the path to the profile photo on disk, or, when using a cloud storage provider such as Amazon S3, the profile photo’s path within its “bucket”.
 ​Defining the Field
@@ -103,93 +84,4 @@ The documentation above only demonstrates the default behavior of the File field
 ​The Local Disk
 If you are using the public disk in conjunction with the local driver, you should run the php artisan storage:link Artisan command to create a symbolic link from public/storage to storage/app/public. To learn more about file storage in Laravel, check out the Laravel file storage documentation.
 ​Images
-The Image field behaves exactly like the File field; however, instead of only displaying the path to the file within the Nova dashboard, an Image field will show a thumbnail preview of the underlying file. All of the configuration and customization options of the Image field mirror that of the File field:
-CopyAsk AIuse Laravel\Nova\Fields\Image;
-
-// ...
-
-Image::make(&#x27;Profile Photo&#x27;)
-    -&gt;disk(&#x27;public&#x27;),
-
-To set the width of the Image field when being displayed, you can use the maxWidth method:
-CopyAsk AIuse Laravel\Nova\Fields\Image;
-
-// ...
-
-Image::make(&#x27;Profile Photo&#x27;)
-    -&gt;maxWidth(100),
-
-Alternatively, you can set separate widths for the index and detail views using the indexWidth and detailWidth methods:
-CopyAsk AIuse Laravel\Nova\Fields\Image;
-
-// ...
-
-Image::make(&#x27;Profile Photo&#x27;)
-    -&gt;indexWidth(60)
-    -&gt;detailWidth(150),
-
-You may also use the maxWidth, indexWidth, and detailWidth methods on the Avatar and Gravatar fields.
-​Avatars
-The Avatar field behaves exactly like the File field; however, instead of only displaying the path to the file within the Nova dashboard, an Avatar field will show a thumbnail preview of the underlying file. All of the configuration and customization options of the Avatar field mirror that of the File field:
-CopyAsk AIuse Laravel\Nova\Fields\Avatar;
-
-// ...
-
-Avatar::make(&#x27;Poster&#x27;)
-    -&gt;disk(&#x27;public&#x27;),
-
-In addition to displaying a thumbnail preview of the underlying file, an Avatar field will also be automatically displayed in Nova search results. An Avatar field is not limited to “user” resources - you may attach Avatar fields to any resource within your Nova application:
-
-​Storing Metadata
-In addition to storing the path to the file within the storage system, you may also instruct Nova to store the original client filename and its size (in bytes). You may accomplish this using the storeOriginalName and storeSize methods. Each of these methods accept the name of the column you would like to store the file information:
-CopyAsk AIuse Illuminate\Http\Request;
-use Laravel\Nova\Fields\File;
-use Laravel\Nova\Fields\Text;
-
-// ... 
-
-/**
- * Get the fields displayed by the resource.
- *
- * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
- */
-public function fields(NovaRequest $request): array 
-{
-    return [
-        // ...
-
-        File::make(&#x27;Attachment&#x27;)
-                -&gt;disk(&#x27;s3&#x27;)
-                -&gt;storeOriginalName(&#x27;attachment_name&#x27;)
-                -&gt;storeSize(&#x27;attachment_size&#x27;),
-
-        Text::make(&#x27;Attachment Name&#x27;)-&gt;exceptOnForms(),
-
-        Text::make(&#x27;Attachment Size&#x27;)
-                -&gt;exceptOnForms()
-                -&gt;displayUsing(function ($value) {
-                    return number_format($value / 1024, 2).&#x27;kb&#x27;;
-                }),
-    ];
-}
-
-One benefit of storing the original client filename is the ability to create file download responses using the original filename that was used to upload the file. For example, you may do something like the following in one of your application’s routes:
-routes/web.phpCopyAsk AIuse Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
-// ... 
-
-Route::get(&#x27;/download&#x27;, function (Request $request) {
-    $user = $request-&gt;user();
-
-    return Storage::download(
-        $user-&gt;attachment, $user-&gt;attachment_name
-    );
-});
-
-When using the storeOriginalName method, the file field’s “Download” link within the Nova dashboard will automatically download the file using its original name.
-​Pruning &amp; Deletion
-File fields are deletable by default, but you can override this behavior by using the deletable method:
-CopyAsk AIuse Laravel\Nova\Fields\File;
-
-// ..
+The Image field behaves exactly like the File field; however, instead of only displaying the path to the file within the Nova dashboard, an Image field will show a thumbnail preview of the underlying file. All of the configuration and customization options of the Image f

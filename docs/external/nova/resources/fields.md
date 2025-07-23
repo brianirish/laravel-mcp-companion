@@ -4,31 +4,12 @@
 
 ---
 
-Fields - Laravel Nova
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "nova-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Fields - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 75 162 227;
     --primary-light: 75 162 227;
     --primary-dark: 75 162 227;
@@ -45,7 +26,7 @@ Fields - Laravel Nova
     --gray-800: 39 42 44;
     --gray-900: 25 27 29;
     --gray-950: 12 15 17;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesFieldsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
@@ -55,7 +36,7 @@ Fields - Laravel Nova
 
 #footer > div > div:nth-of-type(n+2) {
     display: none;
-}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesFieldsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsResourcesFieldsNova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.​Defining Fields
+}On this pageDefining FieldsField Column ConventionsShowing / Hiding FieldsShowing Fields When PeekingResource Preview ModalDynamic Field MethodsDefault ValuesField Placeholder TextField HydrationSortable FieldsField TypesAudio FieldAvatar FieldBadge FieldBoolean FieldCustomizing True / False ValuesBoolean Group FieldCode FieldEditing JSONSyntax HighlightingColor FieldCountry FieldCurrency FieldDate FieldDateTime FieldEmail FieldFile FieldGravatar FieldHeading FieldHidden FieldID FieldImage FieldKeyValue FieldCustomizing KeyValue LabelsMarkdown FieldMarkdown File UploadsMultiSelect FieldNumber FieldPassword FieldPassword Confirmation FieldSelect FieldUsing Enum as OptionsSearchable Select FieldsSlug FieldSparkline FieldUsing Trend MetricsCustomizing the ChartStatus FieldStack FieldLine FieldsPassing Closures to Line FieldsTag FieldPreviewing TagsDisplaying Tags as ListsCreating New Tags InlineAdjusting the Inline Creation Modal’s SizePreloading Available TagsText FieldText Field SuggestionsFormatting Text as LinksCopying Text Field Values to the ClipboardSetting maxlength on Text FieldsTextarea FieldSetting maxlength on Textarea FieldsTimezone FieldTrix FieldTrix File UploadsUI-Avatar FieldURL FieldVapor File FieldVapor Image FieldValidating Vapor Image / File FieldsComputed FieldsCustomizationReadonly FieldsImmutable FieldsRequired FieldsNullable FieldsField Placeholder TextField Help TextField StackingFull Width FieldsField Text AlignmentField Resolution / FormattingFilterable FieldsExtending FieldsMacro ArgumentsMacro on Specific FieldsResourcesFieldsNova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.​Defining Fields
 Each Nova resource contains a fields method. This method returns an array of fields, which generally extend the Laravel\Nova\Fields\Field class. Nova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.
 To add a field to a resource, you may simply add it to the resource’s fields method. Typically, fields may be created using their static make method. This method accepts several arguments; however, you usually only need to pass the “human readable” name of the field. Nova will automatically “snake case” this string to determine the underlying database column:
 app/Nova/User.phpCopyAsk AIuse Laravel\Nova\Fields\ID;
@@ -93,156 +74,4 @@ CopyAsk AIuse Laravel\Nova\Fields\Timezone;
 Timezone::make(&#x27;User Timezone&#x27;, &#x27;settings-&gt;timezone&#x27;),
 
 ​Showing / Hiding Fields
-Often, you will only want to display a field in certain situations. For example, there is typically no need to show a Password field on a resource index listing. Likewise, you may wish to only display a Created At field on the creation / update forms. Nova makes it a breeze to hide / show fields on certain pages.
-The following methods may be used to show / hide fields based on the display context:
-
-showOnIndex
-showOnDetail
-showOnCreating
-showOnUpdating
-showOnPreview
-showWhenPeeking
-hideFromIndex
-hideFromDetail
-hideWhenCreating
-hideWhenUpdating
-onlyOnIndex
-onlyOnDetail
-onlyOnForms
-exceptOnForms
-
-You may chain any of these methods onto your field’s definition in order to instruct Nova where the field should be displayed:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make(&#x27;Name&#x27;)-&gt;hideFromIndex(),
-
-Alternatively, you may pass a callback to the following methods.
-
-showOnIndex
-showOnDetail
-showOnCreating
-showOnUpdating
-showWhenPeeking
-hideFromIndex
-hideFromDetail
-hideWhenCreating
-hideWhenUpdating
-showOnPreview
-onlyOnPreview
-
-For show* methods, the field will be displayed if the given callback returns true:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make(&#x27;Name&#x27;)-&gt;showOnIndex(function (NovaRequest $request, $resource) {
-    return $this-&gt;name === &#x27;Taylor Otwell&#x27;;
-}),
-
-For hide* methods, the field will be hidden if the given callback returns true:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make(&#x27;Name&#x27;)-&gt;hideFromIndex(function (NovaRequest $request, $resource) {
-    return $this-&gt;name === &#x27;Taylor Otwell&#x27;;
-}),
-
-​Showing Fields When Peeking
-You may allow a field to be visible when peeking at the resource by invoking the showWhenPeeking method when defining the field:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make(&#x27;Name&#x27;)-&gt;showWhenPeeking(),
-
-​Resource Preview Modal
-You may also define which fields should be included in the resource’s “preview” modal. This modal can be displayed for a given resource by the user when viewing the resource’s index:
-CopyAsk AIuse Laravel\Nova\Fields\Markdown;
-use Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make(&#x27;Title&#x27;)-&gt;showOnPreview(),
-
-Markdown::make(&#x27;Content&#x27;)-&gt;showOnPreview(),
-
-Alternatively, you may pass a callback to the showOnPreview method:
-CopyAsk AIuse Laravel\Nova\Fields\Markdown;
-
-// ...
-
-Markdown::make(&#x27;Content&#x27;)-&gt;showOnPreview(function (NovaRequest $request, $resource) {
-    return $request-&gt;user()-&gt;can(&#x27;previewContent&#x27;);
-}),
-
-
-​Dynamic Field Methods
-If your application requires it, you may specify a separate list of fields for specific display contexts. For example, imagine you have a resource with the following list of fields:
-app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ... 
-
-/**
- * Get the fields displayed by the resource.
- *
- * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
- */
-public function fields(NovaRequest $request): array
-{
-    return [
-        Text::make(&#x27;First Name&#x27;),
-        Text::make(&#x27;Last Name&#x27;),
-        Text::make(&#x27;Job Title&#x27;),
-    ];
-}
-
-On your detail page, you may wish to show a combined name via a computed field, followed by the job title. In order to do this, you could add a fieldsForDetail method to the resource class which returns a separate list of fields that should only be displayed on the resource’s detail page:
-app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ... 
-
-/**
- * Get the fields displayed by the resource on detail page.
- *
- * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
- */
-public function fieldsForDetail(NovaRequest $request): array
-{
-    return [
-        Text::make(&#x27;Name&#x27;, function () {
-            return sprintf(&#x27;%s %s&#x27;, $this-&gt;first_name, $this-&gt;last_name);
-        }),
-
-        Text::make(&#x27;Job Title&#x27;),
-    ];
-}
-
-The available methods that may be defined for individual display contexts are:
-
-fieldsForIndex
-fieldsForDetail
-fieldsForInlineCreate
-fieldsForCreate
-fieldsForUpdate
-fieldsForPreview
-
-The fieldsForIndex, fieldsForDetail, fieldsForInlineCreate, fieldsForCreate,fieldsForUpdate, and fieldsForPreview methods always take precedence over the fields method.
-​Default Values
-There are times you may wish to provide a default value to your fields. Nova offers this functionality via the default method, which accepts a value or callback. This value will be used as the field’s default input value on the resource’s creation view:
-CopyAsk AIuse Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Text;
-
-// ...
-
-BelongsTo::make(&#x27;Name&#x27;)-&gt;default($request-&gt;user()-&gt;getKey()),
-
-Text::make(&#x27;Uuid&#x27;)-&gt;default(function ($request) {
-    return Str::orderedUuid();
-}),
-
-​Field Placeholder
+Often, you will only want to display a field in certain situations. For example, there is typically no need to show a Password field on a resource index listing. Likewise, you may wish to only display a Created At field on the creation / update forms. Nova makes it a breeze to hide / show
