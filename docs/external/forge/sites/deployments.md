@@ -4,31 +4,12 @@
 
 ---
 
-Deployments - Laravel Forge
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "forge-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Deployments - Laravel Forge(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"forge-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 24 182 155;
     --primary-light: 24 182 155;
     --primary-dark: 24 182 155;
@@ -45,14 +26,14 @@ Deployments - Laravel Forge
     --gray-800: 38 42 42;
     --gray-900: 23 28 27;
     --gray-950: 10 15 14;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationSitesDeploymentsDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuse(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
 .codeblock-dark div:not(:last-child) {
     color: #fafafa;
 }
-Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationSitesDeploymentsDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseSitesDeploymentsManage code deployments with scripts, queues, and CI tools​Overview
+On this pageOverviewEnvironmentsEnvironment Circle PermissionEncrypted Environment FilesQuick DeployDeploy ScriptPHP VersionsRestarting Daemons During DeploymentEnvironment VariablesDeploying From CIUsing Deployment TriggersUsing Forge CLIExample With GitHub ActionsExample With Chipper CIDeployment BranchGit RemoteDeployment NotificationsSlackTelegramDiscordWebhooksCircle PermissionsSitesDeploymentsManage code deployments with scripts, queues, and CI tools​Overview
 A deployment is the process in which your code is downloaded from your source control provider on to your server, ready for the world to access. Forge tracks the latest 10 deployments so that you can see what was deployed, when it was deployed, how long it took to be deployed, and also view the output of your deploy script.
 ​Environments
 Some applications, such as those created with the Laravel framework, may require a .env file to configure settings such as databases and caches. You can create and edit your Environment file within the Forge site’s management dashboard.
@@ -79,35 +60,4 @@ Execute the php artisan migrate command (if your application contains an artisan
 You can make your .env variables available to your deploy script by checking the “Make .env variables to deploy script” checkbox below the Deploy Script panel. When enabled, Forge will automatically inject the variables in your site’s .env file into the deploy script, allowing them to be accessed like any normal Bash variable:
 CopyAsk AIecho &quot;${APP_NAME} is deploying...&quot;
 
-Deployments may make your site unavailable for a brief moment. If you need absolutely zero downtime during deployments, check out Envoyer.
-​PHP Versions
-If you have installed multiple versions of PHP on your server, your deploy script may need to be updated to use the correct version of PHP.
-By default, php will always point to the active version of PHP used on the CLI. If you need to use a different version of PHP, you must use phpx.x where x.x reflects on the version used (e.g. php8.4) when invoking PHP commands.
-The deployment script for newly created sites uses the $FORGE_PHP environment variable. This environment variable will always contain the current PHP binary configured for the site, so no additional changes are needed to your deployment script when using this variable and switching your site’s PHP version.
-​Restarting Daemons During Deployment
-When deploying applications that use daemons (such as Next.js applications), you may need to restart the daemon to ensure it picks up your code changes. You can do this by adding the restart command to your deployment script:
-CopyAsk AI# Restart your daemon (replace 12345 with your daemon&#x27;s ID)...
-sudo supervisorctl restart daemon-12345:*
-
-You can find your daemon’s ID in the Forge dashboard under your server’s Daemons tab.
-​Environment Variables
-Forge will automatically inject the following environment variables into your deployment script at runtime:
-KeyDescriptionFORGE_COMPOSERThe path to the Composer installation.FORGE_CUSTOM_DEPLOYWhether the deployment was triggered with a custom deployment trigger request.FORGE_DEPLOY_AUTHORThe author of the commit.FORGE_DEPLOY_COMMITThe Git hash of the commit being deployed.FORGE_DEPLOY_MESSAGEThe Git commit message.FORGE_DEPLOYMENT_IDThe Forge assigned ID of this deployment.FORGE_MANUAL_DEPLOYWhether the deploy was triggered by clicking “Deploy Now”.FORGE_PHP_FPMThe PHP-FPM process name that is being used by Forge.FORGE_PHPThe php binary that is being used by the Forge site or server.FORGE_QUICK_DEPLOYWhether the deploy was triggered by a source control provider webhook.FORGE_REDEPLOYWhether this is a re-deployed commit.FORGE_SERVER_IDThe ID of the Forge server that is being deployed to.FORGE_SITE_BRANCHThe name of the branch that is being deployed.FORGE_SITE_IDThe ID of the Forge site that is being deployed to.FORGE_SITE_PATHThe root of the deployment path, e.g. /home/forge/mysite.comFORGE_SITE_USERThe name of the user deploying the site.
-You may use these variables as you would any other Bash variable:
-CopyAsk AIif [[ $FORGE_MANUAL_DEPLOY -eq 1 ]]; then
-    echo &quot;This deploy was triggered manually.&quot;
-fi
-
-For example, you may wish to prevent deployments if the commit message contains “wip”:
-CopyAsk AIif [[ $FORGE_DEPLOY_MESSAGE =~ &quot;wip&quot; ]]; then
-    echo &quot;WORK IN PROGRESS, DO NOT CONTINUE.&quot;
-    exit 1
-fi
-
-Forge will prefix any injected variables with FORGE_. Please do not use this “namespace” when defining your own environment variables.
-​Deploying From CI
-So far, we have discussed deploying Forge sites from the Forge UI or by using Forge’s “Quick Deploy” feature. However, you may also deploy them from a CI platform of your choice.
-To execute a Forge deployment from a CI platform, you may use Deployment Triggers or Forge CLI.
-​Using Deployment Triggers
-You may execute a deployment at any time by instructing your CI platform to make a GET or POST request to the “Deployment Trigger URL” displayed in your site’s details.
-Although you can refresh the site token at any time, you
+Deployments may make your site unavailable for a brief moment. If you need absolutely zero d

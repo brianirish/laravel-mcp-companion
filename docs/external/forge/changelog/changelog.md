@@ -4,31 +4,12 @@
 
 ---
 
-Changelog - Laravel Forge
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "forge-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Changelog - Laravel Forge(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"forge-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 24 182 155;
     --primary-light: 24 182 155;
     --primary-dark: 24 182 155;
@@ -45,14 +26,14 @@ Changelog - Laravel Forge
     --gray-800: 38 42 42;
     --gray-900: 23 28 27;
     --gray-950: 10 15 14;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationChangelogDocumentationChangelogCommunityBlogChangelog(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
 .codeblock-dark div:not(:last-child) {
     color: #fafafa;
 }
-Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationChangelogDocumentationChangelogCommunityBlogChangelogChangelog​Week of May 13, 2025Changed
+On this pageWeek of May 13, 2025Week of May 2, 2025Week of Apr 25, 2025Week of Apr 18, 2025Week of Mar 28, 2025Week of Mar 17, 2025Week of Mar 3, 2025Week of Feb 17, 2025Week of Feb 10, 2025Week of Feb 3, 2025Week of Jan 27, 2025Week of Jan 20, 2025Week of Jan 13, 2025Week of Jan 6, 2025Changelog​Week of May 13, 2025Changed
 Removed support for Ubuntu 20.04 as it has reached end-of-life (EOL)
 
 ​Week of May 2, 2025Improvements
@@ -154,19 +135,4 @@ Server Ubuntu versions are now shown in the information bar
 Fixes
 Disabled Microsoft Teams notifications
 Firewall IPs may be comma separated including spaces
-Worker information will now show all known information
-Daemon status syncing is now more resilient
-Pinned awscli to v2.22.35 to resolve issues when using DigitalOcean and Vultr S3 providers with database backups
-
-​Week of Jan 6, 2025Improvements
-Add validation message when archiving balancers from API
-Switched field order when installing existing certificates
-Report rate limiting errors to the frontend
-Fixes
-Allow installing repositories with special characters in branch names
-AWS VPC is no longer always required when creating new AWS servers
-“Skip this step” button now redirects correctly when onboarding
-Disabled “Blogo” starter kit within Statamic integration
-Let’s Encrypt certificates should timeout less frequently
-Forge now reloads PHP-FPM when reloading Nginx configurations (previously calling restart could cause moments of downtime)
-Was this page helpful?YesNoOn this pageWeek of May 13, 2025Week of May 2, 2025Week of Apr 25, 2025Week of Apr 18, 2025Week of Mar 28, 2025Week of Mar 17, 2025Week of Mar 3, 2025Week of Feb 17, 2025Week of Feb 10, 2025Week of Feb 3, 2025Week of Jan 27, 2025Week of Jan 20, 2025Week of Jan 13, 2025Week of Jan 6, 2025Laravel Forge home pagexgithubdiscordlinkedinTerm of ServicePrivacy PolicyData Processing Agreement (DPA)xgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    li: \"li\",\n    p: \"p\",\n    strong: \"strong\",\n    ul: \"ul\",\n    ..._provideComponents(),\n    ...props.components\n  }, {Update} = _components;\n  if (!Update) _missingMdxReference(\"Update\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsxs(Update, {\n      label: \"Week of May 13, 2025\",\n      id: \"week-of-may-13%2C-2025\",\n      children: [_jsx(_components.p, {\n        children: _jsx(_components.strong, {\n          children: \"Changed\"\n        })\n      }), _jsxs(_components.ul, {\n        children: [\"\\n\", _jsx(_components.li, {\n          children: \"Removed support for Ubuntu 20.04 as it has reached end-of-life (EOL)\"\n        }), \"\\n\"]\n      })]\n    }), \"\\n\", _jsxs(Update, {\n      label: \"Week of May 2, 2025\",\n      id: \"week-of-may-2%2C-2025\",\n      children: [_jsx(_components.p, {\n        children: _jsx(_components.strong, {\n          children: \"Improvements\"\n        })\n      }), _jsxs(_components.ul, {\n        children: [\"\\n\", _jsx(_components.li, {\n          children: \"Increased performance around the sites API\"\n        }), \"\\n\", _jsx(_components.li, {\n          children: \"SSH key fingerprinting algorithm\"\n        }), \"\\n\", _jsx(_components.li, {\n          children: \"Performance of server events page\"\n        }), \"\\n\"]\n      }), _jsx(_components.p, {\n        children: _jsx(_components.strong, {\n          children: \"Fixes\"\n        })\n      }), _jsxs(_components.ul, {\n        children: [\"\\n\", _jsx(_components.li, {\n          children: \"Server packages page now loads correctly when the server has no sites\"\n        }), \"\\n\", _jsx(_components.li, {\n          children: \"API now allows custom frequencies when c
+Worker information will now

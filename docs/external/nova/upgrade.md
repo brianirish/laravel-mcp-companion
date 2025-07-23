@@ -4,31 +4,12 @@
 
 ---
 
-Upgrade Guide - Laravel Nova
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "nova-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Upgrade Guide - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 75 162 227;
     --primary-light: 75 162 227;
     --primary-dark: 75 162 227;
@@ -45,7 +26,7 @@ Upgrade Guide - Laravel Nova
     --gray-800: 39 42 44;
     --gray-900: 25 27 29;
     --gray-950: 12 15 17;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationGet StartedUpgrade GuideDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
@@ -55,7 +36,7 @@ Upgrade Guide - Laravel Nova
 
 #footer > div > div:nth-of-type(n+2) {
     display: none;
-}Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationGet StartedUpgrade GuideDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubsGet StartedUpgrade GuideLearn how to upgrade your Laravel Nova installation to the latest version.​Dependency Upgrades
+}On this pageDependency UpgradesServerClientUpdating Composer DependenciesUpdating Assets and TranslationsUpdating Third-Party Nova Packages ​Upgrading Authentication FeaturesUpdating Nova Components (Custom Tool, Cards, Fields, Filters)Inertia 2 CompatibilityReplacing form-backend-validationMedium Impact ChangesForm Abandonment (Using Browser Navigation)Algolia Place Field RemovedLow Impact ChangesUpdate Published StubsGet StartedUpgrade GuideLearn how to upgrade your Laravel Nova installation to the latest version.​Dependency Upgrades
 Nova’s upstream dependencies have been upgraded. You will find a complete list of our dependency upgrades below:
 ​Server
 
@@ -132,25 +113,4 @@ CopyAsk AI&lt;script&gt;
 &lt;/script&gt;
 
 ​Replacing form-backend-validation
-The form-backend-validation repository has been archived and should no longer be used by third-party packages or components. Instead, you may simply import Errors from laravel-nova:
-CopyAsk AI&lt;script&gt;
--import { Errors } from &#x27;form-backend-validation&#x27;
-+import { Errors } from &#x27;laravel-nova&#x27;
-
-// ...
-
-&lt;/script&gt;
-
-Then, you may remove form-backend-validation from your component’s package.json:
-CopyAsk AInpm remove form-backend-validation
-
-​Medium Impact Changes
-​Form Abandonment (Using Browser Navigation)
-With the introduction of Inertia.js 2.x, we are no longer able to provide form abandonment warnings when using the browser’s back button.
-​Algolia Place Field Removed
-Algolia retired their “Places” API on May 31, 2022; therefore, the Place field was deprecated on Nova 4 and is now removed in Nova 5.
-​Low Impact Changes
-​Update Published Stubs
-Due to various changes in Nova 5.x, you should re-publish the Nova “stubs” if you have previously published them. You can accomplish this by executing the nova:stubs Artisan command with the --force option:
-CopyAsk AIphp artisan nova:stubs --force
-Was this page helpful?YesNoRelease NotesThe BasicsOn this pageDependency UpgradesServerClientUpdating Composer DependenciesUpdating Assets and TranslationsUpdating Third-Party Nova Packages ​Upgrading Authentication FeaturesUpdating Nova Components (Custom Tool, Cards, Fields, Filters)Inertia 2 CompatibilityReplacing form-backend-validationMedium Impact ChangesForm Abandonment (Using Browser Navigation)Algolia Place Field RemovedLow Impact ChangesUpdate Published StubsLaravel Nova home pagexgithubdiscordlinkedinPlatformDashboardStatusLegal and ComplianceTerm of ServicePrivacy PolicyxgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    li: \"li\",\n    p: \"p\",\n    pre: \"pre\",\n    span: \"span\",\n    strong: \"strong\",\n    ul: \"ul\",\n    ..._provideComponents(),\n    ...props.components\n  }, {CodeBlock, Heading} = _components;\n  if (!CodeBlock) _missingMdxReference(\"CodeBlock\", true);\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsx(Heading, {\n      level: \"2\",\n      id: \"dependency-upgrades\",\n      isAtRootLevel: \"true\",\n      children: \"Dependency Upgrades\"\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"Nova’s upstream dependencies have been upgraded. You will find a complete list of our dependency upgrades below:\"\n    }), \"\\n\", _jsx(Heading, {\n      level: \"4\",\n      id: \"server\",\n      isAtRootLevel: \"true\",\n      children: \"Server\"\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"PHP 8.1+\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Laravel Framework 10.34+ and 11.0+\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Inertia Laravel 1.3+ and 2.0+\"\n      }), \"\\n\", _jsxs(_components.li, {\n        children: [\"Replaced \", _jsx(_components.code, {\n          children: \"laravel/ui\"\n        }), \" with \", _jsx(_components.code, {\n          children: \"laravel/fortify\"\n        }), \" v1.21+\"]\n      }), \"\\n\", _jsxs(_comp
+The form-backend-validation repository h

@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "959677ceed407801e48087206102a743eaeafe0f",
-  "commit_date": "2025-07-21T20:57:29Z",
-  "commit_message": "Make \"User Preferred Locales\" h4 (#10632)",
-  "commit_url": "https://github.com/laravel/docs/commit/959677ceed407801e48087206102a743eaeafe0f",
-  "sync_time": "2025-07-22T01:26:25Z"
+  "commit_sha": "33c3fe19a0a465de53989b27501e2b947287fd85",
+  "commit_date": "2025-07-22T16:23:19Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/33c3fe19a0a465de53989b27501e2b947287fd85",
+  "sync_time": "2025-07-23T01:27:09Z"
 }

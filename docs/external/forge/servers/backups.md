@@ -4,31 +4,12 @@
 
 ---
 
-Database Backups - Laravel Forge
-              document.documentElement.style.setProperty('--font-family-headings-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-headings-custom', '');
-              document.documentElement.style.setProperty('--font-family-body-custom', 'Figtree');
-              document.documentElement.style.setProperty('--font-weight-body-custom', '');
-            
-    (function() {
-      try {
-        var bannerKey = "forge-laravel-bannerDismissed";
-        var bannerContent = undefined;
-        
-        if (!bannerContent) {
-          document.documentElement.setAttribute('data-banner-state', 'hidden');
-          return;
-        }
-        
-        var dismissedValue = localStorage.getItem(bannerKey);
-        var shouldShowBanner = !dismissedValue || dismissedValue !== bannerContent;
-        
-        document.documentElement.setAttribute('data-banner-state', shouldShowBanner ? 'visible' : 'hidden');
-      } catch (e) {
-        document.documentElement.setAttribute('data-banner-state', 'hidden');
-      }
-    })();
-  :root{--font-inter:'Inter', 'Inter Fallback';--font-jetbrains-mono:'JetBrains Mono', 'JetBrains Mono Fallback'}((e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n)}),R(n)}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n)}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y)}catch(n){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true):root {
+Database Backups - Laravel Forge(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"forge-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
+  --font-family-headings-custom: "Figtree";
+  
+  --font-family-body-custom: "Figtree";
+  
+}:root {
     --primary: 24 182 155;
     --primary-light: 24 182 155;
     --primary-dark: 24 182 155;
@@ -45,14 +26,14 @@ Database Backups - Laravel Forge
     --gray-800: 38 42 42;
     --gray-900: 23 28 27;
     --gray-950: 10 15 14;
-  }h1, h2, h3, h4 {
+  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationServersDatabase BackupsDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuse(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
     font-weight: 600 !important;
 }
 
 .codeblock-dark div:not(:last-child) {
     color: #fafafa;
 }
-Laravel Forge home pageSearch...⌘KAsk AISupportDashboardDashboardSearch...NavigationServersDatabase BackupsDocumentationChangelogCommunityBlogGet StartedIntroductionForge CLIForge SDKAccountsYour AccountCirclesSource ControlSSH KeysAPITagsTroubleshootingServersServer ProvidersServer TypesManagementRoot Access / SecuritySSH Keys / Git AccessPHPPackagesRecipesLoad BalancingNginx TemplatesDatabase BackupsMonitoringCookbookSitesThe BasicsApplicationsDeploymentsCommandsPackagesQueuesSecurity RulesRedirectsSSLUser IsolationCookbookResourcesDaemonsDatabasesCachesNetworkSchedulerIntegrationsCookbookIntegrationsEnvoyerSentryAikidoOtherAbuseServersDatabase BackupsLearn how to configure and manage automated database backups.​Overview
+On this pageOverviewCreating Backup ConfigurationsStorage ProvidersFrequency OptionsBackup RetentionNotifications For Failed BackupsManaging BackupsEditing BackupsDeleting Backup ConfigurationsRestoring BackupsDeleting BackupsBackup OutputCircle PermissionsServersDatabase BackupsLearn how to configure and manage automated database backups.​Overview
 Forge supports automated database backups that can be scheduled directly from your server’s Forge dashboard. You can choose to backup one or more databases at a specified frequency and also restore any of your recent backups. The backup script used by Forge is open source and can be found on GitHub.
 Database backups are only available on our “business” plan.
 ​Creating Backup Configurations
@@ -106,20 +87,3 @@ Forge will also display failed backups within the Backups panel of the Forge ser
 ​Editing Backups
 Existing backup configurations may be edited via the Forge UI. By default, the configuration details are locked to prevent accidental edits. You may click the Edit button to unlock editing.
 When changing the databases that should be backed up, Forge will ask for confirmation that it was an intended change. This is to prevent any future data loss in the event that a database is no longer part of a backup configuration.
-​Deleting Backup Configurations
-You can delete a backup configuration by clicking the Delete button next to your chosen backup configuration under the Backup Configurations section of the server’s Backups dashboard.
-When deleting a backup configuration, your backup archives will not be removed from cloud storage. You may remove these manually if you wish.
-​Restoring Backups
-You can restore backups to your database via the Recent Backups section. Click the Restore button next to your chosen backup. Backups will be restored to the database they were created from. If the backup configuration contains more than one database, you will be asked to select which database to restore.
-If you need to restore a backup to another server or database you may download the backup archive from your cloud storage provider and restore it using a database management tool such as TablePlus.
-​Deleting Backups
-If you need to delete an individual backup, you can do this by clicking the Delete button next to the backup.
-When deleting a backup, your backup archives will be removed from your cloud storage provider. Please take caution when removing backups.
-​Backup Output
-Each backup process will create its own log so that you can inspect the database backup process’s output in the event of a failure. You can view the output of a backup by clicking the “Eye” icon next to your backup.
-​Circle Permissions
-The ability to manage database backups is split into two permissions.
-
-server:create-backups
-server:delete-backups
-Was this page helpful?YesNoNginx TemplatesMonitoringOn this pageOverviewCreating Backup ConfigurationsStorage ProvidersFrequency OptionsBackup RetentionNotifications For Failed BackupsManaging BackupsEditing BackupsDeleting Backup ConfigurationsRestoring BackupsDeleting BackupsBackup OutputCircle PermissionsLaravel Forge home pagexgithubdiscordlinkedinTerm of ServicePrivacy PolicyData Processing Agreement (DPA)xgithubdiscordlinkedinAssistantResponses are generated using AI and may contain mistakes.{"props":{"pageProps":{"mdxSource":{"compiledSource":"\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    code: \"code\",\n    li: \"li\",\n    ol: \"ol\",\n    p: \"p\",\n    strong: \"strong\",\n    ul: \"ul\",\n    ..._provideComponents(),\n    ...props.components\n  }, {Heading, Note, Warning} = _components;\n  if (!Heading) _missingMdxReference(\"Heading\", true);\n  if (!Note) _missingMdxReference(\"Note\", true);\n  if (!Warning) _missingMdxReference(\"Warning\", true);\n  return _jsxs(_Fragment, {\n    children: [_jsx(Heading, {\n      level: \"2\",\n      id: \"overview\",\n      isAtRootLevel: \"true\",\n      children: \"Overview\"\n    }), \"\\n\", _jsxs(_components.p, {\n      children: [\"Forge supports automated database backups that can be scheduled directly from your server’s Forge dashboard. You can choose to backup one or more databases at a specified frequency and also restore any of your recent backups. The backup script used by Forge is open source and can be \", _jsx(_components.a, {\n        href: \"https://github.com/laravel/forge-database-backups\",\n        children: \"found on GitHub\"\n      }), \".\"]\
