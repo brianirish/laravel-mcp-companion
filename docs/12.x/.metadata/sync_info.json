@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "33c3fe19a0a465de53989b27501e2b947287fd85",
-  "commit_date": "2025-07-22T16:23:19Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/33c3fe19a0a465de53989b27501e2b947287fd85",
-  "sync_time": "2025-07-23T01:27:09Z"
+  "commit_sha": "e0108313cd6f3f456f49349cd3625442d7a2401b",
+  "commit_date": "2025-07-23T22:37:27Z",
+  "commit_message": "[12.x] Add readNotifications relationship method (#10638)\n\n* Add readNotifications relationship method\n\n* Update notifications.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/e0108313cd6f3f456f49349cd3625442d7a2401b",
+  "sync_time": "2025-07-24T01:26:38Z"
 }
