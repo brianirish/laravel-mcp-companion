@@ -141,7 +141,6 @@ jobs:
           
           Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
         branch: update-laravel-docs
-        update-method: rebase
     - name: Enable auto-merge and wait for checks
       if: steps.check-updates.outputs.updates_available == 'true' && steps.create-pr.outputs.pull-request-number
       run: |
