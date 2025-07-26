@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e0108313cd6f3f456f49349cd3625442d7a2401b",
-  "commit_date": "2025-07-23T22:37:27Z",
-  "commit_message": "[12.x] Add readNotifications relationship method (#10638)\n\n* Add readNotifications relationship method\n\n* Update notifications.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/e0108313cd6f3f456f49349cd3625442d7a2401b",
-  "sync_time": "2025-07-24T01:26:38Z"
+  "commit_sha": "0dce9eb1e2fa25f7d945cb6073c6ec40609cb0f5",
+  "commit_date": "2025-07-25T14:48:55Z",
+  "commit_message": "[12.x] Adds support for multiple models on single assertion call (#10642)\n\n* [12.x] Adds support for multiple models on single assertion call\n\n* Update database-testing.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/0dce9eb1e2fa25f7d945cb6073c6ec40609cb0f5",
+  "sync_time": "2025-07-26T00:53:01Z"
 }
