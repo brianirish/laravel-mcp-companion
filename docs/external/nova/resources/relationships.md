@@ -4,86 +4,338 @@
 
 ---
 
-Relationships - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesRelationshipsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageHasOneHasOneOfManyHasManyHasOneThroughHasManyThroughBelongsToPeeking at BelongsTo RelationshipsPreventing Peeking at BelongsTo RelationshipsNullable RelationshipsTitle AttributesDisable Ordering by TitleFilter Trashed ItemsBelongsToManyPivot FieldsPivot Computed FieldsPivot ActionsTitle AttributesDisabling Ordering by TitleAllowing Duplicate RelationsMorphOneMorphOneOfManyMorphManyMorphToNullable MorphTo RelationshipsPeeking at MorphTo RelationshipsPreventing Peeking at MorphTo RelationshipsSetting Default Values on MorphTo RelationshipsMorphToManyPivot FieldsTitle AttributesCollapsable RelationsSearchable RelationsRelatable Query FilteringLimiting Relation ResultsCreating Inline RelationsInline Creation Modal SizeResourcesRelationshipsNova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.In addition to the variety of fields we’ve already discussed, Nova has full support for all of Laravel’s relationships. Once you add relationship fields to your Nova resources, you’ll start to experience the full power of the Nova dashboard, as the resource detail page will allow you to quickly view and search a resource’s related models:
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
 
-​HasOne
-The HasOne field corresponds to a hasOne Eloquent relationship. For example, let’s assume a User model hasOne Address model. We may add the relationship to our User Nova resource like so:
-CopyAsk AIuse Laravel\Nova\Fields\HasOne;
+##### Resources
 
-// ...
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
 
-HasOne::make(&#x27;Address&#x27;),
+##### Search
 
-Like other types of fields, relationship fields will automatically “camel case” the displayable name of the field to determine the underlying relationship method / attribute. However, you may explicitly specify the name of the relationship method by passing it as the second argument to the field’s make method:
-CopyAsk AIuse Laravel\Nova\Fields\HasOne;
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
 
-// ...
+##### Filters
 
-HasOne::make(&#x27;Dirección&#x27;, &#x27;address&#x27;),
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
 
-​HasOneOfMany
-The HasOne relationship field can be transformed into an “has one of many” Eloquent relationship using the ofMany method. For example, let’s assume a User model hasMany Post models. We may add the “has one of many” relationship to our User Nova resource like so:
-CopyAsk AIuse App\Nova\Post;
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [HasOne](#hasone)
+- [HasOneOfMany](#hasoneofmany)
+- [HasMany](#hasmany)
+- [HasOneThrough](#hasonethrough)
+- [HasManyThrough](#hasmanythrough)
+- [BelongsTo](#belongsto)
+- [Peeking at BelongsTo Relationships](#peeking-at-belongsto-relationships)
+- [Preventing Peeking at BelongsTo Relationships](#preventing-peeking-at-belongsto-relationships)
+- [Nullable Relationships](#nullable-relationships)
+- [Title Attributes](#title-attributes)
+- [Disable Ordering by Title](#disable-ordering-by-title)
+- [Filter Trashed Items](#filter-trashed-items)
+- [BelongsToMany](#belongstomany)
+- [Pivot Fields](#pivot-fields)
+- [Pivot Computed Fields](#pivot-computed-fields)
+- [Pivot Actions](#pivot-actions)
+- [Title Attributes](#title-attributes-2)
+- [Disabling Ordering by Title](#disabling-ordering-by-title)
+- [Allowing Duplicate Relations](#allowing-duplicate-relations)
+- [MorphOne](#morphone)
+- [MorphOneOfMany](#morphoneofmany)
+- [MorphMany](#morphmany)
+- [MorphTo](#morphto)
+- [Nullable MorphTo Relationships](#nullable-morphto-relationships)
+- [Peeking at MorphTo Relationships](#peeking-at-morphto-relationships)
+- [Preventing Peeking at MorphTo Relationships](#preventing-peeking-at-morphto-relationships)
+- [Setting Default Values on MorphTo Relationships](#setting-default-values-on-morphto-relationships)
+- [MorphToMany](#morphtomany)
+- [Pivot Fields](#pivot-fields-2)
+- [Title Attributes](#title-attributes-3)
+- [Collapsable Relations](#collapsable-relations)
+- [Searchable Relations](#searchable-relations)
+- [Relatable Query Filtering](#relatable-query-filtering)
+- [Limiting Relation Results](#limiting-relation-results)
+- [Creating Inline Relations](#creating-inline-relations)
+- [Inline Creation Modal Size](#inline-creation-modal-size)
+
+Resources
+
+# Relationships
+
+Nova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.
+
+In addition to the variety of fields we’ve already discussed, Nova has full support for all of Laravel’s relationships. Once you add relationship fields to your Nova resources, you’ll start to experience the full power of the Nova dashboard, as the resource detail page will allow you to quickly view and search a resource’s related models:
+
+![Detail page Relationship](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/detail-relationships.png)
+
+## [​](#hasone) HasOne
+
+The `HasOne` field corresponds to a `hasOne` Eloquent relationship. For example, let’s assume a `User` model `hasOne` `Address` model. We may add the relationship to our `User` Nova resource like so:
+
+Copy
+
+Ask AI
+
+```
 use Laravel\Nova\Fields\HasOne;
 
 // ...
 
-HasOne::ofMany(&#x27;Latest Post&#x27;, &#x27;latestPost&#x27;, Post::class),
+HasOne::make('Address'),
 
-​HasMany
-The HasMany field corresponds to a hasMany Eloquent relationship. For example, let’s assume a User model hasMany Post models. We may add the relationship to our User Nova resource like so:
-CopyAsk AIuse Laravel\Nova\Fields\HasMany;
+```
+
+Like other types of fields, relationship fields will automatically “camel case” the displayable name of the field to determine the underlying relationship method / attribute. However, you may explicitly specify the name of the relationship method by passing it as the second argument to the field’s `make` method:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\HasOne;
 
 // ...
 
-HasMany::make(&#x27;Posts&#x27;),
+HasOne::make('Dirección', 'address'),
+
+```
+
+### [​](#hasoneofmany) HasOneOfMany
+
+The `HasOne` relationship field can be transformed into an “has one of many” Eloquent relationship using the `ofMany` method. For example, let’s assume a `User` model `hasMany` `Post` models. We may add the “has one of many” relationship to our `User` Nova resource like so:
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\Post;
+use Laravel\Nova\Fields\HasOne;
+
+// ...
+
+HasOne::ofMany('Latest Post', 'latestPost', Post::class),
+
+```
+
+## [​](#hasmany) HasMany
+
+The `HasMany` field corresponds to a `hasMany` Eloquent relationship. For example, let’s assume a `User` model `hasMany` `Post` models. We may add the relationship to our `User` Nova resource like so:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\HasMany;
+
+// ...
+
+HasMany::make('Posts'),
+
+```
 
 Once the field has been added to your resource, it will be displayed on the resource’s detail page.
-When defining HasMany relationships, make sure to use the plural form of the relationship so Nova can infer the correct singular resource name:CopyAsk AIuse Laravel\Nova\Fields\HasMany;
+
+When defining `HasMany` relationships, make sure to use the plural form of the relationship so Nova can infer the correct singular resource name:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\HasMany;
 
 // ...
 
-HasMany::make(&#x27;Posts&#x27;),
+HasMany::make('Posts'),
 
-​HasOneThrough
-The HasOneThrough field corresponds to a hasOneThrough Eloquent relationship. For example, let’s assume a Mechanic model has one Car, and each Car may have one Owner. While the Mechanic and the Owner have no direct connection, the Mechanic can access the Owner through the Car itself. You can display this relationship by adding it to your Nova resource:
-CopyAsk AIuse Laravel\Nova\Fields\HasOneThrough;
+```
+
+## [​](#hasonethrough) HasOneThrough
+
+The `HasOneThrough` field corresponds to a `hasOneThrough` Eloquent relationship. For example, let’s assume a `Mechanic` model has one `Car`, and each `Car` may have one `Owner`. While the `Mechanic` and the `Owner` have no direct connection, the `Mechanic` can access the `Owner` through the `Car` itself. You can display this relationship by adding it to your Nova resource:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\HasOneThrough;
 
 // ...
 
-HasOneThrough::make(&#x27;Owner&#x27;),
+HasOneThrough::make('Owner'),
 
-​HasManyThrough
-The HasManyThrough field corresponds to a hasManyThrough Eloquent relationship. For example, a Country model might have many Post models through an intermediate User model. In this example, you could easily gather all blog posts for a given country. To di
+```
+
+## [​](#hasmanythrough) HasManyThrough
+
+The `HasManyThrough` field corresponds to a `hasManyThrough` Eloquent relationship. For example, a `Country` model might have many `Post` models through an intermediate `User` model. In this example, you could easily gather all blog posts for a given country. To display this relationship within Nova, you may add it to your Nova resource:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\HasManyThrough;
+
+// ...
+
+HasManyThrough::make('Posts'),
+
+```
+
+## [​](#belongsto) BelongsTo
+
+The `BelongsTo` field corresponds to a `belongsTo` Eloquent relationship. For example, let’s assume a `Post` model `belongsTo` a `User` model. We may add the relationship to our `Post` Nova resource like so:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\BelongsTo;
+
+// ...
+
+BelongsTo::make('User'),
+
+```
+
+You may customize the resource class used by the relation field by providing the second and third arguments of the `make` method, which define the name of the relationship and the underlying Nova resource class:
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\User;
+use Laravel\Nova\Fields\BelongsTo;
+
+// ...
+
+BelongsTo::make('Author', 'author', User::class),
+
+```
+
+### [​](#peeking-at-belongsto-relationships) Peeking at BelongsTo Relationships
+
+When hovering over a `BelongsTo` link when viewing the index or detail views, Nova will show a small card allowing you to “take a peek” at the linked relation:
+
+![Relationship Peeking](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/peeking.png)
+
+### [​](#preventing-peeking-at-belongsto-relationships) Preventing Peeking at `BelongsTo` Relationships
+
+Relationship peeking is enabled by default; however, you can prevent the user from peeking at the relation using the `noPeeking` helper on your `BelongsTo` field:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\BelongsTo;
+
+// ...
+
+BelongsTo::make('Author')
+    ->noPeeking(),
+
+```
+
+You may also use the `peekable` method to determine whether the user should be allowed to peek at the relation:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ...
+
+BelongsTo::make('Author')
+    ->peekable(function (NovaRequest $request) {
+        return $request->isResourceDetailRequest();
+    }),
+
+```
+
+#### [​](#nullable-relationships) Nullable Relationships
+
+If you would like your `BelongsTo` relationship to be `nullable`, you may simply chain the `nullable` method onto the field’s definition:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\BelongsTo;
+
+// ...
+
+BelongsTo::make('User')
+    ->nullable(),
+
+```
+
+#### [​](#title-attributes) Title Attributes
+
+When a `BelongsTo` field is shown on a resource creation / update page, a drop-down selection menu or search menu will display the “title” of the resource. For example, a `User` resource may use the `name` attribute as its title. Then, when the resource is shown in a `BelongsTo` selection menu, that attribute will be displayed:
+
+![Belongs To Title](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/belongs-to-title.png)
+
+To customize the “title” attribute of a resource, you may define a `title` property or `ti
+
+*[Content truncated for length]*

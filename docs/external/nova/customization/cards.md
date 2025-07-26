@@ -4,49 +4,123 @@
 
 ---
 
-Cards - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperCardsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageOverviewDefining CardsRegistering CardsAuthorizationCard OptionsAccessing Card OptionsBuilding CardsRoutingAssetsRegistering AssetsCompiling AssetsDigging DeeperCardsLearn how to build custom cards for your Nova application.​Overview
-Cards are similar to resource tools, but are small, miniature tools that are typically displayed at the top of your dashboard, resource index, or resource detail pages. In fact, if you have used Nova metrics, you have already seen Nova cards. Custom Nova cards allow you to build your own, metric-sized tools.
-​Defining Cards
-Cards may be generated using the nova:card Artisan command. By default, all new cards will be placed in the nova-components directory of your application. When generating a card using the nova:card command, the card name you pass to the command should follow the Composer vendor/package format. So, if we were building a traffic analytics card, we might run the following command:
-CopyAsk AIphp artisan nova:card acme/analytics
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
 
-When generating a card, Nova will prompt you to install the card’s NPM dependencies, compile its assets, and update your application’s composer.json file. All custom cards are registered with your application as a Composer “path” repository.
-Nova cards include all of the scaffolding necessary to build your card. Each card even contains its own composer.json file and is ready to be shared with the world on GitHub or the source control provider of your choice.
-​Registering Cards
-Nova cards may be registered in your resource’s cards method. This method returns an array of cards available to the resource. To register your card, add your card to the array of cards returned by this method:
-app/Nova/Post.phpCopyAsk AInamespace App\Nova;
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Overview](#overview)
+- [Defining Cards](#defining-cards)
+- [Registering Cards](#registering-cards)
+- [Authorization](#authorization)
+- [Card Options](#card-options)
+- [Accessing Card Options](#accessing-card-options)
+- [Building Cards](#building-cards)
+- [Routing](#routing)
+- [Assets](#assets)
+- [Registering Assets](#registering-assets)
+- [Compiling Assets](#compiling-assets)
+
+Digging Deeper
+
+# Cards
+
+Learn how to build custom cards for your Nova application.
+
+## [​](#overview) Overview
+
+Cards are similar to resource tools, but are small, miniature tools that are typically displayed at the top of your dashboard, resource index, or resource detail pages. In fact, if you have used [Nova metrics](./../metrics/defining-metrics), you have already seen Nova cards. Custom Nova cards allow you to build your own, metric-sized tools.
+
+## [​](#defining-cards) Defining Cards
+
+Cards may be generated using the `nova:card` Artisan command. By default, all new cards will be placed in the `nova-components` directory of your application. When generating a card using the `nova:card` command, the card name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a traffic analytics card, we might run the following command:
+
+Copy
+
+Ask AI
+
+```
+php artisan nova:card acme/analytics
+
+```
+
+When generating a card, Nova will prompt you to install the card’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom cards are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
+Nova cards include all of the scaffolding necessary to build your card. Each card even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
+
+## [​](#registering-cards) Registering Cards
+
+Nova cards may be registered in your resource’s `cards` method. This method returns an array of cards available to the resource. To register your card, add your card to the array of cards returned by this method:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+namespace App\Nova;
 
 use Acme\Analytics\Analytics;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -56,7 +130,7 @@ class Post extends Resource
     /**
      * Get the cards available for the resource.
      *
-     * @return array&lt;int, \Laravel\Nova\Card&gt;
+     * @return array<int, \Laravel\Nova\Card>
      */
     public function cards(NovaRequest $request)
     {
@@ -66,29 +140,51 @@ class Post extends Resource
     }
 }
 
-​Authorization
-If you would like to only expose a given card to certain users, you may invoke the canSee method when registering your card. The canSee method accepts a closure which should return true or false. The closure will receive the incoming HTTP request:
-app/Nova/Post.phpCopyAsk AIuse Acme\Analytics\Analytics;
+```
+
+### [​](#authorization) Authorization
+
+If you would like to only expose a given card to certain users, you may invoke the `canSee` method when registering your card. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+use Acme\Analytics\Analytics;
 
 // ...
 
 /**
  * Get the cards available for the resource.
  *
- * @return array&lt;int, \Laravel\Nova\Card&gt;
+ * @return array<int, \Laravel\Nova\Card>
  */
 public function cards(NovaRequest $request)
 {
     return [
-        (new Analytics)-&gt;canSee(function ($request) {
+        (new Analytics)->canSee(function ($request) {
             return false;
         }),
     ];
 }
 
-​Card Options
-Often, you will need to allow the consumer’s of your card to customize run-time configuration options on the card. You may do this by exposing methods on your card class. These methods may call the card’s underlying withMeta method to add information to the card’s metadata, which will be available within your Card.vue component. The withMeta method accepts an array of key / value options:
-nova-components/Analytics/src/Analytics.phpCopyAsk AInamespace Acme\Analytics;
+```
+
+### [​](#card-options) Card Options
+
+Often, you will need to allow the consumer’s of your card to customize run-time configuration options on the card. You may do this by exposing methods on your card class. These methods may call the card’s underlying `withMeta` method to add information to the card’s metadata, which will be available within your `Card.vue` component. The `withMeta` method accepts an array of key / value options:
+
+nova-components/Analytics/src/Analytics.php
+
+Copy
+
+Ask AI
+
+```
+namespace Acme\Analytics;
 
 use Laravel\Nova\Card;
 
@@ -103,12 +199,115 @@ class Analytics extends Card
      */
     public function currentVisitors()
     {
-        return $this-&gt;withMeta([&#x27;currentVisitors&#x27; =&gt; true]);
+        return $this->withMeta(['currentVisitors' => true]);
     }
 }
 
-After registering your custom card, don’t forget to actually call any custom option methods you defined:
-CopyAsk AI(new Acme\Analytics\Analytics)-&gt;currentVisitors(),
+```
 
-​Accessing Card Options
-Your card’s Card.vue component receives a card Vue prop. Thi
+After registering your custom card, don’t forget to actually call any custom option methods you defined:
+
+Copy
+
+Ask AI
+
+```
+(new Acme\Analytics\Analytics)->currentVisitors(),
+
+```
+
+#### [​](#accessing-card-options) Accessing Card Options
+
+Your card’s `Card.vue` component receives a `card` Vue `prop`. This property provides access to any card options that may be available on the card:
+
+Copy
+
+Ask AI
+
+```
+const currentVisitors = this.card.currentVisitors;
+
+```
+
+## [​](#building-cards) Building Cards
+
+Each card generated by Nova includes its own service provider and “card” class. Using the `analytics` card as an example, the card class will be located at `src/Analytics.php`.
+The card’s service provider is also located within the `src` directory of the card, and is registered in the `extra` section of your card’s `composer.json` file so that it will be auto-loaded by Laravel.
+
+### [​](#routing) Routing
+
+Often, you will need to define Laravel routes that are called by your card via [Nova.request](./frontend#nova-requests). When Nova generates your card, it creates a `routes/api.php` routes file. If needed, you may use this file to define any routes your card requires.
+All routes within this file are automatically defined inside a route group by your card’s `CardServiceProvider`. The route group specifies that all routes within the group should receive a `/nova-vendor/card-name` prefix, where `card-name` is the “kebab-case” name of your card. So, for example, `/nova-vendor/analytics`. You are free to modify this route group definition, but take care to make sure your Nova card will co-exist with other Nova packages.
+
+When building routes for your card, you should **always** add authorization to these routes using Laravel gates or policies.
+
+## [​](#assets) Assets
+
+When Nova generates your card, `resources/js` and `resources/css` directories are generated for you. These directories contain your card’s JavaScript and CSS stylesheets. The primary files of interest in these directories are: `resources/js/components/Card.vue` and `resources/css/card.css`.
+The `Card.vue` file is a single-file Vue component that contains your card’s front-end. From this file, you are free to build your card however you want. Your card can make HTTP requests using Axios via [Nova.request](./frontend#nova-requests).
+
+### [​](#registering-assets) Registering Assets
+
+Your Nova card’s service provider registers your card’s compiled assets so that they will be available to the Nova front-end:
+
+nova-components/Analytics/src/CardServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+/**
+ * Bootstrap any application services.
+ */
+public function boot(): void
+{
+    parent::boot();
+
+    $this->app->booted(function () {
+        $this->routes();
+    });
+
+    Nova::serving(function (ServingNova $event) {
+        Nova::mix('acme-analytic', __DIR__.'/../dist/mix-manifest.json');
+
+        Nova::translations(__DIR__.'/../resources/lang/en/card.json');
+    });
+}
+
+```
+
+Alternatively you can also explicitly register `script` and `style` using the following code:
+
+Copy
+
+Ask AI
+
+```
+Nova::serving(function (ServingNova $event) {
+-   Nova::mix('acme-analytic', __DIR__.'/../dist/mix-manifest.json');
++   Nova::script('acme-analytic', __DIR__.'/../dist/js/card.js');
++   Nova::style('acme-analytic', __DIR__.'/../dist/css/card.css');
+    Nova::translations(__DIR__.'/../resources/lang/en/card.json');
+});
+
+```
+
+Your component is bootstrapped and registered in the `resources/js/card.js` file. You are free to modify this file or register additional components here as needed.
+
+### [​](#compiling-assets) Compiling Assets
+
+Your Nova resource card contains a `webpack.mix.js` file, which is generated when Nova creates your card. You may build your card using the NPM `dev` and `prod` commands:
+
+Copy
+
+Ask AI
+
+```
+# Compile your assets for local development...
+npm run dev
+
+# Compile and minify your assets...
+
+
+*[Content truncated for length]*

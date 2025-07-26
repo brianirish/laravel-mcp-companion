@@ -190,6 +190,19 @@ TimePicker::make('appointment_at')
 ```
 Datalists provide autocomplete options to users when they use the picker. However, these are purely recommendations, and the user is still able to type any value into the input. If you’re looking to strictly limit users to a set of predefined options, check out the select field.
 
+### #Focusing a default calendar date
+
+By default, if the field has no state, opening the calendar panel will open the calendar at the current date. This might not be convenient for situations where you want to open the calendar on a specific date instead. You can use the `defaultFocusedDate()` to set a default focused date on the calendar:
+
+```php
+use Filament\Forms\Components\DatePicker;
+
+DatePicker::make('custom_starts_at')
+    ->native(false)
+    ->placeholder(now()->startOfMonth())
+    ->defaultFocusedDate(now()->startOfMonth())
+
+```
 #Adding affix text aside the field
 ----------------------------------
 

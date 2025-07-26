@@ -4,46 +4,134 @@
 
 ---
 
-The Basics - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesThe BasicsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageIntroductionDefining ResourcesRegistering ResourcesCustomizing Resource MenusGrouping ResourcesResource Table Style CustomizationTable StylesColumn BordersResource Table Click ActionEager LoadingResource Default Attribute ValuesResource ReplicationResource EventsResource HooksPreventing ConflictsDisabling Traffic CopResource PollingToggling Resource PollingRedirectionAfter Creating RedirectionAfter Updating RedirectionAfter Deletion RedirectionPaginationCustomizing PaginationCSV ExportResource Index Search DebounceKeyboard ShortcutsResourcesThe BasicsLearn how to define, register, and customize Nova resources.​Introduction
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
+
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Introduction](#introduction)
+- [Defining Resources](#defining-resources)
+- [Registering Resources](#registering-resources)
+- [Customizing Resource Menus](#customizing-resource-menus)
+- [Grouping Resources](#grouping-resources)
+- [Resource Table Style Customization](#resource-table-style-customization)
+- [Table Styles](#table-styles)
+- [Column Borders](#column-borders)
+- [Resource Table Click Action](#resource-table-click-action)
+- [Eager Loading](#eager-loading)
+- [Resource Default Attribute Values](#resource-default-attribute-values)
+- [Resource Replication](#resource-replication)
+- [Resource Events](#resource-events)
+- [Resource Hooks](#resource-hooks)
+- [Preventing Conflicts](#preventing-conflicts)
+- [Disabling Traffic Cop](#disabling-traffic-cop)
+- [Resource Polling](#resource-polling)
+- [Toggling Resource Polling](#toggling-resource-polling)
+- [Redirection](#redirection)
+- [After Creating Redirection](#after-creating-redirection)
+- [After Updating Redirection](#after-updating-redirection)
+- [After Deletion Redirection](#after-deletion-redirection)
+- [Pagination](#pagination)
+- [Customizing Pagination](#customizing-pagination)
+- [CSV Export](#csv-export)
+- [Resource Index Search Debounce](#resource-index-search-debounce)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+
+Resources
+
+# The Basics
+
+Learn how to define, register, and customize Nova resources.
+
+## [​](#introduction) Introduction
+
 Laravel Nova is a beautiful administration dashboard for Laravel applications. Of course, the primary feature of Nova is the ability to administer your underlying database records using Eloquent. Nova accomplishes this by allowing you to define a Nova “resource” that corresponds to each Eloquent model in your application.
-​Defining Resources
-By default, Nova resources are stored in the app/Nova directory of your application. You may generate a new resource using the nova:resource Artisan command:
-CopyAsk AIphp artisan nova:resource Post
 
-The most basic and fundamental property of a resource is its model property. This property tells Nova which Eloquent model the resource corresponds to:
-app/Nova/Post.phpCopyAsk AInamespace App\Nova;
+## [​](#defining-resources) Defining Resources
+
+By default, Nova resources are stored in the `app/Nova` directory of your application. You may generate a new resource using the `nova:resource` Artisan command:
+
+Copy
+
+Ask AI
+
+```
+php artisan nova:resource Post
+
+```
+
+The most basic and fundamental property of a resource is its `model` property. This property tells Nova which Eloquent model the resource corresponds to:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+namespace App\Nova;
 
 class Post extends Resource
 {
@@ -55,35 +143,49 @@ class Post extends Resource
     public static $model = \App\Models\Post::class;
 }
 
-Freshly created Nova resources only contain an ID field definition. Don’t worry, we’ll add more fields to our resource soon.
-Nova contains a few reserved words which may not be used for resource names:
-Card
-Dashboard
-Field
-Impersonate
-Metric
-Resource
-Search
-Script
-Style
-Tool
+```
 
-​Registering Resources
-By default, all resources within the app/Nova directory will automatically be registered with Nova. You are not required to manually register them.
-Before resources are available within your Nova dashboard, they must first be registered with Nova. Resources are typically registered in your application’s app/Providers/NovaServiceProvider.php file. This file contains various configuration and bootstrapping code related to your Nova installation.
-As mentioned above, you are not required to manually register your resources; however, if you choose to do so, you may do so by overriding the resources method of your NovaServiceProvider.
-There are two approaches to manually registering resources. You may use the resourcesIn method to instruct Nova to register all Nova resources within a given directory. Alternatively, you may use the resources method to manually register individual resources:
-app/Providers/NovaServiceProvider.phpCopyAsk AIuse App\Nova\User;
+Freshly created Nova resources only contain an `ID` field definition. Don’t worry, we’ll add more fields to our resource soon.
+
+Nova contains a few reserved words which may not be used for resource names:
+
+- Card
+- Dashboard
+- Field
+- Impersonate
+- Metric
+- Resource
+- Search
+- Script
+- Style
+- Tool
+
+## [​](#registering-resources) Registering Resources
+
+By default, all resources within the `app/Nova` directory will automatically be registered with Nova. You are not required to manually register them.
+
+Before resources are available within your Nova dashboard, they must first be registered with Nova. Resources are typically registered in your application’s `app/Providers/NovaServiceProvider.php` file. This file contains various configuration and bootstrapping code related to your Nova installation.
+**As mentioned above, you are not required to manually register your resources; however, if you choose to do so, you may do so by overriding the `resources` method of your `NovaServiceProvider`**.
+There are two approaches to manually registering resources. You may use the `resourcesIn` method to instruct Nova to register all Nova resources within a given directory. Alternatively, you may use the `resources` method to manually register individual resources:
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\User;
 use App\Nova\Post;
 
 // ...
 
 /**
- * Register the application&#x27;s Nova resources.
+ * Register the application's Nova resources.
  */
 protected function resources(): void
 {
-    Nova::resourcesIn(app_path(&#x27;Nova&#x27;));
+    Nova::resourcesIn(app_path('Nova'));
 
     Nova::resources([
         User::class,
@@ -91,23 +193,168 @@ protected function resources(): void
     ]);
 }
 
+```
+
 Once your resources are registered with Nova, they will be available in the Nova sidebar:
+
+![Nova Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
+
 Dashboard
-If you do not want a resource to appear in the sidebar, you may override the displayInNavigation property of your resource class:
-app/Nova/Post.phpCopyAsk AI/**
+
+If you do not want a resource to appear in the sidebar, you may override the `displayInNavigation` property of your resource class:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+/**
  * Indicates if the resource should be displayed in the sidebar.
  *
  * @var bool
  */
 public static $displayInNavigation = false;
 
-​Customizing Resource Menus
-You can customize the resource’s menu by defining a menu method on your resource class:
-app/Nova/Post.phpCopyAsk AIuse Illuminate\Http\Request;
+```
+
+#### [​](#customizing-resource-menus) Customizing Resource Menus
+
+You can customize the resource’s menu by defining a `menu` method on your resource class:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Http\Request;
 
 // ...
 
 /**
  * Get the menu that should represent the resource.
  *
- * @param  \Ill
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Laravel\Nova\Menu\MenuItem
+ */
+public function menu(Request $request)
+{
+    return parent::menu($request)->withBadge(function () {
+        return static::$model::count();
+    });
+}
+
+```
+
+Please refer to the documentation on [menu customization](./../customization/menus) for more information.
+
+## [​](#grouping-resources) Grouping Resources
+
+If you would like to separate resources into different sidebar groups, you may override the `group` property of your resource class:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+/**
+ * The logical group associated with the resource.
+ *
+ * @var string
+ */
+public static $group = 'Admin';
+
+```
+
+## [​](#resource-table-style-customization) Resource Table Style Customization
+
+Nova supports a few visual customization options for your resources.
+
+### [​](#table-styles) Table Styles
+
+Sometimes it’s convenient to show more data on your resource index tables. To accomplish this, you can use the “tight” table style option designed to increase the visual density of your table rows. To accomplish this, override the static `$tableStyle` property or the static `tableStyle` method on your resource class:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+/**
+ * The visual style used for the table. Available options are 'tight' and 'default'.
+ *
+ * @var string
+ */
+public static $tableStyle = 'tight';
+
+```
+
+This will display your table rows with less visual height, enabling more data to be shown:
+
+![Tight Table Style](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-tight-table.png)
+
+Tight Table Style
+
+### [​](#column-borders) Column Borders
+
+You can instruct Nova to display column borders by overriding the static `$showColumnBorders` property or the static `showColumnBorders` method on your resource class:
+
+app/Nova/Post.php
+
+Copy
+
+Ask AI
+
+```
+/**
+ * Whether to show borders for each column on the X-axis.
+ *
+ * @var bool
+ */
+public static $showColumnBorders = true;
+
+```
+
+Setting this property to `true` will instruct Nova to display the table with borders on every table item:
+
+![Table Column Borders](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-column-borders.png)
+
+Table Column Borders
+
+## [​](#resource-table-click-action) Resource Table Click Action
+
+By default, when clicking on a resource table row, Nova will navigate to the detail view for the resource. However, you may want Nova to navigate to the edit form instead. You can customize this behavior by changing the `clickAction` property or the static `clickAction` method on your resource class:
+
+Property
+
+Method
+
+Copy
+
+Ask AI
+
+```
+/**
+ * The click action to use when clicking on the resource in the table.
+ *
+ * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+ *
+ * @var string
+ */
+public static $clickAction = 'edit';
+
+```
+
+Choosing the `select` option will select the resource row’s checkbox. The `ignore` option instructs Nova to ignore click events altogether.
+
+## [​](#eager-loading) Eager Loading
+
+If you routinely need to access a re
+
+*[Content truncated for length]*

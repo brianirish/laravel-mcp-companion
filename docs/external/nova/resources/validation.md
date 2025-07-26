@@ -4,43 +4,104 @@
 
 ---
 
-Validation - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationResourcesValidationDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageRulesAttaching RulesCreation RulesUpdate RulesAfter Validation HooksThe afterValidation MethodThe afterCreationValidation MethodThe afterUpdateValidation MethodResourcesValidationNova provides a variety of ways to validate your resource fields.Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it’s a cinch to attach all of the Laravel validation rules you’re familiar with to your Nova resource fields. Let’s get started.
-​Rules
-​Attaching Rules
-When defining a field on a resource, you may use the rules method to attach validation rules to the field:
-app/Nova/~Resource.phpCopyAsk AIuse Laravel\Nova\Fields\Text;
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
+
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Rules](#rules)
+- [Attaching Rules](#attaching-rules)
+- [Creation Rules](#creation-rules)
+- [Update Rules](#update-rules)
+- [After Validation Hooks](#after-validation-hooks)
+- [The afterValidation Method](#the-aftervalidation-method)
+- [The afterCreationValidation Method](#the-aftercreationvalidation-method)
+- [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
+
+Resources
+
+# Validation
+
+Nova provides a variety of ways to validate your resource fields.
+
+Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it’s a cinch to attach all of the Laravel validation rules you’re familiar with to your Nova resource fields. Let’s get started.
+
+## [​](#rules) Rules
+
+### [​](#attaching-rules) Attaching Rules
+
+When defining a field on a resource, you may use the `rules` method to attach [validation rules](https://laravel.com/docs/validation#available-validation-rules) to the field:
+
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -48,84 +109,232 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the fields displayed by the resource.
  *
- * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
+ * @return array<int, \Laravel\Nova\Fields\Field>
  */
 public function fields(NovaRequest $request): array
 {
     return [
-        Text::make(&#x27;Name&#x27;)
-            -&gt;sortable()
-            -&gt;rules(&#x27;required&#x27;, &#x27;max:255&#x27;),
+        Text::make('Name')
+            ->sortable()
+            ->rules('required', 'max:255'),
     ];
 }
 
-Of course, if you are leveraging Laravel’s support for validation rule objects, you may attach those to resources as well:
-CopyAsk AIuse App\Rules\ValidState;
+```
+
+Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
+
+Copy
+
+Ask AI
+
+```
+use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make(&#x27;State&#x27;)
-    -&gt;sortable()
-    -&gt;rules(&#x27;required&#x27;, new ValidState),
+Text::make('State')
+    ->sortable()
+    ->rules('required', new ValidState),
 
-You may also provide rules to the rules method via an array or Closure:
-CopyAsk AIuse App\Rules\ValidState;
+```
+
+You may also provide rules to the `rules` method via an array or Closure:
+
+Copy
+
+Ask AI
+
+```
+use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
 // ...
 
 // Using an array...
-Text::make(&#x27;State&#x27;)-&gt;rules([&#x27;required&#x27;, new ValidState]),
+Text::make('State')->rules(['required', new ValidState]),
 
 // Using a Closure...
-Text::make(&#x27;State&#x27;)-&gt;rules(fn ($request) =&gt; [
-    &#x27;required&#x27;, 
+Text::make('State')->rules(fn ($request) => [
+    'required', 
     new ValidState(),
 ]);
 
-Additionally, you may use custom closure rules to validate your resource fields:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
+```
+
+Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make(&#x27;State&#x27;)
-    -&gt;sortable()
-    -&gt;rules(&#x27;required&#x27;, function($attribute, $value, $fail) {
+Text::make('State')
+    ->sortable()
+    ->rules('required', function($attribute, $value, $fail) {
         if (strtoupper($value) !== $value) {
-            return $fail(&#x27;The &#x27;.$attribute.&#x27; field must be uppercase.&#x27;);
+            return $fail('The '.$attribute.' field must be uppercase.');
         }
     }),
 
-​Creation Rules
-If you would like to define rules that only apply when a resource is being created, you may use the creationRules method:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
+```
+
+### [​](#creation-rules) Creation Rules
+
+If you would like to define rules that only apply when a resource is being created, you may use the `creationRules` method:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make(&#x27;Email&#x27;)
-    -&gt;sortable()
-    -&gt;rules(&#x27;required&#x27;, &#x27;email&#x27;, &#x27;max:255&#x27;)
-    -&gt;creationRules(&#x27;unique:users,email&#x27;),
+Text::make('Email')
+    ->sortable()
+    ->rules('required', 'email', 'max:255')
+    ->creationRules('unique:users,email'),
 
-​Update Rules
-Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the updateRules method. If necessary, you may use resourceId place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
-CopyAsk AIuse Laravel\Nova\Fields\Text;
+```
+
+### [​](#update-rules) Update Rules
+
+Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the `updateRules` method. If necessary, you may use `resourceId` place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make(&#x27;Email&#x27;)
-    -&gt;sortable()
-    -&gt;rules(&#x27;required&#x27;, &#x27;email&#x27;, &#x27;max:255&#x27;)
-    -&gt;creationRules(&#x27;unique:users,email&#x27;)
-    -&gt;updateRules(&#x27;unique:users,email,{{resourceId}}&#x27;),
+Text::make('Email')
+    ->sortable()
+    ->rules('required', 'email', 'max:255')
+    ->creationRules('unique:users,email')
+    ->updateRules('unique:users,email,{{resourceId}}'),
 
-​After Validation Hooks
+```
+
+## [​](#after-validation-hooks) After Validation Hooks
+
 Nova also provides several methods that allow you to perform tasks after a resource has been validated, providing the opportunity to perform more custom validation before the resource is persisted to the database:
 
-afterValidation
-afterCreationValidation
-afterUpdateValidation
+- [`afterValidation`](#after-validation-method)
+- [`afterCreationValidation`](#after-creation-validation-method)
+- [`afterUpdateValidation`](#after-update-validation-method)
 
-​The afterValidation Method
-The afterValidation method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling afterCreationValidation or after
+#### [​](#the-aftervalidation-method) The `afterValidation` Method
+
+The `afterValidation` method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling `afterCreationValidation` or `afterUpdateValidation`:
+
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ... 
+
+/**
+ * Handle any post-validation processing.
+ *
+ * @return void
+ */
+protected static function afterValidation( 
+    NovaRequest $request, 
+    ValidatorContract $validator
+) {
+    if (self::somethingElseIsInvalid()) {
+        $validator->errors()->add('field', 'Something is wrong with this field!');
+    }
+}
+
+```
+
+#### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
+
+The `afterCreationValidation` method will be called after a resource that is being created has been validated:
+
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ... 
+
+/**
+ * Handle any post-creation validation processing.
+ * 
+ * @return void
+ */
+protected static function afterCreationValidation(
+    NovaRequest $request, 
+    ValidatorContract $validator
+) {
+    if (self::somethingElseIsInvalid()) {
+        $validator->errors()->add('field', 'Something is wrong with this field!');
+    }
+}
+
+```
+
+#### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
+
+The `afterUpdateValidation` method will be called after a resource that is being updated has been validated:
+
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ... 
+
+/**
+ * Handle any post-update validation processing.
+ *
+ * @return void
+ */
+protected static function afterUpdateValidation(
+    NovaRequest $request, 
+    ValidatorContract $validator
+) {
+    if (self::somethingElseIsInvalid()) {
+        $validator->errors()->add('field', 'Something is wrong with this field!');
+    }
+}
+
+```
+
+Was this page helpful?
+
+YesNo
+
+[Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.
