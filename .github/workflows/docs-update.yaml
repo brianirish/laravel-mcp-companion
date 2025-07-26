@@ -30,7 +30,7 @@ jobs:
       run: |
         python -m venv .venv
         source .venv/bin/activate
-        pip install fastmcp mcp[cli,client]
+        pip install fastmcp mcp[cli,client] markdownify BeautifulSoup
     - name: Check for documentation updates
       id: check-updates
       continue-on-error: true
