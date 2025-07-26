@@ -4,80 +4,170 @@
 
 ---
 
-Fields - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperFieldsDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageOverviewDefining FieldsRegistering FieldsField OptionsAccessing Field OptionsBuilding FieldsIndex FieldsDetail FieldsForm FieldsPreview FieldsSetting the Form ValueDependent Form FieldHydrating the ModelAssetsRegistering AssetsCompiling AssetsDigging DeeperFieldsLearn how to build custom fields for your Nova resources.​Overview
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
+
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Overview](#overview)
+- [Defining Fields](#defining-fields)
+- [Registering Fields](#registering-fields)
+- [Field Options](#field-options)
+- [Accessing Field Options](#accessing-field-options)
+- [Building Fields](#building-fields)
+- [Index Fields](#index-fields)
+- [Detail Fields](#detail-fields)
+- [Form Fields](#form-fields)
+- [Preview Fields](#preview-fields)
+- [Setting the Form Value](#setting-the-form-value)
+- [Dependent Form Field](#dependent-form-field)
+- [Hydrating the Model](#hydrating-the-model)
+- [Assets](#assets)
+- [Registering Assets](#registering-assets)
+- [Compiling Assets](#compiling-assets)
+
+Digging Deeper
+
+# Fields
+
+Learn how to build custom fields for your Nova resources.
+
+## [​](#overview) Overview
+
 Nova ships with a variety of field types; however, sometimes you may need a field type that isn’t provided out of the box. For this reason, Nova allows you to build custom fields. Custom fields consist of three Vue components that determine how the field is displayed in various contexts.
-​Defining Fields
-Custom fields may be generated using the nova:field Artisan command. By default, all new fields will be placed in the nova-components directory of your application. When generating a field using the nova:field command, the field name you pass to the command should follow the Composer vendor/package format. So, if we were building a color-picker field, we might run the following command:
-CopyAsk AIphp artisan nova:field acme/color-picker
 
-When generating a field, Nova will prompt you to install the field’s NPM dependencies, compile its assets, and update your application’s composer.json file. All custom fields are registered with your application as a Composer “path” repository.
-Nova fields include all of the scaffolding necessary to build your field. Each field even contains its own composer.json file and is ready to be shared with the world on GitHub or the source control provider of your choice.
-​Registering Fields
-Nova fields may be registered in your resource’s fields method. This method returns an array of fields available to the resource. To register your field, add your field to the array of fields returned by this method:
-app/Nova/~Resource.phpCopyAsk AIuse Acme\ColorPicker\ColorPicker;
+## [​](#defining-fields) Defining Fields
+
+Custom fields may be generated using the `nova:field` Artisan command. By default, all new fields will be placed in the `nova-components` directory of your application. When generating a field using the `nova:field` command, the field name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a color-picker field, we might run the following command:
+
+Copy
+
+Ask AI
+
+```
+php artisan nova:field acme/color-picker
+
+```
+
+When generating a field, Nova will prompt you to install the field’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom fields are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
+Nova fields include all of the scaffolding necessary to build your field. Each field even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
+
+## [​](#registering-fields) Registering Fields
+
+Nova fields may be registered in your resource’s `fields` method. This method returns an array of fields available to the resource. To register your field, add your field to the array of fields returned by this method:
+
+app/Nova/~Resource.php
+
+Copy
+
+Ask AI
+
+```
+use Acme\ColorPicker\ColorPicker;
 
 // ...
 
 /**
  * Get the fields displayed by the resource.
  *
- * @return array&lt;int, \Laravel\Nova\Fields\Field&gt;
+ * @return array<int, \Laravel\Nova\Fields\Field>
  */
 public function fields(NovaRequest $request): array
 {
     return [
-        ID::make(&#x27;ID&#x27;, &#x27;id&#x27;)-&gt;sortable(),
+        ID::make('ID', 'id')->sortable(),
 
-        ColorPicker::make(&#x27;Color&#x27;),
+        ColorPicker::make('Color'),
     ];
 }
 
-​Field Options
-Often, you will need to allow the consumers of your field to customize run-time configuration options on the field. You may do this by exposing methods on your field class. These methods may call the field’s underlying withMeta method to add information to the field’s metadata, which will be available within your field’s Vue components. The withMeta method accepts an array of key / value options:
-nova-components/ColorPicker/src/ColorPicker.phpCopyAsk AInamespace Acme\ColorPicker;
+```
+
+### [​](#field-options) Field Options
+
+Often, you will need to allow the consumers of your field to customize run-time configuration options on the field. You may do this by exposing methods on your field class. These methods may call the field’s underlying `withMeta` method to add information to the field’s metadata, which will be available within your field’s Vue components. The `withMeta` method accepts an array of key / value options:
+
+nova-components/ColorPicker/src/ColorPicker.php
+
+Copy
+
+Ask AI
+
+```
+namespace Acme\ColorPicker;
 
 use Laravel\Nova\Fields\Field;
 
 class ColorPicker extends Field
 {
     /**
-     * The field&#x27;s component.
+     * The field's component.
      *
      * @var string
      */
-    public $component = &#x27;color-picker&#x27;;
+    public $component = 'color-picker';
 
     /**
      * Set the hues that may be selected by the color picker.
@@ -87,15 +177,117 @@ class ColorPicker extends Field
      */
     public function hues(array $hues)
     {
-        return $this-&gt;withMeta([&#x27;hues&#x27; =&gt; $hues]);
+        return $this->withMeta(['hues' => $hues]);
     }
 }
 
-​Accessing Field Options
-Your field’s Vue components receive a field Vue prop. The field property provides access to any field options that may be available:
-CopyAsk AIconst hues = this.field.hues;
+```
 
-​Building Fields
-Each field generated by Nova includes its own service provider and “field” class. Using the color-picker field as an example, the field class will be located at src/ColorPicker.php.
-The field’s service provider is also located within the src directory of the field, and is registered within the extra section of your field’s composer.json file so that it will be auto-loaded by Laravel.
-​Index 
+#### [​](#accessing-field-options) Accessing Field Options
+
+Your field’s Vue components receive a `field` Vue `prop`. The `field` property provides access to any field options that may be available:
+
+Copy
+
+Ask AI
+
+```
+const hues = this.field.hues;
+
+```
+
+## [​](#building-fields) Building Fields
+
+Each field generated by Nova includes its own service provider and “field” class. Using the `color-picker` field as an example, the field class will be located at `src/ColorPicker.php`.
+The field’s service provider is also located within the `src` directory of the field, and is registered within the `extra` section of your field’s `composer.json` file so that it will be auto-loaded by Laravel.
+
+### [​](#index-fields) Index Fields
+
+When Nova generates your field, it creates a `resources/js/components/IndexField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource index page. By default, this component simply displays the field’s value in a simple `<span>` element; however, you are free to modify this field component as needed.
+
+### [​](#detail-fields) Detail Fields
+
+When creating fields, Nova also creates a `resources/js/components/DetailField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource detail page. By default, this template contains the necessary mark-up needed to display your field’s value. However, you are free to adjust this template as required by your application.
+
+### [​](#form-fields) Form Fields
+
+Finally, Nova creates a `resources/js/components/FormField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a creation or update form. By default, this template contains a simple `input` control to modify your field’s underlying value; however, you are free to customize this template. For example, we may update the template to display a color-picker control:
+
+nova-components/ColorPicker/resources/js/components/FormField.js
+
+Copy
+
+Ask AI
+
+```
+<template>
+    <DefaultField :field="field">
+        <template }
+            </p>
+        </template>
+    </DefaultField>
+</template>
+
+<script>
+import { FormField, HandlesValidationErrors } from 'laravel-nova'
+
+export default {
+  mixins: [FormField, HandlesValidationErrors],
+
+  //
+}
+</script>
+
+```
+
+### [​](#preview-fields) Preview Fields
+
+When creating fields, Nova also creates a `resources/js/components/PreviewField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource detail page. By default, this template extends [Detail Field](#detail-fields) Vue component but you are free to adjust this template as required by your application.
+To enable using `PreviewField` Vue component instead of `DetailField`, you need to enable it via `resources/js/field.js`:
+
+nova-components/ColorPicker/resources/js/field.js
+
+Copy
+
+Ask AI
+
+```
+import IndexField from './components/IndexField'
+import DetailField from './components/DetailField'
+import FormField from './components/FormField'
+import PreviewField from './components/PreviewField'
+
+Nova.booting((app, store) => {
+  app.component('index-color-picker', IndexField)
+  app.component('detail-color-picker', DetailField)
+  app.component('form-color-picker', FormField)
+  app.component('preview-color-picker', PreviewField)
+})
+
+```
+
+#### [​](#setting-the-form-value) Setting the Form Value
+
+Before creating or updating a resource, Nova asks each field on the form to “fill” the outgoing [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object with key / value pairs. Each field may add as many elements to the `FormData` as needed. This may be done in your `FormField.vue` file’s `fill` method:
+
+nova-components/ColorPicker/resources/js/components/FormField.js
+
+Copy
+
+Ask AI
+
+```
+/**
+ * Fill the given FormData object with the field's internal value.
+ */
+fill(formData) {
+  this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
+}
+
+```
+
+#### [​](#dependent-form-field) Dependent Form Field
+
+By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](./../r
+
+*[Content truncated for length]*

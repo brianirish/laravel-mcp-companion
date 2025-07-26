@@ -4,46 +4,123 @@
 
 ---
 
-Menus - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperMenusDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageOverviewCustomizing the Main MenuCustomizing the User MenuAppending / Prepending to the MenuMenu SectionsMenu Section IconsMenu Section BadgesConditional BadgesCollapsable Menu SectionsMenu GroupsCollapsable Menu GroupsMenu ItemsResource Menu ItemsFiltered Resource Menu ItemsUsing Multiple Filters With Filtered Resource Menu ItemsPassing Constructor Parameters to Filtered Resource Menu ItemsLens Menu ItemsDashboard Menu ItemsExternal Link Menu ItemsMenu Item BadgesConditional BadgesAuthorizing Menu ItemsDigging DeeperMenusNova menus provide a convenient way to customize the main and user menus.​Overview
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
+
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Overview](#overview)
+- [Customizing the Main Menu](#customizing-the-main-menu)
+- [Customizing the User Menu](#customizing-the-user-menu)
+- [Appending / Prepending to the Menu](#appending-%2F-prepending-to-the-menu)
+- [Menu Sections](#menu-sections)
+- [Menu Section Icons](#menu-section-icons)
+- [Menu Section Badges](#menu-section-badges)
+- [Conditional Badges](#conditional-badges)
+- [Collapsable Menu Sections](#collapsable-menu-sections)
+- [Menu Groups](#menu-groups)
+- [Collapsable Menu Groups](#collapsable-menu-groups)
+- [Menu Items](#menu-items)
+- [Resource Menu Items](#resource-menu-items)
+- [Filtered Resource Menu Items](#filtered-resource-menu-items)
+- [Using Multiple Filters With Filtered Resource Menu Items](#using-multiple-filters-with-filtered-resource-menu-items)
+- [Passing Constructor Parameters to Filtered Resource Menu Items](#passing-constructor-parameters-to-filtered-resource-menu-items)
+- [Lens Menu Items](#lens-menu-items)
+- [Dashboard Menu Items](#dashboard-menu-items)
+- [External Link Menu Items](#external-link-menu-items)
+- [Menu Item Badges](#menu-item-badges)
+- [Conditional Badges](#conditional-badges-2)
+- [Authorizing Menu Items](#authorizing-menu-items)
+
+Digging Deeper
+
+# Menus
+
+Nova menus provide a convenient way to customize the main and user menus.
+
+## [​](#overview) Overview
+
 By default, Nova’s main left-side navigation menu displays all of your application’s dashboards, resources, and any custom tools you have registered.
 
-When rendering the main menu, Nova will order your dashboards according to the order in which they are returned by the dashboards method within your application’s App\Providers\NovaServiceProvider class.
-Nova will also automatically group your resources under the default “Resources” menu section according to the group property defined in the Resource class. In addition, any custom tools you have registered will be listed in the order they are defined within your application’s NovaServiceProvider.
-​Customizing the Main Menu
-While Nova’s default main menu is sufficient for most applications, there are times you may wish to completely customize the menu based on your own preferences. For that reason, Nova allows you to define your own main menu via the Nova::mainMenu method. Typically, this method should be invoked within the boot method of your application’s App\Providers\NovaServiceProvider class:
-app/Providers/NovaServiceProvider.phpCopyAsk AIuse Illuminate\Http\Request;
+![Default Menu](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/default-main-menu.png)
+
+When rendering the main menu, Nova will order your dashboards according to the order in which they are returned by the `dashboards` method within your application’s `App\Providers\NovaServiceProvider` class.
+Nova will also automatically group your resources under the default “Resources” menu section according to the [`group` property defined in the `Resource` class](./../resources/the-basics#grouping-resources). In addition, any custom tools you have registered will be listed in the order they are defined within your application’s `NovaServiceProvider`.
+
+### [​](#customizing-the-main-menu) Customizing the Main Menu
+
+While Nova’s default main menu is sufficient for most applications, there are times you may wish to completely customize the menu based on your own preferences. For that reason, Nova allows you to define your own main menu via the `Nova::mainMenu` method. Typically, this method should be invoked within the `boot` method of your application’s `App\Providers\NovaServiceProvider` class:
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Http\Request;
 use Laravel\Nova\Menu\Menu;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
@@ -60,25 +137,37 @@ public function boot(): void
 
     Nova::mainMenu(function (Request $request) {
         return [
-            MenuSection::dashboard(Main::class)-&gt;icon(&#x27;chart-bar&#x27;),
+            MenuSection::dashboard(Main::class)->icon('chart-bar'),
 
-            MenuSection::make(&#x27;Customers&#x27;, [
+            MenuSection::make('Customers', [
                 MenuItem::resource(User::class),
                 MenuItem::resource(License::class),
-            ])-&gt;icon(&#x27;user&#x27;)-&gt;collapsable(),
+            ])->icon('user')->collapsable(),
 
-            MenuSection::make(&#x27;Content&#x27;, [
+            MenuSection::make('Content', [
                 MenuItem::resource(Series::class),
                 MenuItem::resource(Release::class),
-            ])-&gt;icon(&#x27;document-text&#x27;)-&gt;collapsable(),
+            ])->icon('document-text')->collapsable(),
         ];
     });
 }
 
+```
 
-​Customizing the User Menu
-Nova also allows you to customize the “user” menu found in the top-right navigation area. You can customize Nova’s user menu by calling the Nova::userMenu method. This method is typically invoked within the boot method of your application’s App\Providers\NovaServiceProvider:
-app/Providers/NovaServiceProvider.phpCopyAsk AIuse Illuminate\Http\Request;
+![Custom Menu](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/custom-main-menu.png)
+
+### [​](#customizing-the-user-menu) Customizing the User Menu
+
+Nova also allows you to customize the “user” menu found in the top-right navigation area. You can customize Nova’s user menu by calling the `Nova::userMenu` method. This method is typically invoked within the `boot` method of your application’s `App\Providers\NovaServiceProvider`:
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Http\Request;
 use Laravel\Nova\Menu\Menu;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Nova;
@@ -93,17 +182,17 @@ public function boot(): void
     parent::boot();
 
     Nova::userMenu(function (Request $request, Menu $menu) {
-        if ($request-&gt;user()-&gt;subscribed()) {
-            $menu-&gt;append(
-                MenuItem::make(&#x27;Subscriber Dashboard&#x27;)
-                    -&gt;path(&#x27;/subscribers/dashboard&#x27;)
+        if ($request->user()->subscribed()) {
+            $menu->append(
+                MenuItem::make('Subscriber Dashboard')
+                    ->path('/subscribers/dashboard')
             );
         }
 
-        $menu-&gt;prepend(
+        $menu->prepend(
             MenuItem::make(
-                &#x27;My Profile&#x27;,
-                &quot;/resources/users/{$request-&gt;user()-&gt;getKey()}&quot;
+                'My Profile',
+                "/resources/users/{$request->user()->getKey()}"
             )
         );
 
@@ -111,4 +200,123 @@ public function boot(): void
     });
 }
 
-By default, Nova is configur
+```
+
+By default, Nova is configured to display a “logout” link in the user menu. This link may not be removed.
+
+Nova’s user menu only supports `MenuItem` objects. Using `MenuSection` or `MenuGroup` inside the user menu will throw an `Exception`.
+
+### [​](#appending-%2F-prepending-to-the-menu) Appending / Prepending to the Menu
+
+You may call the `append` and `prepend` methods on a `Menu` instance to prepend or append new items to the. These methods are typically most helpful when customizing the user menu, since you often do not want to completely replace the existing menu:
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use Illuminate\Http\Request;
+use Laravel\Nova\Menu\Menu;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Nova;
+
+// ...
+
+Nova::userMenu(function (Request $request, Menu $menu) {
+    return $menu
+        ->append(MenuItem::externalLink('API Docs', 'http://example.com'))
+        ->prepend(MenuItem::link('My Profile', '/resources/users/'.$request->user()->getKey()));
+});
+
+```
+
+## [​](#menu-sections) Menu Sections
+
+Menu sections represent a top-level navigation item and are typically displayed with an corresponding icon representing the types of items in the menu. You can create a new menu section by calling the `MenuSection::make` method. This method accepts the name of the menu section and array of menu groups / items that should be placed within the section:
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\Dashboards\Sales;
+use App\Nova\Lenses\MostValuableUsers;
+use App\Nova\License;
+use App\Nova\Refund;
+use App\Nova\User;
+
+// ...
+
+Nova::mainMenu(function (Request $request, Menu $menu) {
+    return [
+        MenuSection::make('Business', [
+            MenuGroup::make('Licensing', [
+                MenuItem::dashboard(Sales::class),
+                MenuItem::resource(License::class),
+                MenuItem::resource(Refund::class),
+                MenuItem::externalLink('Stripe Payments', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+            ]),
+
+            MenuGroup::make('Customers', [
+                MenuItem::lens(User::class, MostValuableUsers::class),
+            ]),
+        ]),
+    ];
+});
+
+```
+
+Instead of displaying a list of links, you may indicate that a menu section should just be a large, emphasized link to another location. To accomplish this, you may invoke the `path` method when defining the menu section:
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Menu\MenuSection;
+
+// ...
+
+MenuSection::make('Dashboard')->path('/dashboards/main');
+
+```
+
+For convenience, if you are only creating a menu section to serve as a large, emphasized link to a Nova dashboard, you may invoke the `MenuSection::dashboard` method:
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\Dashboards\Sales;
+use Laravel\Nova\Menu\MenuSection;
+
+// ...
+
+MenuSection::dashboard(Sales::class);
+
+```
+
+Since you will often be creating links to Nova resources, you may use the `resource` method to quickly create a link to the appropriate path for a given resource:
+
+Copy
+
+Ask AI
+
+```
+use App\Nova\User;
+use Laravel\Nova\Menu\MenuSection;
+
+// ...
+
+MenuSection::resource(User::class);
+
+```
+
+Similarly, you may create links to Nova lenses via the 
+
+*[Content truncated for length]*

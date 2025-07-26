@@ -4,49 +4,123 @@
 
 ---
 
-Filters - Laravel Nova(function(a,b,c){try{let d=localStorage.getItem(a);if(null==d)for(let c=0;c((a,b,c,d,e,f,g,h)=>{let i=document.documentElement,j=["light","dark"];function k(b){var c;(Array.isArray(a)?a:[a]).forEach(a=>{let c="class"===a,d=c&&f?e.map(a=>f[a]||a):e;c?(i.classList.remove(...d),i.classList.add(f&&f[b]?f[b]:b)):i.setAttribute(a,b)}),c=b,h&&j.includes(c)&&(i.style.colorScheme=c)}if(d)k(d);else try{let a=localStorage.getItem(b)||c,d=g&&"system"===a?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":a;k(d)}catch(a){}})("class","isDarkMode","system",null,["dark","light","true","false","system"],{"true":"dark","false":"light","dark":"dark","light":"light"},true,true)(self.__next_s=self.__next_s||[]).push([0,{"children":"(function m(a,b,c,d){try{let e=document.getElementById(\"banner\"),f=e?.innerText;if(!f)return void document.documentElement.setAttribute(d,\"hidden\");let g=localStorage.getItem(a),h=g!==f&&g!==b;null!=g&&(h?(localStorage.removeItem(c),localStorage.removeItem(a)):(localStorage.setItem(c,f),localStorage.setItem(a,f))),document.documentElement.setAttribute(d,!g||h?\"visible\":\"hidden\")}catch(a){console.error(a),document.documentElement.setAttribute(d,\"hidden\")}})(\n  \"nova-laravel-bannerDismissed\",\n  undefined,\n  \"__mintlify-bannerDismissed\",\n  \"data-banner-state\",\n)","id":"_mintlify-banner-script"}]):root {
-  --font-family-headings-custom: "Figtree";
-  
-  --font-family-body-custom: "Figtree";
-  
-}:root {
-    --primary: 75 162 227;
-    --primary-light: 75 162 227;
-    --primary-dark: 75 162 227;
-    --background-light: 255 255 255;
-    --background-dark: 10 12 15;
-    --gray-50: 245 247 249;
-    --gray-100: 240 242 244;
-    --gray-200: 224 227 229;
-    --gray-300: 208 210 212;
-    --gray-400: 160 163 165;
-    --gray-500: 114 116 118;
-    --gray-600: 82 84 86;
-    --gray-700: 64 67 69;
-    --gray-800: 39 42 44;
-    --gray-900: 25 27 29;
-    --gray-950: 12 15 17;
-  }(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function(a,b,c,d){var e;let f,g=\"mint\"===d||\"linden\"===d?\"sidebar\":\"sidebar-content\",h=(e=d,f=\"navbar-transition\",\"maple\"===e&&(f+=\"-maple\"),\"willow\"===e&&(f+=\"-willow\"),f);function i(){document.documentElement.classList.add(\"lg:[--scroll-mt:9.5rem]\")}function j(a){document.getElementById(g)?.style.setProperty(\"top\",`${a}rem`)}function k(a){document.getElementById(g)?.style.setProperty(\"height\",`calc(100vh - ${a}rem)`)}function l(a,b){!a&&b||a&&!b?(i(),document.documentElement.classList.remove(\"lg:[--scroll-mt:12rem]\")):a&&b&&(document.documentElement.classList.add(\"lg:[--scroll-mt:12rem]\"),document.documentElement.classList.remove(\"lg:[--scroll-mt:9.5rem]\"))}let m=document.documentElement.getAttribute(\"data-banner-state\"),n=null!=m?\"visible\"===m:b;switch(d){case\"mint\":j(c),l(a,n);break;case\"palm\":case\"aspen\":j(c),k(c),l(a,n);break;case\"linden\":j(c),n&&i();break;case\"almond\":document.documentElement.style.setProperty(\"--scroll-mt\",\"2.5rem\"),j(c),k(c)}let o=function(){let a=document.createElement(\"style\");return a.appendChild(document.createTextNode(\"*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}\")),document.head.appendChild(a),function(){window.getComputedStyle(document.body),setTimeout(()=>{document.head.removeChild(a)},1)}}();(\"requestAnimationFrame\"in globalThis?requestAnimationFrame:setTimeout)(()=>{let a;a=!1,a=window.scrollY>50,document.getElementById(h)?.setAttribute(\"data-is-opaque\",`${!!a}`),o()})})(\n  true,\n  false,\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-scroll-top-script"}])Laravel Nova home pagev5Search...⌘KAsk AISupportPlatform StatusDashboardDashboardSearch...NavigationDigging DeeperFiltersDocumentationKnowledge BaseCommunityBlogGet StartedInstallationRelease NotesUpgrade GuideResourcesThe BasicsFieldsDependent FieldsDate FieldsFile FieldsRepeater FieldsField PanelsRelationshipsValidationAuthorizationSearchThe BasicsGlobal SearchScout IntegrationFiltersDefining FiltersRegistering FiltersLensesDefining LensesRegistering LensesActionsDefining ActionsRegistering ActionsMetricsDefining MetricsRegistering MetricsDigging DeeperDashboardsMenusNotificationsAuthenticationImpersonationToolsResource ToolsCardsFieldsFiltersCSS / JavaScriptAssetsLocalizationStubs(self.__next_s=self.__next_s||[]).push([0,{"children":"document.documentElement.setAttribute('data-page-mode', 'none');","id":"_mintlify-page-mode-script"}])(self.__next_s=self.__next_s||[]).push([0,{"suppressHydrationWarning":true,"children":"(function m(a,b){if(!document.getElementById(\"footer\")?.classList.contains(\"advanced-footer\")||\"maple\"===b||\"willow\"===b||\"almond\"===b)return;let c=document.documentElement.getAttribute(\"data-page-mode\"),d=document.getElementById(\"navbar\"),e=document.getElementById(\"sidebar\"),f=document.getElementById(\"footer\"),g=document.getElementById(\"table-of-contents-content\");if(!f||\"center\"===c)return;let h=f.getBoundingClientRect().top,i=window.innerHeight-h;e&&(i>0?(e.style.top=`-${i}px`,e.style.height=`${window.innerHeight}px`):(e.style.top=`${a}rem`,e.style.height=\"auto\")),g&&d&&(i>0?g.style.top=\"custom\"===c?`${d.clientHeight-i}px`:`${40+d.clientHeight-i}px`:g.style.top=\"\")})(\n  (function l(a,b,c){let d=document.documentElement.getAttribute(\"data-banner-state\"),e=2.5*!!(null!=d?\"visible\"===d:b),f=3*!!a,g=4,h=e+g+f;switch(c){case\"mint\":case\"palm\":break;case\"aspen\":f=2.5*!!a,g=3.5,h=e+f+g;break;case\"linden\":g=4,h=e+g;break;case\"almond\":g=3.5,h=e+g}return h})(true, false, \"mint\"),\n  \"mint\",\n)","id":"_mintlify-footer-and-sidebar-scroll-script"}])h1, h2, h3, h4 {
-    font-weight: 600 !important;
-}
+- [Community](https://discord.com/invite/laravel)
+- [Blog](https://blog.laravel.com/nova)
 
-.codeblock-dark div:not(:last-child) {
-    color: #fafafa;
-}
+##### Get Started
 
-#footer > div > div:nth-of-type(n+2) {
-    display: none;
-}On this pageOverviewDefining FiltersRegistering FiltersBuilding FiltersThe Filter Vue ComponentManaging Filter StateAssetsRegistering AssetsCompiling AssetsDigging DeeperFiltersLearn how to build custom filters for your Nova resources.​Overview
+- [Installation](/docs/v5/installation)
+- [Release Notes](/docs/v5/releases)
+- [Upgrade Guide](/docs/v5/upgrade)
+
+##### Resources
+
+- [The Basics](/docs/v5/resources/the-basics)
+- [Fields](/docs/v5/resources/fields)
+- [Dependent Fields](/docs/v5/resources/dependent-fields)
+- [Date Fields](/docs/v5/resources/date-fields)
+- [File Fields](/docs/v5/resources/file-fields)
+- [Repeater Fields](/docs/v5/resources/repeater-fields)
+- [Field Panels](/docs/v5/resources/panels)
+- [Relationships](/docs/v5/resources/relationships)
+- [Validation](/docs/v5/resources/validation)
+- [Authorization](/docs/v5/resources/authorization)
+
+##### Search
+
+- [The Basics](/docs/v5/search/the-basics)
+- [Global Search](/docs/v5/search/global-search)
+- [Scout Integration](/docs/v5/search/scout-integration)
+
+##### Filters
+
+- [Defining Filters](/docs/v5/filters/defining-filters)
+- [Registering Filters](/docs/v5/filters/registering-filters)
+
+##### Lenses
+
+- [Defining Lenses](/docs/v5/lenses/defining-lenses)
+- [Registering Lenses](/docs/v5/lenses/registering-lenses)
+
+##### Actions
+
+- [Defining Actions](/docs/v5/actions/defining-actions)
+- [Registering Actions](/docs/v5/actions/registering-actions)
+
+##### Metrics
+
+- [Defining Metrics](/docs/v5/metrics/defining-metrics)
+- [Registering Metrics](/docs/v5/metrics/registering-metrics)
+
+##### Digging Deeper
+
+- [Dashboards](/docs/v5/customization/dashboards)
+- [Menus](/docs/v5/customization/menus)
+- [Notifications](/docs/v5/customization/notifications)
+- [Authentication](/docs/v5/customization/authentication)
+- [Impersonation](/docs/v5/customization/impersonation)
+- [Tools](/docs/v5/customization/tools)
+- [Resource Tools](/docs/v5/customization/resource-tools)
+- [Cards](/docs/v5/customization/cards)
+- [Fields](/docs/v5/customization/fields)
+- [Filters](/docs/v5/customization/filters)
+- [CSS / JavaScript](/docs/v5/customization/frontend)
+- [Assets](/docs/v5/customization/assets)
+- [Localization](/docs/v5/customization/localization)
+- [Stubs](/docs/v5/customization/stubs)
+
+On this page
+
+- [Overview](#overview)
+- [Defining Filters](#defining-filters)
+- [Registering Filters](#registering-filters)
+- [Building Filters](#building-filters)
+- [The Filter Vue Component](#the-filter-vue-component)
+- [Managing Filter State](#managing-filter-state)
+- [Assets](#assets)
+- [Registering Assets](#registering-assets)
+- [Compiling Assets](#compiling-assets)
+
+Digging Deeper
+
+# Filters
+
+Learn how to build custom filters for your Nova resources.
+
+## [​](#overview) Overview
+
 Nova ships with several filter types; however, sometimes you may need a filter type that isn’t provided out of the box. For this reason, Nova allows you to build custom filters.
-​Defining Filters
-Custom filters may be generated using the nova:custom-filter Artisan command. By default, all new filters will be placed in the nova-components directory of your application. When generating a filter using the nova:custom-filter command, the filter name you pass to the command should follow the Composer vendor/package format. So, if we were building an age-range filter, we might run the following command:
-CopyAsk AIphp artisan nova:custom-filter acme/age-range
 
-When generating a filter, Nova will prompt you to install the filter’s NPM dependencies, compile its assets, and update your application’s composer.json file. All custom filters are registered with your application as a Composer “path” repository.
-Nova filters include all of the scaffolding necessary to build your filter. Each filter even contains its own composer.json file and is ready to be shared with the world on GitHub or the source control provider of your choice.
-​Registering Filters
-Nova filters may be registered in your resource’s filters method. This method returns an array of filters available to the resource. To register your filter, add your filter to the array of filters returned by this method:
-ConstructMakeCopyAsk AIuse Acme\AgeRange\AgeRange;
+## [​](#defining-filters) Defining Filters
+
+Custom filters may be generated using the `nova:custom-filter` Artisan command. By default, all new filters will be placed in the `nova-components` directory of your application. When generating a filter using the `nova:custom-filter` command, the filter name you pass to the command should follow the Composer `vendor/package` format. So, if we were building an age-range filter, we might run the following command:
+
+Copy
+
+Ask AI
+
+```
+php artisan nova:custom-filter acme/age-range
+
+```
+
+When generating a filter, Nova will prompt you to install the filter’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom filters are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
+Nova filters include all of the scaffolding necessary to build your filter. Each filter even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
+
+## [​](#registering-filters) Registering Filters
+
+Nova filters may be registered in your resource’s `filters` method. This method returns an array of filters available to the resource. To register your filter, add your filter to the array of filters returned by this method:
+
+Construct
+
+Make
+
+Copy
+
+Ask AI
+
+```
+use Acme\AgeRange\AgeRange;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 // ...
@@ -54,7 +128,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 /**
  * Get the filters available for the resource.
  *
- * @return array&lt;int, \Laravel\Nova\Filters\Filter&gt;
+ * @return array<int, \Laravel\Nova\Filters\Filter>
  */
 public function filters(NovaRequest $request): array
 {
@@ -63,30 +137,111 @@ public function filters(NovaRequest $request): array
     ];
 }
 
-​Building Filters
-Each filter generated by Nova includes its own service provider and “filter” class. Using the age-range filter as an example, the filter class will be located at src/AgeRange.php.
-The filter’s service provider is also located within the src directory of the filter, and is registered in your filter’s composer.json file so that it will be auto-loaded by the Laravel framework.
-​The Filter Vue Component
-When Nova generates your filter, it creates a resources/js/components/Filter.vue Vue component. This component contains the template and logic for your filter when it is displayed in the filter dropdown menu. By default, the component displays a simple select filter component, along with the needed code for updating the filter’s state.
-​Managing Filter State
+```
+
+## [​](#building-filters) Building Filters
+
+Each filter generated by Nova includes its own service provider and “filter” class. Using the `age-range` filter as an example, the filter class will be located at `src/AgeRange.php`.
+The filter’s service provider is also located within the `src` directory of the filter, and is registered in your filter’s `composer.json` file so that it will be auto-loaded by the Laravel framework.
+
+### [​](#the-filter-vue-component) The Filter Vue Component
+
+When Nova generates your filter, it creates a `resources/js/components/Filter.vue` Vue component. This component contains the template and logic for your filter when it is displayed in the filter dropdown menu. By default, the component displays a simple `select` filter component, along with the needed code for updating the filter’s state.
+
+### [​](#managing-filter-state) Managing Filter State
+
 Custom Nova filters use Vuex to manage their state. By default, your filter’s Vue component stub contains the basic logic necessary to update the filter’s current state. When modifying your filter’s component, you should make sure the changes are committed to the Vuex store when your filter’s “selected” value changes:
-CopyAsk AIhandleChange(event) {
-    this.$store.commit(&#x27;updateFilterState&#x27;, {
+
+Copy
+
+Ask AI
+
+```
+handleChange(event) {
+    this.$store.commit('updateFilterState', {
         filterClass: this.filterKey,
         value: event.target.value,
     })
 
-    this.$emit(&#x27;change&#x27;)
+    this.$emit('change')
 }
 
-​Assets
-When Nova generates your filter, resources/js and resources/css directories are generated for you. These directories contain your filter’s JavaScript and CSS.
-​Registering Assets
+```
+
+## [​](#assets) Assets
+
+When Nova generates your filter, `resources/js` and `resources/css` directories are generated for you. These directories contain your filter’s JavaScript and CSS.
+
+### [​](#registering-assets) Registering Assets
+
 Your Nova filter’s service provider registers your filter’s compiled assets so that they will be available to the Nova front-end:
-app/Providers/NovaServiceProvider.phpCopyAsk AIuse Laravel\Nova\Nova;
+
+app/Providers/NovaServiceProvider.php
+
+Copy
+
+Ask AI
+
+```
+use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 
 // ...
 
 /**
  * Bootstrap any application services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    parent::boot();
+
+    Nova::serving(function (ServingNova $event) {
+        Nova::mix('age-range', __DIR__.'/../dist/mix-manifest.json');
+
+        Nova::translations(__DIR__.'/../resources/lang/en/age-range.json');
+    });
+}
+
+```
+
+Your components are bootstrapped and registered in the `resources/js/filter.js` file. You are free to modify this file or register additional components here as needed.
+
+### [​](#compiling-assets) Compiling Assets
+
+Your Nova filter contains a `webpack.mix.js` file, which is generated when Nova creates your filter. You may build your filter using the NPM `dev` and `prod` commands:
+
+Copy
+
+Ask AI
+
+```
+# Compile your assets for local development...
+npm run dev
+
+# Compile and minify your assets...
+npm run prod
+
+```
+
+In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
+
+Copy
+
+Ask AI
+
+```
+npm run watch
+
+```
+
+Was this page helpful?
+
+YesNo
+
+[Fields](/docs/v5/customization/fields)[CSS / JavaScript](/docs/v5/customization/frontend)
+
+Assistant
+
+Responses are generated using AI and may contain mistakes.
