@@ -6,8 +6,8 @@
 - [Service Providers](#service-providers)
 - [Resources](#resources)
     - [Configuration](#configuration)
-    - [Migrations](#migrations)
     - [Routes](#routes)
+    - [Migrations](#migrations)
     - [Language Files](#language-files)
     - [Views](#views)
     - [View Components](#view-components)
@@ -123,7 +123,7 @@ The `mergeConfigFrom` method accepts the path to your package's configuration fi
 
 ```php
 /**
- * Register any application services.
+ * Register any package services.
  */
 public function register(): void
 {
