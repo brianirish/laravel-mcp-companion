@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e409a8d8e4e05dd907a0b9ef21a541742ae42857",
-  "commit_date": "2025-07-28T00:24:11Z",
-  "commit_message": "Remove redundant space (#10652)",
-  "commit_url": "https://github.com/laravel/docs/commit/e409a8d8e4e05dd907a0b9ef21a541742ae42857",
-  "sync_time": "2025-07-28T01:41:23Z"
+  "commit_sha": "a77ec4a5a4d722ce4bd00929b5b1b1840898c0ea",
+  "commit_date": "2025-07-28T14:45:28Z",
+  "commit_message": "Fix PHPDoc for consistency (#10655)",
+  "commit_url": "https://github.com/laravel/docs/commit/a77ec4a5a4d722ce4bd00929b5b1b1840898c0ea",
+  "sync_time": "2025-07-29T01:46:40Z"
 }
