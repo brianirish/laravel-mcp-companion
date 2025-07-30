@@ -6,12 +6,15 @@ RUN apk add --no-cache build-base libffi-dev openssl-dev
 # Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy requirements file first (for better layer caching)
+COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies from requirements.txt
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir fastmcp mcp[cli,client]
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy rest of the project files
+COPY . .
 
 # Default environment
 ENV PYTHONUNBUFFERED=1

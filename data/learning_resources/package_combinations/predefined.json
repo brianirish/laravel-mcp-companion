@@ -1,0 +1,38 @@
+[
+  {
+    "use_case": "Building reactive UI components",
+    "compatibility": "Excellent - Alpine.js is included with Livewire",
+    "guide": "\n## Livewire + Alpine.js Integration\n\nLivewire includes Alpine.js by default, making them a perfect combination for building reactive UIs.\n\n### Installation\n```bash\ncomposer require livewire/livewire\n```\n\nAlpine.js is automatically included when you add Livewire scripts:\n```blade\n@livewireStyles\n@livewireScripts\n```\n\n### Usage Example\n```blade\n<div x-data=\"{ open: false }\">\n    <button @click=\"open = !open\">Toggle</button>\n    <div x-show=\"open\" x-transition>\n        @livewire('user-profile')\n    </div>\n</div>\n```\n\n### Best Practices\n- Use Alpine for client-side state\n- Use Livewire for server-side state\n- Combine both for optimal user experience\n",
+    "packages": [
+      "livewire",
+      "alpine"
+    ]
+  },
+  {
+    "use_case": "Building modern SPAs with Vue.js",
+    "compatibility": "Excellent - Official Inertia.js adapter",
+    "guide": "\n## Inertia.js + Vue 3 Integration\n\nBuild modern single-page applications using classic server-side routing.\n\n### Installation\n```bash\ncomposer require inertiajs/inertia-laravel\nnpm install @inertiajs/vue3\n```\n\n### Setup\n1. Configure your app.js:\n```javascript\nimport { createApp, h } from 'vue'\nimport { createInertiaApp } from '@inertiajs/vue3'\n\ncreateInertiaApp({\n    resolve: name => {\n        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })\n        return pages[`./Pages/${name}.vue`]\n    },\n    setup({ el, App, props, plugin }) {\n        createApp({ render: () => h(App, props) })\n            .use(plugin)\n            .mount(el)\n    },\n})\n```\n\n### Controller Example\n```php\nuse Inertia\\Inertia;\n\nreturn Inertia::render('Users/Index', [\n    'users' => User::paginate()\n]);\n```\n",
+    "packages": [
+      "inertia",
+      "vue"
+    ]
+  },
+  {
+    "use_case": "Authenticating SPAs and mobile apps",
+    "compatibility": "Excellent - Designed for SPA authentication",
+    "guide": "\n## Sanctum for SPA Authentication\n\nLaravel Sanctum provides a simple authentication system for SPAs.\n\n### Installation\n```bash\ncomposer require laravel/sanctum\nphp artisan vendor:publish --provider=\"Laravel\\Sanctum\\SanctumServiceProvider\"\nphp artisan migrate\n```\n\n### Frontend Setup (Axios)\n```javascript\naxios.defaults.withCredentials = true;\n\n// First, get CSRF cookie\nawait axios.get('/sanctum/csrf-cookie');\n\n// Then login\nawait axios.post('/login', credentials);\n```\n\n### CORS Configuration\nConfigure cors.php for your SPA domain:\n```php\n'paths' => ['api/*', 'sanctum/csrf-cookie'],\n'allowed_origins' => ['http://localhost:3000'],\n'supports_credentials' => true,\n```\n",
+    "packages": [
+      "sanctum",
+      "spa"
+    ]
+  },
+  {
+    "use_case": "Admin panel with role-based permissions",
+    "compatibility": "Excellent - Official Filament plugin",
+    "guide": "\n## Filament + Shield (Spatie Permissions)\n\nAdd role-based access control to your Filament admin panel.\n\n### Installation\n```bash\ncomposer require bezhansalleh/filament-shield\nphp artisan shield:install\n```\n\n### Creating Roles\n```bash\nphp artisan shield:generate\n```\n\n### Usage in Resources\n```php\nprotected static ?string $permissionGroup = 'User Management';\n\npublic static function canViewAny(): bool\n{\n    return auth()->user()->can('view_any_user');\n}\n```\n",
+    "packages": [
+      "filament",
+      "shield"
+    ]
+  }
+]

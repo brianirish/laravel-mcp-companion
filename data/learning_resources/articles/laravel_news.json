@@ -1,0 +1,183 @@
+[
+  {
+    "id": 1,
+    "type": "article",
+    "title": "Livewire Security Vulnerability",
+    "description": "In Livewire v3 (\u2264 3.6.3), a vulnerability allows unauthenticated attackers to achieve remote command execution in specific scenarios. The post Livewire Security Vulnerability appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/livewire-security-vulnerability?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-22T18:09:53+00:00",
+    "last_updated": "2025-07-22T23:05:46.695131",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Eric L. Barnes",
+      "guid": "https://laravel-news.com/livewire-security-vulnerability"
+    }
+  },
+  {
+    "id": 2,
+    "type": "article",
+    "title": "The July 2025 Laravel Worldwide Meetup is Today",
+    "description": "The next Laravel Worldwide Meetup is today, Tuesday, July 22nd, 2025. The meetup starts on YouTube at 16:00 UTC and features Harris Raftopoulos. The post The July 2025 Laravel Worldwide Meetup is Today appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/the-july-2025-laravel-worldwide-meetup-is-today?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-22T08:19:30+00:00",
+    "last_updated": "2025-07-22T23:05:46.701902",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Paul Redmond",
+      "guid": "https://laravel-news.com/the-july-2025-laravel-worldwide-meetup-is-today"
+    }
+  },
+  {
+    "id": 3,
+    "type": "article",
+    "title": "Laravel Live Denmark",
+    "description": "Laravel Live Denmark is back with its second edition of the conference, to be held in Copenhagen, Denmark, on 21-22. August 2025. The post Laravel Live Denmark appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/laravel-live-denmark-schedule?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-21T19:44:44+00:00",
+    "last_updated": "2025-07-22T23:05:46.703574",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Eric L. Barnes",
+      "guid": "https://laravel-news.com/laravel-live-denmark-schedule"
+    }
+  },
+  {
+    "id": 4,
+    "type": "article",
+    "title": "Execute Ping Commands and Get Back Structured Data in PHP",
+    "description": "The spatie/ping PHP package provides a simple way to execute Internet Control Message Protocol (ICMP) ping commands and parse the results into structured data. Ping can help determine if a remote host is reachable, providing network diagnostics and measuring latency. The post Execute Ping Commands and Get Back Structured Data in PHP appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/execute-ping-commands-and-get-back-structured-data-in-php?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-21T05:50:11+00:00",
+    "last_updated": "2025-07-22T23:05:46.704397",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Paul Redmond",
+      "guid": "https://laravel-news.com/execute-ping-commands-and-get-back-structured-data-in-php"
+    }
+  },
+  {
+    "id": 5,
+    "type": "article",
+    "title": "Streamlined Data Flow Between Laravel Seeders Using Context",
+    "description": "Laravel's Context system enables clean data sharing between database seeders through the Context facade and attribute-based injection. Eliminates redundant queries and tight coupling while maintaining clear dependencies and type safety. The post Streamlined Data Flow Between Laravel Seeders Using Context appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/context-attribute?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-21T15:24:12+00:00",
+    "last_updated": "2025-07-22T23:05:46.711634",
+    "tags": [
+      "laravel tutorials"
+    ],
+    "metadata": {
+      "author": "Harris Raftopoulos",
+      "guid": "https://laravel-news.com/context-attribute"
+    }
+  },
+  {
+    "id": 39,
+    "type": "article",
+    "title": "NativePHP Is Entering Its Next Phase",
+    "description": "Bifrost is the first and only build service designed specifically for NativePHP apps. The post NativePHP Is Entering Its Next Phase appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/bifrost?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-26T08:16:57+00:00",
+    "last_updated": "2025-07-26T12:54:20.565448+00:00",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Shane Rosenthal",
+      "guid": "https://laravel-news.com/bifrost"
+    }
+  },
+  {
+    "id": 40,
+    "type": "article",
+    "title": "Add Reactions Functionality to Your App With Laravel Reactions",
+    "description": "The Laravel Reactions package is a simple and flexible package to add reaction functionality to any Eloquent model in your Laravel application. The post Add Reactions Functionality to Your App With Laravel Reactions appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/laravel-reactions-package?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-25T08:51:02+00:00",
+    "last_updated": "2025-07-26T12:54:20.569851+00:00",
+    "tags": [
+      "laravel packages"
+    ],
+    "metadata": {
+      "author": "Paul Redmond",
+      "guid": "https://laravel-news.com/laravel-reactions-package"
+    }
+  },
+  {
+    "id": 41,
+    "type": "article",
+    "title": "Laravel Scoped Route Binding for Nested Resource Management",
+    "description": "Secure nested Laravel resources automatically with scoped route binding. This feature validates parent-child relationships in URLs, eliminating manual checks while maintaining clean, SEO-friendly routing structures for hierarchical data management. The post Laravel Scoped Route Binding for Nested Resource Management appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/route-resource-scoped?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-23T22:46:02+00:00",
+    "last_updated": "2025-07-26T12:54:20.572034+00:00",
+    "tags": [
+      "laravel tutorials"
+    ],
+    "metadata": {
+      "author": "Harris Raftopoulos",
+      "guid": "https://laravel-news.com/route-resource-scoped"
+    }
+  },
+  {
+    "id": 42,
+    "type": "article",
+    "title": "Take the Annual State of Laravel 2025 Survey",
+    "description": "Take the State of Laravel 2025 survey to contribute your voice to the Laravel community. By sharing and participating, you can help us gain more insights into this amazing community. The post Take the Annual State of Laravel 2025 Survey appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/take-the-annual-state-of-laravel-2025-survey?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-26T00:12:06+00:00",
+    "last_updated": "2025-07-26T12:54:20.573274+00:00",
+    "tags": [
+      "news"
+    ],
+    "metadata": {
+      "author": "Eric L. Barnes",
+      "guid": "https://laravel-news.com/take-the-annual-state-of-laravel-2025-survey"
+    }
+  },
+  {
+    "id": 43,
+    "type": "article",
+    "title": "Retrieve the Currently Executing Closure in PHP 8.5",
+    "description": "PHP 8.5 will support recursion in Closures by fetching the currently executing Closure. Learn how you can support recursion using the Closure::getCurrent() method. The post Retrieve the Currently Executing Closure in PHP 8.5 appeared first on Laravel News. Join the Laravel Newsletter to get Laravel articles like this directly in your inbox.",
+    "url": "https://laravel-news.com/retrieve-the-currently-executing-closure-in-php-85?utm_medium=feed&utm_source=feedpress.me&utm_campaign=Feed%3A+laravelnews",
+    "source": "laravel-news",
+    "difficulty_level": "beginner",
+    "published_date": "2025-07-24T09:43:43+00:00",
+    "last_updated": "2025-07-26T12:54:20.574190+00:00",
+    "tags": [
+      "news",
+      "php"
+    ],
+    "metadata": {
+      "author": "Paul Redmond",
+      "guid": "https://laravel-news.com/retrieve-the-currently-executing-closure-in-php-85"
+    }
+  }
+]

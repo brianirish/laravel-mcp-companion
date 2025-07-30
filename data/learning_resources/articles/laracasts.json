@@ -1,0 +1,143 @@
+[
+  {
+    "id": 94,
+    "type": "course",
+    "title": "30 Days to Learn Laravel",
+    "description": "Laravel series on Laracasts - 30 episodes, by Jeffrey Way, FREE",
+    "url": "https://laracasts.com/series/30-days-to-learn-laravel-11",
+    "source": "laracasts",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.565290+00:00",
+    "tags": [
+      "frameworks",
+      "free",
+      "video-series",
+      "beginner",
+      "way",
+      "laravel",
+      "laracasts"
+    ],
+    "metadata": {
+      "instructor": "Jeffrey Way",
+      "episode_count": 30,
+      "category": "Frameworks",
+      "is_free": true,
+      "platform": "Laracasts",
+      "series_type": "video"
+    }
+  },
+  {
+    "id": 95,
+    "type": "course",
+    "title": "Laravel 8 From Scratch",
+    "description": "Laravel series on Laracasts - 70 episodes, by Jeffrey Way, FREE",
+    "url": "https://laracasts.com/series/laravel-8-from-scratch",
+    "source": "laracasts",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.567271+00:00",
+    "tags": [
+      "frameworks",
+      "free",
+      "video-series",
+      "beginner",
+      "way",
+      "laravel",
+      "laracasts"
+    ],
+    "metadata": {
+      "instructor": "Jeffrey Way",
+      "episode_count": 70,
+      "category": "Frameworks",
+      "is_free": true,
+      "platform": "Laracasts",
+      "series_type": "video"
+    }
+  },
+  {
+    "id": 96,
+    "type": "course",
+    "title": "What's New in Laravel 11",
+    "description": "Laravel series on Laracasts - 14 episodes, by Luke Downing, FREE",
+    "url": "https://laracasts.com/series/whats-new-in-laravel-11",
+    "source": "laracasts",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.569298+00:00",
+    "tags": [
+      "frameworks",
+      "intermediate",
+      "free",
+      "video-series",
+      "laravel",
+      "downing",
+      "laracasts"
+    ],
+    "metadata": {
+      "instructor": "Luke Downing",
+      "episode_count": 14,
+      "category": "Frameworks",
+      "is_free": true,
+      "platform": "Laracasts",
+      "series_type": "video"
+    }
+  },
+  {
+    "id": 97,
+    "type": "course",
+    "title": "What's New in Laravel 10",
+    "description": "Laravel series on Laracasts - 5 episodes, by Jeffrey Way, FREE",
+    "url": "https://laracasts.com/series/whats-new-in-laravel-10",
+    "source": "laracasts",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.571234+00:00",
+    "tags": [
+      "frameworks",
+      "intermediate",
+      "free",
+      "video-series",
+      "way",
+      "laravel",
+      "laracasts"
+    ],
+    "metadata": {
+      "instructor": "Jeffrey Way",
+      "episode_count": 5,
+      "category": "Frameworks",
+      "is_free": true,
+      "platform": "Laracasts",
+      "series_type": "video"
+    }
+  },
+  {
+    "id": 98,
+    "type": "course",
+    "title": "Laravel Queue Mastery",
+    "description": "Laravel series on Laracasts - 8 episodes, by Mohamed Said, FREE",
+    "url": "https://laracasts.com/series/laravel-queue-mastery",
+    "source": "laracasts",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.573257+00:00",
+    "tags": [
+      "frameworks",
+      "intermediate",
+      "free",
+      "video-series",
+      "queue",
+      "laravel",
+      "said",
+      "laracasts"
+    ],
+    "metadata": {
+      "instructor": "Mohamed Said",
+      "episode_count": 8,
+      "category": "Frameworks",
+      "is_free": true,
+      "platform": "Laracasts",
+      "series_type": "video"
+    }
+  }
+]

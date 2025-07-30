@@ -1,0 +1,15 @@
+{
+  "last_updated": "2025-07-22T23:10:04.425958",
+  "version": "0.8.0",
+  "sources": {
+    "laravel-news": {
+      "last_fetched": "2025-07-22T23:10:04.425967"
+    },
+    "laravel-bootcamp": {
+      "last_fetched": "2025-07-22T23:10:04.425968"
+    },
+    "conference-talks": {
+      "last_fetched": "2025-07-22T23:10:04.425969"
+    }
+  }
+}

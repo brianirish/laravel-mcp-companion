@@ -33,6 +33,20 @@ from mcp_tools import (
     browse_docs_by_category_impl
 )
 
+# Import learning resources components
+from learning_resources import (
+    LearningResourceFetcher,
+    ResourceType,
+    DifficultyLevel,
+    ResourceSource
+)
+from navigation_engine import (
+    NavigationMapper,
+    PackageCombinationGuide,
+    SetupOrchestrator
+)
+from content_aggregators import ContentAggregatorManager
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -498,7 +512,55 @@ When to use:
 - Learning about a specific Laravel service
 - Getting service documentation overview
 - Understanding service capabilities
-- Checking service documentation status"""
+- Checking service documentation status""",
+
+    "discover_laravel_learning_resources": """Find Laravel-specific tutorials, articles, and guides for a given topic.
+
+When to use:
+- Looking for tutorials on a specific Laravel feature
+- Finding learning materials for beginners
+- Discovering community articles and blog posts
+- Getting curated learning paths""",
+
+    "get_laravel_package_combination_guide": """Get integration guide for using multiple Laravel packages together.
+
+When to use:
+- Combining packages like Livewire + Alpine
+- Understanding package compatibility
+- Getting installation order recommendations
+- Finding integration best practices""",
+
+    "get_laravel_learning_path": """Get a structured Laravel learning path for achieving a specific goal.
+
+When to use:
+- Starting to learn a new Laravel concept
+- Planning a learning journey
+- Getting step-by-step guidance
+- Finding prerequisite knowledge""",
+
+    "search_laravel_community_tutorials": """Search through aggregated Laravel community tutorials and articles.
+
+When to use:
+- Finding specific Laravel tutorials
+- Searching Laravel News articles
+- Looking for Spatie blog posts
+- Discovering conference talks""",
+
+    "get_laravel_bootcamp_progress": """Get Laravel Bootcamp content and track learning progress.
+
+When to use:
+- Following Laravel Bootcamp tutorials
+- Getting official Laravel tutorials
+- Learning Laravel basics
+- Building your first Laravel app""",
+
+    "find_laravel_conference_talks": """Find Laravel conference talks and presentations on specific topics.
+
+When to use:
+- Looking for video content
+- Finding expert presentations
+- Learning from conference speakers
+- Discovering advanced topics"""
 }
 
 def parse_arguments():
@@ -1719,6 +1781,431 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         except Exception as e:
             logger.error(f"Error getting service info: {str(e)}")
             return f"Error getting service info: {str(e)}"
+    
+    # Initialize learning resources components
+    learning_db_path = docs_path / "learning_resources.db"
+    resource_fetcher = LearningResourceFetcher(learning_db_path)
+    navigation_mapper = NavigationMapper(resource_fetcher)
+    package_guide = PackageCombinationGuide(resource_fetcher)
+    setup_orchestrator = SetupOrchestrator()
+    content_manager = ContentAggregatorManager(learning_db_path)
+    
+    # Register learning resource tools
+    @mcp.tool(description=TOOL_DESCRIPTIONS["discover_laravel_learning_resources"])
+    def discover_laravel_learning_resources(
+        topic: str,
+        difficulty: Optional[str] = None
+    ) -> str:
+        """
+        Find Laravel-specific tutorials, articles, and guides for a given topic.
+        
+        Args:
+            topic: The Laravel topic or feature to find resources for
+            difficulty: Optional difficulty level (beginner, intermediate, advanced, expert)
+            
+        Returns:
+            Markdown-formatted list of learning resources
+        """
+        logger.info(f"Discovering learning resources for topic: {topic}")
+        
+        try:
+            # Convert difficulty string to enum if provided
+            difficulty_enum = None
+            if difficulty:
+                try:
+                    difficulty_enum = DifficultyLevel(difficulty.lower())
+                except ValueError:
+                    return f"Invalid difficulty level: {difficulty}. Valid options: beginner, intermediate, advanced, expert"
+            
+            # Use navigation mapper to find resources
+            result = navigation_mapper.find_resources_for_use_case(topic, difficulty_enum)
+            
+            # Format response
+            response = [f"# Laravel Learning Resources: {topic}\n"]
+            
+            if result.learning_path:
+                response.append("## Suggested Learning Path\n")
+                for step in result.learning_path:
+                    response.append(f"**Step {step['step']}:** {step['title']}")
+                    response.append(f"   {step['description']}")
+                    if 'resource_url' in step:
+                        response.append(f"   📚 [View Resource]({step['resource_url']})")
+                    response.append("")
+            
+            if result.recommended_packages:
+                response.append(f"## Recommended Packages\n")
+                response.append(", ".join(f"`{pkg}`" for pkg in result.recommended_packages))
+                response.append("")
+            
+            if result.learning_resources:
+                response.append(f"## Available Resources ({len(result.learning_resources)})\n")
+                
+                # Group by resource type
+                by_type = {}
+                for resource in result.learning_resources:
+                    type_name = resource.type.value
+                    if type_name not in by_type:
+                        by_type[type_name] = []
+                    by_type[type_name].append(resource)
+                
+                for type_name, resources in by_type.items():
+                    response.append(f"### {type_name.title()}s\n")
+                    for resource in resources[:5]:  # Limit to 5 per type
+                        response.append(f"- **[{resource.title}]({resource.url})**")
+                        if resource.description:
+                            response.append(f"  {resource.description[:150]}...")
+                        if resource.difficulty_level:
+                            response.append(f"  📊 Difficulty: {resource.difficulty_level.value}")
+                        if resource.tags:
+                            response.append(f"  🏷️ Tags: {', '.join(resource.tags[:5])}")
+                        response.append("")
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error discovering learning resources: {str(e)}")
+            return f"Error discovering learning resources: {str(e)}"
+    
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_combination_guide"])
+    def get_laravel_package_combination_guide(packages: List[str]) -> str:
+        """
+        Get integration guide for using multiple Laravel packages together.
+        
+        Args:
+            packages: List of package names to combine
+            
+        Returns:
+            Markdown-formatted integration guide
+        """
+        logger.info(f"Getting package combination guide for: {packages}")
+        
+        try:
+            guide = package_guide.get_combination_guide(packages)
+            
+            if not guide:
+                return f"No specific guide available for combining: {', '.join(packages)}"
+            
+            response = [f"# Package Combination Guide\n"]
+            response.append(f"**Packages:** {', '.join(packages)}\n")
+            
+            if 'compatibility_notes' in guide:
+                response.append(f"## Compatibility\n")
+                response.append(guide['compatibility_notes'])
+                response.append("")
+            
+            if 'guide_content' in guide:
+                response.append(guide['guide_content'])
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error getting package combination guide: {str(e)}")
+            return f"Error getting package combination guide: {str(e)}"
+    
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_learning_path"])
+    def get_laravel_learning_path(
+        goal: str,
+        current_level: str = "beginner"
+    ) -> str:
+        """
+        Get a structured Laravel learning path for achieving a specific goal.
+        
+        Args:
+            goal: The learning goal or objective
+            current_level: Current skill level (beginner, intermediate, advanced)
+            
+        Returns:
+            Markdown-formatted learning path
+        """
+        logger.info(f"Getting learning path for goal: {goal}, level: {current_level}")
+        
+        try:
+            # Convert level to enum
+            try:
+                level_enum = DifficultyLevel(current_level.lower())
+            except ValueError:
+                level_enum = DifficultyLevel.BEGINNER
+            
+            # Get resources and learning path
+            result = navigation_mapper.find_resources_for_use_case(goal, level_enum)
+            
+            response = [f"# Laravel Learning Path: {goal}\n"]
+            response.append(f"**Starting Level:** {current_level}")
+            response.append(f"**Target:** {goal}\n")
+            
+            if result.learning_path:
+                response.append("## Recommended Steps\n")
+                total_steps = len(result.learning_path)
+                
+                for i, step in enumerate(result.learning_path, 1):
+                    response.append(f"### Step {step['step']}: {step['title']}")
+                    response.append(f"{step['description']}")
+                    
+                    if 'resource_url' in step:
+                        response.append(f"\n📚 **Resource:** [{step.get('resource_title', 'View Resource')}]({step['resource_url']})")
+                    
+                    response.append(f"\n**Type:** {step['resource_type']}")
+                    
+                    if i < total_steps:
+                        response.append("\n---\n")
+                    else:
+                        response.append("")
+            
+            # Add additional resources
+            if result.learning_resources:
+                response.append("\n## Additional Resources\n")
+                for resource in result.learning_resources[:10]:
+                    response.append(f"- [{resource.title}]({resource.url})")
+                    if resource.difficulty_level:
+                        response.append(f"  (Level: {resource.difficulty_level.value})")
+            
+            # Add package recommendations
+            if result.recommended_packages:
+                response.append("\n## Relevant Packages\n")
+                response.append("Consider these packages for your implementation:")
+                for pkg in result.recommended_packages:
+                    response.append(f"- `{pkg}`")
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error getting learning path: {str(e)}")
+            return f"Error getting learning path: {str(e)}"
+    
+    @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_community_tutorials"])
+    def search_laravel_community_tutorials(
+        query: str,
+        source: Optional[str] = None
+    ) -> str:
+        """
+        Search through aggregated Laravel community tutorials and articles.
+        
+        Args:
+            query: Search query
+            source: Optional source filter (laravel-news, spatie-blog, etc.)
+            
+        Returns:
+            Markdown-formatted search results
+        """
+        logger.info(f"Searching community tutorials for: {query}")
+        
+        try:
+            # Convert source to enum if provided
+            source_enum = None
+            if source:
+                try:
+                    source_enum = ResourceSource(source.lower().replace(' ', '-'))
+                except ValueError:
+                    return f"Invalid source: {source}. Valid options: laravel-news, spatie-blog, laracasts, etc."
+            
+            # Search resources
+            resources = resource_fetcher.search(
+                query=query,
+                source=source_enum.value if source_enum else None,
+                limit=30
+            )
+            
+            if not resources:
+                return f"No tutorials found for query: '{query}'"
+            
+            response = [f"# Community Tutorial Search: {query}\n"]
+            response.append(f"Found {len(resources)} resources\n")
+            
+            # Group by source
+            by_source = {}
+            for resource in resources:
+                source_name = resource.source.value
+                if source_name not in by_source:
+                    by_source[source_name] = []
+                by_source[source_name].append(resource)
+            
+            for source_name, source_resources in by_source.items():
+                response.append(f"## {source_name.replace('-', ' ').title()}\n")
+                
+                for resource in source_resources[:10]:
+                    response.append(f"### [{resource.title}]({resource.url})")
+                    
+                    if resource.published_date:
+                        response.append(f"*Published: {resource.published_date.strftime('%Y-%m-%d')}*")
+                    
+                    if resource.description:
+                        response.append(f"\n{resource.description[:200]}...")
+                    
+                    if resource.tags:
+                        response.append(f"\n🏷️ {', '.join(resource.tags[:5])}")
+                    
+                    response.append("")
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error searching community tutorials: {str(e)}")
+            return f"Error searching community tutorials: {str(e)}"
+    
+    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_bootcamp_progress"])
+    def get_laravel_bootcamp_progress(section: Optional[str] = None) -> str:
+        """
+        Get Laravel Bootcamp content and track learning progress.
+        
+        Args:
+            section: Optional specific bootcamp section (blade, livewire, inertia)
+            
+        Returns:
+            Markdown-formatted bootcamp content
+        """
+        logger.info(f"Getting Laravel Bootcamp content for section: {section}")
+        
+        try:
+            # Search for bootcamp resources
+            resources = resource_fetcher.search(
+                source=ResourceSource.LARAVEL_BOOTCAMP.value,
+                limit=50
+            )
+            
+            if not resources:
+                return "Laravel Bootcamp content not found. Run documentation update to fetch bootcamp resources."
+            
+            response = ["# Laravel Bootcamp\n"]
+            response.append("Build a fully functional Laravel application with our official tutorial.\n")
+            
+            # Group by stack
+            stacks = {
+                'blade': [],
+                'livewire': [],
+                'inertia': []
+            }
+            
+            for resource in resources:
+                title_lower = resource.title.lower()
+                if 'blade:' in title_lower:
+                    stacks['blade'].append(resource)
+                elif 'livewire:' in title_lower:
+                    stacks['livewire'].append(resource)
+                elif 'inertia' in title_lower:
+                    stacks['inertia'].append(resource)
+            
+            # Filter by section if specified
+            if section and section.lower() in stacks:
+                stack_resources = stacks[section.lower()]
+                response.append(f"## {section.title()} Track\n")
+                
+                for i, resource in enumerate(stack_resources, 1):
+                    response.append(f"### {i}. [{resource.title.split(': ', 1)[1]}]({resource.url})")
+                    response.append(f"{resource.description}")
+                    response.append("")
+            else:
+                # Show all tracks
+                for stack_name, stack_resources in stacks.items():
+                    if stack_resources:
+                        response.append(f"## {stack_name.title()} Track ({len(stack_resources)} lessons)\n")
+                        
+                        for resource in stack_resources[:3]:  # Show first 3
+                            title_parts = resource.title.split(': ', 1)
+                            lesson_title = title_parts[1] if len(title_parts) > 1 else title_parts[0]
+                            response.append(f"- [{lesson_title}]({resource.url})")
+                        
+                        if len(stack_resources) > 3:
+                            response.append(f"- ...and {len(stack_resources) - 3} more lessons")
+                        response.append("")
+            
+            response.append("## Getting Started\n")
+            response.append("1. Choose your preferred stack (Blade, Livewire, or Inertia)")
+            response.append("2. Follow the installation guide for your stack")
+            response.append("3. Build the Chirper application step by step")
+            response.append("4. Learn Laravel fundamentals through practical examples")
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error getting bootcamp content: {str(e)}")
+            return f"Error getting bootcamp content: {str(e)}"
+    
+    @mcp.tool(description=TOOL_DESCRIPTIONS["find_laravel_conference_talks"])
+    def find_laravel_conference_talks(
+        topic: str,
+        year: Optional[int] = None
+    ) -> str:
+        """
+        Find Laravel conference talks and presentations on specific topics.
+        
+        Args:
+            topic: Topic to search for in conference talks
+            year: Optional year filter
+            
+        Returns:
+            Markdown-formatted list of conference talks
+        """
+        logger.info(f"Finding conference talks for topic: {topic}, year: {year}")
+        
+        try:
+            # Search for conference talks
+            resources = resource_fetcher.search(
+                query=topic,
+                resource_type=ResourceType.VIDEO.value,
+                source=ResourceSource.CONFERENCE_TALK.value,
+                limit=20
+            )
+            
+            # Filter by year if specified
+            if year and resources:
+                resources = [
+                    r for r in resources
+                    if r.metadata.get('conference', '').endswith(str(year))
+                ]
+            
+            if not resources:
+                return f"No conference talks found for topic: '{topic}'" + (f" in {year}" if year else "")
+            
+            response = [f"# Laravel Conference Talks: {topic}\n"]
+            
+            if year:
+                response.append(f"**Year:** {year}\n")
+            
+            response.append(f"Found {len(resources)} conference talks\n")
+            
+            # Group by conference
+            by_conference = {}
+            for resource in resources:
+                conf = resource.metadata.get('conference', 'General')
+                if conf not in by_conference:
+                    by_conference[conf] = []
+                by_conference[conf].append(resource)
+            
+            for conference, talks in by_conference.items():
+                response.append(f"## {conference}\n")
+                
+                for talk in talks:
+                    response.append(f"### [{talk.title}]({talk.url})")
+                    
+                    if 'speaker' in talk.metadata:
+                        response.append(f"**Speaker:** {talk.metadata['speaker']}")
+                    
+                    if 'duration' in talk.metadata:
+                        response.append(f"**Duration:** {talk.metadata['duration']}")
+                    
+                    if talk.description:
+                        response.append(f"\n{talk.description}")
+                    
+                    if talk.tags:
+                        response.append(f"\n🏷️ {', '.join(talk.tags)}")
+                    
+                    response.append("")
+            
+            return "\n".join(response)
+            
+        except Exception as e:
+            logger.error(f"Error finding conference talks: {str(e)}")
+            return f"Error finding conference talks: {str(e)}"
+    
+    # Initialize learning resources on first run
+    if not (docs_path / "learning_resources.db").exists():
+        logger.info("Initializing learning resources database...")
+        try:
+            # Run content aggregators to populate initial data
+            results = content_manager.update_all()
+            logger.info(f"Learning resources initialized: {sum(len(r) for r in results.values())} resources added")
+        except Exception as e:
+            logger.warning(f"Could not initialize learning resources: {str(e)}")
 
 
 

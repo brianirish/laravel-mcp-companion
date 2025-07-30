@@ -1,0 +1,177 @@
+[
+  {
+    "id": 80,
+    "type": "tutorial",
+    "title": "How to Make Your AI Agent Program  PHP and Laravel with Grace and Style",
+    "description": "Latest postJuly 24, 2025",
+    "url": "https://spatie.be/blog/how-to-make-your-ai-agent-program-with-grace-and-style",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-07-24T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.038573+00:00",
+    "tags": [
+      "laravel"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie",
+      "featured": true
+    }
+  },
+  {
+    "id": 81,
+    "type": "tutorial",
+    "title": "A package to handle one-time passwords (OTP) in Laravel apps",
+    "description": "",
+    "url": "https://spatie.be/blog/a-package-to-handle-one-time-passwords-otp-in-laravel-apps",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-05-22T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.041914+00:00",
+    "tags": [
+      "package-development",
+      "laravel",
+      "oss"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 82,
+    "type": "tutorial",
+    "title": "Do not call toArray() to get all items from a Laravel Collection",
+    "description": "",
+    "url": "https://spatie.be/blog/do-not-call-toarray-to-get-all-items-from-a-laravel-collection",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-05-15T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.043945+00:00",
+    "tags": [
+      "laravel",
+      "oss"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 83,
+    "type": "tutorial",
+    "title": "5 levels of handling images in Laravel",
+    "description": "",
+    "url": "https://spatie.be/blog/five-levels-of-handling-images-in-laravel",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-05-12T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.045727+00:00",
+    "tags": [
+      "laravel",
+      "oss"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 84,
+    "type": "tutorial",
+    "title": "A package to handle passkeys in Laravel",
+    "description": "",
+    "url": "https://spatie.be/blog/a-package-to-handle-passkeys-in-laravel",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-05-07T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.047213+00:00",
+    "tags": [
+      "package-development",
+      "laravel",
+      "oss"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 85,
+    "type": "tutorial",
+    "title": "Livewire and Inertia: how we love and use both",
+    "description": "",
+    "url": "https://spatie.be/blog/livewire-and-inertia-how-we-love-and-use-both",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-05-05T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.048727+00:00",
+    "tags": [
+      "livewire",
+      "inertia",
+      "laravel"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 86,
+    "type": "tutorial",
+    "title": "Media Library Pro: Easier validation in Livewire",
+    "description": "",
+    "url": "https://spatie.be/blog/media-library-pro-easier-validation-in-livewire",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-03-13T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.050238+00:00",
+    "tags": [
+      "validation",
+      "livewire",
+      "laravel"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 87,
+    "type": "tutorial",
+    "title": "Laravel CSP v3 and a call for contributors",
+    "description": "",
+    "url": "https://spatie.be/blog/releasing-laravel-csp-3-and-a-call-for-contributors",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-03-13T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.051704+00:00",
+    "tags": [
+      "laravel",
+      "oss"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  },
+  {
+    "id": 88,
+    "type": "tutorial",
+    "title": "Reintroducing Laravel Backup Server as an open source package",
+    "description": "",
+    "url": "https://spatie.be/blog/reintroducing-laravel-backup-server",
+    "source": "spatie-blog",
+    "difficulty_level": "intermediate",
+    "published_date": "2025-01-28T00:00:00+00:00",
+    "last_updated": "2025-07-26T12:54:27.053293+00:00",
+    "tags": [
+      "package-development",
+      "laravel"
+    ],
+    "metadata": {
+      "author": "Spatie Team",
+      "company": "Spatie"
+    }
+  }
+]
