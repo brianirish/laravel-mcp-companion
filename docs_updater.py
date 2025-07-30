@@ -591,10 +591,8 @@ class ExternalDocsFetcher:
             return False
         
         try:
-            with open(metadata_path, 'r') as f:
-                metadata = json.load(f)
-            
-            cache_time = metadata.get('cached_at', 0)
+            # Use file modification time instead of stored cached_at
+            cache_time = metadata_path.stat().st_mtime
             return (time.time() - cache_time) < self.cache_duration
         except Exception as e:
             logger.warning(f"Error reading cache metadata for {service}: {str(e)}")
@@ -603,7 +601,6 @@ class ExternalDocsFetcher:
     def save_cache_metadata(self, service: str, metadata: Dict) -> None:
         """Save cache metadata for a service."""
         metadata_path = self.get_cache_metadata_path(service)
-        metadata['cached_at'] = time.time()
         
         try:
             with open(metadata_path, 'w') as f:
@@ -1052,7 +1049,14 @@ class ExternalDocsFetcher:
             autolinks=True,  # Convert URLs to links automatically
         )
         
-        # Post-process to handle Support links with email protection
+        # Post-process to handle CloudFlare email protection links
+        # Replace all email protection links with [email protected]
+        markdown = re.sub(
+            r'\[\[email protected\]\]\(/cdn-cgi/l/email-protection#[a-f0-9]+\)',
+            '[email protected]',
+            markdown
+        )
+        # Handle Support links with email protection
         markdown = re.sub(
             r'\[Support\]\(/cdn-cgi/l/email-protection[^)]+\)',
             'Support',
@@ -1589,10 +1593,8 @@ class CommunityPackageFetcher:
             return False
         
         try:
-            with open(metadata_path, 'r') as f:
-                metadata = json.load(f)
-            
-            cache_time = metadata.get("cache_time", 0)
+            # Use file modification time instead of stored cache_time
+            cache_time = metadata_path.stat().st_mtime
             current_time = time.time()
             
             if current_time - cache_time > self.cache_duration:
@@ -1678,7 +1680,6 @@ class CommunityPackageFetcher:
                 if fetched_sections > 0:
                     # Update cache metadata
                     metadata = {
-                        "cache_time": time.time(),
                         "package": package_key,
                         "name": package_info['name'],
                         "sections_count": fetched_sections,
@@ -1725,7 +1726,6 @@ class CommunityPackageFetcher:
         if fetched_sections > 0:
             # Update cache metadata
             metadata = {
-                "cache_time": time.time(),
                 "package": "livewire",
                 "name": config['name'],
                 "sections_count": fetched_sections,
@@ -1796,7 +1796,6 @@ class CommunityPackageFetcher:
         if fetched_sections > 0:
             # Update cache metadata
             metadata = {
-                "cache_time": time.time(),
                 "package": "inertia",
                 "name": config['name'],
                 "sections_count": fetched_sections,
@@ -2002,7 +2001,6 @@ class CommunityPackageFetcher:
         if fetched_sections > 0:
             # Update cache metadata
             metadata = {
-                "cache_time": time.time(),
                 "package": "filament",
                 "name": config['name'],
                 "version": version,
@@ -2047,7 +2045,6 @@ class CommunityPackageFetcher:
         if fetched_sections > 0:
             # Update cache metadata
             metadata = {
-                "cache_time": time.time(),
                 "package": "debugbar",
                 "name": config['name'],
                 "sections_count": fetched_sections,
@@ -2102,7 +2099,6 @@ class CommunityPackageFetcher:
                 
                 # Update cache metadata
                 metadata = {
-                    "cache_time": time.time(),
                     "package": "ide-helper",
                     "name": config['name'],
                     "source_type": "github_readme",
@@ -2265,6 +2261,13 @@ class CommunityPackageFetcher:
         
         # Fix code blocks
         content = re.sub(r'```\s*\n', '```\n', content)
+        
+        # Remove CloudFlare email protection links
+        content = re.sub(
+            r'\[\[email protected\]\]\(/cdn-cgi/l/email-protection#[a-f0-9]+\)',
+            '[email protected]',
+            content
+        )
         
         # Remove trailing whitespace
         content = '\n'.join(line.rstrip() for line in content.split('\n'))
@@ -2476,7 +2479,7 @@ class MultiSourceDocsUpdater:
                     "name": service_info.get("name", service),
                     "type": service_info.get("type", "unknown").value if hasattr(service_info.get("type"), 'value') else str(service_info.get("type", "unknown")),
                     "cache_valid": cache_valid,
-                    "last_fetched": metadata.get("cached_at", "never"),
+                    "last_fetched": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(metadata_path.stat().st_mtime)) if metadata_path.exists() else "never",
                     "success_rate": metadata.get("success_rate", "unknown")
                 }
             except Exception as e:
