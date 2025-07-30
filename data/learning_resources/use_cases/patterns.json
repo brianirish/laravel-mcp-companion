@@ -1,0 +1,218 @@
+{
+  "authentication": {
+    "keywords": [
+      "auth",
+      "login",
+      "register",
+      "password",
+      "session",
+      "guard"
+    ],
+    "packages": [
+      "sanctum",
+      "fortify",
+      "breeze",
+      "jetstream",
+      "socialite"
+    ],
+    "docs": [
+      "authentication",
+      "authorization",
+      "passwords",
+      "sanctum"
+    ],
+    "difficulty": "beginner"
+  },
+  "api_development": {
+    "keywords": [
+      "api",
+      "rest",
+      "restful",
+      "json",
+      "endpoint",
+      "resource"
+    ],
+    "packages": [
+      "sanctum",
+      "passport",
+      "scout",
+      "dingo/api"
+    ],
+    "docs": [
+      "routing",
+      "controllers",
+      "eloquent-resources",
+      "sanctum"
+    ],
+    "difficulty": "intermediate"
+  },
+  "payment_processing": {
+    "keywords": [
+      "payment",
+      "subscription",
+      "billing",
+      "stripe",
+      "paypal"
+    ],
+    "packages": [
+      "cashier",
+      "cashier-paddle",
+      "laravel-stripe"
+    ],
+    "docs": [
+      "billing",
+      "cashier",
+      "queues"
+    ],
+    "difficulty": "intermediate"
+  },
+  "file_uploads": {
+    "keywords": [
+      "upload",
+      "file",
+      "image",
+      "media",
+      "storage",
+      "s3"
+    ],
+    "packages": [
+      "medialibrary",
+      "filepond",
+      "laravel-filemanager"
+    ],
+    "docs": [
+      "filesystem",
+      "validation",
+      "requests"
+    ],
+    "difficulty": "beginner"
+  },
+  "search": {
+    "keywords": [
+      "search",
+      "full-text",
+      "elasticsearch",
+      "algolia",
+      "index"
+    ],
+    "packages": [
+      "scout",
+      "tntsearch",
+      "elasticsearch"
+    ],
+    "docs": [
+      "scout",
+      "eloquent",
+      "database"
+    ],
+    "difficulty": "intermediate"
+  },
+  "testing": {
+    "keywords": [
+      "test",
+      "unit",
+      "feature",
+      "pest",
+      "phpunit",
+      "mock"
+    ],
+    "packages": [
+      "pest",
+      "laravel-test-tools",
+      "mockery"
+    ],
+    "docs": [
+      "testing",
+      "database-testing",
+      "mocking"
+    ],
+    "difficulty": "intermediate"
+  },
+  "frontend": {
+    "keywords": [
+      "frontend",
+      "vue",
+      "react",
+      "blade",
+      "javascript",
+      "spa"
+    ],
+    "packages": [
+      "livewire",
+      "inertia",
+      "breeze",
+      "jetstream"
+    ],
+    "docs": [
+      "blade",
+      "frontend",
+      "vite",
+      "mix"
+    ],
+    "difficulty": "beginner"
+  },
+  "admin_panel": {
+    "keywords": [
+      "admin",
+      "dashboard",
+      "crud",
+      "panel",
+      "backend"
+    ],
+    "packages": [
+      "filament",
+      "nova",
+      "orchid",
+      "backpack"
+    ],
+    "docs": [
+      "routing",
+      "middleware",
+      "authorization"
+    ],
+    "difficulty": "intermediate"
+  },
+  "performance": {
+    "keywords": [
+      "performance",
+      "optimization",
+      "cache",
+      "speed",
+      "scale"
+    ],
+    "packages": [
+      "horizon",
+      "telescope",
+      "debugbar",
+      "clockwork"
+    ],
+    "docs": [
+      "cache",
+      "queues",
+      "database",
+      "telescope"
+    ],
+    "difficulty": "advanced"
+  },
+  "deployment": {
+    "keywords": [
+      "deploy",
+      "production",
+      "server",
+      "hosting",
+      "docker"
+    ],
+    "packages": [
+      "envoy",
+      "forge",
+      "vapor",
+      "sail"
+    ],
+    "docs": [
+      "deployment",
+      "configuration",
+      "artisan"
+    ],
+    "difficulty": "intermediate"
+  }
+}

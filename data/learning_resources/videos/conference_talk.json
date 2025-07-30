@@ -1,0 +1,143 @@
+[
+  {
+    "id": 89,
+    "type": "video",
+    "title": "Laravel 11: What's New - Taylor Otwell at Laracon US 2024",
+    "description": "Taylor Otwell unveils Laravel 11 features and improvements at Laracon US 2024",
+    "url": "https://www.youtube.com/watch?v=9NNDPDlBrJQ",
+    "source": "conference-talk",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.549435+00:00",
+    "tags": [
+      "2024",
+      "otwell",
+      "video",
+      "laracon-us-2024",
+      "conference-talk"
+    ],
+    "metadata": {
+      "video_id": "9NNDPDlBrJQ",
+      "channel": "Laravel",
+      "duration": null,
+      "thumbnail": null,
+      "speaker": "Taylor Otwell",
+      "conference": "Laracon US 2024",
+      "year": "2024"
+    }
+  },
+  {
+    "id": 90,
+    "type": "video",
+    "title": "Pest 3: The Architect's Vision - Nuno Maduro",
+    "description": "Nuno Maduro presents Pest 3 and its architectural improvements",
+    "url": "https://www.youtube.com/watch?v=bqBW_E1Y-OI",
+    "source": "conference-talk",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.555222+00:00",
+    "tags": [
+      "2024",
+      "maduro",
+      "video",
+      "laracon-us-2024",
+      "conference-talk",
+      "pest"
+    ],
+    "metadata": {
+      "video_id": "bqBW_E1Y-OI",
+      "channel": "Laravel",
+      "duration": null,
+      "thumbnail": null,
+      "speaker": "Nuno Maduro",
+      "conference": "Laracon US 2024",
+      "year": "2024"
+    }
+  },
+  {
+    "id": 91,
+    "type": "video",
+    "title": "Building Laravel Pulse - Jess Archer & Tim MacDonald",
+    "description": "The story behind building Laravel Pulse, a real-time application performance monitoring tool",
+    "url": "https://www.youtube.com/watch?v=HaexnkKWqdM",
+    "source": "conference-talk",
+    "difficulty_level": "advanced",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.557852+00:00",
+    "tags": [
+      "macdonald",
+      "pulse",
+      "laracon-us-2023",
+      "performance",
+      "video",
+      "conference-talk",
+      "2023"
+    ],
+    "metadata": {
+      "video_id": "HaexnkKWqdM",
+      "channel": "Laravel",
+      "duration": null,
+      "thumbnail": null,
+      "speaker": "Jess Archer & Tim MacDonald",
+      "conference": "Laracon US 2023",
+      "year": "2023"
+    }
+  },
+  {
+    "id": 92,
+    "type": "video",
+    "title": "Livewire 3: Beyond the Basics - Caleb Porzio",
+    "description": "Advanced Livewire 3 techniques and patterns for building dynamic interfaces",
+    "url": "https://www.youtube.com/watch?v=f4QShF42c6E",
+    "source": "conference-talk",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.560173+00:00",
+    "tags": [
+      "livewire",
+      "laracon-us-2023",
+      "video",
+      "conference-talk",
+      "2023",
+      "porzio"
+    ],
+    "metadata": {
+      "video_id": "f4QShF42c6E",
+      "channel": "Laravel",
+      "duration": null,
+      "thumbnail": null,
+      "speaker": "Caleb Porzio",
+      "conference": "Laracon US 2023",
+      "year": "2023"
+    }
+  },
+  {
+    "id": 93,
+    "type": "video",
+    "title": "Laravel Folio & Volt - Taylor Otwell",
+    "description": "Introduction to Laravel Folio page-based routing and Volt single-file components",
+    "url": "https://www.youtube.com/watch?v=im-iN7l5U_A",
+    "source": "conference-talk",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-26T12:54:34.562356+00:00",
+    "tags": [
+      "folio",
+      "laracon-us-2023",
+      "otwell",
+      "video",
+      "conference-talk",
+      "2023",
+      "volt"
+    ],
+    "metadata": {
+      "video_id": "im-iN7l5U_A",
+      "channel": "Laravel",
+      "duration": null,
+      "thumbnail": null,
+      "speaker": "Taylor Otwell",
+      "conference": "Laracon US 2023",
+      "year": "2023"
+    }
+  }
+]

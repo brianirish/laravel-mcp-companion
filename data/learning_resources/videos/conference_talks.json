@@ -1,0 +1,68 @@
+[
+  {
+    "id": 17,
+    "type": "video",
+    "title": "Laracon US 2023 - Taylor Otwell Keynote",
+    "description": "Taylor Otwell presents the latest Laravel features and future roadmap",
+    "url": "https://www.youtube.com/watch?v=example1",
+    "source": "conference-talk",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.522745",
+    "metadata": {
+      "speaker": "Taylor Otwell",
+      "conference": "Laracon US 2023",
+      "duration": "45 min"
+    },
+    "tags": [
+      "laracon",
+      "keynote",
+      "taylor-otwell",
+      "2023"
+    ]
+  },
+  {
+    "id": 18,
+    "type": "video",
+    "title": "Testing Like a Pro with PestPHP - Nuno Maduro",
+    "description": "Learn advanced testing techniques using PestPHP in Laravel applications",
+    "url": "https://www.youtube.com/watch?v=example2",
+    "source": "conference-talk",
+    "difficulty_level": "advanced",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.523862",
+    "metadata": {
+      "speaker": "Nuno Maduro",
+      "conference": "Laracon EU 2023",
+      "duration": "30 min"
+    },
+    "tags": [
+      "laracon",
+      "testing",
+      "pest",
+      "nuno-maduro"
+    ]
+  },
+  {
+    "id": 19,
+    "type": "video",
+    "title": "Building Livewire 3 - Caleb Porzio",
+    "description": "Deep dive into Livewire 3 features and building reactive Laravel apps",
+    "url": "https://www.youtube.com/watch?v=example3",
+    "source": "conference-talk",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.524891",
+    "metadata": {
+      "speaker": "Caleb Porzio",
+      "conference": "Laracon US 2023",
+      "duration": "40 min"
+    },
+    "tags": [
+      "livewire",
+      "caleb-porzio",
+      "reactive",
+      "frontend"
+    ]
+  }
+]

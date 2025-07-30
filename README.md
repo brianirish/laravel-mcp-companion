@@ -21,18 +21,27 @@
 
 | Feature | Laravel MCP Companion | Context7 |
 |---------|:--------------------:|:--------:|
-| **Instant documentation retrieval** (zero latency) | ✅ | ❌ |
-| **Laravel multi-version support** (6.x - latest) | ✅ | ❌ |
+| **Laravel documentation support** | ✅ | ✅ |
+| **Instant retrieval** (zero latency) | ✅ | ❌ |
+| **Laravel multi-version support** (6.x - latest) | ✅ | ❓ |
 | **Laravel service docs** (Forge, Vapor, Nova, Envoyer) | ✅ | ❌ |
-| **Curated Laravel package recommendations** | ✅ | ❌ |
+| **Community learning resources** (tutorials, videos) | ✅ | ❌ |
+| **Curated package recommendations** | ✅ | ❌ |
 | **Offline documentation access** | ✅ | ❌ |
-| **Pre-processed markdown** (saves tokens) | ✅ | ❌ |
-| **No internet requests during use** | ✅ | ❌ |
-| **Laravel-specific search** | ✅ | ❌ |
-| **Auto-discovery of service docs** | ✅ | ❌ |
-| **General documentation** (non-Laravel) | ❌ | ✅ |
+| **Pre-cached & pre-processed** (saves tokens) | ✅ | ❌ |
+| **No internet required during use** | ✅ | ❌ |
+| **Laravel-specific search & navigation** | ✅ | ❌ |
+| **JavaScript/TypeScript libraries** | ❌ | ✅ |
+| **Real-time doc fetching** | ❌ | ✅ |
+| **Multiple programming languages** | ❌ | ✅ |
 
-*While Context7 excels at general documentation retrieval, Laravel MCP Companion is purpose-built for Laravel developers with faster, offline-capable, Laravel-specific features.*
+*Context7 excels at real-time documentation fetching for multiple languages (especially JS/TS), while Laravel MCP Companion provides instant, offline-capable, comprehensive Laravel ecosystem coverage with learning resources.*
+
+### Key Differences
+
+**Context7** requires an internet connection and fetches documentation in real-time when you add "use context7" to your prompts. It supports multiple programming languages with a focus on JavaScript/TypeScript libraries.
+
+**Laravel MCP Companion** pre-caches all documentation locally, providing instant access without internet connectivity. It includes not just Laravel core docs, but also service documentation, community packages, tutorials, conference talks, and curated learning resources specifically for the Laravel ecosystem.
 
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
@@ -142,6 +151,7 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --packages li
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
 - ✅ **Community package docs** - Documentation for Spatie, Livewire, Inertia, Filament
 - ✅ **Smart package recommendations** - Curated Laravel ecosystem packages
+- ✅ **Conference talk aggregator** - Fetches Laravel conference talks from YouTube (API or scraping)
 - ✅ **Unified search** - One search across all documentation sources
 - ✅ **Daily updates** - Automatic sync with latest documentation
 - ✅ **Battle-tested** - Comprehensive test suite ensures reliability

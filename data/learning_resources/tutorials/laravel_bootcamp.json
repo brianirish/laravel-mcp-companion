@@ -1,0 +1,248 @@
+[
+  {
+    "id": 6,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Getting Started",
+    "description": "Introduction to Laravel Bootcamp and setting up your development environment",
+    "url": "https://bootcamp.laravel.com/",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.489054",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "getting-started",
+      "setup"
+    ]
+  },
+  {
+    "id": 7,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Installation",
+    "description": "Installing Laravel and creating your first Laravel project using Blade templates",
+    "url": "https://bootcamp.laravel.com/blade/installation",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.494395",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "setup",
+      "blade",
+      "installation"
+    ]
+  },
+  {
+    "id": 8,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Creating Chirps",
+    "description": "Building a microblogging platform - creating the Chirp model and forms",
+    "url": "https://bootcamp.laravel.com/blade/creating-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.499372",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "blade",
+      "forms",
+      "models",
+      "crud"
+    ]
+  },
+  {
+    "id": 9,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Showing Chirps",
+    "description": "Displaying Chirps from the database using Blade templates",
+    "url": "https://bootcamp.laravel.com/blade/showing-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.503210",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "blade",
+      "views",
+      "database"
+    ]
+  },
+  {
+    "id": 10,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Editing Chirps",
+    "description": "Implementing edit functionality for Chirps",
+    "url": "https://bootcamp.laravel.com/blade/editing-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.506763",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "blade",
+      "forms",
+      "crud"
+    ]
+  },
+  {
+    "id": 11,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Deleting Chirps",
+    "description": "Adding delete functionality and authorization",
+    "url": "https://bootcamp.laravel.com/blade/deleting-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.511735",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "blade",
+      "crud",
+      "authorization"
+    ]
+  },
+  {
+    "id": 12,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Blade: Notifications & Events",
+    "description": "Sending email notifications when new Chirps are created",
+    "url": "https://bootcamp.laravel.com/blade/notifications-and-events",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.515015",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "blade",
+      "notifications",
+      "events",
+      "email"
+    ]
+  },
+  {
+    "id": 13,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Livewire: Installation",
+    "description": "Installing Laravel with Livewire for reactive components",
+    "url": "https://bootcamp.laravel.com/livewire/installation",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "beginner",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.517108",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "setup",
+      "installation",
+      "livewire"
+    ]
+  },
+  {
+    "id": 14,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Livewire: Creating Chirps",
+    "description": "Building reactive forms with Livewire components",
+    "url": "https://bootcamp.laravel.com/livewire/creating-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.518827",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "forms",
+      "crud",
+      "livewire",
+      "components"
+    ]
+  },
+  {
+    "id": 15,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Inertia & React: Installation",
+    "description": "Setting up Laravel with Inertia.js and React",
+    "url": "https://bootcamp.laravel.com/inertia/installation",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.520232",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "installation",
+      "inertia",
+      "react",
+      "spa"
+    ]
+  },
+  {
+    "id": 16,
+    "type": "tutorial",
+    "title": "Laravel Bootcamp - Inertia & React: Creating Chirps",
+    "description": "Building a SPA with Inertia.js and React components",
+    "url": "https://bootcamp.laravel.com/inertia/creating-chirps",
+    "source": "laravel-bootcamp",
+    "difficulty_level": "intermediate",
+    "published_date": null,
+    "last_updated": "2025-07-22T23:05:47.521516",
+    "metadata": {
+      "type": "bootcamp",
+      "official": true,
+      "interactive": true
+    },
+    "tags": [
+      "bootcamp",
+      "crud",
+      "inertia",
+      "react",
+      "spa"
+    ]
+  }
+]
