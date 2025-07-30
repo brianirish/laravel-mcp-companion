@@ -20,7 +20,7 @@ Repository
 
 Open Issues
 
-69,054,771
+69,144,081
 
 12,584
 
