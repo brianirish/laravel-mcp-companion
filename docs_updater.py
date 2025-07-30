@@ -2157,6 +2157,51 @@ class CommunityPackageFetcher:
             for tag in soup.find_all(['nav', 'header', 'footer', 'aside']):
                 tag.decompose()
             
+            # Remove stats/metrics elements that contain dynamic numbers
+            # For Spatie packages, remove elements that contain download counts and issue numbers
+            if package == "spatie":
+                # Find and remove the stats section that appears at the top of Spatie docs
+                # This typically contains Repository, Open Issues, and download counts
+                stats_removed = False
+                
+                # Look for the pattern: Repository -> Open Issues -> large numbers
+                for element in soup.find_all(string=re.compile(r'^Repository$', re.I)):
+                    # Find the container that holds this stats section
+                    container = element.parent
+                    while container and container.name not in ['body', 'html', 'main', 'article']:
+                        # Check if this container has "Open Issues" and large numbers
+                        text_content = container.get_text()
+                        if 'Open Issues' in text_content and re.search(r'\d{3,}', text_content):
+                            # This looks like the stats container
+                            container.decompose()
+                            stats_removed = True
+                            logger.debug(f"Removed stats container from {url}")
+                            break
+                        # Try parent container
+                        if container.parent and container.parent.name in ['div', 'section', 'aside', 'header']:
+                            container = container.parent
+                        else:
+                            break
+                    if stats_removed:
+                        break
+                
+                # Also remove any standalone large numbers that might be stats
+                for tag in soup.find_all(string=re.compile(r'^\s*[\d,]+\s*$')):
+                    if tag.parent:
+                        num_str = tag.strip().replace(',', '')
+                        try:
+                            # Remove numbers larger than 1000 (likely stats, not code examples)
+                            if num_str.isdigit() and int(num_str) > 1000:
+                                # Don't remove if it's inside a code block
+                                if not any(p.name in ['code', 'pre'] for p in tag.parents):
+                                    tag.parent.extract()
+                        except:
+                            pass
+                
+                # Remove any divs or sections that look like stats containers
+                for tag in soup.find_all(['div', 'section'], class_=re.compile(r'stats|metrics|numbers|count', re.I)):
+                    tag.decompose()
+            
             # Try to find main content area
             main_content = None
             
