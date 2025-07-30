@@ -83,17 +83,14 @@ class TestFuzzySearch:
         # "Hello " (6) + "world " (6) = 12
         assert matches[0]['position'] == 12
     
-    def test_empty_query(self):
-        """Test handling of empty query."""
-        text = "Laravel is a PHP framework"
-        matches = fuzzy_search("", text)
-        
+    def test_empty_inputs(self):
+        """Test handling of empty query and text."""
+        # Empty query
+        matches = fuzzy_search("", "Laravel is a PHP framework")
         assert len(matches) == 0
-    
-    def test_empty_text(self):
-        """Test handling of empty text."""
-        matches = fuzzy_search("Laravel", "")
         
+        # Empty text
+        matches = fuzzy_search("Laravel", "")
         assert len(matches) == 0
     
     def test_query_longer_than_text(self):

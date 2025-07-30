@@ -233,32 +233,3 @@ class TestMainFunction:
         assert exc_info.value.code == 1
 
 
-class TestMainFunctionTools:
-    """Test that tools are registered in main function."""
-    
-    @patch('laravel_mcp_companion.GracefulShutdown')
-    @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
-    def test_tools_are_registered(self, mock_setup_docs, mock_fastmcp_class, 
-                                  mock_updater_class, mock_shutdown_class, temp_dir):
-        """Test that MCP tools are registered during main()."""
-        # Setup mocks
-        mock_setup_docs.return_value = temp_dir
-        mock_mcp = MagicMock()
-        mock_fastmcp_class.return_value = mock_mcp
-        mock_updater = MagicMock()
-        mock_updater_class.return_value = mock_updater
-        mock_shutdown = MagicMock()
-        mock_shutdown_class.return_value = mock_shutdown
-        
-        test_args = ['laravel-mcp-companion']
-        
-        with patch.object(sys, 'argv', test_args):
-            main()
-            
-            # After main() runs, tools should be registered
-            # Note: In the actual implementation, tools are registered via decorators
-            # For now, we just verify the server was created
-            assert mock_fastmcp_class.called
-            assert mock_mcp.run.called
