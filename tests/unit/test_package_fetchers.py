@@ -3,8 +3,7 @@
 import pytest
 import json
 import time
-from pathlib import Path
-from unittest.mock import patch, Mock, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
 import urllib.error
 
 from docs_updater import CommunityPackageFetcher

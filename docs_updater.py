@@ -1967,7 +1967,6 @@ class CommunityPackageFetcher:
         text = re.sub(r'<[^>]*>', '', text)
         
         # Decode HTML entities
-        import html
         text = html.unescape(text)
         
         # Clean up whitespace
@@ -2118,7 +2117,7 @@ class CommunityPackageFetcher:
                 with open(metadata_path, 'w') as f:
                     json.dump(metadata, f, indent=2)
                 
-                logger.info(f"Successfully fetched documentation for Laravel IDE Helper")
+                logger.info("Successfully fetched documentation for Laravel IDE Helper")
                 return True
                 
         except urllib.error.HTTPError as e:
@@ -2188,14 +2187,14 @@ class CommunityPackageFetcher:
                 # Also remove any standalone large numbers that might be stats
                 for tag in soup.find_all(string=re.compile(r'^\s*[\d,]+\s*$')):
                     if tag.parent:
-                        num_str = tag.strip().replace(',', '')
+                        num_str = str(tag).strip().replace(',', '')
                         try:
                             # Remove numbers larger than 1000 (likely stats, not code examples)
                             if num_str.isdigit() and int(num_str) > 1000:
                                 # Don't remove if it's inside a code block
                                 if not any(p.name in ['code', 'pre'] for p in tag.parents):
                                     tag.parent.extract()
-                        except:
+                        except Exception:
                             pass
                 
                 # Remove any divs or sections that look like stats containers

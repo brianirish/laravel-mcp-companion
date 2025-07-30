@@ -1,8 +1,6 @@
 """Tests for content validation functionality in docs_updater."""
 
 import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch
 from docs_updater import ExternalDocsFetcher
 
 

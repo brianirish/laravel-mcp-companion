@@ -1,8 +1,6 @@
 """Tests for cache management functionality."""
 
-import pytest
 import threading
-import time
 from pathlib import Path
 from unittest.mock import patch, mock_open
 from mcp_tools import get_file_content_cached, search_laravel_docs_impl, clear_caches

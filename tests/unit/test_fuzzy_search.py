@@ -1,6 +1,5 @@
 """Tests for the fuzzy_search function."""
 
-import pytest
 from laravel_mcp_companion import fuzzy_search
 
 
