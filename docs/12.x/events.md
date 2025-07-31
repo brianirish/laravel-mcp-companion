@@ -555,7 +555,7 @@ class SendShipmentNotification implements ShouldQueue
 
 If one of your queued listeners is encountering an error, you likely do not want it to keep retrying indefinitely. Therefore, Laravel provides various ways to specify how many times or for how long a listener may be attempted.
 
-You may define a `$tries` property on your listener class to specify how many times the listener may be attempted before it is considered to have failed:
+You may define a `tries` property on your listener class to specify how many times the listener may be attempted before it is considered to have failed:
 
 ```php
 <?php
@@ -598,7 +598,7 @@ If both `retryUntil` and `tries` are defined, Laravel gives precedence to the `r
 <a name="specifying-queued-listener-backoff"></a>
 #### Specifying Queued Listener Backoff
 
-If you would like to configure how many seconds Laravel should wait before retrying a listener that has encountered an exception, you may do so by defining a `$backoff` property on your listener class:
+If you would like to configure how many seconds Laravel should wait before retrying a listener that has encountered an exception, you may do so by defining a `backoff` property on your listener class:
 
 ```php
 /**
@@ -638,7 +638,7 @@ public function backoff(OrderShipped $event): array
 <a name="specifying-queued-listener-max-exceptions"></a>
 #### Specifying Queued Listener Max Exceptions
 
-Sometimes you may wish to specify that a queued listener may be attempted many times, but should fail if the retries are triggered by a given number of unhandled exceptions (as opposed to being released by the `release` method directly). To accomplish this, you may define a `$maxExceptions` property on your listener class:
+Sometimes you may wish to specify that a queued listener may be attempted many times, but should fail if the retries are triggered by a given number of unhandled exceptions (as opposed to being released by the `release` method directly). To accomplish this, you may define a `maxExceptions` property on your listener class:
 
 ```php
 <?php
@@ -682,7 +682,7 @@ In this example, the listener will be retried up to 25 times. However, the liste
 <a name="specifying-queued-listener-timeout"></a>
 #### Specifying Queued Listener Timeout
 
-Often, you know roughly how long you expect your queued listeners to take. For this reason, Laravel allows you to specify a "timeout" value. If a listener is processing for longer than the number of seconds specified by the timeout value, the worker processing the listener will exit with an error. You may define the maximum number of seconds a listener should be allowed to run by defining a `$timeout` property on your listener class:
+Often, you know roughly how long you expect your queued listeners to take. For this reason, Laravel allows you to specify a "timeout" value. If a listener is processing for longer than the number of seconds specified by the timeout value, the worker processing the listener will exit with an error. You may define the maximum number of seconds a listener should be allowed to run by defining a `timeout` property on your listener class:
 
 ```php
 <?php
@@ -703,7 +703,7 @@ class SendShipmentNotification implements ShouldQueue
 }
 ```
 
-If you would like to indicate that a listener should be marked as failed on timeout, you may define the `$failOnTimeout` property on the listener class:
+If you would like to indicate that a listener should be marked as failed on timeout, you may define the `failOnTimeout` property on the listener class:
 
 ```php
 <?php

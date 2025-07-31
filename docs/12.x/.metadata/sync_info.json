@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a77ec4a5a4d722ce4bd00929b5b1b1840898c0ea",
-  "commit_date": "2025-07-28T14:45:28Z",
-  "commit_message": "Fix PHPDoc for consistency (#10655)",
-  "commit_url": "https://github.com/laravel/docs/commit/a77ec4a5a4d722ce4bd00929b5b1b1840898c0ea",
-  "sync_time": "2025-07-29T01:46:40Z"
+  "commit_sha": "4d2579e3a11ad725724355549d0a3532c66e0424",
+  "commit_date": "2025-07-30T17:55:23Z",
+  "commit_message": "Add an example for whereIn with JSON column types. (#10654)",
+  "commit_url": "https://github.com/laravel/docs/commit/4d2579e3a11ad725724355549d0a3532c66e0424",
+  "sync_time": "2025-07-31T01:27:38Z"
 }
