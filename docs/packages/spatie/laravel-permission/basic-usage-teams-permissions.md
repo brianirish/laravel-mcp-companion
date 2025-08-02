@@ -99,13 +99,17 @@ class AppServiceProvider extends ServiceProvider
         $kernel = app()->make(Kernel::class);
 
         $kernel->addToMiddlewarePriorityBefore(
-            SubstituteBindings::class,
             YourCustomMiddlewareClass::class,
+            SubstituteBindings::class,
         );
     }
 }
 
 ```
+### ##Using LiveWire?
+
+You may need to register your team middleware as Persisted in Livewire. See Livewire docs: Configuring Persistent Middleware
+
 ##Roles Creating
 ----------------
 
