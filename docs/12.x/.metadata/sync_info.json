@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "4d2579e3a11ad725724355549d0a3532c66e0424",
-  "commit_date": "2025-07-30T17:55:23Z",
-  "commit_message": "Add an example for whereIn with JSON column types. (#10654)",
-  "commit_url": "https://github.com/laravel/docs/commit/4d2579e3a11ad725724355549d0a3532c66e0424",
-  "sync_time": "2025-07-31T01:27:38Z"
+  "commit_sha": "d640df584c1a06656e4518074a08acc5ca7a1560",
+  "commit_date": "2025-08-03T15:12:49Z",
+  "commit_message": "[12.x] Add documentation for `doesnt_contain` validation rule (#10664)\n\n* add doesntContain validation docs\n\n* Update validation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/d640df584c1a06656e4518074a08acc5ca7a1560",
+  "sync_time": "2025-08-04T01:44:24Z"
 }
