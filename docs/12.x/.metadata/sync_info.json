@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "d640df584c1a06656e4518074a08acc5ca7a1560",
-  "commit_date": "2025-08-03T15:12:49Z",
-  "commit_message": "[12.x] Add documentation for `doesnt_contain` validation rule (#10664)\n\n* add doesntContain validation docs\n\n* Update validation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/d640df584c1a06656e4518074a08acc5ca7a1560",
-  "sync_time": "2025-08-04T01:44:24Z"
+  "commit_sha": "a9900438e4037f15b7ffd7e271e8c8a94e315cb6",
+  "commit_date": "2025-08-05T01:25:55Z",
+  "commit_message": "add `doesntContainStrict` (#10673)",
+  "commit_url": "https://github.com/laravel/docs/commit/a9900438e4037f15b7ffd7e271e8c8a94e315cb6",
+  "sync_time": "2025-08-05T01:40:01Z"
 }
