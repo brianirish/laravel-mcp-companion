@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a9900438e4037f15b7ffd7e271e8c8a94e315cb6",
-  "commit_date": "2025-08-05T01:25:55Z",
-  "commit_message": "add `doesntContainStrict` (#10673)",
-  "commit_url": "https://github.com/laravel/docs/commit/a9900438e4037f15b7ffd7e271e8c8a94e315cb6",
-  "sync_time": "2025-08-05T01:40:01Z"
+  "commit_sha": "a3d14a367e6dd4c268b21630f14a0d553c2c5df6",
+  "commit_date": "2025-08-05T13:49:31Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/a3d14a367e6dd4c268b21630f14a0d553c2c5df6",
+  "sync_time": "2025-08-06T01:28:28Z"
 }

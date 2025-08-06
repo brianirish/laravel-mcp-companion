@@ -46,6 +46,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [Arr::crossJoin](#method-array-crossjoin)
 [Arr::divide](#method-array-divide)
 [Arr::dot](#method-array-dot)
+[Arr::every](#method-array-every)
 [Arr::except](#method-array-except)
 [Arr::exists](#method-array-exists)
 [Arr::first](#method-array-first)
@@ -79,6 +80,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [Arr::set](#method-array-set)
 [Arr::shuffle](#method-array-shuffle)
 [Arr::sole](#method-array-sole)
+[Arr::some](#method-array-some)
 [Arr::sort](#method-array-sort)
 [Arr::sortDesc](#method-array-sort-desc)
 [Arr::sortRecursive](#method-array-sort-recursive)
@@ -152,6 +154,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [route](#method-route)
 [secure_asset](#method-secure-asset)
 [secure_url](#method-secure-url)
+[to_action](#method-to-action)
 [to_route](#method-to-route)
 [uri](#method-uri)
 [url](#method-url)
@@ -386,6 +389,25 @@ $array = ['products' => ['desk' => ['price' => 100]]];
 $flattened = Arr::dot($array);
 
 // ['products.desk.price' => 100]
+```
+
+<a name="method-array-every"></a>
+#### `Arr::every()` {.collection-method}
+
+The `Arr::every` method ensures that all values in the array pass a given truth test:
+
+```php
+use Illuminate\Support\Arr;
+
+$array = [1, 2, 3];
+
+Arr::every($array, fn ($i) => $i > 0);
+
+// true
+
+Arr::every($array, fn ($i) => $i > 2);
+
+// false
 ```
 
 <a name="method-array-except"></a>
@@ -1060,6 +1082,21 @@ $array = ['Desk', 'Table', 'Chair'];
 $value = Arr::sole($array, fn (string $value) => $value === 'Desk');
 
 // 'Desk'
+```
+
+<a name="method-array-some"></a>
+#### `Arr::some()` {.collection-method}
+
+The `Arr::some` method ensures that at least one of the values in the array passes a given truth test:
+
+```php
+use Illuminate\Support\Arr;
+
+$array = [1, 2, 3];
+
+Arr::some($array, fn ($i) => $i > 2);
+
+// true
 ```
 
 <a name="method-array-sort"></a>
@@ -2098,6 +2135,28 @@ The `secure_url` function generates a fully qualified HTTPS URL to the given pat
 $url = secure_url('user/profile');
 
 $url = secure_url('user/profile', [1]);
+```
+
+<a name="method-to-action"></a>
+#### `to_action()` {.collection-method}
+
+The `to_action` function generates a [redirect HTTP response](/docs/{{version}}/responses#redirects) for a given controller action:
+
+```php
+use App\Http\Controllers\UserController;
+
+return to_action([UserController::class, 'show'], ['user' => 1]);
+```
+
+If necessary, you may pass the HTTP status code that should be assigned to the redirect and any additional response headers as the third and fourth arguments to the `to_action` method:
+
+```php
+return to_action(
+    [UserController::class, 'show'],
+    ['user' => 1],
+    302,
+    ['X-Framework' => 'Laravel']
+);
 ```
 
 <a name="method-to-route"></a>
@@ -3303,6 +3362,19 @@ Of course, as discussed previously, you are not limited to providing closures to
 
 ```php
 $user = Pipeline::send($user)
+    ->through([
+        GenerateProfilePhoto::class,
+        ActivateSubscription::class,
+        SendWelcomeEmail::class,
+    ])
+    ->thenReturn();
+```
+
+The `withinTransactions` method may be invoked on the pipeline to automatically invoke each step of the pipeline within a database transaction:
+
+```php
+$user = Pipeline::send($user)
+    ->withinTransactions()
     ->through([
         GenerateProfilePhoto::class,
         ActivateSubscription::class,
