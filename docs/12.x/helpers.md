@@ -3224,6 +3224,9 @@ By default, deferred functions will only be executed if the HTTP response, Artis
 defer(fn () => Metrics::reportOrder($order))->always();
 ```
 
+> [!WARNING]
+> If you have the **swoole** PHP extension installed, Laravel's `defer` function may conflict with Swoole's own global `defer` function, leading to web server errors. Make sure you call Laravel's `defer` helper by explicitly namespacing it: `use function Illuminate\Support\defer;`
+
 <a name="cancelling-deferred-functions"></a>
 #### Cancelling Deferred Functions
 
@@ -3370,11 +3373,11 @@ $user = Pipeline::send($user)
     ->thenReturn();
 ```
 
-The `withinTransactions` method may be invoked on the pipeline to automatically invoke each step of the pipeline within a database transaction:
+The `withinTransaction` method may be invoked on the pipeline to automatically wrap all steps of the pipeline within a single database transaction:
 
 ```php
 $user = Pipeline::send($user)
-    ->withinTransactions()
+    ->withinTransaction()
     ->through([
         GenerateProfilePhoto::class,
         ActivateSubscription::class,

@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a3d14a367e6dd4c268b21630f14a0d553c2c5df6",
-  "commit_date": "2025-08-05T13:49:31Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/a3d14a367e6dd4c268b21630f14a0d553c2c5df6",
-  "sync_time": "2025-08-06T01:28:28Z"
+  "commit_sha": "e239db7579b2ba3de3dd777fbbf5156dc865ce93",
+  "commit_date": "2025-08-06T20:19:05Z",
+  "commit_message": "Add custom Caddyfile configuration and HTTPS options for FrankenPHP in Octane docs (#10688)\n\n* Add custom Caddyfile configuration and HTTPS options for FrankenPHP in Octane docs\n\n* Update octane.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/e239db7579b2ba3de3dd777fbbf5156dc865ce93",
+  "sync_time": "2025-08-07T01:38:24Z"
 }
