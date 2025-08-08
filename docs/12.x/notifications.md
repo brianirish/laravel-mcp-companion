@@ -1668,6 +1668,9 @@ test('orders can be shipped', function () {
         [$user], AnotherNotification::class
     );
 
+    // Assert a notification was sent twice...
+    Notification::assertSentTimes(WeeklyReminder::class, 2);
+
     // Assert that a given number of notifications were sent...
     Notification::assertCount(3);
 });
@@ -1702,6 +1705,9 @@ class ExampleTest extends TestCase
         Notification::assertNotSentTo(
             [$user], AnotherNotification::class
         );
+
+        // Assert a notification was sent twice...
+        Notification::assertSentTimes(WeeklyReminder::class, 2);
 
         // Assert that a given number of notifications were sent...
         Notification::assertCount(3);

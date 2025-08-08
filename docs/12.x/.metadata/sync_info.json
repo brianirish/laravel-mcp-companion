@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e239db7579b2ba3de3dd777fbbf5156dc865ce93",
-  "commit_date": "2025-08-06T20:19:05Z",
-  "commit_message": "Add custom Caddyfile configuration and HTTPS options for FrankenPHP in Octane docs (#10688)\n\n* Add custom Caddyfile configuration and HTTPS options for FrankenPHP in Octane docs\n\n* Update octane.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/e239db7579b2ba3de3dd777fbbf5156dc865ce93",
-  "sync_time": "2025-08-07T01:38:24Z"
+  "commit_sha": "5f01fbcdb444f11dfbbaa031e3be6ce4cf3188a6",
+  "commit_date": "2025-08-07T21:04:27Z",
+  "commit_message": "[12.x] Add missing assertSentTimes method (#10700)\n\n* Update mail.md\n\n* Update notifications.md",
+  "commit_url": "https://github.com/laravel/docs/commit/5f01fbcdb444f11dfbbaa031e3be6ce4cf3188a6",
+  "sync_time": "2025-08-08T01:28:27Z"
 }
