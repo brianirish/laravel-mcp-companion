@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5f01fbcdb444f11dfbbaa031e3be6ce4cf3188a6",
-  "commit_date": "2025-08-07T21:04:27Z",
-  "commit_message": "[12.x] Add missing assertSentTimes method (#10700)\n\n* Update mail.md\n\n* Update notifications.md",
-  "commit_url": "https://github.com/laravel/docs/commit/5f01fbcdb444f11dfbbaa031e3be6ce4cf3188a6",
-  "sync_time": "2025-08-08T01:28:27Z"
+  "commit_sha": "7ab01f3a1a1567e4fcd9760c2f440ce316921fc1",
+  "commit_date": "2025-08-08T20:00:15Z",
+  "commit_message": "Clarify ShouldBeUnique job lock behavior (#10710)",
+  "commit_url": "https://github.com/laravel/docs/commit/7ab01f3a1a1567e4fcd9760c2f440ce316921fc1",
+  "sync_time": "2025-08-09T01:21:39Z"
 }
