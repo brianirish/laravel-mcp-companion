@@ -22,7 +22,6 @@ You can find all the exceptions added by this package in the code here: https://
 **Laravel 10: app/Exceptions/Handler.php**
 
 ```php
-
 public function register()
 {
     $this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
@@ -32,12 +31,10 @@ public function register()
         ]);
     });
 }
-
 ```
 **Laravel 11: bootstrap/app.php**
 
 ```php
-
 ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->render(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
         return response()->json([
@@ -46,7 +43,6 @@ public function register()
         ]);
     });
 }
-
 ```
 Database Seeding
 

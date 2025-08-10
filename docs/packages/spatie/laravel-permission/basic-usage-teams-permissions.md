@@ -36,14 +36,12 @@ Teams permissions can be enabled in the permission config file:
 ```php
 // config/permission.php
 'teams' => true,
-
 ```
 Also, if you want to use a custom foreign key for teams you set it in the permission config file:
 
 ```php
 // config/permission.php
 'team_foreign_key' => 'custom_team_id',
-
 ```
 ##Working with Teams Permissions
 --------------------------------
@@ -74,7 +72,6 @@ class TeamsPermission
         return $next($request);
     }
 }
-
 ```
 **YOU MUST ALSO** set the `$middlewarePriority` array in `app/Http/Kernel.php` to include your custom middleware before the `SubstituteBindings` middleware, else you may get *404 Not Found* responses when a *403 Not Authorized* response might be expected.
 
@@ -104,7 +101,6 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 }
-
 ```
 ### ##Using LiveWire?
 
@@ -124,7 +120,6 @@ Role::create(['name' => 'reader', 'team_id' => 1]);
 
 // creating a role without team_id makes the role take the default global team_id
 Role::create(['name' => 'reviewer']);
-
 ```
 ##Roles/Permissions Assignment and Removal
 ------------------------------------------
@@ -165,7 +160,6 @@ $hasRole = $user->hasRole('my_role');
 $user->hasPermissionTo('foo');
 $user->can('bar');
 // etc
-
 ```
 ##Defining a Super-Admin on Teams
 ---------------------------------
@@ -198,7 +192,6 @@ class YourTeamModel extends \Illuminate\Database\Eloquent\Model
     }
     // ...
 }
-
 ```
 Enums
 

@@ -35,20 +35,17 @@ Here are some quick code examples:
 ```php
 $yourModel = YourModel::find(1);
 $yourModel->addMedia($pathToFile)->toMediaCollection('images');
-
 ```
 It can also directly handle your uploads:
 
 ```php
 $yourModel->addMediaFromRequest('image')->toMediaCollection('images');
-
 ```
 Want to store some large files on another filesystem? No problem:
 
 ```php
 $yourModel->addMedia($smallFile)->toMediaCollection('downloads', 'local');
 $yourModel->addMedia($bigFile)->toMediaCollection('downloads', 's3');
-
 ```
 The storage of the files is handled by Laravel's Filesystem, so you can plug in any compatible filesystem.
 
@@ -56,7 +53,6 @@ The package can also generate derived images such as thumbnails for images, vide
 
 ```php
 $yourModel->getMedia('images')->first()->getUrl('thumb');
-
 ```
 ##Are you a visual learner?
 ---------------------------

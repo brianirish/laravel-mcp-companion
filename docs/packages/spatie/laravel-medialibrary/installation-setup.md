@@ -25,7 +25,6 @@ If you only use the base package issue this command:
 
 ```php
 composer require "spatie/laravel-medialibrary"
-
 ```
 If you have a license for Media Library Pro, you should install `spatie/laravel-media-library-pro` instead. Please refer to our Media Library Pro installation instructions to continue.
 
@@ -36,13 +35,11 @@ You need to publish the migration to create the `media` table:
 
 ```php
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
-
 ```
 After that, you need to run migrations.
 
 ```php
 php artisan migrate
-
 ```
 ##Publishing the config file
 ----------------------------
@@ -51,7 +48,6 @@ Publishing the config file is optional:
 
 ```php
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
-
 ```
 This is the default content of the config file:
 
@@ -292,7 +288,6 @@ return [
      */
     'force_lazy_loading' => env('FORCE_MEDIA_LIBRARY_LAZY_LOADING', true),
 ];
-
 ```
 ##Adding a media disk
 ---------------------
@@ -312,7 +307,6 @@ By default, the media library will store its files on Laravel's `public` disk. I
             'throw' => false,
         ],
     ...
-
 ```
 Don't forget to `.gitignore` the directory of your configured disk, so the files won't end up in your git repo.
 
@@ -326,7 +320,6 @@ return [
 
     // ...
 ];
-
 ```
 Want to use S3? Then follow Laravel's instructions on how to add the S3 Flysystem driver. If possible, we recommend using a remote filesystem like S3 instead of your local filesystem to prevent security issues.
 
@@ -351,14 +344,12 @@ Here's how to install all the optimizers on Ubuntu:
 ```php
 sudo apt install jpegoptim optipng pngquant gifsicle libavif-bin
 npm install -g svgo
-
 ```
 If you don't want to install `npm` on your Ubuntu server, you can use `snap` which is installed by default:
 
 ```php
 sudo apt install jpegoptim optipng pngquant gifsicle libavif-bin
 sudo snap install svgo
-
 ```
 Here's how to install the binaries on MacOS (using Homebrew):
 
@@ -369,7 +360,6 @@ brew install pngquant
 brew install svgo
 brew install gifsicle
 brew install libavif
-
 ```
 ##Installing Media Library Pro
 ------------------------------

@@ -30,7 +30,6 @@ Route::group(['middleware' => ['can:publish articles']], function () { ... });
 
 // or with static method (requires Laravel 10.9+)
 Route::group(['middleware' => [\Illuminate\Auth\Middleware\Authorize::using('publish articles')]], function () { ... });
-
 ```
 ##Package Middleware
 --------------------
@@ -51,7 +50,6 @@ In Laravel 11 open `/bootstrap/app.php` and register them there:
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
     })
-
 ```
 In Laravel 9 and 10 you can add them in `app/Http/Kernel.php`:
 
@@ -65,7 +63,6 @@ protected $middlewareAliases = [
     'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
     'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
 ];
-
 ```
 ### ##Middleware Priority
 
@@ -90,7 +87,6 @@ Route::group(['middleware' => ['role:manager,api']], function () { ... });
 
 // multiple middleware
 Route::group(['middleware' => ['role:manager','permission:publish articles']], function () { ... });
-
 ```
 You can specify multiple roles or permissions with a `|` (pipe) character, which is treated as `OR`:
 
@@ -101,7 +97,6 @@ Route::group(['middleware' => ['role_or_permission:manager|edit articles']], fun
 
 // for a specific guard
 Route::group(['middleware' => ['permission:publish articles|edit articles,api']], function () { ... });
-
 ```
 ### ##Controllers
 
@@ -118,7 +113,6 @@ public static function middleware(): array
         new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('delete records,api'), only:['destroy']),
     ];
 }
-
 ```
 In Laravel 10 and older, you can register it in the constructor:
 
@@ -131,7 +125,6 @@ public function __construct()
     // or with specific guard
     $this->middleware(['role_or_permission:manager|edit articles,api']);
 }
-
 ```
 You can also use Laravel's Model Policy feature in your controller methods. See the Model Policies section of these docs.
 
@@ -144,7 +137,6 @@ All of the middleware can also be applied by calling the static `using` method, 
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleMiddleware::using('manager')]], function () { ... });
 Route::group(['middleware' => [\Spatie\Permission\Middleware\PermissionMiddleware::using('publish articles|edit articles')]], function () { ... });
 Route::group(['middleware' => [\Spatie\Permission\Middleware\RoleOrPermissionMiddleware::using(['manager', 'edit articles'])]], function () { ... });
-
 ```
 Artisan Commands
 
