@@ -25,7 +25,6 @@ You can clean up your backups by running:
 
 ```php
 php artisan backup:clean
-
 ```
 We'll tell you right off the bat that the package by default will never delete the latest backup regardless of its size or age.
 
@@ -84,7 +83,6 @@ This portion of the configuration determines which backups should be deleted.
             'delete_oldest_backups_when_using_more_megabytes_than' => 5000,
         ],
     ],
-
 ```
 This package provides an opinionated method to determine which old backups should be deleted. We call this the `DefaultStrategy`. This is how it works:
 
@@ -109,7 +107,6 @@ Extend the abstract class `Spatie\Backup\Tasks\Cleanup\CleanupStrategy`. You onl
 use Spatie\Backup\BackupDestination\BackupCollection;
 
 public function deleteOldBackups(BackupCollection $backupCollection)
-
 ```
 The `BackupCollection` class is extended from `Illuminate\Support\Collection` and contains `Spatie\Backup\BackupDestination\Backup` objects sorted by age. The latest backup is the first one in the collection.
 
@@ -121,7 +118,6 @@ $backup = $backups->oldestBackup();
 
 // Bye bye backup
 $backup->delete();
-
 ```
 Don't forget to specify the full classname of your custom strategy in the `cleanup.strategy` key of the `laravel-backup` config file.
 

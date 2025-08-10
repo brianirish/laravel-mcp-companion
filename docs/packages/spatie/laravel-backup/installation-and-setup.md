@@ -27,7 +27,6 @@ You can install this package via composer using:
 
 ```php
 composer require spatie/laravel-backup
-
 ```
 The package will automatically register its service provider.
 
@@ -35,13 +34,11 @@ To publish the config file to `config/backup.php` run:
 
 ```php
 php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider" --tag=backup-config
-
 ```
 You can also publish translation files using the command:
 
 ```php
 php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider" --tag=backup-translations
-
 ```
 This is the default contents of the configuration:
 
@@ -338,7 +335,6 @@ return [
     ],
 
 ];
-
 ```
 ##Configuring the backup disk
 -----------------------------
@@ -361,7 +357,6 @@ protected function schedule(Schedule $schedule)
    $schedule->command('backup:clean')->daily()->at('01:00');
    $schedule->command('backup:run')->daily()->at('01:30');
 }
-
 ```
 Or for Laravel 11 or higher you just add them to the console routes file.
 
@@ -372,7 +367,6 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:30');
-
 ```
 Of course, the times used in the code above are just examples. Adjust them to suit your own preferences. It is generally a good idea to avoid the timeslot between 02:00 and 03:00 at night in areas where daylight saving time changes occur, as this causes sometimes a double backup or (worse) no backup at all.
 
@@ -387,7 +381,6 @@ If a backup cannot be taken successfully, the `backup:run` command returns an ex
       ->onSuccess(function () {
          ...
       });
-
 ```
 ##Monitoring
 ------------
@@ -421,7 +414,6 @@ Here's an example for MySQL:
 		   'add_extra_option' => '--optionname=optionvalue', // for example '--column-statistics=0'
 		]
 	],
-
 ```
 ##SkipSsl in MySQL/MariaDB database connection
 ----------------------------------------------
@@ -442,7 +434,6 @@ Here's an example for MySQL:
 		   ...,
 		]
 	],
-
 ```
 ### ##Timestamp form of database dumps
 
@@ -456,7 +447,6 @@ For example, to save a database dump with a timestamp in the format of Y-m-d-H-i
     ...,
     'database_dump_file_timestamp_format' => 'Y-m-d-H-i-s',
   ],
-
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
 
@@ -472,7 +462,6 @@ For example, to save a database dump using the connection name in the filename:
     ...,
     'database_dump_filename_base' => 'connection',
   ],
-
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
 
@@ -488,7 +477,6 @@ For example, to save a database dump as a `.txt` file:
     ...,
     'database_dump_file_extension' => 'txt',
   ],
-
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
 
@@ -500,7 +488,6 @@ If you need to have a custom database dumper for a driver, you can use `DbDumpFa
 DbDumperFactory::extend('mysql', function() {
     return new YourCustomMysqlDumper();
 });
-
 ```
 ```php
 use Spatie\DbDumper\DbDumper;
@@ -509,7 +496,6 @@ class YourCustomMysqlDumper extends DbDumper
 {
 
 }
-
 ```
 High level overview
 

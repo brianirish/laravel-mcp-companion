@@ -26,34 +26,28 @@ You can create a role or permission from the console with artisan commands.
 
 ```php
 php artisan permission:create-role writer
-
 ```
 ```php
 php artisan permission:create-permission "edit articles"
-
 ```
 When creating permissions/roles for specific guards you can specify the guard names as a second argument:
 
 ```php
 php artisan permission:create-role writer web
-
 ```
 ```php
 php artisan permission:create-permission "edit articles" web
-
 ```
 When creating roles you can also create and link permissions at the same time:
 
 ```php
 php artisan permission:create-role writer web "create articles|edit articles"
-
 ```
 When creating roles with teams enabled you can set the team id by adding the `--team-id` parameter:
 
 ```php
 php artisan permission:create-role --team-id=1 writer
 php artisan permission:create-role writer api --team-id=1
-
 ```
 ##Displaying roles and permissions in the console
 -------------------------------------------------
@@ -62,7 +56,6 @@ There is also a `show` command to show a table of roles and permissions per guar
 
 ```php
 php artisan permission:show
-
 ```
 ##Resetting the Cache
 ---------------------
@@ -75,7 +68,6 @@ If you need to manually reset the cache for this package, you may use the follow
 
 ```php
 php artisan permission:cache-reset
-
 ```
 Again, it is more efficient to use the API provided by this package, instead of manually clearing the cache.
 

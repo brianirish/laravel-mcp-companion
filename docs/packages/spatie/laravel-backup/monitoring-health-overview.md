@@ -33,7 +33,6 @@ Once installed, making a backup of your files and databases is very easy. Just r
 
 ```php
 php artisan backup:run
-
 ```
 In addition to making the backup, the package can also clean up old backups, monitor the health of the backups, and show an overview of all backups.
 

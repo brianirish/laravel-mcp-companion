@@ -40,7 +40,6 @@ $role->syncPermissions(params);
 $permission->assignRole('writer');
 $permission->removeRole('writer');
 $permission->syncRoles(params);
-
 ```
 HOWEVER, if you manipulate permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application unless you manually reset the cache.
 
@@ -54,7 +53,6 @@ Examples:
 $user->assignRole('writer');
 $user->removeRole('writer');
 $user->syncRoles(params);
-
 ```
 ##Manual cache reset
 --------------------
@@ -63,13 +61,11 @@ To manually reset the cache for this package, you can run the following in your 
 
 ```php
 app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-
 ```
 Or you can use an Artisan command:
 
 ```php
 php artisan permission:cache-reset
-
 ```
 (This command is effectively an alias for `artisan cache:forget spatie.permission.cache` but respects the package config as well.)
 
@@ -105,7 +101,6 @@ Tip: Most parts of your multitenancy app will relate to a single tenant during a
 
 ```php
 app()->make(\Spatie\Permission\PermissionRegistrar::class)->initializeCache();
-
 ```
 ### ##Custom Cache Store
 

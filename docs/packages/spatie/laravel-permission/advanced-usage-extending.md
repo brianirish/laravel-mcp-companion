@@ -32,7 +32,6 @@ Here is an example of adding a 'description' field to your Permissions and Roles
 
 ```php
 php artisan make:migration add_description_to_permissions_tables
-
 ```
 And in the migration file:
 
@@ -46,7 +45,6 @@ public function up()
         $table->string('description')->nullable();
     });
 }
-
 ```
 Semi-Related article: Adding Extra Fields To Pivot Table (video)
 
@@ -84,7 +82,6 @@ eg: This could be useful, but only if you're willing to give up the child's inde
     {
         return 'users';
     }
-
 ```
 ##Extending Role and Permission Models
 --------------------------------------
@@ -114,7 +111,6 @@ class Role extends SpatieRole
 {
     // You might set a public property like guard_name or connection, or override other Eloquent Model methods/properties
 }
-
 ```
 ### ##Replacing
 

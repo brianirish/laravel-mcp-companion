@@ -29,7 +29,6 @@ class DownloadMediaController
       return $mediaItem;
    }
 }
-
 ```
 If you need more control you could also do the above more verbose:
 
@@ -43,7 +42,6 @@ class DownloadMediaController
        return response()->download($mediaItem->getPath(), $mediaItem->file_name);
    }
 }
-
 ```
 ##Are you a visual learner?
 ---------------------------

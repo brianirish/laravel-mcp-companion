@@ -28,7 +28,6 @@ This package lets you use Laravel's native `@can` directive to check if a user h
 @can('edit articles')
   //
 @endcan
-
 ```
 or
 
@@ -36,7 +35,6 @@ or
 @if(auth()->user()->can('edit articles') && $some_other_condition)
   //
 @endif
-
 ```
 You can use `@can`, `@cannot`, `@canany`, and `@guest` to test for permission-related access.
 
@@ -48,7 +46,6 @@ Example:
 @can('edit articles', 'guard_name')
   //
 @endcan
-
 ```
 You can also use `@haspermission('permission-name')` or `@haspermission('permission-name', 'guard_name')` in similar fashion. With corresponding `@endhaspermission`.
 
@@ -76,7 +73,6 @@ Check for a specific role:
 @else
     I am not a writer...
 @endrole
-
 ```
 is the same as
 
@@ -86,7 +82,6 @@ is the same as
 @else
     I am not a writer...
 @endhasrole
-
 ```
 which is also the same as
 
@@ -94,7 +89,6 @@ which is also the same as
 @if(auth()->user()->hasRole('writer'))
   //
 @endif
-
 ```
 Check for any role in a list:
 
@@ -110,7 +104,6 @@ Check for any role in a list:
 @else
     I have none of these roles...
 @endhasanyrole
-
 ```
 Check for all roles:
 
@@ -126,7 +119,6 @@ Check for all roles:
 @else
     I do not have all of these roles...
 @endhasallroles
-
 ```
 Alternatively, `@unlessrole` gives the reverse for checking a singular role, like this:
 
@@ -136,7 +128,6 @@ Alternatively, `@unlessrole` gives the reverse for checking a singular role, lik
 @else
     I do have the role
 @endunlessrole
-
 ```
 You can also determine if a user has exactly all of a given list of roles:
 
@@ -146,7 +137,6 @@ You can also determine if a user has exactly all of a given list of roles:
 @else
     I do not have all of these roles or have more other roles...
 @endhasexactroles
-
 ```
 Wildcard permissions
 

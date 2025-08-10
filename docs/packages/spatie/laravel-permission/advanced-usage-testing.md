@@ -36,7 +36,6 @@ In your tests simply add a `setUp()` instruction to re-register the permissions,
         // now de-register all the roles and permissions by clearing the permission cache
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
-
 ```
 ##Clear Cache When Using Seeders
 --------------------------------
@@ -48,7 +47,6 @@ Event::listen(DatabaseRefreshed::class, function () {
     $this->artisan('db:seed', ['--class' => RoleAndPermissionSeeder::class]);
     $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 });
-
 ```
 Note that `PermissionRegistrar::forgetCachedPermissions()` is called AFTER seeding. This is to prevent a caching issue that can occur when the database is set up after permissions have already been registered and cached.
 

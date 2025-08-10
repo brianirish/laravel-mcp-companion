@@ -61,13 +61,11 @@ class YourModel extends Model implements HasMedia
               ->sharpen(10);
     }
 }
-
 ```
 Let's add an image to the media library.
 
 ```php
 $media = YourModel::first()->addMedia($pathToImage)->toMediaCollection();
-
 ```
 Besides storing the original item, the media library also has created a derived image.
 
@@ -77,7 +75,6 @@ $media->getPath('thumb'); // the path to the converted image with dimensions 368
 
 $media->getUrl();  // the url to the where the original image is stored
 $media->getUrl('thumb'); // the url to the converted image with dimensions 368x232
-
 ```
 ##Using multiple conversions
 ----------------------------
@@ -105,14 +102,12 @@ use Spatie\Image\Enums\CropPosition;
         $this->addMediaConversion('thumb-cropped')
             ->crop(400, 400, CropPosition::Center); // Trim or crop the image to the center for specified width and height.
     }
-
 ```
 Use the conversions like this:
 
 ```php
 $media->getUrl('thumb') // the url to the thumbnail
 $media->getUrl('old-picture') // the url to the sepia, bordered version
-
 ```
 ##Performing conversions on specific collections
 ------------------------------------------------
@@ -130,7 +125,6 @@ public function registerMediaConversions(?Media $media = null): void
           ->width(368)
           ->height(232);
 }
-
 ```
 ```php
 // a thumbnail will be generated for this media item
@@ -140,7 +134,6 @@ $media->getUrl('thumb') // the url to the thumbnail
 //but not for this one
 $media = $yourModel->addMedia($pathToImage)->toMediaCollection('other collection');
 $media->getUrl('thumb') // returns ''
-
 ```
 ##Using a specific disk
 -----------------------
@@ -155,7 +148,6 @@ public function registerMediaCollections(): void
         ->useDisk('s3')
         ->storeConversionsOnDisk('public');
 }
-
 ```
 ##Queuing conversions
 ---------------------
@@ -171,7 +163,6 @@ public function registerMediaConversions(?Media $media = null): void
             ->height(232)
             ->nonQueued();
 }
-
 ```
 If you have set `queue_conversions_by_default` in the `media-library` config file to `false`, all conversions will all be generated synchronously. If you want to generate a conversion on a queue, while `queue_conversions_by_default` is set to `false`, use the `queued` method.
 
@@ -184,7 +175,6 @@ public function registerMediaConversions(?Media $media = null): void
             ->height(232)
             ->queued();
 }
-
 ```
 The default behaviour is that queued conversions will run **after all database transactions have been committed**.
 This prevents unexpected behaviour where the model does not yet exist in the database and the conversion is disregarded.
@@ -207,7 +197,6 @@ public function registerMediaConversions(?Media $media = null): void
           ->width($this->width)
           ->height($this->height);
 }
-
 ```
 Be aware that this can lead to a hit in performance. When processing media the media library has to perform queries to fetch each separate model.
 

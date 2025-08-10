@@ -31,7 +31,6 @@ And if you use the `WithoutModelEvents` trait in your seeders, flush it **AFTER 
 ```php
 // reset cached roles and permissions
 app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
 ```
 You can optionally flush the cache before seeding by using the `SetUp()` method of your test suite (see the Testing page in the docs).
 
@@ -82,7 +81,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $role->givePermissionTo(Permission::all());
     }
 }
-
 ```
 ##User Seeding with Factories and States
 ----------------------------------------
@@ -106,7 +104,6 @@ To use Factory States to assign roles after creating users:
 // Seeder:
 // To create 4 users using this 'active' state in a Seeder:
 User::factory(4)->active()->create();
-
 ```
 To seed multiple users and then assign each of them a role, WITHOUT using Factory States:
 
@@ -118,7 +115,6 @@ User::factory()
     ->each(function ($user) {
         $user->assignRole('Member');
     });
-
 ```
 ##Speeding up seeding for large data sets
 -----------------------------------------
@@ -132,7 +128,6 @@ When seeding large quantities of roles or permissions you may consider using Elo
     });
 
     Permission::insert($permissions->toArray());
-
 ```
 Alternatively you could use `DB::insert`, as long as you also provide all the required data fields. One example of this is shown below ... but note that this example hard-codes the table names and field names, thus does not respect any customizations you may have in your permissions config file.
 
@@ -166,7 +161,6 @@ foreach ($permissionIdsByRole as $role => $permissionIds) {
 }
 
 // and also add the command to flush the cache again now after doing all these inserts
-
 ```
 **CAUTION**: ANY TIME YOU DIRECTLY RUN DB QUERIES you are bypassing cache-control features. So you will need to manually flush the package cache AFTER running direct DB queries, even in a seeder.
 

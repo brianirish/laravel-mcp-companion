@@ -35,7 +35,6 @@ $user->givePermissionTo('edit articles');
 $user->assignRole('writer');
 
 $role->givePermissionTo('edit articles');
-
 ```
 If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the using multiple guards section.
 
@@ -43,7 +42,6 @@ Because all permissions will be registered on Laravel's gate, you can check if a
 
 ```php
 $user->can('edit articles');
-
 ```
 and Blade directives:
 
@@ -51,7 +49,6 @@ and Blade directives:
 @can('edit articles')
 ...
 @endcan
-
 ```
 About us
 

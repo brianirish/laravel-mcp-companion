@@ -31,14 +31,12 @@ See the "Prerequisites" documentation page for compatibility details.
 
    ```php
     composer require spatie/laravel-permission
-
    ```
 4. The Service Provider will automatically be registered; however, if you wish to manually register it, you can manually add the `Spatie\Permission\PermissionServiceProvider::class` service provider to the array in `bootstrap/providers.php` (`config/app.php` in Laravel 10 or older).
 5. **You should publish** the migration and the `config/permission.php` config file with:
 
    ```php
    php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-
    ```
 6. BEFORE RUNNING MIGRATIONS
 
@@ -55,20 +53,17 @@ See the "Prerequisites" documentation page for compatibility details.
     php artisan optimize:clear
     # or
     php artisan config:clear
-
    ```
 8. **Run the migrations**: After the config and migration have been published and configured, you can create the tables for this package by running:
 
    ```php
     php artisan migrate
-
    ```
 9. **Add the necessary trait to your User model**:
 
    ```php
     // The User model requires this trait
     use HasRoles;
-
    ```
 10. Consult the **Basic Usage** section of the docs to get started using the features of this package.
 

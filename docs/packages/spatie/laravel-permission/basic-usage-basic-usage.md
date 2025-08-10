@@ -41,7 +41,6 @@ class User extends Authenticatable
 
     // ...
 }
-
 ```
 ##Create A Permission
 ---------------------
@@ -55,7 +54,6 @@ use Spatie\Permission\Models\Permission;
 
 $role = Role::create(['name' => 'writer']);
 $permission = Permission::create(['name' => 'edit articles']);
-
 ```
 ##Assign A Permission To A Role
 -------------------------------
@@ -65,7 +63,6 @@ A permission can be assigned to a role using either of these methods:
 ```php
 $role->givePermissionTo($permission);
 $permission->assignRole($role);
-
 ```
 ##Sync Permissions To A Role
 ----------------------------
@@ -75,7 +72,6 @@ Multiple permissions can be synced to a role using either of these methods:
 ```php
 $role->syncPermissions($permissions);
 $permission->syncRoles($roles);
-
 ```
 ##Remove Permission From A Role
 -------------------------------
@@ -85,7 +81,6 @@ A permission can be removed from a role using either of these methods:
 ```php
 $role->revokePermissionTo($permission);
 $permission->removeRole($role);
-
 ```
 ##Guard Name
 ------------
@@ -109,7 +104,6 @@ $permissions = $user->getAllPermissions();
 
 // get the names of the user's roles
 $roles = $user->getRoleNames(); // Returns a collection
-
 ```
 ##Scopes
 --------
@@ -119,7 +113,6 @@ The `HasRoles` trait also adds `role` and `withoutRole` scopes to your models to
 ```php
 $users = User::role('writer')->get(); // Returns only users with the role 'writer'
 $nonEditors = User::withoutRole('editor')->get(); // Returns only users without the role 'editor'
-
 ```
 The `role` and `withoutRole` scopes can accept a string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
 
@@ -128,7 +121,6 @@ The same trait also adds scopes to only get users that have or don't have a cert
 ```php
 $users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles' (inherited or directly)
 $usersWhoCannotEditArticles = User::withoutPermission('edit articles')->get(); // Returns all users without the permission 'edit articles' (inherited or directly)
-
 ```
 The scope can accept a string, a `\Spatie\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
 
@@ -143,7 +135,6 @@ $allUsersWithAllTheirDirectPermissions = User::with('permissions')->get();
 $allRolesInDatabase = Role::all()->pluck('name');
 $usersWithoutAnyRoles = User::doesntHave('roles')->get();
 $allRolesExceptAandB = Role::whereNotIn('name', ['role A', 'role B'])->get();
-
 ```
 ##Counting Users Having A Role
 ------------------------------
@@ -154,7 +145,6 @@ One way to count all users who have a certain role is by filtering the collectio
 $managersCount = User::with('roles')->get()->filter(
     fn ($user) => $user->roles->where('name', 'Manager')->toArray()
 )->count();
-
 ```
 About us
 

@@ -42,7 +42,6 @@ If your app structure does NOT differentiate between guards when it comes to rol
 ```php
     protected string $guard_name = 'web';
     protected function getDefaultGuardName(): string { return $this->guard_name; }
-
 ```
 ##Using permissions and roles with multiple guards
 --------------------------------------------------
@@ -58,13 +57,11 @@ $permission = Permission::create(['guard_name' => 'admin', 'name' => 'publish ar
 
 // Define a *different* `publish articles` permission for the regular users belonging to the web guard
 $permission = Permission::create(['guard_name' => 'web', 'name' => 'publish articles']);
-
 ```
 To check if a user has permission for a specific guard:
 
 ```php
 $user->hasPermissionTo('publish articles', 'admin');
-
 ```
 > **Note**: When determining whether a role/permission is valid on a given model, it checks against the first matching guard in this order (it does NOT check role/permission for EACH possibility, just the first match):
 
@@ -82,13 +79,11 @@ If your User is able to consume multiple roles or permissions from different gua
 
 ```php
     protected $guard_name = ['web', 'admin'];
-
 ```
 or
 
 ```php
     public function guardName() { return ['web', 'admin']; }
-
 ```
 ##Using blade directives with multiple guards
 ---------------------------------------------
@@ -101,7 +96,6 @@ You can use all of the blade directives offered by this package by passing in th
 @else
     I am not a super-admin...
 @endrole
-
 ```
 Defining a Super-Admin
 
