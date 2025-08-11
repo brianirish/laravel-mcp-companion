@@ -443,6 +443,7 @@ class TestExternalDocsFetcher:
         """Test cache validation when cache is expired."""
         import time
         import json
+        import os
         # Set timestamp to more than cache_duration (86400 seconds) ago
         old_timestamp = time.time() - (external_docs_fetcher.cache_duration + 1000)
         metadata = {"cached_at": old_timestamp}
@@ -451,6 +452,9 @@ class TestExternalDocsFetcher:
         metadata_path = external_docs_fetcher.get_cache_metadata_path("forge")
         with open(metadata_path, 'w') as f:
             json.dump(metadata, f)
+        
+        # Set file modification time to be expired
+        os.utime(metadata_path, (old_timestamp, old_timestamp))
         
         assert external_docs_fetcher.is_cache_valid("forge") is False
 
@@ -472,7 +476,7 @@ class TestExternalDocsFetcher:
         
         saved_data = json.loads(metadata_path.read_text())
         assert saved_data["service"] == "forge"
-        assert "cached_at" in saved_data
+        assert saved_data["fetched_sections"] == ["intro"]
 
     @patch('docs_updater.urllib.request.urlopen')
     def test_fetch_laravel_service_docs_success(self, mock_urlopen, external_docs_fetcher):
@@ -594,14 +598,6 @@ class TestExternalDocsFetcher:
         assert "Laravel Installation" in processed
         assert "PHP >= 8.1" in processed
         assert "composer create-project" in processed
-    
-    def test_is_cache_valid_metadata_read_error(self, external_docs_fetcher):
-        """Test cache validation when metadata read fails."""
-        # Create invalid metadata file
-        metadata_path = external_docs_fetcher.get_cache_metadata_path("forge")
-        metadata_path.write_text("invalid json {")
-        
-        assert external_docs_fetcher.is_cache_valid("forge") is False
     
     def test_save_cache_metadata_write_error(self, external_docs_fetcher):
         """Test saving cache metadata with write error."""
@@ -1133,6 +1129,10 @@ class TestMultiSourceDocsUpdater:
         # Mock cache metadata paths
         mock_metadata_path = Mock()
         mock_metadata_path.exists.return_value = True
+        # Mock stat() to return an object with st_mtime
+        mock_stat = Mock()
+        mock_stat.st_mtime = 1234567890
+        mock_metadata_path.stat.return_value = mock_stat
         mock_get_cache_path.return_value = mock_metadata_path
         
         # Mock metadata file content

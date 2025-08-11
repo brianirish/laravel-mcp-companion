@@ -75,6 +75,7 @@ class TestCommunityPackageFetcher:
     def test_is_cache_valid_expired(self, fetcher, temp_dir):
         """Test cache validation with expired cache."""
         import time
+        import os
         
         # Create expired metadata
         metadata_path = fetcher.get_cache_metadata_path("livewire")
@@ -86,6 +87,10 @@ class TestCommunityPackageFetcher:
         
         with open(metadata_path, 'w') as f:
             json.dump(metadata, f)
+        
+        # Set file modification time to be expired
+        old_time = time.time() - 86401  # 1 second past expiration
+        os.utime(metadata_path, (old_time, old_time))
         
         assert not fetcher.is_cache_valid("livewire")
     
