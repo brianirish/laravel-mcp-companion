@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "7ab01f3a1a1567e4fcd9760c2f440ce316921fc1",
-  "commit_date": "2025-08-08T20:00:15Z",
-  "commit_message": "Clarify ShouldBeUnique job lock behavior (#10710)",
-  "commit_url": "https://github.com/laravel/docs/commit/7ab01f3a1a1567e4fcd9760c2f440ce316921fc1",
-  "sync_time": "2025-08-09T01:21:39Z"
+  "commit_sha": "4333a440d1781e6ee37a2c5586cbd48d2cd6ccc5",
+  "commit_date": "2025-08-11T00:07:10Z",
+  "commit_message": "Add proper links (#10711)",
+  "commit_url": "https://github.com/laravel/docs/commit/4333a440d1781e6ee37a2c5586cbd48d2cd6ccc5",
+  "sync_time": "2025-08-11T01:38:55Z"
 }

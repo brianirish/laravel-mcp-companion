@@ -112,7 +112,8 @@ In order to use the `redis` queue driver, you should configure a Redis database 
 > [!WARNING]
 > The `serializer` and `compression` Redis options are not supported by the `redis` queue driver.
 
-**Redis Cluster**
+<a name="redis-cluster"></a>
+##### Redis Cluster
 
 If your Redis queue connection uses a [Redis Cluster](https://redis.io/docs/latest/operate/rs/databases/durability-ha/clustering), your queue names must contain a [key hash tag](https://redis.io/docs/latest/develop/using-commands/keyspace/#hashtags). This is required in order to ensure all of the Redis keys for a given queue are placed into the same hash slot:
 
@@ -127,7 +128,8 @@ If your Redis queue connection uses a [Redis Cluster](https://redis.io/docs/late
 ],
 ```
 
-**Blocking**
+<a name="blocking"></a>
+##### Blocking
 
 When using the Redis queue, you may use the `block_for` configuration option to specify how long the driver should wait for a job to become available before iterating through the worker loop and re-polling the Redis database.
 
@@ -731,7 +733,7 @@ public function middleware(): array
 }
 ```
 
-Internally, this middleware uses Laravel's cache system to implement rate limiting, and the job's class name is utilized as the cache "key". You may override this key by calling the `by` method when attaching the middleware to your job. This may be useful if you have multiple jobs interacting with the same third-party service and you would like them to share a common throttling "bucket":
+Internally, this middleware uses Laravel's cache system to implement rate limiting, and the job's class name is utilized as the cache "key". You may override this key by calling the `by` method when attaching the middleware to your job. This may be useful if you have multiple jobs interacting with the same third-party service and you would like them to share a common throttling "bucket" ensuring they respect a single shared limit:
 
 ```php
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
@@ -883,7 +885,7 @@ ProcessPodcast::dispatchIf($accountActive, $podcast);
 ProcessPodcast::dispatchUnless($accountSuspended, $podcast);
 ```
 
-In new Laravel applications, the `sync` driver is the default queue driver. This driver executes jobs synchronously in the foreground of the current request, which is often convenient during local development. If you would like to actually begin queueing jobs for background processing, you may specify a different queue driver within your application's `config/queue.php` configuration file.
+In new Laravel applications, the `database` driver is the default queue driver. You may specify a different queue driver within your application's `config/queue.php` configuration file.
 
 <a name="delayed-dispatching"></a>
 ### Delayed Dispatching
@@ -1025,7 +1027,7 @@ ProcessPodcast::dispatch($podcast)->beforeCommit();
 <a name="job-chaining"></a>
 ### Job Chaining
 
-Job chaining allows you to specify a list of queued jobs that should be run in sequence after the primary job has executed successfully. If one job in the sequence fails, the rest of the jobs will not be run. To execute a queued job chain, you may use the `chain` method provided by the `Bus` facade. Laravel's command bus is a lower level component that queued job dispatching is built on top of:
+Job chaining allows you to specify a list of queued jobs that should be run in sequence after the primary job has executed successfully. If one job in the sequence fails, the rest of the jobs will not be run. To execute a queued job chain, you may use the `chain` method provided by the `Bus` facade. Laravel's command bus is a lower-level component that queued job dispatching is built on top of:
 
 ```php
 use App\Jobs\OptimizePodcast;
@@ -1313,10 +1315,14 @@ Sometimes you may wish to specify that a job may be attempted many times, but sh
 
 namespace App\Jobs;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Redis;
 
 class ProcessPodcast implements ShouldQueue
 {
+    use Queueable;
+
     /**
      * The number of times the job may be attempted.
      *
@@ -1379,7 +1385,7 @@ class ProcessPodcast implements ShouldQueue
 }
 ```
 
-Sometimes, IO blocking processes such as sockets or outgoing HTTP connections may not respect your specified timeout. Therefore, when using these features, you should always attempt to specify a timeout using their APIs as well. For example, when using Guzzle, you should always specify a connection and request timeout value.
+Sometimes, IO blocking processes such as sockets or outgoing HTTP connections may not respect your specified timeout. Therefore, when using these features, you should always attempt to specify a timeout using their APIs as well. For example, when using [Guzzle](https://docs.guzzlephp.org), you should always specify a connection and request timeout value.
 
 > [!WARNING]
 > The [PCNTL](https://www.php.net/manual/en/book.pcntl.php) PHP extension must be installed in order to specify job timeouts. In addition, a job's "timeout" value should always be less than its ["retry after"](#job-expiration) value. Otherwise, the job may be re-attempted before it has actually finished executing or timed out.
@@ -1470,13 +1476,12 @@ use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\FailOnException;
 use Illuminate\Support\Facades\Http;
 
 class SyncChatHistory implements ShouldQueue
 {
-    use InteractsWithQueue;
+    use Queueable;
 
     public $tries = 3;
 
@@ -1598,7 +1603,7 @@ The batch's ID, which may be accessed via the `$batch->id` property, may be used
 <a name="naming-batches"></a>
 #### Naming Batches
 
-Some tools such as Laravel Horizon and Laravel Telescope may provide more user-friendly debug information for batches if batches are named. To assign an arbitrary name to a batch, you may call the `name` method while defining the batch:
+Some tools such as [Laravel Horizon](/docs/{{version}}/horizon) and [Laravel Telescope](/docs/{{version}}/telescope) may provide more user-friendly debug information for batches if batches are named. To assign an arbitrary name to a batch, you may call the `name` method while defining the batch:
 
 ```php
 $batch = Bus::batch([
