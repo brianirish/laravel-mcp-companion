@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "4333a440d1781e6ee37a2c5586cbd48d2cd6ccc5",
-  "commit_date": "2025-08-11T00:07:10Z",
-  "commit_message": "Add proper links (#10711)",
-  "commit_url": "https://github.com/laravel/docs/commit/4333a440d1781e6ee37a2c5586cbd48d2cd6ccc5",
-  "sync_time": "2025-08-11T01:38:55Z"
+  "commit_sha": "2dc867e406e5a429556de850435213ae44d9d6c4",
+  "commit_date": "2025-08-11T14:52:30Z",
+  "commit_message": "Align example method order with second example (#10725)",
+  "commit_url": "https://github.com/laravel/docs/commit/2dc867e406e5a429556de850435213ae44d9d6c4",
+  "sync_time": "2025-08-12T01:20:46Z"
 }
