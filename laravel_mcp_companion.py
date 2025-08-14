@@ -646,11 +646,12 @@ def update_documentation(docs_path: Path, version: str, force: bool = False) -> 
         logger.error(f"Failed to update documentation: {str(e)}")
         return False
 
-def get_version_from_path(path: str) -> tuple[str, str]:
+def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> tuple[str, str]:
     """Extract version and relative path from a documentation path.
     
     Args:
         path: Path like "12.x/blade.md" or "blade.md"
+        runtime_version: Runtime default version (from --version flag)
         
     Returns:
         (version, relative_path): Tuple of version and path within that version
@@ -663,8 +664,9 @@ def get_version_from_path(path: str) -> tuple[str, str]:
         relative_path = str(Path(*path_parts[1:]))
         return version, relative_path
     
-    # Default to latest version if no version specified
-    return DEFAULT_VERSION, path
+    # Default to runtime version or latest version if no version specified
+    default_version = runtime_version if runtime_version else DEFAULT_VERSION
+    return default_version, path
 
 def get_laravel_docs_metadata(docs_path: Path, version: Optional[str] = None) -> Dict:
     """Get documentation metadata if available."""
@@ -1047,13 +1049,13 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
-def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
     
     Args:
         server_name: Name for the MCP server
         docs_path: Path to documentation directory
-        version: Laravel version
+        runtime_version: Runtime default Laravel version (from --version flag)
         
     Returns:
         Configured FastMCP server instance
@@ -1062,14 +1064,14 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
     global _server_config
     _server_config = {
         'docs_path': docs_path,
-        'version': version
+        'version': runtime_version
     }
     
     # Create the MCP server
     mcp: FastMCP = FastMCP(server_name)
     
     # Initialize multi-source documentation updater
-    multi_updater = MultiSourceDocsUpdater(docs_path, version)
+    multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
     
     # Define resource handler functions
     def read_laravel_doc(path: str) -> str:
@@ -1077,8 +1079,8 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
         config = _server_config
         logger.debug(f"read_laravel_doc function called with path: {path}")
         
-        # Extract version and relative path
-        version_inner, relative_path = get_version_from_path(path)
+        # Extract version and relative path, using runtime version as default
+        version_inner, relative_path = get_version_from_path(path, config.get('version'))
         
         # Make sure the path ends with .md
         if not relative_path.endswith('.md'):
@@ -1157,7 +1159,7 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
     
     
     # Configure all tools
-    configure_mcp_server(mcp, docs_path, version, multi_updater)
+    configure_mcp_server(mcp, docs_path, runtime_version, multi_updater)
     
     return mcp
 
@@ -1165,13 +1167,13 @@ def create_mcp_server(server_name: str, docs_path: Path, version: str) -> FastMC
 _server_config: Dict[str, Any] = {}
 
 
-def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_updater: MultiSourceDocsUpdater) -> None:
+def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, multi_updater: MultiSourceDocsUpdater) -> None:
     """Configure the MCP server with all tools and resources.
     
     Args:
         mcp: FastMCP server instance
         docs_path: Path to documentation directory
-        version: Laravel version
+        runtime_version: Runtime default Laravel version (from --version flag)
         multi_updater: Multi-source documentation updater instance
     """
     # Register documentation tools
@@ -1182,7 +1184,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         Args:
             version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
         """
-        return list_laravel_docs_impl(docs_path, version)
+        return list_laravel_docs_impl(docs_path, version, runtime_version=runtime_version)
     
     
     @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_docs"])
@@ -1195,7 +1197,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
             include_external: Whether to include external Laravel services documentation in search
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir)
+        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version)
     
     @mcp.tool(description=TOOL_DESCRIPTIONS["update_laravel_docs"])
     def update_laravel_docs(version_param: Optional[str] = None, force: bool = False) -> str:
@@ -1209,7 +1211,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         logger.debug(f"update_laravel_docs function called (version: {version_param}, force: {force})")
         
         # Use provided version or default to the one specified at startup
-        doc_version = version_param or version
+        doc_version = version_param or runtime_version
         
         try:
             updater = DocsUpdater(docs_path, doc_version)
@@ -1440,7 +1442,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         Returns:
             Full markdown content of the documentation file
         """
-        return read_laravel_doc_content_impl(docs_path, filename, version)
+        return read_laravel_doc_content_impl(docs_path, filename, version, runtime_version=runtime_version)
 
     @mcp.tool(description="Search Laravel docs with context snippets")
     def search_laravel_docs_with_context(
@@ -1462,7 +1464,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
             Search results with context snippets
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir)
+        return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir, runtime_version=runtime_version)
 
     @mcp.tool(description="Get the structure and sections of a documentation file")
     def get_doc_structure(filename: str, version: Optional[str] = None) -> str:
@@ -1476,7 +1478,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         Returns:
             Structured outline of the document
         """
-        return get_doc_structure_impl(docs_path, filename, version)
+        return get_doc_structure_impl(docs_path, filename, version, runtime_version=runtime_version)
 
     @mcp.tool(description="Browse Laravel documentation by category")
     def browse_docs_by_category(category: str, version: Optional[str] = None) -> str:
@@ -1490,7 +1492,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, version: str, multi_upda
         Returns:
             List of relevant documentation files
         """
-        return browse_docs_by_category_impl(docs_path, category, version)
+        return browse_docs_by_category_impl(docs_path, category, version, runtime_version=runtime_version)
     
     # Register external documentation tools
     @mcp.tool(description=TOOL_DESCRIPTIONS["update_external_laravel_docs"])

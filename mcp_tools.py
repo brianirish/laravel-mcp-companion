@@ -55,16 +55,25 @@ def get_file_content_cached(file_path: str) -> str:
         return f"Error reading file: {str(e)}"
 
 
-def get_version_from_path(path: str) -> tuple[str, str]:
-    """Extract version and relative path from a path string."""
+def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> tuple[str, str]:
+    """Extract version and relative path from a path string.
+    
+    Args:
+        path: Path like "12.x/blade.md" or "blade.md"
+        runtime_version: Runtime default version (from --version flag)
+    
+    Returns:
+        (version, relative_path): Tuple of version and path within that version
+    """
     parts = path.split('/', 1)
     
     if len(parts) == 2 and parts[0] in SUPPORTED_VERSIONS:
         # Path includes version
         return parts[0], parts[1]
     else:
-        # No version specified, use default
-        return DEFAULT_VERSION, path
+        # No version specified, use runtime version or default
+        default_version = runtime_version if runtime_version else DEFAULT_VERSION
+        return default_version, path
 
 
 def is_safe_path(base_path: Path, target_path: Path) -> bool:
@@ -99,7 +108,7 @@ def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
     return {}
 
 
-def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None) -> str:
+def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """List all available Laravel documentation files.
     
     Args:
@@ -165,7 +174,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None) -> st
         return f"Error listing documentation files: {str(e)}"
 
 
-def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optional[str] = None) -> str:
+def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Read the content of a specific Laravel documentation file.
     
     Args:
@@ -173,18 +182,18 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         filename: Name of the documentation file (e.g., "blade.md" or "12.x/blade.md")
         version: Specific Laravel version to use. Overridden if filename includes version.
     """
-    logger.debug(f"read_laravel_doc_content_impl called with filename: {filename}, version: {version}")
+    logger.debug(f"read_laravel_doc_content_impl called with filename: {filename}, version: {version}, runtime_version: {runtime_version}")
     
     # Extract version and relative path
     if '/' in filename and filename.split('/')[0] in SUPPORTED_VERSIONS:
         # Filename includes version
-        version_from_path, relative_path = get_version_from_path(filename)
+        version_from_path, relative_path = get_version_from_path(filename, runtime_version)
         version = version_from_path
     else:
-        # Use provided version or default
+        # Use provided version or runtime version or default
         relative_path = filename
         if not version:
-            version = DEFAULT_VERSION
+            version = runtime_version if runtime_version else DEFAULT_VERSION
     
     # Make sure the path ends with .md
     if not relative_path.endswith('.md'):
@@ -212,7 +221,7 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
-def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None) -> str:
+def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None) -> str:
     """Search through Laravel documentation for a specific term.
     
     Args:
@@ -319,7 +328,7 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
 def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None, 
                                          context_length: int = 200, include_external: bool = True,
-                                         external_dir: Optional[Path] = None) -> str:
+                                         external_dir: Optional[Path] = None, runtime_version: Optional[str] = None) -> str:
     """Search Laravel documentation and return matches with surrounding context.
     
     Args:
@@ -419,7 +428,7 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
         return f"Error searching documentation: {str(e)}"
 
 
-def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None) -> str:
+def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Get the structure (headings) of a documentation file.
     
     Args:
@@ -460,7 +469,7 @@ def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str
         return f"Error analyzing document structure: {str(e)}"
 
 
-def browse_docs_by_category_impl(docs_path: Path, category: str, version: Optional[str] = None) -> str:
+def browse_docs_by_category_impl(docs_path: Path, category: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Browse Laravel documentation files by category.
     
     Args:
@@ -468,10 +477,10 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
         category: Category to filter by (e.g., "authentication", "database", "frontend")
         version: Specific Laravel version to browse. If not provided, uses default version.
     """
-    logger.debug(f"browse_docs_by_category_impl called with category: {category}")
+    logger.debug(f"browse_docs_by_category_impl called with category: {category}, version: {version}, runtime_version: {runtime_version}")
     
     if not version:
-        version = DEFAULT_VERSION
+        version = runtime_version if runtime_version else DEFAULT_VERSION
     
     # Define category mappings
     categories = {

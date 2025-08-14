@@ -110,12 +110,6 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --version 11.
 
 # Force update all documentation
 docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-update
-
-# Update only Forge and Vapor services
-docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --services forge vapor
-
-# Update only Livewire and Filament packages
-docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --packages livewire filament
 ```
 
 | Option | Description | Default |
@@ -125,14 +119,6 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --packages li
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
-| `--external-only` | Update only external Laravel services | false |
-| `--core-only` | Update only core Laravel documentation | false |
-| `--packages-only` | Update only community package documentation | false |
-| `--services SERVICE1 SERVICE2` | Update specific services (forge, vapor, etc.) | All |
-| `--packages PACKAGE1 PACKAGE2` | Update specific packages (spatie, livewire, etc.) | All |
-| `--list-services` | List available Laravel services | - |
-| `--list-packages` | List available community packages | - |
-| `--status` | Show documentation status for all sources | - |
 
 
 ## Features and Roadmap

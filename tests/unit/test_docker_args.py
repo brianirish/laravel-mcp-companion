@@ -1,12 +1,8 @@
 """Unit tests for Docker argument handling and command-line parsing."""
 
-import pytest
 import sys
-import subprocess
-import tempfile
-import os
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from laravel_mcp_companion import parse_arguments
 

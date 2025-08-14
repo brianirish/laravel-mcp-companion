@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from unittest.mock import Mock, patch
-from bs4 import BeautifulSoup
 
 from docs_updater import CommunityPackageFetcher
 
