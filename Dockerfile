@@ -16,5 +16,8 @@ RUN pip install --upgrade pip && \
 # Default environment
 ENV PYTHONUNBUFFERED=1
 
-# Run the MCP server with HTTP transport
-CMD ["python", "laravel_mcp_companion.py"]
+# Set the entrypoint to the Python script so arguments can be passed
+ENTRYPOINT ["python", "laravel_mcp_companion.py"]
+
+# Default command (no arguments) - can be overridden
+CMD []
