@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "6a66f11d99d483b413c3fa388c24ef92cbd1da8c",
-  "commit_date": "2025-08-13T21:28:34Z",
-  "commit_message": "Adding Docs about Event::defer specific events (#10732)\n\n* Adding Docs about Event::defer specific events\n\n* Update events.md\n\n* Update events.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/6a66f11d99d483b413c3fa388c24ef92cbd1da8c",
-  "sync_time": "2025-08-14T01:22:30Z"
+  "commit_sha": "2a5fabc2102887fb0e8a473dca1b93fdf6caaa0d",
+  "commit_date": "2025-08-14T17:30:23Z",
+  "commit_message": "[12.x] Add note about TTY mode support (#10734)\n\n* Add note about TTY mode support\n\n* Update processes.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/2a5fabc2102887fb0e8a473dca1b93fdf6caaa0d",
+  "sync_time": "2025-08-15T01:23:16Z"
 }
