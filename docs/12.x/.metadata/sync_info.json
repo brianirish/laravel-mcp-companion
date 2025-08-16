@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "2a5fabc2102887fb0e8a473dca1b93fdf6caaa0d",
-  "commit_date": "2025-08-14T17:30:23Z",
-  "commit_message": "[12.x] Add note about TTY mode support (#10734)\n\n* Add note about TTY mode support\n\n* Update processes.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/2a5fabc2102887fb0e8a473dca1b93fdf6caaa0d",
-  "sync_time": "2025-08-15T01:23:16Z"
+  "commit_sha": "6f02e3f9fae473a1af9591fb46b7d7969a2cc54c",
+  "commit_date": "2025-08-15T14:59:42Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/6f02e3f9fae473a1af9591fb46b7d7969a2cc54c",
+  "sync_time": "2025-08-16T01:18:59Z"
 }
