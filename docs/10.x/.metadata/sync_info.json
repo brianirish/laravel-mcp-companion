@@ -1,8 +1,8 @@
 {
   "version": "10.x",
-  "commit_sha": "fdf1d85a032b220060cc246bd3ed643259197903",
-  "commit_date": "2025-07-07T14:02:13Z",
-  "commit_message": "\u301010.x\u3011Individual wrapping in `Collection::sortByMany` allows sorting with multiple attributes by just an array of attributes(without direction, defaulting to asceding sort), but the spec is missing in docs (#10581)\n\n* Update collections.md\n\n* Update collections.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/fdf1d85a032b220060cc246bd3ed643259197903",
-  "sync_time": "2025-07-08T01:22:25Z"
+  "commit_sha": "ecd3d4997bcf2668a8b3d6aefb80fe768c4e7c8e",
+  "commit_date": "2025-08-18T17:52:10Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/ecd3d4997bcf2668a8b3d6aefb80fe768c4e7c8e",
+  "sync_time": "2025-08-19T01:19:07Z"
 }

@@ -1,8 +1,8 @@
 {
   "version": "11.x",
-  "commit_sha": "f90e43d782976ecb13dfe55bad056b7c14e08b22",
-  "commit_date": "2025-03-28T16:07:47Z",
-  "commit_message": "[11.x] Pessimistic locking SQL (#10284)",
-  "commit_url": "https://github.com/laravel/docs/commit/f90e43d782976ecb13dfe55bad056b7c14e08b22",
-  "sync_time": "2025-06-01T01:58:08Z"
+  "commit_sha": "cc55714f99a0e0c19d7ea355072ba76b9a373181",
+  "commit_date": "2025-08-18T17:51:53Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/cc55714f99a0e0c19d7ea355072ba76b9a373181",
+  "sync_time": "2025-08-19T01:19:08Z"
 }
