@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "d34d8574ae36efb6a35233bffb16898d2fb979bb",
-  "commit_date": "2025-08-17T19:53:00Z",
-  "commit_message": "update `newCollection` override to account for automatic eager loading (#10737)\n\ndue to the new \"automatic eager loading\" feature, and the changes made here:\n\nhttps://github.com/laravel/framework/commit/5548f956a64fa620356ae96880418901d358787d\n\nthe programmer needs to also include these changes when using the `newCollection()` method override for a custom collection, if they want the automatic eager loading feature to work correctly.",
-  "commit_url": "https://github.com/laravel/docs/commit/d34d8574ae36efb6a35233bffb16898d2fb979bb",
-  "sync_time": "2025-08-18T01:27:26Z"
+  "commit_sha": "469f6b3f65fa9f5e6d0bc57b8f0bbdf39397bebf",
+  "commit_date": "2025-08-18T22:27:21Z",
+  "commit_message": "document merges",
+  "commit_url": "https://github.com/laravel/docs/commit/469f6b3f65fa9f5e6d0bc57b8f0bbdf39397bebf",
+  "sync_time": "2025-08-19T01:19:08Z"
 }
