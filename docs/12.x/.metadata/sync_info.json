@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "469f6b3f65fa9f5e6d0bc57b8f0bbdf39397bebf",
-  "commit_date": "2025-08-18T22:27:21Z",
-  "commit_message": "document merges",
-  "commit_url": "https://github.com/laravel/docs/commit/469f6b3f65fa9f5e6d0bc57b8f0bbdf39397bebf",
-  "sync_time": "2025-08-19T01:19:08Z"
+  "commit_sha": "f51a1bf2bde9072577b04c99e02edbcda8af2934",
+  "commit_date": "2025-08-19T13:33:44Z",
+  "commit_message": "Use simpler wording (#10748)",
+  "commit_url": "https://github.com/laravel/docs/commit/f51a1bf2bde9072577b04c99e02edbcda8af2934",
+  "sync_time": "2025-08-20T01:17:10Z"
 }
