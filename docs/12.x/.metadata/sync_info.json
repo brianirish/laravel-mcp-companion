@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e1a7b2ee320e7c3b54847080311ea4fba7d40fd0",
-  "commit_date": "2025-08-20T14:52:49Z",
-  "commit_message": "Adjusts docs for pest v4 (#10756)",
-  "commit_url": "https://github.com/laravel/docs/commit/e1a7b2ee320e7c3b54847080311ea4fba7d40fd0",
-  "sync_time": "2025-08-21T01:16:28Z"
+  "commit_sha": "3e6177d969ba220e24ec445634a24a607d52876f",
+  "commit_date": "2025-08-21T14:28:52Z",
+  "commit_message": "Add Limit::perHour to route rate limiters (#10757)",
+  "commit_url": "https://github.com/laravel/docs/commit/3e6177d969ba220e24ec445634a24a607d52876f",
+  "sync_time": "2025-08-22T01:17:08Z"
 }
