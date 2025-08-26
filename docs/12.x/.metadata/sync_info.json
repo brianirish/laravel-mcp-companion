@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "1224d088c8878423a75576b03c10aa7e21b86660",
-  "commit_date": "2025-08-22T17:25:42Z",
-  "commit_message": "[12.x] Fix Cancelling Batches example (#10760)\n\n* Fix Cancelling Batches example\n\n* Update queues.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/1224d088c8878423a75576b03c10aa7e21b86660",
-  "sync_time": "2025-08-23T01:14:40Z"
+  "commit_sha": "43bbd494256950e6cb3b2b3b83a03a5a284aff07",
+  "commit_date": "2025-08-25T17:48:39Z",
+  "commit_message": "Fix anchor format for toPrettyJson (#10775)",
+  "commit_url": "https://github.com/laravel/docs/commit/43bbd494256950e6cb3b2b3b83a03a5a284aff07",
+  "sync_time": "2025-08-26T01:18:01Z"
 }

@@ -62,7 +62,7 @@ While building your web application, you may have some tasks, such as parsing an
 
 Laravel queues provide a unified queueing API across a variety of different queue backends, such as [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io), or even a relational database.
 
-Laravel's queue configuration options are stored in your application's `config/queue.php` configuration file. In this file, you will find connection configurations for each of the queue drivers that are included with the framework, including the database, [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io), and [Beanstalkd](https://beanstalkd.github.io/) drivers, as well as a synchronous driver that will execute jobs immediately (for use during local development). A `null` queue driver is also included which discards queued jobs.
+Laravel's queue configuration options are stored in your application's `config/queue.php` configuration file. In this file, you will find connection configurations for each of the queue drivers that are included with the framework, including the database, [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io), and [Beanstalkd](https://beanstalkd.github.io/) drivers, as well as a synchronous driver that will execute jobs immediately (for use during development or testing). A `null` queue driver is also included which discards queued jobs.
 
 > [!NOTE]
 > Laravel Horizon is a beautiful dashboard and configuration system for your Redis powered queues. Check out the full [Horizon documentation](/docs/{{version}}/horizon) for more information.
@@ -1945,7 +1945,9 @@ If you defined your DynamoDB table with a `ttl` attribute, you may define config
 Instead of dispatching a job class to the queue, you may also dispatch a closure. This is great for quick, simple tasks that need to be executed outside of the current request cycle. When dispatching closures to the queue, the closure's code content is cryptographically signed so that it cannot be modified in transit:
 
 ```php
-$podcast = App\Podcast::find(1);
+use App\Models\Podcast;
+
+$podcast = Podcast::find(1);
 
 dispatch(function () use ($podcast) {
     $podcast->publish();
@@ -2366,6 +2368,12 @@ To delete all of your failed jobs from the `failed_jobs` table, you may use the 
 php artisan queue:flush
 ```
 
+The `queue:flush` command removes all failed job records from your queue, no matter how old the failed job is. You may use the `--hours` option to only delete jobs that failed a certain number of hours ago or earlier:
+
+```shell
+php artisan queue:flush --hours=48
+```
+
 <a name="ignoring-missing-models"></a>
 ### Ignoring Missing Models
 
@@ -2758,7 +2766,7 @@ Bus::fake();
 // ...
 
 Bus::assertBatched(function (PendingBatch $batch) {
-    return $batch->name == 'import-csv' &&
+    return $batch->name == 'Import CSV' &&
            $batch->jobs->count() === 10;
 });
 ```
@@ -2794,7 +2802,7 @@ $this->assertEmpty($batch->added);
 
 Sometimes, you may need to test that a queued job [releases itself back onto the queue](#manually-releasing-a-job). Or, you may need to test that the job deleted itself. You may test these queue interactions by instantiating the job and invoking the `withFakeQueueInteractions` method.
 
-Once the job's queue interactions have been faked, you may invoke the `handle` method on the job. After invoking the job, the `assertReleased`, `assertDeleted`, `assertNotDeleted`, `assertFailed`, `assertFailedWith`, and `assertNotFailed` methods may be used to make assertions against the job's queue interactions:
+Once the job's queue interactions have been faked, you may invoke the `handle` method on the job. After invoking the job, various assertion methods are available to verify the job's queue interactions:
 
 ```php
 use App\Exceptions\CorruptedAudioException;
