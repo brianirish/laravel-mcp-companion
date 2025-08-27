@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "43bbd494256950e6cb3b2b3b83a03a5a284aff07",
-  "commit_date": "2025-08-25T17:48:39Z",
-  "commit_message": "Fix anchor format for toPrettyJson (#10775)",
-  "commit_url": "https://github.com/laravel/docs/commit/43bbd494256950e6cb3b2b3b83a03a5a284aff07",
-  "sync_time": "2025-08-26T01:18:01Z"
+  "commit_sha": "ad410a8a6a9390492fa541c52dc47b9d672260f0",
+  "commit_date": "2025-08-26T15:16:25Z",
+  "commit_message": "document withHeartbeat",
+  "commit_url": "https://github.com/laravel/docs/commit/ad410a8a6a9390492fa541c52dc47b9d672260f0",
+  "sync_time": "2025-08-27T01:15:45Z"
 }
