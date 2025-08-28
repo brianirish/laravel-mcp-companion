@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "ad410a8a6a9390492fa541c52dc47b9d672260f0",
-  "commit_date": "2025-08-26T15:16:25Z",
-  "commit_message": "document withHeartbeat",
-  "commit_url": "https://github.com/laravel/docs/commit/ad410a8a6a9390492fa541c52dc47b9d672260f0",
-  "sync_time": "2025-08-27T01:15:45Z"
+  "commit_sha": "2b86f080eafa6d55a196f54e814f6a15376f6149",
+  "commit_date": "2025-08-27T13:41:27Z",
+  "commit_message": "Fix Arr::push example to show the actual result (#10779)",
+  "commit_url": "https://github.com/laravel/docs/commit/2b86f080eafa6d55a196f54e814f6a15376f6149",
+  "sync_time": "2025-08-28T01:15:16Z"
 }
