@@ -1,8 +1,8 @@
 {
   "version": "11.x",
-  "commit_sha": "cc55714f99a0e0c19d7ea355072ba76b9a373181",
-  "commit_date": "2025-08-18T17:51:53Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/cc55714f99a0e0c19d7ea355072ba76b9a373181",
-  "sync_time": "2025-08-19T01:19:08Z"
+  "commit_sha": "552cc03615246abe0539147725a9297939bc0e6b",
+  "commit_date": "2025-08-28T19:16:58Z",
+  "commit_message": "update redis documentation urls (#10784)",
+  "commit_url": "https://github.com/laravel/docs/commit/552cc03615246abe0539147725a9297939bc0e6b",
+  "sync_time": "2025-08-29T01:15:03Z"
 }
