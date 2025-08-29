@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "2b86f080eafa6d55a196f54e814f6a15376f6149",
-  "commit_date": "2025-08-27T13:41:27Z",
-  "commit_message": "Fix Arr::push example to show the actual result (#10779)",
-  "commit_url": "https://github.com/laravel/docs/commit/2b86f080eafa6d55a196f54e814f6a15376f6149",
-  "sync_time": "2025-08-28T01:15:16Z"
+  "commit_sha": "90032baf5391094038f32f2428680ac4a0420ee3",
+  "commit_date": "2025-08-28T14:25:28Z",
+  "commit_message": "update redis documentation urls (#10780)",
+  "commit_url": "https://github.com/laravel/docs/commit/90032baf5391094038f32f2428680ac4a0420ee3",
+  "sync_time": "2025-08-29T01:15:04Z"
 }
