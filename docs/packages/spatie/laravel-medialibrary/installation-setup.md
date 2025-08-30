@@ -351,6 +351,12 @@ If you don't want to install `npm` on your Ubuntu server, you can use `snap` whi
 sudo apt install jpegoptim optipng pngquant gifsicle libavif-bin
 sudo snap install svgo
 ```
+Here's how to install all the optimizers on Alpine Linux:
+
+```php
+apk add jpegoptim optipng pngquant gifsicle libavif-apps
+npm install -g svgo
+```
 Here's how to install the binaries on MacOS (using Homebrew):
 
 ```php
