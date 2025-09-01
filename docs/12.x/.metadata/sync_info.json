@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "8f8cc25aebcc2ac2bb855ed934aab05e74f37322",
-  "commit_date": "2025-08-29T17:38:54Z",
-  "commit_message": "Fix hyphenation of cursor-based for grammatical correctness (#10788)",
-  "commit_url": "https://github.com/laravel/docs/commit/8f8cc25aebcc2ac2bb855ed934aab05e74f37322",
-  "sync_time": "2025-08-30T01:11:39Z"
+  "commit_sha": "aa81a050f48c501a642d7fda21aeaeefc179333b",
+  "commit_date": "2025-08-31T15:01:42Z",
+  "commit_message": "Fix withHeartbeat example (#10790)",
+  "commit_url": "https://github.com/laravel/docs/commit/aa81a050f48c501a642d7fda21aeaeefc179333b",
+  "sync_time": "2025-09-01T01:26:47Z"
 }
