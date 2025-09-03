@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "aa81a050f48c501a642d7fda21aeaeefc179333b",
-  "commit_date": "2025-08-31T15:01:42Z",
-  "commit_message": "Fix withHeartbeat example (#10790)",
-  "commit_url": "https://github.com/laravel/docs/commit/aa81a050f48c501a642d7fda21aeaeefc179333b",
-  "sync_time": "2025-09-01T01:26:47Z"
+  "commit_sha": "290569bf123f5324e6f224f75b57e7a387702bda",
+  "commit_date": "2025-09-02T16:00:26Z",
+  "commit_message": "fifo",
+  "commit_url": "https://github.com/laravel/docs/commit/290569bf123f5324e6f224f75b57e7a387702bda",
+  "sync_time": "2025-09-03T01:12:03Z"
 }
