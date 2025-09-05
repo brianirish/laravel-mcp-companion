@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "4a1c139b368cee236d4e8ff051db7bccc05a6e07",
-  "commit_date": "2025-09-03T16:59:48Z",
-  "commit_message": "[12.x] Use straight quotation marks for consistency (#10794)\n\n* Update cache.md\n\n* Update horizon.md\n\n* Update dusk.md",
-  "commit_url": "https://github.com/laravel/docs/commit/4a1c139b368cee236d4e8ff051db7bccc05a6e07",
-  "sync_time": "2025-09-04T01:11:40Z"
+  "commit_sha": "27d9c9328e1514dc109f89fa903d9a0f9912bc41",
+  "commit_date": "2025-09-04T12:49:21Z",
+  "commit_message": "[12x.] Add `0` option for disabling `LongWaitDetected` notification in Horizon docs (#10796)\n\n* Add 0 option for disabling LongWaitDetectedNotification in horizon docs\n\n* Update horizon.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/27d9c9328e1514dc109f89fa903d9a0f9912bc41",
+  "sync_time": "2025-09-05T01:13:31Z"
 }
