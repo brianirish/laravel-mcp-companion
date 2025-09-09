@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a4c80eb568be016344d03e8421302cbc365c58aa",
-  "commit_date": "2025-09-07T22:49:46Z",
-  "commit_message": "Add command method to ProcessResult (#10803)",
-  "commit_url": "https://github.com/laravel/docs/commit/a4c80eb568be016344d03e8421302cbc365c58aa",
-  "sync_time": "2025-09-08T01:17:16Z"
+  "commit_sha": "251eb0656795b9cbd65c0d45366b71439f3da5bc",
+  "commit_date": "2025-09-08T19:25:02Z",
+  "commit_message": "[12.x] Add withoutGlobalScopesExcept() documentation (#10804)\n\n* [12.x] Add withoutGlobalScopesExcept() documentation\n\n* Revert \"[12.x] Add withoutGlobalScopesExcept() documentation\"\n\nThis reverts commit 4c01e432ae9e6a9b288f508c20efae66b26e053e.\n\n* [12.x] Add withoutGlobalScopesExcept() documentation\n\n* Update eloquent.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/251eb0656795b9cbd65c0d45366b71439f3da5bc",
+  "sync_time": "2025-09-09T01:14:34Z"
 }
