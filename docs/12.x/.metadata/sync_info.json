@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "f3f7969b8e28c2eaa99a5d321246a0d3f1caa539",
-  "commit_date": "2025-09-12T14:45:41Z",
-  "commit_message": "[12.x] Add `silenced_tags` configuration docs (#10808)\n\n* Add silenced tags configuration docs\n\n* Add tags reference link\n\n* Update horizon.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/f3f7969b8e28c2eaa99a5d321246a0d3f1caa539",
-  "sync_time": "2025-09-13T01:08:16Z"
+  "commit_sha": "1b33a1c4fec81871dd1f8f1fb5c08a5c652b55f2",
+  "commit_date": "2025-09-13T12:30:08Z",
+  "commit_message": "Add 'PasswordResetLinkSent' event to authentication (#10811)",
+  "commit_url": "https://github.com/laravel/docs/commit/1b33a1c4fec81871dd1f8f1fb5c08a5c652b55f2",
+  "sync_time": "2025-09-14T01:18:16Z"
 }
