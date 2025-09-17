@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "1b33a1c4fec81871dd1f8f1fb5c08a5c652b55f2",
-  "commit_date": "2025-09-13T12:30:08Z",
-  "commit_message": "Add 'PasswordResetLinkSent' event to authentication (#10811)",
-  "commit_url": "https://github.com/laravel/docs/commit/1b33a1c4fec81871dd1f8f1fb5c08a5c652b55f2",
-  "sync_time": "2025-09-14T01:18:16Z"
+  "commit_sha": "5b548557cd96b2d31a73d66c4f1af408d5a42ccf",
+  "commit_date": "2025-09-16T14:55:31Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/5b548557cd96b2d31a73d66c4f1af408d5a42ccf",
+  "sync_time": "2025-09-17T01:12:10Z"
 }
