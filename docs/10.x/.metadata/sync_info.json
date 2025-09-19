@@ -1,8 +1,8 @@
 {
   "version": "10.x",
-  "commit_sha": "559c3659ed98d529974d24326f0fb3db66235215",
-  "commit_date": "2025-08-28T19:16:50Z",
-  "commit_message": "update redis documentation urls (#10783)",
-  "commit_url": "https://github.com/laravel/docs/commit/559c3659ed98d529974d24326f0fb3db66235215",
-  "sync_time": "2025-08-29T01:15:02Z"
+  "commit_sha": "e2a484e38d7d54a48ee68305408563663987ea58",
+  "commit_date": "2025-09-18T13:26:31Z",
+  "commit_message": "[10.x] Adds Laravel MCP documentation (#10819)\n\n* Adds mcp docs to laravel 10\n\n* Update documentation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/e2a484e38d7d54a48ee68305408563663987ea58",
+  "sync_time": "2025-09-19T01:19:19Z"
 }

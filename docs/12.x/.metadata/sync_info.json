@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5b548557cd96b2d31a73d66c4f1af408d5a42ccf",
-  "commit_date": "2025-09-16T14:55:31Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/5b548557cd96b2d31a73d66c4f1af408d5a42ccf",
-  "sync_time": "2025-09-17T01:12:10Z"
+  "commit_sha": "8efe91c77d619547c0cd4abca7ce83e11429ff98",
+  "commit_date": "2025-09-18T21:05:55Z",
+  "commit_message": "Improves server example (#10821)",
+  "commit_url": "https://github.com/laravel/docs/commit/8efe91c77d619547c0cd4abca7ce83e11429ff98",
+  "sync_time": "2025-09-19T01:19:21Z"
 }
