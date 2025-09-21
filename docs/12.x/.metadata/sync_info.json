@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "8efe91c77d619547c0cd4abca7ce83e11429ff98",
-  "commit_date": "2025-09-18T21:05:55Z",
-  "commit_message": "Improves server example (#10821)",
-  "commit_url": "https://github.com/laravel/docs/commit/8efe91c77d619547c0cd4abca7ce83e11429ff98",
-  "sync_time": "2025-09-19T01:19:21Z"
+  "commit_sha": "053cbc7d208e90e83c31276b39b4d3a04ff52a5b",
+  "commit_date": "2025-09-20T15:14:55Z",
+  "commit_message": "Fix command syntax for mcp:inspector (#10822)\n\nWith the leading `/`, you get the error that the server cannot be found.",
+  "commit_url": "https://github.com/laravel/docs/commit/053cbc7d208e90e83c31276b39b4d3a04ff52a5b",
+  "sync_time": "2025-09-21T01:20:08Z"
 }
