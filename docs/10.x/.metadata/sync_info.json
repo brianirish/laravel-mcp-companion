@@ -1,8 +1,8 @@
 {
   "version": "10.x",
-  "commit_sha": "e2a484e38d7d54a48ee68305408563663987ea58",
-  "commit_date": "2025-09-18T13:26:31Z",
-  "commit_message": "[10.x] Adds Laravel MCP documentation (#10819)\n\n* Adds mcp docs to laravel 10\n\n* Update documentation.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/e2a484e38d7d54a48ee68305408563663987ea58",
-  "sync_time": "2025-09-19T01:19:19Z"
+  "commit_sha": "37e19ec52ec0894e9380fb57f3c5d0dd1f85872a",
+  "commit_date": "2025-09-21T15:09:36Z",
+  "commit_message": "Improve upgrade docs (#10823)",
+  "commit_url": "https://github.com/laravel/docs/commit/37e19ec52ec0894e9380fb57f3c5d0dd1f85872a",
+  "sync_time": "2025-09-22T01:19:16Z"
 }
