@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "0cf7f87eff687fed5670959c978b5cb3c10ec793",
-  "commit_date": "2025-09-22T14:46:26Z",
-  "commit_message": "[12.x] MCP Tool Schema docs (#10824)\n\n* fix: json schema creation\n\n* fix: replace json schema with factory instance",
-  "commit_url": "https://github.com/laravel/docs/commit/0cf7f87eff687fed5670959c978b5cb3c10ec793",
-  "sync_time": "2025-09-23T01:12:56Z"
+  "commit_sha": "edb3e5fa8bee095b919e8f032339ddd23b208ed3",
+  "commit_date": "2025-09-23T19:34:14Z",
+  "commit_message": "Chore: Remove false attribute passing example from blade (#10825)",
+  "commit_url": "https://github.com/laravel/docs/commit/edb3e5fa8bee095b919e8f032339ddd23b208ed3",
+  "sync_time": "2025-09-24T01:13:32Z"
 }
