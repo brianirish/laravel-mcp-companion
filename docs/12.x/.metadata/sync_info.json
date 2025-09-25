@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "edb3e5fa8bee095b919e8f032339ddd23b208ed3",
-  "commit_date": "2025-09-23T19:34:14Z",
-  "commit_message": "Chore: Remove false attribute passing example from blade (#10825)",
-  "commit_url": "https://github.com/laravel/docs/commit/edb3e5fa8bee095b919e8f032339ddd23b208ed3",
-  "sync_time": "2025-09-24T01:13:32Z"
+  "commit_sha": "64500d70529ee60d2420c7f74c11732ce2e63c5c",
+  "commit_date": "2025-09-24T16:18:56Z",
+  "commit_message": "[12.x] Add Two-Factor Authentication Docs (#10807)\n\n* Add 2FA docs\n\n* Update starter-kits.md\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/64500d70529ee60d2420c7f74c11732ce2e63c5c",
+  "sync_time": "2025-09-25T01:14:05Z"
 }
