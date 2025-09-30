@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "7938bf89a7783995ac817c51517a7d3f62f6f201",
-  "commit_date": "2025-09-25T13:45:42Z",
-  "commit_message": "docs: update GH Action syntax to use `tools` parameter for Pint (#10826)",
-  "commit_url": "https://github.com/laravel/docs/commit/7938bf89a7783995ac817c51517a7d3f62f6f201",
-  "sync_time": "2025-09-26T01:13:51Z"
+  "commit_sha": "7b6cecb362e331aed101d579c1b9add5e7434077",
+  "commit_date": "2025-09-29T18:48:06Z",
+  "commit_message": "Remove unused import (#10832)",
+  "commit_url": "https://github.com/laravel/docs/commit/7b6cecb362e331aed101d579c1b9add5e7434077",
+  "sync_time": "2025-09-30T01:14:57Z"
 }
