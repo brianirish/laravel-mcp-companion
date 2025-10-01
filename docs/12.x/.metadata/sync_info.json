@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "7b6cecb362e331aed101d579c1b9add5e7434077",
-  "commit_date": "2025-09-29T18:48:06Z",
-  "commit_message": "Remove unused import (#10832)",
-  "commit_url": "https://github.com/laravel/docs/commit/7b6cecb362e331aed101d579c1b9add5e7434077",
-  "sync_time": "2025-09-30T01:14:57Z"
+  "commit_sha": "53dfa18cff23d1fe08bd3363b0939da8d07f6829",
+  "commit_date": "2025-09-30T11:11:58Z",
+  "commit_message": "fifo docs",
+  "commit_url": "https://github.com/laravel/docs/commit/53dfa18cff23d1fe08bd3363b0939da8d07f6829",
+  "sync_time": "2025-10-01T01:21:57Z"
 }
