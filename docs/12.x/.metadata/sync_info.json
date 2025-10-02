@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "53dfa18cff23d1fe08bd3363b0939da8d07f6829",
-  "commit_date": "2025-09-30T11:11:58Z",
-  "commit_message": "fifo docs",
-  "commit_url": "https://github.com/laravel/docs/commit/53dfa18cff23d1fe08bd3363b0939da8d07f6829",
-  "sync_time": "2025-10-01T01:21:57Z"
+  "commit_sha": "228216faf162c8fa4d6e0f8f0a833ef6b48db41a",
+  "commit_date": "2025-10-01T14:13:24Z",
+  "commit_message": "`stopListeningForNotification` (#10835)\n\n* Update broadcasting.md\n\n* Update broadcasting.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/228216faf162c8fa4d6e0f8f0a833ef6b48db41a",
+  "sync_time": "2025-10-02T01:12:26Z"
 }
