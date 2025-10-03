@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "228216faf162c8fa4d6e0f8f0a833ef6b48db41a",
-  "commit_date": "2025-10-01T14:13:24Z",
-  "commit_message": "`stopListeningForNotification` (#10835)\n\n* Update broadcasting.md\n\n* Update broadcasting.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/228216faf162c8fa4d6e0f8f0a833ef6b48db41a",
-  "sync_time": "2025-10-02T01:12:26Z"
+  "commit_sha": "37786a8f31c98fc002af32c429400f297412c34d",
+  "commit_date": "2025-10-02T11:37:00Z",
+  "commit_message": "Fixed string utility examples (#10838)\n\n* Fixed string utility examples\n\n* Updated Str::remove example",
+  "commit_url": "https://github.com/laravel/docs/commit/37786a8f31c98fc002af32c429400f297412c34d",
+  "sync_time": "2025-10-03T01:12:15Z"
 }
