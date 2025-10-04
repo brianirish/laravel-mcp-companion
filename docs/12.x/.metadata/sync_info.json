@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "37786a8f31c98fc002af32c429400f297412c34d",
-  "commit_date": "2025-10-02T11:37:00Z",
-  "commit_message": "Fixed string utility examples (#10838)\n\n* Fixed string utility examples\n\n* Updated Str::remove example",
-  "commit_url": "https://github.com/laravel/docs/commit/37786a8f31c98fc002af32c429400f297412c34d",
-  "sync_time": "2025-10-03T01:12:15Z"
+  "commit_sha": "371592f092a65d24ce3be61bc6aac974b42be5a5",
+  "commit_date": "2025-10-03T21:23:15Z",
+  "commit_message": "docs: add Supervisor setup for Octane (#10837)\n\n* docs: add Supervisor setup for Octane\n\n* formatting\n\n* Update octane.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/371592f092a65d24ce3be61bc6aac974b42be5a5",
+  "sync_time": "2025-10-04T01:09:39Z"
 }
