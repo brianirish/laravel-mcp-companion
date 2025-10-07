@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "2d059d1368c5d382c7b76b6d20faf92680b1fbfc",
-  "commit_date": "2025-10-04T23:22:41Z",
-  "commit_message": "Use const instead of plain text (#10843)",
-  "commit_url": "https://github.com/laravel/docs/commit/2d059d1368c5d382c7b76b6d20faf92680b1fbfc",
-  "sync_time": "2025-10-05T01:19:56Z"
+  "commit_sha": "6fcb3d22405279da7b8f01b8fbf7fbb5bca72ac8",
+  "commit_date": "2025-10-06T14:46:13Z",
+  "commit_message": "Correct demonstration URL in route helper example (#10844)\n\nThe example for the route helper currently shows a relative URL:\r\n\r\n```\r\n// /user/1/profile?photos=yes\r\n```\r\n\r\nHowever, the route helper returns an absolute URL by default, since the third parameter is not set to false. The corrected example should be:\r\n\r\n```\r\n// http://example.com/user/1/profile?photos=yes\r\n```\r\n\r\nThis change ensures the documentation matches the actual behavior of the route helper.",
+  "commit_url": "https://github.com/laravel/docs/commit/6fcb3d22405279da7b8f01b8fbf7fbb5bca72ac8",
+  "sync_time": "2025-10-07T01:13:16Z"
 }
