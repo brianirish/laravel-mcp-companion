@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "6fcb3d22405279da7b8f01b8fbf7fbb5bca72ac8",
-  "commit_date": "2025-10-06T14:46:13Z",
-  "commit_message": "Correct demonstration URL in route helper example (#10844)\n\nThe example for the route helper currently shows a relative URL:\r\n\r\n```\r\n// /user/1/profile?photos=yes\r\n```\r\n\r\nHowever, the route helper returns an absolute URL by default, since the third parameter is not set to false. The corrected example should be:\r\n\r\n```\r\n// http://example.com/user/1/profile?photos=yes\r\n```\r\n\r\nThis change ensures the documentation matches the actual behavior of the route helper.",
-  "commit_url": "https://github.com/laravel/docs/commit/6fcb3d22405279da7b8f01b8fbf7fbb5bca72ac8",
-  "sync_time": "2025-10-07T01:13:16Z"
+  "commit_sha": "f46410706f2bb7f800ffbc9cadb910dc0e2745ea",
+  "commit_date": "2025-10-08T21:14:43Z",
+  "commit_message": "[12.x] Add documentation about queued notification job properties (#10852)\n\n* Document queued notification job properties\n\nAdd documentation explaining that queued notifications inherit job-related properties (tries, timeout, maxExceptions, shouldBeEncrypted, backoff, retryUntil) from the notification class to the underlying queued job. This behavior is implemented in SendQueuedNotifications but was not previously documented.\n\n* Fix: Use ShouldBeEncrypted interface instead of property\n\nThe shouldBeEncrypted behavior is applied by implementing the ShouldBeEncrypted interface on the notification class, not by setting a property directly.\n\n* Remove menu item and adjust wording\n\n* Remove unnecessary sentence",
+  "commit_url": "https://github.com/laravel/docs/commit/f46410706f2bb7f800ffbc9cadb910dc0e2745ea",
+  "sync_time": "2025-10-09T01:13:41Z"
 }
