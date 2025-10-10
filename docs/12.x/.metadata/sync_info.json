@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "f46410706f2bb7f800ffbc9cadb910dc0e2745ea",
-  "commit_date": "2025-10-08T21:14:43Z",
-  "commit_message": "[12.x] Add documentation about queued notification job properties (#10852)\n\n* Document queued notification job properties\n\nAdd documentation explaining that queued notifications inherit job-related properties (tries, timeout, maxExceptions, shouldBeEncrypted, backoff, retryUntil) from the notification class to the underlying queued job. This behavior is implemented in SendQueuedNotifications but was not previously documented.\n\n* Fix: Use ShouldBeEncrypted interface instead of property\n\nThe shouldBeEncrypted behavior is applied by implementing the ShouldBeEncrypted interface on the notification class, not by setting a property directly.\n\n* Remove menu item and adjust wording\n\n* Remove unnecessary sentence",
-  "commit_url": "https://github.com/laravel/docs/commit/f46410706f2bb7f800ffbc9cadb910dc0e2745ea",
-  "sync_time": "2025-10-09T01:13:41Z"
+  "commit_sha": "36d9a6a3849243f67be517b6615850a30175cec2",
+  "commit_date": "2025-10-09T13:26:39Z",
+  "commit_message": "two-factor",
+  "commit_url": "https://github.com/laravel/docs/commit/36d9a6a3849243f67be517b6615850a30175cec2",
+  "sync_time": "2025-10-10T01:13:57Z"
 }
