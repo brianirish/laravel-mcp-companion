@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "36d9a6a3849243f67be517b6615850a30175cec2",
-  "commit_date": "2025-10-09T13:26:39Z",
-  "commit_message": "two-factor",
-  "commit_url": "https://github.com/laravel/docs/commit/36d9a6a3849243f67be517b6615850a30175cec2",
-  "sync_time": "2025-10-10T01:13:57Z"
+  "commit_sha": "3f041580bfddb3dbe24c8d938fbff3dfbe370492",
+  "commit_date": "2025-10-10T13:49:35Z",
+  "commit_message": "Add note about jobs in batches running out of sequence when using multiple workers (#10855)\n\n* Add note about jobs in batches running out of sequence when using multiple workers\n\n* Update queues.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/3f041580bfddb3dbe24c8d938fbff3dfbe370492",
+  "sync_time": "2025-10-11T01:11:18Z"
 }
