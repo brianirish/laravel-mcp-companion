@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "3f041580bfddb3dbe24c8d938fbff3dfbe370492",
-  "commit_date": "2025-10-10T13:49:35Z",
-  "commit_message": "Add note about jobs in batches running out of sequence when using multiple workers (#10855)\n\n* Add note about jobs in batches running out of sequence when using multiple workers\n\n* Update queues.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/3f041580bfddb3dbe24c8d938fbff3dfbe370492",
-  "sync_time": "2025-10-11T01:11:18Z"
+  "commit_sha": "c8530966817f57635af8b3569c18e13452f02899",
+  "commit_date": "2025-10-12T14:21:53Z",
+  "commit_message": "fix(schema): correct units field type from array to string in CurrentWeatherTool (#10859)\n\nThe `units` parameter should be a string enum (`\"celsius\"` or `\"fahrenheit\"`) instead of an array.\r\nUsing `$schema->array()` caused runtime schema validation errors. This change fixes the schema definition by using `$schema->string()` instead.",
+  "commit_url": "https://github.com/laravel/docs/commit/c8530966817f57635af8b3569c18e13452f02899",
+  "sync_time": "2025-10-13T01:18:58Z"
 }

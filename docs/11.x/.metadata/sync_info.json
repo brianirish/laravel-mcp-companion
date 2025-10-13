@@ -1,8 +1,8 @@
 {
   "version": "11.x",
-  "commit_sha": "8815bf7f8e8bc618c9af6fcac491cea89e1c4f8c",
-  "commit_date": "2025-10-07T17:27:27Z",
-  "commit_message": "Update controllers.md to correct HasMiddleware documentation (#10847)\n\nThere is a note just under this section that states that the `Illuminate\\Routing\\Controllers\\HasMiddleware` contract cannot be used in conjunction with ` App\\Http\\Controllers\\Controller` yet the example itself has the class extending `Controller`.\r\n\r\nI can confirm that if the class extends `Controller` you will get an error:\r\n\r\n\"Cannot make non static method Illuminate\\Routing\\Controller::middleware() static in class App\\Http\\Controllers\\ArticleController\"\r\n\r\nThis correction is applicable to documentation for Laravel 11.x and up.",
-  "commit_url": "https://github.com/laravel/docs/commit/8815bf7f8e8bc618c9af6fcac491cea89e1c4f8c",
-  "sync_time": "2025-10-08T01:13:06Z"
+  "commit_sha": "b92d6219333339c3bf96e75d7fdc7a35bc0b538c",
+  "commit_date": "2025-10-12T14:22:07Z",
+  "commit_message": "Wrong anchor for section `Resources` (#10858)",
+  "commit_url": "https://github.com/laravel/docs/commit/b92d6219333339c3bf96e75d7fdc7a35bc0b538c",
+  "sync_time": "2025-10-13T01:18:57Z"
 }
