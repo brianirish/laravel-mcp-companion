@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "6e59525e0f8005bc388fe4c85128735628450472",
-  "commit_date": "2025-10-13T16:30:06Z",
-  "commit_message": "Add stripePhone() info regarding undocumented 20-character API limit (#10861)\n\n* Add stripePhone() info regarding undocumented 20-character API limit\n\n* Update billing.md\n\n* Update billing.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/6e59525e0f8005bc388fe4c85128735628450472",
-  "sync_time": "2025-10-14T01:13:55Z"
+  "commit_sha": "e734e1383adc684b2fca86014915b96b9c16c3d3",
+  "commit_date": "2025-10-14T17:25:44Z",
+  "commit_message": "[12.x] Update controllers.md to correct HasMiddleware documentation (#10864)\n\nThis copies over the documentation fix about HasMiddleware for 12.x. https://github.com/laravel/docs/pull/10847",
+  "commit_url": "https://github.com/laravel/docs/commit/e734e1383adc684b2fca86014915b96b9c16c3d3",
+  "sync_time": "2025-10-15T01:15:58Z"
 }
