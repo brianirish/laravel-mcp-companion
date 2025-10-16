@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e734e1383adc684b2fca86014915b96b9c16c3d3",
-  "commit_date": "2025-10-14T17:25:44Z",
-  "commit_message": "[12.x] Update controllers.md to correct HasMiddleware documentation (#10864)\n\nThis copies over the documentation fix about HasMiddleware for 12.x. https://github.com/laravel/docs/pull/10847",
-  "commit_url": "https://github.com/laravel/docs/commit/e734e1383adc684b2fca86014915b96b9c16c3d3",
-  "sync_time": "2025-10-15T01:15:58Z"
+  "commit_sha": "141cf54a04d32cbb25374a0533d6396279a7451f",
+  "commit_date": "2025-10-15T18:21:34Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/141cf54a04d32cbb25374a0533d6396279a7451f",
+  "sync_time": "2025-10-16T01:15:13Z"
 }
