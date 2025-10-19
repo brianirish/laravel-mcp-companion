@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "cb672cf1dd465569d1f1e019db09383aeb831da2",
-  "commit_date": "2025-10-17T15:51:35Z",
-  "commit_message": "add event docs",
-  "commit_url": "https://github.com/laravel/docs/commit/cb672cf1dd465569d1f1e019db09383aeb831da2",
-  "sync_time": "2025-10-18T01:11:19Z"
+  "commit_sha": "fbade1300b3990dcb355edd09539213024475b81",
+  "commit_date": "2025-10-18T19:34:09Z",
+  "commit_message": "[12.x] explain how to use `@once`/`@pushOnce` with a custom ID (#10867)\n\n* explain how to use `@once`/`@pushOnce` with a custom ID\n\nrelying on the default random generated string only works if the code is compiled once, like in a loop or in a single component.\n\nif you wish to use the directives across multiple compilations, like in separate components, you **must** pass a custom unique ID for them to only be rendered once.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/fbade1300b3990dcb355edd09539213024475b81",
+  "sync_time": "2025-10-19T01:23:23Z"
 }
