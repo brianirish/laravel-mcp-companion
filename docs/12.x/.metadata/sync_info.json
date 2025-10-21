@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "fbade1300b3990dcb355edd09539213024475b81",
-  "commit_date": "2025-10-18T19:34:09Z",
-  "commit_message": "[12.x] explain how to use `@once`/`@pushOnce` with a custom ID (#10867)\n\n* explain how to use `@once`/`@pushOnce` with a custom ID\n\nrelying on the default random generated string only works if the code is compiled once, like in a loop or in a single component.\n\nif you wish to use the directives across multiple compilations, like in separate components, you **must** pass a custom unique ID for them to only be rendered once.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/fbade1300b3990dcb355edd09539213024475b81",
-  "sync_time": "2025-10-19T01:23:23Z"
+  "commit_sha": "99c6dc610d0846836da9e5c5c9fb7f459f973a8c",
+  "commit_date": "2025-10-20T21:57:59Z",
+  "commit_message": "[12.x] Add the wasRecentlyCreated property. (#10870)\n\n* Add the wasRecentlyCreated property.\n\n* Update eloquent.md\n\n* Fix formatting and remove redundant text in eloquent.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/99c6dc610d0846836da9e5c5c9fb7f459f973a8c",
+  "sync_time": "2025-10-21T01:17:19Z"
 }
