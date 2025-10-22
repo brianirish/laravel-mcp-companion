@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "99c6dc610d0846836da9e5c5c9fb7f459f973a8c",
-  "commit_date": "2025-10-20T21:57:59Z",
-  "commit_message": "[12.x] Add the wasRecentlyCreated property. (#10870)\n\n* Add the wasRecentlyCreated property.\n\n* Update eloquent.md\n\n* Fix formatting and remove redundant text in eloquent.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/99c6dc610d0846836da9e5c5c9fb7f459f973a8c",
-  "sync_time": "2025-10-21T01:17:19Z"
+  "commit_sha": "f386dcf23249cfbe60d537dfdbaab2ee10d497d3",
+  "commit_date": "2025-10-21T15:37:34Z",
+  "commit_message": "document cache failover",
+  "commit_url": "https://github.com/laravel/docs/commit/f386dcf23249cfbe60d537dfdbaab2ee10d497d3",
+  "sync_time": "2025-10-22T01:18:39Z"
 }
