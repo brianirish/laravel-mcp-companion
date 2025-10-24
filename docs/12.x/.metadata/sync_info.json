@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "24593c5bde94a731f55438cd5bf794ccfdb2c8f0",
-  "commit_date": "2025-10-22T19:26:09Z",
-  "commit_message": "Use consistent code example placeholders (#10873)",
-  "commit_url": "https://github.com/laravel/docs/commit/24593c5bde94a731f55438cd5bf794ccfdb2c8f0",
-  "sync_time": "2025-10-23T01:16:53Z"
+  "commit_sha": "b953ddd9375033392debfbf9f2212873dd4f15a6",
+  "commit_date": "2025-10-23T23:47:43Z",
+  "commit_message": "soft deprecate dispatchAfterResponse (#10876)",
+  "commit_url": "https://github.com/laravel/docs/commit/b953ddd9375033392debfbf9f2212873dd4f15a6",
+  "sync_time": "2025-10-24T01:13:08Z"
 }
