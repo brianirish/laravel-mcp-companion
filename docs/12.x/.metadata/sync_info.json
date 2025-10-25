@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "b953ddd9375033392debfbf9f2212873dd4f15a6",
-  "commit_date": "2025-10-23T23:47:43Z",
-  "commit_message": "soft deprecate dispatchAfterResponse (#10876)",
-  "commit_url": "https://github.com/laravel/docs/commit/b953ddd9375033392debfbf9f2212873dd4f15a6",
-  "sync_time": "2025-10-24T01:13:08Z"
+  "commit_sha": "725b28d2b55e98107136128d0f30a08b0d8617ec",
+  "commit_date": "2025-10-24T16:18:48Z",
+  "commit_message": "missing relationship types (#10878)",
+  "commit_url": "https://github.com/laravel/docs/commit/725b28d2b55e98107136128d0f30a08b0d8617ec",
+  "sync_time": "2025-10-25T01:13:58Z"
 }
