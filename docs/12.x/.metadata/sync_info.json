@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "725b28d2b55e98107136128d0f30a08b0d8617ec",
-  "commit_date": "2025-10-24T16:18:48Z",
-  "commit_message": "missing relationship types (#10878)",
-  "commit_url": "https://github.com/laravel/docs/commit/725b28d2b55e98107136128d0f30a08b0d8617ec",
-  "sync_time": "2025-10-25T01:13:58Z"
+  "commit_sha": "726c983f756e2a5d4bab046f2b65550628534594",
+  "commit_date": "2025-10-26T17:41:53Z",
+  "commit_message": "feat: Allow `findForPassport` to optionally receive the OAuth client (#10880)\n\n* Modify findForPassport to accept client parameter\n\nUpdated findForPassport method to include client parameter.\n\n* Update passport.md\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>\n\n* Update passport.md\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>\n\n* Update passport.md\n\n---------\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/726c983f756e2a5d4bab046f2b65550628534594",
+  "sync_time": "2025-10-27T01:22:58Z"
 }
