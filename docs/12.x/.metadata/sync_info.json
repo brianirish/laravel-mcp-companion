@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "b9354330bfefc5e9066da48b707160bbaf72674a",
-  "commit_date": "2025-10-29T14:09:05Z",
-  "commit_message": "Change boot method visibility to public (#10893)\n\nChanged the visibility of the boot method from protected to public.\r\n\r\nFixing the \"Call to protected method App\\Providers\\AppServiceProvider::boot() from scope Illuminate\\Container\\BoundMethod\" when useing the wrong visibility in v12",
-  "commit_url": "https://github.com/laravel/docs/commit/b9354330bfefc5e9066da48b707160bbaf72674a",
-  "sync_time": "2025-10-30T01:20:11Z"
+  "commit_sha": "0a852826210d79320a879241b35e125e6da63964",
+  "commit_date": "2025-10-30T17:38:06Z",
+  "commit_message": "update to key",
+  "commit_url": "https://github.com/laravel/docs/commit/0a852826210d79320a879241b35e125e6da63964",
+  "sync_time": "2025-10-31T01:17:33Z"
 }
