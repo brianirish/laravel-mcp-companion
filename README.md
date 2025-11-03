@@ -36,9 +36,11 @@
 
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
-- **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova
-- **Community package documentation** - Spatie, Livewire, Inertia, Filament
-- **Curated package recommendations** with detailed integration guides  
+- **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova (117+ sections)
+- **Community package documentation** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
+- **Use case mapping** - Describe what you need, get relevant packages instantly
+- **Package integration guides** - Installation and setup for 50+ curated packages
+- **Cross-package compatibility** - Learn which packages work well together
 - **Unified search** across core Laravel docs, services, and packages
 - **Smart navigation** - find exactly what you need for your use case
 - **Future-proof updates** - automatically adapts to Laravel service changes
@@ -123,18 +125,20 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 
 ## Features and Roadmap
 
-### Current Features
+### Current Features (v0.8.0)
 - ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
-- ✅ **Community package docs** - Documentation for Spatie, Livewire, Inertia, Filament
-- ✅ **Smart package recommendations** - Curated Laravel ecosystem packages
+- ✅ **Community package docs** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
+- ✅ **Use case mapping** - Describe what you need, get relevant packages
+- ✅ **Package integration guides** - Installation and setup for 50+ packages
+- ✅ **Cross-package compatibility** - Documentation for package combinations
 - ✅ **Unified search** - One search across all documentation sources
 - ✅ **Daily updates** - Automatic sync with latest documentation
 - ✅ **Battle-tested** - Comprehensive test suite ensures reliability
 
 ### Upcoming Features
-- 📚 **v0.8.0**: Community learning resources (Laravel News, tutorials, guides)
-- 🔍 **v0.9.0**: Advanced search and smart navigation across all sources
+- 📰 **v0.9.0**: Laravel News, Bootcamp, tutorials, and advanced discovery
+- 🔍 **v0.10.0**: Ecosystem intelligence and real-time updates
 - 🚀 **v1.0.0**: The complete Laravel documentation navigator
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).
