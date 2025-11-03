@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "0a852826210d79320a879241b35e125e6da63964",
-  "commit_date": "2025-10-30T17:38:06Z",
-  "commit_message": "update to key",
-  "commit_url": "https://github.com/laravel/docs/commit/0a852826210d79320a879241b35e125e6da63964",
-  "sync_time": "2025-10-31T01:17:33Z"
+  "commit_sha": "8c667fbd5ca85ce31b359cd98058d6cf5272801b",
+  "commit_date": "2025-11-02T16:21:43Z",
+  "commit_message": "fix: queue option missing = (#10896)",
+  "commit_url": "https://github.com/laravel/docs/commit/8c667fbd5ca85ce31b359cd98058d6cf5272801b",
+  "sync_time": "2025-11-03T01:21:14Z"
 }
