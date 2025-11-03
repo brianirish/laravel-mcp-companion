@@ -9,14 +9,22 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
-# Install Python dependencies
+# Install Python dependencies including HTTP server requirements
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir fastmcp mcp[cli,client]
+    pip install --no-cache-dir fastmcp mcp[cli,client] uvicorn starlette
 
 # Default environment
 ENV PYTHONUNBUFFERED=1
 
-# Set the entrypoint to the Python script so arguments can be passed
+# Smithery environment variables
+ENV PORT=8081
+ENV TRANSPORT=http
+ENV DOCS_PATH="./docs"
+ENV SERVER_NAME="LaravelMCPCompanion"
+ENV LOG_LEVEL="INFO"
+ENV VERSION="12.x"
+
+# Set the entrypoint to the Python script
 ENTRYPOINT ["python", "laravel_mcp_companion.py"]
 
 # Default command (no arguments) - can be overridden

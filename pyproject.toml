@@ -6,7 +6,10 @@ authors = [{name = "Brian Irish", email = "irishb@gmail.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "uvicorn>=0.30.0",
+    "starlette>=0.37.0"
+]
 keywords = ["laravel", "mcp", "documentation", "ai", "modelcontextprotocol", "php", "companion"]
 classifiers = [
     "Development Status :: 4 - Beta",

@@ -507,58 +507,60 @@ def parse_arguments():
         description="Laravel Documentation and Package Recommendation MCP Server"
     )
     parser.add_argument(
-        "--docs-path", 
+        "--docs-path",
         type=str,
-        default=None,
-        help="Path to Laravel documentation directory (default: ./docs)"
+        default=os.environ.get("DOCS_PATH"),
+        help="Path to Laravel documentation directory (default: ./docs, env: DOCS_PATH)"
     )
     parser.add_argument(
         "--server-name",
         type=str,
-        default="LaravelMCPCompanion",
-        help="Name of the MCP server (default: LaravelMCPCompanion)"
+        default=os.environ.get("SERVER_NAME", "LaravelMCPCompanion"),
+        help="Name of the MCP server (default: LaravelMCPCompanion, env: SERVER_NAME)"
     )
     parser.add_argument(
         "--log-level",
         type=str,
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        default="INFO",
-        help="Logging level (default: INFO)"
+        default=os.environ.get("LOG_LEVEL", "INFO"),
+        help="Logging level (default: INFO, env: LOG_LEVEL)"
     )
     parser.add_argument(
         "--host",
         type=str,
-        default=None,
-        help="Host to bind to (if using network transport)"
+        default=os.environ.get("HOST"),
+        help="Host to bind to (if using network transport, env: HOST)"
     )
     parser.add_argument(
         "--port",
         type=int,
-        default=None,
-        help="Port to listen on (if using network transport)"
+        default=int(os.environ.get("PORT", "0")) if os.environ.get("PORT") else None,
+        help="Port to listen on (if using network transport, env: PORT)"
     )
     parser.add_argument(
         "--transport",
         type=str,
-        default="stdio",
-        choices=["stdio", "websocket", "sse"],
-        help="Transport mechanism to use (default: stdio)"
+        default=os.environ.get("TRANSPORT", "stdio"),
+        choices=["stdio", "websocket", "sse", "http"],
+        help="Transport mechanism to use (default: stdio, env: TRANSPORT)"
     )
     parser.add_argument(
         "--version",
         type=str,
-        default=DEFAULT_VERSION,
-        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}). Supported: {', '.join(SUPPORTED_VERSIONS)}"
+        default=os.environ.get("VERSION", DEFAULT_VERSION),
+        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}, env: VERSION). Supported: {', '.join(SUPPORTED_VERSIONS)}"
     )
     parser.add_argument(
         "--update-docs",
         action="store_true",
-        help="Update documentation before starting server"
+        default=os.environ.get("UPDATE_DOCS", "").lower() == "true",
+        help="Update documentation before starting server (env: UPDATE_DOCS=true)"
     )
     parser.add_argument(
         "--force-update",
         action="store_true",
-        help="Force update of documentation even if already up to date"
+        default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
+        help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
     
     return parser.parse_args()
@@ -1779,8 +1781,35 @@ def main():
     
     # Run the server
     try:
-        logger.info("Server ready. Press Ctrl+C to stop.")
-        mcp.run(transport=args.transport, **transport_options)
+        if args.transport == "http":
+            # HTTP mode for Smithery deployment
+            logger.info("Starting in HTTP mode for Smithery deployment...")
+            import uvicorn
+            from starlette.middleware.cors import CORSMiddleware
+
+            # Get the FastMCP HTTP app
+            app = mcp.streamable_http_app()
+
+            # Add CORS middleware for browser-based clients
+            app.add_middleware(
+                CORSMiddleware,
+                allow_origins=["*"],
+                allow_credentials=True,
+                allow_methods=["GET", "POST", "OPTIONS"],
+                allow_headers=["*"],
+                expose_headers=["mcp-session-id", "mcp-protocol-version"],
+                max_age=86400,
+            )
+
+            # Use PORT from environment or args, default to 8081
+            port = args.port if args.port else 8081
+            host = args.host or "0.0.0.0"
+            logger.info(f"Listening on {host}:{port}")
+
+            uvicorn.run(app, host=host, port=port, log_level="info")
+        else:
+            logger.info("Server ready. Press Ctrl+C to stop.")
+            mcp.run(transport=args.transport, **transport_options)
     except Exception as e:
         logger.critical(f"Server error: {str(e)}")
         sys.exit(1)

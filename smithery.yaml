@@ -1,65 +1,10 @@
-# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
-
+# Smithery configuration file for hosted deployment
+runtime: "container"
+build:
+  dockerfile: "Dockerfile"
+  dockerBuildPath: "."
 startCommand:
-  type: stdio
-  configSchema:
-    type: object
-    description: Configuration for starting the Laravel MCP Companion
-    properties:
-      docsPath:
-        type: string
-        description: Path to Laravel documentation directory
-        default: "./docs"
-      serverName:
-        type: string
-        description: Name of the MCP server
-        default: "LaravelMCPCompanion"
-      logLevel:
-        type: string
-        description: Logging level
-        enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        default: "INFO"
-      version:
-        type: string
-        description: Laravel version branch to use (e.g., '12.x', '11.x')
-        default: "12.x"
-      updateDocs:
-        type: boolean
-        description: Update documentation before starting server
-        default: false
-      forceUpdate:
-        type: boolean
-        description: Force update of documentation even if already up to date
-        default: false
-      externalOnly:
-        type: boolean
-        description: Update only external Laravel services documentation
-        default: false
-      coreOnly:
-        type: boolean
-        description: Update only core Laravel documentation
-        default: false
-  commandFunction: |
-    (config) => {
-      const args = ['laravel_mcp_companion.py'];
-      
-      if (config.docsPath) args.push('--docs-path', config.docsPath);
-      if (config.serverName) args.push('--server-name', config.serverName);
-      if (config.logLevel) args.push('--log-level', config.logLevel);
-      if (config.version) args.push('--version', config.version);
-      if (config.updateDocs) args.push('--update-docs');
-      if (config.forceUpdate) args.push('--force-update');
-      if (config.externalOnly) args.push('--external-only');
-      if (config.coreOnly) args.push('--core-only');
-      
-      return { command: 'python', args };
-    }
-  exampleConfig:
-    docsPath: "./docs"
-    serverName: "LaravelMCPCompanion"
-    logLevel: "INFO"
-    version: "12.x"
-    updateDocs: false
-    forceUpdate: false
-    externalOnly: false
-    coreOnly: false
+  type: "http"
+  # Configuration is passed via environment variables (see Dockerfile for defaults)
+  # Available env vars: DOCS_PATH, SERVER_NAME, LOG_LEVEL, VERSION,
+  #                     UPDATE_DOCS, FORCE_UPDATE, EXTERNAL_ONLY, CORE_ONLY
