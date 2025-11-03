@@ -38,4 +38,8 @@ ENV/
 *.log
 logs/
 
+# Cache files
+*_cache*.json
+.cache/
+
 CLAUDE.md
