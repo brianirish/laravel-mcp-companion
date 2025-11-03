@@ -24,13 +24,14 @@ class MockFastMCP:
         self._tool_functions: Dict[str, Callable] = {}
         self._resource_functions: Dict[str, Callable] = {}
         
-    def tool(self, description: str):
+    def tool(self, description: str, annotations: Optional[Dict[str, Any]] = None, **kwargs):
         """Mock tool decorator."""
         def decorator(func: Callable) -> Callable:
             self.tools[func.__name__] = {
                 'description': description,
                 'function': func,
-                'doc': func.__doc__
+                'doc': func.__doc__,
+                'annotations': annotations or {}
             }
             self._tool_functions[func.__name__] = func
             return func
@@ -45,6 +46,13 @@ class MockFastMCP:
                 'doc': func.__doc__
             }
             self._resource_functions[func.__name__] = func
+            return func
+        return decorator
+
+    def prompt(self, name: str, **kwargs):
+        """Mock prompt decorator."""
+        def decorator(func: Callable) -> Callable:
+            # Just return the function, we don't need to track prompts in tests
             return func
         return decorator
     
