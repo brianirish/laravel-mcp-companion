@@ -2181,9 +2181,9 @@ class CommunityPackageFetcher:
                         break
                 
                 # Also remove any standalone large numbers that might be stats
-                for tag in soup.find_all(string=re.compile(r'^\s*[\d,]+\s*$')):
-                    if tag.parent:
-                        num_str = str(tag).strip().replace(',', '')
+                for text_node in soup.find_all(string=re.compile(r'^\s*[\d,]+\s*$')):
+                    if text_node.parent:
+                        num_str = str(text_node).strip().replace(',', '')
                         try:
                             # Remove numbers larger than 1000 (likely stats, not code examples)
                             if num_str.isdigit() and int(num_str) > 1000:
