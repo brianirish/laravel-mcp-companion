@@ -1,0 +1,20 @@
+{
+  "name": "laravel-mcp-companion",
+  "version": "0.8.0",
+  "description": "A Laravel developer's MCP companion. Get the absolute best advice, recommendations, and up-to-date documentation for the entire Laravel ecosystem.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianirish/laravel-mcp-companion.git"
+  },
+  "author": "Brian Irish <irishb@gmail.com>",
+  "keywords": [
+    "laravel",
+    "mcp",
+    "documentation",
+    "ai",
+    "modelcontextprotocol",
+    "php",
+    "companion"
+  ]
+}
