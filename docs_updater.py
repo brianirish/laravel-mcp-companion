@@ -2188,8 +2188,8 @@ class CommunityPackageFetcher:
                             # Remove numbers larger than 1000 (likely stats, not code examples)
                             if num_str.isdigit() and int(num_str) > 1000:
                                 # Don't remove if it's inside a code block
-                                if not any(p.name in ['code', 'pre'] for p in tag.parents):
-                                    tag.parent.extract()
+                                if not any(p.name in ['code', 'pre'] for p in text_node.parents):
+                                    text_node.parent.extract()
                         except Exception:
                             pass
                 
