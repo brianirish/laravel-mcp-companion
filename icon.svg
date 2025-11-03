@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#FF2D20" rx="64"/>
+
+  <!-- Laravel-inspired L shape -->
+  <g transform="translate(100, 120)">
+    <!-- Main vertical bar -->
+    <rect x="20" y="0" width="80" height="300" fill="white" rx="8"/>
+
+    <!-- Horizontal bar -->
+    <rect x="20" y="220" width="200" height="80" fill="white" rx="8"/>
+
+    <!-- Book/docs icon in corner -->
+    <g transform="translate(240, 10)">
+      <rect x="0" y="0" width="60" height="80" fill="white" rx="4"/>
+      <rect x="8" y="12" width="44" height="3" fill="#FF2D20"/>
+      <rect x="8" y="24" width="44" height="3" fill="#FF2D20"/>
+      <rect x="8" y="36" width="44" height="3" fill="#FF2D20"/>
+      <rect x="8" y="48" width="32" height="3" fill="#FF2D20"/>
+    </g>
+  </g>
+</svg>

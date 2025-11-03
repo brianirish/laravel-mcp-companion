@@ -1179,20 +1179,26 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         multi_updater: Multi-source documentation updater instance
     """
     # Register documentation tools
-    @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_docs"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["list_laravel_docs"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def list_laravel_docs(version: Optional[str] = None) -> str:
         """List all available Laravel documentation files.
-        
+
         Args:
             version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
         """
         return list_laravel_docs_impl(docs_path, version, runtime_version=runtime_version)
     
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["search_laravel_docs"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["search_laravel_docs"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True) -> str:
         """Search through Laravel documentation for a specific term.
-        
+
         Args:
             query: Search term to look for
             version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
@@ -1201,7 +1207,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
         return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["update_laravel_docs"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["update_laravel_docs"],
+        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True}
+    )
     def update_laravel_docs(version_param: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
@@ -1243,7 +1252,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             logger.error(f"Error updating documentation: {str(e)}")
             return f"Error updating documentation: {str(e)}"
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["laravel_docs_info"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["laravel_docs_info"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def laravel_docs_info(version: Optional[str] = None) -> str:
         """Get information about the documentation version and status.
         
@@ -1286,7 +1298,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             return "\n".join(result)
     
     # Register package recommendation tools
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_laravel_package_recommendations(use_case: str) -> str:
         """
         Get Laravel package recommendations based on a use case.
@@ -1329,7 +1344,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         
         return "\n".join(results)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_info"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_package_info"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_laravel_package_info(package_name: str) -> str:
         """
         Get detailed information about a specific Laravel package.
@@ -1352,7 +1370,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         # Format the package information as markdown
         return format_package_recommendation(package)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_package_categories"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_package_categories"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_laravel_package_categories(category: str) -> str:
         """
         Get Laravel packages in a specific category.
@@ -1397,7 +1418,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         
         return "\n".join(results)
     
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_features_for_laravel_package"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_features_for_laravel_package"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_features_for_laravel_package(package: str) -> str:
         """
         Get available features/implementations for a Laravel package.
@@ -1432,7 +1456,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         
         return "\n".join(results)
 
-    @mcp.tool(description="Read the full content of a specific Laravel documentation file")
+    @mcp.tool(
+        description="Read the full content of a specific Laravel documentation file",
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def read_laravel_doc_content(filename: str, version: Optional[str] = None) -> str:
         """
         Read a specific Laravel documentation file.
@@ -1446,9 +1473,12 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         """
         return read_laravel_doc_content_impl(docs_path, filename, version, runtime_version=runtime_version)
 
-    @mcp.tool(description="Search Laravel docs with context snippets")
+    @mcp.tool(
+        description="Search Laravel docs with context snippets",
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def search_laravel_docs_with_context(
-        query: str, 
+        query: str,
         version: Optional[str] = None,
         context_length: int = 200,
         include_external: bool = True
@@ -1468,7 +1498,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
         return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir, runtime_version=runtime_version)
 
-    @mcp.tool(description="Get the structure and sections of a documentation file")
+    @mcp.tool(
+        description="Get the structure and sections of a documentation file",
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_doc_structure(filename: str, version: Optional[str] = None) -> str:
         """
         Get the table of contents / structure of a documentation file.
@@ -1482,7 +1515,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         """
         return get_doc_structure_impl(docs_path, filename, version, runtime_version=runtime_version)
 
-    @mcp.tool(description="Browse Laravel documentation by category")
+    @mcp.tool(
+        description="Browse Laravel documentation by category",
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def browse_docs_by_category(category: str, version: Optional[str] = None) -> str:
         """
         Browse documentation files by category.
@@ -1497,7 +1533,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         return browse_docs_by_category_impl(docs_path, category, version, runtime_version=runtime_version)
     
     # Register external documentation tools
-    @mcp.tool(description=TOOL_DESCRIPTIONS["update_external_laravel_docs"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["update_external_laravel_docs"],
+        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True}
+    )
     def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
         """
         Update documentation for external Laravel services.
@@ -1547,7 +1586,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             logger.error(f"Error updating external documentation: {str(e)}")
             return f"Error updating external documentation: {str(e)}"
 
-    @mcp.tool(description=TOOL_DESCRIPTIONS["list_laravel_services"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["list_laravel_services"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def list_laravel_services() -> str:
         """
         List all available Laravel services with external documentation.
@@ -1587,7 +1629,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             logger.error(f"Error listing Laravel services: {str(e)}")
             return f"Error listing Laravel services: {str(e)}"
 
-    @mcp.tool(description=TOOL_DESCRIPTIONS["search_external_laravel_docs"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["search_external_laravel_docs"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def search_external_laravel_docs(query: str, services: Optional[List[str]] = None) -> str:
         """
         Search through external Laravel service documentation.
@@ -1654,7 +1699,10 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             logger.error(f"Error searching external documentation: {str(e)}")
             return f"Error searching external documentation: {str(e)}"
 
-    @mcp.tool(description=TOOL_DESCRIPTIONS["get_laravel_service_info"])
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_service_info"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
     def get_laravel_service_info(service: str) -> str:
         """
         Get detailed information about a specific Laravel service.
@@ -1723,6 +1771,43 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         except Exception as e:
             logger.error(f"Error getting service info: {str(e)}")
             return f"Error getting service info: {str(e)}"
+
+    # Register prompts to demonstrate common use cases
+    @mcp.prompt(name="laravel-authentication-setup")
+    def prompt_authentication_setup() -> str:
+        """Guide user through setting up authentication in Laravel"""
+        return """I need help setting up authentication in my Laravel application.
+
+Please help me:
+1. Understand the available authentication options in Laravel
+2. Choose the right authentication package for my needs
+3. Get step-by-step implementation guidance
+
+Start by searching the Laravel documentation for authentication options and recommending appropriate packages."""
+
+    @mcp.prompt(name="find-payment-solution")
+    def prompt_payment_solution() -> str:
+        """Help user find and implement payment processing"""
+        return """I need to add payment processing to my Laravel application.
+
+Please help me:
+1. Find Laravel packages for payment processing
+2. Compare different payment solutions (Stripe, Paddle, etc.)
+3. Provide installation and setup instructions
+
+Start by searching for payment-related packages."""
+
+    @mcp.prompt(name="laravel-forge-deployment")
+    def prompt_forge_deployment() -> str:
+        """Guide user through Laravel Forge deployment"""
+        return """I want to deploy my Laravel application using Laravel Forge.
+
+Please help me:
+1. Understand what Laravel Forge is and what it does
+2. Learn about server provisioning and deployment
+3. Get guidance on setting up deployments
+
+Start by providing information about Laravel Forge and its key features."""
 
 
 
