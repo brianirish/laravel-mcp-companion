@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "14ef86e38007ea5a6a0de32ca973889df086bb42",
-  "commit_date": "2025-11-04T15:53:35Z",
-  "commit_message": "document ucwords",
-  "commit_url": "https://github.com/laravel/docs/commit/14ef86e38007ea5a6a0de32ca973889df086bb42",
-  "sync_time": "2025-11-05T01:19:42Z"
+  "commit_sha": "1058f416d65cd1903a29321db98c9558063a9e06",
+  "commit_date": "2025-11-05T15:21:28Z",
+  "commit_message": "Document fluent string deosntcontain, #10899 PR was closed due to missing ToC entry (#10901)\n\n* document fluent string deosntContain method\n\n* add ToC for Stringable doesntContain docs\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/1058f416d65cd1903a29321db98c9558063a9e06",
+  "sync_time": "2025-11-06T01:19:22Z"
 }
