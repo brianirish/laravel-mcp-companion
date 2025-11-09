@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "1058f416d65cd1903a29321db98c9558063a9e06",
-  "commit_date": "2025-11-05T15:21:28Z",
-  "commit_message": "Document fluent string deosntcontain, #10899 PR was closed due to missing ToC entry (#10901)\n\n* document fluent string deosntContain method\n\n* add ToC for Stringable doesntContain docs\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/1058f416d65cd1903a29321db98c9558063a9e06",
-  "sync_time": "2025-11-06T01:19:22Z"
+  "commit_sha": "614ac4580b3b12819ee88b7cd6a9b50c33efaa84",
+  "commit_date": "2025-11-08T14:36:43Z",
+  "commit_message": "fix incorrect fluent string doesntContain example in documentation (#10904)\n\n* Add resove to reserved keywords in blade\n\n* fix incorrect fluent string doesntContain example in documentation\"",
+  "commit_url": "https://github.com/laravel/docs/commit/614ac4580b3b12819ee88b7cd6a9b50c33efaa84",
+  "sync_time": "2025-11-09T01:22:07Z"
 }
