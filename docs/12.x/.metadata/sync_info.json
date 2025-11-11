@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "614ac4580b3b12819ee88b7cd6a9b50c33efaa84",
-  "commit_date": "2025-11-08T14:36:43Z",
-  "commit_message": "fix incorrect fluent string doesntContain example in documentation (#10904)\n\n* Add resove to reserved keywords in blade\n\n* fix incorrect fluent string doesntContain example in documentation\"",
-  "commit_url": "https://github.com/laravel/docs/commit/614ac4580b3b12819ee88b7cd6a9b50c33efaa84",
-  "sync_time": "2025-11-09T01:22:07Z"
+  "commit_sha": "293ca608ce77396f254abab6c9fc74b0615bc8fb",
+  "commit_date": "2025-11-10T22:57:27Z",
+  "commit_message": "[12.x] explain how to manually activate broadcasting routes (#10908)\n\n* explain how to manually activate broadcasting routes\n\nwhile the automatic attempts Laravel makes to activate broadcast routes cover a lot of cases, there are some it does not.  this change adds an explanation on how to manually activate routes if the Laravel magic fails.\n\n* Update broadcasting.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/293ca608ce77396f254abab6c9fc74b0615bc8fb",
+  "sync_time": "2025-11-11T01:19:42Z"
 }
