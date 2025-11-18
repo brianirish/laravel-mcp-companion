@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "45a233232c01bf0b3befe4c37660843393b2fcf7",
-  "commit_date": "2025-11-16T23:26:12Z",
-  "commit_message": "[12.x] add docs for `@hasstack` (#10913)\n\n* add docs for `@hasstack`\n\ndocument https://github.com/laravel/framework/pull/57788\n\n* Update blade.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/45a233232c01bf0b3befe4c37660843393b2fcf7",
-  "sync_time": "2025-11-17T01:20:16Z"
+  "commit_sha": "706eb355e93046d9a7cbb01591b3a7486178aa6c",
+  "commit_date": "2025-11-17T22:30:51Z",
+  "commit_message": "Add documentation for MCP meta (#10915)\n\n* Add Docs for MCP meta\n\n* Update anchor link in MCP meta-section\n\n* formatting\n\n* formatting\n\n* Update mcp.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/706eb355e93046d9a7cbb01591b3a7486178aa6c",
+  "sync_time": "2025-11-18T01:19:11Z"
 }
