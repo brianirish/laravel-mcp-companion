@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "3dde7fdf3c30be7e216d72a6d115159f5c4061fa",
-  "commit_date": "2025-11-19T15:55:08Z",
-  "commit_message": "Update queue driver configuration instructions (#10916)\n\n* Update queue driver configuration instructions\n\n* Update queues.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/3dde7fdf3c30be7e216d72a6d115159f5c4061fa",
-  "sync_time": "2025-11-20T01:17:37Z"
+  "commit_sha": "00bab18760b65fa1d5176f1667ce9d7f3ebc1a2c",
+  "commit_date": "2025-11-20T20:04:16Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/00bab18760b65fa1d5176f1667ce9d7f3ebc1a2c",
+  "sync_time": "2025-11-21T01:18:24Z"
 }
