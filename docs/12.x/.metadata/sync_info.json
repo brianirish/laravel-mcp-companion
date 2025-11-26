@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "71eeb73f3a616d2d1f564417500cb06a79ac9dbb",
-  "commit_date": "2025-11-22T16:53:09Z",
-  "commit_message": "[12.x] Add `daysOfMonth` to scheduling (#10922)\n\n* add `daysOfMonth` to scheduling\n\n* Update daysOfMonth description in scheduling.md\n\nClarified the description for the daysOfMonth method.\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/71eeb73f3a616d2d1f564417500cb06a79ac9dbb",
-  "sync_time": "2025-11-23T01:37:47Z"
+  "commit_sha": "46c86518ba328e9db6e1e22bce3ae415b608dacf",
+  "commit_date": "2025-11-25T15:51:26Z",
+  "commit_message": "document time helpers",
+  "commit_url": "https://github.com/laravel/docs/commit/46c86518ba328e9db6e1e22bce3ae415b608dacf",
+  "sync_time": "2025-11-26T01:19:35Z"
 }
