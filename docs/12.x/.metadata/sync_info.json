@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "b888cab88a3ce969268c8569834f772a4ff2c94f",
-  "commit_date": "2025-11-26T15:18:04Z",
-  "commit_message": "[12.x] Updating the Pulse Card TailwindCSS v3 configuration to TailwindCSS v4 (#10926)\n\n* Updating the Pulse Card TailwindCSS v3 configuration to TailwindCSS v4\n\nInstead of `@tailwind`, a single `@import` is used.\r\n\r\nBut because of the previous \"important strategy\" (v3), a long import was required (with CSS selector - v4).\r\n\r\nThe \"important strategy\" has been removed; only an appropriate CSS selector is needed.\r\n\r\n`@source` requires a fallback value (to ensure that the card view is included in the automatic source detection).\n\n* Added dark mode with `@custom-variant`\n\ninstead of `darkMode: 'class'`\n\n* Disable preflight (`preflight: false`)\n\n* Update pulse.md\n\nCo-authored-by: Jess Archer <jess@jessarcher.com>\n\n* Update pulse.md\n\nCo-authored-by: Jess Archer <jess@jessarcher.com>\n\n* Update pulse.md\n\nCo-authored-by: Jess Archer <jess@jessarcher.com>\n\n* remove layers; disable automatic source detection\n\nReference:\r\n* https://github.com/laravel/docs/pull/10926#discussion_r2563556056\n\n* formatting\n\n---------\n\nCo-authored-by: Jess Archer <jess@jessarcher.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/b888cab88a3ce969268c8569834f772a4ff2c94f",
-  "sync_time": "2025-11-27T01:18:20Z"
+  "commit_sha": "555ade66f189fa12f410d1ca062553fc89d8a492",
+  "commit_date": "2025-11-27T16:46:54Z",
+  "commit_message": "Update Starter Kit Docs (#10930)\n\n* Update Starter Kit Docs\n\n* Improve formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/555ade66f189fa12f410d1ca062553fc89d8a492",
+  "sync_time": "2025-11-28T01:17:36Z"
 }
