@@ -10,6 +10,7 @@
 - [Tools](#tools)
     - [Creating Tools](#creating-tools)
     - [Tool Input Schemas](#tool-input-schemas)
+    - [Tool Output Schemas](#tool-output-schemas)
     - [Validating Tool Arguments](#validating-tool-arguments)
     - [Tool Dependency Injection](#tool-dependency-injection)
     - [Tool Annotations](#tool-annotations)
@@ -27,6 +28,7 @@
     - [Resource URI and MIME Type](#resource-uri-and-mime-type)
     - [Resource Request](#resource-request)
     - [Resource Dependency Injection](#resource-dependency-injection)
+    - [Resource Annotations](#resource-annotations)
     - [Conditional Resource Registration](#conditional-resource-registration)
     - [Resource Responses](#resource-responses)
 - [Metadata](#metadata)
@@ -175,7 +177,7 @@ Tools enable your server to expose functionality that AI clients can call. They 
 
 namespace App\Mcp\Tools;
 
-use Illuminate\JsonSchema\JsonSchema;
+use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Tool;
@@ -202,7 +204,7 @@ class CurrentWeatherTool extends Tool
     /**
      * Get the tool's input schema.
      *
-     * @return array<string, \Illuminate\JsonSchema\JsonSchema>
+     * @return array<string, \Illuminate\Contracts\JsonSchema\JsonSchema>
      */
     public function schema(JsonSchema $schema): array
     {
@@ -289,14 +291,14 @@ class CurrentWeatherTool extends Tool
 <a name="tool-input-schemas"></a>
 ### Tool Input Schemas
 
-Tools can define input schemas to specify what arguments they accept from AI clients. Use Laravel's `Illuminate\JsonSchema\JsonSchema` builder to define your tool's input requirements:
+Tools can define input schemas to specify what arguments they accept from AI clients. Use Laravel's `Illuminate\Contracts\JsonSchema\JsonSchema` builder to define your tool's input requirements:
 
 ```php
 <?php
 
 namespace App\Mcp\Tools;
 
-use Illuminate\JsonSchema\JsonSchema;
+use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Server\Tool;
 
 class CurrentWeatherTool extends Tool
@@ -317,6 +319,45 @@ class CurrentWeatherTool extends Tool
                 ->enum(['celsius', 'fahrenheit'])
                 ->description('The temperature units to use.')
                 ->default('celsius'),
+        ];
+    }
+}
+```
+
+<a name="tool-output-schemas"></a>
+### Tool Output Schemas
+
+Tools can define [output schemas](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#output-schema) to specify the structure of their responses. This enables better integration with AI clients that need parseable tool results. Use the `outputSchema` method to define your tool's output structure:
+
+```php
+<?php
+
+namespace App\Mcp\Tools;
+
+use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Laravel\Mcp\Server\Tool;
+
+class CurrentWeatherTool extends Tool
+{
+    /**
+     * Get the tool's output schema.
+     *
+     * @return array<string, JsonSchema>
+     */
+    public function outputSchema(JsonSchema $schema): array
+    {
+        return [
+            'temperature' => $schema->number()
+                ->description('Temperature in Celsius')
+                ->required(),
+
+            'conditions' => $schema->string()
+                ->description('Weather conditions')
+                ->required(),
+
+            'humidity' => $schema->integer()
+                ->description('Humidity percentage')
+                ->required(),
         ];
     }
 }
@@ -530,6 +571,30 @@ public function handle(Request $request): array
         Response::text('**Detailed Forecast**\n- Morning: 65°F\n- Afternoon: 78°F\n- Evening: 70°F')
     ];
 }
+```
+
+<a name="structured-responses"></a>
+#### Structured Responses
+
+Tools can return [structured content](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#structured-content) using the `structured` method. This provides parseable data for AI clients while maintaining backward compatibility with a JSON-encoded text representation:
+
+```php
+return Response::structured([
+    'temperature' => 22.5,
+    'conditions' => 'Partly cloudy',
+    'humidity' => 65,
+]);
+```
+
+If you need to provide custom text alongside structured content, use the `withStructuredContent` method on the response factory:
+
+```php
+return Response::make(
+    Response::text('Weather is 22.5°C and sunny')
+)->withStructuredContent([
+    'temperature' => 22.5,
+    'conditions' => 'Sunny',
+]);
 ```
 
 <a name="streaming-responses"></a>
@@ -1029,6 +1094,39 @@ class WeatherGuidelinesResource extends Resource
     }
 }
 ```
+
+<a name="resource-annotations"></a>
+### Resource Annotations
+
+You may enhance your resources with [annotations](https://modelcontextprotocol.io/specification/2025-06-18/schema#resourceannotations) to provide additional metadata to AI clients. Annotations are added to resources via attributes:
+
+```php
+<?php
+
+namespace App\Mcp\Resources;
+
+use Laravel\Mcp\Enums\Role;
+use Laravel\Mcp\Server\Annotations\Audience;
+use Laravel\Mcp\Server\Annotations\LastModified;
+use Laravel\Mcp\Server\Annotations\Priority;
+use Laravel\Mcp\Server\Resource;
+
+#[Audience(Role::User)]
+#[LastModified('2025-01-12T15:00:58Z')]
+#[Priority(0.9)]
+class UserDashboardResource extends Resource
+{
+    //
+}
+```
+
+Available annotations include:
+
+| Annotation       | Type           | Description                                                                                     |
+| ---------------- | -------------- | ----------------------------------------------------------------------------------------------- |
+| `#[Audience]`    | Role or array  | Specifies the intended audience (`Role::User`, `Role::Assistant`, or both).                    |
+| `#[Priority]`    | float          | A numerical score between 0.0 and 1.0 indicating resource importance.                          |
+| `#[LastModified]`| string         | An ISO 8601 timestamp showing when the resource was last updated.                               |
 
 <a name="conditional-resource-registration"></a>
 ### Conditional Resource Registration
