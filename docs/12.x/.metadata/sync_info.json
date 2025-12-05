@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "831cf00ddf3c54b9b93dc966e509942b314d72f7",
-  "commit_date": "2025-12-01T17:48:08Z",
-  "commit_message": "Update MCP docs to add outputSchema and struturedContent (#10932)\n\n* Update MCP docs to add outputSchema and struturedCOntent\n\n* Update MCP docs to replace JsonSchema with Contracts\\JsonSchema\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/831cf00ddf3c54b9b93dc966e509942b314d72f7",
-  "sync_time": "2025-12-02T01:22:30Z"
+  "commit_sha": "c67cb4425af264f331c194e7c6abc69f9c048c9a",
+  "commit_date": "2025-12-04T20:42:31Z",
+  "commit_message": "[12.x] Document reload command (#10935)\n\n* [12.x] Document reload command\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/c67cb4425af264f331c194e7c6abc69f9c048c9a",
+  "sync_time": "2025-12-05T01:21:40Z"
 }
