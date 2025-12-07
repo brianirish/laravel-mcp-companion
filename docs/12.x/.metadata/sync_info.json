@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "c67cb4425af264f331c194e7c6abc69f9c048c9a",
-  "commit_date": "2025-12-04T20:42:31Z",
-  "commit_message": "[12.x] Document reload command (#10935)\n\n* [12.x] Document reload command\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/c67cb4425af264f331c194e7c6abc69f9c048c9a",
-  "sync_time": "2025-12-05T01:21:40Z"
+  "commit_sha": "08796c215daa70bc040e9967923b1dbeddd32d0f",
+  "commit_date": "2025-12-06T18:18:40Z",
+  "commit_message": "docs: mark Horizon as unsupported with Redis Clusters (#10942)\n\n* docs: mark Horizon as unsupported with Redis Clusters\n\n* Update warning about Redis Cluster support\n\n* Update horizon.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/08796c215daa70bc040e9967923b1dbeddd32d0f",
+  "sync_time": "2025-12-07T01:28:50Z"
 }
