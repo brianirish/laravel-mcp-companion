@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "08796c215daa70bc040e9967923b1dbeddd32d0f",
-  "commit_date": "2025-12-06T18:18:40Z",
-  "commit_message": "docs: mark Horizon as unsupported with Redis Clusters (#10942)\n\n* docs: mark Horizon as unsupported with Redis Clusters\n\n* Update warning about Redis Cluster support\n\n* Update horizon.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/08796c215daa70bc040e9967923b1dbeddd32d0f",
-  "sync_time": "2025-12-07T01:28:50Z"
+  "commit_sha": "b8f025f906c3e79efb76c17447ca7b1da5d0de5b",
+  "commit_date": "2025-12-08T21:53:22Z",
+  "commit_message": "update for laravel idea",
+  "commit_url": "https://github.com/laravel/docs/commit/b8f025f906c3e79efb76c17447ca7b1da5d0de5b",
+  "sync_time": "2025-12-09T01:21:14Z"
 }
