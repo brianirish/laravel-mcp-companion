@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "4da19a5f3f4c14d57d08662b942e3c270fc35af5",
-  "commit_date": "2025-12-09T16:28:24Z",
-  "commit_message": "update date modification",
-  "commit_url": "https://github.com/laravel/docs/commit/4da19a5f3f4c14d57d08662b942e3c270fc35af5",
-  "sync_time": "2025-12-10T01:23:07Z"
+  "commit_sha": "fda374daf62874dafcf79202fe9fc9cc8552e985",
+  "commit_date": "2025-12-10T15:28:55Z",
+  "commit_message": "A few adjustments to documentation on Migrations (#10947)\n\n* docs: use proper naming convention for model Flight\n\n* docs: add link to Isolating Migration Execution section",
+  "commit_url": "https://github.com/laravel/docs/commit/fda374daf62874dafcf79202fe9fc9cc8552e985",
+  "sync_time": "2025-12-11T01:23:59Z"
 }
