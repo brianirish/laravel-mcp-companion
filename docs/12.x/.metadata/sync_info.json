@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "02afe14b44c12f2979ee9c389c59341b4c0451d4",
-  "commit_date": "2025-12-11T16:11:52Z",
-  "commit_message": "[12.x] Remove Inertia Precognition integration + Link to Inertia docs (#10946)\n\n* Remove Inertia Precognition integration + Link to Inertia docs\n\n* Update precognition.md",
-  "commit_url": "https://github.com/laravel/docs/commit/02afe14b44c12f2979ee9c389c59341b4c0451d4",
-  "sync_time": "2025-12-12T01:23:49Z"
+  "commit_sha": "ea8b96ec0a1bb7dad0c2172aced3371725edc2f3",
+  "commit_date": "2025-12-12T19:39:09Z",
+  "commit_message": "add cookie note",
+  "commit_url": "https://github.com/laravel/docs/commit/ea8b96ec0a1bb7dad0c2172aced3371725edc2f3",
+  "sync_time": "2025-12-13T01:19:11Z"
 }
