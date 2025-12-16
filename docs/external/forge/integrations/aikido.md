@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,38 +67,43 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Connect with Aikido](#connect-with-aikido)
-- [Viewing Aikido Findings](#viewing-aikido-findings)
+- [Introduction](#introduction)
+- [Connecting with Aikido](#connecting-with-aikido)
+- [Enabling Aikido for sites](#enabling-aikido-for-sites)
+- [Viewing security findings](#viewing-security-findings)
 
 Integrations
 
 # Aikido
 
-Aikido provides security scanning with Forge integration.
+Aikido provides security scanning with Laravel Forge integration.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-[Aikido](https://aikido.dev) provides security scanning for repositories. Forge has partnered with Aikido to allow for a seamless integration with your Forge sites.
+[Aikido](https://aikido.dev?utm_source=laravel&utm_medium=referral) provides security scanning for repositories. Laravel Forge has partnered with Aikido to allow for a seamless integration with your Forge sites, enabling you to identify and resolve security vulnerabilities directly from the Forge dashboard.
 
-## [​](#connect-with-aikido) Connect with Aikido
+## [​](#connecting-with-aikido) Connecting with Aikido
 
-Before you can use Aikido with Forge, you must connect your Forge account to an Aikido account.
-To do this, visit the [Aikido panel](https://forge.laravel.com/user-profile/aikido) in the Forge dashboard.
-Clicking “Connect Aikido” will allow you to connect your Forge account to an Aikido account.
+To begin using Aikido with Laravel Forge, you’ll need to enable the integration at the organization level. Navigate to your organization’s settings, select the “Integrations” tab, and toggle the Aikido integration on.
+Follow the prompts to connect your Forge organization to an Aikido workspace. After creating your Aikido workspace, you may easily check the security findings for any of your Forge-powered sites.
 
-You can connect multiple Aikido workspaces to a single Forge account, each representing a different organization or group in your source control provider.
-This can be managed from the [Aikido panel](https://forge.laravel.com/user-profile/aikido) within Forge.
+You can connect multiple Aikido workspaces to a single Forge organization, each representing a different organization or group in your source control provider.
 
-## [​](#viewing-aikido-findings) Viewing Aikido Findings
+## [​](#enabling-aikido-for-sites) Enabling Aikido for sites
 
-When viewing a site in the Forge dashboard, the top security findings will be displayed on the Aikido tab.
+Once your organization is connected to Aikido, you can enable Aikido security scanning for individual sites. Navigate to your site’s “Settings / Integrations” panel and toggle the Aikido integration on.
+Click “Enable Aikido” to activate security scanning for the site. Laravel Forge will automatically match the site’s repository and source control provider to enable Aikido scanning.
 
-![Screenshot showing the top security findings](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/aikido-top-security-findings.png)
+## [​](#viewing-security-findings) Viewing security findings
+
+Once Aikido is enabled for a site, security findings will be displayed directly in the site’s “Integrations” panel. If Aikido has not found any security issues for your repository, you will see a confirmation message. You can click “View on Aikido” to see more detailed information on the Aikido platform.
+You may disable Aikido for a site at any time by toggling the integration off. This will deactivate Aikido from the repository, and scanning will be stopped.
 
 The Aikido integration is only supported for GitHub, GitLab, GitLab Self-Hosted, and Bitbucket.
 
@@ -110,8 +111,8 @@ Was this page helpful?
 
 YesNo
 
-[Sentry](/docs/integrations/sentry)[Abuse](/docs/abuse)
+[Sentry](/docs/integrations/sentry)[Support](/docs/support)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

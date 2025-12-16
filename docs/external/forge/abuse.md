@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,6 +67,8 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 Other
@@ -79,14 +77,14 @@ Other
 
 Help us keep Laravel Forge safe by reporting any abuse, security concerns, or violations.
 
-Please email us at [[email protected]](/cdn-cgi/l/email-protection#e596808690978c919ca589849784938089cb868a88)
+Please email us at [[email protected]](/cdn-cgi/l/email-protection#4437212731362d303d04282536253221286a272b29)
 
 Was this page helpful?
 
 YesNo
 
-[Aikido](/docs/integrations/aikido)
+[Changelog](/docs/changelog)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

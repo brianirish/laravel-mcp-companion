@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -120,7 +120,6 @@ use Laravel\Nova\Fields\File;
 
 File::make('Profile Photo')
     ->disk('public'),
-
 ```
 
 ### [​](#disabling-file-downloads) Disabling File Downloads
@@ -138,7 +137,6 @@ use Laravel\Nova\Fields\File;
 
 File::make('Profile Photo')
     ->disableDownload(),
-
 ```
 
 ### [​](#how-files-are-stored) How Files Are Stored
@@ -164,7 +162,6 @@ Route::post('/photo', function (Request $request) {
         'profile_photo' => $path,
     ]);
 });
-
 ```
 
 Of course, once the file has been stored, you may retrieve it within your application using the Laravel `Storage` facade:
@@ -180,7 +177,6 @@ use Illuminate\Support\Facades\Storage;
 
 Storage::get($user->profile_photo);
 Storage::url($user->profile_photo);
-
 ```
 
 The documentation above only demonstrates the default behavior of the `File` field. To learn more about how to customize its behavior, check out the [customization documentation](#customization).
@@ -204,7 +200,6 @@ use Laravel\Nova\Fields\Image;
 
 Image::make('Profile Photo')
     ->disk('public'),
-
 ```
 
 To set the width of the `Image` field when being displayed, you can use the `maxWidth` method:
@@ -220,7 +215,6 @@ use Laravel\Nova\Fields\Image;
 
 Image::make('Profile Photo')
     ->maxWidth(100),
-
 ```
 
 Alternatively, you can set separate widths for the index and detail views using the `indexWidth` and `detailWidth` methods:
@@ -237,7 +231,6 @@ use Laravel\Nova\Fields\Image;
 Image::make('Profile Photo')
     ->indexWidth(60)
     ->detailWidth(150),
-
 ```
 
 You may also use the `maxWidth`, `indexWidth`, and `detailWidth` methods on the [Avatar](#avatars) and [Gravatar](./fields#gravatar-field) fields.
@@ -257,12 +250,11 @@ use Laravel\Nova\Fields\Avatar;
 
 Avatar::make('Poster')
     ->disk('public'),
-
 ```
 
 In addition to displaying a thumbnail preview of the underlying file, an `Avatar` field will also be automatically displayed in Nova search results. An `Avatar` field is not limited to “user” resources - you may attach `Avatar` fields to any resource within your Nova application:
 
-![Avatar Example](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/avatar-poster.png)
+![Avatar Example](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/avatar-poster.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=254090ea14d4fb2ff589eb8dd140dd21)
 
 ## [​](#storing-metadata) Storing Metadata
 
@@ -303,7 +295,6 @@ public function fields(NovaRequest $request): array
                 }),
     ];
 }
-
 ```
 
 One benefit of storing the original client filename is the ability to create file download responses using the original filename that was used to upload the file. For example, you may do something like the following in one of your application’s routes:
@@ -323,8 +314,6 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/download', function (Request $request) {
     $user = $request->user();
 
-    return Storage::download(
-        $user->attachment, $user->attachment_name
-    
+    return Storage::downlo
 
 *[Content truncated for length]*

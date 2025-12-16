@@ -55,6 +55,4 @@ YesNo
 
 [Notifications](/projects/notifications)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

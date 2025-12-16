@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -104,7 +104,7 @@ Nova menus provide a convenient way to customize the main and user menus.
 
 By default, Nova’s main left-side navigation menu displays all of your application’s dashboards, resources, and any custom tools you have registered.
 
-![Default Menu](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/default-main-menu.png)
+![Default Menu](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/default-main-menu.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=19d8f5ccc27e09e005a16f3c556f9737)
 
 When rendering the main menu, Nova will order your dashboards according to the order in which they are returned by the `dashboards` method within your application’s `App\Providers\NovaServiceProvider` class.
 Nova will also automatically group your resources under the default “Resources” menu section according to the [`group` property defined in the `Resource` class](./../resources/the-basics#grouping-resources). In addition, any custom tools you have registered will be listed in the order they are defined within your application’s `NovaServiceProvider`.
@@ -151,10 +151,9 @@ public function boot(): void
         ];
     });
 }
-
 ```
 
-![Custom Menu](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/custom-main-menu.png)
+![Custom Menu](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/custom-main-menu.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=1c9783058f1da576316f1846626bcc06)
 
 ### [​](#customizing-the-user-menu) Customizing the User Menu
 
@@ -199,14 +198,13 @@ public function boot(): void
         return $menu;
     });
 }
-
 ```
 
 By default, Nova is configured to display a “logout” link in the user menu. This link may not be removed.
 
 Nova’s user menu only supports `MenuItem` objects. Using `MenuSection` or `MenuGroup` inside the user menu will throw an `Exception`.
 
-### [​](#appending-%2F-prepending-to-the-menu) Appending / Prepending to the Menu
+### [​](#appending-/-prepending-to-the-menu) Appending / Prepending to the Menu
 
 You may call the `append` and `prepend` methods on a `Menu` instance to prepend or append new items to the. These methods are typically most helpful when customizing the user menu, since you often do not want to completely replace the existing menu:
 
@@ -229,7 +227,6 @@ Nova::userMenu(function (Request $request, Menu $menu) {
         ->append(MenuItem::externalLink('API Docs', 'http://example.com'))
         ->prepend(MenuItem::link('My Profile', '/resources/users/'.$request->user()->getKey()));
 });
-
 ```
 
 ## [​](#menu-sections) Menu Sections
@@ -267,7 +264,6 @@ Nova::mainMenu(function (Request $request, Menu $menu) {
         ]),
     ];
 });
-
 ```
 
 Instead of displaying a list of links, you may indicate that a menu section should just be a large, emphasized link to another location. To accomplish this, you may invoke the `path` method when defining the menu section:
@@ -282,7 +278,6 @@ use Laravel\Nova\Menu\MenuSection;
 // ...
 
 MenuSection::make('Dashboard')->path('/dashboards/main');
-
 ```
 
 For convenience, if you are only creating a menu section to serve as a large, emphasized link to a Nova dashboard, you may invoke the `MenuSection::dashboard` method:
@@ -298,7 +293,6 @@ use Laravel\Nova\Menu\MenuSection;
 // ...
 
 MenuSection::dashboard(Sales::class);
-
 ```
 
 Since you will often be creating links to Nova resources, you may use the `resource` method to quickly create a link to the appropriate path for a given resource:
@@ -309,14 +303,6 @@ Ask AI
 
 ```
 use App\Nova\User;
-use Laravel\Nova\Menu\MenuSection;
-
-// ...
-
-MenuSection::resource(User::class);
-
-```
-
-Similarly, you may create links to Nova lenses via the 
+use Larave
 
 *[Content truncated for length]*

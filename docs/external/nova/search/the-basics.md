@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -111,7 +111,6 @@ class Post extends Resource
         'id', 'title', 'content',
     ];
 }
-
 ```
 
 If you are using Nova’s Scout integration, the `$search` property has no effect on your search results and may be ignored. You should manage the searchable columns within the Algolia or Meilisearch dashboard.
@@ -141,7 +140,6 @@ public static function searchableColumns()
 {
     return ['id', new SearchableText('title')];
 }
-
 ```
 
 The array returned by the `searchableColumns` method can also include raw SQL expressions, which allow you to search through derived columns:
@@ -166,7 +164,6 @@ public static function searchableColumns()
 {
     return ['id', DB::raw("CONCAT(first_name, ' ', last_name)")];
 }
-
 ```
 
 ## [​](#searching-relationships) Searching Relationships
@@ -194,7 +191,6 @@ public static function searchableColumns()
 {
     return ['id', new SearchableRelation('author', 'name')];
 }
-
 ```
 
 For convenience, you may define a relationship that should be searched by adding the field to your resource’s `$search` property using “dot notation”:
@@ -214,7 +210,6 @@ Ask AI
 public static $search = [
     'id', 'author.name'
 ];
-
 ```
 
 ### [​](#morphto-relationships) MorphTo Relationships
@@ -242,7 +237,6 @@ public static function searchableColumns()
 {
     return ['id', new SearchableMorphToRelation('commentable', 'title', [Post::class])];
 }
-
 ```
 
 ## [​](#searching-json-data) Searching JSON Data
@@ -270,7 +264,6 @@ public static function searchableColumns()
 {
     return ['id', new SearchableJson('meta->address->postcode')];
 }
-
 ```
 
 Was this page helpful?
@@ -279,6 +272,4 @@ YesNo
 
 [Authorization](/docs/v5/resources/authorization)[Global Search](/docs/v5/search/global-search)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

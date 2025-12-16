@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -84,7 +84,6 @@ Ask AI
 
 ```
 php artisan nova:stubs
-
 ```
 
 When running this Artisan command in your terminal, Nova will copy all of its stub files into `./stubs/nova`, where they may then be customized.
@@ -98,6 +97,4 @@ YesNo
 
 [Localization](/docs/v5/customization/localization)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

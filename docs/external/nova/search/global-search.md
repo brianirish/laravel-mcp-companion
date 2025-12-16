@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -88,11 +88,11 @@ Learn how to use Nova’s global search feature to search across all your resour
 
 Nova not only allows you to search within specific resources and relationships, you may also globally search across all your resources using the global search input located within the top-navigation bar of the Nova administration panel:
 
-![Global Search](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/global-search.png)
+![Global Search](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/global-search.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=9bd231905069b799f34c74a7a3564cd6)
 
 You can focus the global search input by pressing `/` (forward slash) on your keyboard. Pressing `ESC` (the escape key) will also close the global search input.
 
-## [​](#title-%2F-subtitle-attributes) Title / Subtitle Attributes
+## [​](#title-/-subtitle-attributes) Title / Subtitle Attributes
 
 When a resource is shown within the search results, the results will display the “title” of the resource. For example, a `User` resource may specify the `name` attribute as its title. Then, when the resource is shown within the global search results, that attribute will be displayed.
 To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
@@ -117,7 +117,6 @@ class Team extends Resource
      */
     public static $title = 'name';
 }
-
 ```
 
 You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](./../resources/fields#avatar-field) field to the resource.
@@ -126,7 +125,7 @@ You may also display resource’s “avatar” next to the title in the search r
 
 You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:
 
-![Global Search](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/global-search.png)
+![Global Search](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/global-search.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=9bd231905069b799f34c74a7a3564cd6)
 
 To define a resource’s subtitle, you should override the `subtitle` method of the resource:
 
@@ -146,7 +145,6 @@ public function subtitle()
 {
     return "Author: {$this->user->name}";
 }
-
 ```
 
 If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource’s [eager load array](./../resources/the-basics#eager-loadings).
@@ -170,7 +168,6 @@ Ask AI
  * @var int
  */
 public static $globalSearchResults = 5;
-
 ```
 
 ### [​](#global-search-debounce) Global Search Debounce
@@ -193,10 +190,9 @@ public function boot(): void
     
     Nova::globalSearchDebounce(1); // 1 second
 }
-
 ```
 
-### [​](#custom-avatars-%2F-covers) Custom Avatars / Covers
+### [​](#custom-avatars-/-covers) Custom Avatars / Covers
 
 If you are building a [custom field](./../customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
 
@@ -221,7 +217,6 @@ class Team extends Resource
         return 'https://www.example.com/avatar/'.md5(strtolower($this->value)).'?s=300';
     }
 }
-
 ```
 
 ## [​](#disabling-global-search-for-a-resource) Disabling Global Search for a Resource
@@ -241,7 +236,6 @@ Ask AI
  * @var bool
  */
 public static $globallySearchable = false;
-
 ```
 
 ## [​](#disabling-global-search-globally) Disabling Global Search Globally
@@ -264,7 +258,6 @@ public function boot(): void
 
     Nova::withoutGlobalSearch();
 }
-
 ```
 
 Was this page helpful?
@@ -273,6 +266,4 @@ YesNo
 
 [The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

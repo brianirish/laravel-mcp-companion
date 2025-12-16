@@ -28,7 +28,8 @@
 
 On this page
 
-- [What Is Envoyer?](#what-is-envoyer%3F)
+- [What Is Envoyer?](#what-is-envoyer)
+- [Requirements](#requirements)
 - [Forge Integration](#forge-integration)
 - [Envoyer IP Addresses](#envoyer-ip-addresses)
 - [Envoyer API](#envoyer-api)
@@ -47,7 +48,7 @@ Create your Envoyer account today](https://envoyer.io/auth/register)[## Watch Mo
 
 Watch the free Envoyer series on Laracasts](https://laracasts.com/series/envoyer)
 
-## [​](#what-is-envoyer%3F) What Is Envoyer?
+## [​](#what-is-envoyer) What Is Envoyer?
 
 [Envoyer](https://envoyer.io) is a zero downtime deployment service for PHP. Some highlights of Envoyer’s features include:
 
@@ -57,13 +58,18 @@ Watch the free Envoyer series on Laracasts](https://laracasts.com/series/envoyer
 - Application Health Checks
 - Integrated Chat Notifications
 - Tuned for Laravel Apps
-- Deploy Any PHP Project
+- Deploy any PHP Project
 - Unlimited Deployments
-- Deploy To Multiple Servers
+- Deploy to Multiple Servers
 - Cron Job Monitoring
 - Unlimited Team Members
 - Customize Your Deployments
 - Import Your [Laravel Forge](https://forge.laravel.com) Servers
+
+#### [​](#requirements) Requirements
+
+- Envoyer supports Ubuntu and FreeBSD servers.
+- The server must have `scp` installed.
 
 ## [​](#forge-integration) Forge Integration
 
@@ -100,6 +106,4 @@ YesNo
 
 [Quick Start](/quick-start)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

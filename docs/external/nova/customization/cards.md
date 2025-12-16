@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -103,7 +103,6 @@ Ask AI
 
 ```
 php artisan nova:card acme/analytics
-
 ```
 
 When generating a card, Nova will prompt you to install the card’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom cards are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -139,7 +138,6 @@ class Post extends Resource
         ];
     }
 }
-
 ```
 
 ### [​](#authorization) Authorization
@@ -170,7 +168,6 @@ public function cards(NovaRequest $request)
         }),
     ];
 }
-
 ```
 
 ### [​](#card-options) Card Options
@@ -202,7 +199,6 @@ class Analytics extends Card
         return $this->withMeta(['currentVisitors' => true]);
     }
 }
-
 ```
 
 After registering your custom card, don’t forget to actually call any custom option methods you defined:
@@ -213,7 +209,6 @@ Ask AI
 
 ```
 (new Acme\Analytics\Analytics)->currentVisitors(),
-
 ```
 
 #### [​](#accessing-card-options) Accessing Card Options
@@ -226,7 +221,6 @@ Ask AI
 
 ```
 const currentVisitors = this.card.currentVisitors;
-
 ```
 
 ## [​](#building-cards) Building Cards
@@ -274,7 +268,6 @@ public function boot(): void
         Nova::translations(__DIR__.'/../resources/lang/en/card.json');
     });
 }
-
 ```
 
 Alternatively you can also explicitly register `script` and `style` using the following code:
@@ -290,7 +283,6 @@ Nova::serving(function (ServingNova $event) {
 +   Nova::style('acme-analytic', __DIR__.'/../dist/css/card.css');
     Nova::translations(__DIR__.'/../resources/lang/en/card.json');
 });
-
 ```
 
 Your component is bootstrapped and registered in the `resources/js/card.js` file. You are free to modify this file or register additional components here as needed.
@@ -308,6 +300,7 @@ Ask AI
 npm run dev
 
 # Compile and minify your assets...
+npm run prod
 
 
 *[Content truncated for length]*

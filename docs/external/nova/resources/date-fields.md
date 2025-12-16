@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -97,7 +97,6 @@ use Laravel\Nova\Fields\DateTime;
 
 Date::make('Birthday'),
 DateTime::make('Created At'),
-
 ```
 
 ### [​](#options) Options
@@ -122,7 +121,6 @@ Date::make('Expired On')->step(CarbonInterval::weeks(1)),
 
 DateTime::make('Published At')->step(60),
 DateTime::make('Published At')->step(CarbonInterval::minutes(1)),
-
 ```
 
 #### [​](#minimum-and-maximum-values) Minimum and Maximum Values
@@ -146,7 +144,6 @@ Date::make('Expired On')
 Date::make('Expired On')
     ->min(Carbon::tomorrow())
     ->max(Carbon::today()->addWeek(1)),
-
 ```
 
 ### [​](#timezones) Timezones
@@ -181,7 +178,6 @@ public function boot(): void
         return $request->user()?->timezone;
     });
 }
-
 ```
 
 Was this page helpful?
@@ -190,6 +186,4 @@ YesNo
 
 [Dependent Fields](/docs/v5/resources/dependent-fields)[File Fields](/docs/v5/resources/file-fields)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

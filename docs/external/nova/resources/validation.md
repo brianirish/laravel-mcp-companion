@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -119,7 +119,6 @@ public function fields(NovaRequest $request): array
             ->rules('required', 'max:255'),
     ];
 }
-
 ```
 
 Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
@@ -137,7 +136,6 @@ use Laravel\Nova\Fields\Text;
 Text::make('State')
     ->sortable()
     ->rules('required', new ValidState),
-
 ```
 
 You may also provide rules to the `rules` method via an array or Closure:
@@ -160,7 +158,6 @@ Text::make('State')->rules(fn ($request) => [
     'required', 
     new ValidState(),
 ]);
-
 ```
 
 Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
@@ -181,7 +178,6 @@ Text::make('State')
             return $fail('The '.$attribute.' field must be uppercase.');
         }
     }),
-
 ```
 
 ### [​](#creation-rules) Creation Rules
@@ -201,7 +197,6 @@ Text::make('Email')
     ->sortable()
     ->rules('required', 'email', 'max:255')
     ->creationRules('unique:users,email'),
-
 ```
 
 ### [​](#update-rules) Update Rules
@@ -222,7 +217,6 @@ Text::make('Email')
     ->rules('required', 'email', 'max:255')
     ->creationRules('unique:users,email')
     ->updateRules('unique:users,email,{{resourceId}}'),
-
 ```
 
 ## [​](#after-validation-hooks) After Validation Hooks
@@ -262,7 +256,6 @@ protected static function afterValidation(
         $validator->errors()->add('field', 'Something is wrong with this field!');
     }
 }
-
 ```
 
 #### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
@@ -294,7 +287,6 @@ protected static function afterCreationValidation(
         $validator->errors()->add('field', 'Something is wrong with this field!');
     }
 }
-
 ```
 
 #### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
@@ -326,7 +318,6 @@ protected static function afterUpdateValidation(
         $validator->errors()->add('field', 'Something is wrong with this field!');
     }
 }
-
 ```
 
 Was this page helpful?
@@ -335,6 +326,4 @@ YesNo
 
 [Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

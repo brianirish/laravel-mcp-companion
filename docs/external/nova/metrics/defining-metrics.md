@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -128,7 +128,7 @@ Nova offers several types of built-in metrics: value, trend, partition, and prog
 
 Value metrics display a single value and, if desired, its change compared to a previous time interval. For example, a value metric might display the total number of users created in the last thirty days compared with the previous thirty days:
 
-![Value Metric](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/value.png)
+![Value Metric](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/value.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=92ce9a138b27eaf9f727131355e862e3)
 
 Value metrics may be generated using the `nova:value` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
 
@@ -138,7 +138,6 @@ Ask AI
 
 ```
 php artisan nova:value NewUsers
-
 ```
 
 Once your value metric class has been generated, you’re ready to customize it. Each value metric class contains a `calculate` method. This method should return a `Laravel\Nova\Metrics\ValueResult` instance. Don’t worry, Nova ships with a variety of helpers for quickly generating metric results.
@@ -185,7 +184,6 @@ class NewUsers extends Value
         ];
     }
 }
-
 ```
 
 ### [​](#value-query-types) Value Query Types
@@ -216,7 +214,6 @@ public function calculate(NovaRequest $request): ValueResult
 {
     return $this->average($request, Post::class, 'word_count');
 }
-
 ```
 
 #### [​](#sum) Sum
@@ -243,7 +240,6 @@ public function calculate(NovaRequest $request): ValueResult
 {
     return $this->sum($request, Order::class, 'price');
 }
-
 ```
 
 #### [​](#max) Max
@@ -270,7 +266,6 @@ public function calculate(NovaRequest $request): ValueResult
 {
     return $this->max($request, Order::class, 'total');
 }
-
 ```
 
 #### [​](#min) Min
@@ -297,7 +292,6 @@ public function calculate(NovaRequest $request): ValueResult
 {
     return $this->min($request, Order::class, 'total');
 }
-
 ```
 
 ### [​](#value-ranges) Value Ranges
@@ -330,13 +324,12 @@ public function ranges(): array
         'ALL' => Nova::__('All Time'),
     ];
 }
-
 ```
 
 You may customize these ranges to suit your needs; however, if you are using the built-in “Today”, “Yesterday”, “Month To Date”, “Quarter To Date”, “Year To Date”, or “All Time” ranges, you should not change their keys.
 
 ### [​](#zero-result-values) Zero Result Values
 
-By default, Nova will handle results of `0` as a result containing no data. This may not always be correct, which is why you can use the `allowZeroResult` method to indicate that `0` is a vali
+By default, Nova will handle results of `0` as a result containing no data. This may not always be correct, which is why you can use
 
 *[Content truncated for length]*

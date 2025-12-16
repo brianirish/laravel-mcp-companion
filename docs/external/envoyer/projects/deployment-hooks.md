@@ -80,7 +80,6 @@ Ask AI
 cd {{ release }}
 
 php artisan command
-
 ```
 
 Other available variables are:
@@ -106,6 +105,4 @@ YesNo
 
 [Servers](/projects/servers)[Heartbeats](/projects/heartbeats)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -91,7 +91,7 @@ Nova dashboards provide a convenient way to build information overview pages tha
 
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](./../metrics/defining-metrics) and [cards](../customization/cards).
 
-![Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
+![Dashboard](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/dashboard.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=55c6eb6b0402f001136f8dca6a79fd24)
 
 ### [​](#default-dashboard) Default Dashboard
 
@@ -123,7 +123,6 @@ class Main extends Dashboard
         ];
     }
 }
-
 ```
 
 More information regarding dashboard metrics can be found [within our documentation on metrics](../metrics/registering-metrics#dashboard-metrics).
@@ -138,7 +137,6 @@ Ask AI
 
 ```
 php artisan nova:dashboard UserInsights
-
 ```
 
 Once your dashboard class has been generated, you’re ready to customize it. Each dashboard class contains a `cards` method. This method should return an array of card or metric classes:
@@ -171,7 +169,6 @@ class UserInsights extends Dashboard
         ];
     }
 }
-
 ```
 
 #### [​](#dashboard-names) Dashboard Names
@@ -188,13 +185,12 @@ Ask AI
 /**
  * Get the displayable name of the dashboard.
  *
- * @return \Stingable|string
+ * @return \Stringable|string
  */
 public function name()
 {
     return 'User Insights';
 }
-
 ```
 
 #### [​](#dashboard-uri-keys) Dashboard URI Keys
@@ -217,7 +213,6 @@ public function uriKey()
 {
     return 'user-insights-improved';
 }
-
 ```
 
 ## [​](#registering-dashboards) Registering Dashboards
@@ -248,7 +243,6 @@ protected function dashboards(): array
         UserInsights::make(),
     ];
 }
-
 ```
 
 #### [​](#customizing-dashboard-menus) Customizing Dashboard Menus
@@ -277,7 +271,6 @@ public function menu(Request $request)
         return 'NEW!';
     });
 }
-
 ```
 
 Please refer to the documentation on [menu customization](./menus) for more information.
@@ -310,7 +303,6 @@ protected function dashboards(): array
         UserInsights::make()->showRefreshButton(),
     ];
 }
-
 ```
 
 ### [​](#authorization) Authorization
@@ -344,7 +336,6 @@ protected function dashboards(): array
         }),
     ];
 }
-
 ```
 
 In the example above, we are using Laravel’s `Authorizable` trait’s can method on our `User` model to determine if the authorized user is authorized for the `viewUserInsights` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
@@ -374,7 +365,6 @@ protected function dashboards(): array
         UserInsights::make()->canSeeWhen('viewUserInsights', User::class),
     ];
 }
-
 ```
 
 Was this page helpful?
@@ -383,6 +373,4 @@ YesNo
 
 [Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

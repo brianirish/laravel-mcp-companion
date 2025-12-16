@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,27 +67,32 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Connecting To Redis](#connecting-to-redis)
-- [External Connections](#external-connections)
+- [Introduction](#introduction)
+- [Connecting to Redis and Memcached](#connecting-to-redis-and-memcached)
+- [Managing cache services](#managing-cache-services)
+- [Configuring Redis password](#configuring-redis-password)
+- [Network connectivity](#network-connectivity)
+- [External connections](#external-connections)
 
 Resources
 
 # Caches
 
-Learn how to connect to Redis and Memcache on your Forge server.
+Learn how to connect to Redis™ and Memcached on your Laravel Forge server.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-When provisioning an [App Server](/docs/servers/types#app-servers) or a [Cache Server](/docs/servers/types#cache-servers), Forge will automatically install [Memcache](https://www.memcached.org/) and [Redis](https://redis.io/). By default, neither of these services are exposed to the public and may only be accessed from within your server.
+Laravel Forge automatically installs both [Memcached](https://www.memcached.org/) and [Redis™](https://redis.io/) when provisioning [App Servers](/docs/servers/types#app-servers) or [Cache Servers](/docs/servers/types#cache-servers). Both services are secured by default, remaining inaccessible from external networks and only available for local server connections.
 
-## [​](#connecting-to-redis) Connecting To Redis
+## [​](#connecting-to-redis-and-memcached) Connecting to Redis and Memcached
 
-Redis and Memcache are both available via `127.0.0.1` and their default ports.
+Both caching services are accessible via localhost using their standard ports:
 
 Copy
 
@@ -104,20 +105,32 @@ MEMCACHED_PORT=11211
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
-
 ```
 
-## [​](#external-connections) External Connections
+## [​](#managing-cache-services) Managing cache services
 
-All Forge servers require SSH key authentication and are not able to be accessed using passwords. Therefore, when selecting the SSH key to use during authentication, ensure that you select your private SSH key. For example, when connecting to Redis using the [TablePlus](https://tableplus.com/) database client:
-![Connecting to Redis with TablePlus](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/redis-gui.png)
+Both Redis and Memcached run as system services and can be managed through standard service commands if needed. Laravel Forge handles the initial configuration and setup automatically, ensuring optimal performance for your applications.
+
+### [​](#configuring-redis-password) Configuring Redis password
+
+To configure the Redis password, navigate to the server’s settings page. Then, click “Recipes” in the sidebar. Click the “Set password” button under the Redis section. After entering and confirming your desired password, click the “Add password” button to apply the changes.
+
+## [​](#network-connectivity) Network connectivity
+
+When connecting your applications to Redis or Memcached from another server within your infrastructure, you can utilize [Laravel Forge’s server network feature](/docs/resources/network#server-network) to establish secure internal connections between servers.
+
+### [​](#external-connections) External connections
+
+Laravel Forge servers require SSH key authentication and don’t support password-based access. When connecting to Redis through external clients, ensure you use your **private SSH key** for authentication.
+For example, when connecting via [TablePlus](https://tableplus.com/):
+![Connecting to Redis with TablePlus](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/images/redis-gui.png?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=d6396671f62cabe59cedeed62491809b)
 
 Was this page helpful?
 
 YesNo
 
-[Databases](/docs/resources/databases)[Network](/docs/resources/network)
+[Database Backups](/docs/resources/database-backups)[Background Processes](/docs/resources/background-processes)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

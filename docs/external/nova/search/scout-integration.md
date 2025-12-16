@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -113,7 +113,6 @@ class User extends Resource
         return $query;
     }
 }
-
 ```
 
 ### [​](#limiting-scout-search-results) Limiting Scout Search Results
@@ -140,7 +139,6 @@ class User extends Resource
      */
     public static $scoutSearchResults = 200;
 }
-
 ```
 
 ## [​](#disabling-scout-search) Disabling Scout Search
@@ -168,7 +166,6 @@ class User extends Resource
         return false;
     }
 }
-
 ```
 
 Was this page helpful?
@@ -177,6 +174,4 @@ YesNo
 
 [Global Search](/docs/v5/search/global-search)[Defining Filters](/docs/v5/filters/defining-filters)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

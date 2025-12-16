@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,124 +67,116 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Creating Servers With Databases](#creating-servers-with-databases)
-- [Installing Databases Later](#installing-databases-later)
-- [Changing the Root / Forge Database Password](#changing-the-root-%2F-forge-database-password)
-- [Connecting To Databases Via A GUI Client](#connecting-to-databases-via-a-gui-client)
-- [Using The Database Connection URL](#using-the-database-connection-url)
-- [Connecting To A Database On Another Forge Server](#connecting-to-a-database-on-another-forge-server)
-- [Managing Your Databases Within Forge](#managing-your-databases-within-forge)
-- [Creating Databases](#creating-databases)
-- [Syncing Databases](#syncing-databases)
-- [Creating Database Users](#creating-database-users)
-- [Upgrading Databases](#upgrading-databases)
-- [Circle Permissions](#circle-permissions)
+- [Introduction](#introduction)
+- [Creating servers with databases](#creating-servers-with-databases)
+- [Installing databases later](#installing-databases-later)
+- [Managing database passwords](#managing-database-passwords)
+- [Connecting to databases via database clients](#connecting-to-databases-via-database-clients)
+- [Using database connection URLs](#using-database-connection-urls)
+- [Connecting to external databases](#connecting-to-external-databases)
+- [Managing databases](#managing-databases)
+- [Creating databases](#creating-databases)
+- [Syncing databases](#syncing-databases)
+- [Creating database users](#creating-database-users)
+- [Database upgrades](#database-upgrades)
 
 Resources
 
 # Databases
 
-Learn how to manage databases on your Forge server.
+Learn how to manage databases on your Laravel Forge server.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-When provisioning a new Forge server you may choose to install an [App Server](/docs/servers/types#app-servers) or a [Database Server](/docs/servers/types#database-servers). You can then use the Forge dashboard to manage databases, users, and permissions.
+When provisioning a new Laravel Forge server that requires a database, you can choose between installing an [app server](/docs/servers/types#app-servers) or a dedicated [database server](/docs/servers/types#database-servers). The Forge dashboard provides comprehensive tools for managing databases, users, and permissions across your infrastructure.
 
-## [​](#creating-servers-with-databases) Creating Servers With Databases
+## [​](#creating-servers-with-databases) Creating servers with databases
 
-When creating a new server, you can select to install a supported database server:
+During server creation, you can select from several supported database servers:
 
 - MySQL (8.0)
-- MariaDB (10.6)
-- MariaDB (10.11)
-- PostgreSQL (12)
-- PostgreSQL (13)
-- PostgreSQL (14)
-- PostgreSQL (15)
-- PostgreSQL (16)
-- PostgreSQL (17)
+- MariaDB (10.11, 11.4)
+- PostgreSQL (13, 14, 15, 16, 17, 18)
 
-As part of the provisioning process, Forge will automatically install the selected database server and create a default `forge` database, `forge` user, and a secure, randomly-generated password. The database password will be shown upon creating the server alongside the root password. These passwords will also be emailed to you.
+Laravel Forge automatically handles the installation process, creating a default `forge` database and user with a securely generated password. Both the database and root passwords are displayed upon server creation for your reference.
 
-### [​](#installing-databases-later) Installing Databases Later
+Laravel VPS servers are limited to the latest MySQL and PostgreSQL versions only.
 
-If you later decide to that you need to install a database on your server, you can do so through the server’s **Databases** management tab. Once installed, you will then be able to manage your database via Forge.
+### [​](#installing-databases-later) Installing databases later
 
-If you created a “Web Server”, you will not be able to install a database on that server at any point. Web servers are provisioned with the minimum amount of software needed to serve your PHP application only. If you need a database and web server on the same server, you should provision an “App Server”.
+If you need to add database functionality to an existing server, you can install one through the server’s “Databases” management tab. Once installed, you’ll have full database management capabilities through the Laravel Forge interface.
 
-## [​](#changing-the-root-%2F-forge-database-password) Changing the Root / Forge Database Password
+If you created a “Web Server”, database installation is not supported. Web servers include only the essential software needed for PHP applications. For combined web and database functionality, provision an “App Server” instead.
 
-To reset the `root` and `forge` database user passwords, you may use the password reset functionality provided by Forge’s **Databases** management tab.
+## [​](#managing-database-passwords) Managing database passwords
 
-You should not change the `root` or `forge` database user passwords manually or outside of the Forge dashboard. Doing so will prevent Forge from being able to connect to or manage your database.
+You can reset both `root` and `forge` database user passwords using the password reset feature in Laravel Forge’s “Databases” management tab.
 
-## [​](#connecting-to-databases-via-a-gui-client) Connecting To Databases Via A GUI Client
+Never change `root` or `forge` database passwords manually or outside the Laravel Forge dashboard. This will break Forge’s ability to connect to and manage your database.
 
-By default, database connections require SSH key authentication and are not able to be accessed using passwords. Therefore, when using a GUI database client to connect to your Forge database, you will need to use SSH authentication.
-When selecting the SSH key to use during authentication, **ensure that you select your private SSH key**. For example, when using the [TablePlus](https://tableplus.com) database client:
-![Connecting to a database with TablePlus](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/db-gui.png)
+## [​](#connecting-to-databases-via-database-clients) Connecting to databases via database clients
 
-### [​](#using-the-database-connection-url) Using The Database Connection URL
+Database connections require SSH key authentication by default and don’t support password-only access. When using GUI database clients to connect to your Laravel Forge database, you’ll need SSH authentication with your **private SSH key**.
+For example, when configuring [TablePlus](https://tableplus.com):
+![Connecting to a database with TablePlus](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/images/db-gui.png?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=3125efd48932e002a063cc2452049c8c)
 
-Some clients, such as TablePlus, allow you to connect to a database via a connection URL. Forge automatically generates this connection URL for you and you can use it to connect to your database. Note that the password is not included in this URL, so you should provide your password manually within your database client’s GUI.
+### [​](#using-database-connection-urls) Using database connection URLs
 
-## [​](#connecting-to-a-database-on-another-forge-server) Connecting To A Database On Another Forge Server
+Some clients like TablePlus support connection URLs for simplified setup. Laravel Forge automatically generates these URLs for you, though you’ll need to enter your password manually since it’s not included in the URL for security purposes.
+Forge also provides a convenient button to launch your preferred database client directly.
 
-You can utilize [Forge’s server network feature](/docs/resources/network#server-network) to connect one server’s application to a database on another server within the same network.
-If both the server hosting your application and the server hosting the external database [meet the requirements](/docs/resources/network#server-network) for internal network connections, you may follow these steps to establish the database connection:
+## [​](#connecting-to-external-databases) Connecting to external databases
 
-1. Allow access from your application’s web server to the database server:
-   - Navigate to the Network settings of your application’s web server: `https://forge.laravel.com/servers/<serverID>/networks`.
-   - Under the Server Network section of the page, enable the connection to the server of the external database.
-2. Next, update your application’s environment configuration:
-   - Visit your site’s environment page at `https://forge.laravel.com/servers/<serverID>/sites/<siteID>/environment`
-   - Set the database host to the external server’s private IP address.
-   - Update the database credential variables to match those of the external database.
+You can connect your application to a database hosted on another Laravel Forge server using [Laravel Forge’s server network feature](/docs/resources/network#server-network).
+When both servers [meet the network requirements](/docs/resources/network#server-network), follow these steps:
 
-## [​](#managing-your-databases-within-forge) Managing Your Databases Within Forge
+1. **Configure server network access:**
 
-For servers running MySQL, MariaDB, and PostgreSQL, Forge offers some advanced features which allows it to manage your databases and database users easily. We’ll discuss these features below.
+- Navigate to your application server’s “Network” settings
+- Enable the connection to your database server under the “Server Network” section
 
-### [​](#creating-databases) Creating Databases
+2. **Update application configuration:**
 
-You can create a new database through the server’s **Database** tab within Forge. At a minimum, you must supply the name of your new database. The `forge` user will be able to access the database automatically.
+- Access your site’s environment page
+- Set the database host to the external server’s private IP address
+- Update database credentials to match the external database
 
-### [​](#syncing-databases) Syncing Databases
+## [​](#managing-databases) Managing databases
 
-For consistency, you should use Forge to manage your databases and database users. However, if you created databases outside of the Forge dashboard, you can manually sync them into the Forge dashboard using the **Sync Databases** button on your Forge database management panel.
-When syncing databases, some database names that are reserved by the database engine will not be synced, including:
+Laravel Forge provides advanced database management capabilities for MySQL, MariaDB, and PostgreSQL servers.
 
-- `mysql`
-- `information_schema`
-- `peformance_schema`
-- `sys`
-- `postgres`
-- `template0`
-- `template1`
+### [​](#creating-databases) Creating databases
 
-### [​](#creating-database-users) Creating Database Users
+Create new databases through the server’s “Storage” > “Database” tab. You only need to provide the database name—the `forge` user automatically receives access permissions.
 
-You can create extra database users through the Forge dashboard’s database panel. To do so, you’ll need to provide the username, password, and select the databases that the new user can access.
+### [​](#syncing-databases) Syncing databases
 
-## [​](#upgrading-databases) Upgrading Databases
+While we recommend managing databases through Laravel Forge for consistency, you can sync externally created databases using the “Sync Databases” button.
+Note that system-reserved database names are excluded from syncing:
 
-Forge does not provide the ability to upgrade your database server software automatically. If you wish to upgrade your database server, you will need to complete this manually.
+- `mysql`, `information_schema`, `performance_schema`, `sys`
+- `postgres`, `template0`, `template1`
 
-## [​](#circle-permissions) Circle Permissions
+### [​](#creating-database-users) Creating database users
 
-You may grant a circle member authority to create and manage databases **and** database users by granting the `server:create-databases` and `server:delete-databases` permissions.
+The database panel allows you to create additional users by specifying the username, password, and accessible databases. You can also designate users as read-only, restricting them to select operations while preventing insert, update, or delete actions.
+
+## [​](#database-upgrades) Database upgrades
+
+Laravel Forge doesn’t provide automatic database server upgrades. If you need to upgrade your database software, you’ll need to handle this process manually.
 
 Was this page helpful?
 
 YesNo
 
-[Daemons](/docs/resources/daemons)[Caches](/docs/resources/caches)
+[Logs](/docs/sites/logs)[Database Backups](/docs/resources/database-backups)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

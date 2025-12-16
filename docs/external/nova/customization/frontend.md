@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -101,7 +101,6 @@ Ask AI
 Nova.request().get('/nova-vendor/stripe-inspector/endpoint').then(response => {
     // ...
 })
-
 ```
 
 ### [​](#manual-navigation) Manual Navigation
@@ -118,7 +117,6 @@ Nova.visit(`/resources/users/${userId}`)
 
 // Navigate to remote URL...
 Nova.visit({ url: 'https://nova.laravel.com', remote: true })
-
 ```
 
 The `visit` method accepts an array of navigation options as its second argument. As the `visit` method uses Inertia’s own `visit` method behind the scenes, all of [Inertia’s `visit` options](https://legacy.inertiajs.com/manual-visits) are supported by Nova’s `visit` method:
@@ -131,7 +129,6 @@ Ask AI
 Nova.visit(`/resources/users/${userId}`, {
   onFinish: () => Nova.success(`User ${userId} detail page.`)
 })
-
 ```
 
 ### [​](#event-bus) Event Bus
@@ -147,7 +144,6 @@ Nova.$on(event, callback)
 Nova.$once(event, callback)
 Nova.$off(event, callback)
 Nova.$emit(event, [...args])
-
 ```
 
 ### [​](#notifications) Notifications
@@ -161,7 +157,6 @@ Ask AI
 ```
 Nova.success('It worked!')
 Nova.error('It failed!')
-
 ```
 
 ### [​](#shortcuts) Shortcuts
@@ -193,7 +188,6 @@ Nova.disableShortcut('ctrl+k')
 
 // Remove multiple shortcuts...
 Nova.disableShortcut(['ctrl+k', 'command+k'])
-
 ```
 
 ### [​](#global-variables) Global Variables
@@ -207,7 +201,6 @@ Ask AI
 ```
 const userId = Nova.config('userId');
 const basePath = Nova.config('base');
-
 ```
 
 However, you are free to add additional values to this object using the `Nova::provideToScript` method. You may call this method within a `Nova::serving` listener, which should typically be registered in the `boot` method of your application or custom component’s service provider:
@@ -239,7 +232,6 @@ public function boot()
         ]);
     });
 }
-
 ```
 
 Once the variable has been provided to Nova via the `provideToScript` method, you may access it using the global `Nova` JavaScript object’s `config` method:
@@ -250,7 +242,6 @@ Ask AI
 
 ```
 const driver = Nova.config('mail_driver');
-
 ```
 
 ### [​](#localizations) Localizations
@@ -277,7 +268,6 @@ mix
   .vue({ version: 3 })
   .css('resources/css/card.css', 'css')
   .nova('acme/analytics')
-
 ```
 
 Laravel Nova’s assets are built using **lockfile** version `3` and require NPM 9+.
@@ -292,7 +282,6 @@ Ask AI
 
 ```
 composer require --dev "laravel/nova-devtool"
-
 ```
 
 By default, Nova’s JavaScript is compiled for production. As such, you will not be able to access the Vue DevTools out of the box without compiling Nova’s JavaScript for development. To accomplish this, you may issue the following terminal commands from the root of your Nova project:
@@ -307,7 +296,6 @@ Ask AI
 
 ```
 php artisan nova:enable-vue-devtool
-
 ```
 
 Was this page helpful?
@@ -316,6 +304,4 @@ YesNo
 
 [Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

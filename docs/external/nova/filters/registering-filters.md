@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -105,7 +105,6 @@ public function filters(NovaRequest $request): array
         new Filters\UserType,
     ];
 }
-
 ```
 
 ## [​](#searchable-select-filters) Searchable Select Filters
@@ -135,7 +134,6 @@ public function filters(NovaRequest $request): array
             ->searchable(),
     ];
 }
-
 ```
 
 Was this page helpful?
@@ -144,6 +142,4 @@ YesNo
 
 [Defining Filters](/docs/v5/filters/defining-filters)[Defining Lenses](/docs/v5/lenses/defining-lenses)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

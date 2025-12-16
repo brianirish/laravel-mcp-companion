@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,18 +67,23 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Server Network](#server-network)
-- [Firewalls](#firewalls)
-- [Port Ranges](#port-ranges)
-- [Allow / Deny Rules](#allow-%2F-deny-rules)
-- [Default Firewall Rules](#default-firewall-rules)
-- [Deleted SSH Firewall Rule](#deleted-ssh-firewall-rule)
-- [Circle Permissions](#circle-permissions)
+- [Introduction](#introduction)
+- [Managing server networks and firewalls](#managing-server-networks-and-firewalls)
+- [Server networks](#server-networks)
+- [Firewall management](#firewall-management)
+- [Creating firewall rules](#creating-firewall-rules)
+- [Deleting firewall rules](#deleting-firewall-rules)
+- [Enhanced security options](#enhanced-security-options)
+- [Allow and deny rules](#allow-and-deny-rules)
+- [Default firewall configuration](#default-firewall-configuration)
+- [Health check service IP addresses](#health-check-service-ip-addresses)
+- [Recovering from deleted SSH rules](#recovering-from-deleted-ssh-rules)
 
 Resources
 
@@ -90,74 +91,86 @@ Resources
 
 Learn how to manage your server network and firewall.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-Forge allows you to manage your server’s firewall as well as configure which servers can connect to other servers via the **Network** management panel within your server’s management dashboard.
+Laravel Forge provides comprehensive network management capabilities. This includes firewall configuration and server-to-server connectivity management, allowing you to control traffic flow and establish secure connections between your infrastructure components.
 
-If you manually create a `ufw` rule on your server, this will not be reflected in the Forge dashboard. Forge is only aware of rules created via the Forge dashboard.
+Manually created `ufw` rules on your server won’t appear in the Laravel Forge dashboard. Forge only displays and manages rules created through its interface.
 
-## [​](#server-network) Server Network
+## [​](#managing-server-networks-and-firewalls) Managing server networks and firewalls
 
-Server networks make it painless to use a connected server as a separate database, cache, or queue server. For a server to be connected to an internal network, it must:
+### [​](#server-networks) Server networks
 
-- Be created by the same provider.
-- Be using the same server provider credentials.
-- Be owned by the same user.
-- Be within the same region.
+Server networks simplify the process of connecting servers for dedicated database, cache, or queue functionality. To establish internal network connections, servers must meet these requirements:
 
-Once you have granted access from one server to another, you may access the other server via its private IP address.
+- Created by the same server provider
+- Using identical server provider credentials
+- Owned by the same user account
+- Located within the same geographical region and VPC
 
-## [​](#firewalls) Firewalls
+Once network access is granted between servers, you can connect using private IP addresses for secure, high-performance internal communication.
 
-You can configure and manage your firewall from within the Forge dashboard via the **Network** tab on the server’s management dashboard. Firewalls are used to open ports on your server to the Internet. For example, when using FTP you may need to open port `21`.
-For added security, you can restrict opened ports to specific IP addresses.
-In the “From IP Address” field, you can provide multiple IP addresses by entering a list of comma separated IP addresses. For example: `192.168.1.1,192.168.1.2,192.168.1.3`.
+## [​](#firewall-management) Firewall management
 
-### [​](#port-ranges) Port Ranges
+Laravel Forge provides complete firewall control, allowing you to open specific ports to internet traffic. Common use cases include opening port `21` for FTP services or custom application ports.
 
-When creating new firewall rules, you may supply a range of ports to open (`8000:8010`), which will open every port from `8000` to `8010`.
+### [​](#creating-firewall-rules) Creating firewall rules
 
-### [​](#allow-%2F-deny-rules) Allow / Deny Rules
+To create a firewall rule, navigate to your server’s settings page and click the “Network” tab. Then, click the “Add rule” button. Configure the rule by specifying the port or port range, type, and optionally restrict access to specific IP addresses. Click the “Create rule” button to apply the new firewall configuration.
+When creating rules, you can specify port ranges using the format `8000:8010` to open multiple consecutive ports, or provide multiple IP addresses as a comma-separated list for enhanced security.
 
-You may select whether to allow or deny the traffic that matches a given rule. By creating a `deny` rule, you will be preventing traffic from reaching the service.
+### [​](#deleting-firewall-rules) Deleting firewall rules
 
-To make `deny` rules work correctly, they are added at a higher priority than `allow` rules. Each new `deny` rule for IPv4 addresses will be added above any existing `deny` rules. UFW does not currently support IPv6 rules at first priority.
+To delete a firewall rule, navigate to your server’s “Network” tab. Then, click on the dropdown next to the rule you want to remove. Click the “Delete” dropdown item and confirm the deletion.
+**Warning:** Never delete the SSH rule (typically port 22) as this will prevent Laravel Forge from connecting to and managing your server.
 
-## [​](#default-firewall-rules) Default Firewall Rules
+### [​](#enhanced-security-options) Enhanced security options
 
-As part of the provisioning process, Forge will automatically configure three rules:
+You can restrict port access to specific IP addresses for additional security. The “From IP Address” field accepts multiple addresses as a comma-separated list: `192.168.1.1,192.168.1.2,192.168.1.3`.
 
-- SSH - Allow port 22 traffic from any IP Address
-- HTTP - Allow port 80 traffic from any IP Address
-- HTTPS - Allow port 443 traffic from any IP Address
+### [​](#allow-and-deny-rules) Allow and deny rules
 
-You should note that although incoming traffic is allowed on port 22 for SSH connections, SSH connections that do not use an SSH key are not accepted. Therefore, it is not possible to brute force an SSH connection to your server. **You should never delete the rule that allows SSH traffic to your server; otherwise, Forge will be unable to connect to or manage your server.**
+Configure traffic permissions by selecting allow or deny actions for each rule. Deny rules prevent matching traffic from reaching services and are automatically prioritized above allow rules for proper security enforcement.
 
-#### [​](#deleted-ssh-firewall-rule) Deleted SSH Firewall Rule
+New IPv4 deny rules are positioned above existing deny rules for optimal priority handling. IPv6 rules currently don’t support first-priority positioning in UFW.
 
-If you have deleted the firewall rule (typically port 22) from the Forge UI or directly on the server, Forge will be unable to connect to the server and will be unable to re-create this rule for you.
-To fix this, you will need to access the server directly via your provider and manually add the SSH port again. DigitalOcean allows you to connect remotely through their dashboard.
-Forge uses `ufw` for the firewall, so once you’ve connected to the server you need to run the following as `root`:
+## [​](#default-firewall-configuration) Default firewall configuration
 
-Copy
+Laravel Forge automatically configures essential firewall rules during server provisioning:
 
-Ask AI
+- **SSH:** Port 22 access from any IP address
+- **HTTP:** Port 80 access from any IP address
+- **HTTPS:** Port 443 access from any IP address
 
-```
-ufw allow 22
+While port 22 remains open for SSH connections, only SSH key-based authentication is accepted, preventing brute force attacks. **Never delete the SSH rule—doing so will break Forge’s ability to connect to and manage your server.**
+Mail ports (25, 465, 587) are blocked by default on Laravel VPS servers to prevent abuse. If you need to send email from your server, use an HTTP / API based service like [Resend](https://resend.com), or contact [Laravel Forge support](/docs/support) to request these ports be unblocked.
 
-```
+### [​](#health-check-service-ip-addresses) Health check service IP addresses
 
-## [​](#circle-permissions) Circle Permissions
+If you have enabled [deployment health checks](/docs/sites/deployments#deployment-health-checks) for your sites, you should ensure that the following IP addresses are allowed through your HTTP and HTTPS firewall rules. Health check requests are made from these addresses to verify your application is accessible after deployments. These IPs will **not make** SSH connections to the server.
 
-You may grant a circle member authority to manage the server’s network by granting the `server:manage-network` permission.
+- 209.38.170.132
+- 206.189.255.228
+- 139.59.222.70
+
+Alternatively, you can allow the health check service by its `User-Agent` header value: `Laravel-Healthcheck/1.0`.
+
+### [​](#recovering-from-deleted-ssh-rules) Recovering from deleted SSH rules
+
+If you accidentally delete the SSH firewall rule (typically port 22), Forge loses server connectivity and cannot restore the rule automatically. To resolve this issue:
+
+1. Access your server directly through your cloud provider’s console (such as DigitalOcean’s remote access feature)
+2. Connect as the `root` user
+3. Restore SSH access by running: `ufw allow 22`
+
+This will re-establish Forge’s connection capability to your server.
 
 Was this page helpful?
 
 YesNo
 
-[Caches](/docs/resources/caches)[Scheduler](/docs/resources/scheduler)
+[Scheduler](/docs/resources/scheduler)[Packages](/docs/resources/packages)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

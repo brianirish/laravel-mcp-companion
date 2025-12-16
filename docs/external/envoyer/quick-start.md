@@ -73,7 +73,7 @@ With your project created, you now need to tell Envoyer which server or servers 
 ### [​](#import-from-forge) Import From Forge
 
 Envoyer has a first-party integration with [Laravel Forge](https://forge.laravel.com) - Laravel’s preferred server provisioning and management platform - and you may import servers directly from Forge into your project.
-Click the “Provide API Token” option from the onboarding screen and provide a [Forge API token](https://forge.laravel.com/user-profile/api). From the project overview, you may now select the “Import” option to open the import modal. From here, select the server and site you wish to import. Envoyer will retrieve the connection details of the server and automatically add an SSH key which allows it to connect.
+Click the “Provide API Token” option from the onboarding screen and provide a [Forge API token](https://forge.laravel.com/profile/api). From the project overview, you may now select the “Import” option to open the import modal. From here, select the server and site you wish to import. Envoyer will retrieve the connection details of the server and automatically add an SSH key which allows it to connect.
 
 ![Import from Forge](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/images/import-forge.png)
 
@@ -85,7 +85,7 @@ Don’t worry if you’re not using Forge; you may configure your server manuall
 
 ### [​](#connect-from-forge) Connect From Forge
 
-It’s also possible to attach a server to your Envoyer project [directly from Forge](https://forge.laravel.com/docs/sites/envoyer.html). When creating a new site on Laravel Forge, you may choose “Configure with Envoyer,” allowing you to select the Envoyer project you wish the site to be attached to. Doing so will automatically configure the connection between Envoyer and Forge, install an SSH key, and set the path from which the project should be served.
+It’s also possible to attach a server to your Envoyer project [directly from Forge](https://forge.laravel.com/docs/integrations/envoyer#envoyer). When creating a new site on Laravel Forge, you may choose “Configure with Envoyer,” allowing you to select the Envoyer project you wish the site to be attached to. Doing so will automatically configure the connection between Envoyer and Forge, install an SSH key, and set the path from which the project should be served.
 
 ![Connect from Forge](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/images/forge-connect.png)
 
@@ -124,6 +124,4 @@ YesNo
 
 [Introduction](/introduction)[Source Control](/accounts/source-control)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

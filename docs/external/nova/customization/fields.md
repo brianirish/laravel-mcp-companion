@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -108,7 +108,6 @@ Ask AI
 
 ```
 php artisan nova:field acme/color-picker
-
 ```
 
 When generating a field, Nova will prompt you to install the field’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom fields are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -142,7 +141,6 @@ public function fields(NovaRequest $request): array
         ColorPicker::make('Color'),
     ];
 }
-
 ```
 
 ### [​](#field-options) Field Options
@@ -180,7 +178,6 @@ class ColorPicker extends Field
         return $this->withMeta(['hues' => $hues]);
     }
 }
-
 ```
 
 #### [​](#accessing-field-options) Accessing Field Options
@@ -193,7 +190,6 @@ Ask AI
 
 ```
 const hues = this.field.hues;
-
 ```
 
 ## [​](#building-fields) Building Fields
@@ -237,7 +233,6 @@ export default {
   //
 }
 </script>
-
 ```
 
 ### [​](#preview-fields) Preview Fields
@@ -263,7 +258,6 @@ Nova.booting((app, store) => {
   app.component('form-color-picker', FormField)
   app.component('preview-color-picker', PreviewField)
 })
-
 ```
 
 #### [​](#setting-the-form-value) Setting the Form Value
@@ -283,11 +277,10 @@ Ask AI
 fill(formData) {
   this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
 }
-
 ```
 
 #### [​](#dependent-form-field) Dependent Form Field
 
-By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](./../r
+By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](./../resources/fie
 
 *[Content truncated for length]*

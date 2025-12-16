@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -125,12 +125,11 @@ class Invoice extends Resource
 		];
 	}
 }
-
 ```
 
 After defining a `Repeater` field, your resource will have an elegant interface for adding and editing repeatable items in the field:
 
-![Repeater Field](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/repeater-field.png)
+![Repeater Field](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/repeater-field.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=c1b5036d6adaf9fbfb55f63722a0cd3b)
 
 ## [​](#repeatables) Repeatables
 
@@ -147,7 +146,6 @@ Ask AI
 
 ```
 php artisan nova:repeatable LineItem
-
 ```
 
 After invoking the command above, Nova generates a new file at `app/Nova/Repeater/LineItem.php`. This file contains a `fields` method in which you may list any supported Nova field. For example, below we will define a `Repeatable` representing a line item for an invoice:
@@ -183,7 +181,6 @@ class LineItem extends Repeatable
 		];
 	}
 }
-
 ```
 
 ### [​](#confirming-repeatable-removal) Confirming Repeatable Removal
@@ -216,7 +213,6 @@ public function fields(NovaRequest $request): array
 		]),
 	];
 }
-
 ```
 
 ## [​](#repeater-presets) Repeater Presets
@@ -253,7 +249,6 @@ public function fields(NovaRequest $request): array
 			->asJson(),
 	];
 }
-
 ```
 
 Before using this preset, you should ensure that the underlying Eloquent attribute for the resource’s repeater column is configured to cast to an `array` (or equivalent) within your Eloquent model class:
@@ -273,7 +268,6 @@ Ask AI
 protected $casts = [
 	'line_items' => 'array',
 ];
-
 ```
 
 ### [​](#hasmany-preset) HasMany Preset
@@ -305,7 +299,6 @@ public function fields(NovaRequest $request): array
 			->asHasMany(),
 	];
 }
-
 ```
 
 The `HasMany` preset requires each repeatable to specify the underlying model it represents by setting the `model` property on the `Repeatable`. For example, a `LineItem` repeatable would need to specify the underlying `\App\Models\LineItem` model it represents:
@@ -323,7 +316,6 @@ Ask AI
  * @var class-string
  */
 public static $model = \App\Models\LineItem::class;
-
 ```
 
 ## [​](#upserting-repeatables-using-unique-fields) Upserting Repeatables Using Unique Fields
@@ -340,8 +332,6 @@ use App\Nova\Repeaters;
 // ...
 
 /**
- * Get the fields displayed by the resource. 
- * 
- * @return array<int, \
+ * Get the fie
 
 *[Content truncated for length]*

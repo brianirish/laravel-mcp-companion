@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,81 +67,56 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Monitor Types](#monitor-types)
-- [CPU Load Average](#cpu-load-average)
-- [Used Disk Space](#used-disk-space)
-- [Used Memory](#used-memory)
-- [Creating Monitors](#creating-monitors)
-- [Stat Collection Frequencies](#stat-collection-frequencies)
-- [Circle Permissions](#circle-permissions)
+- [Introduction](#introduction)
+- [Managing server monitors](#managing-server-monitors)
+- [Creating monitors](#creating-monitors)
+- [Deleting monitors](#deleting-monitors)
+- [Stat collection frequencies](#stat-collection-frequencies)
 
 Servers
 
 # Monitoring
 
-Learn how to configure server monitoring in Forge.
+Learn how to configure server monitoring in Laravel Forge.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-Forge can be configured to monitor the following metrics on your server and email you when their state changes:
+Laravel Forge can be configured to monitor the following metrics on your server and email you when their state changes:
 
-- CPU Load Average
-- Used Disk Space
-- Used Memory
+- **CPU Load Average** - tracks the server’s load average. This is based on the average system load over a one-minute interval.
+- **Used Disk Space** - tracks the amount of disk space that has been used on the primary drive.
+- **Used Memory** - tracks how much of the RAM is in active use.
 
-Server monitoring is only available on our “business” plan.
+Server monitoring is only available on the Business plan.
 
-## [​](#monitor-types) Monitor Types
+## [​](#managing-server-monitors) Managing server monitors
 
-### [​](#cpu-load-average) CPU Load Average
+### [​](#creating-monitors) Creating monitors
 
-The **CPU Load Average** monitor will track the server’s load average. This is based on the average system load over a one minute interval.
+To create a server monitor, navigate to the server’s dashboard, click the “Observe” tab, and click the “Add monitor” button. Select the metric type, configure the thresholds and provide an email address to notify. Once done, click “Create server monitor”.
 
-### [​](#used-disk-space) Used Disk Space
+Laravel Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `[email protected]`.
 
-The **Used Disk Space** monitor tracks the amount of disk space that has been used on the primary drive.
+### [​](#deleting-monitors) Deleting monitors
 
-### [​](#used-memory) Used Memory
+To delete a server monitor, navigate to the server’s dashboard and click the “Observe” tab. Locate the server monitor you wish to delete, click the action dropdown next to the server monitor, and select “Delete”.
 
-The **Used Memory** monitor tracks how much of the RAM is in active use.
-
-## [​](#creating-monitors) Creating Monitors
-
-You may configure a new monitor from the **Monitoring** tab within a server’s management dashboard. Below is a brief overview of how to create and configure a monitoring metric:
-
-1. Select the metric to monitor.
-2. Select whether the value of the metric should be `>=` or `<=` a threshold.
-3. Enter the threshold percentage that the metric would need to meet before notifying you.
-4. Enter how long (in minutes) the metric needs to exceed the threshold criteria for before you are notified.
-5. Enter an email address to notify when the monitor’s state changes.
-6. Click **Install Monitor**.
-
-Once the monitor is installed, your server will begin collecting metric data and notify you once the state changes.
-
-Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `[email protected]`.
-
-### [​](#stat-collection-frequencies) Stat Collection Frequencies
+## [​](#stat-collection-frequencies) Stat collection frequencies
 
 The CPU Load and Used Memory metric data will be collected every minute. The Disk Space metric will be collected hourly.
-
-## [​](#circle-permissions) Circle Permissions
-
-The ability to manage server monitors is split into two permissions:
-
-- `server:create-monitors`
-- `server:delete-monitors`
 
 Was this page helpful?
 
 YesNo
 
-[Database Backups](/docs/servers/backups)[Cookbook](/docs/servers/cookbook)
+[Security](/docs/servers/security)[Real-Time Metrics](/docs/servers/real-time-metrics)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
