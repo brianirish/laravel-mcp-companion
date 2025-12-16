@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -128,7 +128,6 @@ Ask AI
 -       "laravel/nova": "^4.0",
 +       "laravel/nova": "^5.0",
     }
-
 ```
 
 Next, install your updated Composer dependencies:
@@ -141,7 +140,6 @@ Ask AI
 composer update mirrors
 
 composer update
-
 ```
 
 ### [​](#updating-assets-and-translations) Updating Assets and Translations
@@ -156,10 +154,9 @@ Ask AI
 ```
 php artisan vendor:publish --tag=nova-assets --force
 php artisan vendor:publish --tag=nova-lang --force
-
 ```
 
-### [​](#updating-third-party-nova-packages-%E2%80%8B) Updating Third-Party Nova Packages ​
+### [​](#updating-third-party-nova-packages-​) Updating Third-Party Nova Packages ​
 
 If your application relies on Nova tools or packages developed by third-parties, it is possible that these packages are not yet compatible with Nova 5.0 and will require an update from their maintainers.
 
@@ -186,7 +183,6 @@ return [
     ],
 
 ];
-
 ```
 
 Next, update the `register` method in your application’s `App\Providers\NovaServiceProvider` class to call the parent’s `register` method. The `parent::register()` method should be invoked before any other code in the method:
@@ -207,10 +203,9 @@ public function register(): void
 
     //
 }
-
 ```
 
-## [​](#updating-nova-components-custom-tool%2C-cards%2C-fields%2C-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
+## [​](#updating-nova-components-custom-tool,-cards,-fields,-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
 
 ### [​](#inertia-2-compatibility) Inertia 2 Compatibility
 
@@ -229,7 +224,6 @@ Ask AI
 // ...
 
 </script>
-
 ```
 
 ### [​](#replacing-form-backend-validation) Replacing `form-backend-validation`
@@ -248,7 +242,6 @@ Ask AI
 // ...
 
 </script>
-
 ```
 
 Then, you may remove `form-backend-validation` from your component’s `package.json`:
@@ -259,7 +252,6 @@ Ask AI
 
 ```
 npm remove form-backend-validation
-
 ```
 
 ## [​](#medium-impact-changes) Medium Impact Changes
@@ -284,7 +276,6 @@ Ask AI
 
 ```
 php artisan nova:stubs --force
-
 ```
 
 Was this page helpful?
@@ -293,6 +284,4 @@ YesNo
 
 [Release Notes](/docs/v5/releases)[The Basics](/docs/v5/resources/the-basics)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

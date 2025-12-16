@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,30 +67,34 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Creating An Envoyer API Token](#creating-an-envoyer-api-token)
-- [Linking Your Envoyer Account To Forge](#linking-your-envoyer-account-to-forge)
-- [Creating New Sites With Envoyer](#creating-new-sites-with-envoyer)
-- [Envoyer Sites In Forge](#envoyer-sites-in-forge)
-- [Migrating An Existing Site To Envoyer](#migrating-an-existing-site-to-envoyer)
+- [Introduction](#introduction)
+- [Creating an Envoyer API token](#creating-an-envoyer-api-token)
+- [Linking your Envoyer account to Laravel Forge](#linking-your-envoyer-account-to-laravel-forge)
+- [Envoyer sites in Laravel Forge](#envoyer-sites-in-laravel-forge)
+- [Migrating existing sites to Forge](#migrating-existing-sites-to-forge)
+- [Requirements](#requirements)
 
 Integrations
 
 # Envoyer
 
-Zero downtime deployments with Laravel Forge and Envoyer
+Zero-downtime deployments with Laravel Forge and Envoyer.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-Forge now offers zero downtime deployments, thanks to a seamless first-party integration with [Envoyer](https://envoyer.io). Envoyer’s zero downtime deployments ensure you avoid even those brief milliseconds of downtime while the server updates your code.
+Laravel Forge now offers zero-downtime deployments for all new sites.
 
-## [​](#creating-an-envoyer-api-token) Creating An Envoyer API Token
+While Laravel Forge now offers [zero-downtime deployments](/docs/sites/deployments), you may choose to use the first-party integration with [Envoyer](https://envoyer.io) to simultaneously deploy projects across multiple servers. Zero-downtime deployments ensure you avoid those brief milliseconds of downtime while the server updates your code.
 
-To kick things off, you’ll need active subscriptions for both [Laravel Forge](https://forge.laravel.com/auth/register) and [Envoyer](https://envoyer.io/auth/register). Once you’re set up, navigate to your Envoyer dashboard and [create a new API token](https://envoyer.io/user/profile?name=Laravel%20Forge&scopes=projects:create,deployments:create,servers:create#/api). At a minimum, Forge requires the following scopes:
+## [​](#creating-an-envoyer-api-token) Creating an Envoyer API token
+
+To kick things off, you’ll need active subscriptions for both [Laravel Forge](https://forge.laravel.com/sign-up) and [Envoyer](https://envoyer.io/auth/register). Once you’re set up, navigate to your Envoyer dashboard and [create a new API token](https://envoyer.io/user/profile?name=Laravel%20Forge&scopes=projects:create,deployments:create,servers:create#/api). At a minimum, Laravel Forge requires the following scopes:
 
 Copy
 
@@ -104,69 +104,47 @@ Ask AI
 deployments:create
 projects:create
 servers:create
-
 ```
 
-To future-proof the integration, consider providing Forge with additional access permissions. You can update your Envoyer’s API token in Forge at any point.
+To future-proof the integration, consider providing Laravel Forge with additional access permissions. You can update your Envoyer’s API token in Forge at any point.
 
-## [​](#linking-your-envoyer-account-to-forge) Linking Your Envoyer Account To Forge
+## [​](#linking-your-envoyer-account-to-laravel-forge) Linking your Envoyer account to Laravel Forge
 
-Next, it’s time to link Forge with your Envoyer API token. Navigate to your account settings in Forge and click on the [Envoyer navigation item](https://forge.laravel.com/user-profile/envoyer).
+To link Laravel Forge with your Envoyer API token, navigate to your organization’s settings and toggle on the “Envoyer” option. You’ll be prompted to enter your Envoyer API token. After submitting the token, Forge will first verify it and then enable the integration.
 
-![Envoyer panel in Forge's Account settings](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/forge-envoyer-panel.png)
+## [​](#envoyer-sites-in-laravel-forge) Envoyer sites in Laravel Forge
 
-## [​](#creating-new-sites-with-envoyer) Creating New Sites With Envoyer
+It is no longer possible to link newly created Laravel Forge sites to Envoyer projects. Instead, you should create a new Envoyer project and then import your Laravel Forge server and site into that project. For more information, see the “Migrating an existing site to Envoyer” section below.
 
-When creating a new site in Forge, you’ll notice a new option labeled “Configure with Envoyer”. Toggle this option to reveal a dropdown menu, where you can either select an existing Envoyer project or create a brand new one.
-
-![Creating a new site with Envoyer](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/envoyer-new-site.png)
-
-![Creating a new Envoyer project from Forge](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/new-envoyer-project.png)
-
-## [​](#envoyer-sites-in-forge) Envoyer Sites In Forge
-
-To deploy your Envoyer project within Forge, simply click the “Deploy Now” button, just as you would with any other site in Forge. The “Deployment Trigger URL” is also available for use in a CI environment.
-Additionally, Forge has been updated to align perfectly with Envoyer projects:
+To deploy your Envoyer project within Laravel Forge, click the “Deploy” button, as you would with any other site in Forge. The “Deployment Trigger URL” is also available for use in a CI environment.
+Additionally, Laravel Forge has been updated to align perfectly with Envoyer projects:
 
 - Commands are executed from the `/current` directory.
-- The Environment panel will display a read-only version of the `.env` file. Continue to use Envoyer to manage your environment file, especially since it may need to be synchronized across multiple servers.
-- The site’s Packages panel is disabled to ensure the `auth.json` file remains intact through subsequent deployments.
+- The site’s “Environment” panel will display a read-only version of the `.env` file. Continue to use Envoyer to manage your environment file, especially since it may need to be synchronized across multiple servers.
+- The site’s “Packages” panel is disabled to ensure the `auth.json` file remains intact through future deployments.
 
-![Application panel when a project is configured with Envoyer](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/site-panel-with-envoyer.png)
+## [​](#migrating-existing-sites-to-forge) Migrating existing sites to Forge
 
-## [​](#migrating-an-existing-site-to-envoyer) Migrating An Existing Site To Envoyer
+Sites previously connected to Envoyer can be migrated to Laravel Forge’s native zero-downtime deployment system. To do so, navigate to the site’s “Overview” panel and click “Migrate to Forge”.
+The Envoyer project will first be checked for compatibility. If compatible, the migration can be completed.
+To complete the migration, you will need to provide your environment key for the Envoyer project. This allows Laravel Forge to access the `.env` file for the project.
+If the Envoyer project is configured to use Heartbeats, Laravel Forge will also provide you with a list of new heartbeat URLs. You will need to update your application to use these new URLs.
 
-Before migrating your Forge site to Envoyer, ensure your site directory does not contain a directory named `releases` or `current`. This is essential in allowing Envoyer to create these directories during the project’s installation on your server.
-Next, access the Envoyer dashboard and navigate to the relevant project. Within the project settings, select “Import Forge Server”, then choose the appropriate server and site before clicking “Import Server.”
+### [​](#requirements) Requirements
 
-![Import server from Forge](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/import-server-from-forge.png)
+There are a few requirements that must be met before migrating an existing Envoyer site to Laravel Forge:
 
-After adding the server details, it’s crucial to test the connection to ensure that Envoyer can communicate with your server effectively. You can test the connection status from the server overview.
-
-![Server connection status](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/server-connection-status.png)
-
-Next, click the “Manage Environment” button, unlock your environment, and sync it to the new server. This action will replace the contents of the existing `.env` file in the site directory on the server.
-
-![Sync environment variables](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/sync-environment.png)
-
-Now, you should initiate a deployment from Envoyer. Once the deployment is complete, Envoyer will download the latest version of your application into the releases directory of your site and add a symlink to `/current`.
-Your site should still be accessible, but the old version is still being served. To address this, navigate to the “Settings” panel in Forge and prefix the web directory with `/current`. For example, if your site’s web directory is currently `/public`, update it to `/current/public`. Doing so will instruct Nginx to serve your application from `/home/forge/example.com/current/public` – the location where Envoyer has installed the latest version of your application.
-
-![Update web directory](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/update-web-directory.png)
-
-You should now tidy your site directory by ensuring it only contains the `.env` file, along with the `releases`, `current`, and `storage` directories. After **ensuring you have backed up anything you need**, you may remove everything else, including any dotfiles and directories such as `.git`, `.gitattributes`, etc.
-Now that the web directory includes `/current`, Forge will recognize your site as being managed by Envoyer in the “Envoyer” panel. You can now link Forge and Envoyer together by selecting the relevant project from the project list.
-
-![Link Forge with Envoyer](https://mintlify.s3.us-west-1.amazonaws.com/forge-laravel/images/forge-envoyer-link.png)
-
-Finally, now that your application is being served from the `/current` directory, you should update your scheduler, queue workers, and any daemons to ensure they are running from the correct path.
+1. Your Envoyer project must be connected to a single server.
+2. Must not be using GitLab Self-Hosted as the Git repository.
+3. Your organization must be connected to the Envoyer integration.
+4. Forge deployments are limited to [10 minutes](/docs/sites/deployments#introduction), compared to Envoyer’s 15-minute limit. Ensure your deployment process completes within this timeframe.
 
 Was this page helpful?
 
 YesNo
 
-[Cookbook](/docs/resources/cookbook)[Sentry](/docs/integrations/sentry)
+[Packages](/docs/resources/packages)[Sentry](/docs/integrations/sentry)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

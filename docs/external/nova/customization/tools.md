@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -106,7 +106,6 @@ Ask AI
 
 ```
 php artisan nova:tool acme/price-tracker
-
 ```
 
 When generating a tool, Nova will prompt you to install the tool’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom tools are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -136,7 +135,6 @@ public function tools(): array
         new PriceTracker,
     ];
 }
-
 ```
 
 ### [​](#authorization) Authorization
@@ -165,7 +163,6 @@ public function tools(): array
         }),
     ];
 }
-
 ```
 
 ## [​](#building-tools) Building Tools
@@ -213,7 +210,6 @@ public function menu(Request $request)
         ->path('/price-tracker')
         ->icon('server');
 }
-
 ```
 
 If you have [customized Nova’s main sidebar menu](./menus#customizing-the-main-menu), a link to your tool will not automatically display in Nova’s sidebar. You will need to manually define your tool’s menu inside your custom `Nova::mainMenu` callback.
@@ -251,6 +247,6 @@ public function boot(): void
     parent::boot();
 
     Nova::serving(function () {
-        Nov
+        Nova::mix('p
 
 *[Content truncated for length]*

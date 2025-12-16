@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -117,7 +117,6 @@ public function cards(NovaRequest $request): array
         new UsersPerDay,
     ];
 }
-
 ```
 
 ### [​](#detail-metrics) Detail Metrics
@@ -147,7 +146,6 @@ public function cards(NovaRequest $request): array
             ->onlyOnDetail(),
     ];
 }
-
 ```
 
 Of course, you will need to modify your metric’s query to only gather metric data on the resource for which it is currently being displayed. To accomplish this, your metric’s `calculate` method may access the `resourceId` property on the incoming `$request`:
@@ -175,7 +173,6 @@ public function calculate(NovaRequest $request): TrendResult
         Podcast::where('user_id', $request->resourceId)
     );
 }
-
 ```
 
 ### [​](#dashboard-metrics) Dashboard Metrics
@@ -204,7 +201,6 @@ public function cards(): array
         new NewUsers,
     ];
 }
-
 ```
 
 ## [​](#authorization) Authorization
@@ -225,7 +221,6 @@ UsersPerDay::make()
     ->canSee(function ($request) {
         return $request->user()->can('viewUsersPerDay', User::class);
     }),
-
 ```
 
 In the example above, we are using Laravel’s `Authorizable` trait’s `can` method on our `User` model to determine if the authorized user is authorized for the `viewUsersPerDay` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
@@ -244,7 +239,6 @@ UsersPerDay::make()
     ->canSeeWhen(
         'viewUsersPerDay', User::class
     ),
-
 ```
 
 ## [​](#default-metric-range) Default Metric Range
@@ -274,7 +268,6 @@ public function cards(NovaRequest $request): array
             ->defaultRange('YTD'),
     ];
 }
-
 ```
 
 ## [​](#metric-sizes) Metric Sizes
@@ -307,7 +300,6 @@ public function cards(NovaRequest $request): array
         Metrics\UsersPerDay::make()->width('full'),
     ];
 }
-
 ```
 
 When the metric width is set to `full`, the height of the card will become dynamic. You may explicitly define this behaviour by calling the `fixedHeight` or `dynamicHeight` methods:
@@ -335,14 +327,13 @@ public function cards(NovaRequest $request): array
         Metrics\UsersPerDay::make()->width('full')->dynamicHeight(),
     ];
 }
-
 ```
 
-## [​](#metric-help-text-%2F-tooltips) Metric Help Text / Tooltips
+## [​](#metric-help-text-/-tooltips) Metric Help Text / Tooltips
 
 Sometimes a metric needs to offer the user more context about how the value is calculated or other details related to the metric’s value. To provide this context, Nova allows you to define a help text “tooltip”, which can be registered similarly to [Field Help Text](./../resources/fields#field-help-text):
 
-![Metric Help Tooltip](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/metric-tooltip-help.png)
+![Metric Help Tooltip](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/metric-tooltip-help.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=4c947ed73975f38e54bf70782b659171)
 
 To enable the tooltip, invoke the `help` method while registering your metric. The `help` method receives the help text as its only argument:
 
@@ -369,7 +360,6 @@ public function cards(NovaRequest $request): array
             ->help('This is calculated using all users that are active and not banned.'),
     ];
 }
-
 ```
 
 You may also use HTML when defining your help text. For example, you may pass a rendered Blade template to the `help` method:
@@ -385,7 +375,6 @@ use App\Nova\Metrics\TotalUsers;
 
 TotalUsers::make()
     ->help(view('nova.metrics.total-users.tooltip')->render()),
-
 ```
 
 ## [​](#refreshing-metrics) Refreshing Metrics
@@ -394,7 +383,6 @@ Laravel Nova will automatically fetch updated results (without requiring the use
 
 | Event | Behaviour |
 | --- | --- |
-| Resource Deleted | Automatic Update |
-| Resource Restored | Automati
+| Resource Delet
 
 *[Content truncated for length]*

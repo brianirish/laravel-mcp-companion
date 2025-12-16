@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -96,7 +96,6 @@ Ask AI
 
 ```
 php artisan nova:asset acme/analytics
-
 ```
 
 When generating an asset, Nova will prompt you to install the assets NPM dependencies, compile its dependencies, and update your application’s `composer.json` file. All custom assets are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -120,7 +119,6 @@ npm run dev
 
 # Compile and minify your assets...
 npm run prod
-
 ```
 
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
@@ -131,7 +129,6 @@ Ask AI
 
 ```
 npm run watch
-
 ```
 
 Was this page helpful?
@@ -140,6 +137,4 @@ YesNo
 
 [CSS / JavaScript](/docs/v5/customization/frontend)[Localization](/docs/v5/customization/localization)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

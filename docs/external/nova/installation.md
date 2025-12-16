@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -146,7 +146,6 @@ Ask AI
         "url": "https://nova.laravel.com"
     }
 ],
-
 ```
 
 Or, you may use the following CLI command to add the Composer repository to your `composer.json` file:
@@ -157,7 +156,6 @@ Ask AI
 
 ```
 composer config repositories.nova '{"type": "composer", "url": "https://nova.laravel.com"}' --file composer.json
-
 ```
 
 Next, you may add `laravel/nova` to your list of required packages in your `composer.json` file:
@@ -174,7 +172,6 @@ Ask AI
     "laravel/framework": "^12.0",
     "laravel/nova": "^5.0"
 },
-
 ```
 
 After your `composer.json` file has been updated, run the `composer update` command in your console terminal:
@@ -185,7 +182,6 @@ Ask AI
 
 ```
 composer update --prefer-dist
-
 ```
 
 When running `composer update`, you will be prompted to provide a username and password. You should use your Nova website email for the username and a [license key](https://nova.laravel.com/licenses) should be used as the password. These credentials will authenticate your Composer session as having permission to download the Nova source code.
@@ -197,7 +193,6 @@ Ask AI
 
 ```
 composer config http-basic.nova.laravel.com [email protected] your-license-key
-
 ```
 
 Finally, run the `nova:install` and `migrate` Artisan commands. The `nova:install` command will install Nova’s service provider and public assets within your application:
@@ -210,7 +205,6 @@ Ask AI
 php artisan nova:install
 
 php artisan migrate
-
 ```
 
 The default `App\Nova\User` Nova resource references the `App\Models\User` model. If you place your models in a different directory or namespace, you should adjust this value within the resource:
@@ -233,7 +227,6 @@ class User extends Resource
      */
     public static $model = \App\Models\User::class;
 }
-
 ```
 
 If your application’s `users` table is empty or you want to create a new user, you can run the `nova:user` Artisan command:
@@ -244,7 +237,6 @@ Ask AI
 
 ```
 php artisan nova:user
-
 ```
 
 That’s it! Next, you may navigate to your application’s `/nova` path in your browser and you should be greeted with the Nova dashboard which includes links to various parts of this documentation.
@@ -254,7 +246,7 @@ That’s it! Next, you may navigate to your application’s `/nova` path in your
 Nova requires a license key and a production URL to be used in production environments. Nova will check your license key and the current host against the values from the license details found in your Nova account.
 You can generate license keys and register the production URL for your project inside the license’s page on your Nova account at <https://nova.laravel.com/licenses>:
 
-![Registering your production site](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/register-site.png)
+![Registering your production site](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/register-site.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=bcb0b0aa45a250e99d89be8dabf3e4f1)
 
 You can register a wildcard subdomain for your production URL for use in multi-tenant scenarios (e.g. `*.laravel.com`).
 
@@ -270,7 +262,6 @@ Ask AI
 
 ```
 NOVA_LICENSE_KEY=
-
 ```
 
 ### [​](#verifying-your-nova-license-key-configuration) Verifying Your Nova License Key Configuration
@@ -283,7 +274,6 @@ Ask AI
 
 ```
 php artisan nova:check-license
-
 ```
 
 ## [​](#authenticating-nova-in-ci-environments) Authenticating Nova in CI Environments
@@ -299,7 +289,6 @@ Ask AI
 
 ```
 composer config http-basic.nova.laravel.com "${secrets.NOVA_USERNAME}" "${secrets.NOVA_LICENSE_KEY}"
-
 ```
 
 ## [​](#using-nova-on-development-and-staging-domains) Using Nova on Development and Staging Domains
@@ -323,6 +312,6 @@ Nova will also not check the current license key when the subdomain is one of th
 
 ## [​](#authorizing-access-to-nova) Authorizing Access to Nova
 
-Within your `app/Providers/NovaServiceProvider.php` file, there is a `gate` method. This authorization gate controls access to Nova in **non-local** environments. By default, any user can access the Nova dashboard when the 
+Within your `app/Providers/NovaServiceProvider.php` file, there is a `gate` method. This authorization gate controls access to Nova in **non-local** environments. By d
 
 *[Content truncated for length]*

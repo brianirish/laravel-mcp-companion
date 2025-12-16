@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -137,7 +137,6 @@ class PostPolicy
         return $user->type == 'editor';
     }
 }
-
 ```
 
 ### [​](#undefined-policy-methods) Undefined Policy Methods
@@ -187,10 +186,9 @@ public function viewAny(User $user)
 {
     return in_array('view-posts', $user->permissions);
 }
-
 ```
 
-### [​](#when-nova-%26-application-authorization-logic-differs) When Nova & Application Authorization Logic Differs
+### [​](#when-nova-&-application-authorization-logic-differs) When Nova & Application Authorization Logic Differs
 
 If you need to authorize actions differently when a request is initiated from within Nova versus your primary application, you may utilize Nova’s `whenServing` method within your policy. This method allows you to only execute the given callback if the request is a Nova request. An additional callback may be provided that will be executed for non-Nova requests:
 
@@ -221,7 +219,6 @@ public function viewAny(User $user)
         return in_array('view-posts', $user->permissions);
     });
 }
-
 ```
 
 #### [​](#using-separate-policy-classes-for-nova-resources) Using Separate Policy Classes for Nova Resources
@@ -234,7 +231,6 @@ Ask AI
 
 ```
 php artisan nova:policy PostPolicy --resource=Post
-
 ```
 
 The `nova:policy` command above will create a new policy class as `App\Nova\Policies\PostPolicy`. In addition, the generated policy will authorize against `App\Nova\Post` instead of `App\Models\Post`. To register the policy with your Nova resource, you should specify the policy within the resource’s `$policy` property:
@@ -257,7 +253,6 @@ class Post extends Resource
      */
     public static $policy = Policies\PostPolicy::class;
 }
-
 ```
 
 ### [​](#relationships) Relationships
@@ -286,13 +281,12 @@ public function addComment(User $user, Podcast $podcast)
 {
     return true;
 }
-
 ```
 
 As you can see, Nova uses a simple `add{Model}` policy method naming convention for authorizing relationship actions.
 
-#### [​](#authorizing-attaching-%2F-detaching) Authorizing Attaching / Detaching
+#### [​](#authorizing-attaching-/-detaching) Authorizing Attaching / Detaching
 
-For many-to-many relationships, Nova uses a similar naming convention. However, instead of `add{Model}`, you should use an `attach{Model}` / `detach{Model}` naming convention. For example, imagine a `Podcast` model has a many-to-many relationship with the `Tag` model. If you would like to authorize which users can attach “tags” to a podcast, you may add an `attachTag` method to your podcast policy. In addition, you will li
+For many-to-many relationships, Nova uses a similar naming convention. However, instead of `add{Model}`, you should use an `attach{Model}` / `detach{Model}` naming convention. For example, imagine a `Podcast` model has a many-to-many relationship with the `Tag` model. If you would like to authorize which users can attach “tags” to a podcast, you may add an `attachTag` method to your podcast policy. In addition, you will likely want to de
 
 *[Content truncated for length]*

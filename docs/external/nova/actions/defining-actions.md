@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -99,11 +99,11 @@ Defining actions in Nova
 Nova actions allow you to perform custom tasks on one or more Eloquent models. For example, you might write an action that sends an email to a user containing account data they have requested. Or, you might write an action to transfer a group of records to another user.
 Once an action has been attached to a resource definition, you may initiate it from the resource’s index or detail pages:
 
-![Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action.png)
+![Action](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/action.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=d873f3a8c9aad2689e00b5f3ad689953)
 
 If an action is enabled for display on the resource’s table row, you may also initiate the action from the resource’s action dropdown menu via the resource index page. These actions are referred to as “Inline Actions”:
 
-![Inline Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/inline-actions.png)
+![Inline Action](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/inline-actions.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=e1046d3e58a1d97a1ab5b3af6bafa3c1)
 
 ## [​](#overview) Overview
 
@@ -115,7 +115,6 @@ Ask AI
 
 ```
 php artisan nova:action EmailAccountProfile
-
 ```
 
 You may generate a [destructive action](#destructive-actions) by passing the `--destructive` option:
@@ -126,7 +125,6 @@ Ask AI
 
 ```
 php artisan nova:action DeleteUserData --destructive
-
 ```
 
 To learn how to define Nova actions, let’s look at an example. In this example, we’ll define an action that sends an email message to a user or group of users:
@@ -176,7 +174,6 @@ class EmailAccountProfile extends Action
         return [];
     }
 }
-
 ```
 
 The most important method of an action is the `handle` method. The `handle` method receives the values for any fields attached to the action, as well as a collection of selected models. The `handle` method **always** receives a `Collection` of models, even if the action is only being performed against a single model.
@@ -199,14 +196,13 @@ Ask AI
  * @var \Stringable|string
  */
 public $name = 'Send Account Profile via E-mail';
-
 ```
 
 ### [​](#destructive-actions) Destructive Actions
 
 You may designate an action as destructive or dangerous by defining an action class that extends `Laravel\Nova\Actions\DestructiveAction`. This will change the color of the action’s confirm button to red:
 
-![Destructive Action](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action-destructive.png)
+![Destructive Action](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/action-destructive.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=23bed389de76c44c1018e30ef3d522b7)
 
 When a destructive action is added to a resource that has an associated authorization policy, the policy’s `delete` method must return `true` in order for the action to run.
 
@@ -242,7 +238,6 @@ public function handle(ActionFields $fields, Collection $models): Collection
 
     return $models;
 }
-
 ```
 
 When registering this action on a resource, we may use the `then` callback to access the returned models and interact with them after the action has finished executing:
@@ -274,14 +269,13 @@ public function actions(NovaRequest $request): array
         }),
     ];
 }
-
 ```
 
 ## [​](#action-fields) Action Fields
 
 Sometimes you may wish to gather additional information from the user before dispatching an action. For this reason, Nova allows you to attach most of Nova’s supported [fields](./../resources/fields) directly to an action. When the action is initiated, Nova will prompt the user to provide input for the fields:
 
-![Action Field](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/action-field.png)
+![Action Field](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/action-field.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=310dd15ae9817fed39aa9c6934e6f58f)
 
 To add a field to an action, add the field to the array of fields returned by the action’s `fields` method:
 
@@ -298,19 +292,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 // ...
 
 /**
- * Get the fields available on the action.
- *
- * @return array<int, \Laravel\Nova\Fields\Field>
- */
-public function fields(NovaRequest $request): array 
-{
-    return [
-        Text::make('Subject'),
-    ];
-}
-
-```
-
-Finally, within your action’s `handle` method, you may access your fields u
+ * Get the f
 
 *[Content truncated for length]*

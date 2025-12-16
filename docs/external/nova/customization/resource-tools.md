@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -104,7 +104,6 @@ Ask AI
 
 ```
 php artisan nova:resource-tool acme/stripe-inspector
-
 ```
 
 When generating a tool, Nova will prompt you to install the tool’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom tools are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -139,7 +138,6 @@ public function fields(NovaRequest $request): array
         StripeInspector::make(),
     ];
 }
-
 ```
 
 ### [​](#authorization) Authorization
@@ -173,7 +171,6 @@ public function fields(NovaRequest $request): array
         }),
     ];
 }
-
 ```
 
 ### [​](#tool-options) Tool Options
@@ -205,7 +202,6 @@ class StripeInspector extends ResourceTool
         return $this->withMeta(['issuesRefunds' => true]);
     }
 }
-
 ```
 
 #### [​](#accessing-tool-options) Accessing Tool Options
@@ -218,7 +214,6 @@ Ask AI
 
 ```
 const issuesRefunds = this.panel.fields[0].issuesRefunds;
-
 ```
 
 #### [​](#dynamic-options) Dynamic Options
@@ -248,7 +243,6 @@ public function fields(NovaRequest $request): array
         StripeInspector::make()->issuesRefunds(),
     ];
 }
-
 ```
 
 ## [​](#building-tools) Building Tools
@@ -292,6 +286,8 @@ public function boot(): void
     parent::boot();
 
     $this->app->booted(function () {
-        $this->routes(
+        $this->routes();
+    });
+
 
 *[Content truncated for length]*

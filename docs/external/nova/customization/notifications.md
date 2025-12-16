@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -88,7 +88,7 @@ Learn how to send notifications to Nova users.
 
 Nova notifications allow you to notify Nova users of events within your application, such as a report being ready to download or of an invoice that needs attention. Nova notifications are displayed within a slide-out menu that can be accessed via the “bell” icon within Nova’s top navigation menu.
 
-![Notifications](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/notifications.png)
+![Notifications](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/notifications.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=5809b1bd2e07a05cb1d99d7b76a1e238)
 
 ## [​](#sending-notifications) Sending Notifications
 
@@ -112,7 +112,6 @@ $request->user()->notify(
         ->icon('download')
         ->type('info')
 );
-
 ```
 
 You may also send a Nova notification by including the `NovaChannel` in the array of channels returned by a notification’s `via` method:
@@ -152,7 +151,6 @@ public function toNova()
         ->icon('download')
         ->type('info');
 }
-
 ```
 
 #### [​](#opening-remote-action-urls-in-new-tabs) Opening Remote Action URLs in New Tabs
@@ -168,7 +166,6 @@ return (new NovaNotification)
     ->action(
         'Download', URL::remote('https://example.com/report.pdf')
     )->openInNewTab()
-
 ```
 
 #### [​](#notification-icons) Notification Icons
@@ -195,7 +192,6 @@ public function boot(): void
 
     Nova::withoutNotificationCenter();
 }
-
 ```
 
 ## [​](#enabling-unread-notifications-count) Enabling Unread Notifications Count
@@ -219,7 +215,6 @@ public function boot(): void
 
     Nova::showUnreadCountInNotificationCenter();
 }
-
 ```
 
 Was this page helpful?
@@ -228,6 +223,4 @@ YesNo
 
 [Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

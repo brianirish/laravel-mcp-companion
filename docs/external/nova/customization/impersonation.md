@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -113,12 +113,11 @@ class User extends Authenticatable
 
     // ...
 }
-
 ```
 
 Once the `Impersonatable` trait has been added to your application’s `User` model, an “Impersonate” action will be available via the inline action menu for the corresponding resource:
 
-![Impersonation](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/impersonate.png)
+![Impersonation](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/impersonate.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=2998c68c60ae0a5a1e344a425f4ddf11)
 
 ### [​](#customizing-impersonation-authorization) Customizing Impersonation Authorization
 
@@ -154,7 +153,6 @@ public function canBeImpersonated()
 {
     return true;
 }
-
 ```
 
 ## [​](#inspecting-impersonation-state) Inspecting Impersonation State
@@ -178,7 +176,6 @@ Route::get('/impersonation', function (Request $request, ImpersonatesUsers $impe
         $impersonator->stopImpersonating($request, Auth::guard(), User::class);
     }
 });
-
 ```
 
 ## [​](#impersonation-events) Impersonation Events
@@ -218,7 +215,6 @@ public function boot(): void
         logger("User {$event->impersonator->name} stopped impersonating {$event->impersonated->name}");
     });
 }
-
 ```
 
 Was this page helpful?
@@ -227,6 +223,4 @@ YesNo
 
 [Authentication](/docs/v5/customization/authentication)[Tools](/docs/v5/customization/tools)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

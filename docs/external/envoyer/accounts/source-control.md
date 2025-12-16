@@ -85,6 +85,4 @@ YesNo
 
 [Quick Start](/quick-start)[Your Account](/accounts/your-account)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

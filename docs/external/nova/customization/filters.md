@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -101,7 +101,6 @@ Ask AI
 
 ```
 php artisan nova:custom-filter acme/age-range
-
 ```
 
 When generating a filter, Nova will prompt you to install the filter’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom filters are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
@@ -136,7 +135,6 @@ public function filters(NovaRequest $request): array
         new AgeRange,
     ];
 }
-
 ```
 
 ## [​](#building-filters) Building Filters
@@ -165,7 +163,6 @@ handleChange(event) {
 
     this.$emit('change')
 }
-
 ```
 
 ## [​](#assets) Assets
@@ -203,7 +200,6 @@ public function boot()
         Nova::translations(__DIR__.'/../resources/lang/en/age-range.json');
     });
 }
-
 ```
 
 Your components are bootstrapped and registered in the `resources/js/filter.js` file. You are free to modify this file or register additional components here as needed.
@@ -222,7 +218,6 @@ npm run dev
 
 # Compile and minify your assets...
 npm run prod
-
 ```
 
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
@@ -233,7 +228,6 @@ Ask AI
 
 ```
 npm run watch
-
 ```
 
 Was this page helpful?
@@ -242,6 +236,4 @@ YesNo
 
 [Fields](/docs/v5/customization/fields)[CSS / JavaScript](/docs/v5/customization/frontend)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

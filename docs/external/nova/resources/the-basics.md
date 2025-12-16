@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -119,7 +119,6 @@ Ask AI
 
 ```
 php artisan nova:resource Post
-
 ```
 
 The most basic and fundamental property of a resource is its `model` property. This property tells Nova which Eloquent model the resource corresponds to:
@@ -142,7 +141,6 @@ class Post extends Resource
      */
     public static $model = \App\Models\Post::class;
 }
-
 ```
 
 Freshly created Nova resources only contain an `ID` field definition. Don’t worry, we’ll add more fields to our resource soon.
@@ -192,12 +190,11 @@ protected function resources(): void
         Post::class,
     ]);
 }
-
 ```
 
 Once your resources are registered with Nova, they will be available in the Nova sidebar:
 
-![Nova Dashboard](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/dashboard.png)
+![Nova Dashboard](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/dashboard.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=55c6eb6b0402f001136f8dca6a79fd24)
 
 Dashboard
 
@@ -216,7 +213,6 @@ Ask AI
  * @var bool
  */
 public static $displayInNavigation = false;
-
 ```
 
 #### [​](#customizing-resource-menus) Customizing Resource Menus
@@ -246,7 +242,6 @@ public function menu(Request $request)
         return static::$model::count();
     });
 }
-
 ```
 
 Please refer to the documentation on [menu customization](./../customization/menus) for more information.
@@ -268,7 +263,6 @@ Ask AI
  * @var string
  */
 public static $group = 'Admin';
-
 ```
 
 ## [​](#resource-table-style-customization) Resource Table Style Customization
@@ -292,12 +286,11 @@ Ask AI
  * @var string
  */
 public static $tableStyle = 'tight';
-
 ```
 
 This will display your table rows with less visual height, enabling more data to be shown:
 
-![Tight Table Style](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-tight-table.png)
+![Tight Table Style](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/resource-tight-table.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=070aa958c0d2190fdde8143b56e1eecf)
 
 Tight Table Style
 
@@ -318,12 +311,11 @@ Ask AI
  * @var bool
  */
 public static $showColumnBorders = true;
-
 ```
 
 Setting this property to `true` will instruct Nova to display the table with borders on every table item:
 
-![Table Column Borders](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/resource-column-borders.png)
+![Table Column Borders](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/resource-column-borders.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d6d839bdfa1d09a82600648e033bfa1b)
 
 Table Column Borders
 
@@ -348,13 +340,8 @@ Ask AI
  * @var string
  */
 public static $clickAction = 'edit';
-
 ```
 
-Choosing the `select` option will select the resource row’s checkbox. The `ignore` option instructs Nova to ignore click events altogether.
-
-## [​](#eager-loading) Eager Loading
-
-If you routinely need to access a re
+Choosing the 
 
 *[Content truncated for length]*

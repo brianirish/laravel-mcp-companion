@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -104,7 +104,6 @@ Ask AI
 
 ```
 php artisan nova:translate es
-
 ```
 
 #### [​](#user-locale-overrides) User Locale Overrides
@@ -134,7 +133,6 @@ public function boot(): void
         };
     });
 }
-
 ```
 
 ### [​](#resources) Resources
@@ -167,7 +165,6 @@ public static function singularLabel()
 {
     return __('Post');
 }
-
 ```
 
 To customize labels for the resource’s create and update buttons, you may override the `createButtonLabel` and `updateButtonLabel` methods on the resource:
@@ -198,7 +195,6 @@ public static function updateButtonLabel()
 {
     return __('Save Changes');
 }
-
 ```
 
 ### [​](#fields) Fields
@@ -215,7 +211,6 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make(__('Email Address'), 'email_address'),
-
 ```
 
 ### [​](#relationships) Relationships
@@ -233,7 +228,6 @@ use Laravel\Nova\Fields\HasMany;
 // ...
 
 HasMany::make(__('Posts'), 'posts', Post::class),
-
 ```
 
 In addition, you should also override the `label` and `singularLabel` methods on the related resource:
@@ -264,7 +258,6 @@ public static function singularLabel()
 {
     return __('Post');
 }
-
 ```
 
 ### [​](#filters) Filters
@@ -287,7 +280,6 @@ public function name()
 {
     return __('Admin Users');
 }
-
 ```
 
 ### [​](#lenses) Lenses
@@ -310,7 +302,6 @@ public function name()
 {
     return __('Most Valuable Users');
 }
-
 ```
 
 ### [​](#actions) Actions
@@ -333,7 +324,6 @@ public function name()
 {
     return __('Email Account Profile');
 }
-
 ```
 
 ### [​](#metrics) Metrics
@@ -356,7 +346,6 @@ public function name()
 {
     return __('Total Users');
 }
-
 ```
 
 ### [​](#frontend) Frontend
@@ -381,7 +370,6 @@ public function boot(): void
         Nova::translations($pathToFile);
     });
 }
-
 ```
 
 You may also pass an array of key / value pairs representing each localization:
@@ -406,7 +394,6 @@ public function boot(): void
         ]);
     });
 }
-
 ```
 
 As in Laravel, you may use the `__` helper within your custom Vue components to access these translations. To accomplish this, add the following mixins to your Inertia page component or Vue component:
@@ -433,7 +420,6 @@ export default {
   // ...
 }
 </script>
-
 ```
 
 Was this page helpful?
@@ -442,6 +428,4 @@ YesNo
 
 [Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

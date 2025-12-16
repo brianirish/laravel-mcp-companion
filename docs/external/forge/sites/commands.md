@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,15 +67,16 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
-- [Running Commands](#running-commands)
-- [Command History](#command-history)
-- [Commands vs. Recipes](#commands-vs-recipes)
-- [Circle Permissions](#circle-permissions)
+- [Introduction](#introduction)
+- [Running commands](#running-commands)
+- [Command history](#command-history)
+- [Commands vs. recipes](#commands-vs-recipes)
 
 Sites
 
@@ -87,9 +84,9 @@ Sites
 
 Learn how to run arbitrary commands from the Commands panel.
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
-You may execute arbitrary Bash commands from the Commands panel. Commands are executed from within the site’s root directory, e.g. `/home/forge/site.com`. If you need to run commands within another directory you may prefix the command with a `cd` operation:
+You may execute arbitrary Bash commands from the “Commands” panel. Commands are executed from within the site’s root directory, e.g., `/home/forge/site.com`. If you need to run commands within another directory you may prefix the command with a `cd` operation:
 
 Copy
 
@@ -97,45 +94,37 @@ Ask AI
 
 ```
 cd bin && ./run-command.sh
-
 ```
 
-## [​](#running-commands) Running Commands
+## [​](#running-commands) Running commands
 
-Commands can be executed from the Site’s **Commands** panel.
-Sites that were created with the **General PHP / Laravel** project type will automatically suggest common Laravel Artisan commands.
+Commands can be executed from the site’s “Commands” panel.
+Sites that were created with the “General PHP / Laravel” project type will automatically suggest common Laravel Artisan commands.
 
-Commands are not executed within a tty, which means that input / passwords cannot be provided.
+Commands are not executed within a TTY, which means that input / passwords cannot be provided. Additionally, commands cannot exceed 5 minutes of execution time.
 
-## [​](#command-history) Command History
+### [​](#command-history) Command history
 
-The last 10 previously executed commands will be shown within the **Command History** table. Alongside the command that was run, Forge will also display:
+- The user who initiated the command. This is particularly helpful when using Laravel Forge within [teams](/docs/teams)
+- The command that was executed
+- The date and time of execution
+- The status of the command
 
-- The user who initiated the command. This is particularly helpful when using Forge within [Circles](/docs/accounts/circles).
-- The command that was executed.
-- The date and time of execution.
-- The status of the command.
+## [​](#commands-vs-recipes) Commands vs. recipes
 
-From the Command History table, it’s also possible to view the output of the command and re-run the command.
+While [recipes](/docs/recipes) also allow you to run arbitrary Bash scripts on your servers, commands on a site differ in a few, but important ways:
 
-## [​](#commands-vs-recipes) Commands vs. Recipes
-
-While [Recipes](/docs/servers/recipes) also allow you to run arbitrary Bash scripts on your servers, Commands differ in a few, but important ways:
-
-- Recipes run at a server level. In other words, they cannot dynamically change into a site’s directory unless you already know the directory ahead of time.
-- Recipes can run using the `root` user. Commands only run as the site’s user, which in most cases will be `forge` unless the site is “isolated”.
-- Recipes are better equipped for running larger Bash scripts. Commands focus on running short commands, such as `php artisan config:cache`.
-
-## [​](#circle-permissions) Circle Permissions
-
-You may grant a circle member authority to run arbitrary commands in a site’s directory by granting the `site:manage-commands` permission.
+- Recipes run at a server level. In other words, they cannot dynamically change into a site’s directory unless you already know the directory ahead of time
+- Recipes can run using the `root` user. Commands only run as the site’s user, which in most cases will be `forge` unless the site is “isolated”
+- Recipes are better equipped for running larger Bash scripts. Commands focus on running short commands, such as `php artisan config:cache`
+- Recipes use the server’s configured PHP CLI version. Commands use the PHP version configured for the site they are run on.
 
 Was this page helpful?
 
 YesNo
 
-[Deployments](/docs/sites/deployments)[Packages](/docs/sites/packages)
+[Environment Variables](/docs/sites/environment-variables)[Queues](/docs/sites/queues)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

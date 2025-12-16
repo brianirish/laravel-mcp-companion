@@ -102,6 +102,4 @@ YesNo
 
 [Your Account](/accounts/your-account)[Servers](/projects/servers)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -132,18 +132,17 @@ public function fields(NovaRequest $request): array
         ]),
     ];
 }
-
 ```
 
 For example, the code snippet above will generate the following tabs:
 
-![Tab Panel](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/tab-panel.png)
+![Tab Panel](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/tab-panel.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=0f367b6ea661668155918888f4a39a7a)
 
 To learn more about adding tab panels to your Nova resources, check out the [tab documentation](./resources/panels#tabs).
 
-## [​](#fields-%26-filters-improvements) Fields & Filters Improvements
+## [​](#fields-&-filters-improvements) Fields & Filters Improvements
 
-### [​](#new-dependent-computed-field-via-field%3A%3Acomputed-method) New Dependent Computed Field via `Field::computed()` method
+### [​](#new-dependent-computed-field-via-field::computed-method) New Dependent Computed Field via `Field::computed()` method
 
 Nova 5 introduces an enhanced `computed` method that builds upon the previous computed fields feature. While computed fields have always been valuable for displaying additional resource information, they previously lacked a unique `$attribute` identifier, which limited their use as dependent fields. This limitation has been resolved in Nova 5:
 
@@ -169,12 +168,11 @@ Text::make('Comment')
             $field->show();
         }
     }),
-
 ```
 
 More information on computed fields can be found within the [computed field documentation](./resources/dependent-fields#dependable-computed-fields).
 
-### [​](#new-field%3A%3Aimmutable-method) New `Field::immutable()` method
+### [​](#new-field::immutable-method) New `Field::immutable()` method
 
 While [readonly fields](./resources/fields#readonly-fields) disable a field’s input and prevent form submission of its value, immutable fields offer more flexibility. By invoking the `immutable` method on a field, you can prevent users from modifying the field’s value while still allowing it to be submitted with the form.
 You may also pass a boolean argument to the `immutable` method to dynamically control whether a field should be immutable:
@@ -189,7 +187,6 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make('Name')->immutable(),
-
 ```
 
 Further reading is available on the [documentation](./resources/fields#immutable-fields).
@@ -211,10 +208,9 @@ Ask AI
 
 ```
 php artisan nova:policy
-
 ```
 
-![Create UserPolicy class](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/make-policy-command.png)
+![Create UserPolicy class](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/make-policy-command.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=395eb3dcadcc578f9fc053ae7fa2aaea)
 
 To enable the new policy you need to add the following code:
 
@@ -236,7 +232,6 @@ class User extends Resource
      */
     public static $policy = Policies\UserPolicy::class;
 }
-
 ```
 
 Further reading is available on the [Authorization](./resources/authorization#using-separate-policy-class-for-nova-resource) documentation.
@@ -247,6 +242,4 @@ YesNo
 
 [Installation](/docs/v5/installation)[Upgrade Guide](/docs/v5/upgrade)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

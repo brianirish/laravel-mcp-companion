@@ -58,6 +58,4 @@ YesNo
 
 [Heartbeats](/projects/heartbeats)[Collaborators](/projects/collaborators)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

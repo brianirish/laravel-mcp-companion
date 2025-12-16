@@ -4,64 +4,60 @@
 
 ---
 
-- [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/forge)
+- [Community](https://discord.gg/laravel)
+- [Blog](https://blog.laravel.com)
+- [Status](https://status.on-forge.com)
 
 ##### Get Started
 
 - [Introduction](/docs/introduction)
-- [Forge CLI](/docs/cli)
-- [Forge SDK](/docs/sdk)
+- [Laravel Forge CLI](/docs/cli)
+- [Laravel Forge SDK](/docs/sdk)
 
-##### Accounts
+##### Basics
 
-- [Your Account](/docs/accounts/your-account)
-- [Circles](/docs/accounts/circles)
-- [Source Control](/docs/accounts/source-control)
-- [SSH Keys](/docs/accounts/ssh)
-- [API](/docs/accounts/api)
-- [Tags](/docs/accounts/tags)
-- [Troubleshooting](/docs/accounts/cookbook)
+- [Organizations](/docs/organizations)
+- [Teams](/docs/teams)
+- [Server Providers](/docs/server-providers)
+- [Source Control](/docs/source-control)
+- [SSH Keys](/docs/ssh)
+- [Recipes](/docs/recipes)
+- [API](/docs/api)
 
 ##### Servers
 
-- [Server Providers](/docs/servers/providers)
+- [Managing Servers](/docs/servers/the-basics)
 - [Server Types](/docs/servers/types)
-- [Management](/docs/servers/management)
-- [Root Access / Security](/docs/servers/provisioning-process)
-- [SSH Keys / Git Access](/docs/servers/ssh)
+- [Laravel VPS](/docs/servers/laravel-vps)
 - [PHP](/docs/servers/php)
-- [Packages](/docs/servers/packages)
-- [Recipes](/docs/servers/recipes)
 - [Load Balancing](/docs/servers/load-balancing)
 - [Nginx Templates](/docs/servers/nginx-templates)
-- [Database Backups](/docs/servers/backups)
+- [Security](/docs/servers/security)
 - [Monitoring](/docs/servers/monitoring)
-- [Cookbook](/docs/servers/cookbook)
+- [Real-Time Metrics](/docs/servers/real-time-metrics)
 
 ##### Sites
 
-- [The Basics](/docs/sites/the-basics)
-- [Applications](/docs/sites/applications)
+- [Managing Sites](/docs/sites/the-basics)
+- [Domains](/docs/sites/domains)
 - [Deployments](/docs/sites/deployments)
+- [Environment Variables](/docs/sites/environment-variables)
 - [Commands](/docs/sites/commands)
-- [Packages](/docs/sites/packages)
 - [Queues](/docs/sites/queues)
-- [Security Rules](/docs/sites/security-rules)
-- [Redirects](/docs/sites/redirects)
-- [SSL](/docs/sites/ssl)
-- [User Isolation](/docs/sites/user-isolation)
-- [Cookbook](/docs/sites/cookbook)
+- [Network](/docs/sites/network)
+- [Isolation](/docs/sites/user-isolation)
+- [Laravel](/docs/sites/laravel)
+- [Logs](/docs/sites/logs)
 
 ##### Resources
 
-- [Daemons](/docs/resources/daemons)
 - [Databases](/docs/resources/databases)
+- [Database Backups](/docs/resources/database-backups)
 - [Caches](/docs/resources/caches)
-- [Network](/docs/resources/network)
+- [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
-- [Integrations](/docs/resources/integrations)
-- [Cookbook](/docs/resources/cookbook)
+- [Network](/docs/resources/network)
+- [Packages](/docs/resources/packages)
 
 ##### Integrations
 
@@ -71,28 +67,30 @@
 
 ##### Other
 
+- [Support](/docs/support)
+- [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 
 On this page
 
-- [Overview](#overview)
+- [Introduction](#introduction)
 - [Installation](#installation)
 - [Upgrading](#upgrading)
-- [Basic Usage](#basic-usage)
+- [Basic usage](#basic-usage)
 
 Get Started
 
-# Forge SDK
+# Laravel Forge SDK
 
 A PHP SDK for interacting with Laravel Forge.
 
-[## Forge SDK
+[## Laravel Forge SDK
 
-View the Forge SDK on GitHub](https://github.com/laravel/forge-sdk)[## Forge API
+View the Laravel Forge SDK on GitHub](https://github.com/laravel/forge-sdk)[## Laravel Forge API
 
-View the Forge API Documentation](https://forge.laravel.com/api-documentation)
+View the Laravel Forge API documentation](https://forge.laravel.com/api-documentation)
 
-## [​](#overview) Overview
+## [​](#introduction) Introduction
 
 The [Laravel Forge SDK](https://github.com/laravel/forge-sdk) provides an expressive interface for interacting with Forge’s API and managing Laravel Forge servers.
 
@@ -106,14 +104,13 @@ Ask AI
 
 ```
 composer require laravel/forge-sdk
-
 ```
 
 ## [​](#upgrading) Upgrading
 
-When upgrading to a new major version of Forge SDK, it’s important that you carefully review [the upgrade guide](https://github.com/laravel/forge-sdk/blob/master/UPGRADE.md).
+When upgrading to a new major version of Laravel Forge SDK, it’s important that you carefully review [the upgrade guide](https://github.com/laravel/forge-sdk/blob/master/UPGRADE.md).
 
-## [​](#basic-usage) Basic Usage
+## [​](#basic-usage) Basic usage
 
 You can create an instance of the SDK like so:
 
@@ -123,7 +120,6 @@ Ask AI
 
 ```
 $forge = new Laravel\Forge\Forge(TOKEN_HERE);
-
 ```
 
 Using the `Forge` instance you may perform multiple actions as well as retrieve the different resources Forge’s API provides:
@@ -134,7 +130,6 @@ Ask AI
 
 ```
 $servers = $forge->servers();
-
 ```
 
 This will give you an array of servers that you have access to, where each server is represented by an instance of `Laravel\Forge\Resources\Server`, this instance has multiple public properties like `$name`, `$id`, `$size`, `$region`, and others.
@@ -146,7 +141,6 @@ Ask AI
 
 ```
 $server = $forge->server(SERVER_ID_HERE);
-
 ```
 
 On multiple actions supported by this SDK you may need to pass some parameters, for example when creating a new server:
@@ -167,13 +161,12 @@ $server = $forge->createServer([
     "php_version"=> InstallableServices::PHP_84,
     "region"=> "ams2"
 ]);
-
 ```
 
-These parameters will be used in the POST request sent to Forge servers, you can find more information about the parameters needed for each action on
-[Forge’s official API documentation](https://forge.laravel.com/api-documentation).
+These parameters will be used in the POST request sent to Laravel Forge servers, you can find more information about the parameters needed for each action on
+[Laravel Forge’s official API documentation](https://forge.laravel.com/api-documentation).
 Notice that this request for example will only start the server creation process, your server might need a few minutes before it completes provisioning, you’ll need to check the server’s `$isReady` property to know if it’s ready or not yet.
-Some SDK methods however wait for the action to complete on Forge’s end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
+Some SDK methods however wait for the action to complete on Laravel Forge’s end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
 
 Copy
 
@@ -181,10 +174,9 @@ Ask AI
 
 ```
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
-
 ```
 
-This method will ping Forge servers every 5 seconds and see if the newly created Site’s status is `installed` and only return when it’s so, in case the waiting exceeded 30 seconds a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
+This method will ping Laravel Forge servers every 5 seconds and see if the newly created Site’s status is `installed` and only return when it’s so, in case the waiting exceeded 30 seconds a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
 You can easily stop this behaviour by setting the `$wait` argument to false:
 
 Copy
@@ -193,7 +185,6 @@ Ask AI
 
 ```
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
-
 ```
 
 You can also set the desired timeout value:
@@ -204,15 +195,14 @@ Ask AI
 
 ```
 $forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
-
 ```
 
 Was this page helpful?
 
 YesNo
 
-[Forge CLI](/docs/cli)[Your Account](/docs/accounts/your-account)
+[Laravel Forge CLI](/docs/cli)[Organizations](/docs/organizations)
 
-Assistant
+⌘I
 
-Responses are generated using AI and may contain mistakes.
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

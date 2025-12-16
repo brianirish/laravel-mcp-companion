@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -116,7 +116,6 @@ return [
             }
         ),
 ];
-
 ```
 
 To define dependent fields separately for creating and updating resources, you may use the `dependsOnCreating` and `dependsOnUpdating` methods.
@@ -199,10 +198,9 @@ BelongsTo::make('User')
             $field->show()->rules('required');
         }
     }),
-
 ```
 
-## [​](#setting-a-field%E2%80%99s-value-using-dependson) Setting a Field’s Value Using `dependsOn`
+## [​](#setting-a-field’s-value-using-dependson) Setting a Field’s Value Using `dependsOn`
 
 Another common use-case for dependent fields is to set the value of a field based on the value of another field. You can accomplish this using the `setValue` method:
 
@@ -223,7 +221,6 @@ DateTime::make('Updated At')
     ->dependsOn(['created_at'], function (DateTime $field, NovaRequest $request, FormData $form) {
         $field->setValue(Carbon::parse($form->created_at)->addDays(7));
     }),
-
 ```
 
 ## [​](#accessing-request-resource-ids) Accessing Request Resource IDs
@@ -253,7 +250,6 @@ Currency::make('Price')
             'required', 'numeric', 'min:0', 'max:99'
         ])->help('Price starts from $0-$99');
     }),
-
 ```
 
 Was this page helpful?
@@ -262,6 +258,4 @@ YesNo
 
 [Fields](/docs/v5/resources/fields)[Date Fields](/docs/v5/resources/date-fields)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

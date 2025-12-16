@@ -78,6 +78,4 @@ YesNo
 
 [Source Control](/accounts/source-control)[Management](/projects/management)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

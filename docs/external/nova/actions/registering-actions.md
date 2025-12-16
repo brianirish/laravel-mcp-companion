@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -125,7 +125,6 @@ public function actions(NovaRequest $request): array
         new Actions\EmailAccountProfile,
     ];
 }
-
 ```
 
 ## [​](#authorization) Authorization
@@ -160,7 +159,6 @@ public function actions(NovaRequest $request): array
             }),
     ];
 }
-
 ```
 
 You may also use a variety of request methods to get the currently selected resources:
@@ -202,7 +200,6 @@ public function actions(NovaRequest $request): array
             }),
     ];
 }
-
 ```
 
 ### [​](#authorization-via-resource-policy) Authorization via Resource Policy
@@ -256,7 +253,6 @@ public function actions(NovaRequest $request): array
             ->showInline(),
     ];
 }
-
 ```
 
 ## [​](#standalone-actions) Standalone Actions
@@ -286,7 +282,6 @@ public function actions(NovaRequest $request): array
             ->standalone(),
     ];
 }
-
 ```
 
 ## [​](#sole-actions) Sole Actions
@@ -316,7 +311,6 @@ public function actions(NovaRequest $request): array
             ->sole(),
     ];
 }
-
 ```
 
 ## [​](#pivot-actions) Pivot Actions
@@ -329,5 +323,7 @@ Copy
 
 Ask AI
 
+```
+use La
 
 *[Content truncated for length]*

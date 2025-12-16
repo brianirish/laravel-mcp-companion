@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -196,7 +196,6 @@ public function fields(NovaRequest $request): array
         Text::make('Name')->sortable(),
     ];
 }
-
 ```
 
 ### [​](#field-column-conventions) Field Column Conventions
@@ -213,7 +212,6 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make('Name', 'name_column'),
-
 ```
 
 If the field has a JSON, `ArrayObject`, or array cast assigned to it, you may use the `->` operator to specify nested properties within the field:
@@ -228,10 +226,9 @@ use Laravel\Nova\Fields\Timezone;
 // ...
 
 Timezone::make('User Timezone', 'settings->timezone'),
-
 ```
 
-## [​](#showing-%2F-hiding-fields) Showing / Hiding Fields
+## [​](#showing-/-hiding-fields) Showing / Hiding Fields
 
 Often, you will only want to display a field in certain situations. For example, there is typically no need to show a `Password` field on a resource index listing. Likewise, you may wish to only display a `Created At` field on the creation / update forms. Nova makes it a breeze to hide / show fields on certain pages.
 The following methods may be used to show / hide fields based on the display context:
@@ -263,7 +260,6 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make('Name')->hideFromIndex(),
-
 ```
 
 Alternatively, you may pass a callback to the following methods.
@@ -294,7 +290,6 @@ use Laravel\Nova\Fields\Text;
 Text::make('Name')->showOnIndex(function (NovaRequest $request, $resource) {
     return $this->name === 'Taylor Otwell';
 }),
-
 ```
 
 For `hide*` methods, the field will be hidden if the given callback returns `true`:
@@ -311,7 +306,6 @@ use Laravel\Nova\Fields\Text;
 Text::make('Name')->hideFromIndex(function (NovaRequest $request, $resource) {
     return $this->name === 'Taylor Otwell';
 }),
-
 ```
 
 ### [​](#showing-fields-when-peeking) Showing Fields When Peeking
@@ -328,6 +322,8 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make('Name')->showWhenPeeking(),
+```
 
+### [​](
 
 *[Content truncated for length]*

@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -116,7 +116,7 @@ Nova ships with a variety of fields out of the box, including fields for text in
 
 In addition to the variety of fields we’ve already discussed, Nova has full support for all of Laravel’s relationships. Once you add relationship fields to your Nova resources, you’ll start to experience the full power of the Nova dashboard, as the resource detail page will allow you to quickly view and search a resource’s related models:
 
-![Detail page Relationship](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/detail-relationships.png)
+![Detail page Relationship](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/detail-relationships.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=3e0e10bc6d3259883129745224b3cb85)
 
 ## [​](#hasone) HasOne
 
@@ -132,7 +132,6 @@ use Laravel\Nova\Fields\HasOne;
 // ...
 
 HasOne::make('Address'),
-
 ```
 
 Like other types of fields, relationship fields will automatically “camel case” the displayable name of the field to determine the underlying relationship method / attribute. However, you may explicitly specify the name of the relationship method by passing it as the second argument to the field’s `make` method:
@@ -147,7 +146,6 @@ use Laravel\Nova\Fields\HasOne;
 // ...
 
 HasOne::make('Dirección', 'address'),
-
 ```
 
 ### [​](#hasoneofmany) HasOneOfMany
@@ -165,7 +163,6 @@ use Laravel\Nova\Fields\HasOne;
 // ...
 
 HasOne::ofMany('Latest Post', 'latestPost', Post::class),
-
 ```
 
 ## [​](#hasmany) HasMany
@@ -182,7 +179,6 @@ use Laravel\Nova\Fields\HasMany;
 // ...
 
 HasMany::make('Posts'),
-
 ```
 
 Once the field has been added to your resource, it will be displayed on the resource’s detail page.
@@ -199,7 +195,6 @@ use Laravel\Nova\Fields\HasMany;
 // ...
 
 HasMany::make('Posts'),
-
 ```
 
 ## [​](#hasonethrough) HasOneThrough
@@ -216,7 +211,6 @@ use Laravel\Nova\Fields\HasOneThrough;
 // ...
 
 HasOneThrough::make('Owner'),
-
 ```
 
 ## [​](#hasmanythrough) HasManyThrough
@@ -233,7 +227,6 @@ use Laravel\Nova\Fields\HasManyThrough;
 // ...
 
 HasManyThrough::make('Posts'),
-
 ```
 
 ## [​](#belongsto) BelongsTo
@@ -250,7 +243,6 @@ use Laravel\Nova\Fields\BelongsTo;
 // ...
 
 BelongsTo::make('User'),
-
 ```
 
 You may customize the resource class used by the relation field by providing the second and third arguments of the `make` method, which define the name of the relationship and the underlying Nova resource class:
@@ -266,14 +258,13 @@ use Laravel\Nova\Fields\BelongsTo;
 // ...
 
 BelongsTo::make('Author', 'author', User::class),
-
 ```
 
 ### [​](#peeking-at-belongsto-relationships) Peeking at BelongsTo Relationships
 
 When hovering over a `BelongsTo` link when viewing the index or detail views, Nova will show a small card allowing you to “take a peek” at the linked relation:
 
-![Relationship Peeking](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/peeking.png)
+![Relationship Peeking](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/peeking.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=cee5d3b9b4fcb1b387ebd3891db39995)
 
 ### [​](#preventing-peeking-at-belongsto-relationships) Preventing Peeking at `BelongsTo` Relationships
 
@@ -290,7 +281,6 @@ use Laravel\Nova\Fields\BelongsTo;
 
 BelongsTo::make('Author')
     ->noPeeking(),
-
 ```
 
 You may also use the `peekable` method to determine whether the user should be allowed to peek at the relation:
@@ -309,7 +299,6 @@ BelongsTo::make('Author')
     ->peekable(function (NovaRequest $request) {
         return $request->isResourceDetailRequest();
     }),
-
 ```
 
 #### [​](#nullable-relationships) Nullable Relationships
@@ -327,15 +316,12 @@ use Laravel\Nova\Fields\BelongsTo;
 
 BelongsTo::make('User')
     ->nullable(),
-
 ```
 
 #### [​](#title-attributes) Title Attributes
 
 When a `BelongsTo` field is shown on a resource creation / update page, a drop-down selection menu or search menu will display the “title” of the resource. For example, a `User` resource may use the `name` attribute as its title. Then, when the resource is shown in a `BelongsTo` selection menu, that attribute will be displayed:
 
-![Belongs To Title](https://mintlify.s3.us-west-1.amazonaws.com/nova-laravel/images/belongs-to-title.png)
-
-To customize the “title” attribute of a resource, you may define a `title` property or `ti
+![Belongs To Title](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/
 
 *[Content truncated for length]*

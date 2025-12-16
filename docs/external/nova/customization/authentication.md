@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -84,7 +84,7 @@ Learn how to customize the Nova authentication logic.
 
 Nova utilizes [Laravel Fortify](https://laravel.com/docs/fortify) and offers two-factor authentication, email address verification, and password confirmation. By default, these features are not enabled but can be enabled with just a few changes to your application’s `app/Providers/NovaServiceProvider.php` file.
 
-### [​](#using-nova-as-your-application%E2%80%99s-default-login) Using Nova as Your Application’s Default Login
+### [​](#using-nova-as-your-application’s-default-login) Using Nova as Your Application’s Default Login
 
 Sometimes you might want to use Nova as the default authentication UI for your application. To accomplish this, you should enable Nova’s authentication and password reset routes within the `routes` method of your application’s `App\Providers\NovaServiceProvider` class:
 
@@ -103,7 +103,6 @@ protected function routes(): void
         ->withPasswordResetRoutes()
         ->register();
 }
-
 ```
 
 ### [​](#using-custom-authentication-routes) Using Custom Authentication Routes
@@ -131,7 +130,6 @@ protected function routes(): void
         )
         ->register();
 }
-
 ```
 
 ### [​](#enabling-two-factor-authentication) Enabling Two Factor Authentication
@@ -158,7 +156,6 @@ class User extends Authenticatable
 
     // ...
 }
-
 ```
 
 Next, update the `routes` method in your application’s `App\Providers\NovaServiceProvider` class to enable two-factor authentication:
@@ -189,7 +186,6 @@ protected function fortify(): void
         ])
         ->register();
 }
-
 ```
 
 Finally, run the `nova:publish` Artisan command to publish the required Fortify migrations. Then, run the `migrate` command:
@@ -202,7 +198,6 @@ Ask AI
 php artisan nova:publish
 
 php artisan migrate
-
 ```
 
 Once completed, Nova users will be able to access a new **User Security** page from the User Menu. Please refer to Fortify’s [two-factor authentication documentation](https://laravel.com/docs/fortify#two-factor-authentication) for more information.
@@ -234,7 +229,6 @@ protected function fortify(): void
         ])
         ->register();
 }
-
 ```
 
 Next, you should ensure that your `User` model implements the `Illuminate\Contracts\Auth\MustVerifyEmail` interface:
@@ -258,7 +252,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     // ...
 }
-
 ```
 
 Finally, to secure the Nova page from being used by unverified users, you can add the `Laravel\Nova\Http\Middleware\EnsureEmailIsVerified` middleware to the `api_middleware` configuration key in your application’s `config/nova.php` configuration file:
@@ -274,7 +267,6 @@ Ask AI
     \Laravel\Nova\Http\Middleware\EnsureEmailIsVerified::class,
     \Laravel\Nova\Http\Middleware\Authorize::class,
 ],
-
 ```
 
 Was this page helpful?
@@ -283,6 +275,4 @@ YesNo
 
 [Notifications](/docs/v5/customization/notifications)[Impersonation](/docs/v5/customization/impersonation)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I

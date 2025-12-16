@@ -5,7 +5,7 @@
 ---
 
 - [Community](https://discord.com/invite/laravel)
-- [Blog](https://blog.laravel.com/nova)
+- [Blog](https://blog.laravel.com)
 
 ##### Get Started
 
@@ -105,7 +105,6 @@ public function lenses(NovaRequest $request): array
         new Lenses\MostValuableUsers,
     ];
 }
-
 ```
 
 ## [​](#authorization) Authorization
@@ -140,7 +139,6 @@ public function lenses(NovaRequest $request): array
             }),
     ];
 }
-
 ```
 
 In the example above, we are using Laravel’s `Authorizable` trait’s `can` method on our `User` model to determine if the authorized user is authorized for the `viewValuableUsers` action. However, since proxying to authorization policy methods is a common use-case for `canSee`, you may use the `canSeeWhen` method to achieve the same behavior. The `canSeeWhen` method has the same method signature as the `Illuminate\Foundation\Auth\Access\Authorizable` trait’s `can` method:
@@ -169,7 +167,6 @@ public function lenses(NovaRequest $request): array
             ),
     ];
 }
-
 ```
 
 Was this page helpful?
@@ -178,6 +175,4 @@ YesNo
 
 [Defining Lenses](/docs/v5/lenses/defining-lenses)[Defining Actions](/docs/v5/actions/defining-actions)
 
-Assistant
-
-Responses are generated using AI and may contain mistakes.
+⌘I
