@@ -197,13 +197,13 @@ class DocumentationAutoDiscovery:
             doc_links = re.findall(r'href="(/docs/[^"]*)"', content, re.IGNORECASE)
             
             for link in doc_links:
-                # Remove query parameters if present
-                clean_link = link.split('?')[0]
-                
+                # Remove query parameters and fragments
+                clean_link = link.split('?')[0].split('#')[0]
+
                 # Check if this is an asset file (CSS, JS, images, etc.)
                 if self._is_asset_file(clean_link):
                     continue
-                    
+
                 # Remove the /docs/ prefix to get the section name
                 section = clean_link.replace('/docs/', '')
                 if section and section not in sections:
@@ -248,8 +248,10 @@ class DocumentationAutoDiscovery:
             nav_links = re.findall(r'href="(/docs/[^"]*)"', nav_content, re.IGNORECASE)
             
             for link in nav_links:
+                # Remove fragments from link
+                clean_link = link.split('#')[0]
                 # Extract section after version (e.g., /docs/v5/installation -> installation)
-                section_match = re.search(r'/docs/v\d+/(.+)', link)
+                section_match = re.search(r'/docs/v\d+/(.+)', clean_link)
                 if section_match:
                     section = section_match.group(1)
                     if section and section not in sections:
@@ -290,12 +292,14 @@ class DocumentationAutoDiscovery:
                         path = link
                     
                     # Filter for documentation paths (exclude external links, assets, etc.)
-                    if (path.startswith('/') and 
-                        not path.startswith('//') and 
+                    if (path.startswith('/') and
+                        not path.startswith('//') and
                         not self._is_asset_file(path) and
                         path != '/'):
-                        
-                        section = path.lstrip('/')
+
+                        # Strip fragment identifier (everything after #)
+                        path_without_fragment = path.split('#')[0]
+                        section = path_without_fragment.lstrip('/')
                         if section and section not in sections:
                             sections.append(section)
             
@@ -323,8 +327,9 @@ class DocumentationAutoDiscovery:
             doc_links = re.findall(r'href="(/docs/[^"]*)"', content, re.IGNORECASE)
             
             for link in doc_links:
-                # Remove the /docs/ prefix
-                section = link.replace('/docs/', '')
+                # Remove fragments and /docs/ prefix
+                clean_link = link.split('#')[0]
+                section = clean_link.replace('/docs/', '')
                 if section and section not in sections:
                     # Test if this is a real page (not a redirect)
                     try:
@@ -584,16 +589,37 @@ class ExternalDocsFetcher:
         return self.get_service_cache_path(service) / ".cache_metadata.json"
     
     def is_cache_valid(self, service: str) -> bool:
-        """Check if the cached documentation for a service is still valid."""
+        """Check if the cached documentation for a service is still valid.
+
+        Cache is considered invalid if:
+        - Metadata file doesn't exist
+        - Cache is older than cache_duration
+        - Success rate is below 90%
+        """
         metadata_path = self.get_cache_metadata_path(service)
-        
+
         if not metadata_path.exists():
             return False
-        
+
         try:
-            # Use file modification time instead of stored cached_at
-            cache_time = metadata_path.stat().st_mtime
-            return (time.time() - cache_time) < self.cache_duration
+            # Read metadata to get cached_at timestamp and success_rate
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+
+            cache_time = metadata.get('cached_at', 0)
+            success_rate = metadata.get('success_rate', 0.0)
+
+            # Check if cache is too old
+            is_fresh = (time.time() - cache_time) < self.cache_duration
+
+            # Check if success rate is acceptable (90% threshold)
+            is_quality = success_rate >= 0.9
+
+            if not is_quality:
+                logger.info(f"Cache for {service} has low success rate ({success_rate:.1%}), invalidating")
+                return False
+
+            return is_fresh
         except Exception as e:
             logger.warning(f"Error reading cache metadata for {service}: {str(e)}")
             return False
@@ -650,21 +676,31 @@ class ExternalDocsFetcher:
         
         # Try auto-discovery first, fallback to manual sections
         discovered_sections = []
+        manual_sections = config.get("sections", [])
+
         if config.get("auto_discovery", False):
             try:
                 discovered_sections = self.auto_discovery.discover_sections(service, config)
                 logger.info(f"Auto-discovery found {len(discovered_sections)} sections for {service}")
             except Exception as e:
                 logger.warning(f"Auto-discovery failed for {service}: {str(e)}, falling back to manual sections")
-        
-        # Use discovered sections if available, otherwise use manual sections
-        if discovered_sections:
+
+        # Use discovered sections if available AND better than manual fallback
+        # Otherwise use manual sections
+        should_use_discovery = (
+            discovered_sections and
+            (not manual_sections or len(discovered_sections) >= len(manual_sections) * 0.75)
+        )
+
+        if should_use_discovery:
             sections = discovered_sections
             discovery_method = "auto-discovery"
         else:
-            sections = config.get("sections", [])
+            if discovered_sections and manual_sections:
+                logger.info(f"Auto-discovery found only {len(discovered_sections)} sections but manual config has {len(manual_sections)}, using manual")
+            sections = manual_sections
             discovery_method = "manual configuration"
-            
+
         logger.info(f"Using {discovery_method} for {service}: {len(sections)} sections")
         
         # All configured services are now publicly accessible
@@ -1297,53 +1333,55 @@ class DocsUpdater:
         # GitHub archive URL for the specific branch
         archive_url = f"https://github.com/{self.repo}/archive/refs/heads/{self.version}.zip"
         
+        # Create a temporary directory (persists after function exits)
+        # Note: Using mkdtemp instead of TemporaryDirectory for Python 3.9 compatibility
+        temp_dir = tempfile.mkdtemp()
+        temp_path = Path(temp_dir)
+
         try:
-            # Create a temporary directory
-            with tempfile.TemporaryDirectory(delete=False) as temp_dir:
-                temp_path = Path(temp_dir)
-                zip_path = temp_path / "laravel_docs.zip"
-                
-                # Download the zip file
-                logger.debug(f"Downloading from {archive_url}")
-                
-                # Retry mechanism for downloading
-                max_retries = 3
-                
-                for attempt in range(max_retries + 1):
-                    try:
-                        request = urllib.request.Request(
-                            archive_url,
-                            headers={"User-Agent": USER_AGENT}
-                        )
-                        
-                        with urllib.request.urlopen(request) as response, open(zip_path, 'wb') as out_file:
-                            shutil.copyfileobj(response, out_file)
-                        break  # Success, exit retry loop
-                    except Exception as e:
-                        if attempt < max_retries:
-                            wait_time = min(30, (2 ** attempt) + random.uniform(0, 2))
-                            logger.warning(f"Download failed on attempt {attempt + 1}/{max_retries + 1}, retrying in {wait_time:.1f}s: {str(e)}")
-                            time.sleep(wait_time)
-                        else:
-                            logger.error(f"Failed to download after {max_retries + 1} attempts: {str(e)}")
-                            raise
-                
-                # Extract the zip file
-                logger.debug(f"Extracting archive to {temp_path}")
-                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                    zip_ref.extractall(temp_path)
-                
-                # Find the extracted directory (should be named like "docs-12.x")
-                extracted_dirs = [d for d in temp_path.iterdir() if d.is_dir() and (d.name.startswith(f"{self.repo.split('/')[-1]}-"))]
-                
-                if not extracted_dirs:
-                    raise FileNotFoundError("Could not find extracted documentation directory")
-                
-                extracted_dir = extracted_dirs[0]
-                logger.debug(f"Found extracted directory: {extracted_dir}")
-                
-                # Return the directory containing markdown files
-                return extracted_dir
+            zip_path = temp_path / "laravel_docs.zip"
+
+            # Download the zip file
+            logger.debug(f"Downloading from {archive_url}")
+
+            # Retry mechanism for downloading
+            max_retries = 3
+
+            for attempt in range(max_retries + 1):
+                try:
+                    request = urllib.request.Request(
+                        archive_url,
+                        headers={"User-Agent": USER_AGENT}
+                    )
+
+                    with urllib.request.urlopen(request) as response, open(zip_path, 'wb') as out_file:
+                        shutil.copyfileobj(response, out_file)
+                    break  # Success, exit retry loop
+                except Exception as e:
+                    if attempt < max_retries:
+                        wait_time = min(30, (2 ** attempt) + random.uniform(0, 2))
+                        logger.warning(f"Download failed on attempt {attempt + 1}/{max_retries + 1}, retrying in {wait_time:.1f}s: {str(e)}")
+                        time.sleep(wait_time)
+                    else:
+                        logger.error(f"Failed to download after {max_retries + 1} attempts: {str(e)}")
+                        raise
+
+            # Extract the zip file
+            logger.debug(f"Extracting archive to {temp_path}")
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(temp_path)
+
+            # Find the extracted directory (should be named like "docs-12.x")
+            extracted_dirs = [d for d in temp_path.iterdir() if d.is_dir() and (d.name.startswith(f"{self.repo.split('/')[-1]}-"))]
+
+            if not extracted_dirs:
+                raise FileNotFoundError("Could not find extracted documentation directory")
+
+            extracted_dir = extracted_dirs[0]
+            logger.debug(f"Found extracted directory: {extracted_dir}")
+
+            # Return the directory containing markdown files
+            return extracted_dir
         except Exception as e:
             logger.error(f"Error downloading documentation: {str(e)}")
             raise
