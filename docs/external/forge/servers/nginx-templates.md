@@ -85,7 +85,11 @@ Servers
 
 # Nginx Templates
 
+Copy page
+
 Learn how to use Nginx templates to customize your site configurations.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

@@ -89,7 +89,11 @@ Resources
 
 # Scheduler
 
+Copy page
+
 Learn how to configure and manage scheduled jobs on your Laravel Forge server.
+
+Copy page
 
 ## [​](#scheduled-jobs) Scheduled jobs
 

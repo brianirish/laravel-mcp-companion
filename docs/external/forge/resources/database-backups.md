@@ -91,7 +91,11 @@ Resources
 
 # Database Backups
 
+Copy page
+
 Learn how to configure and manage automated database backups.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

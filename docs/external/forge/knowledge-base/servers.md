@@ -42,7 +42,11 @@ Troubleshooting
 
 # Servers
 
+Copy page
+
 Common tasks and solutions for managing your Laravel Forge server.
+
+Copy page
 
 ## [​](#aws-provisioned-servers-are-disappearing) AWS provisioned servers are disappearing
 
@@ -212,6 +216,6 @@ There are several reasons why your server may have a “disconnected” status. 
 - Verify that the Laravel Forge generated public key for the server is included in the `/root/.ssh/authorized_keys` and `/home/forge/.ssh/authorized_keys` files. This key is available via the “Settings” tab of your server’s Forge management panel.
 - If your server is behind a firewall, make sure you have [allowed Laravel Forge’s IP addresses to access the server](/docs/introduction#forge-ip-addresses).
 - If you removed Port 22 from the server’s firewall rules, you will need to contact your server provider and ask them to restore the rule. Removing this rule prevents Laravel Forge from accessing your server via SSH.
-- Remove any private keys or other lines that
+- Remove any private ke
 
 *[Content truncated for length]*

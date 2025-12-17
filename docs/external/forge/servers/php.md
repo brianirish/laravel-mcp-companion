@@ -91,7 +91,11 @@ Servers
 
 # PHP
 
+Copy page
+
 Learn how to manage PHP versions on your Laravel Forge server.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

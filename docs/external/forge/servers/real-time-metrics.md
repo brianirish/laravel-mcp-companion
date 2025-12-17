@@ -82,7 +82,11 @@ Servers
 
 # Real-Time Metrics
 
+Copy page
+
 Learn how to view real-time server metrics in Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

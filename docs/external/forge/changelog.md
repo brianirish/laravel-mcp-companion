@@ -86,7 +86,11 @@ Other
 
 # Changelog
 
+Copy page
+
 New updates and improvements to Laravel Forge.
+
+Copy page
 
 [​](#december-5%2C-2025)
 
@@ -201,7 +205,6 @@ We have made several improvements to the SSL certificate UI.You can now see rele
 
 Show Improvements (5)
 
-- **Deployment error handling**: Continued work to ensure deployment error output is helpful to customers.
-- **F
+- **Deployment error handling**: Continued work to ensure deployment error output is helpf
 
 *[Content truncated for length]*

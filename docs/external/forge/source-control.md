@@ -86,7 +86,11 @@ Basics
 
 # Source Control
 
+Copy page
+
 Source control providers allow Laravel Forge to access your project’s codebase and easily deploy your applications.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

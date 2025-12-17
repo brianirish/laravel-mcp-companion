@@ -52,7 +52,11 @@ Introduction
 
 # Introduction
 
+Copy page
+
 Introduction to the Laravel Forge API.
+
+Copy page
 
 This documentation is for the new Laravel Forge API. For the legacy API, please refer to the [legacy API documentation](https://forge.laravel.com/api-documentation).
 

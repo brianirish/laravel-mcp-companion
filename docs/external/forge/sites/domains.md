@@ -97,7 +97,11 @@ Sites
 
 # Domains
 
+Copy page
+
 Configure and manage domains and SSL certificates for your sites.
+
+Copy page
 
 ## [​](#introduction) Introduction
 
@@ -188,6 +192,6 @@ To use a custom certificate, you’ll need to provide:
 - The certificate file, including any intermediate certificates to form the full chain.
 - The corresponding private key.
 
-Custom certificates **are not renewed automatically** by Forge. You are responsible for monitoring their expiration and uploa
+Custom certificates **are not renewed automatically** by Forge. You are responsible for monitoring thei
 
 *[Content truncated for length]*

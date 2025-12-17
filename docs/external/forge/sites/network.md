@@ -94,7 +94,11 @@ Sites
 
 # Network
 
+Copy page
+
 Learn how Laravel Forge can manage your site’s redirect and security rules.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

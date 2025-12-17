@@ -82,7 +82,11 @@ Basics
 
 # API
 
+Copy page
+
 Learn how to get started and interact with the Laravel Forge API.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

@@ -82,7 +82,11 @@ Get Started
 
 # Laravel Forge SDK
 
+Copy page
+
 A PHP SDK for interacting with Laravel Forge.
+
+Copy page
 
 [## Laravel Forge SDK
 

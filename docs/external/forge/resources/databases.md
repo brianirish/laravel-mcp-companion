@@ -90,7 +90,11 @@ Resources
 
 # Databases
 
+Copy page
+
 Learn how to manage databases on your Laravel Forge server.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

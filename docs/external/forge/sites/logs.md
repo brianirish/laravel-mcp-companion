@@ -80,7 +80,11 @@ Sites
 
 # Logs
 
+Copy page
+
 Understand and manage logs for your sites in Laravel Forge
+
+Copy page
 
 ## [​](#introduction) Introduction
 

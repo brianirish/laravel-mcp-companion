@@ -85,7 +85,11 @@ Servers
 
 # Laravel VPS
 
+Copy page
+
 Learn about Laravel VPS and instant provisioning.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

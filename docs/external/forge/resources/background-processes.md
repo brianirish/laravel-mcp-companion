@@ -83,7 +83,11 @@ Resources
 
 # Background Processes
 
+Copy page
+
 Learn how to configure and manage background processes on your Laravel Forge server.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

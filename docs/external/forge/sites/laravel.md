@@ -92,7 +92,11 @@ Sites
 
 # Laravel
 
+Copy page
+
 Laravel Forge provides first-class support for Laravel applications.
+
+Copy page
 
 ## [​](#introduction) Introduction
 
@@ -202,6 +206,6 @@ MIX_REVERB_SCHEME="${REVERB_SCHEME}"
 
 ### [​](#converting-existing-daemons-3) Converting existing daemons
 
-If your server is already configured with a daemon that runs Laravel Reverb, Laravel Forge will manage the daemon for you. This process links the 
+If your server is already configured with a daemon that runs Laravel Reverb, Laravel Forge will manage the daemon for you. T
 
 *[Content truncated for length]*

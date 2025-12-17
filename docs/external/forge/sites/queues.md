@@ -83,7 +83,11 @@ Sites
 
 # Queues
 
+Copy page
+
 Manage Laravel queue workers.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

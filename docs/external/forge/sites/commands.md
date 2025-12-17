@@ -82,7 +82,11 @@ Sites
 
 # Commands
 
+Copy page
+
 Learn how to run arbitrary commands from the Commands panel.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

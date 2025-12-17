@@ -92,7 +92,11 @@ Sites
 
 # Creating and Managing Sites
 
+Copy page
+
 Learn how to create sites and install applications.
+
+Copy page
 
 ## [​](#introduction) Introduction
 
@@ -202,6 +206,6 @@ If your server has [multiple versions of PHP](/docs/servers/php) installed, you 
 
 When switching the version used by your site, you should ensure that your server has any additional PHP extensions / modules installed for that version.Failure to install additional modules may make your site unresponsive.
 
-Laravel Forge will automatically update your site’s Nginx configuration files to
+Laravel Forge will automatically update your site’s Nginx 
 
 *[Content truncated for length]*
