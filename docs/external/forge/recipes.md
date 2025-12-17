@@ -86,7 +86,11 @@ Basics
 
 # Recipes
 
+Copy page
+
 Save and run common Bash scripts across your servers.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

@@ -82,7 +82,11 @@ Servers
 
 # Root Access / Security
 
+Copy page
+
 Learn about the security measures Laravel Forge takes to protect your server.
+
+Copy page
 
 ## [​](#overview) Overview
 

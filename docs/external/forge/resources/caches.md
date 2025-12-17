@@ -84,7 +84,11 @@ Resources
 
 # Caches
 
+Copy page
+
 Learn how to connect to Redis™ and Memcached on your Laravel Forge server.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

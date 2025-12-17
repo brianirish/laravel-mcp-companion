@@ -90,7 +90,11 @@ Basics
 
 # Organizations
 
+Copy page
+
 Learn how to create and manage organizations in Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

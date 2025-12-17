@@ -89,7 +89,11 @@ Basics
 
 # Teams
 
+Copy page
+
 Collaborate with team members and manage servers and sites on your behalf.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

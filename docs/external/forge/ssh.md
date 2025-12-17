@@ -93,7 +93,11 @@ Basics
 
 # SSH Keys
 
+Copy page
+
 SSH keys are used to authenticate with your server over the SSH protocol.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

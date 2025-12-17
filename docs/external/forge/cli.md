@@ -96,7 +96,11 @@ Get Started
 
 # Laravel Forge CLI
 
+Copy page
+
 Laravel Forge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.
+
+Copy page
 
 [## Laravel Forge CLI
 
@@ -372,6 +376,6 @@ forge database:logs
 forge nginx:logs         # View error logs
 forge nginx:logs access  # View access logs
 
-forge php:logs           # View PHP logs (default 
+forge php:logs           # V
 
 *[Content truncated for length]*

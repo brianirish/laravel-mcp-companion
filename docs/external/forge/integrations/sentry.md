@@ -81,7 +81,11 @@ Integrations
 
 # Sentry
 
+Copy page
+
 Sentry provides error monitoring and tracing for your apps with Laravel Forge integration for creating Sentry organizations.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

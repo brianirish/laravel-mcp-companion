@@ -81,7 +81,11 @@ Sites
 
 # User Isolation
 
+Copy page
+
 Learn how to isolate your sites on Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

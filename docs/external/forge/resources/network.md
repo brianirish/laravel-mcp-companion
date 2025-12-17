@@ -89,7 +89,11 @@ Resources
 
 # Network
 
+Copy page
+
 Learn how to manage your server network and firewall.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

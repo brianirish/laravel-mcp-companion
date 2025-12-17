@@ -107,7 +107,11 @@ Sites
 
 # Deployments
 
+Copy page
+
 Manage code deployments with scripts, queues, and CI tools
+
+Copy page
 
 ## [​](#introduction) Introduction
 
@@ -178,6 +182,6 @@ This strategy *can* be faster than zero-downtime deployments, but it does come w
 
 Laravel Forge’s “Push to deploy” feature allows you to easily deploy your projects when you push new code to your source control provider.
 When code is pushed to your site’s configured branch, Laravel Forge will automatically trigger a new deployment and run your site’s deployment script.
-Push to deploy is **enabled by default for new sites** created with GitHub, GitLab, or Bitbucket. If you wish to disable this feature, you may do so by toggling the “Push
+Push to deploy is **enabled by default for new sites** created with GitHub, GitLab, or Bitbucket. If you wish to disable this feature, you may do so
 
 *[Content truncated for length]*

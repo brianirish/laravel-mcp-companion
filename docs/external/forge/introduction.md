@@ -83,7 +83,11 @@ Get Started
 
 # Welcome to Laravel Forge
 
+Copy page
+
 A server management and application deployment service for your Laravel applications and beyond.
+
+Copy page
 
 [## Create an account
 

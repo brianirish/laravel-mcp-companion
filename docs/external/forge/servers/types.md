@@ -87,7 +87,11 @@ Servers
 
 # Server Types
 
+Copy page
+
 Learn about the different types of servers you can provision with Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

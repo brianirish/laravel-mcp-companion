@@ -84,7 +84,11 @@ Integrations
 
 # Envoyer
 
+Copy page
+
 Zero-downtime deployments with Laravel Forge and Envoyer.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

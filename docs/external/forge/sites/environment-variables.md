@@ -82,7 +82,11 @@ Sites
 
 # Environment Variables
 
+Copy page
+
 Learn how to manage environment variables for your sites.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

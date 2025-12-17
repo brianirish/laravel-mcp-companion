@@ -89,7 +89,11 @@ Basics
 
 # Server Providers
 
+Copy page
+
 Learn about the server providers supported by Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 
@@ -205,6 +209,6 @@ In addition, you should review the following server requirements:
 - The server **must be** accessible externally over the Internet.
 - The server **must have** `root` SSH access enabled.
 - The server requirements **should meet** the following criteria or more: 1 CPU Core with 1GHz, 1GB RAM, and 10GB Disk space.
-- The server **must have** cu
+- The s
 
 *[Content truncated for length]*

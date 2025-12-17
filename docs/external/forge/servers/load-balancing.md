@@ -86,7 +86,11 @@ Servers
 
 # Load Balancing
 
+Copy page
+
 Learn how to horizontally scale your application using load balancers.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

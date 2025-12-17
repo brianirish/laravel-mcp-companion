@@ -83,7 +83,11 @@ Servers
 
 # Monitoring
 
+Copy page
+
 Learn how to configure server monitoring in Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

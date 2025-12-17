@@ -91,7 +91,11 @@ Servers
 
 # Creating and Managing Servers
 
+Copy page
+
 Learn how to create and manage your servers in Laravel Forge.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

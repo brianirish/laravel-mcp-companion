@@ -86,7 +86,11 @@ Resources
 
 # Packages
 
+Copy page
+
 Learn how Laravel Forge manages Composer credentials for your servers and sites.
+
+Copy page
 
 ## [​](#introduction) Introduction
 

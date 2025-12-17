@@ -82,7 +82,11 @@ Integrations
 
 # Aikido
 
+Copy page
+
 Aikido provides security scanning with Laravel Forge integration.
+
+Copy page
 
 ## [​](#introduction) Introduction
 
