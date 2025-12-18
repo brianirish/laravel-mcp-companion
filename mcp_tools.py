@@ -10,11 +10,19 @@ import os
 import re
 import logging
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 import json
 import threading
 
 from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
+from toon_helpers import (
+    toon_encode,
+    format_version_list,
+    format_search_results,
+    format_category_docs,
+    format_doc_structure,
+    format_error
+)
 
 logger = logging.getLogger("laravel-mcp-companion")
 
@@ -110,68 +118,64 @@ def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
 
 def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """List all available Laravel documentation files.
-    
+
     Args:
         docs_path: Base path for documentation
         version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
+
+    Returns:
+        TOON-encoded structured data with version metadata and file lists.
     """
     logger.debug(f"list_laravel_docs_impl called (version: {version})")
-    result = []
-    
+
     try:
         if version:
             # List docs for specific version
             version_path = docs_path / version
             if not version_path.exists():
-                return f"No documentation found for version {version}. Use update_laravel_docs() to fetch documentation."
-            
-            # Add metadata if available
+                return format_error(
+                    f"No documentation found for version {version}",
+                    {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+                )
+
             metadata = get_laravel_docs_metadata(docs_path, version)
-            if metadata.get("version"):
-                result.append(f"Laravel Documentation (Version: {metadata['version']})")
-                result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
-                result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
-                result.append("")
-            
-            # List markdown files in this version
-            md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
-            if md_files:
-                result.append(f"Files in {version}:")
-                for file in sorted(md_files):
-                    result.append(f"  {file}")
-            else:
-                result.append(f"No documentation files found in version {version}")
+            md_files = sorted([f for f in os.listdir(version_path) if f.endswith('.md')])
+
+            if not md_files:
+                return format_error(f"No documentation files found in version {version}")
+
+            return toon_encode({
+                "version": version,
+                "last_updated": metadata.get('sync_time', 'unknown'),
+                "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
+                "file_count": len(md_files),
+                "files": md_files
+            })
         else:
-            # List all versions and their files
-            available_versions = []
+            # List all versions
+            versions_data: List[Dict] = []
             for v in SUPPORTED_VERSIONS:
                 version_path = docs_path / v
                 if version_path.exists() and any(f.endswith('.md') for f in os.listdir(version_path) if os.path.isfile(version_path / f)):
-                    available_versions.append(v)
-            
-            if not available_versions:
-                return "No documentation files found. Use update_laravel_docs() to fetch documentation."
-            
-            result.append("Available Laravel Documentation Versions:")
-            result.append("")
-            
-            for v in available_versions:
-                version_path = docs_path / v
-                metadata = get_laravel_docs_metadata(docs_path, v)
-                
-                result.append(f"## Version {v}")
-                if metadata.get('sync_time'):
-                    result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
-                    result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
-                
-                md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
-                result.append(f"Files: {len(md_files)} documentation files")
-                result.append("")
-        
-        return "\n".join(result) if result else "No documentation files found"
+                    metadata = get_laravel_docs_metadata(docs_path, v)
+                    md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
+                    versions_data.append({
+                        "version": v,
+                        "last_updated": metadata.get('sync_time', 'unknown'),
+                        "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
+                        "file_count": len(md_files)
+                    })
+
+            if not versions_data:
+                return format_error(
+                    "No documentation files found",
+                    {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+                )
+
+            return format_version_list(versions_data)
     except Exception as e:
         logger.error(f"Error listing documentation files: {str(e)}")
-        return f"Error listing documentation files: {str(e)}"
+        return format_error(f"Error listing documentation files: {str(e)}")
 
 
 def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
@@ -223,93 +227,87 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
 
 def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None) -> str:
     """Search through Laravel documentation for a specific term.
-    
+
     Args:
         docs_path: Base path for documentation
         query: Search term to look for
         version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
         include_external: Whether to include external Laravel services documentation in search
         external_dir: Path to external documentation directory
+
+    Returns:
+        TOON-encoded structured search results.
     """
     logger.debug(f"search_laravel_docs_impl called with query: {query}, version: {version}, include_external: {include_external}")
-    
+
     if not query.strip():
-        return "Search query cannot be empty"
-    
+        return format_error("Search query cannot be empty")
+
     # Check cache for search results
     cache_key = f"search:{query}:{version}:{include_external}"
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
             return _search_result_cache[cache_key]
-    
-    core_results = []
-    external_results = []
+
+    core_results_data: List[Dict] = []
+    external_results_data: List[Dict] = []
     pattern = re.compile(re.escape(query), re.IGNORECASE)
-    
+
     try:
         # Search core Laravel documentation
         search_versions = [version] if version else SUPPORTED_VERSIONS
-        
+
         for v in search_versions:
             version_path = docs_path / v
             if not version_path.exists():
                 continue
-            
+
             for file in os.listdir(version_path):
                 if file.endswith('.md'):
                     file_path = version_path / file
-                    
+
                     content = get_file_content_cached(str(file_path))
                     if not content.startswith("Error") and not content.startswith("File not found"):
                         if pattern.search(content):
                             count = len(pattern.findall(content))
-                            core_results.append(f"{v}/{file} ({count} matches)")
-        
+                            core_results_data.append({
+                                "file": f"{v}/{file}",
+                                "matches": count
+                            })
+
         # Search external documentation if requested
         if include_external and external_dir and external_dir.exists():
             for service_dir in external_dir.iterdir():
                 if service_dir.is_dir():
                     service_name = service_dir.name
-                    service_matches = []
-                    
+
                     for file_path in service_dir.glob("*.md"):
                         try:
                             content = get_file_content_cached(str(file_path))
                             if not content.startswith("Error") and not content.startswith("File not found"):
                                 if pattern.search(content):
                                     count = len(pattern.findall(content))
-                                    service_matches.append(f"{file_path.name} ({count} matches)")
+                                    external_results_data.append({
+                                        "service": service_name,
+                                        "file": file_path.name,
+                                        "matches": count
+                                    })
                         except Exception as e:
                             logger.warning(f"Error searching {file_path}: {str(e)}")
                             continue
-                    
-                    if service_matches:
-                        external_results.append(f"**{service_name.title()}:** {', '.join(service_matches)}")
-        
+
         # Format combined results
-        response = []
-        
-        if core_results or external_results:
-            response.append(f"Search results for '{query}':")
-            response.append("")
-            
-            if core_results:
-                response.append(f"**Core Laravel Documentation ({len(core_results)} files):**")
-                for result in core_results:
-                    response.append(f"  - {result}")
-                response.append("")
-            
-            if external_results:
-                response.append(f"**External Laravel Services ({len(external_results)} services):**")
-                for result in external_results:
-                    response.append(f"  - {result}")
-            
-            result = "\n".join(response)
-        else:
+        if not core_results_data and not external_results_data:
             search_scope = f"version {version}" if version else "all sources"
-            result = f"No results found for '{query}' in {search_scope}"
-        
+            result = format_error(f"No results found for '{query}'", {"scope": search_scope})
+        else:
+            result = format_search_results(
+                query,
+                core_results_data,
+                external_results_data if external_results_data else None
+            )
+
         # Cache the search result
         with _cache_lock:
             _search_result_cache[cache_key] = result
@@ -319,11 +317,11 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
                 oldest_keys = list(_search_result_cache.keys())[:20]
                 for key in oldest_keys:
                     del _search_result_cache[key]
-        
+
         return result
     except Exception as e:
         logger.error(f"Error searching documentation: {str(e)}")
-        return f"Error searching documentation: {str(e)}"
+        return format_error(f"Error searching documentation: {str(e)}")
 
 
 def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None, 
@@ -430,58 +428,63 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
 
 def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Get the structure (headings) of a documentation file.
-    
+
     Args:
         docs_path: Base path for documentation
         filename: Name of the documentation file
         version: Specific Laravel version to use
+
+    Returns:
+        TOON-encoded document structure with headings.
     """
     logger.debug(f"get_doc_structure_impl called with filename: {filename}")
-    
+
     # Use read_laravel_doc_content_impl to get the content
     content = read_laravel_doc_content_impl(docs_path, filename, version)
-    
+
     if content.startswith("Error") or content.startswith("Documentation file not found") or content.startswith("Access denied"):
         return content
-    
+
     try:
-        structure = []
+        headings_data: List[Dict] = []
         lines = content.split('\n')
-        
+
         for line in lines:
             # Match markdown headings
             if line.startswith('#'):
-                # Count the number of # characters
                 level = len(line) - len(line.lstrip('#'))
                 heading = line.lstrip('#').strip()
                 if heading:
-                    indent = "  " * (level - 1)
-                    structure.append(f"{indent}- {heading}")
-        
-        if structure:
-            result = f"Structure of {filename}:\n\n" + "\n".join(structure)
-        else:
-            result = f"No headings found in {filename}"
-        
-        return result
+                    headings_data.append({
+                        "level": level,
+                        "text": heading
+                    })
+
+        if not headings_data:
+            return format_error(f"No headings found in {filename}")
+
+        return format_doc_structure(filename, headings_data)
     except Exception as e:
         logger.error(f"Error analyzing document structure: {str(e)}")
-        return f"Error analyzing document structure: {str(e)}"
+        return format_error(f"Error analyzing document structure: {str(e)}")
 
 
 def browse_docs_by_category_impl(docs_path: Path, category: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Browse Laravel documentation files by category.
-    
+
     Args:
         docs_path: Base path for documentation
         category: Category to filter by (e.g., "authentication", "database", "frontend")
         version: Specific Laravel version to browse. If not provided, uses default version.
+
+    Returns:
+        TOON-encoded category documentation files with descriptions.
     """
     logger.debug(f"browse_docs_by_category_impl called with category: {category}, version: {version}, runtime_version: {runtime_version}")
-    
+
     if not version:
         version = runtime_version if runtime_version else DEFAULT_VERSION
-    
+
     # Define category mappings
     categories = {
         "authentication": ["authentication", "sanctum", "passport", "fortify", "breeze", "jetstream", "passwords", "verification"],
@@ -493,59 +496,54 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
         "packages": ["packages", "cashier", "scout", "socialite", "telescope", "horizon"],
         "security": ["authentication", "authorization", "encryption", "hashing", "passwords", "csrf", "sanctum", "passport"]
     }
-    
+
     category_lower = category.lower()
     if category_lower not in categories:
-        available = ", ".join(sorted(categories.keys()))
-        return f"Unknown category: {category}. Available categories: {available}"
-    
+        available = sorted(categories.keys())
+        return format_error(f"Unknown category: {category}", {"available_categories": available})
+
     version_path = docs_path / version
     if not version_path.exists():
-        return f"No documentation found for version {version}"
-    
+        return format_error(f"No documentation found for version {version}")
+
     try:
         # Find files matching the category
-        category_files = []
+        category_files_data: List[Dict] = []
         keywords = categories[category_lower]
-        
+
         for file in os.listdir(version_path):
             if file.endswith('.md'):
                 file_lower = file.lower().replace('.md', '')
                 # Check if filename contains any category keyword
                 if any(keyword in file_lower for keyword in keywords):
-                    category_files.append(file)
-        
-        if category_files:
-            result = [f"Laravel {version} - {category.title()} Documentation:"]
-            result.append("")
-            
-            for file in sorted(category_files):
-                # Try to get a brief description from the file
-                file_path = version_path / file
-                content = get_file_content_cached(str(file_path))
-                
-                if not content.startswith("Error"):
-                    # Extract first paragraph or first few lines
-                    lines = content.split('\n')
+                    # Try to get a brief description from the file
+                    file_path = version_path / file
+                    content = get_file_content_cached(str(file_path))
                     description = ""
-                    
-                    for line in lines[:10]:
-                        line = line.strip()
-                        if line and not line.startswith('#') and not line.startswith('- '):
-                            description = line[:100] + "..." if len(line) > 100 else line
-                            break
-                    
-                    result.append(f"- **{file}**: {description}")
-                else:
-                    result.append(f"- **{file}**")
-            
-            return "\n".join(result)
-        else:
-            return f"No {category} documentation files found in version {version}"
-            
+
+                    if not content.startswith("Error"):
+                        lines = content.split('\n')
+                        for line in lines[:10]:
+                            line = line.strip()
+                            if line and not line.startswith('#') and not line.startswith('- '):
+                                description = line[:100] + "..." if len(line) > 100 else line
+                                break
+
+                    category_files_data.append({
+                        "file": file,
+                        "description": description
+                    })
+
+        if not category_files_data:
+            return format_error(f"No {category} documentation files found", {"version": version})
+
+        # Sort by filename
+        category_files_data.sort(key=lambda x: x["file"])
+        return format_category_docs(category, version, category_files_data)
+
     except Exception as e:
         logger.error(f"Error browsing documentation: {str(e)}")
-        return f"Error browsing documentation: {str(e)}"
+        return format_error(f"Error browsing documentation: {str(e)}")
 
 
 def clear_caches():

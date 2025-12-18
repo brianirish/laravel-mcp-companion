@@ -22,6 +22,13 @@ from fastmcp import FastMCP
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
+from toon_helpers import (
+    toon_encode,
+    format_package_list,
+    format_package_info,
+    format_service_list,
+    format_error
+)
 
 # Import standalone MCP tool implementations
 from mcp_tools import (
@@ -753,86 +760,81 @@ def search_by_use_case(use_case: str) -> List[Dict]:
     return ranked_packages
 
 def format_package_recommendation(package: Dict) -> str:
-    """Format a package recommendation as markdown."""
+    """Format a package recommendation as TOON."""
     pkg_id = package.get('id', 'unknown')
-    result = [
-        f"# {package.get('name', pkg_id)}",
-        package.get('description', 'No description available'),
-        ""
-    ]
-    
-    # Add use cases
+
+    data: Dict[str, Any] = {
+        "id": pkg_id,
+        "name": package.get('name', pkg_id),
+        "description": package.get('description', 'No description available'),
+    }
+
     if 'use_cases' in package:
-        result.append("## Use Cases")
-        for use_case in package['use_cases']:
-            result.append(f"- {use_case}")
-        result.append("")
-    
-    # Add installation
+        data["use_cases"] = package['use_cases']
+
     if 'installation' in package:
-        result.append("## Installation")
-        result.append(f"```bash\n{package['installation']}\n```")
-        result.append("")
-    
+        data["installation"] = package['installation']
+
     # Add features if available in map
     if pkg_id in FEATURE_MAP:
-        result.append("## Common Implementations")
-        for feature in FEATURE_MAP[pkg_id]:
-            result.append(f"- {feature}")
-        result.append("")
-    
-    # Add documentation link
+        data["features"] = FEATURE_MAP[pkg_id]
+
     if 'documentation_link' in package:
-        result.append("## Documentation")
-        result.append(f"For more information, see: {package['documentation_link']}")
-    
-    return "\n".join(result)
+        data["documentation_link"] = package['documentation_link']
+
+    return format_package_info(data)
 
 
 # Standalone implementations for testing
 def get_laravel_package_recommendations(use_case: str) -> str:
-    """Get Laravel package recommendations for a specific use case (for testing)."""
+    """Get Laravel package recommendations for a specific use case (for testing).
+
+    Returns:
+        TOON-encoded package recommendations.
+    """
     logger.debug(f"get_laravel_package_recommendations called with use_case: {use_case}")
     use_case_lower = use_case.lower()
-    recommendations = []
-    
+    recommendations: List[Dict[str, Any]] = []
+
     for pkg_id, package in PACKAGE_CATALOG.items():
         # Check if use case matches categories or use cases
         if any(cat in use_case_lower for cat in package.get('categories', [])):
-            recommendations.append(package)
+            recommendations.append({
+                "id": pkg_id,
+                "name": package['name'],
+                "description": package['description'],
+                "installation": package['installation'],
+                "use_cases": package.get('use_cases', [])[:3]
+            })
             continue
-        
+
         # Check if use case matches any defined use cases
         if any(use_case_lower in defined_use.lower() for defined_use in package.get('use_cases', [])):
-            recommendations.append(package)
-    
+            recommendations.append({
+                "id": pkg_id,
+                "name": package['name'],
+                "description": package['description'],
+                "installation": package['installation'],
+                "use_cases": package.get('use_cases', [])[:3]
+            })
+
     if not recommendations:
-        return f"No packages found matching the use case: '{use_case}'. Try different keywords or browse categories."
-    
-    result = [f"# Laravel Packages for: {use_case}\n"]
-    result.append(f"Found {len(recommendations)} relevant packages:\n")
-    
-    for package in recommendations:
-        result.append(f"## {package['name']}")
-        result.append(f"{package['description']}\n")
-        result.append(f"**Installation:** `{package['installation']}`\n")
-        
-        if package.get('use_cases'):
-            result.append("**Common use cases:**")
-            for uc in package['use_cases'][:3]:  # Show first 3 use cases
-                result.append(f"- {uc}")
-            result.append("")
-    
-    return "\n".join(result)
+        return format_error(f"No packages found matching: '{use_case}'")
+
+    return format_package_list(recommendations, f"Packages for: {use_case}")
 
 
 def get_laravel_package_info(package_name: str) -> str:
-    """Get detailed information about a specific Laravel package (for testing)."""
+    """Get detailed information about a specific Laravel package (for testing).
+
+    Returns:
+        TOON-encoded package information.
+    """
     logger.debug(f"get_laravel_package_info called with package_name: {package_name}")
-    
+
     # Clean the package name
     package_name = package_name.lower().strip()
-    
+
     # Look for exact match or partial match
     package = None
     package_id: Optional[str] = None
@@ -841,10 +843,10 @@ def get_laravel_package_info(package_name: str) -> str:
             package = pkg
             package_id = pkg_id
             break
-    
+
     if not package:
-        return f"Package '{package_name}' not found. Use get_laravel_package_categories() to browse available packages."
-    
+        return format_error(f"Package '{package_name}' not found")
+
     # Add the package ID to the package dict for format_package_recommendation
     package_with_id = package.copy()
     package_with_id['id'] = package_id or ''
@@ -852,75 +854,72 @@ def get_laravel_package_info(package_name: str) -> str:
 
 
 def get_laravel_package_categories(category: str) -> str:
-    """Get packages by category (for testing)."""
+    """Get packages by category (for testing).
+
+    Returns:
+        TOON-encoded packages in category.
+    """
     logger.debug(f"get_laravel_package_categories called with category: {category}")
     category_lower = category.lower()
-    matching_packages = []
-    
+    matching_packages: List[Dict[str, Any]] = []
+
     for pkg_id, package in PACKAGE_CATALOG.items():
         if category_lower in [cat.lower() for cat in package.get('categories', [])]:
-            matching_packages.append((pkg_id, package))
-    
+            matching_packages.append({
+                "id": pkg_id,
+                "name": package['name'],
+                "description": package['description'],
+                "installation": package['installation'],
+                "documentation_link": package.get('documentation_link')
+            })
+
     if not matching_packages:
         # List available categories
         all_categories: set[str] = set()
         for package in PACKAGE_CATALOG.values():
             all_categories.update(package.get('categories', []))
-        
-        return (f"No packages found in category: '{category}'. "
-                f"Available categories: {', '.join(sorted(all_categories))}")
-    
-    result = [f"# Laravel Packages for Category: {category}\n"]
-    result.append(f"Found {len(matching_packages)} packages:\n")
-    
-    for pkg_id, package in matching_packages:
-        result.append(f"## {package['name']} ({pkg_id})")
-        result.append(f"{package['description']}\n")
-        result.append(f"**Installation:** `{package['installation']}`\n")
-    
-    return "\n".join(result)
+
+        return format_error(
+            f"No packages found in category: '{category}'",
+            {"available_categories": sorted(all_categories)}
+        )
+
+    return format_package_list(matching_packages, f"Category: {category}")
 
 
 def get_features_for_laravel_package(package: str) -> str:
-    """Get implementation features for a Laravel package (for testing)."""
+    """Get implementation features for a Laravel package (for testing).
+
+    Returns:
+        TOON-encoded package features.
+    """
     logger.debug(f"get_features_for_laravel_package called with package: {package}")
-    
+
     # Clean the package name
     package_lower = package.lower().strip()
-    
+
     # Find the package in catalog
     found_package = None
     package_id = None
-    
+
     for pkg_id, pkg in PACKAGE_CATALOG.items():
         if pkg_id.lower() == package_lower or package_lower in pkg_id.lower():
             found_package = pkg
             package_id = pkg_id
             break
-    
+
     if not found_package:
-        return f"Package '{package}' not found in the catalog."
-    
+        return format_error(f"Package '{package}' not found")
+
     # Get features from the feature map
     features = FEATURE_MAP.get(package_id or '', [])
-    
-    results = [f"# Implementation Features for {found_package['name']}\n"]
-    
-    if features:
-        results.append("Common implementation patterns and features:\n")
-        for feature in features:
-            results.append(f"- **{feature}**: Common implementation pattern")
-        results.append("")
-        results.append("The AI can provide detailed code examples for any of these features.")
-    else:
-        results.append(f"No specific features listed for {package_id}, but this package supports:")
-        results.append("")
-        for use_case in found_package.get('use_cases', [])[:5]:
-            results.append(f"- {use_case}")
-        results.append("")
-        results.append("The AI can generate example code for this implementation based on best practices.")
-    
-    return "\n".join(results)
+
+    return toon_encode({
+        "package": package_id,
+        "name": found_package['name'],
+        "features": features if features else found_package.get('use_cases', [])[:5],
+        "has_defined_features": bool(features)
+    })
 
 
 def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
@@ -1258,44 +1257,53 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     )
     def laravel_docs_info(version: Optional[str] = None) -> str:
         """Get information about the documentation version and status.
-        
+
         Args:
             version: Specific Laravel version to get info for (e.g., "12.x"). If not provided, shows all versions.
+
+        Returns:
+            TOON-encoded documentation metadata.
         """
         logger.debug(f"laravel_docs_info function called (version: {version})")
-        
+
         if version:
             metadata = get_laravel_docs_metadata(docs_path, version)
-            
+
             if "version" not in metadata:
-                return f"No documentation metadata available for version {version}. Use update_laravel_docs() to fetch documentation."
-            
-            return (
-                f"Laravel Documentation (Version {version})\n"
-                f"Last updated: {metadata.get('sync_time', 'unknown')}\n"
-                f"Commit SHA: {metadata.get('commit_sha', 'unknown')}\n"
-                f"Commit date: {metadata.get('commit_date', 'unknown')}\n"
-                f"Commit message: {metadata.get('commit_message', 'unknown')}\n"
-                f"GitHub URL: {metadata.get('commit_url', 'unknown')}"
-            )
+                return format_error(
+                    f"No documentation metadata available for version {version}",
+                    {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+                )
+
+            return toon_encode({
+                "version": version,
+                "last_updated": metadata.get('sync_time', 'unknown'),
+                "commit_sha": metadata.get('commit_sha', 'unknown'),
+                "commit_date": metadata.get('commit_date', 'unknown'),
+                "commit_message": metadata.get('commit_message', 'unknown'),
+                "github_url": metadata.get('commit_url', 'unknown')
+            })
         else:
             # Show info for all available versions
-            result = ["Laravel Documentation Status\n"]
-            
+            versions_data: List[Dict[str, Any]] = []
+
             for v in SUPPORTED_VERSIONS:
                 metadata = get_laravel_docs_metadata(docs_path, v)
                 if "version" in metadata:
-                    result.append(f"## Version {v}")
-                    result.append(f"Last updated: {metadata.get('sync_time', 'unknown')}")
-                    result.append(f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}")
-                    result.append(f"Commit date: {metadata.get('commit_date', 'unknown')}")
-                    result.append("")
+                    versions_data.append({
+                        "version": v,
+                        "last_updated": metadata.get('sync_time', 'unknown'),
+                        "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
+                        "commit_date": metadata.get('commit_date', 'unknown'),
+                        "available": True
+                    })
                 else:
-                    result.append(f"## Version {v}")
-                    result.append("Not available (use update_laravel_docs() to fetch)")
-                    result.append("")
-            
-            return "\n".join(result)
+                    versions_data.append({
+                        "version": v,
+                        "available": False
+                    })
+
+            return toon_encode({"versions": versions_data})
     
     # Register package recommendation tools
     @mcp.tool(
@@ -1305,44 +1313,34 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def get_laravel_package_recommendations(use_case: str) -> str:
         """
         Get Laravel package recommendations based on a use case.
-        
+
         Args:
             use_case: Description of what the user wants to implement
-            
+
         Returns:
-            Markdown-formatted package recommendations
+            TOON-encoded package recommendations.
         """
         logger.info(f"Searching for packages matching use case: {use_case}")
-        
+
         # Search for packages by use case
         packages = search_by_use_case(use_case)
-        
+
         if not packages:
-            return f"No packages found matching the use case: '{use_case}'"
-        
-        # Format the results
-        results = [f"# Laravel Packages for: {use_case}"]
-        
-        for i, package in enumerate(packages[:3]):  # Limit to top 3 matches
-            results.append(f"\n## {i+1}. {package.get('name', package.get('id', 'Unknown Package'))}")
-            results.append(f"{package.get('description', 'No description available')}")
-            
-            # Add use cases section
-            results.append("\n**Use Cases:**")
-            for use_case_item in package.get('use_cases', []):
-                results.append(f"- {use_case_item}")
-            
-            # Add installation instructions
-            if 'installation' in package:
-                results.append("\n**Installation:**")
-                results.append(f"```bash\n{package['installation']}\n```")
-            
-            # Add documentation link
-            if 'documentation_link' in package:
-                results.append("\n**Documentation:**")
-                results.append(f"For more information, see: {package['documentation_link']}")
-        
-        return "\n".join(results)
+            return format_error(f"No packages found matching: '{use_case}'")
+
+        # Build TOON-friendly package list (limit to top 3)
+        packages_data: List[Dict[str, Any]] = []
+        for package in packages[:3]:
+            packages_data.append({
+                "id": package.get('id'),
+                "name": package.get('name', package.get('id', 'Unknown Package')),
+                "description": package.get('description', 'No description available'),
+                "use_cases": package.get('use_cases', []),
+                "installation": package.get('installation'),
+                "documentation_link": package.get('documentation_link')
+            })
+
+        return format_package_list(packages_data, f"Packages for: {use_case}")
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_info"],
@@ -1351,23 +1349,23 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def get_laravel_package_info(package_name: str) -> str:
         """
         Get detailed information about a specific Laravel package.
-        
+
         Args:
             package_name: The name of the package (e.g., 'laravel/cashier')
-            
+
         Returns:
-            Markdown-formatted package information
+            TOON-encoded package information.
         """
         logger.info(f"Getting information for package: {package_name}")
-        
+
         # Get the package information
         if package_name not in PACKAGE_CATALOG:
-            return f"Package '{package_name}' not found"
-        
+            return format_error(f"Package '{package_name}' not found")
+
         package = PACKAGE_CATALOG[package_name].copy()
         package['id'] = package_name
-        
-        # Format the package information as markdown
+
+        # Format the package information as TOON
         return format_package_recommendation(package)
     
     @mcp.tool(
@@ -1377,46 +1375,33 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def get_laravel_package_categories(category: str) -> str:
         """
         Get Laravel packages in a specific category.
-        
+
         Args:
             category: The category to filter by (e.g., 'authentication', 'payment')
-            
+
         Returns:
-            Markdown-formatted list of packages in the category
+            TOON-encoded list of packages in the category.
         """
         logger.info(f"Getting packages for category: {category}")
-        
+
         # Find packages in the category
-        matches = []
+        matches: List[Dict[str, Any]] = []
         category_lower = category.lower()
-        
+
         for pkg_id, pkg_info in PACKAGE_CATALOG.items():
             if any(cat.lower() == category_lower for cat in pkg_info.get('categories', [])):
-                pkg = pkg_info.copy()
-                pkg['id'] = pkg_id
-                matches.append(pkg)
-        
+                matches.append({
+                    "id": pkg_id,
+                    "name": pkg_info.get('name', pkg_id),
+                    "description": pkg_info.get('description', 'No description available'),
+                    "installation": pkg_info.get('installation'),
+                    "documentation_link": pkg_info.get('documentation_link')
+                })
+
         if not matches:
-            return f"No packages found in category: '{category}'"
-        
-        # Format the results
-        results = [f"# Laravel Packages for Category: {category}"]
-        
-        for i, package in enumerate(matches):
-            results.append(f"\n## {i+1}. {package.get('name', package.get('id', 'Unknown Package'))}")
-            results.append(f"{package.get('description', 'No description available')}")
-            
-            # Add installation instructions
-            if 'installation' in package:
-                results.append("\n**Installation:**")
-                results.append(f"```bash\n{package['installation']}\n```")
-            
-            # Add documentation link
-            if 'documentation_link' in package:
-                results.append("\n**Documentation:**")
-                results.append(f"For more information, see: {package['documentation_link']}")
-        
-        return "\n".join(results)
+            return format_error(f"No packages found in category: '{category}'")
+
+        return format_package_list(matches, f"Category: {category}")
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_features_for_laravel_package"],
@@ -1425,36 +1410,29 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def get_features_for_laravel_package(package: str) -> str:
         """
         Get available features/implementations for a Laravel package.
-        
+
         Args:
             package: The Laravel package name (e.g., 'laravel/cashier')
-            
+
         Returns:
-            Markdown-formatted list of features
+            TOON-encoded list of features.
         """
         logger.info(f"Getting features for package: {package}")
-        
+
         # Check if the package exists
         if package not in PACKAGE_CATALOG:
-            return f"Package '{package}' not found"
-        
+            return format_error(f"Package '{package}' not found")
+
         # Get features from the feature map
         features = FEATURE_MAP.get(package, [])
-        
-        if not features:
-            return f"No specific features listed for {package}"
-        
-        # Format the results
         package_info = PACKAGE_CATALOG[package]
-        results = [f"# Implementation Features for {package_info.get('name', package)}"]
-        
-        results.append("\nThe following implementation features are commonly needed:")
-        
-        for i, feature in enumerate(features):
-            results.append(f"\n## {i+1}. {feature}")
-            results.append("The AI can generate example code for this implementation based on best practices.")
-        
-        return "\n".join(results)
+
+        return toon_encode({
+            "package": package,
+            "name": package_info.get('name', package),
+            "features": features if features else package_info.get('use_cases', [])[:5],
+            "has_defined_features": bool(features)
+        })
 
     @mcp.tool(
         description="Read the full content of a specific Laravel documentation file",
@@ -1593,41 +1571,35 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def list_laravel_services() -> str:
         """
         List all available Laravel services with external documentation.
-        
+
         Returns:
-            List of available Laravel services
+            TOON-encoded list of available Laravel services.
         """
         logger.debug("Listing available Laravel services")
-        
+
         try:
             services = multi_updater.external_fetcher.list_available_services()
-            response = ["Available Laravel Services:\n"]
-            
+            services_data: List[Dict[str, Any]] = []
+
             for service in services:
                 service_info = multi_updater.external_fetcher.get_service_info(service)
                 if service_info:
                     service_type = service_info.get('type', 'unknown')
                     if hasattr(service_type, 'value'):
                         service_type = service_type.value
-                    
-                    response.append(f"## {service_info.get('name', service)}")
-                    response.append(f"**ID:** {service}")
-                    response.append(f"**Type:** {service_type}")
-                    
-                    if 'base_url' in service_info:
-                        response.append(f"**Documentation URL:** {service_info['base_url']}")
-                    elif 'repo' in service_info:
-                        response.append(f"**GitHub Repository:** {service_info['repo']}")
-                    
-                    # Check cache status
-                    cache_valid = multi_updater.external_fetcher.is_cache_valid(service)
-                    response.append(f"**Cache Status:** {'Valid' if cache_valid else 'Needs Update'}")
-                    response.append("")
-            
-            return "\n".join(response)
+
+                    services_data.append({
+                        "id": service,
+                        "name": service_info.get('name', service),
+                        "type": service_type,
+                        "url": service_info.get('base_url') or service_info.get('repo'),
+                        "cache_valid": multi_updater.external_fetcher.is_cache_valid(service)
+                    })
+
+            return format_service_list(services_data)
         except Exception as e:
             logger.error(f"Error listing Laravel services: {str(e)}")
-            return f"Error listing Laravel services: {str(e)}"
+            return format_error(f"Error listing Laravel services: {str(e)}")
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_external_laravel_docs"],
@@ -1636,68 +1608,81 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def search_external_laravel_docs(query: str, services: Optional[List[str]] = None) -> str:
         """
         Search through external Laravel service documentation.
-        
+
         Args:
             query: Search term to look for
             services: List of services to search. If None, searches all cached services.
-            
+
         Returns:
-            Search results from external documentation
+            TOON-encoded search results from external documentation.
         """
         logger.debug(f"Searching external Laravel docs for: {query}")
-        
+
         if not query.strip():
-            return "Search query cannot be empty"
-        
+            return format_error("Search query cannot be empty")
+
         try:
             external_dir = multi_updater.external_fetcher.external_dir
-            
+
             if not external_dir.exists():
-                return "No external documentation found. Use update_external_laravel_docs() to fetch documentation first."
-            
+                return format_error(
+                    "No external documentation found",
+                    {"suggestion": "Use update_external_laravel_docs() to fetch documentation first"}
+                )
+
             # Determine which services to search
             if services:
                 available_services = multi_updater.external_fetcher.list_available_services()
                 invalid_services = [s for s in services if s not in available_services]
                 if invalid_services:
-                    return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
+                    return format_error(
+                        f"Invalid services: {', '.join(invalid_services)}",
+                        {"available_services": available_services}
+                    )
                 search_services = services
             else:
                 search_services = [d.name for d in external_dir.iterdir() if d.is_dir()]
-            
-            results = []
+
+            results_data: List[Dict[str, Any]] = []
             pattern = re.compile(re.escape(query), re.IGNORECASE)
-            
+
             for service in search_services:
                 service_dir = external_dir / service
                 if not service_dir.exists():
                     continue
-                
-                service_matches = []
+
+                service_matches: List[Dict[str, Any]] = []
                 for file_path in service_dir.glob("*.md"):
                     try:
                         with open(file_path, 'r', encoding='utf-8') as f:
                             content = f.read()
                             if pattern.search(content):
                                 count = len(pattern.findall(content))
-                                service_matches.append(f"{file_path.name} ({count} matches)")
+                                service_matches.append({
+                                    "file": file_path.name,
+                                    "matches": count
+                                })
                     except Exception as e:
                         logger.warning(f"Error searching {file_path}: {str(e)}")
                         continue
-                
+
                 if service_matches:
-                    results.append(f"**{service.title()}:**")
-                    for match in service_matches:
-                        results.append(f"  - {match}")
-                    results.append("")
-            
-            if results:
-                return f"Found '{query}' in external Laravel service documentation:\n\n" + "\n".join(results)
-            else:
-                return f"No results found for '{query}' in external Laravel service documentation."
+                    results_data.append({
+                        "service": service,
+                        "files": service_matches
+                    })
+
+            if not results_data:
+                return format_error(f"No results found for '{query}' in external documentation")
+
+            return toon_encode({
+                "query": query,
+                "results": results_data,
+                "service_count": len(results_data)
+            })
         except Exception as e:
             logger.error(f"Error searching external documentation: {str(e)}")
-            return f"Error searching external documentation: {str(e)}"
+            return format_error(f"Error searching external documentation: {str(e)}")
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_service_info"],
@@ -1706,71 +1691,69 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     def get_laravel_service_info(service: str) -> str:
         """
         Get detailed information about a specific Laravel service.
-        
+
         Args:
             service: Service name (forge, vapor, envoyer, nova)
-            
+
         Returns:
-            Detailed information about the service
+            TOON-encoded detailed information about the service.
         """
         logger.debug(f"Getting information for Laravel service: {service}")
-        
+
         try:
             service_info = multi_updater.external_fetcher.get_service_info(service)
-            
+
             if not service_info:
                 available_services = multi_updater.external_fetcher.list_available_services()
-                return f"Service '{service}' not found. Available services: {', '.join(available_services)}"
-            
-            response = []
-            response.append(f"# {service_info.get('name', service)}")
-            response.append("")
-            
-            # Service type and source
+                return format_error(
+                    f"Service '{service}' not found",
+                    {"available_services": available_services}
+                )
+
+            # Service type
             service_type = service_info.get('type', 'unknown')
             if hasattr(service_type, 'value'):
                 service_type = service_type.value
-            response.append(f"**Type:** {service_type}")
-            
+
+            data: Dict[str, Any] = {
+                "id": service,
+                "name": service_info.get('name', service),
+                "type": service_type,
+                "cache_valid": multi_updater.external_fetcher.is_cache_valid(service)
+            }
+
             if 'base_url' in service_info:
-                response.append(f"**Documentation URL:** {service_info['base_url']}")
+                data["documentation_url"] = service_info['base_url']
                 if 'sections' in service_info:
-                    response.append(f"**Available Sections:** {', '.join(service_info['sections'])}")
+                    data["available_sections"] = service_info['sections']
             elif 'repo' in service_info:
-                response.append(f"**GitHub Repository:** {service_info['repo']}")
-                response.append(f"**Branch:** {service_info.get('branch', 'main')}")
-            
-            # Cache information
-            cache_valid = multi_updater.external_fetcher.is_cache_valid(service)
-            response.append(f"**Cache Status:** {'Valid' if cache_valid else 'Needs Update'}")
-            
+                data["github_repo"] = service_info['repo']
+                data["branch"] = service_info.get('branch', 'main')
+
             # Try to get cache metadata
             metadata_path = multi_updater.external_fetcher.get_cache_metadata_path(service)
             if metadata_path.exists():
                 try:
                     with open(metadata_path, 'r') as f:
                         metadata = json.load(f)
-                    
+
                     if 'cached_at' in metadata:
                         import datetime
                         cache_time = datetime.datetime.fromtimestamp(metadata['cached_at'])
-                        response.append(f"**Last Fetched:** {cache_time.strftime('%Y-%m-%d %H:%M:%S')}")
-                    
+                        data["last_fetched"] = cache_time.strftime('%Y-%m-%d %H:%M:%S')
+
                     if 'success_rate' in metadata:
-                        response.append(f"**Success Rate:** {metadata['success_rate']:.1%}")
-                    
+                        data["success_rate"] = metadata['success_rate']
+
                     if 'fetched_sections' in metadata:
-                        response.append(f"**Fetched Sections:** {', '.join(metadata['fetched_sections'])}")
+                        data["fetched_sections"] = metadata['fetched_sections']
                 except Exception:
                     pass
-            
-            response.append("")
-            response.append("Use `update_external_laravel_docs()` to fetch or refresh this service's documentation.")
-            
-            return "\n".join(response)
+
+            return toon_encode(data)
         except Exception as e:
             logger.error(f"Error getting service info: {str(e)}")
-            return f"Error getting service info: {str(e)}"
+            return format_error(f"Error getting service info: {str(e)}")
 
     # Register prompts to demonstrate common use cases
     @mcp.prompt(name="laravel-authentication-setup")

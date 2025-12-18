@@ -25,7 +25,7 @@
 | **Laravel service docs** (Forge, Vapor, Nova, Envoyer) | ✅ | ❌ |
 | **Curated Laravel package recommendations** | ✅ | ❌ |
 | **Offline documentation access** | ✅ | ❌ |
-| **Pre-processed markdown** (saves tokens) | ✅ | ❌ |
+| **TOON format output** (30-60% fewer tokens) | ✅ | ❌ |
 | **No internet requests during use** | ✅ | ❌ |
 | **Laravel-specific search** | ✅ | ❌ |
 | **Auto-discovery of service docs** | ✅ | ❌ |
@@ -121,6 +121,34 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
 
+
+## TOON Format Output
+
+Laravel MCP Companion uses [TOON (Token-Oriented Object Notation)](https://github.com/toon-format/toon) for structured output, saving **30-60% on tokens** compared to JSON/markdown.
+
+### Example Output
+
+When you search for packages or list documentation, you get efficient structured data:
+
+```
+context: "authentication for SPA"
+count: 2
+packages[2]{id,name,description,categories,install}:
+  laravel/sanctum,Laravel Sanctum,"Featherweight authentication for SPAs",[authentication,spa],"composer require laravel/sanctum"
+  laravel/passport,Laravel Passport,"Full OAuth2 implementation",[authentication,api],"composer require laravel/passport"
+```
+
+Compare to the equivalent JSON (nearly 2x the tokens):
+
+```json
+{"context":"authentication for SPA","count":2,"packages":[{"id":"laravel/sanctum","name":"Laravel Sanctum",...}]}
+```
+
+### Why TOON?
+
+- **Token efficient**: LLMs understand TOON natively - no parsing overhead
+- **Structured data**: Arrays, objects, and metadata without JSON verbosity
+- **AI-friendly**: Designed specifically for LLM context windows
 
 ## Features and Roadmap
 

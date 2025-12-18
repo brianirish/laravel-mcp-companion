@@ -4,3 +4,4 @@ markdownify>=1.2.2
 beautifulsoup4>=4.14.3
 uvicorn>=0.38.0
 starlette>=0.50.0
+toon-format @ git+https://github.com/toon-format/toon-python.git
