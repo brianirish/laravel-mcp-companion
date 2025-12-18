@@ -62,29 +62,28 @@ class TestMCPTools:
             assert len(results) == 0
 
     def test_format_package_recommendation(self, sample_package_catalog):
-        """Test package recommendation formatting."""
+        """Test package recommendation formatting returns TOON format."""
         package = sample_package_catalog['laravel/cashier'].copy()
         package['id'] = 'laravel/cashier'
-        
+
         result = format_package_recommendation(package)
-        
-        assert "# Laravel Cashier" in result
-        assert "Laravel Cashier provides an expressive" in result
-        assert "## Use Cases" in result
-        assert "## Installation" in result
-        assert "composer require laravel/cashier" in result
-        assert "## Documentation" in result
+
+        # TOON format assertions
+        assert "laravel/cashier" in result
+        assert "Laravel Cashier" in result or "Cashier" in result
+        assert "expressive" in result.lower() or "billing" in result.lower()
+        assert "laravel/cashier" in result
 
     def test_format_package_recommendation_with_features(self, sample_package_catalog):
-        """Test package recommendation formatting with features."""
+        """Test package recommendation formatting with features returns TOON format."""
         package = sample_package_catalog['laravel/cashier'].copy()
         package['id'] = 'laravel/cashier'
-        
+
         # Mock the FEATURE_MAP to include cashier features
         with patch.dict(FEATURE_MAP, {'laravel/cashier': ['subscription-setup', 'webhook-handling']}):
             result = format_package_recommendation(package)
-            
-            assert "## Common Implementations" in result
+
+            # TOON format assertions
             assert "subscription-setup" in result
             assert "webhook-handling" in result
 

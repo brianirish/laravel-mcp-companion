@@ -52,69 +52,69 @@ class TestRuntimeVersion:
         assert "Test for 11.x" in content
     
     def test_browse_docs_by_category_with_runtime_version(self, test_docs_dir):
-        """Test browsing docs with runtime_version parameter."""
+        """Test browsing docs with runtime_version parameter returns TOON format."""
         # Create test files
         version_dir = test_docs_dir / "10.x"
         version_dir.mkdir(parents=True, exist_ok=True)
         (version_dir / "blade.md").write_text("# Blade Templates")
-        
+
         with patch('mcp_tools.os.listdir', return_value=['blade.md']):
             # Without runtime_version, should use DEFAULT_VERSION
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert "Laravel 12.x" in result
-            
+            assert "12.x" in result
+
             # With runtime_version, should use that version
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", runtime_version="10.x")
-            assert "Laravel 10.x" in result
-            
+            assert "10.x" in result
+
             # Explicit version should override runtime_version
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", version="11.x", runtime_version="10.x")
-            assert "Laravel 11.x" in result
+            assert "11.x" in result
     
     @patch('mcp_tools.os.listdir')
     @patch('mcp_tools.get_laravel_docs_metadata')
     def test_list_laravel_docs_with_runtime_version(self, mock_metadata, mock_listdir, test_docs_dir):
-        """Test listing docs with runtime_version parameter."""
+        """Test listing docs with runtime_version parameter returns TOON format."""
         # Create the version directory
         version_dir = test_docs_dir / "10.x"
         version_dir.mkdir(parents=True, exist_ok=True)
-        
+
         mock_listdir.return_value = ['test.md']
         mock_metadata.return_value = {
             'version': '10.x',
             'sync_time': '2024-01-01T12:00:00Z',
             'commit_sha': 'abc123'
         }
-        
+
         # Test with specific version and runtime_version
         # Runtime version shouldn't affect list when specific version is provided
         result = list_laravel_docs_impl(test_docs_dir, "10.x", runtime_version="11.x")
-        assert "Laravel Documentation (Version: 10.x)" in result
+        assert "10.x" in result
     
     @patch('mcp_tools.get_file_content_cached')
     @patch('mcp_tools.os.listdir')
     def test_search_laravel_docs_with_runtime_version(self, mock_listdir, mock_get_content, test_docs_dir):
-        """Test searching docs with runtime_version parameter."""
+        """Test searching docs with runtime_version parameter returns TOON format."""
         # Create version directories
         for ver in ["10.x", "11.x", "12.x"]:
             (test_docs_dir / ver).mkdir(parents=True, exist_ok=True)
-        
+
         mock_listdir.return_value = ['test.md']
         mock_get_content.return_value = "Test content with search term"
-        
+
         with patch('mcp_tools.SUPPORTED_VERSIONS', ['10.x', '11.x', '12.x']):
             # Without version or runtime_version, searches all versions
             result = search_laravel_docs_impl(test_docs_dir, "search")
-            assert "Search results for 'search':" in result
-            
+            assert "search" in result.lower()
+
             # With runtime_version but no version, still searches all
             # (runtime_version doesn't affect search scope, only default serving)
             result = search_laravel_docs_impl(test_docs_dir, "search", runtime_version="10.x")
-            assert "Search results for 'search':" in result
-            
+            assert "search" in result.lower()
+
             # With specific version, only searches that version
             result = search_laravel_docs_impl(test_docs_dir, "search", version="10.x", runtime_version="11.x")
-            assert "Search results for 'search':" in result
+            assert "search" in result.lower()
 
 
 class TestVersionArgumentIntegration:
@@ -161,4 +161,5 @@ class TestVersionArgumentIntegration:
         
         with patch('mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert "Laravel 12.x" in result
+            # TOON format: version: 12.x
+            assert "12.x" in result

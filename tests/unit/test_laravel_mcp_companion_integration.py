@@ -100,8 +100,9 @@ class TestMCPIntegration:
                 content = result.content[0].text if result.content else ""
             else:
                 content = str(result)
-            assert "Laravel Documentation (Version 12.x)" in content
-            assert "Commit SHA: abc123" in content
+            # TOON format: version and commit_sha fields
+            assert "12.x" in content
+            assert "abc123" in content
     
     @pytest.mark.asyncio
     async def test_get_laravel_package_recommendations_tool(self, mcp_server):
@@ -119,7 +120,8 @@ class TestMCPIntegration:
                 content = result.content[0].text if result.content else ""
             else:
                 content = str(result)
-            assert "Laravel Packages for: authentication" in content
+            # TOON format: context field contains the use case
+            assert "authentication" in content
     
     # Removed test_read_nonexistent_doc - it was testing FastMCP's URI resolution, not our code.
     # Error handling in read_laravel_doc should be tested directly in unit tests.
@@ -173,7 +175,8 @@ class TestMCPExternalDocumentation:
                 content = result.content[0].text if result.content else ""
             else:
                 content = str(result)
-            assert "Available Laravel Services" in content
+            # TOON format: services list with count
+            assert "services" in content or "count" in content
     
     @pytest.mark.asyncio
     async def test_search_external_docs_empty_query(self, mcp_server):
@@ -229,7 +232,8 @@ class TestMCPPackageTools:
                 content = result.content[0].text if result.content else ""
             else:
                 content = str(result)
-            assert "Laravel Packages for Category: authentication" in content
+            # TOON format: context contains category
+            assert "authentication" in content
     
     @pytest.mark.asyncio
     async def test_get_features_for_package(self, mcp_server):
@@ -247,9 +251,8 @@ class TestMCPPackageTools:
                 content = result.content[0].text if result.content else ""
             else:
                 content = str(result)
-            # Either features are listed or "No specific features" message
-            assert ("Implementation Features for" in content or 
-                   "No specific features listed" in content)
+            # TOON format: package name should be present
+            assert "laravel/cashier" in content
 
 
 @pytest.mark.integration

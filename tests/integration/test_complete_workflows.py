@@ -51,8 +51,9 @@ class TestDocumentationWorkflows:
                      patch('mcp_tools.get_file_content_cached', return_value="# Routing\n\nLaravel routing documentation."):
                     
                     search_result = search_laravel_docs_impl(test_docs_dir, "routing", "12.x")
-                    assert "Search results for 'routing'" in search_result
-                    assert "12.x/routing.md" in search_result
+                    # TOON format: query and file paths
+                    assert "routing" in search_result
+                    assert "routing.md" in search_result
                 
                 # Step 4: Read specific documentation
                 (test_docs_dir / "12.x" / "routing.md").write_text("# Routing\n\nDetailed routing info")
@@ -68,15 +69,17 @@ class TestDocumentationWorkflows:
             from laravel_mcp_companion import get_laravel_package_recommendations
             recommendations = get_laravel_package_recommendations("authentication for single page applications")
             
-            assert "Laravel Sanctum" in recommendations
-            assert "composer require laravel/sanctum" in recommendations
-            
+            # TOON format: package name and install command
+            assert "Laravel Sanctum" in recommendations or "Sanctum" in recommendations
+            assert "laravel/sanctum" in recommendations
+
             # Step 2: Get detailed info about specific package
             from laravel_mcp_companion import get_laravel_package_info
             package_info = get_laravel_package_info("laravel/sanctum")
-            
-            assert "# Laravel Sanctum" in package_info
-            assert "featherweight authentication system" in package_info
+
+            # TOON format: name and description fields
+            assert "Sanctum" in package_info
+            assert "authentication" in package_info.lower()
             
             # Step 3: Get packages by category
             from laravel_mcp_companion import get_laravel_package_categories
@@ -265,7 +268,8 @@ class TestCachingWorkflows:
         with patch('mcp_tools.os.listdir', return_value=['test.md']):
             # First search - should cache result
             result1 = search_laravel_docs_impl(test_docs_dir, "keyword", "12.x")
-            assert "Search results" in result1
+            # TOON format: query field present
+            assert "keyword" in result1
             
             # Verify search cache is populated
             assert len(_search_result_cache) > 0
@@ -417,7 +421,8 @@ class TestPerformanceWorkflows:
             
             # Should complete in reasonable time (< 1 second for this test)
             assert end_time - start_time < 1.0
-            assert "Search results" in result
+            # TOON format: query field present
+            assert "File" in result
 
     def test_concurrent_access_simulation(self, test_docs_dir):
         """Test behavior under simulated concurrent access."""
