@@ -41,8 +41,6 @@ class TestSpatieStatsFiltering:
             # Stats should be removed
             assert "17,716,982" not in content
             assert "5,853" not in content
-            # But headers might remain (that's ok)
-            assert "Repository" in content or "Repository" not in content  # Either way is fine
             # Documentation content should remain
             assert "Laravel Backup" in content
             assert "actual documentation content" in content

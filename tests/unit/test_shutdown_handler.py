@@ -10,20 +10,18 @@ from shutdown_handler import GracefulShutdown
 class TestGracefulShutdown:
     """Test graceful shutdown functionality."""
 
-    def test_init_default_logger(self):
-        """Test initialization with default logger."""
+    def test_init(self):
+        """Test initialization with default and custom logger."""
+        # Default logger
         shutdown = GracefulShutdown()
-        
         assert shutdown.logger is not None
         assert shutdown.shutdown_callbacks == []
         assert shutdown.is_shutting_down is False
 
-    def test_init_custom_logger(self):
-        """Test initialization with custom logger."""
+        # Custom logger
         mock_logger = MagicMock()
-        shutdown = GracefulShutdown(logger=mock_logger)
-        
-        assert shutdown.logger == mock_logger
+        shutdown_custom = GracefulShutdown(logger=mock_logger)
+        assert shutdown_custom.logger == mock_logger
 
     @patch('shutdown_handler.signal.signal')
     def test_signal_handlers_registered(self, mock_signal):

@@ -253,14 +253,7 @@ class TestContentValidation:
         # Exactly 100 characters (minimum threshold)
         content = "a" * 100
         assert fetcher._is_valid_content(content, "forge", "test") is False
-        
+
         # Just over threshold but no keywords
         content = "Some basic text about nothing in particular. " * 3
         assert fetcher._is_valid_content(content, "forge", "test") is False
-        
-        # Over threshold with minimal keywords
-        content = "This is about Forge servers. " + ("Some filler text here. " * 10)
-        # Should evaluate based on keyword density
-        result = fetcher._is_valid_content(content, "forge", "test")
-        # May or may not pass depending on scoring threshold
-        assert isinstance(result, bool)

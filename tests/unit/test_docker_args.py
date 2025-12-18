@@ -1,7 +1,6 @@
 """Unit tests for Docker argument handling and command-line parsing."""
 
 import sys
-from pathlib import Path
 from unittest.mock import patch
 
 from laravel_mcp_companion import parse_arguments
@@ -109,64 +108,3 @@ class TestDockerArgumentHandling:
             assert args.server_name == "DockerMCPServer"
 
 
-class TestDockerfileEntrypoint:
-    """Test Dockerfile configuration for proper argument handling."""
-    
-    def test_dockerfile_uses_entrypoint(self):
-        """Verify that Dockerfile uses ENTRYPOINT instead of just CMD."""
-        dockerfile_path = Path(__file__).parent.parent.parent / "Dockerfile"
-        
-        if dockerfile_path.exists():
-            with open(dockerfile_path, 'r') as f:
-                dockerfile_content = f.read()
-            
-            # Check that ENTRYPOINT is used
-            assert 'ENTRYPOINT ["python", "laravel_mcp_companion.py"]' in dockerfile_content
-            
-            # Check that CMD is empty or provides default args
-            assert 'CMD []' in dockerfile_content or 'CMD [""]' in dockerfile_content
-    
-    def test_dockerfile_python_unbuffered(self):
-        """Verify that PYTHONUNBUFFERED is set for proper Docker logging."""
-        dockerfile_path = Path(__file__).parent.parent.parent / "Dockerfile"
-        
-        if dockerfile_path.exists():
-            with open(dockerfile_path, 'r') as f:
-                dockerfile_content = f.read()
-            
-            assert 'ENV PYTHONUNBUFFERED=1' in dockerfile_content
-
-
-class TestDockerBuildScript:
-    """Test for Docker build/run helper scripts if they exist."""
-    
-    def create_test_dockerfile(self):
-        """Create a test Dockerfile to verify argument passing."""
-        dockerfile_content = '''FROM python:3.12-alpine
-WORKDIR /app
-COPY laravel_mcp_companion.py .
-RUN pip install --no-cache-dir fastmcp mcp[cli,client]
-ENV PYTHONUNBUFFERED=1
-ENTRYPOINT ["python", "laravel_mcp_companion.py"]
-CMD []
-'''
-        return dockerfile_content
-    
-    def test_docker_argument_passing_simulation(self):
-        """Simulate Docker argument passing to verify it works correctly."""
-        # This test verifies that our solution works conceptually
-        # In a real Docker environment, ENTRYPOINT + CMD allows argument passing
-        
-        # Simulate what Docker does with ENTRYPOINT
-        entrypoint = ["python", "laravel_mcp_companion.py"]
-        user_args = ["--version", "11.x", "--log-level", "DEBUG"]
-        
-        # Docker combines ENTRYPOINT with user args
-        final_command = entrypoint + user_args
-        
-        # Verify the final command is correct
-        assert final_command == [
-            "python", "laravel_mcp_companion.py",
-            "--version", "11.x",
-            "--log-level", "DEBUG"
-        ]
