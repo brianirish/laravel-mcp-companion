@@ -152,45 +152,39 @@ class TestDocsUpdater:
         assert written_data == metadata
 
     @patch('docs_updater.shutil.copyfileobj')
-    @patch('docs_updater.urllib.request.urlopen')  
-    @patch('docs_updater.tempfile.TemporaryDirectory')
+    @patch('docs_updater.urllib.request.urlopen')
+    @patch('docs_updater.tempfile.mkdtemp')
     @patch('docs_updater.zipfile.ZipFile')
-    def test_download_documentation_success(self, mock_zipfile, mock_tempdir, mock_urlopen, mock_copyfileobj, docs_updater_instance, temp_dir):
+    def test_download_documentation_success(self, mock_zipfile, mock_mkdtemp, mock_urlopen, mock_copyfileobj, docs_updater_instance, temp_dir):
         """Test successful documentation download."""
         # Create a real temporary directory structure
         mock_temp_path = temp_dir / "download_test"
         mock_temp_path.mkdir()
-        
-        # Mock TemporaryDirectory to return our test directory
-        mock_tempdir_instance = MagicMock()
-        mock_tempdir_instance.__enter__ = lambda self: str(mock_temp_path)
-        mock_tempdir_instance.__exit__ = lambda self, *args: None
-        mock_tempdir.return_value = mock_tempdir_instance
-        
-        # Create zip file path
-        mock_temp_path / "laravel_docs.zip"  # Path is created by mock_copyfileobj
-        
+
+        # Mock mkdtemp to return our test directory
+        mock_mkdtemp.return_value = str(mock_temp_path)
+
         # Mock URL response
         mock_response = MagicMock()
         mock_response.__enter__ = lambda self: self
         mock_response.__exit__ = lambda self, *args: None
         mock_urlopen.return_value = mock_response
-        
+
         # Mock shutil.copyfileobj to create the file
         def create_zip_file(src, dst):
             dst.write(b"mock zip content")
         mock_copyfileobj.side_effect = create_zip_file
-        
+
         # Mock zipfile extraction
         mock_zip_instance = MagicMock()
         mock_zipfile.return_value.__enter__ = lambda self: mock_zip_instance
         mock_zipfile.return_value.__exit__ = lambda self, *args: None
-        
+
         # Create the expected extracted directory
         extracted_dir = mock_temp_path / "docs-12.x"
         extracted_dir.mkdir()
         (extracted_dir / "test.md").write_text("test content")
-        
+
         result = docs_updater_instance.download_documentation()
         assert result.name == "docs-12.x"
 
@@ -461,9 +455,12 @@ class TestExternalDocsFetcher:
     def test_is_cache_valid_fresh(self, external_docs_fetcher):
         """Test cache validation when cache is fresh."""
         import time
-        metadata = {"cached_at": time.time()}  # Current time
+        metadata = {
+            "cached_at": time.time(),
+            "success_rate": 1.0  # Required for cache validity (must be >= 0.9)
+        }
         external_docs_fetcher.save_cache_metadata("forge", metadata)
-        
+
         assert external_docs_fetcher.is_cache_valid("forge") is True
 
     def test_save_cache_metadata(self, external_docs_fetcher):
