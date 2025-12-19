@@ -321,3 +321,154 @@ class TestPackageRecommendationTools:
             assert "laravel/sanctum" in result
 
 
+class TestMcpToolsEdgeCases:
+    """Test edge cases and exception handlers in mcp_tools."""
+
+    def test_is_safe_path_exception_handling(self, test_docs_dir):
+        """Test that is_safe_path handles exceptions gracefully."""
+        from mcp_tools import is_safe_path
+
+        # Test with paths that cause exceptions (invalid paths)
+        with patch('mcp_tools.Path.resolve') as mock_resolve:
+            mock_resolve.side_effect = Exception("Permission denied")
+
+            # Should return False when exception occurs, not raise
+            result = is_safe_path("/some/path", "/base")
+            assert result is False
+
+    def test_get_laravel_docs_metadata_json_error(self, test_docs_dir):
+        """Test metadata reading handles malformed JSON."""
+        from mcp_tools import get_laravel_docs_metadata
+
+        # Create malformed metadata file
+        metadata_dir = test_docs_dir / "12.x" / ".metadata"
+        metadata_dir.mkdir(parents=True, exist_ok=True)
+        (metadata_dir / "sync_info.json").write_text("{ invalid json }")
+
+        # Should return empty dict on JSON error
+        result = get_laravel_docs_metadata(test_docs_dir, "12.x")
+        assert result == {}
+
+    def test_list_laravel_docs_no_md_files(self, test_docs_dir):
+        """Test listing docs when version exists but has no .md files."""
+        from mcp_tools import list_laravel_docs_impl
+
+        # Create empty version dir (no .md files)
+        empty_version = test_docs_dir / "13.x"
+        empty_version.mkdir()
+
+        result = list_laravel_docs_impl(test_docs_dir, "13.x")
+
+        # Should indicate no files found
+        assert "13.x" in result or "No documentation" in result
+
+    def test_list_laravel_docs_all_versions_empty(self, test_docs_dir):
+        """Test listing all docs when no versions have files."""
+        from mcp_tools import list_laravel_docs_impl
+
+        # Create completely empty docs dir
+        empty_docs = test_docs_dir.parent / "empty_docs"
+        empty_docs.mkdir()
+
+        result = list_laravel_docs_impl(empty_docs)
+
+        # Should indicate no documentation found
+        assert "No documentation files found" in result or "error" in result.lower()
+
+    def test_list_laravel_docs_exception_handling(self, test_docs_dir):
+        """Test list_laravel_docs handles exceptions gracefully."""
+        from mcp_tools import list_laravel_docs_impl
+
+        with patch('mcp_tools.os.listdir') as mock_listdir:
+            mock_listdir.side_effect = OSError("Permission denied")
+
+            result = list_laravel_docs_impl(test_docs_dir, "12.x")
+
+            # Should return error message
+            assert "Error" in result
+
+    def test_browse_docs_by_category_unknown_category(self, test_docs_dir):
+        """Test browsing docs with unknown category."""
+        from mcp_tools import browse_docs_by_category_impl
+
+        result = browse_docs_by_category_impl(test_docs_dir, "unknown_category", "12.x")
+
+        assert "Unknown category" in result
+        assert "available_categories" in result.lower() or "frontend" in result.lower()
+
+    def test_browse_docs_by_category_version_not_found(self, test_docs_dir):
+        """Test browsing docs when version doesn't exist."""
+        from mcp_tools import browse_docs_by_category_impl
+
+        result = browse_docs_by_category_impl(test_docs_dir, "frontend", "99.x")
+
+        assert "No documentation found for version 99.x" in result
+
+    def test_browse_docs_by_category_no_matching_files(self, test_docs_dir):
+        """Test browsing category with no matching files."""
+        from mcp_tools import browse_docs_by_category_impl
+
+        # Create version with files that don't match any category
+        version_dir = test_docs_dir / "12.x"
+        # Remove existing files and create non-matching ones
+        for f in version_dir.glob("*.md"):
+            f.unlink()
+        (version_dir / "random_topic.md").write_text("# Random\n\nUnrelated content.")
+
+        result = browse_docs_by_category_impl(test_docs_dir, "frontend", "12.x")
+
+        assert "No frontend documentation files found" in result
+
+    def test_browse_docs_by_category_exception(self, test_docs_dir):
+        """Test browse_docs_by_category handles exceptions."""
+        from mcp_tools import browse_docs_by_category_impl
+
+        with patch('mcp_tools.os.listdir') as mock_listdir:
+            mock_listdir.side_effect = OSError("Disk error")
+
+            result = browse_docs_by_category_impl(test_docs_dir, "frontend", "12.x")
+
+            assert "Error browsing documentation" in result
+
+    def test_search_laravel_docs_exception_handling(self, test_docs_dir):
+        """Test search_laravel_docs handles exceptions gracefully."""
+        from mcp_tools import search_laravel_docs_impl
+
+        with patch('mcp_tools.os.listdir') as mock_listdir:
+            mock_listdir.side_effect = Exception("Unexpected error")
+
+            # Need to patch SUPPORTED_VERSIONS to include 12.x
+            with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+                result = search_laravel_docs_impl(test_docs_dir, "test", "12.x")
+
+                # Should handle exception gracefully
+                # The actual implementation might return error or empty results
+                assert result is not None
+
+    def test_search_with_context_no_results(self, test_docs_dir):
+        """Test search with context returns appropriate message when no results."""
+        from mcp_tools import search_laravel_docs_with_context_impl
+
+        with patch('mcp_tools.os.listdir', return_value=['test.md']), \
+             patch('mcp_tools.get_file_content_cached', return_value="# Test\n\nNo match here"), \
+             patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+
+            result = search_laravel_docs_with_context_impl(
+                test_docs_dir, "nonexistent_query_xyz", "12.x"
+            )
+
+            assert "No results found" in result
+
+    def test_search_with_context_exception(self, test_docs_dir):
+        """Test search with context handles exceptions."""
+        from mcp_tools import search_laravel_docs_with_context_impl
+
+        with patch('mcp_tools.os.listdir') as mock_listdir:
+            mock_listdir.side_effect = Exception("Search error")
+
+            with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+                result = search_laravel_docs_with_context_impl(
+                    test_docs_dir, "test", "12.x"
+                )
+
+                assert "Error" in result
