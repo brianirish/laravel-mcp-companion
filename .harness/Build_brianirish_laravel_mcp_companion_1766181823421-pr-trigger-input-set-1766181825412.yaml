@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_brianirish_laravel_mcp_companion_1766181823421-pr-trigger-input-set
+  identifier: Build_brianirish_laravel_mcp_companion_1766181823421prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_brianirish_laravel_mcp_companion_1766181823421
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
