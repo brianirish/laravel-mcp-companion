@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "da854c600882815be7adc27bb3cbc5f878039791",
-  "commit_date": "2025-12-15T14:50:35Z",
-  "commit_message": "Add the assertOutgoingCount method. (#10951)",
-  "commit_url": "https://github.com/laravel/docs/commit/da854c600882815be7adc27bb3cbc5f878039791",
-  "sync_time": "2025-12-16T01:24:31Z"
+  "commit_sha": "8af3c886f9605d41184eb082087fb7582998bba2",
+  "commit_date": "2025-12-18T14:40:50Z",
+  "commit_message": "Add result to example (#10953)",
+  "commit_url": "https://github.com/laravel/docs/commit/8af3c886f9605d41184eb082087fb7582998bba2",
+  "sync_time": "2025-12-19T01:23:52Z"
 }
