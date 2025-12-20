@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "8af3c886f9605d41184eb082087fb7582998bba2",
-  "commit_date": "2025-12-18T14:40:50Z",
-  "commit_message": "Add result to example (#10953)",
-  "commit_url": "https://github.com/laravel/docs/commit/8af3c886f9605d41184eb082087fb7582998bba2",
-  "sync_time": "2025-12-19T01:23:52Z"
+  "commit_sha": "5cd32f4c0456abecf5bb11f5ab79bc80d4a7794c",
+  "commit_date": "2025-12-19T20:01:56Z",
+  "commit_message": "[12.x] Add Reverb events documentation (#10954)\n\n* [12.x] Add Reverb events documentation\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/5cd32f4c0456abecf5bb11f5ab79bc80d4a7794c",
+  "sync_time": "2025-12-20T01:19:40Z"
 }
