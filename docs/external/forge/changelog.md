@@ -73,6 +73,7 @@
 
 On this page
 
+- [December 12, 2025](#december-12%2C-2025)
 - [December 5, 2025](#december-5%2C-2025)
 - [November 21, 2025](#november-21%2C-2025)
 - [November 14, 2025](#november-14%2C-2025)
@@ -91,6 +92,30 @@ Copy page
 New updates and improvements to Laravel Forge.
 
 Copy page
+
+[​](#december-12%2C-2025)
+
+December 12, 2025
+
+Show Improvements (2)
+
+- **New heartbeat notification settings**: You can now choose to be notified about failed heartbeats after 30 or 60 minutes.
+- **Nginx API endpoints**: Implemented API endpoints to retrieve and update domain Nginx configurations.
+
+Show Fixes (12)
+
+- Let’s Encrypt certificates are no longer renewing prematurely.
+- Users without active subscriptions can now access past invoices on the billing page.
+- DNS verification now works when the root domain is not authoritative.
+- Fixed resized servers not updating to show new specs on the settings page.
+- Fixed ARIA attributes for dropdowns to resolve accessibility issues.
+- Ensured backup configuration API updates the DB backup script after database removal.
+- Fixed the queue worker —force flag UI so the toggle state displays correctly.
+- Isolated Users are added to the supervisor sudoers so the they can restart background tasks after deployment.
+- Aligned git clone authentication behavior between Zero Downtime Deployment and non‑Zero Downtime Deployment site creation.
+- Fixed server metrics failures on Hetzner caused by a console error.
+- Corrected Let’s Encrypt domain builder so wildcard certificates no longer add an unnecessary www host.
+- Restored visibility of Hetzner Intel/AMD (x86) servers in Forge.
 
 [​](#december-5%2C-2025)
 
@@ -183,28 +208,6 @@ Show Improvements (4)
 
 - **Sync network rules**: Automatically sync UFW rules with Forge. Missing server rules will be added to Forge and orphaned rules will be removed.
 - **Toggle certificates via API**: Enableing and disabling existing certificates is now possible via the API.
-- **Improved validation errors**: Validation errors for required fields are now easier to identify.
-- **Improved Composer credential validation**: Added context to clarify how fields should be formatted when adding Composer credentials.
-
-Show Fixes (4)
-
-- Fixed bug causing the Update Site API endpoint to reset other keys.
-- Fixed z-index issue on site deployment pages.
-- Fixed issue in Forge’s API `project_type` match statement causing HTTP 500 errors.
-- Improved reliability when adding and removing domains from sites with many domains has been improved.
-
-[​](#november-7%2C-2025)
-
-November 7, 2025
-
-## [​](#ssl-certificate-information) SSL Certificate Information
-
-We have made several improvements to the SSL certificate UI.You can now see relevant domains, status, issue date, and expiration date on the certificate card under Certificates, on the Domains tab.Details on why the most recent attempt to renew or issue a certificate are now easily accessible in the View Output option.Multiple domains sharing a certificate can be copied all at once by clicking on the domains listed in the card details. [Learn more](https://forge.laravel.com/docs/sites/domains)
-
-![](https://mintcdn.com/forge-laravel/wSpywaUjjpMc8duW/images/changelogs/11-7-2025/ssl-certificate-ui.png?fit=max&auto=format&n=wSpywaUjjpMc8duW&q=85&s=4c4bb065caa1bf2ff476b130d43a1d39)
-
-Show Improvements (5)
-
-- **Deployment error handling**: Continued work to ensure deployment error output is helpf
+- **Improved validation errors**: Validation errors for required fields are now easier to i
 
 *[Content truncated for length]*
