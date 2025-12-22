@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5cd32f4c0456abecf5bb11f5ab79bc80d4a7794c",
-  "commit_date": "2025-12-19T20:01:56Z",
-  "commit_message": "[12.x] Add Reverb events documentation (#10954)\n\n* [12.x] Add Reverb events documentation\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/5cd32f4c0456abecf5bb11f5ab79bc80d4a7794c",
-  "sync_time": "2025-12-20T01:19:40Z"
+  "commit_sha": "d39e809ea519e58544904ba0c500313eaf459146",
+  "commit_date": "2025-12-22T00:04:45Z",
+  "commit_message": "Promote RustFS instead of MinIO (#10959)\n\n* change minio with rustfs\nand remove minio mentions\n\n* change minio with rustfs\nand remove minio mentions\n\n* Update filesystem.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/d39e809ea519e58544904ba0c500313eaf459146",
+  "sync_time": "2025-12-22T01:27:13Z"
 }
