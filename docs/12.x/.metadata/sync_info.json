@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "d39e809ea519e58544904ba0c500313eaf459146",
-  "commit_date": "2025-12-22T00:04:45Z",
-  "commit_message": "Promote RustFS instead of MinIO (#10959)\n\n* change minio with rustfs\nand remove minio mentions\n\n* change minio with rustfs\nand remove minio mentions\n\n* Update filesystem.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/d39e809ea519e58544904ba0c500313eaf459146",
-  "sync_time": "2025-12-22T01:27:13Z"
+  "commit_sha": "1c4eb3618aea9635562195f7af8c8377dca02518",
+  "commit_date": "2025-12-23T15:31:15Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/1c4eb3618aea9635562195f7af8c8377dca02518",
+  "sync_time": "2025-12-24T01:22:53Z"
 }
