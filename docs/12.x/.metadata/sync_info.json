@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "1c4eb3618aea9635562195f7af8c8377dca02518",
-  "commit_date": "2025-12-23T15:31:15Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/1c4eb3618aea9635562195f7af8c8377dca02518",
-  "sync_time": "2025-12-24T01:22:53Z"
+  "commit_sha": "d8cb4030c280f007ecda38751f7f62928640a9e3",
+  "commit_date": "2025-12-25T16:27:27Z",
+  "commit_message": "PHP version 8.5 added (#10962)",
+  "commit_url": "https://github.com/laravel/docs/commit/d8cb4030c280f007ecda38751f7f62928640a9e3",
+  "sync_time": "2025-12-26T01:24:10Z"
 }

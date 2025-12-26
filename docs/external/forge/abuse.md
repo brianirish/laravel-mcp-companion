@@ -81,7 +81,7 @@ Help us keep Laravel Forge safe by reporting any abuse, security concerns, or vi
 
 Copy page
 
-Please email us at [[email protected]](/cdn-cgi/l/email-protection#2251474157504b565b624e43504354474e0c414d4f)
+Please email us at [[email protected]](/cdn-cgi/l/email-protection#0e7d6b6d7b7c677a774e626f7c6f786b62206d6163)
 
 Was this page helpful?
 
