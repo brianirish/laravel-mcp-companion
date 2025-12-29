@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "d8cb4030c280f007ecda38751f7f62928640a9e3",
-  "commit_date": "2025-12-25T16:27:27Z",
-  "commit_message": "PHP version 8.5 added (#10962)",
-  "commit_url": "https://github.com/laravel/docs/commit/d8cb4030c280f007ecda38751f7f62928640a9e3",
-  "sync_time": "2025-12-27T01:22:03Z"
+  "commit_sha": "017c1a65b0dc86546f7965a1bf2bd53f411823ec",
+  "commit_date": "2025-12-28T16:55:49Z",
+  "commit_message": "Use Local IP for examples (#10963)",
+  "commit_url": "https://github.com/laravel/docs/commit/017c1a65b0dc86546f7965a1bf2bd53f411823ec",
+  "sync_time": "2025-12-29T01:40:49Z"
 }
