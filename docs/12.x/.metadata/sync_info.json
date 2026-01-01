@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "017c1a65b0dc86546f7965a1bf2bd53f411823ec",
-  "commit_date": "2025-12-28T16:55:49Z",
-  "commit_message": "Use Local IP for examples (#10963)",
-  "commit_url": "https://github.com/laravel/docs/commit/017c1a65b0dc86546f7965a1bf2bd53f411823ec",
-  "sync_time": "2025-12-29T01:40:49Z"
+  "commit_sha": "fa9fa250d92fd7838a81b8202863b24ff4db599e",
+  "commit_date": "2025-12-30T16:56:46Z",
+  "commit_message": "Update Carbon link migration link in upgrade.md (#10965)\n\nthe previous link would end up in a 404 page. I found this guide: https://carbon.nesbot.com/guide/getting-started/migration.html",
+  "commit_url": "https://github.com/laravel/docs/commit/fa9fa250d92fd7838a81b8202863b24ff4db599e",
+  "sync_time": "2026-01-01T01:43:14Z"
 }
