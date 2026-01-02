@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "fa9fa250d92fd7838a81b8202863b24ff4db599e",
-  "commit_date": "2025-12-30T16:56:46Z",
-  "commit_message": "Update Carbon link migration link in upgrade.md (#10965)\n\nthe previous link would end up in a 404 page. I found this guide: https://carbon.nesbot.com/guide/getting-started/migration.html",
-  "commit_url": "https://github.com/laravel/docs/commit/fa9fa250d92fd7838a81b8202863b24ff4db599e",
-  "sync_time": "2026-01-01T01:43:14Z"
+  "commit_sha": "50f605416d5f13d54ec3db6f22c3d404dfaedff0",
+  "commit_date": "2026-01-01T02:40:47Z",
+  "commit_message": "[12.x] Delete unused redirects.md (#10969)",
+  "commit_url": "https://github.com/laravel/docs/commit/50f605416d5f13d54ec3db6f22c3d404dfaedff0",
+  "sync_time": "2026-01-02T01:26:06Z"
 }

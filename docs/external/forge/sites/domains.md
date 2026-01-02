@@ -112,6 +112,8 @@ Domains let you manage how your site is reached on the web. All Forge sites are 
 Forge provides every site with a free `on-forge.com` domain. These vanity domains are automatically available as soon as a site is created and and receive free HTTPS encryption.
 We do not recommend using `on-forge.com` domains in production. They’re best for quick previews, staging environments, or testing with zero DNS configuration.
 
+Forge domains are not available for load balancers.
+
 ## [​](#custom-domains) Custom domains
 
 You can attach your own domain names to site in Forge, such as `example.com` or `app.example.com`.
@@ -192,6 +194,6 @@ To use a custom certificate, you’ll need to provide:
 - The certificate file, including any intermediate certificates to form the full chain.
 - The corresponding private key.
 
-Custom certificates **are not renewed automatically** by Forge. You are responsible for monitoring thei
+Custom certificates **are not renewed automaticall
 
 *[Content truncated for length]*
