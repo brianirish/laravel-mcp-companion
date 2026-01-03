@@ -87,7 +87,7 @@ https://forge.laravel.com/docs/servers/laravel-vps
 2025-10-31T16:24:30.014Z
 
 https://forge.laravel.com/docs/servers/load-balancing
-2025-10-01T13:21:04.412Z
+2026-01-01T02:44:35.166Z
 
 https://forge.laravel.com/docs/servers/monitoring
 2025-10-01T13:14:10.562Z
@@ -115,7 +115,7 @@ https://forge.laravel.com/docs/sites/deployments
 2025-12-19T19:31:25.709Z
 
 https://forge.laravel.com/docs/sites/domains
-2025-11-03T14:25:34.197Z
+2026-01-01T02:44:35.168Z
 
 https://forge.laravel.com/docs/sites/environment-variables
 2025-10-17T15:11:06.890Z
