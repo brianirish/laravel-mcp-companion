@@ -101,7 +101,7 @@ Load balancers are used to distribute web traffic amongst two or more servers an
 Load balanced sites can only be created on [load balancer servers](/docs/servers/types#load-balancers).
 To create a new load balanced site, navigate to the server’s dashboard, and click New site. Next, provide the name of the site, the balancing method and add the servers you want to balance the traffic to.
 
-The selected servers must have a site with a matching domain, otherwise traffic will not be routed correctly.
+The selected servers must have a site with a matching domain, otherwise traffic will not be routed correctly. Forge domains (`on-forge.com`) are not available for load balancers.
 
 ## [​](#load-balancer-methods) Load balancer methods
 
