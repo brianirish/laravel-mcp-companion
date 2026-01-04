@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "50f605416d5f13d54ec3db6f22c3d404dfaedff0",
-  "commit_date": "2026-01-01T02:40:47Z",
-  "commit_message": "[12.x] Delete unused redirects.md (#10969)",
-  "commit_url": "https://github.com/laravel/docs/commit/50f605416d5f13d54ec3db6f22c3d404dfaedff0",
-  "sync_time": "2026-01-03T01:21:26Z"
+  "commit_sha": "7d36bdc3301eff9443416cdbcd5e1eebc60d9eba",
+  "commit_date": "2026-01-03T18:01:49Z",
+  "commit_message": "Update documentation on uuidMorphs method (#10974)\n\n* docs: use proper naming convention for model Flight\n\n* docs: add link to Isolating Migration Execution section\n\n* docs: link docs on polymorphic relationships to uuidMorphs() method",
+  "commit_url": "https://github.com/laravel/docs/commit/7d36bdc3301eff9443416cdbcd5e1eebc60d9eba",
+  "sync_time": "2026-01-04T01:43:23Z"
 }
