@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Sites
+
+Creating and Managing Sites
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -196,16 +215,6 @@ Editing some variables such as `$table_prefix` will invoke the WordPress install
 
 Laravel Forge also supports installing [phpMyAdmin](https://phpmyadmin.net), allowing you to manage your server’s databases from anywhere.
 You will need to choose an existing database, or create a new one, to proceed. This database is used by phpMyAdmin to store the configuration of your databases and users.
-Once Laravel Forge has installed phpMyAdmin, you can visit your site using the provided Forge domain and log in using any of your database username and password combinations.
-
-Some very small server sizes, such as `t2.nano` on AWS, do not have enough resources to run an application like phpMyAdmin.
-
-## [​](#php-versions) PHP versions
-
-If your server has [multiple versions of PHP](/docs/servers/php) installed, you can switch the version used by your site at any time by using the site’s “Settings” tab in the Laravel Forge dashboard.
-
-When switching the version used by your site, you should ensure that your server has any additional PHP extensions / modules installed for that version.Failure to install additional modules may make your site unresponsive.
-
-Laravel Forge will automatically update your site’s Nginx 
+Once Laravel Forge has installed phpMyAdmin, you can visit your site using the provided Forge domain and log in using any of your database username and 
 
 *[Content truncated for length]*

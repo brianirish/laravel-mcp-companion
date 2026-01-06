@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Basics
+
+Server Providers
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -200,15 +219,6 @@ The Vultr server provider requires you to add the [Laravel Forge IP addresses](/
 
 Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forge has an API token for each Hetzner Project.
 
-## [​](#bring-your-own-server) Bring your own server
-
-Alongside supporting several first-party server providers, Laravel Forge also supports the ability to use your own custom server. To do so, select the **Custom VPS** option when creating a new server.
-In addition, you should review the following server requirements:
-
-- The server **must be** running a fresh installation of Ubuntu 22.04 or 24.04 x64.
-- The server **must be** accessible externally over the Internet.
-- The server **must have** `root` SSH access enabled.
-- The server requirements **should meet** the following criteria or more: 1 CPU Core with 1GHz, 1GB RAM, and 10GB Disk space.
-- The s
+#
 
 *[Content truncated for length]*

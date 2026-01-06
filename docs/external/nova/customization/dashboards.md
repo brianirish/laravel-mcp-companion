@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Dashboards
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -354,23 +377,6 @@ use App\Nova\Dashboards\UserInsights;
 // ...
 
 /**
- * Get the dashboards that should be listed in the Nova sidebar.
- *
- * @return array<int, \Laravel\Nova\Dashboard>
- */
-protected function dashboards(): array
-{
-    return [
-        Main::make(),
-        UserInsights::make()->canSeeWhen('viewUserInsights', User::class),
-    ];
-}
-```
+ * Get the dashboards that should be listed in 
 
-Was this page helpful?
-
-YesNo
-
-[Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)
-
-⌘I
+*[Content truncated for length]*

@@ -4,6 +4,27 @@
 
 ---
 
+[Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://vapor.laravel.com)
+- [Dashboard](https://vapor.laravel.com)
+
+Search...
+
+Navigation
+
+Resources
+
+Databases
+
+[Documentation](/introduction)[Knowledge Base](/kb/troubleshooting)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -248,32 +269,6 @@ Before considering the usage of database proxies in Vapor, please consult Amazon
 
 ## [​](#database-users) Database Users
 
-When a database is created, Vapor creates a “vapor” master user. You may create additional database users, which will automatically be assigned a secure, random password, using the Vapor UI or the `database:user` CLI command:
-
-Copy
-
-Ask AI
-
-```
-vapor database:user my-application-db user-2
-```
-
-You may instruct an environment to connect to a database as a given user using the `database-user` configuration option within your `vapor.yml` file:
-
-vapor.yml
-
-Copy
-
-Ask AI
-
-```
-id: 3
-name: vapor-app
-environments:
-    production:
-        database: my-application-db
-        database-user: user-2
-        build:
-            - 'composer install -
+When a dat
 
 *[Content truncated for length]*

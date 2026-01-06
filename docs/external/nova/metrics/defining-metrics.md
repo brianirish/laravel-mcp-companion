@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Metrics
+
+Defining Metrics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -316,20 +339,6 @@ public function ranges(): array
         30 => Nova::__('30 Days'),
         60 => Nova::__('60 Days'),
         365 => Nova::__('365 Days'),
-        'TODAY' => Nova::__('Today'),
-        'YESTERDAY' => Nova::__('Yesterday'),
-        'MTD' => Nova::__('Month To Date'),
-        'QTD' => Nova::__('Quarter To Date'),
-        'YTD' => Nova::__('Year To Date'),
-        'ALL' => Nova::__('All Time'),
-    ];
-}
-```
-
-You may customize these ranges to suit your needs; however, if you are using the built-in “Today”, “Yesterday”, “Month To Date”, “Quarter To Date”, “Year To Date”, or “All Time” ranges, you should not change their keys.
-
-### [​](#zero-result-values) Zero Result Values
-
-By default, Nova will handle results of `0` as a result containing no data. This may not always be correct, which is why you can use
+        'TODAY' =
 
 *[Content truncated for length]*

@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Menus
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -266,43 +289,6 @@ Nova::mainMenu(function (Request $request, Menu $menu) {
 });
 ```
 
-Instead of displaying a list of links, you may indicate that a menu section should just be a large, emphasized link to another location. To accomplish this, you may invoke the `path` method when defining the menu section:
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Menu\MenuSection;
-
-// ...
-
-MenuSection::make('Dashboard')->path('/dashboards/main');
-```
-
-For convenience, if you are only creating a menu section to serve as a large, emphasized link to a Nova dashboard, you may invoke the `MenuSection::dashboard` method:
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Dashboards\Sales;
-use Laravel\Nova\Menu\MenuSection;
-
-// ...
-
-MenuSection::dashboard(Sales::class);
-```
-
-Since you will often be creating links to Nova resources, you may use the `resource` method to quickly create a link to the appropriate path for a given resource:
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\User;
-use Larave
+Instead of displaying a list of links, you may indicate that a menu section should just be a large, emphasized link to another location. To accomplish this, you may invoke the `path` method when defining the menu
 
 *[Content truncated for length]*

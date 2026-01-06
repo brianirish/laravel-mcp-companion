@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Filters
+
+Defining Filters
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -283,38 +306,6 @@ Ask AI
  */
 public function name()
 {
-    return 'Filter By '.$this->customProperty;
-}
-```
-
-## [​](#filter-default-values) Filter Default Values
-
-If you would like to set the default value of a filter, you may define a `default` method on the filter class:
-
-app/Nova/Filters/UserType.php
-
-Copy
-
-Ask AI
-
-```
-/**
- * The default value of the filter.
- *
- * @var array|mixed
- */
-public function default()
-{
-    return [
-        'admin' => true,
-        'editor' => false,
-    ];
-}
-```
-
-## [​](#dynamic-filters) Dynamic Filters
-
-There may be times when you want to create a dynamic filter which filters on columns that are determined at runtime, allowing you to reuse a filter class across multiple different resources and fields.
-To a
+    return 'Filter By '.$this->custo
 
 *[Content truncated for length]*

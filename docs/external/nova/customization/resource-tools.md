@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Resource Tools
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -260,34 +283,6 @@ When building routes for your tool, you should **always** add authorization to t
 ## [​](#assets) Assets
 
 When Nova generates your tool, `resources/js` and `resources/css` directories are generated for you. These directories contain your tool’s JavaScript and CSS. The primary files of interest in these directories are: `resources/js/components/Tool.vue` and `resources/css/tool.css`.
-The `Tool.vue` file is a single-file Vue component that contains your tool’s front-end. From this file, you are free to build your tool however you want. Your tool can make HTTP requests using Axios via [Nova.request](./frontend#nova-requests).
-
-### [​](#registering-assets) Registering Assets
-
-Your Nova tool’s service provider registers your tool’s compiled assets so that they will be available to the Nova front-end:
-
-nova-components/StripeInspector/src/ToolServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Nova;
-use Laravel\Nova\Events\ServingNova;
-
-// ...
-
-/**
- * Bootstrap any application services.
- */
-public function boot(): void
-{
-    parent::boot();
-
-    $this->app->booted(function () {
-        $this->routes();
-    });
-
+The `Tool.vue` file is a single-file Vue component that contains your tool’s fr
 
 *[Content truncated for length]*

@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Tools
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -221,32 +244,6 @@ Nova utilizes the free [Heroicons](https://heroicons.com/) icon set by [Steve Sc
 ## [​](#assets) Assets
 
 When Nova generates your tool, `resources/js` and `resources/css` directories are generated for you. These directories contain your tool’s JavaScript and CSS. The primary files of interest in these directories are: `resources/js/components/Tool.vue` and `resources/css/tool.css`.
-The `Tool.vue` file is a single-file Vue component that contains your tool’s front-end. From this file, you are free to build your tool however you want. Your tool can make HTTP requests using Axios via [Nova.request](./frontend#nova-requests).
-
-### [​](#registering-assets) Registering Assets
-
-Your Nova tool class contains a `boot` method. This method is executed when the tool is registered and available. By default, this method registers your tool’s compiled assets so that they will be available to the Nova front-end:
-
-nova-components/PriceTracker/src/ToolServiceProvider.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Nova;
-use Laravel\Nova\Events\ServingNova;
-
-// ...
-
-/**
- * Perform any tasks that need to happen on tool registration.
- */
-public function boot(): void
-{
-    parent::boot();
-
-    Nova::serving(function () {
-        Nova::mix('p
+The `Tool.vue` file is a single-file Vue component that contains your tool’s front-end. From this file, you are free to build your tool however you want. Your tool can make HTTP requests using Ax
 
 *[Content truncated for length]*

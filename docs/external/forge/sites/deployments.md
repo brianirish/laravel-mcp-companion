@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Sites
+
+Deployments
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -176,12 +195,6 @@ You should not use zero-downtime deployments when using Laravel Octane, as Octan
 ### [​](#standard-deployments) Standard deployments
 
 The standard deployment strategy uses a simpler approach where your site’s code is kept in a single directory and updated in place during deployment.
-This strategy *can* be faster than zero-downtime deployments, but it does come with the risk of your site going down if a deployment step fails midway through the deployment process.
-
-## [​](#push-to-deploy) Push to deploy
-
-Laravel Forge’s “Push to deploy” feature allows you to easily deploy your projects when you push new code to your source control provider.
-When code is pushed to your site’s configured branch, Laravel Forge will automatically trigger a new deployment and run your site’s deployment script.
-Push to deploy is **enabled by default for new sites** created with GitHub, GitLab, or Bitbucket. If you wish to disable this feature, you may do so
+This strat
 
 *[Content truncated for length]*

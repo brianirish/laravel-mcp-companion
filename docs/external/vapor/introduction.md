@@ -4,6 +4,27 @@
 
 ---
 
+[Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://vapor.laravel.com)
+- [Dashboard](https://vapor.laravel.com)
+
+Search...
+
+Navigation
+
+Get Started
+
+Introduction
+
+[Documentation](/introduction)[Knowledge Base](/kb/troubleshooting)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -217,28 +238,6 @@ The process for creating the role is outlined in these steps:
 Since Vapor manages many types of resources across more than a dozen AWS services, it may be convenient to create a role with the `AdministratorAccess` policy. If desired, you may create a separate AWS account to house this role and contain all of your Vapor resources.
 
 On the permissions management screen, you may grant full administrator access to the IAM role by selecting the “AdministratorAccess” policy. Or, you would prefer to not provide administrator access to Vapor, you may instead create a custom permission policy with the specific permissions needed by Vapor.
-It is necessary to create two policies due to the policy size limit set by AWS. To do so, select “Create policy” from the “Permissions policies” panel. Choose the JSON option and provide the first permission definition below. Then, follow the same process to create another policy using the second definition listed below. Once the policies have been defined, you may attach them to your new IAM role:
-
-Copy
-
-Ask AI
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VaporPolicy",
-            "Effect": "Allow",
-            "Action": [
-                "acm:AddTagsToCertificate",
-                "acm:DeleteCertificate",
-                "acm:DescribeCertificate",
-                "acm:ImportCertificate",
-                "acm:RequestCertificate",
-                "apigateway:DELETE",
-                "apigateway:GET",
-                "apigateway:PATCH",
-                "a
+It is necessary to create two policies due to the policy size limit set by AWS. To do so, select “Create policy” from the “Permissions policies” panel. Choose the JSON option and provide the first permission definition below. Then, follow the same process to create anot
 
 *[Content truncated for length]*

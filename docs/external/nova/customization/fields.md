@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Fields
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -262,25 +285,6 @@ Nova.booting((app, store) => {
 
 #### [​](#setting-the-form-value) Setting the Form Value
 
-Before creating or updating a resource, Nova asks each field on the form to “fill” the outgoing [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object with key / value pairs. Each field may add as many elements to the `FormData` as needed. This may be done in your `FormField.vue` file’s `fill` method:
-
-nova-components/ColorPicker/resources/js/components/FormField.js
-
-Copy
-
-Ask AI
-
-```
-/**
- * Fill the given FormData object with the field's internal value.
- */
-fill(formData) {
-  this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
-}
-```
-
-#### [​](#dependent-form-field) Dependent Form Field
-
-By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](./../resources/fie
+Before creating or updating a resource, Nova asks each field on the form to “fill” the outgoing [FormData](https://developer.mozilla.org
 
 *[Content truncated for length]*

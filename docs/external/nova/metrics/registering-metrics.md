@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Metrics
+
+Registering Metrics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -356,33 +379,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 public function cards(NovaRequest $request): array
 {
     return [
-        Metrics\TotalUsers::make()
-            ->help('This is calculated using all users that are active and not banned.'),
-    ];
-}
-```
-
-You may also use HTML when defining your help text. For example, you may pass a rendered Blade template to the `help` method:
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Metrics\TotalUsers;
-
-// ...
-
-TotalUsers::make()
-    ->help(view('nova.metrics.total-users.tooltip')->render()),
-```
-
-## [​](#refreshing-metrics) Refreshing Metrics
-
-Laravel Nova will automatically fetch updated results (without requiring the user to refresh the page) for metrics attached to a resource based on following events:
-
-| Event | Behaviour |
-| --- | --- |
-| Resource Delet
+        Metrics\TotalU
 
 *[Content truncated for length]*

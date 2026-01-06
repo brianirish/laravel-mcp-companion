@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Troubleshooting
+
+Servers
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -212,10 +231,6 @@ If your servers are managed by DigitalOcean, the following steps should assist y
 There are several reasons why your server may have a “disconnected” status. We encourage you to check these common solutions before contacting support:
 
 - Verify that the server is powered on via your server provider’s dashboard. If the server is powered off, you should restart it using your **provider’s dashboard**.
-- Verify that the public IP address of the server is known to Laravel Forge (the public IP address may change between reboots of the actual VPS).
-- Verify that the Laravel Forge generated public key for the server is included in the `/root/.ssh/authorized_keys` and `/home/forge/.ssh/authorized_keys` files. This key is available via the “Settings” tab of your server’s Forge management panel.
-- If your server is behind a firewall, make sure you have [allowed Laravel Forge’s IP addresses to access the server](/docs/introduction#forge-ip-addresses).
-- If you removed Port 22 from the server’s firewall rules, you will need to contact your server provider and ask them to restore the rule. Removing this rule prevents Laravel Forge from accessing your server via SSH.
-- Remove any private ke
+- Verify that the public IP address of the server is known to Laravel Forge (the public IP address may change between reboots of the a
 
 *[Content truncated for length]*

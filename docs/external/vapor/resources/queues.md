@@ -4,6 +4,27 @@
 
 ---
 
+[Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://vapor.laravel.com)
+- [Dashboard](https://vapor.laravel.com)
+
+Search...
+
+Navigation
+
+Resources
+
+Queues
+
+[Documentation](/introduction)[Knowledge Base](/kb/troubleshooting)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -292,26 +313,6 @@ environments:
 
 ## [​](#queue-database-connections) Queue Database Connections
 
-By default, database connections do not persist between queued jobs, ensuring that the database does not get overwhelmed with active connections. However, if your database can handle a large number of connections and you want to reduce the overhead involved in creating a database connection on each job, you may define the `queue-database-session-persist` option in your environment’s `vapor.yml` configuration file to instruct Vapor to reuse the same database connection across jobs:
-
-vapor.yml
-
-Copy
-
-Ask AI
-
-```
-id: 2
-name: vapor-laravel-app
-environments:
-    production:
-        queue-database-session-persist: true
-        build:
-            - 'composer install --no-dev'
-```
-
-## [​](#monitoring-jobs) Monitoring Jobs
-
-You may monitor your queued jobs directly from the Vapor dashboard by navigating to the “Queues” tab of an
+By default, database connections do not persist between queued jobs, ensuring that the database does not get overwhelmed with active connections. However, if your database can handle a large number of co
 
 *[Content truncated for length]*

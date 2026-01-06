@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Get Started
+
+Installation
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -293,25 +316,6 @@ composer config http-basic.nova.laravel.com "${secrets.NOVA_USERNAME}" "${secret
 
 ## [​](#using-nova-on-development-and-staging-domains) Using Nova on Development and Staging Domains
 
-Since Nova can be used in local and staging development environments, Nova will not check your license key when used on `localhost` or local TLDs like those specified in [IETF RFC 2606](https://datatracker.ietf.org/doc/html/rfc2606#page-2):
-
-- `.test`
-- `.example`
-- `.invalid`
-- `.localhost`
-- `.local`
-
-Nova will also not check the current license key when the subdomain is one of these commonly-used staging subdomains:
-
-- `staging.`
-- `stage.`
-- `test.`
-- `testing.`
-- `dev.`
-- `development.`
-
-## [​](#authorizing-access-to-nova) Authorizing Access to Nova
-
-Within your `app/Providers/NovaServiceProvider.php` file, there is a `gate` method. This authorization gate controls access to Nova in **non-local** environments. By d
+Since Nova can be used in local and staging development environments, Nova
 
 *[Content truncated for length]*

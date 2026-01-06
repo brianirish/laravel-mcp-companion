@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Resources
+
+The Basics
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -317,31 +340,6 @@ Setting this property to `true` will instruct Nova to display the table with bor
 
 ![Table Column Borders](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/resource-column-borders.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d6d839bdfa1d09a82600648e033bfa1b)
 
-Table Column Borders
-
-## [​](#resource-table-click-action) Resource Table Click Action
-
-By default, when clicking on a resource table row, Nova will navigate to the detail view for the resource. However, you may want Nova to navigate to the edit form instead. You can customize this behavior by changing the `clickAction` property or the static `clickAction` method on your resource class:
-
-Property
-
-Method
-
-Copy
-
-Ask AI
-
-```
-/**
- * The click action to use when clicking on the resource in the table.
- *
- * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
- *
- * @var string
- */
-public static $clickAction = 'edit';
-```
-
-Choosing the 
+Table Colum
 
 *[Content truncated for length]*
