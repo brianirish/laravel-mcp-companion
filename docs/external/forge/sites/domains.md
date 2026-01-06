@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Sites
+
+Domains
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -184,16 +203,6 @@ HTTP-01 is usually the best choice when:
 - You have strict restrictions around DNS record targets.
 - The domain points directly to Forge and you know it won’t be placed behind a CDN, proxy, or firewall later.
 
-While HTTP-01 can be more convenient to setup in limited cases, it is more fragile. **For most domains, we recommend using DNS-01 instead.**
-
-### [​](#custom-certificates) Custom certificates
-
-In addition to Let’s Encrypt, Forge also lets you install your own SSL certificates. This is useful if you use a commercial certificate authority, have an organization-validation (OV) or extended-validation (EV) certificate, or need to reuse an existing certificate across multiple systems.
-To use a custom certificate, you’ll need to provide:
-
-- The certificate file, including any intermediate certificates to form the full chain.
-- The corresponding private key.
-
-Custom certificates **are not renewed automaticall
+While HTTP-01 can be more convenient to setup in limited cases
 
 *[Content truncated for length]*

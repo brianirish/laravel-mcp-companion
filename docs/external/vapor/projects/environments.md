@@ -4,6 +4,27 @@
 
 ---
 
+[Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://vapor.laravel.com)
+- [Dashboard](https://vapor.laravel.com)
+
+Search...
+
+Navigation
+
+Projects
+
+Environments
+
+[Documentation](/introduction)[Knowledge Base](/kb/troubleshooting)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -268,10 +289,6 @@ In addition, environment variables should not contain `AWS_ACCESS_KEY_ID`, `AWS_
 
 ## [​](#encrypted-environment-files) Encrypted Environment Files
 
-Vapor provides built-in support for Laravel’s [encrypted environment files](https://laravel.com/docs/configuration#encrypting-environment-files). If Vapor discovers an encrypted environment file while booting your application, it will automatically attempt to decrypt it and inject the resulting variables into the runtime.
-To leverage this feature, you must first ensure an encrypted environment file is present at the root of your application during deployment. For example, deploying the `production` environment requires a file called `.env.production.encrypted` to be present at the root of your application.
-Additionally, you should ensure the decryption key is available in the runtime by defining it as the `LARAVEL_ENV_ENCRYPTION_KEY` environment variable via the Vapor UI or [CLI](#environment-variables).
-
-Utilizing en
+Vapor provides built-in support for Laravel’s [encrypted environment files](https://laravel.com/docs/configuration#encrypting-environment-files). If Vapor discovers an encrypted environment file w
 
 *[Content truncated for length]*

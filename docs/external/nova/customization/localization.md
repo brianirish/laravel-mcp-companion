@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Localization
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -429,3 +452,7 @@ YesNo
 [Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)
 
 ⌘I
+
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo
+
+*[Content truncated for length]*

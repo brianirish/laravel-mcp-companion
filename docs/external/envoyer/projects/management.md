@@ -4,6 +4,25 @@
 
 ---
 
+[Envoyer home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/dark.svg)](https://envoyer.io)
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://envoyer.io)
+- [Dashboard](https://envoyer.io)
+
+Search...
+
+Navigation
+
+Projects
+
+Management
+
 - [Documentation](/introduction)
 - [Community](https://discord.com/invite/laravel)
 
@@ -103,3 +122,17 @@ YesNo
 [Your Account](/accounts/your-account)[Servers](/projects/servers)
 
 ⌘I
+
+[Envoyer home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/dark.svg)](https://envoyer.io)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+
+Platform
+
+[Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)
+
+Legal and Compliance
+
+[Term of Service](https://envoyer.io/terms)[Privacy Policy](https://envoyer.io/privacy)
+
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

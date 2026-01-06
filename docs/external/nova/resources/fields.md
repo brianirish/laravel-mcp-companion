@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Resources
+
+Fields
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -288,42 +311,6 @@ use Laravel\Nova\Fields\Text;
 // ...
 
 Text::make('Name')->showOnIndex(function (NovaRequest $request, $resource) {
-    return $this->name === 'Taylor Otwell';
-}),
-```
-
-For `hide*` methods, the field will be hidden if the given callback returns `true`:
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make('Name')->hideFromIndex(function (NovaRequest $request, $resource) {
-    return $this->name === 'Taylor Otwell';
-}),
-```
-
-### [​](#showing-fields-when-peeking) Showing Fields When Peeking
-
-You may allow a field to be visible [when peeking at the resource](./relationships#peeking-at-belongsto-relationships) by invoking the `showWhenPeeking` method when defining the field:
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Fields\Text;
-
-// ...
-
-Text::make('Name')->showWhenPeeking(),
-```
-
-### [​](
+    return $this->name === 'Taylor Otwell'
 
 *[Content truncated for length]*

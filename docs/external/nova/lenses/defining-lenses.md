@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Lenses
+
+Defining Lenses
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -287,42 +310,5 @@ public static $pollingInterval = 5;
 By default, when lens polling is enabled, there is no way to disable polling once the page has loaded. However, you can instruct Nova to display a start / stop polling toggle button by defining a `showPollingToggle` property on your lens class as `true`:
 
 app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-/**
- * Indicates whether to show the polling toggle button inside Nova.
- *
- * @var bool
- */
-public static $showPollingToggle = true;
-```
-
-## [​](#lens-filters) Lens Filters
-
-Each Nova lens also contains a `filters` method. This method allows you to attach any of your existing [filters](./../filters/defining-filters) to the lens:
-
-app/Nova/Lenses/MostValuableUsers.php
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Filters\UserType;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ...
-
-/**
- * Get the filters available for the lens.
- *
- * @return array<int, \Laravel\Nova\Filters\Filter>
- */
-public function filters(NovaRequest $request): array
-{
 
 *[Content truncated for length]*

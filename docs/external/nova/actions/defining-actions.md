@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Actions
+
+Defining Actions
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -273,25 +296,6 @@ public function actions(NovaRequest $request): array
 
 ## [​](#action-fields) Action Fields
 
-Sometimes you may wish to gather additional information from the user before dispatching an action. For this reason, Nova allows you to attach most of Nova’s supported [fields](./../resources/fields) directly to an action. When the action is initiated, Nova will prompt the user to provide input for the fields:
-
-![Action Field](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/action-field.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=310dd15ae9817fed39aa9c6934e6f58f)
-
-To add a field to an action, add the field to the array of fields returned by the action’s `fields` method:
-
-app/Nova/Actions/EmailAccountProfile.php
-
-Copy
-
-Ask AI
-
-```
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-// ...
-
-/**
- * Get the f
+Sometimes you may wish to gather additional information from the user before dispatching an actio
 
 *[Content truncated for length]*

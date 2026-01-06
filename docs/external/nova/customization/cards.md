@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Digging Deeper
+
+Cards
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -280,27 +303,6 @@ Ask AI
 Nova::serving(function (ServingNova $event) {
 -   Nova::mix('acme-analytic', __DIR__.'/../dist/mix-manifest.json');
 +   Nova::script('acme-analytic', __DIR__.'/../dist/js/card.js');
-+   Nova::style('acme-analytic', __DIR__.'/../dist/css/card.css');
-    Nova::translations(__DIR__.'/../resources/lang/en/card.json');
-});
-```
-
-Your component is bootstrapped and registered in the `resources/js/card.js` file. You are free to modify this file or register additional components here as needed.
-
-### [​](#compiling-assets) Compiling Assets
-
-Your Nova resource card contains a `webpack.mix.js` file, which is generated when Nova creates your card. You may build your card using the NPM `dev` and `prod` commands:
-
-Copy
-
-Ask AI
-
-```
-# Compile your assets for local development...
-npm run dev
-
-# Compile and minify your assets...
-npm run prod
-
++ 
 
 *[Content truncated for length]*

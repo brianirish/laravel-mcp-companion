@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Get Started
+
+Laravel Forge CLI
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -343,39 +362,6 @@ Laravel Forge provisions servers with a variety of resources and additional soft
 
 ### [​](#checking-resource-status) Checking resource status
 
-To check the current status of a resource, you may use the `{resource}:status` command:
-
-Copy
-
-Ask AI
-
-```
-forge daemon:status
-forge database:status
-
-forge nginx:status
-
-forge php:status      # View PHP status (default PHP version)
-forge php:status 8.5  # View PHP 8.5 status
-```
-
-### [​](#viewing-resources-logs) Viewing resources logs
-
-You may also view logs directly from the command-line. To do so, use the `{resource}:logs` command:
-
-Copy
-
-Ask AI
-
-```
-forge daemon:logs
-forge daemon:logs --follow  # View logs in realtime
-
-forge database:logs
-
-forge nginx:logs         # View error logs
-forge nginx:logs access  # View access logs
-
-forge php:logs           # V
+T
 
 *[Content truncated for length]*

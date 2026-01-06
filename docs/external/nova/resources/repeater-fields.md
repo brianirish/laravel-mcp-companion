@@ -4,6 +4,29 @@
 
 ---
 
+[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
+
+v5
+
+Search...
+
+⌘KAsk AI
+
+- Support
+- [Platform Status](https://status.laravel.com/)
+- [Dashboard](https://nova.laravel.com)
+- [Dashboard](https://nova.laravel.com)
+
+Search...
+
+Navigation
+
+Resources
+
+Repeater Fields
+
+[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
+
 - [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
 
@@ -316,22 +339,6 @@ Ask AI
  * @var class-string
  */
 public static $model = \App\Models\LineItem::class;
-```
-
-## [​](#upserting-repeatables-using-unique-fields) Upserting Repeatables Using Unique Fields
-
-By default, when editing your repeatables configured with the `HasMany` preset, Nova will delete all of the related items and recreate them every time you save your resource. To instruct Nova to “upsert” the repeatable data instead, you should ensure you have a unique identifier column on your related models. Typically, this will be an auto-incrementing column or a UUID. You may then use the `uniqueField` method to specify which column contains the unique key for the database table:
-
-Copy
-
-Ask AI
-
-```
-use App\Nova\Repeaters;
-
-// ...
-
-/**
- * Get the fie
+`
 
 *[Content truncated for length]*

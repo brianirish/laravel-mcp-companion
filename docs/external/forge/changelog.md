@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Other
+
+Changelog
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -200,14 +219,6 @@ November 14, 2025
 
 ## [​](#introducing-support-for-postgresql-18) Introducing support for PostgreSQL 18
 
-Forge now offers support for PostgreSQL 18 when provisioning new servers, including Laravel VPS servers.
-
-![](https://mintcdn.com/forge-laravel/u1I1iXJo6d23a1Ko/images/changelogs/11-14-25/postgres-18.png?fit=max&auto=format&n=u1I1iXJo6d23a1Ko&q=85&s=f4d1790efb2263a7564cebad788b9c3d)
-
-Show Improvements (4)
-
-- **Sync network rules**: Automatically sync UFW rules with Forge. Missing server rules will be added to Forge and orphaned rules will be removed.
-- **Toggle certificates via API**: Enableing and disabling existing certificates is now possible via the API.
-- **Improved validation errors**: Validation errors for required fields are now easier to i
+Forge 
 
 *[Content truncated for length]*

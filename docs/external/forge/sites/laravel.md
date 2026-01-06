@@ -4,6 +4,25 @@
 
 ---
 
+[Laravel Forge home page![light logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)![dark logo](https://mintcdn.com/forge-laravel/DhXK7kFkCTo-2V2J/logo/logo.svg?fit=max&auto=format&n=DhXK7kFkCTo-2V2J&q=85&s=a66298a7f876f35c44132183267a2cd6)](https://forge.laravel.com)
+
+Search...
+
+⌘KAsk AI
+
+- [Get started](https://forge.laravel.com)
+- [Get started](https://forge.laravel.com)
+
+Search...
+
+Navigation
+
+Sites
+
+Laravel
+
+[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
+
 - [Community](https://discord.gg/laravel)
 - [Blog](https://blog.laravel.com)
 - [Status](https://status.on-forge.com)
@@ -186,26 +205,6 @@ If the site’s deploy script does not contain the `reverb:restart` command, Lar
 ### [​](#ssl) SSL
 
 If an SSL certificate exists for your site which protects Reverb’s configured hostname, Laravel Forge will automatically install it when enabling Reverb, ensuring your Reverb server is accessible via secure WebSockets (`wss`).
-If Reverb is installed before a valid certificate is available, you may request a new certificate for Reverb’s configured hostname from your site’s “SSL” tab. Laravel Forge will automatically configure secure WebSockets for Reverb as soon as the certificate is activated. Forge will also pre-populate the “Domains” SSL form input with Reverb’s hostname when requesting a certificate.
-After activating SSL on a Reverb-enabled site, you should ensure the following environment variables are properly defined before redeploying your site:
-
-Copy
-
-Ask AI
-
-```
-REVERB_PORT=443
-REVERB_SCHEME=https
-
-VITE_REVERB_PORT="${REVERB_PORT}"
-VITE_REVERB_SCHEME="${REVERB_SCHEME}"
-
-MIX_REVERB_PORT="${REVERB_PORT}"
-MIX_REVERB_SCHEME="${REVERB_SCHEME}"
-```
-
-### [​](#converting-existing-daemons-3) Converting existing daemons
-
-If your server is already configured with a daemon that runs Laravel Reverb, Laravel Forge will manage the daemon for you. T
+If Reverb is installed before a valid certificate is available, you may request a new certificate for Reverb’s configured hostname from your site’s “SSL” tab. Laravel Forge will automatically configure secure WebSockets for Reverb as soon as the certificate is activated. Forge will al
 
 *[Content truncated for length]*
