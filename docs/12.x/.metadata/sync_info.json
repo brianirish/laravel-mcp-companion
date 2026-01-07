@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "02eb8b8c90ef0d0bbf6105389014d1eb167f1767",
-  "commit_date": "2026-01-05T16:02:25Z",
-  "commit_message": "Fix documentation for Arr::toCssStyles method (#10976)",
-  "commit_url": "https://github.com/laravel/docs/commit/02eb8b8c90ef0d0bbf6105389014d1eb167f1767",
-  "sync_time": "2026-01-06T01:25:50Z"
+  "commit_sha": "6069fea96e90c34bd3c2d1beaec5eb9757d4389a",
+  "commit_date": "2026-01-06T15:33:40Z",
+  "commit_message": "Adding Readable Encrypted Environment Files (#10980)\n\n* Adding Readable Encrypted Environment Files\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/6069fea96e90c34bd3c2d1beaec5eb9757d4389a",
+  "sync_time": "2026-01-07T01:25:52Z"
 }
