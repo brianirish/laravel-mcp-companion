@@ -4,7 +4,7 @@
 
 ---
 
-[Envoyer home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/dark.svg)](https://envoyer.io)
+[Envoyer home page![light logo](https://mintcdn.com/envoyer/t2bz6kuyoDJvJvYR/logo/light.svg?fit=max&auto=format&n=t2bz6kuyoDJvJvYR&q=85&s=f90c47f92772d2c636d509fe836b1feb)![dark logo](https://mintcdn.com/envoyer/t2bz6kuyoDJvJvYR/logo/dark.svg?fit=max&auto=format&n=t2bz6kuyoDJvJvYR&q=85&s=53c14c20c18b8e4cd5659d574dc07c45)](https://envoyer.io)
 
 Search...
 
@@ -94,7 +94,7 @@ Watch the free Envoyer series on Laracasts](https://laracasts.com/series/envoyer
 
 [Laravel Forge](https://forge.laravel.com) now offers a first-party integration with Envoyer. [Learn more](https://blog.laravel.com/forge-zero-downtime-deployments).
 
-![Laravel Forge x Envoyer](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/images/forge-envoyer-integration-header.png)
+![Laravel Forge x Envoyer](https://mintcdn.com/envoyer/t2bz6kuyoDJvJvYR/images/forge-envoyer-integration-header.png?fit=max&auto=format&n=t2bz6kuyoDJvJvYR&q=85&s=dbd13839cb1d1075169a79bfef643bf6)
 
 ## [​](#envoyer-ip-addresses) Envoyer IP Addresses
 
@@ -127,7 +127,7 @@ YesNo
 
 ⌘I
 
-[Envoyer home page![light logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/light.svg)![dark logo](https://mintlify.s3.us-west-1.amazonaws.com/envoyer/logo/dark.svg)](https://envoyer.io)
+[Envoyer home page![light logo](https://mintcdn.com/envoyer/t2bz6kuyoDJvJvYR/logo/light.svg?fit=max&auto=format&n=t2bz6kuyoDJvJvYR&q=85&s=f90c47f92772d2c636d509fe836b1feb)![dark logo](https://mintcdn.com/envoyer/t2bz6kuyoDJvJvYR/logo/dark.svg?fit=max&auto=format&n=t2bz6kuyoDJvJvYR&q=85&s=53c14c20c18b8e4cd5659d574dc07c45)](https://envoyer.io)
 
 [x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
 
