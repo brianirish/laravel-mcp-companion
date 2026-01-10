@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "e6c2db9bc2eec8c84d87fb68fe53d96a5fbbb663",
-  "commit_date": "2026-01-07T23:25:57Z",
-  "commit_message": "document lock",
-  "commit_url": "https://github.com/laravel/docs/commit/e6c2db9bc2eec8c84d87fb68fe53d96a5fbbb663",
-  "sync_time": "2026-01-09T01:26:44Z"
+  "commit_sha": "fdb2dfa496cbd2d143f968e3a9ee8c3bab6a34c5",
+  "commit_date": "2026-01-09T19:45:05Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/fdb2dfa496cbd2d143f968e3a9ee8c3bab6a34c5",
+  "sync_time": "2026-01-10T01:23:59Z"
 }

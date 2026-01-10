@@ -135,6 +135,7 @@ On this page
 - [Password Field](#password-field)
 - [Password Confirmation Field](#password-confirmation-field)
 - [Select Field](#select-field)
+- [Disabled Select Options](#disabled-select-options)
 - [Using Enum as Options](#using-enum-as-options)
 - [Searchable Select Fields](#searchable-select-fields)
 - [Slug Field](#slug-field)
@@ -310,7 +311,6 @@ use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make('Name')->showOnIndex(function (NovaRequest $request, $resource) {
-    return $this->name === 'Taylor Otwell'
+Text::make('Name')->showOnIndex(function (NovaRequest $request, $
 
 *[Content truncated for length]*
