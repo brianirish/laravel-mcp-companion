@@ -25,7 +25,7 @@ https://forge.laravel.com/docs/api-reference/relationships
 2025-10-16T11:04:36.736Z
 
 https://forge.laravel.com/docs/changelog
-2025-12-19T19:27:12.279Z
+2026-01-12T14:55:18.648Z
 
 https://forge.laravel.com/docs/cli
 2025-11-25T22:16:50.576Z
@@ -115,7 +115,7 @@ https://forge.laravel.com/docs/sites/deployments
 2025-12-19T19:31:25.709Z
 
 https://forge.laravel.com/docs/sites/domains
-2026-01-01T02:44:35.168Z
+2026-01-12T21:09:17.356Z
 
 https://forge.laravel.com/docs/sites/environment-variables
 2025-10-17T15:11:06.890Z

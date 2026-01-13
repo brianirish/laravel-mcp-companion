@@ -92,6 +92,7 @@ Changelog
 
 On this page
 
+- [January 9, 2026](#january-9%2C-2026)
 - [December 12, 2025](#december-12%2C-2025)
 - [December 5, 2025](#december-5%2C-2025)
 - [November 21, 2025](#november-21%2C-2025)
@@ -112,6 +113,26 @@ New updates and improvements to Laravel Forge.
 
 Copy page
 
+[​](#january-9%2C-2026)
+
+January 9, 2026
+
+Show Improvements (4)
+
+- **Default branch**: Forge will now automatically select the default branch in a repository in the new site modal.
+- **Zero downtime tooltip**: Added a tooltip under deployments clarifying that zero downtime deployment is only supported for new Forge sites.
+- **Handling text overflow**: Expanded the Migrate to Forge modal, and enabled multiple lines to prevent text overflow.
+- **Rate limit errors**: Forge now differentiates between user and service-driven rate limit errors for LetsEncrypt.
+
+Show Fixes (6)
+
+- The second modal in the “create backup” flow now opens at the top of the page, instead of opening halfway down.
+- Resolved Let’s Encrypt modal display issues when using Safari.
+- The delete option in the drop-down has been removed from the final domain on sites.
+- Resolved a bug leaving SSL certificate renewals stuck in a renewing state.
+- Resolved a caching issue preventing the new site modal from appearing after backing out of this flow using the browser back button.
+- Users can now delete domains on sites even when there is no primary domain.
+
 [​](#december-12%2C-2025)
 
 December 12, 2025
@@ -130,7 +151,7 @@ Show Fixes (12)
 - Fixed ARIA attributes for dropdowns to resolve accessibility issues.
 - Ensured backup configuration API updates the DB backup script after database removal.
 - Fixed the queue worker —force flag UI so the toggle state displays correctly.
-- Isolated Users are added to the supervisor sudoers so the they can restart background tasks after deployment.
+- Isolated Users are added to the supervisor sudoers so they can restart background tasks after deployment.
 - Aligned git clone authentication behavior between Zero Downtime Deployment and non‑Zero Downtime Deployment site creation.
 - Fixed server metrics failures on Hetzner caused by a console error.
 - Corrected Let’s Encrypt domain builder so wildcard certificates no longer add an unnecessary www host.
@@ -154,20 +175,20 @@ It’s now possible to configure your application’s “root” directory, maki
 
 Show Improvements (8)
 
-- **Manually update database version**: Added a refresh button on the database page allowing you to manually sync the database version.
-- **Increased FastCGI buffers**: Increased FastCGI buffers and FastCGI buffer size to decrease the chances exceeding buffer thresholds, triggering a 502 error.
+- **Manually update database version**: Added a refresh button on the database page, allowing you to manually sync the database version.
+- **Increased FastCGI buffers**: Increased FastCGI buffers and FastCGI buffer size to decrease the chances of exceeding buffer thresholds, triggering a 502 error.
 - **Branch details**: Branch details are now visible on the deployments tab and the deployment details page.
 - **Deployment logs**: Deployment logs automatically open on the deployment details page after initiating a new deployment.
 - **Scheduled job frequency**: The cron expression now displays when hovering over Custom frequency on the scheduled job card.
 - **Copy certificate output**: There is now a button to copy the full certificate output in the output modal.
 - **Site install automation**: Site installation will trigger the install and build commands automatically.
-- **Accessibility**: Dropdowns are now navigable using the arrow keys when opened using the the `Tab` key. Additionally, pressing `Esc` closes the dropdown.
+- **Accessibility**: Dropdowns are now navigable using the arrow keys when opened using the `Tab` key. Additionally, pressing `Esc` closes the dropdown.
 
 Show Fixes (9)
 
-- Add users modal is now properly sized to avoid overlapping.
+- The add users modal is now properly sized to avoid overlapping.
 - Commenting out deployment script macros now works as expected.
-- Organizations no longer overlap while switching organizations when using the Safari browser.
+- Organizations no longer overlap when switching organizations when using the Safari browser.
 - The Let’s Encrypt modal now expands correctly for sites with many domains.
 - Users can now view archived servers even when there are no active servers.
 - DNS certificates will automatically reuse verification names for the same domain.
@@ -199,26 +220,8 @@ Show Improvements (8)
 Show Fixes (14)
 
 - Resolved a bug causing the Used Memory monitor to display “unknown” after being installed.
-- Scheduled jobs now accurately display next expected run time instead of always showing as UTC.
+- Scheduled jobs now accurately display the next expected run time instead of always showing as UTC.
 - A Z-index issue on the domain dropdown of the Let’s Encrypt modal has been fixed.
-- Fixed a bug causing Forge to re-add server’s SSH key to source control provider when creating a site with a deploy key.
-- Site logs are available in the Observe tab when Custom and Other are selected in the Framework setting.
-- Confirmed users assigned a Viewer role at an organization level are not shown organization level settings they do not have permissions to edit.
-- Hetzner server sizes and prices now display accurate pricing when provisioning a new server.
-- The new schedule job modal now has a placeholder reflecting the current directory.
-- Confirmed users are being shown the billing button in the admin dashboard after they’ve completed onboarding, instead of being prompted to subscribe.
-- Sync database button is now showing for server types other than Database.
-- Log file dropdown has been expanded to accommodate longer options.
-- Backup configuration has been updated to ensure deleted databases are shown for removal.
-- Resolved a bug causing database backups with server database driver set to MariaDB to fail.
-- Laravel VPS servers are now displayed in the drop down when configuring a load balancer.
-
-[​](#november-14%2C-2025)
-
-November 14, 2025
-
-## [​](#introducing-support-for-postgresql-18) Introducing support for PostgreSQL 18
-
-Forge 
+- Fixed a bug causing Forge to re-add server’s SSH key to the source control provider when
 
 *[Content truncated for length]*
