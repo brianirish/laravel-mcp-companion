@@ -38,6 +38,7 @@ Laravel
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -205,6 +206,6 @@ If the site’s deploy script does not contain the `reverb:restart` command, Lar
 ### [​](#ssl) SSL
 
 If an SSL certificate exists for your site which protects Reverb’s configured hostname, Laravel Forge will automatically install it when enabling Reverb, ensuring your Reverb server is accessible via secure WebSockets (`wss`).
-If Reverb is installed before a valid certificate is available, you may request a new certificate for Reverb’s configured hostname from your site’s “SSL” tab. Laravel Forge will automatically configure secure WebSockets for Reverb as soon as the certificate is activated. Forge will al
+If Reverb is installed before a valid certificate is available, you may request a new certificate for Reverb’s configured hostname from your site’s “SSL” tab. Laravel Forge will automatically configure secure WebSockets for Reverb as soon
 
 *[Content truncated for length]*

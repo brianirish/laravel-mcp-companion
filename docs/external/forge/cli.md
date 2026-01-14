@@ -38,6 +38,7 @@ Laravel Forge CLI
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -360,8 +361,6 @@ forge tinker example.com
 
 Laravel Forge provisions servers with a variety of resources and additional software, such as Nginx, MySQL, etc. You may use the Forge CLI to perform common actions on those resources.
 
-### [​](#checking-resource-status) Checking resource status
-
-T
+### [​](#checki
 
 *[Content truncated for length]*

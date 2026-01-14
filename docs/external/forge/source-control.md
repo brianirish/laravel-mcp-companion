@@ -38,6 +38,7 @@ Source Control
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -163,7 +164,7 @@ Was this page helpful?
 
 YesNo
 
-[Server Providers](/docs/server-providers)[SSH Keys](/docs/ssh)
+[Storage Providers](/docs/storage-providers)[SSH Keys](/docs/ssh)
 
 ⌘I
 

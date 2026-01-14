@@ -38,6 +38,7 @@ Laravel Forge SDK
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -200,7 +201,7 @@ $forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
 ```
 
 This method will ping Laravel Forge servers every 5 seconds and see if the newly created Site’s status is `installed` and only return when it’s so, in case the waiting exceeded 30 seconds a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
-You can easily stop this behaviour by setting the `$wait` argument to false:
+You can easily stop this behavior by setting the `$wait` argument to false:
 
 Copy
 

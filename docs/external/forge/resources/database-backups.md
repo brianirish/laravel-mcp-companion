@@ -38,6 +38,7 @@ Database Backups
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -94,7 +95,6 @@ On this page
 
 - [Introduction](#introduction)
 - [Creating backup configurations](#creating-backup-configurations)
-- [Storage providers](#storage-providers)
 - [Frequency options](#frequency-options)
 - [Backup retention](#backup-retention)
 - [Notifications for failed backups](#notifications-for-failed-backups)
@@ -124,41 +124,8 @@ Database backups are only available on the Business plan.
 
 ## [​](#creating-backup-configurations) Creating backup configurations
 
-### [​](#storage-providers) Storage providers
-
-You can choose to backup your databases to:
-
-1. [Amazon S3](https://aws.amazon.com/s3/)
-2. [DigitalOcean Spaces](https://www.digitalocean.com/products/spaces)
-3. [Scaleway](https://www.scaleway.com/en/object-storage/)
-4. [OVH Cloud](https://www.ovhcloud.com/en/public-cloud/object-storage/)
-5. Custom (S3 Compatible)
-
-For Amazon S3, DigitalOcean Spaces, Scaleway, and OVH Cloud storage providers you need to provide Laravel Forge with:
-
-- The region your backup should be stored in (`eu-west-2`, `nyc3` etc..)
-- The name of the storage “bucket”
-- The access / secret keys that should be used to connect to the storage service
-
-When using Amazon S3 in combination with an EC2 server, you can alternatively choose to use the identity of the EC2 server to
-stream the backup to S3 without providing credentials. In this case, you only need to check the “Use EC2 Assumed Role” checkbox.
-
-When using Amazon S3 to store your database backups, your AWS IAM user must have the following permissions for S3:
-
-- `s3:PutObject`
-- `s3:GetObject`
-- `s3:ListBucket`
-- `s3:DeleteObject`
-
-When using a custom, S3 compatible provider, you must supply:
-
-- The service endpoint / URL
-- The name of the storage “bucket”
-- The access / secret keys that should be used to connect to the storage service
-
-You can also choose to provide a storage directory where backups will be restored relative to your bucket root. If left empty, backups will be stored within the root of your bucket.
-
-Not all providers are 100% compatible with Amazon S3’s API. Some providers, such as OVH and Scaleway, require a custom configuration to work correctly, typically through the use of `awscli-plugin-endpoint`.
+Before creating a backup configuration, you must configure at least one [storage provider](/docs/storage-providers). When creating a backup configuration, you will select which storage provider to use.
+You may optionally override the bucket and directory settings for a specific backup configuration. This allows you to use the same storage provider but store backups in different locations.
 
 ### [​](#frequency-options) Frequency options
 

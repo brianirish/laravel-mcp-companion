@@ -38,6 +38,7 @@ Changelog
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -222,6 +223,6 @@ Show Fixes (14)
 - Resolved a bug causing the Used Memory monitor to display “unknown” after being installed.
 - Scheduled jobs now accurately display the next expected run time instead of always showing as UTC.
 - A Z-index issue on the domain dropdown of the Let’s Encrypt modal has been fixed.
-- Fixed a bug causing Forge to re-add server’s SSH key to the source control provider when
+- Fixed a bug causing Forge to re-add serve
 
 *[Content truncated for length]*
