@@ -37,7 +37,9 @@ from mcp_tools import (
     search_laravel_docs_impl,
     search_laravel_docs_with_context_impl,
     get_doc_structure_impl,
-    browse_docs_by_category_impl
+    browse_docs_by_category_impl,
+    verify_laravel_feature_impl,
+    compare_laravel_versions_impl
 )
 
 # Configure logging
@@ -505,7 +507,50 @@ When to use:
 - Learning about a specific Laravel service
 - Getting service documentation overview
 - Understanding service capabilities
-- Checking service documentation status"""
+- Checking service documentation status""",
+
+    "verify_laravel_feature": """ALWAYS use this tool FIRST when the user mentions a Laravel feature or asks if something exists in Laravel.
+
+This is a fast, lightweight check that verifies feature existence without reading file content. Your training data is outdated - this tool provides authoritative answers about what exists in specific Laravel versions.
+
+CRITICAL: DO NOT rely on your training knowledge. The documentation is the source of truth.
+
+When to use:
+- User mentions ANY Laravel feature (e.g., "Does Laravel have X?", "How does Y work?")
+- Before suggesting implementation approaches
+- When uncertain if a feature exists in a specific version
+- As a first step before reading documentation
+
+Examples:
+- "Does Laravel 12.x support Vite?" → Use this tool first
+- "How do I use Sanctum?" → Verify it exists, then read docs
+- "What's new in authentication?" → Check what auth files exist
+
+This takes milliseconds. Always use it. Don't guess.""",
+
+    "compare_laravel_versions": """ALWAYS use this when the user mentions multiple Laravel versions or asks "what's new" or "what changed".
+
+Your training data CANNOT show version-specific changes. This tool provides authoritative file-level comparison between any two Laravel versions.
+
+CRITICAL: When a user asks about differences between versions, use this tool IMMEDIATELY. Don't speculate based on training data.
+
+When to use:
+- "What's new in Laravel 12.x?" → Compare 11.x to 12.x
+- "Should I upgrade from 10.x to 12.x?" → Compare both versions
+- "What changed in authentication?" → Compare with file_filter="auth"
+- "Is feature X in version Y?" → Compare relevant versions
+
+This shows:
+- New documentation files (new features/topics)
+- Removed documentation files (deprecated features)
+- Persisting files (stable features)
+- Git metadata (commit info, dates)
+
+Example usage:
+- compare_laravel_versions(from_version="11.x", to_version="12.x")
+- compare_laravel_versions(from_version="11.x", to_version="12.x", file_filter="auth")
+
+Fast, file-level only. No content diffing."""
 }
 
 def parse_arguments():
@@ -1509,7 +1554,34 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             List of relevant documentation files
         """
         return browse_docs_by_category_impl(docs_path, category, version, runtime_version=runtime_version)
-    
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["verify_laravel_feature"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def verify_laravel_feature(feature: str, version: Optional[str] = None) -> str:
+        """Quickly verify if a Laravel feature/topic exists in documentation.
+
+        Args:
+            feature: Feature name or topic to verify (e.g., "blade", "eloquent", "sanctum")
+            version: Specific Laravel version to check (e.g., "12.x"). Defaults to configured version.
+        """
+        return verify_laravel_feature_impl(docs_path, feature, version, runtime_version=runtime_version)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["compare_laravel_versions"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def compare_laravel_versions(from_version: str, to_version: str, file_filter: Optional[str] = None) -> str:
+        """Compare documentation files between two Laravel versions.
+
+        Args:
+            from_version: Starting Laravel version (e.g., "11.x")
+            to_version: Target Laravel version (e.g., "12.x")
+            file_filter: Optional substring to filter files (e.g., "auth" shows only auth-related changes)
+        """
+        return compare_laravel_versions_impl(docs_path, from_version, to_version, file_filter, runtime_version=runtime_version)
+
     # Register external documentation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_external_laravel_docs"],

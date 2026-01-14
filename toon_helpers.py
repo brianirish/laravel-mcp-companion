@@ -89,3 +89,66 @@ def format_error(message: str, context: Optional[Dict[str, Any]] = None) -> str:
     if context:
         data["context"] = context
     return toon_encode(data)
+
+
+def format_feature_verification(
+    feature: str,
+    version: str,
+    found: bool,
+    exact_matches: List[str],
+    partial_matches: List[str]
+) -> str:
+    """Format feature verification results."""
+    return toon_encode({
+        "feature": feature,
+        "version": version,
+        "found": found,
+        "exact_matches": exact_matches,
+        "partial_matches": partial_matches,
+        "total_matches": len(exact_matches) + len(partial_matches)
+    })
+
+
+def format_version_comparison(
+    from_version: str,
+    to_version: str,
+    added_files: List[str],
+    removed_files: List[str],
+    common_files: List[str],
+    from_metadata: Dict[str, Any],
+    to_metadata: Dict[str, Any],
+    file_filter: Optional[str] = None
+) -> str:
+    """Format version comparison results."""
+    data = {
+        "from_version": from_version,
+        "to_version": to_version,
+        "summary": {
+            "added_count": len(added_files),
+            "removed_count": len(removed_files),
+            "common_count": len(common_files),
+            "total_changes": len(added_files) + len(removed_files)
+        },
+        "added_files": added_files,
+        "removed_files": removed_files,
+        "common_files": common_files,
+        "metadata": {
+            "from": {
+                "commit": from_metadata.get('commit_sha', 'unknown')[:7] if from_metadata.get('commit_sha') else 'unknown',
+                "date": from_metadata.get('commit_date', 'unknown'),
+                "message": from_metadata.get('commit_message', 'unknown'),
+                "synced": from_metadata.get('sync_time', 'unknown')
+            },
+            "to": {
+                "commit": to_metadata.get('commit_sha', 'unknown')[:7] if to_metadata.get('commit_sha') else 'unknown',
+                "date": to_metadata.get('commit_date', 'unknown'),
+                "message": to_metadata.get('commit_message', 'unknown'),
+                "synced": to_metadata.get('sync_time', 'unknown')
+            }
+        }
+    }
+
+    if file_filter:
+        data["filter_applied"] = file_filter
+
+    return toon_encode(data)
