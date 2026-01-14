@@ -38,6 +38,7 @@ Report Abuse
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -100,7 +101,7 @@ Help us keep Laravel Forge safe by reporting any abuse, security concerns, or vi
 
 Copy page
 
-Please email us at [[email protected]](/cdn-cgi/l/email-protection#e89b8d8b9d9a819c91a884899a899e8d84c68b8785)
+Please email us at [[email protected]](/cdn-cgi/l/email-protection#c6b5a3a5b3b4afb2bf86aaa7b4a7b0a3aae8a5a9ab)
 
 Was this page helpful?
 

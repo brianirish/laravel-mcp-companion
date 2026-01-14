@@ -66,6 +66,7 @@ https://forge.laravel.com/docs/resources/caches
 2025-10-16T11:04:36.786Z
 
 https://forge.laravel.com/docs/resources/database-backups
+2026-01-13T15:13:11.831Z
 
 https://forge.laravel.com/docs/resources/databases
 2025-11-10T11:52:32.253Z
@@ -79,7 +80,7 @@ https://forge.laravel.com/docs/resources/scheduler
 2025-10-08T20:47:39.311Z
 
 https://forge.laravel.com/docs/sdk
-2025-11-06T17:42:58.879Z
+2026-01-13T23:16:52.319Z
 
 https://forge.laravel.com/docs/server-providers
 
@@ -115,7 +116,7 @@ https://forge.laravel.com/docs/sites/deployments
 2025-12-19T19:31:25.709Z
 
 https://forge.laravel.com/docs/sites/domains
-2026-01-12T21:09:17.356Z
+2026-01-13T23:16:52.317Z
 
 https://forge.laravel.com/docs/sites/environment-variables
 2025-10-17T15:11:06.890Z
@@ -141,6 +142,8 @@ https://forge.laravel.com/docs/source-control
 
 https://forge.laravel.com/docs/ssh
 2025-10-16T11:04:37.068Z
+
+https://forge.laravel.com/docs/storage-providers
 
 https://forge.laravel.com/docs/support
 2025-10-01T13:14:11.575Z

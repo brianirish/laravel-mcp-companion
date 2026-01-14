@@ -38,6 +38,7 @@ Server Providers
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -217,8 +218,6 @@ The Vultr server provider requires you to add the [Laravel Forge IP addresses](/
 
 ### [​](#hetzner-cloud-api-access) Hetzner Cloud API access
 
-Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forge has an API token for each Hetzner Project.
-
-#
+Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forg
 
 *[Content truncated for length]*

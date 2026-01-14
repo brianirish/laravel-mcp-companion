@@ -38,6 +38,7 @@ Deployments
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -194,7 +195,6 @@ You should not use zero-downtime deployments when using Laravel Octane, as Octan
 
 ### [​](#standard-deployments) Standard deployments
 
-The standard deployment strategy uses a simpler approach where your site’s code is kept in a single directory and updated in place during deployment.
-This strat
+The standard deployment strategy uses a simpler approach where your site’s code is kept in a single directory and
 
 *[Content truncated for length]*

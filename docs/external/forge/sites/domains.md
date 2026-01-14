@@ -38,6 +38,7 @@ Domains
 - [Organizations](/docs/organizations)
 - [Teams](/docs/teams)
 - [Server Providers](/docs/server-providers)
+- [Storage Providers](/docs/storage-providers)
 - [Source Control](/docs/source-control)
 - [SSH Keys](/docs/ssh)
 - [Recipes](/docs/recipes)
@@ -136,7 +137,7 @@ Forge domains are not available for load balancers.
 ## [​](#custom-domains) Custom domains
 
 You can attach your own domain names to site in Forge, such as `example.com` or `app.example.com`.
-Each custom domain is managed separately, allowing you to create domain-specific certificates, configure `www.` redirect behaviour, and choose one domain to serve as the primary domain.
+Each custom domain is managed separately, allowing you to create domain-specific certificates, configure `www.` redirect behavior, and choose one domain to serve as the primary domain.
 Custom domains have their own Nginx configuration files and SSL certificates, so adding or removing a domain does not impact other domains on the same site.
 
 ### [​](#www-redirect-types) `www.` redirect types
@@ -155,7 +156,7 @@ Allowing wildcard subdomains will still serve traffic for the apex domain (e.g.,
 ### [​](#primary-domains) Primary domains
 
 Each site can designate one domain as the **primary domain**.
-Changing the primary domain does not impact your additional custom domains, it is used as the “name” of the site so that it’s easily recognisable inside of Forge and on your server.
+Changing the primary domain does not impact your additional custom domains, it is used as the “name” of the site so that it’s easily recognizable inside of Forge and on your server.
 
 Changing the primary domain updates the site’s directory name on the server. This may affect third-party integrations and custom scripts that reference the site directory.Be sure to use Forge’s pre-configured `$FORGE_SITE_PATH` and `$FORGE_RELEASE_DIRECTORY` variables inside of deploy scripts to mitigate these problems.
 
@@ -203,6 +204,6 @@ HTTP-01 is usually the best choice when:
 - You have strict restrictions around DNS record targets.
 - The domain points directly to Forge and you know it won’t be placed behind a CDN, proxy, or firewall later.
 
-While HTTP-01 can be more convenient to setup in limited cases
+While HTTP-01 ca
 
 *[Content truncated for length]*

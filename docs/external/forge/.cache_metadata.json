@@ -44,13 +44,14 @@
     "sites/user-isolation",
     "source-control",
     "ssh",
+    "storage-providers",
     "support",
     "teams"
   ],
-  "total_sections": 45,
+  "total_sections": 46,
   "success_rate": 1.0,
   "discovery_method": "auto-discovery",
   "auto_discovery_enabled": true,
-  "discovered_count": 45,
+  "discovered_count": 46,
   "manual_fallback": false
 }
