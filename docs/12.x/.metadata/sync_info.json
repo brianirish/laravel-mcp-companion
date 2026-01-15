@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "ad716d5b2d788abd2e45f76cf0e6962b7ecbe591",
-  "commit_date": "2026-01-13T15:44:28Z",
-  "commit_message": "connection status hook",
-  "commit_url": "https://github.com/laravel/docs/commit/ad716d5b2d788abd2e45f76cf0e6962b7ecbe591",
-  "sync_time": "2026-01-14T01:39:14Z"
+  "commit_sha": "81861de593b9eac91f857e29d9391eb67451ea86",
+  "commit_date": "2026-01-14T21:54:01Z",
+  "commit_message": "[12.x] Update for Livewire 4 starter kit (#10990)\n\n* update docs for v4\n\n* update referenced version from 3 to 4\n\n* Add layouts folder\n\n---------\n\nCo-authored-by: Filip Ganyicz <ganyicz.filip@gmail.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/81861de593b9eac91f857e29d9391eb67451ea86",
+  "sync_time": "2026-01-15T01:25:10Z"
 }

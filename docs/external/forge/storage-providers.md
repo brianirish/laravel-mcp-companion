@@ -123,6 +123,7 @@ Laravel Forge supports the following storage providers:
 
 - [Amazon S3](https://aws.amazon.com/s3/)
 - [DigitalOcean Spaces](https://www.digitalocean.com/products/spaces)
+- [Hetzner](https://www.hetzner.com/storage/object-storage/)
 - [Scaleway](https://www.scaleway.com/en/object-storage/)
 - [OVH Cloud](https://www.ovhcloud.com/en/public-cloud/object-storage/)
 - Custom (S3 Compatible)
@@ -134,7 +135,7 @@ Not all providers are 100% compatible with Amazon S3’s API. Some providers, su
 ### [​](#adding-a-storage-provider) Adding a storage provider
 
 To add a storage provider, navigate to the organization’s settings. Then, on the “Storage providers” page, click “Add provider”. Select the provider you wish to configure and provide the required credentials.
-For Amazon S3, DigitalOcean Spaces, Scaleway, and OVH Cloud, you need to provide:
+For Amazon S3, DigitalOcean Spaces, Hetzner, Scaleway, and OVH Cloud, you need to provide:
 
 - A name for the storage provider
 - The region your backups should be stored in (`eu-west-2`, `nyc3`, etc.)
