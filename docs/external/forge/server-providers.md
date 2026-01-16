@@ -151,11 +151,11 @@ Once approved, Laravel Forge will create an OAuth credential, allowing it to acc
 In order to provision servers on AWS, you need to create a new IAM role. To get started, navigate to the IAM service on your AWS dashboard. Once you are in the IAM dashboard, you may select “Roles” from the left-side navigation panel and click the “Create Role” button.
 The process for creating the role is outlined in these steps:
 
-1. Choose “AWS account” as the trusted entity type, and select “Another AWS account.”
-2. Enter the “Laravel Forge AWS Account” from the Forge dashboard, then click “Next.”
-3. In the “Permissions policies” section, select the `AmazonEC2FullAccess` and `AmazonVPCFullAccess` policies. Then, click “Next.”
-4. In the “Name, review, and create” section, provide a name and description for the role.
-5. Update the “Trust policy” under “Select trusted entities” by enabling the “Require external ID” checkbox and entering the “AWS External ID” shown in the Laravel Forge dashboard.
+1. Choose “AWS account” as the trusted entity type, and select “Another AWS account”.
+2. Enter the “Laravel Forge AWS Account” from the Forge dashboard.
+3. Under “Options”, enable the “Require external ID” checkbox, enter the “AWS External ID” shown in the Forge dashboard, and then click “Next”.
+4. In the “Permissions policies” section, select the `AmazonEC2FullAccess` and `AmazonVPCFullAccess` policies. Then, click “Next”.
+5. In the “Name, review, and create” section, provide a name and description for the role.
 6. Complete the process by creating the role.
 7. Copy the role ARN displayed in the AWS dashboard and add it to your AWS credentials in Laravel Forge.
 
@@ -218,6 +218,8 @@ The Vultr server provider requires you to add the [Laravel Forge IP addresses](/
 
 ### [​](#hetzner-cloud-api-access) Hetzner Cloud API access
 
-Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forg
+Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forge has an API token for each Hetzner Project.
+
+## [​](#br
 
 *[Content truncated for length]*
