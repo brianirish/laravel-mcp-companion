@@ -4,6 +4,8 @@
 
 ---
 
+xml version="1.0" encoding="UTF-8"?
+
 https://forge.laravel.com/docs/abuse
 2025-08-08T15:48:14.032Z
 

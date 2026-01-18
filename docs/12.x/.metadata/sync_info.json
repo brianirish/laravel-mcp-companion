@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "22104aa9feffa3f1bd4292d30c17b3e121982c9d",
-  "commit_date": "2026-01-15T20:28:44Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/22104aa9feffa3f1bd4292d30c17b3e121982c9d",
-  "sync_time": "2026-01-16T01:27:01Z"
+  "commit_sha": "77cb8ecf05d2b911fe1076531f2883d4fcb6c168",
+  "commit_date": "2026-01-16T17:45:10Z",
+  "commit_message": "Clarify sentence in packages-public-assets docs (#10994)",
+  "commit_url": "https://github.com/laravel/docs/commit/77cb8ecf05d2b911fe1076531f2883d4fcb6c168",
+  "sync_time": "2026-01-18T01:42:05Z"
 }
