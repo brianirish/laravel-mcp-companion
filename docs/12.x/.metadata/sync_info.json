@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "77cb8ecf05d2b911fe1076531f2883d4fcb6c168",
-  "commit_date": "2026-01-16T17:45:10Z",
-  "commit_message": "Clarify sentence in packages-public-assets docs (#10994)",
-  "commit_url": "https://github.com/laravel/docs/commit/77cb8ecf05d2b911fe1076531f2883d4fcb6c168",
-  "sync_time": "2026-01-18T01:42:05Z"
+  "commit_sha": "37155768dcd6cc2d86ebf0d2cb4e23ceebed14f3",
+  "commit_date": "2026-01-19T15:29:17Z",
+  "commit_message": "[12.x] Fix phrasing: correct reference to when method for third parameter ($default) behavior (#10998)\n\n* Fix phrasing: correct reference to `when` method for third parameter ($default) behavior\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/37155768dcd6cc2d86ebf0d2cb4e23ceebed14f3",
+  "sync_time": "2026-01-20T01:26:17Z"
 }

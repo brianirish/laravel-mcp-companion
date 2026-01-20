@@ -93,6 +93,7 @@ Changelog
 
 On this page
 
+- [January 16, 2026](#january-16%2C-2026)
 - [January 9, 2026](#january-9%2C-2026)
 - [December 12, 2025](#december-12%2C-2025)
 - [December 5, 2025](#december-5%2C-2025)
@@ -113,6 +114,24 @@ Copy page
 New updates and improvements to Laravel Forge.
 
 Copy page
+
+[​](#january-16%2C-2026)
+
+January 16, 2026
+
+Show Improvements (1)
+
+- **Hetzner S3**: Hetzner S3 object storage in now available as an option for database backups.
+
+Show Fixes (7)
+
+- Addressed a bug preventing users from scrolling modals across Forge.
+- Modals in the create a certificate flow now display properly when using Safari.
+- Shared paths are now saving properly after being updated on the settings deployments page.
+- Removed access key and secret key required fields from the database backup configuration modal when using EC2 assumed role.
+- The tooltip under the deployment script form now displays a tooltip instead of submitting the form.
+- Resolved a bug preventing users from setting up Meilisearch servers.
+- The directory fields supports using slashes again, allowing users to point to subdirectories.
 
 [​](#january-9%2C-2026)
 
@@ -212,17 +231,6 @@ Show Improvements (8)
 - **Recipes search results**: Updated the recipe search UI to accurately show that a search returned zero matching results, instead of displaying “no recipes”.
 - **Manual certificate renewal**: You can now manually trigger a certificate renewal for Let’s Encrypt certificates after a failed attempt on the Domains tab.
 - **Site notes**: Sites now allow you to leave notes in the Settings tab, similar to the notes feature for servers. Use them to keep track of important information.
-- **Accessibility improvements**: Continued to improve color contrast and form labeling across the platform.
-- **Scheduled jobs paths**: Scheduled job paths are now copyable from the scheduler.
-- **Clone certificate endpoint**: Added an API endpoint to clone certificates. Mirroring functionality available in the Forge UI now.
-- **Copy debug info**: Added the site path to the information included in the copy debug info action.
-- **Destructive commands**: Added a confirmation step when attempting to run destructive commands.
-
-Show Fixes (14)
-
-- Resolved a bug causing the Used Memory monitor to display “unknown” after being installed.
-- Scheduled jobs now accurately display the next expected run time instead of always showing as UTC.
-- A Z-index issue on the domain dropdown of the Let’s Encrypt modal has been fixed.
-- Fixed a bug causing Forge to re-add serve
+- **
 
 *[Content truncated for length]*
