@@ -27,7 +27,7 @@ https://forge.laravel.com/docs/api-reference/relationships
 2025-10-16T11:04:36.736Z
 
 https://forge.laravel.com/docs/changelog
-2026-01-12T14:55:18.648Z
+2026-01-19T15:10:48.802Z
 
 https://forge.laravel.com/docs/cli
 2025-11-25T22:16:50.576Z
