@@ -1,7 +1,7 @@
 FROM python:3.12-alpine
 
 # Install build dependencies (if necessary)
-RUN apk add --no-cache build-base libffi-dev openssl-dev
+RUN apk add --no-cache build-base libffi-dev openssl-dev git
 
 # Set working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . .
 
 # Install Python dependencies including HTTP server requirements
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir fastmcp mcp[cli,client] uvicorn starlette
+    pip install --no-cache-dir -r requirements.txt
 
 # Default environment
 ENV PYTHONUNBUFFERED=1
