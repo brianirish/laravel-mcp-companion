@@ -1,0 +1,14 @@
+inputSet:
+  identifier: release_tag_trigger
+  name: Release Tag Trigger Input Set
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  pipeline:
+    identifier: release
+    properties:
+      ci:
+        codebase:
+          build:
+            type: tag
+            spec:
+              tag: <+trigger.tag>

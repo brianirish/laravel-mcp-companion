@@ -1,0 +1,38 @@
+pipeline:
+  identifier: release
+  name: Release
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  properties:
+    ci:
+      codebase:
+        build: <+input>
+        connectorRef: account.Github
+        repoName: brianirish/laravel-mcp-companion
+  stages:
+    - stage:
+        identifier: build_and_push
+        name: Build and Push Docker Image
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  identifier: build_push_amd64
+                  name: Build and Push (amd64)
+                  type: BuildAndPushDockerRegistry
+                  spec:
+                    connectorRef: ghcr
+                    repo: ghcr.io/brianirish/laravel-mcp-companion
+                    tags:
+                      - latest
+                      - <+trigger.tag>
+                    dockerfile: Dockerfile
+                    context: .

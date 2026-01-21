@@ -1,0 +1,14 @@
+inputSet:
+  identifier: ci_pr_trigger
+  name: CI PR Trigger Input Set
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  pipeline:
+    identifier: ci
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>

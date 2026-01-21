@@ -1,0 +1,14 @@
+inputSet:
+  identifier: ci_push_trigger
+  name: CI Push Trigger Input Set
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  pipeline:
+    identifier: ci
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
