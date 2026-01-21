@@ -25,8 +25,8 @@ pipeline:
           execution:
             steps:
               - step:
-                  identifier: build_push_amd64
-                  name: Build and Push (amd64)
+                  identifier: build_push_multiarch
+                  name: Build and Push (multi-arch)
                   type: BuildAndPushDockerRegistry
                   spec:
                     connectorRef: ghcr
@@ -36,3 +36,7 @@ pipeline:
                       - <+trigger.tag>
                     dockerfile: Dockerfile
                     context: .
+                    buildx: true
+                    platforms:
+                      - linux/amd64
+                      - linux/arm64
