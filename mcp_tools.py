@@ -582,7 +582,14 @@ def verify_laravel_feature_impl(docs_path: Path, feature: str, version: Optional
 
     try:
         # Normalize feature name for comparison
-        feature_lower = feature.lower().strip()
+        # Strip directory parts (e.g., "12.x/routing.md" -> "routing.md")
+        # Strip .md suffix (e.g., "routing.md" -> "routing")
+        feature_normalized = feature.strip()
+        if "/" in feature_normalized:
+            feature_normalized = feature_normalized.rsplit("/", 1)[-1]
+        if feature_normalized.lower().endswith(".md"):
+            feature_normalized = feature_normalized[:-3]
+        feature_lower = feature_normalized.lower()
 
         # Strategy 1: Exact filename match (e.g., "blade" -> "blade.md")
         exact_match = version_path / f"{feature_lower}.md"
