@@ -1,0 +1,66 @@
+pipeline:
+  identifier: ci
+  name: CI
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  properties:
+    ci:
+      codebase:
+        build: <+input>
+        connectorRef: account.Github
+        repoName: brianirish/laravel-mcp-companion
+  stages:
+    - stage:
+        identifier: test
+        name: Test
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            paths:
+              - .venv
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  identifier: install_dependencies
+                  name: Install Dependencies
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      python -m pip install --upgrade pip
+                      pip install -r requirements.txt
+                      pip install -r requirements-dev.txt
+              - step:
+                  identifier: lint
+                  name: Lint with ruff
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: ruff check .
+              - step:
+                  identifier: typecheck
+                  name: Type check with mypy
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: mypy --ignore-missing-imports .
+              - step:
+                  identifier: test
+                  name: Run tests
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: pytest --cov --cov-branch --cov-report=xml --junitxml=results.xml
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - results.xml
