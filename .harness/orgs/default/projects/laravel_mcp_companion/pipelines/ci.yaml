@@ -64,3 +64,4 @@ pipeline:
                       spec:
                         paths:
                           - results.xml
+
