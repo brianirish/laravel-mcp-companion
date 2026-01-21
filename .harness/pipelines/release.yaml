@@ -26,7 +26,7 @@ pipeline:
             steps:
               - step:
                   identifier: build_push_multiarch
-                  name: Build and Push (multi-arch)
+                  name: Build and Push multi-arch
                   type: BuildAndPushDockerRegistry
                   spec:
                     connectorRef: ghcr
@@ -40,3 +40,9 @@ pipeline:
                     platforms:
                       - linux/amd64
                       - linux/arm64
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
