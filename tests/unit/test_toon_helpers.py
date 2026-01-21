@@ -1,6 +1,6 @@
 """Unit tests for TOON format helper functions."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import toon_helpers
 
