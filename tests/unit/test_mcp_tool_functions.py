@@ -10,7 +10,9 @@ from mcp_tools import (
     search_laravel_docs_impl,
     search_laravel_docs_with_context_impl,
     get_doc_structure_impl,
-    browse_docs_by_category_impl
+    browse_docs_by_category_impl,
+    verify_laravel_feature_impl,
+    compare_laravel_versions_impl
 )
 
 
@@ -472,3 +474,131 @@ class TestMcpToolsEdgeCases:
                 )
 
                 assert "Error" in result
+
+
+class TestVersionComparisonTools:
+    """Test version comparison and feature verification tools."""
+
+    def test_verify_laravel_feature_exact_match(self, test_docs_dir):
+        """Test verify_laravel_feature with exact filename match."""
+        # test_docs_dir fixture already has routing.md
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = verify_laravel_feature_impl(test_docs_dir, "routing", "12.x")
+
+            # TOON format assertions
+            assert "routing" in result
+            assert "12.x" in result
+            assert "true" in result.lower() or "found" in result
+            assert "routing.md" in result
+
+    def test_verify_laravel_feature_partial_match(self, test_docs_dir):
+        """Test verify_laravel_feature with partial matches."""
+        # Create auth-related files
+        version_dir = test_docs_dir / "12.x"
+        (version_dir / "authentication.md").write_text("# Authentication")
+        (version_dir / "authorization.md").write_text("# Authorization")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = verify_laravel_feature_impl(test_docs_dir, "auth", "12.x")
+
+            # Should find both auth files
+            assert "auth" in result
+            assert "authentication.md" in result
+            assert "authorization.md" in result
+            assert "true" in result.lower() or "found" in result
+
+    def test_verify_laravel_feature_not_found(self, test_docs_dir):
+        """Test verify_laravel_feature when feature doesn't exist."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = verify_laravel_feature_impl(test_docs_dir, "nonexistent", "12.x")
+
+            assert "nonexistent" in result
+            assert "false" in result.lower() or '"found": false' in result.lower() or "found\nfalse" in result.lower()
+
+    def test_verify_laravel_feature_empty_feature(self, test_docs_dir):
+        """Test verify_laravel_feature with empty feature name."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = verify_laravel_feature_impl(test_docs_dir, "", "12.x")
+
+            assert "error" in result.lower() or "cannot be empty" in result
+
+    def test_verify_laravel_feature_version_not_found(self, test_docs_dir):
+        """Test verify_laravel_feature with non-existent version."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x', '99.x']):
+            result = verify_laravel_feature_impl(test_docs_dir, "blade", "99.x")
+
+            assert "error" in result.lower() or "not found" in result.lower()
+
+    def test_compare_laravel_versions_added_files(self, test_docs_dir):
+        """Test compare_laravel_versions showing added files."""
+        # Add a new file only in 12.x
+        (test_docs_dir / "12.x" / "new-feature.md").write_text("# New Feature")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
+
+            # TOON format assertions
+            assert "11.x" in result
+            assert "12.x" in result
+            assert "new-feature.md" in result
+            assert "added" in result.lower()
+
+    def test_compare_laravel_versions_removed_files(self, test_docs_dir):
+        """Test compare_laravel_versions showing removed files."""
+        # Add a file only in 11.x
+        (test_docs_dir / "11.x" / "deprecated.md").write_text("# Deprecated")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
+
+            assert "deprecated.md" in result
+            assert "removed" in result.lower()
+
+    def test_compare_laravel_versions_with_filter(self, test_docs_dir):
+        """Test compare_laravel_versions with file filter."""
+        # Create auth files in both versions
+        (test_docs_dir / "11.x" / "authentication.md").write_text("# Auth v11")
+        (test_docs_dir / "12.x" / "authentication.md").write_text("# Auth v12")
+        (test_docs_dir / "12.x" / "authorization.md").write_text("# Authz v12")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x", file_filter="auth")
+
+            # Should only show auth-related files
+            assert "auth" in result.lower()
+            assert "authentication.md" in result
+            # Should show filter was applied
+            assert "filter" in result.lower() or "auth" in result
+
+    def test_compare_laravel_versions_same_version_error(self, test_docs_dir):
+        """Test compare_laravel_versions with same source and target."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "12.x", "12.x")
+
+            assert "error" in result.lower() or "cannot be the same" in result.lower()
+
+    def test_compare_laravel_versions_invalid_version(self, test_docs_dir):
+        """Test compare_laravel_versions with invalid version."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "99.x", "12.x")
+
+            assert "error" in result.lower() or "invalid" in result.lower()
+
+    def test_compare_laravel_versions_metadata_included(self, test_docs_dir):
+        """Test compare_laravel_versions includes metadata from both versions."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
+
+            # Should include commit info from metadata
+            assert "commit" in result.lower() or "metadata" in result.lower()
+            # Check for date/sync info (from fixture metadata)
+            assert "2024" in result or "unknown" in result
+
+    def test_verify_laravel_feature_uses_default_version(self, test_docs_dir):
+        """Test verify_laravel_feature uses default version when none specified."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+                result = verify_laravel_feature_impl(test_docs_dir, "routing", runtime_version="12.x")
+
+                assert "routing" in result
+                assert "12.x" in result

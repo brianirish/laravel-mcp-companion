@@ -21,7 +21,9 @@ from toon_helpers import (
     format_search_results,
     format_category_docs,
     format_doc_structure,
-    format_error
+    format_error,
+    format_feature_verification,
+    format_version_comparison
 )
 
 logger = logging.getLogger("laravel-mcp-companion")
@@ -544,6 +546,161 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
     except Exception as e:
         logger.error(f"Error browsing documentation: {str(e)}")
         return format_error(f"Error browsing documentation: {str(e)}")
+
+
+def verify_laravel_feature_impl(docs_path: Path, feature: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
+    """Lightweight verification of Laravel feature existence via file pattern matching.
+
+    This tool checks if a feature/topic exists in Laravel docs WITHOUT reading file contents.
+    Uses fast Path.glob() for pattern matching on filenames only.
+
+    Args:
+        docs_path: Base path for documentation
+        feature: Feature name or topic to verify (e.g., "blade", "eloquent", "sanctum")
+        version: Specific Laravel version to check. If not provided, uses runtime_version or default.
+        runtime_version: Runtime default version (from --version flag)
+
+    Returns:
+        TOON-encoded verification results with match status and matching files.
+    """
+    logger.debug(f"verify_laravel_feature_impl called with feature: {feature}, version: {version}")
+
+    # Validate inputs
+    if not feature.strip():
+        return format_error("Feature name cannot be empty")
+
+    # Determine version to use
+    if not version:
+        version = runtime_version if runtime_version else DEFAULT_VERSION
+
+    version_path = docs_path / version
+    if not version_path.exists():
+        return format_error(
+            f"Documentation not found for version {version}",
+            {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+        )
+
+    try:
+        # Normalize feature name for comparison
+        # Strip directory parts (e.g., "12.x/routing.md" -> "routing.md")
+        # Strip .md suffix (e.g., "routing.md" -> "routing")
+        feature_normalized = feature.strip()
+        if "/" in feature_normalized:
+            feature_normalized = feature_normalized.rsplit("/", 1)[-1]
+        if feature_normalized.lower().endswith(".md"):
+            feature_normalized = feature_normalized[:-3]
+        feature_lower = feature_normalized.lower()
+
+        # Strategy 1: Exact filename match (e.g., "blade" -> "blade.md")
+        exact_match = version_path / f"{feature_lower}.md"
+        exact_files = [exact_match.name] if exact_match.exists() else []
+
+        # Strategy 2: Partial matches (e.g., "auth" matches "authentication.md", "authorization.md")
+        # Use glob to find all .md files, then filter
+        all_md_files = list(version_path.glob("*.md"))
+        partial_matches = [
+            f.name for f in all_md_files
+            if feature_lower in f.stem.lower() and f.name not in exact_files
+        ]
+
+        # Combine results
+        found = len(exact_files) + len(partial_matches) > 0
+
+        return format_feature_verification(
+            feature=feature,
+            version=version,
+            found=found,
+            exact_matches=exact_files,
+            partial_matches=partial_matches
+        )
+
+    except Exception as e:
+        logger.error(f"Error verifying feature '{feature}': {str(e)}")
+        return format_error(f"Error verifying feature: {str(e)}")
+
+
+def compare_laravel_versions_impl(docs_path: Path, from_version: str, to_version: str, file_filter: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
+    """Compare documentation files between two Laravel versions.
+
+    Shows which documentation files were added, removed, or persist between versions.
+    Also includes git metadata diff (commit info, sync dates).
+    NO content diffing - just file-level comparison for speed.
+
+    Args:
+        docs_path: Base path for documentation
+        from_version: Starting Laravel version (e.g., "11.x")
+        to_version: Target Laravel version (e.g., "12.x")
+        file_filter: Optional substring to filter files (e.g., "auth" shows only auth-related changes)
+        runtime_version: Runtime default version (from --version flag)
+
+    Returns:
+        TOON-encoded version comparison with added/removed/common files and metadata.
+    """
+    logger.debug(f"compare_laravel_versions_impl called: {from_version} -> {to_version}, filter: {file_filter}")
+
+    # Validate versions
+    if from_version not in SUPPORTED_VERSIONS:
+        return format_error(
+            f"Invalid source version: {from_version}",
+            {"supported_versions": SUPPORTED_VERSIONS}
+        )
+    if to_version not in SUPPORTED_VERSIONS:
+        return format_error(
+            f"Invalid target version: {to_version}",
+            {"supported_versions": SUPPORTED_VERSIONS}
+        )
+    if from_version == to_version:
+        return format_error("Source and target versions cannot be the same")
+
+    from_path = docs_path / from_version
+    to_path = docs_path / to_version
+
+    # Check both versions exist
+    if not from_path.exists():
+        return format_error(
+            f"Documentation not found for version {from_version}",
+            {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+        )
+    if not to_path.exists():
+        return format_error(
+            f"Documentation not found for version {to_version}",
+            {"suggestion": "Use update_laravel_docs() to fetch documentation"}
+        )
+
+    try:
+        # Get file lists
+        from_files = set(f.name for f in from_path.glob("*.md"))
+        to_files = set(f.name for f in to_path.glob("*.md"))
+
+        # Apply filter if provided
+        if file_filter:
+            filter_lower = file_filter.lower()
+            from_files = {f for f in from_files if filter_lower in f.lower()}
+            to_files = {f for f in to_files if filter_lower in f.lower()}
+
+        # Calculate differences
+        added_files = sorted(to_files - from_files)
+        removed_files = sorted(from_files - to_files)
+        common_files = sorted(from_files & to_files)
+
+        # Get metadata for both versions
+        from_metadata = get_laravel_docs_metadata(docs_path, from_version)
+        to_metadata = get_laravel_docs_metadata(docs_path, to_version)
+
+        return format_version_comparison(
+            from_version=from_version,
+            to_version=to_version,
+            added_files=added_files,
+            removed_files=removed_files,
+            common_files=common_files,
+            from_metadata=from_metadata,
+            to_metadata=to_metadata,
+            file_filter=file_filter
+        )
+
+    except Exception as e:
+        logger.error(f"Error comparing versions {from_version} -> {to_version}: {str(e)}")
+        return format_error(f"Error comparing versions: {str(e)}")
 
 
 def clear_caches():
