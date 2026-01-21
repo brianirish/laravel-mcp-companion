@@ -1,6 +1,6 @@
 inputSet:
-  identifier: ci_pr_trigger
-  name: CI PR Trigger Input Set
+  identifier: ci_pr_input_set
+  name: ci-pr-input-set
   orgIdentifier: default
   projectIdentifier: laravel_mcp_companion
   pipeline:

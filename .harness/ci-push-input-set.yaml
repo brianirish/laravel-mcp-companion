@@ -1,6 +1,6 @@
 inputSet:
-  identifier: ci_push_trigger
-  name: CI Push Trigger Input Set
+  identifier: ci_push_input_set
+  name: ci-push-input-set
   orgIdentifier: default
   projectIdentifier: laravel_mcp_companion
   pipeline:
