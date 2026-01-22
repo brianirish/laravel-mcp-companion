@@ -38,6 +38,7 @@ Introduction
 ##### Reference
 
 - Background Processes
+- Backups
 - Commands
 - Databases
 - Deployments
@@ -57,6 +58,7 @@ Introduction
 - Server Credentials
 - Servers
 - Sites
+- Storage Providers
 - Teams
 - User
 
