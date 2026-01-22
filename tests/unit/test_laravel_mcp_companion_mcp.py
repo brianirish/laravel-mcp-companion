@@ -1,7 +1,7 @@
 """Unit tests for Laravel MCP Companion MCP framework integration."""
 
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 import argparse
 
 from laravel_mcp_companion import (
