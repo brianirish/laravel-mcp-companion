@@ -7,149 +7,160 @@
 xml version="1.0" encoding="UTF-8"?
 
 https://forge.laravel.com/docs/abuse
-2025-08-08T15:48:14.032Z
+2026-01-22T19:25:16.365Z
 
 https://forge.laravel.com/docs/api
+2026-01-22T19:25:16.358Z
 
 https://forge.laravel.com/docs/api-reference/filtering
-2025-10-16T11:04:36.734Z
+2026-01-22T19:25:16.582Z
 
 https://forge.laravel.com/docs/api-reference/introduction
-2025-10-16T11:04:36.733Z
+2026-01-22T19:25:16.652Z
 
 https://forge.laravel.com/docs/api-reference/pagination
-2025-10-16T11:04:36.732Z
+2026-01-22T19:25:16.727Z
 
 https://forge.laravel.com/docs/api-reference/rate-limiting
-2025-10-06T17:35:35.024Z
+2026-01-22T19:25:16.771Z
 
 https://forge.laravel.com/docs/api-reference/relationships
-2025-10-16T11:04:36.736Z
+2026-01-22T19:25:16.840Z
 
 https://forge.laravel.com/docs/changelog
-2026-01-19T15:10:48.802Z
+2026-01-22T19:25:17.429Z
 
 https://forge.laravel.com/docs/cli
-2025-11-25T22:16:50.576Z
+2026-01-22T19:25:17.420Z
 
 https://forge.laravel.com/docs/integrations/aikido
+2026-01-22T19:25:17.421Z
 
 https://forge.laravel.com/docs/integrations/envoyer
-2025-11-12T16:42:09.853Z
+2026-01-22T19:25:17.423Z
 
 https://forge.laravel.com/docs/integrations/sentry
-2025-10-01T13:14:09.747Z
+2026-01-22T19:25:17.431Z
 
 https://forge.laravel.com/docs/introduction
-2025-10-06T11:50:07.057Z
+2026-01-22T19:25:17.448Z
 
 https://forge.laravel.com/docs/knowledge-base/networks
-2025-10-16T11:04:36.755Z
+2026-01-22T19:25:17.447Z
 
 https://forge.laravel.com/docs/knowledge-base/scheduled-jobs
+2026-01-22T19:25:17.449Z
 
 https://forge.laravel.com/docs/knowledge-base/servers
-2025-10-16T11:04:36.757Z
+2026-01-22T19:25:17.452Z
 
 https://forge.laravel.com/docs/knowledge-base/sites
-2025-10-15T13:40:56.688Z
+2026-01-22T19:25:17.453Z
 
 https://forge.laravel.com/docs/knowledge-base/source-control
+2026-01-22T19:25:17.453Z
 
 https://forge.laravel.com/docs/organizations
-2025-10-28T08:54:42.391Z
+2026-01-22T19:25:17.450Z
 
 https://forge.laravel.com/docs/recipes
+2026-01-22T19:25:17.451Z
 
 https://forge.laravel.com/docs/resources/background-processes
-2025-10-09T13:36:41.137Z
+2026-01-22T19:25:17.454Z
 
 https://forge.laravel.com/docs/resources/caches
-2025-10-16T11:04:36.786Z
+2026-01-22T19:25:17.455Z
 
 https://forge.laravel.com/docs/resources/database-backups
-2026-01-13T15:13:11.831Z
+2026-01-22T19:25:17.476Z
 
 https://forge.laravel.com/docs/resources/databases
-2025-11-10T11:52:32.253Z
+2026-01-22T19:25:17.483Z
 
 https://forge.laravel.com/docs/resources/network
-2025-10-17T15:11:05.269Z
+2026-01-22T19:25:17.485Z
 
 https://forge.laravel.com/docs/resources/packages
+2026-01-22T19:25:17.474Z
 
 https://forge.laravel.com/docs/resources/scheduler
-2025-10-08T20:47:39.311Z
+2026-01-22T19:25:17.479Z
 
 https://forge.laravel.com/docs/sdk
-2026-01-13T23:16:52.319Z
+2026-01-22T19:25:17.485Z
 
 https://forge.laravel.com/docs/server-providers
-2026-01-15T19:23:02.139Z
+2026-01-22T19:25:17.480Z
 
 https://forge.laravel.com/docs/servers/laravel-vps
-2025-10-31T16:24:30.014Z
+2026-01-22T19:25:17.487Z
 
 https://forge.laravel.com/docs/servers/load-balancing
-2026-01-01T02:44:35.166Z
+2026-01-22T19:25:17.482Z
 
 https://forge.laravel.com/docs/servers/monitoring
-2025-10-01T13:14:10.562Z
+2026-01-22T19:25:17.478Z
 
 https://forge.laravel.com/docs/servers/nginx-templates
-2025-10-01T13:14:11.548Z
+2026-01-22T19:25:17.508Z
 
 https://forge.laravel.com/docs/servers/php
-2025-11-25T22:16:50.575Z
+2026-01-22T19:25:17.509Z
 
 https://forge.laravel.com/docs/servers/real-time-metrics
+2026-01-22T19:25:17.512Z
 
 https://forge.laravel.com/docs/servers/security
+2026-01-22T19:25:17.513Z
 
 https://forge.laravel.com/docs/servers/the-basics
-2025-10-24T14:08:10.487Z
+2026-01-22T19:25:17.506Z
 
 https://forge.laravel.com/docs/servers/types
-2025-10-01T13:14:11.551Z
+2026-01-22T19:25:17.509Z
 
 https://forge.laravel.com/docs/sites/commands
-2025-10-29T14:12:50.096Z
+2026-01-22T19:25:17.510Z
 
 https://forge.laravel.com/docs/sites/deployments
-2025-12-19T19:31:25.709Z
+2026-01-22T19:25:17.514Z
 
 https://forge.laravel.com/docs/sites/domains
-2026-01-13T23:16:52.317Z
+2026-01-22T19:25:17.514Z
 
 https://forge.laravel.com/docs/sites/environment-variables
-2025-10-17T15:11:06.890Z
+2026-01-22T19:25:17.511Z
 
 https://forge.laravel.com/docs/sites/laravel
-2025-10-03T07:05:12.724Z
+2026-01-22T19:25:17.532Z
 
 https://forge.laravel.com/docs/sites/logs
+2026-01-22T19:25:17.530Z
 
 https://forge.laravel.com/docs/sites/network
+2026-01-22T19:25:17.533Z
 
 https://forge.laravel.com/docs/sites/queues
-2025-10-17T15:11:06.891Z
+2026-01-22T19:25:17.533Z
 
 https://forge.laravel.com/docs/sites/the-basics
-2025-10-16T11:04:37.068Z
+2026-01-22T19:25:17.538Z
 
 https://forge.laravel.com/docs/sites/user-isolation
-2025-11-25T22:16:50.577Z
+2026-01-22T19:25:17.536Z
 
 https://forge.laravel.com/docs/source-control
-2025-11-04T15:12:45.294Z
+2026-01-22T19:25:17.537Z
 
 https://forge.laravel.com/docs/ssh
-2025-10-16T11:04:37.068Z
+2026-01-22T19:25:17.534Z
 
 https://forge.laravel.com/docs/storage-providers
-2026-01-14T18:43:09.364Z
+2026-01-22T19:25:17.535Z
 
 https://forge.laravel.com/docs/support
-2025-10-01T13:14:11.575Z
+2026-01-22T19:25:17.538Z
 
 https://forge.laravel.com/docs/teams
+2026-01-22T19:25:17.553Z
