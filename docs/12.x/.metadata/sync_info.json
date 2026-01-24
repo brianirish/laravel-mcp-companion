@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "ca2cec017caa8fd1356cf81b36291f5312c43d35",
-  "commit_date": "2026-01-20T15:38:49Z",
-  "commit_message": "Merge branch 'Ray-s-Forks/12.x' into 12.x",
-  "commit_url": "https://github.com/laravel/docs/commit/ca2cec017caa8fd1356cf81b36291f5312c43d35",
-  "sync_time": "2026-01-21T01:29:06Z"
+  "commit_sha": "b4492810ffb36c0d2af51b2248efa8685375a236",
+  "commit_date": "2026-01-23T21:24:15Z",
+  "commit_message": "[12.x] Add `hasSole` to collections (#11005)\n\n* add `hasSole` to collections\n\n* Update collections.md\n\n* remove `containsOneItem` section",
+  "commit_url": "https://github.com/laravel/docs/commit/b4492810ffb36c0d2af51b2248efa8685375a236",
+  "sync_time": "2026-01-24T01:24:38Z"
 }

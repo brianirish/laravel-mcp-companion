@@ -219,8 +219,6 @@ Once your resources are registered with Nova, they will be available in the Nova
 
 ![Nova Dashboard](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/dashboard.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=55c6eb6b0402f001136f8dca6a79fd24)
 
-Dashboard
-
 If you do not want a resource to appear in the sidebar, you may override the `displayInNavigation` property of your resource class:
 
 app/Nova/Post.php
@@ -315,8 +313,6 @@ This will display your table rows with less visual height, enabling more data to
 
 ![Tight Table Style](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/resource-tight-table.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=070aa958c0d2190fdde8143b56e1eecf)
 
-Tight Table Style
-
 ### [​](#column-borders) Column Borders
 
 You can instruct Nova to display column borders by overriding the static `$showColumnBorders` property or the static `showColumnBorders` method on your resource class:
@@ -340,6 +336,6 @@ Setting this property to `true` will instruct Nova to display the table with bor
 
 ![Table Column Borders](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/resource-column-borders.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d6d839bdfa1d09a82600648e033bfa1b)
 
-Table Colum
+## [​](#resource-table-click-action) Reso
 
 *[Content truncated for length]*
