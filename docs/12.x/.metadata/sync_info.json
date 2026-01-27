@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "b4492810ffb36c0d2af51b2248efa8685375a236",
-  "commit_date": "2026-01-23T21:24:15Z",
-  "commit_message": "[12.x] Add `hasSole` to collections (#11005)\n\n* add `hasSole` to collections\n\n* Update collections.md\n\n* remove `containsOneItem` section",
-  "commit_url": "https://github.com/laravel/docs/commit/b4492810ffb36c0d2af51b2248efa8685375a236",
-  "sync_time": "2026-01-24T01:24:38Z"
+  "commit_sha": "a9bcd56cc73801ae930c5e53a7bc48075a5e3e80",
+  "commit_date": "2026-01-26T10:33:32Z",
+  "commit_message": "Add Boost Docs (#11004)\n\n* Add boost docs\n\n* Refactor Boost documentation structure and update content\n\n* Formatting\n\n* Add \"Guidelines vs. Skills\" section to Boost documentation\n\n* Formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/a9bcd56cc73801ae930c5e53a7bc48075a5e3e80",
+  "sync_time": "2026-01-27T01:42:25Z"
 }
