@@ -64,4 +64,11 @@ pipeline:
                       spec:
                         paths:
                           - results.xml
+              - step:
+                  identifier: mcp_inspector_smoke_test
+                  name: MCP Inspector smoke test
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: npx @modelcontextprotocol/inspector --cli --method tools/list python laravel_mcp_companion.py | grep -q "search_laravel_docs"
 
