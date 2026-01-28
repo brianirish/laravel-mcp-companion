@@ -70,5 +70,12 @@ pipeline:
                   type: Run
                   spec:
                     shell: Sh
-                    command: npx @modelcontextprotocol/inspector --cli --method tools/list python laravel_mcp_companion.py | grep -q "search_laravel_docs"
+                    command: |
+                      # Harness Cloud runner ships Node v16, Inspector requires >= 22
+                      curl -fsSL https://fnm.vercel.app/install | bash
+                      export PATH="$HOME/.local/share/fnm:$PATH"
+                      eval "$(fnm env)"
+                      fnm install 22
+                      fnm use 22
+                      npx @modelcontextprotocol/inspector --cli --method tools/list python laravel_mcp_companion.py | grep -q "search_laravel_docs"
 
