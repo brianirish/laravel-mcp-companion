@@ -114,6 +114,7 @@ pipeline:
                     command: |
                       git config --local user.email "action@github.com"
                       git config --local user.name "GitHub Action"
+                      git remote set-url origin https://x-access-token:$(echo '<+secrets.getValue("GITHUB_TOKEN")>')@github.com/brianirish/laravel-mcp-companion.git
                       git checkout -b update-laravel-docs
                       git add docs/
                       git add docs/.metadata/
@@ -248,6 +249,7 @@ pipeline:
                     shell: Bash
                     command: |
                       export GH_TOKEN=<+secrets.getValue("PAT_FOR_WORKFLOWS")>
+                      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/brianirish/laravel-mcp-companion.git
 
                       # Get the latest tag, default to v0.0.0 if no tags exist
                       LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
