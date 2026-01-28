@@ -5,16 +5,9 @@ the Model Context Protocol specification.
 """
 
 import pytest
-from pathlib import Path
-from unittest.mock import patch
-import json
 import re
 
-from laravel_mcp_companion import (
-    create_mcp_server,
-    PACKAGE_CATALOG,
-    TOOL_DESCRIPTIONS,
-)
+from laravel_mcp_companion import create_mcp_server
 
 
 @pytest.fixture
