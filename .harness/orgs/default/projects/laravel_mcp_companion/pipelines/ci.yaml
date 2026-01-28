@@ -69,7 +69,7 @@ pipeline:
                   name: MCP Inspector smoke test
                   type: Run
                   spec:
-                    shell: Sh
+                    shell: Bash
                     command: |
                       # Harness Cloud runner ships Node v16, Inspector requires >= 22
                       curl -fsSL https://fnm.vercel.app/install | bash
