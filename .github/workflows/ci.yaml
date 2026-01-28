@@ -2,11 +2,13 @@ name: CI
 permissions:
   contents: read
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+# Disabled - CI moved to Harness
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+on: workflow_dispatch
 
 jobs:
   test:
