@@ -90,8 +90,9 @@ pipeline:
                     condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
                   spec:
                     shell: Sh
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
                     command: |
-                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
 
                       # Close any existing docs update PRs
                       PR_NUMBERS=$(gh pr list --state open --head update-laravel-docs --json number -q '.[].number')
@@ -111,10 +112,12 @@ pipeline:
                     condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
                   spec:
                     shell: Sh
+                    envVariables:
+                      GITHUB_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
                     command: |
                       git config --local user.email "action@github.com"
                       git config --local user.name "GitHub Action"
-                      git remote set-url origin https://x-access-token:$(echo '<+secrets.getValue("GITHUB_TOKEN")>')@github.com/brianirish/laravel-mcp-companion.git
+                      git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/brianirish/laravel-mcp-companion.git"
                       git checkout -b update-laravel-docs
                       git add docs/
                       git add docs/.metadata/
@@ -129,9 +132,9 @@ pipeline:
                     condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
                   spec:
                     shell: Sh
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
                     command: |
-                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
-
                       PR_URL=$(gh pr create \
                         --title "Update Laravel and external services documentation" \
                         --body "$(cat <<'PRBODY'
@@ -169,8 +172,9 @@ pipeline:
                     condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
                   spec:
                     shell: Sh
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
                     command: |
-                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
                       PR_NUMBER=<+execution.steps.create_pr.output.outputVariables.PR_NUMBER>
 
                       gh pr merge "$PR_NUMBER" --auto --squash
@@ -207,8 +211,9 @@ pipeline:
                   type: Run
                   spec:
                     shell: Sh
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
                     command: |
-                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
                       PR_NUMBER=<+pipeline.stages.check_and_update.spec.execution.steps.create_pr.output.outputVariables.PR_NUMBER>
 
                       if [ -z "$PR_NUMBER" ]; then
@@ -247,9 +252,10 @@ pipeline:
                   type: Run
                   spec:
                     shell: Bash
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("PAT_FOR_WORKFLOWS")>
                     command: |
-                      export GH_TOKEN=<+secrets.getValue("PAT_FOR_WORKFLOWS")>
-                      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/brianirish/laravel-mcp-companion.git
+                      git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/brianirish/laravel-mcp-companion.git"
 
                       # Get the latest tag, default to v0.0.0 if no tags exist
                       LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
