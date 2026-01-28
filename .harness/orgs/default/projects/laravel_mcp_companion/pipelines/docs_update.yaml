@@ -1,0 +1,272 @@
+pipeline:
+  identifier: docs_update
+  name: Docs Update
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  properties:
+    ci:
+      codebase:
+        build: <+input>
+        connectorRef: Laravel_MCP_Companion
+        repoName: brianirish/laravel-mcp-companion
+  stages:
+    - stage:
+        identifier: check_and_update
+        name: Check and Update Docs
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  identifier: fetch_latest_main
+                  name: Fetch latest main
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      git fetch origin main
+                      git reset --hard origin/main
+              - step:
+                  identifier: install_dependencies
+                  name: Install dependencies
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      python -m venv .venv
+                      source .venv/bin/activate
+                      pip install fastmcp "mcp[cli,client]" markdownify beautifulsoup4 feedparser
+              - step:
+                  identifier: check_updates
+                  name: Check for documentation updates
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      set +e
+                      source .venv/bin/activate
+
+                      echo "Starting documentation update with auto-discovery..."
+                      python docs_updater.py --all-versions --log-level INFO
+                      UPDATE_STATUS=$?
+
+                      echo "Updating external services documentation..."
+                      python docs_updater.py --external-only --log-level INFO
+                      EXTERNAL_STATUS=$?
+
+                      echo "Checking external services status..."
+                      python docs_updater.py --status --external-only
+
+                      if git diff --quiet docs/; then
+                        echo "No file changes detected"
+                        UPDATES_AVAILABLE="false"
+                      else
+                        echo "File changes detected"
+                        UPDATES_AVAILABLE="true"
+
+                        CHANGED_FILES=$(git diff --name-only docs/ | wc -l)
+                        echo "Found $CHANGED_FILES changed documentation files"
+
+                        NEW_EXTERNAL_FILES=$(git diff --name-status docs/external/ | grep "^A" | wc -l)
+                        if [ "$NEW_EXTERNAL_FILES" -gt 0 ]; then
+                          echo "Auto-discovery found $NEW_EXTERNAL_FILES new external documentation files"
+                        fi
+                      fi
+                    outputVariables:
+                      - name: UPDATES_AVAILABLE
+              - step:
+                  identifier: close_existing_prs
+                  name: Close existing pull requests
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
+
+                      # Close any existing docs update PRs
+                      PR_NUMBERS=$(gh pr list --state open --head update-laravel-docs --json number -q '.[].number')
+                      for PR in $PR_NUMBERS; do
+                        echo "Closing existing PR #$PR"
+                        gh pr close "$PR"
+                      done
+
+                      # Delete the remote branch if it exists
+                      git push origin --delete update-laravel-docs 2>/dev/null || echo "No existing remote branch to delete"
+              - step:
+                  identifier: commit_and_push
+                  name: Commit and push changes
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      git config --local user.email "action@github.com"
+                      git config --local user.name "GitHub Action"
+                      git checkout -b update-laravel-docs
+                      git add docs/
+                      git add docs/.metadata/
+                      git commit -m "Update Laravel and external services documentation" || exit 0
+                      git push origin update-laravel-docs --force
+              - step:
+                  identifier: create_pr
+                  name: Create pull request
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
+
+                      PR_URL=$(gh pr create \
+                        --title "Update Laravel and external services documentation" \
+                        --body "$(cat <<'PRBODY'
+                      Automated PR to update Laravel and external services documentation to the latest version.
+
+                      ## Auto-Discovery Status
+                      This update includes enhancements with auto-discovery for external Laravel services:
+                      - Laravel Forge - Auto-discovery enabled for comprehensive section detection
+                      - Laravel Vapor - Auto-discovery enabled with Mintlify navigation parsing
+                      - Laravel Envoyer - Auto-discovery enabled with redirect validation
+                      - Laravel Nova - Auto-discovery enabled with version detection
+
+                      ## Changes Included
+                      - Core Laravel documentation updates for all supported versions
+                      - External Laravel services documentation with auto-discovered sections
+                      - Enhanced content validation and quality scoring
+                      - Improved fallback mechanisms for manual configuration
+
+                      Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
+                      PRBODY
+                      )" \
+                        --head update-laravel-docs \
+                        --base main)
+
+                      PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+                      echo "Created PR #$PR_NUMBER: $PR_URL"
+                    outputVariables:
+                      - name: PR_NUMBER
+              - step:
+                  identifier: enable_auto_merge
+                  name: Enable auto-merge
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
+                      PR_NUMBER=<+execution.steps.create_pr.output.outputVariables.PR_NUMBER>
+
+                      gh pr merge "$PR_NUMBER" --auto --squash
+
+                      echo "Checking for required status checks..."
+                      CHECK_COUNT=$(gh pr checks "$PR_NUMBER" --json state | jq '. | length')
+
+                      if [ "$CHECK_COUNT" -gt 0 ]; then
+                        echo "Found $CHECK_COUNT checks. Waiting for all checks to complete..."
+                        gh pr checks "$PR_NUMBER" --watch
+                      else
+                        echo "No checks found. Auto-merge will proceed without waiting for checks."
+                      fi
+    - stage:
+        identifier: auto_tag_after_merge
+        name: Auto Tag After Merge
+        type: CI
+        when:
+          pipelineStatus: Success
+          condition: <+pipeline.stages.check_and_update.spec.execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  identifier: wait_for_merge
+                  name: Wait for PR to be merged
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      export GH_TOKEN=<+secrets.getValue("GITHUB_TOKEN")>
+                      PR_NUMBER=<+pipeline.stages.check_and_update.spec.execution.steps.create_pr.output.outputVariables.PR_NUMBER>
+
+                      if [ -z "$PR_NUMBER" ]; then
+                        echo "No PR number available"
+                        exit 1
+                      fi
+
+                      # Wait up to 10 minutes for the PR to be merged
+                      for i in $(seq 1 80); do
+                        PR_STATE=$(gh pr view "$PR_NUMBER" --json state,mergedAt -q '.state')
+                        if [ "$PR_STATE" = "MERGED" ]; then
+                          echo "PR $PR_NUMBER has been merged!"
+                          MERGE_COMMIT=$(gh pr view "$PR_NUMBER" --json mergeCommit -q '.mergeCommit.oid')
+                          echo "Merge commit: $MERGE_COMMIT"
+                          exit 0
+                        fi
+                        echo "PR state: $PR_STATE. Waiting... (attempt $i/80)"
+                        sleep 15
+                      done
+                      echo "PR was not merged within timeout"
+                      exit 1
+                    outputVariables:
+                      - name: MERGE_COMMIT
+              - step:
+                  identifier: checkout_merge_commit
+                  name: Checkout merge commit
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      git fetch origin
+                      git checkout <+execution.steps.wait_for_merge.output.outputVariables.MERGE_COMMIT>
+              - step:
+                  identifier: create_tag_and_release
+                  name: Create tag and release
+                  type: Run
+                  spec:
+                    shell: Sh
+                    command: |
+                      export GH_TOKEN=<+secrets.getValue("PAT_FOR_WORKFLOWS")>
+
+                      # Get the latest tag, default to v0.0.0 if no tags exist
+                      LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+                      echo "Latest tag: $LATEST_TAG"
+
+                      # Extract version numbers
+                      VERSION=${LATEST_TAG#v}
+                      IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+                      # Increment patch version for docs updates
+                      NEW_PATCH=$((PATCH + 1))
+                      NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+
+                      echo "Creating new tag: $NEW_VERSION"
+                      git tag "$NEW_VERSION"
+                      git push origin "$NEW_VERSION"
+
+                      echo "Creating GitHub release: $NEW_VERSION"
+                      gh release create "$NEW_VERSION" \
+                        --title "$NEW_VERSION" \
+                        --notes "Documentation Update - Updated Laravel and external services documentation to latest version" \
+                        --latest

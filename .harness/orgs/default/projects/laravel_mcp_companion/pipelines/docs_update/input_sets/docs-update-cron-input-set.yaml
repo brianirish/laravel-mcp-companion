@@ -1,0 +1,14 @@
+inputSet:
+  identifier: docs_update_cron_input_set
+  name: docs-update-cron-input-set
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  pipeline:
+    identifier: docs_update
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: main

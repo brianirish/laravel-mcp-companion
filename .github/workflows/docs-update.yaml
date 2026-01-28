@@ -3,10 +3,12 @@ permissions:
   contents: write
   pull-requests: write
 
-on:
-  schedule:
-    - cron: '0 0 * * *'  # Daily at midnight UTC
-  workflow_dispatch:  # Manual trigger
+# Disabled - Docs update moved to Harness
+# on:
+#   schedule:
+#     - cron: '0 0 * * *'  # Daily at midnight UTC
+#   workflow_dispatch:  # Manual trigger
+on: workflow_dispatch
 
 jobs:
   check-update:
