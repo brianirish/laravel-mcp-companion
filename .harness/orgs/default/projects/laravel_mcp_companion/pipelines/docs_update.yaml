@@ -38,7 +38,7 @@ pipeline:
                   name: Install dependencies
                   type: Run
                   spec:
-                    shell: Sh
+                    shell: Bash
                     command: |
                       python -m venv .venv
                       source .venv/bin/activate
@@ -48,7 +48,7 @@ pipeline:
                   name: Check for documentation updates
                   type: Run
                   spec:
-                    shell: Sh
+                    shell: Bash
                     command: |
                       set +e
                       source .venv/bin/activate
@@ -245,7 +245,7 @@ pipeline:
                   name: Create tag and release
                   type: Run
                   spec:
-                    shell: Sh
+                    shell: Bash
                     command: |
                       export GH_TOKEN=<+secrets.getValue("PAT_FOR_WORKFLOWS")>
 
