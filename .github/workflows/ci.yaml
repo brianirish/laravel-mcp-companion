@@ -32,6 +32,13 @@ jobs:
       run: mypy --ignore-missing-imports .
     - name: Run tests with pytest
       run: pytest --cov --cov-branch --cov-report=xml
+    - name: Setup Node.js for MCP Inspector
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: MCP Inspector smoke test
+      run: |
+        npx @modelcontextprotocol/inspector --cli list-tools python laravel_mcp_companion.py | grep -q "search_laravel_docs"
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       if: success()

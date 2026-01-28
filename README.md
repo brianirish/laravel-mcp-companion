@@ -93,10 +93,10 @@ Use the `claude mcp add` command:
 
 ```bash
 # Add with Docker
-claude mcp add laravel-mcp-companion docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest
+claude mcp add laravel-mcp-companion -- docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest
 
 # Or add to project-specific config (for team sharing)
-claude mcp add laravel-mcp-companion docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --scope project
+claude mcp add laravel-mcp-companion --scope project -- docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest
 ```
 
 The `--scope project` option creates a `.mcp.json` file in your project root that can be committed to version control.
@@ -152,7 +152,7 @@ Compare to the equivalent JSON (nearly 2x the tokens):
 
 ## Features and Roadmap
 
-### Current Features (v0.8.0)
+### Current Features (v0.7.22)
 - ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
 - ✅ **Community package docs** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
@@ -169,6 +169,59 @@ Compare to the equivalent JSON (nearly 2x the tokens):
 - 🚀 **v1.0.0**: The complete Laravel documentation navigator
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).
+
+## Development
+
+### Prerequisites
+- Python 3.12+
+- Node.js 18+ (for MCP Inspector)
+
+### Setup
+```bash
+git clone https://github.com/brianirish/laravel-mcp-companion
+cd laravel-mcp-companion
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt -r requirements-dev.txt
+```
+
+### Running Tests
+```bash
+# All tests with coverage
+pytest --cov --cov-report=html
+
+# Unit tests only
+pytest tests/unit/
+
+# Integration tests only
+pytest tests/integration/
+
+# Protocol compliance tests
+pytest tests/protocol/ -m protocol
+```
+
+### Manual Testing with MCP Inspector
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) provides a visual UI for testing MCP servers.
+
+```bash
+# Launch Inspector (opens browser at http://localhost:6274)
+npx @modelcontextprotocol/inspector python laravel_mcp_companion.py
+
+# With specific version
+npx @modelcontextprotocol/inspector python laravel_mcp_companion.py --version 12.x
+```
+
+Use the Inspector to:
+- **Tools tab**: Test all tools with auto-generated input forms
+- **Resources tab**: Browse `laravel://` and `laravel-external://` resources
+- **Prompts tab**: Test prompt templates
+
+### Code Quality
+```bash
+ruff check --fix .     # Linting
+mypy --ignore-missing-imports .  # Type checking
+black .                # Formatting
+```
 
 ## License
 

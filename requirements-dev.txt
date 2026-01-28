@@ -4,3 +4,4 @@ pytest
 pytest-cov
 pytest-asyncio
 black
+inline-snapshot
