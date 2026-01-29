@@ -152,7 +152,7 @@ Compare to the equivalent JSON (nearly 2x the tokens):
 
 ## Features and Roadmap
 
-### Current Features (v0.7.22)
+### Current Features (v0.8.20)
 - ✅ **Multi-version Laravel docs** - All versions from 6.x to latest
 - ✅ **Auto-discovery engine** - Finds new docs across Forge, Vapor, Nova, Envoyer
 - ✅ **Community package docs** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
