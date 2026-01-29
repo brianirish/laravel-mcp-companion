@@ -4,6 +4,8 @@
 
 ---
 
+[Migrating from Vapor to Cloud? See how Pyle did it (Webinar)](https://lrvl.co/vapor-cloud)
+
 [Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
 
 Search...
@@ -289,6 +291,6 @@ In addition, environment variables should not contain `AWS_ACCESS_KEY_ID`, `AWS_
 
 ## [​](#encrypted-environment-files) Encrypted Environment Files
 
-Vapor provides built-in support for Laravel’s [encrypted environment files](https://laravel.com/docs/configuration#encrypting-environment-files). If Vapor discovers an encrypted environment file w
+Vapor provides built-in support for Laravel’s [encrypted environment files](https://laravel.com/docs/co
 
 *[Content truncated for length]*

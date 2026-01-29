@@ -28,7 +28,7 @@ https://forge.laravel.com/docs/api-reference/relationships
 2026-01-22T19:25:16.840Z
 
 https://forge.laravel.com/docs/changelog
-2026-01-22T19:25:17.429Z
+2026-01-27T02:57:41.609Z
 
 https://forge.laravel.com/docs/cli
 2026-01-22T19:25:17.420Z
@@ -151,10 +151,10 @@ https://forge.laravel.com/docs/sites/user-isolation
 2026-01-22T19:25:17.536Z
 
 https://forge.laravel.com/docs/source-control
-2026-01-22T19:25:17.537Z
+2026-01-28T15:16:00.952Z
 
 https://forge.laravel.com/docs/ssh
-2026-01-22T19:25:17.534Z
+2026-01-28T15:16:00.954Z
 
 https://forge.laravel.com/docs/storage-providers
 2026-01-22T19:25:17.535Z

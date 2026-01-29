@@ -4,6 +4,8 @@
 
 ---
 
+[Migrating from Vapor to Cloud? See how Pyle did it (Webinar)](https://lrvl.co/vapor-cloud)
+
 [Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
 
 Search...
@@ -286,6 +288,6 @@ If you are using Laravel Vite with your project, you only need to utilize the `a
 
 If you are compiling your application’s assets in one of the build steps listed in your `vapor.yml` configuration file, you may need your build script to be able to access your environment variables. An excellent example of this requirement is instantiating a frontend SDK such as Pusher.
 Build steps are executed in the environment where a deployment is initiated - typically, this will be your local machine or your CI pipeline. As such, you must ensure the required environment variables are available in that environment.
-To assist with this, Vapor will attempt to load variables first from `.env.[environment]` (e.g. `.env.staging`). If that file does not exist, Vapor will attempt to load variables from the `.env` file. You should 
+To assist with this, Vapor will attempt to load variables first from `.env.[environment]` (e.g. `.env.staging`). If tha
 
 *[Content truncated for length]*

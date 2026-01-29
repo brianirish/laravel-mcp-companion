@@ -4,6 +4,8 @@
 
 ---
 
+[Migrating from Vapor to Cloud? See how Pyle did it (Webinar)](https://lrvl.co/vapor-cloud)
+
 [Laravel Vapor home page![light logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/light.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=b75f22b35cd4eb8d659a33a7efe9a317)![dark logo](https://mintcdn.com/vapor/xzCd7jrV_PrTp5n0/logo/dark.svg?fit=max&auto=format&n=xzCd7jrV_PrTp5n0&q=85&s=bbbfac3aab3d7a07d5382ee8fa9a669e)](https://vapor.laravel.com)
 
 Search...
@@ -238,6 +240,6 @@ The process for creating the role is outlined in these steps:
 Since Vapor manages many types of resources across more than a dozen AWS services, it may be convenient to create a role with the `AdministratorAccess` policy. If desired, you may create a separate AWS account to house this role and contain all of your Vapor resources.
 
 On the permissions management screen, you may grant full administrator access to the IAM role by selecting the “AdministratorAccess” policy. Or, you would prefer to not provide administrator access to Vapor, you may instead create a custom permission policy with the specific permissions needed by Vapor.
-It is necessary to create two policies due to the policy size limit set by AWS. To do so, select “Create policy” from the “Permissions policies” panel. Choose the JSON option and provide the first permission definition below. Then, follow the same process to create anot
+It is necessary to create two policies due to the policy size limit set by AWS. To do so, select “Create policy” from the “Permissions policies” panel. Choose the JSON option an
 
 *[Content truncated for length]*
