@@ -1,12 +1,14 @@
 name: Release
 
-on:
-  release:
-    types: [published]
-  workflow_dispatch:  # Manual trigger
-  push:
-    tags:
-      - 'v*'  # triggers on version tags like v1.0.0
+# Disabled - Release moved to Harness
+# on:
+#   release:
+#     types: [published]
+#   workflow_dispatch:  # Manual trigger
+#   push:
+#     tags:
+#       - 'v*'  # triggers on version tags like v1.0.0
+on: workflow_dispatch
 
 jobs:
   build-docker:
