@@ -248,19 +248,24 @@ pipeline:
                       fi
 
                       # Wait up to 10 minutes for the PR to be merged
+                      MERGED=false
                       for i in $(seq 1 80); do
                         PR_STATE=$(gh pr view "$PR_NUMBER" --json state,mergedAt -q '.state')
                         if [ "$PR_STATE" = "MERGED" ]; then
                           echo "PR $PR_NUMBER has been merged!"
                           MERGE_COMMIT=$(gh pr view "$PR_NUMBER" --json mergeCommit -q '.mergeCommit.oid')
                           echo "Merge commit: $MERGE_COMMIT"
-                          exit 0
+                          MERGED=true
+                          break
                         fi
                         echo "PR state: $PR_STATE. Waiting... (attempt $i/80)"
                         sleep 15
                       done
-                      echo "PR was not merged within timeout"
-                      exit 1
+
+                      if [ "$MERGED" = "false" ]; then
+                        echo "PR was not merged within timeout"
+                        exit 1
+                      fi
                     outputVariables:
                       - name: MERGE_COMMIT
               - step:
