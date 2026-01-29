@@ -1,264 +1,180 @@
 # Laravel MCP Companion - Roadmap
 
-This roadmap outlines the planned development path toward v1.0.0 and beyond.
+This roadmap outlines the planned development path toward v1.0.0.
 
 ## Mission Statement
 
-**Laravel MCP Companion** is a documentation aggregator and navigator designed specifically for **junior and intermediate Laravel developers**. Rather than generating content, we centralize and organize existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable and searchable through MCP.
+**Laravel MCP Companion** is a documentation aggregator and navigator designed specifically for **junior and intermediate Laravel developers**. We centralize and organize existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable through MCP.
 
-## Current Version: v0.7.0
-- ✅ **Laravel MCP Companion**: Comprehensive documentation aggregator and navigator
-- ✅ **Multi-version Laravel documentation** support (6.x through latest)
-- ✅ **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
-- ✅ **Community Package Documentation**: Spatie, Livewire, Inertia.js, Filament integration
-- ✅ **Enhanced content retrieval** and search capabilities with quality validation
-- ✅ **Package recommendation system** with 50+ curated packages
-- ✅ **Context-aware search** with surrounding text snippets
-- ✅ **Document structure extraction** and category browsing
-- ✅ **Future-proof version detection** via GitHub API
-- ✅ **Automated daily documentation updates** with auto-discovery metrics
-- ✅ **Streamlined distribution** via Docker
-- ✅ **Documentation aggregator strategy** with intelligent auto-discovery implementation
-- ✅ **Comprehensive test suite** with 84% code coverage
-- ✅ **Asset filtering** to prevent non-documentation files from being saved
-- ✅ **Markdownify integration** for HTML to Markdown conversion
+**We complement, not compete with, official Laravel tools.** Laravel's [Boost](https://github.com/laravel/boost) focuses on code generation context for active development. We focus on documentation navigation, learning paths, and reference material.
 
-## ✅ v0.5.0 - Laravel Ecosystem Documentation (COMPLETED)
-**Released: Q2 2024**
+---
 
-### Auto-Discovery System ✅
-- ✅ **Auto-Discovery Engine**: Automatically discovers Laravel service documentation sections
-- ✅ **Content Validation**: Quality scoring and validation for discovered documentation
-- ✅ **Graceful Fallback**: Intelligent fallback to manual configuration when needed
-- ✅ **117+ Sections**: Discovered 23% more documentation than manual configuration
+## Current Version: v0.9.0
 
-### Laravel Services Documentation ✅
-- ✅ **Laravel Forge**: Server management documentation (53 sections auto-discovered)
-- ✅ **Laravel Vapor**: Serverless deployment docs (16 sections auto-discovered)
-- ✅ **Laravel Envoyer**: Zero-downtime deployment documentation (intelligent fallback)
-- ✅ **Laravel Nova**: Admin panel documentation (38 sections with version detection)
+### ✅ Completed Features
+- **Multi-version Laravel documentation** support (6.x through latest)
+- **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
+- **Community Package Documentation**: Spatie, Livewire, Inertia.js, Filament integration (42,000+ lines)
+- **Learning Resource Infrastructure**: Difficulty classification, 15 semantic categories
+- **8 New MCP Tools**: Learning paths, "I need X" finder, category browsing, difficulty filtering
+- **Package recommendation system** with 50+ curated packages
+- **Context-aware search** with surrounding text snippets
+- **Future-proof version detection** via GitHub API
+- **Automated daily documentation updates** with auto-discovery metrics
+- **Comprehensive test suite** with 85%+ code coverage
 
-### Infrastructure Improvements ✅
-- ✅ **Enhanced documentation indexing** with auto-discovery integration
-- ✅ **Robust error handling** with retry mechanisms and graceful degradation
-- ✅ **Performance optimization** with intelligent caching and respectful web scraping
-- ✅ **GitHub Actions enhancement** with auto-discovery metrics and reporting
+---
 
-## ✅ v0.6.0 - Test Coverage & Quality Improvements (COMPLETED)
-**Released: Q3 2024**
+## ✅ v0.9.0 - Learning Resources & Discovery (COMPLETED)
+**Released: Q1 2026**
 
-### Testing Infrastructure ✅
-- ✅ **Comprehensive Test Suite**: Increased test coverage from 34% to 84%
-- ✅ **Refactored Architecture**: Extracted testable components for better modularity
-- ✅ **Integration Tests**: Added tests using FastMCP's Client class
-- ✅ **Security Tests**: Added path traversal protection tests
-- ✅ **Async Test Support**: Added pytest-asyncio for async testing
+### Learning Resource Infrastructure ✅
+- ✅ Learning resource data model with difficulty levels (beginner/intermediate/advanced)
+- ✅ 15 semantic categories for documentation organization
+- ✅ Learning path generation based on topic and skill level
+- ✅ "I need X" documentation finder for natural language queries
+- ✅ Related content suggestions based on current context
 
-### Quality Improvements ✅
-- ✅ **Asset Filtering**: Fixed CSS/JS files being saved as documentation
-- ✅ **Code Organization**: Created mcp_tools.py for standalone tool implementations
-- ✅ **Test Coverage Monitoring**: Integrated with CI/CD pipeline
-- ✅ **Project Metadata**: Updated pyproject.toml with proper metadata
+### New MCP Tools ✅
+- ✅ `list_learning_categories` - Browse all 15 documentation categories
+- ✅ `get_learning_resources` - Retrieve resources by category and difficulty
+- ✅ `find_documentation_for_need` - Natural language documentation discovery
+- ✅ `get_learning_path` - Generate structured learning sequences
+- ✅ `get_resources_by_difficulty` - Filter content by skill level
+- ✅ `search_learning_resources` - Full-text search across learning materials
+- ✅ `get_related_resources` - Find related documentation
+- ✅ `get_quick_reference` - Condensed reference guides
 
-## ✅ v0.7.0 - Community Package Documentation (COMPLETED)
-**Released: Q4 2024**
+### Infrastructure ✅
+- ✅ Learning resource registry with category mappings
+- ✅ Difficulty classification system
+- ✅ Integration with existing documentation aggregation
 
-### Official Laravel Ecosystem Integration
-- ✅ Laravel Sanctum documentation aggregation  
-- ✅ Laravel Cashier documentation and examples
-- ✅ Laravel Scout search documentation
-- ✅ Laravel Horizon queue monitoring docs
-- ✅ Laravel Telescope debugging docs
-- ✅ Laravel Sail development environment docs
-- ✅ Laravel Valet local development docs
+---
 
-### Major Community Packages ✅
-- ✅ **Spatie package documentation** (Permission, Media Library, Backup) - 34 sections
-- ✅ **Livewire documentation** and examples - 36 sections
-- ✅ **Inertia.js** documentation via GitHub JSX extraction - 27 sections
-- ✅ **Filament** admin panel documentation - 62 sections
-- ✅ **Laravel Debugbar documentation** - 4 sections from laraveldebugbar.com
-- ✅ **Laravel IDE Helper documentation** - Complete README from GitHub
-
-### Infrastructure Improvements ✅
-- ✅ **CommunityPackageFetcher class** for modular package documentation
-- ✅ **CLI arguments** for package selection (--packages, --list-packages)
-- ✅ **Integration** with existing MultiSourceDocsUpdater
-- ✅ **Test coverage** for community package features (18 new tests)
-- ✅ **Markdownify integration** for HTML to Markdown conversion
-- ✅ **JSX content processing** for React-based documentation
-- ✅ **GitHub repository integration** for source-level documentation fetching
-- ✅ **Enhanced error handling** with 404 validation and URL fixes
-
-
-## ✅ v0.8.0 - Community Learning Resources (Phase 1) (COMPLETED)
-**Released: Q4 2024 / Q1 2025**
-
-### Smart Navigation Features ✅
-*Moved from v0.7.0 - These features require advanced mapping systems beyond documentation aggregation*
-- ✅ Use case → documentation mapping system
-- ✅ Package combination integration guides
-- ✅ Cross-package compatibility documentation
-- ✅ Installation and setup documentation organization
-
-### Community Package Documentation ✅
-- ✅ **42,000+ lines** of aggregated package documentation
-- ✅ **Spatie packages** - Backup, Media Library, Permission documentation
-- ✅ **Livewire** - 39 comprehensive documentation files
-- ✅ **Inertia.js** - 32 framework integration guides
-- ✅ **Filament** - 65 admin panel documentation files
-- ✅ **Laravel Debugbar** - Complete usage and configuration docs
-- ✅ **IDE Helper** - Full development tooling documentation
-
-### Documentation Enhancement ✅
-- ✅ Multi-source documentation cross-referencing
-- ✅ Package learning resource aggregation
-- ✅ Setup and configuration guide centralization
-
-### Phase 2 Features (Moved to v0.9.0)
-The following features are planned for future releases:
-- [ ] Laravel News article index and summaries
-- [ ] Spatie.be blog tutorial aggregation
-- [ ] High-quality community tutorial indexing
-- [ ] Laravel conference talk references
-- [ ] Laravel Bootcamp step-by-step guide integration
-- [ ] Laracasts topic discovery (index only)
-- [ ] Official Laravel blog feature announcements
-- [ ] Laravel certification exam topic coverage
-- [ ] Tutorial difficulty level classification
-
-## v0.9.0 - Community Learning Resources (Phase 2) & Advanced Discovery
-**Target: Q2 2025**
-
-### Community Learning Resources (Phase 2)
-*Continuing from v0.8.0 - External learning resources and tutorials*
-- [ ] Laravel News article index and summaries
-- [ ] Spatie.be blog tutorial aggregation
-- [ ] High-quality community tutorial indexing
-- [ ] Laravel conference talk references
-- [ ] Laravel Bootcamp step-by-step guide integration
-- [ ] Laracasts topic discovery (index only)
-- [ ] Official Laravel blog feature announcements
-- [ ] Laravel certification exam topic coverage
-- [ ] Tutorial difficulty level classification
-
-### Enhanced Discovery Features
-*AI/ML features for intelligent documentation discovery*
-- [ ] "I need X" → relevant documentation finder
-- [ ] Related package documentation suggestions
-- [ ] Learning path documentation organization
-
-### Smart Documentation Discovery
-- [ ] Advanced search across all aggregated sources
-- [ ] Topic clustering and related content discovery
-- [ ] Version-specific documentation filtering
-- [ ] Package ecosystem documentation mapping
-
-### Content Organization
-- [ ] Learning path documentation sequences
-- [ ] Skill-level appropriate content filtering
-- [ ] Use case documentation categorization
-- [ ] Quick reference guide aggregation
-
-## v0.10.0 - Ecosystem Intelligence
-**Target: Q3 2025**
-
-### Real-Time Documentation Updates
-- [ ] Package documentation change tracking
-- [ ] Laravel release documentation updates
-- [ ] Community content freshness monitoring
-- [ ] Deprecated documentation flagging
-
-### Community Intelligence
-- [ ] Package popularity and health metrics
-- [ ] Documentation quality indicators
-- [ ] Community recommendation aggregation
-- [ ] Maintainer activity and support metrics
-
-### Advanced Navigation
-- [ ] Multi-criteria documentation search
-- [ ] Cross-reference documentation linking
-- [ ] Documentation completeness indicators
-- [ ] Alternative solution documentation discovery
-
-## v0.11.0 - Production Readiness
-**Target: Q4 2025**
-
-### Reliability & Scale
-- [ ] Rate limiting and quota management
-- [ ] Health monitoring and metrics
-- [ ] Backup and recovery mechanisms
-- [ ] Multi-source documentation fallbacks
-
-### Security & Compliance
-- [ ] Security audit and hardening
-- [ ] Privacy controls and data handling
-- [ ] Compliance with enterprise requirements
-
-## v0.12.0 - Integration & Ecosystem
-**Target: Q1 2026**
-
-### Developer Tools
-- [ ] VS Code extension
-- [ ] Standalone CLI tool
-- [ ] Optional web interface
-- [ ] API documentation and OpenAPI spec
-
-### Platform Integration
-- [ ] GitHub integration for project analysis
-- [ ] CI/CD pipeline integration
-- [ ] Docker and containerization improvements
-
-## v1.0.0 - The Complete Laravel Documentation Navigator
+## v0.10.0 - MCP Modernization
 **Target: Q2 2026**
 
-### Core Pillars
-- [ ] **Comprehensive Coverage**: 95% of Laravel ecosystem documentation aggregated
-- [ ] **Smart Discovery**: Find the right documentation for any Laravel need
-- [ ] **Junior-Friendly**: Perfect documentation navigator for new Laravel developers
-- [ ] **Always Current**: Real-time synchronization with all documentation sources
+### MCP 2025-11-25 Spec Compatibility
+- [ ] **Tasks primitive** for async documentation updates and background indexing
+- [ ] **Elicitation** for interactive learning path customization
+- [ ] **Structured tool outputs** for better response formatting
+- [ ] **OAuth 2.1** support for remote HTTP transport
 
-### Launch Features
-- [ ] Analytics and usage insights
-- [ ] Community feedback and contribution system
-- [ ] Enterprise support options
-- [ ] Comprehensive documentation and tutorials
+### MCP Registry Publishing
+- [ ] Publish to official MCP Registry for discoverability
+- [ ] `.well-known` URL support for server identity
+- [ ] Self-publishing metadata and versioning
 
-### Success Metrics for v1.0.0
-- Documentation coverage for 95% of common Laravel development scenarios *(Currently: 117+ sections via auto-discovery)*
-- Sub-100ms response times for documentation queries *(Achieved with caching)*
-- 200+ curated packages with complete documentation integration *(Currently: 50+ packages)*
-- Aggregation of 500+ high-quality tutorial and guide resources
-- Auto-discovery coverage for all major Laravel ecosystem services *(Currently: 4/4 Laravel services)*
-- Recognition as the go-to documentation resource for junior Laravel developers
+### Documentation Improvements
+- [ ] Advanced search across all aggregated sources
+- [ ] Version-specific documentation filtering improvements
+- [ ] Package ecosystem documentation mapping
 
-## Beyond v1.0.0
+---
 
-### Future Considerations
-- ✅ ~~Laravel Forge integration~~ *(Completed in v0.5.0 via auto-discovery)*
-- ✅ ~~Laravel Nova documentation support~~ *(Completed in v0.5.0 via auto-discovery)*
-- AI-powered code generation based on documentation
-- Real-time collaboration features
-- Laravel conference and community event integration
-- Mobile app for documentation access
-- Advanced auto-discovery for community packages
-- Machine learning-enhanced content validation
+## v0.11.0 - Production Readiness
+**Target: Q3 2026**
+
+### Reliability & Monitoring
+- [ ] Health monitoring and metrics endpoints
+- [ ] Rate limiting and quota management
+- [ ] Error recovery and graceful degradation improvements
+- [ ] Performance optimization and caching improvements
+
+### Security & Stability
+- [ ] Security audit and hardening
+- [ ] Input validation improvements
+- [ ] Dependency security scanning
+
+### Quality Assurance
+- [ ] 90%+ test coverage target
+- [ ] Load testing and performance benchmarks
+- [ ] Documentation completeness audit
+
+---
+
+## v1.0.0 - First Stable Release
+**Target: Q4 2026**
+
+### Stability Commitments
+- [ ] Feature freeze and API stability
+- [ ] Breaking change policy documentation
+- [ ] LTS commitment (minimum 12 months support)
+- [ ] Semantic versioning guarantee
+
+### Documentation & Support
+- [ ] Comprehensive user documentation
+- [ ] API reference and examples
+- [ ] Troubleshooting guides
+- [ ] Migration guides for future versions
+
+### Success Criteria
+- Documentation coverage for 95% of common Laravel development scenarios
+- Sub-100ms response times for documentation queries
+- 85%+ test coverage with comprehensive integration tests
+- MCP Registry listing with verified status
+- Active community of users and contributors
+
+---
+
+## What We're NOT Building
+
+To maintain focus and deliver quality, we've explicitly decided against:
+
+- **VS Code extension** - MCP clients handle this natively
+- **Standalone CLI tool** - Use any MCP-compatible client
+- **Web interface** - Not the MCP pattern
+- **Mobile app** - Wrong direction for developer tooling
+- **ML-based topic clustering** - Overkill for our use case
+- **Real-time documentation change tracking** - Complex, low ROI
+- **Code generation** - That's what [laravel/boost](https://github.com/laravel/boost) does
+
+---
+
+## Version History
+
+### ✅ v0.8.0 - Community Learning Resources (Phase 1)
+**Released: Q4 2024 / Q1 2025**
+- Use case → documentation mapping system
+- Package combination integration guides
+- Cross-package compatibility documentation
+- 42,000+ lines of aggregated package documentation
+
+### ✅ v0.7.0 - Community Package Documentation
+**Released: Q4 2024**
+- Spatie, Livewire, Inertia.js, Filament documentation
+- CommunityPackageFetcher with modular architecture
+- Markdownify integration for HTML conversion
+
+### ✅ v0.6.0 - Test Coverage & Quality
+**Released: Q3 2024**
+- Test coverage from 34% to 84%
+- Refactored testable architecture
+- Asset filtering for documentation quality
+
+### ✅ v0.5.0 - Laravel Ecosystem Documentation
+**Released: Q2 2024**
+- Auto-Discovery Engine for Laravel services
+- Forge, Vapor, Envoyer, Nova documentation
+- 117+ sections via intelligent discovery
 
 ---
 
 ## Contributing to the Roadmap
 
-We welcome community input on this roadmap! If you have ideas, feature requests, or want to contribute to development:
+We welcome community input! If you have ideas, feature requests, or want to contribute:
 
 1. **Open an Issue**: Propose new features or improvements
-2. **Join Discussions**: Participate in roadmap planning discussions
+2. **Join Discussions**: Participate in roadmap planning
 3. **Submit PRs**: Help implement features from this roadmap
 4. **Share Feedback**: Let us know how you use the MCP server
 
 ## Versioning Strategy
 
-- **Patch releases (v0.x.y)**: Bug fixes, documentation updates, minor improvements
+- **Patch releases (v0.x.y)**: Bug fixes, documentation updates
 - **Minor releases (v0.x.0)**: New features, backward-compatible changes
-- **Major releases (v1.0.0)**: Significant features, potential breaking changes
+- **Major releases (v1.0.0+)**: Stability guarantee, potential breaking changes with migration guides
 
-Each release will maintain backward compatibility within the same major version.
+Each release maintains backward compatibility within the same major version.
