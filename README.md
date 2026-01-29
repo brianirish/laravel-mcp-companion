@@ -7,7 +7,6 @@
 [![codecov](https://codecov.io/gh/brianirish/laravel-mcp-companion/graph/badge.svg?token=VC93Y921KR)](https://codecov.io/gh/brianirish/laravel-mcp-companion)
 [![License](https://img.shields.io/github/license/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/blob/main/LICENSE)
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/brianirish/laravel-mcp-companion/pkgs/container/laravel-mcp-companion)
-[![smithery badge](https://smithery.ai/badge/@brianirish/laravel-mcp-companion)](https://smithery.ai/server/@brianirish/laravel-mcp-companion)
 [![GitHub Stars](https://img.shields.io/github/stars/brianirish/laravel-mcp-companion?style=social)](https://github.com/brianirish/laravel-mcp-companion)
 [![GitHub Forks](https://img.shields.io/github/forks/brianirish/laravel-mcp-companion?style=social)](https://github.com/brianirish/laravel-mcp-companion)
 
@@ -55,14 +54,6 @@ This application features an **intelligent auto-discovery system** that automati
 - ✅ **Generates** new patch releases automatically when updates are found
 
 ## Installation
-
-### Quick Install via Smithery
-
-```bash
-npx -y @smithery/cli install @brianirish/laravel-mcp-companion --client claude
-```
-
-*Note: Smithery automatically configures your AI client.*
 
 ### Claude Desktop
 

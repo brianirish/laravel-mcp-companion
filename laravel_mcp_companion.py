@@ -1922,8 +1922,8 @@ def main():
     # Run the server
     try:
         if args.transport == "http":
-            # HTTP mode for Smithery deployment
-            logger.info("Starting in HTTP mode for Smithery deployment...")
+            # HTTP mode for web-based deployments
+            logger.info("Starting in HTTP mode...")
             import uvicorn
             from starlette.middleware.cors import CORSMiddleware
 

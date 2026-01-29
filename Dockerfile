@@ -16,9 +16,9 @@ RUN pip install --upgrade pip && \
 # Default environment
 ENV PYTHONUNBUFFERED=1
 
-# Smithery environment variables
+# HTTP server environment variables
 ENV PORT=8081
-ENV TRANSPORT=http
+ENV TRANSPORT=stdio
 ENV DOCS_PATH="./docs"
 ENV SERVER_NAME="LaravelMCPCompanion"
 ENV LOG_LEVEL="INFO"

@@ -17,7 +17,7 @@ This roadmap outlines the planned development path toward v1.0.0 and beyond.
 - ✅ **Document structure extraction** and category browsing
 - ✅ **Future-proof version detection** via GitHub API
 - ✅ **Automated daily documentation updates** with auto-discovery metrics
-- ✅ **Streamlined distribution** via Docker and Smithery
+- ✅ **Streamlined distribution** via Docker
 - ✅ **Documentation aggregator strategy** with intelligent auto-discovery implementation
 - ✅ **Comprehensive test suite** with 84% code coverage
 - ✅ **Asset filtering** to prevent non-documentation files from being saved
