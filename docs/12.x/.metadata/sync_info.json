@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "a9bcd56cc73801ae930c5e53a7bc48075a5e3e80",
-  "commit_date": "2026-01-26T10:33:32Z",
-  "commit_message": "Add Boost Docs (#11004)\n\n* Add boost docs\n\n* Refactor Boost documentation structure and update content\n\n* Formatting\n\n* Add \"Guidelines vs. Skills\" section to Boost documentation\n\n* Formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/a9bcd56cc73801ae930c5e53a7bc48075a5e3e80",
-  "sync_time": "2026-01-27T01:42:25Z"
+  "commit_sha": "eba60c227efb738ce3825772a99e3fd7476bb8c5",
+  "commit_date": "2026-01-28T04:00:41Z",
+  "commit_message": "remove headings",
+  "commit_url": "https://github.com/laravel/docs/commit/eba60c227efb738ce3825772a99e3fd7476bb8c5",
+  "sync_time": "2026-01-29T02:40:57Z"
 }

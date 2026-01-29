@@ -133,6 +133,8 @@ Laravel Forge supports the following source control providers:
 To connect a source control provider, navigate to the organization’s settings. Then, on the “Source control” page, click “Add provider”. Select the provider you wish to connect to and authenticate your chosen account.
 You may only configure one account from each provider at a time. If you need to connect a different account from the same provider, you must first remove the existing connection.
 
+When you connect a source control provider via OAuth, the API token grants Forge access to all repositories accessible by your authenticated account. If a server is compromised, an attacker could potentially use this token to discover and access other repositories. For enhanced security, consider using [deploy keys](/docs/ssh#deploy-keys) instead, which limit access to only specific repositories.
+
 ### [​](#removing-source-control-providers) Removing source control providers
 
 To unlink a source control provider, navigate to the organization’s settings. Then, on the “Source control” page, click the dropdown menu on the provider and click “Delete”.

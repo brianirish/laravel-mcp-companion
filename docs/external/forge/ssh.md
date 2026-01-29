@@ -196,12 +196,17 @@ During the provisioning process, Laravel Forge will generate its own keypair so 
 ### [​](#laravel-forge-public-key) Laravel Forge public key
 
 During the provisioning process, Laravel Forge will generate a public key for the `forge` user. This is used by Git to clone the projects to your server. The key will be added to the source control provider. This key is located at `/home/forge/.ssh/id_rsa.pub`.
+
+When you add the server’s SSH key to your source control provider, the server gains access to **all repositories** accessible by your source control account. If the server is compromised, an attacker could potentially access any repository your account can reach. For enhanced security, consider using [deploy keys](#deploy-keys) to limit access to only the specific repositories each site requires.
+
 Alternatively, you may opt out of having this key added to your source control providers by un-checking the **Add server’s SSH key to source control providers** option when creating a server. When opting-out, you will need to use site-level [deploy keys](#deploy-keys) in order to grant your server access to specific repositories on a source control provider such as GitHub, GitLab, or Bitbucket.
 
 ### [​](#deploy-keys) Deploy keys
 
 Sometimes you may wish to only grant the Laravel Forge user access to a specific repository. This is typically accomplished by adding an SSH key to that repository’s “Deploy Keys” on the repository’s GitHub, GitLab, or Bitbucket dashboard.
 When adding a new site to the server, you may choose to generate a Deploy Key for that application. Once the key has been generated, you can add it to the repository of your choice via your source control provider’s dashboard - allowing the server to clone that specific repository.
+
+Deploy keys provide better security isolation than server-level SSH keys. Each deploy key only grants access to a single repository, so if a server is compromised, the attacker can only access the repositories explicitly configured with deploy keys on that server—not your entire source control account.
 
 Deploy keys can be used on servers that have their SSH key attached to your source control provider accounts, allowing you to grant the server access to clone a repository that the source control account connected to your Laravel Forge account does not have collaborator access to.
 
@@ -213,4 +218,6 @@ YesNo
 
 ⌘I
 
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://l
+
+*[Content truncated for length]*

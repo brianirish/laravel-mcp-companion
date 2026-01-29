@@ -93,6 +93,7 @@ Changelog
 
 On this page
 
+- [January 23, 2026](#january-23%2C-2026)
 - [January 16, 2026](#january-16%2C-2026)
 - [January 9, 2026](#january-9%2C-2026)
 - [December 12, 2025](#december-12%2C-2025)
@@ -114,6 +115,21 @@ Copy page
 New updates and improvements to Laravel Forge.
 
 Copy page
+
+[​](#january-23%2C-2026)
+
+January 23, 2026
+
+Show Improvements (1)
+
+- **Server configuration UI**: Advanced settings on the server configuration modal now detail which options are included in the advanced settings modal.
+
+Show Fixes (4)
+
+- Log viewer now refreshes after selecting “Delete contents” in the drop down.
+- When a site stops using a PHP version, the corresponding PHP-FPM pool configuration and service are removed for that version.
+- Isolated users are now given updated SSH keys.
+- Fixed a bug causing the PM2 process to fail after changing primary domain on NextJS sites.
 
 [​](#january-16%2C-2026)
 
@@ -224,13 +240,6 @@ November 21, 2025
 
 You can now provision an AWS server with EBS GP3. GP2 will remain the default for already provisioned AWS servers. All new servers will be provisioned with EBS gp3.To move your existing servers from gp2 to gp3, visit your AWS dashboard.
 
-![](https://mintcdn.com/forge-laravel/hcLEf7Sqd4f72HGx/images/changelogs/11-21-2025/amazon_ebs_gp3.png?fit=max&auto=format&n=hcLEf7Sqd4f72HGx&q=85&s=45fc5b7da5ef5cdc4c6a924e18c641dd)
-
-Show Improvements (8)
-
-- **Recipes search results**: Updated the recipe search UI to accurately show that a search returned zero matching results, instead of displaying “no recipes”.
-- **Manual certificate renewal**: You can now manually trigger a certificate renewal for Let’s Encrypt certificates after a failed attempt on the Domains tab.
-- **Site notes**: Sites now allow you to leave notes in the Settings tab, similar to the notes feature for servers. Use them to keep track of important information.
-- **
+![](https://mintcdn.com/forge-laravel/hcLEf7Sqd4f72HGx/images/chan
 
 *[Content truncated for length]*
