@@ -34,6 +34,19 @@ pipeline:
                       git fetch origin main
                       git reset --hard origin/main
               - step:
+                  identifier: install_gh_cli
+                  name: Install latest gh CLI
+                  type: Run
+                  spec:
+                    shell: Bash
+                    command: |
+                      # Harness Cloud runner may have old gh CLI, install latest
+                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      sudo apt-get update
+                      sudo apt-get install -y gh
+                      gh --version
+              - step:
                   identifier: install_dependencies
                   name: Install dependencies
                   type: Run
@@ -205,6 +218,19 @@ pipeline:
             spec: {}
           execution:
             steps:
+              - step:
+                  identifier: install_gh_cli
+                  name: Install latest gh CLI
+                  type: Run
+                  spec:
+                    shell: Bash
+                    command: |
+                      # Harness Cloud runner may have old gh CLI, install latest
+                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      sudo apt-get update
+                      sudo apt-get install -y gh
+                      gh --version
               - step:
                   identifier: wait_for_merge
                   name: Wait for PR to be merged
