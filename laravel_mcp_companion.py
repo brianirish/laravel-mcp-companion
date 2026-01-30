@@ -39,8 +39,18 @@ from mcp_tools import (
     get_doc_structure_impl,
     browse_docs_by_category_impl,
     verify_laravel_feature_impl,
-    compare_laravel_versions_impl
+    compare_laravel_versions_impl,
+    find_laravel_docs_for_need_impl,
+    get_laravel_learning_path_impl,
+    list_laravel_learning_paths_impl,
+    get_laravel_content_by_difficulty_impl,
+    get_related_laravel_packages_impl,
+    search_laravel_learning_resources_impl,
+    list_laravel_learning_resources_impl,
+    list_laravel_categories_impl
 )
+
+# Import learning resources
 
 # Configure logging
 logging.basicConfig(
@@ -71,7 +81,8 @@ PACKAGE_CATALOG = {
             "Handling webhooks from payment providers"
         ],
         "installation": "composer require laravel/cashier",
-        "documentation_link": "laravel://packages/cashier.md"
+        "documentation_link": "laravel://packages/cashier.md",
+        "related_packages": ["laravel/cashier-paddle"]
     },
     "laravel/sanctum": {
         "name": "Laravel Sanctum",
@@ -84,7 +95,8 @@ PACKAGE_CATALOG = {
             "Creating a secure API"
         ],
         "installation": "composer require laravel/sanctum",
-        "documentation_link": "laravel://authentication/sanctum.md"
+        "documentation_link": "laravel://authentication/sanctum.md",
+        "related_packages": ["laravel/breeze", "laravel/jetstream", "laravel/fortify"]
     },
     "laravel/scout": {
         "name": "Laravel Scout",
@@ -110,7 +122,8 @@ PACKAGE_CATALOG = {
             "Supporting password grant tokens"
         ],
         "installation": "composer require laravel/passport",
-        "documentation_link": "laravel://authentication/passport.md"
+        "documentation_link": "laravel://authentication/passport.md",
+        "related_packages": ["laravel/socialite"]
     },
     "laravel/breeze": {
         "name": "Laravel Breeze",
@@ -122,7 +135,8 @@ PACKAGE_CATALOG = {
             "Creating a starting point for authentication with Tailwind CSS"
         ],
         "installation": "composer require laravel/breeze --dev",
-        "documentation_link": "laravel://starter-kits/breeze.md"
+        "documentation_link": "laravel://starter-kits/breeze.md",
+        "related_packages": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"]
     },
     "livewire/livewire": {
         "name": "Laravel Livewire",
@@ -135,7 +149,8 @@ PACKAGE_CATALOG = {
             "Adding interactive elements to Blade templates"
         ],
         "installation": "composer require livewire/livewire",
-        "documentation_link": "laravel://livewire.md"
+        "documentation_link": "laravel://livewire.md",
+        "related_packages": ["laravel/breeze", "laravel/jetstream"]
     },
     "laravel/fortify": {
         "name": "Laravel Fortify",
@@ -148,7 +163,8 @@ PACKAGE_CATALOG = {
             "Setting up email verification"
         ],
         "installation": "composer require laravel/fortify",
-        "documentation_link": "laravel://authentication/fortify.md"
+        "documentation_link": "laravel://authentication/fortify.md",
+        "related_packages": ["laravel/breeze", "laravel/jetstream", "laravel/sanctum"]
     },
     "spatie/laravel-permission": {
         "name": "Spatie Laravel Permission",
@@ -174,7 +190,8 @@ PACKAGE_CATALOG = {
             "Developing reactive interfaces with Laravel controllers"
         ],
         "installation": "composer require inertiajs/inertia-laravel",
-        "documentation_link": "laravel://inertia.md"
+        "documentation_link": "laravel://inertia.md",
+        "related_packages": ["laravel/breeze", "laravel/jetstream"]
     },
     "laravel/horizon": {
         "name": "Laravel Horizon",
@@ -187,7 +204,8 @@ PACKAGE_CATALOG = {
             "Visualizing queue throughput and wait times"
         ],
         "installation": "composer require laravel/horizon",
-        "documentation_link": "laravel://horizon.md"
+        "documentation_link": "laravel://horizon.md",
+        "related_packages": ["laravel/telescope"]
     },
     "laravel/telescope": {
         "name": "Laravel Telescope",
@@ -200,7 +218,8 @@ PACKAGE_CATALOG = {
             "Inspecting queued jobs and mail"
         ],
         "installation": "composer require laravel/telescope --dev",
-        "documentation_link": "laravel://telescope.md"
+        "documentation_link": "laravel://telescope.md",
+        "related_packages": ["laravel/horizon", "barryvdh/laravel-debugbar"]
     },
     "laravel/jetstream": {
         "name": "Laravel Jetstream",
@@ -213,7 +232,8 @@ PACKAGE_CATALOG = {
             "Setting up profile management"
         ],
         "installation": "composer require laravel/jetstream",
-        "documentation_link": "laravel://starter-kits/jetstream.md"
+        "documentation_link": "laravel://starter-kits/jetstream.md",
+        "related_packages": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"]
     },
     "laravel/octane": {
         "name": "Laravel Octane",
@@ -226,7 +246,8 @@ PACKAGE_CATALOG = {
             "Reducing server costs through efficiency"
         ],
         "installation": "composer require laravel/octane",
-        "documentation_link": "laravel://octane.md"
+        "documentation_link": "laravel://octane.md",
+        "related_packages": ["laravel/horizon"]
     },
     "laravel/socialite": {
         "name": "Laravel Socialite",
@@ -550,7 +571,78 @@ Example usage:
 - compare_laravel_versions(from_version="11.x", to_version="12.x")
 - compare_laravel_versions(from_version="11.x", to_version="12.x", file_filter="auth")
 
-Fast, file-level only. No content diffing."""
+Fast, file-level only. No content diffing.""",
+
+    "find_laravel_docs_for_need": """Finds relevant Laravel documentation based on what you need to accomplish.
+
+When to use:
+- "I need to upload files" → Returns filesystem, validation, requests docs
+- "I need to send emails" → Returns mail, notifications, queues docs
+- "I need to accept payments" → Returns cashier, billing docs
+- Starting a new feature without knowing which docs to read
+- Finding related documentation for a specific use case
+
+This maps common needs to relevant documentation, including packages and external services.""",
+
+    "get_laravel_learning_path": """Returns a curated learning path with ordered documentation for a specific goal.
+
+When to use:
+- User is learning Laravel from scratch
+- User wants to learn a specific area (APIs, testing, etc.)
+- Providing structured guidance for skill development
+- Recommending documentation reading order
+
+Available paths: getting-started, crud-basics, authentication-basics, api-development, testing-fundamentals, advanced-eloquent, background-processing, real-time-features, production-ready, full-stack-spa""",
+
+    "list_laravel_learning_paths": """Lists all available curated learning paths with difficulty and duration estimates.
+
+When to use:
+- User asks "where should I start?"
+- Helping user choose a learning path
+- Showing available structured learning options
+- Recommending based on skill level""",
+
+    "get_laravel_content_by_difficulty": """Filters documentation by difficulty level (beginner, intermediate, advanced).
+
+When to use:
+- User is a beginner and needs easier content
+- User wants advanced topics only
+- Recommending appropriate documentation based on skill level
+- Organizing learning progression""",
+
+    "get_related_laravel_packages": """Returns packages commonly used together with a given package.
+
+When to use:
+- User is installing a package and might need related ones
+- Suggesting complementary packages
+- Building complete feature stacks
+- Understanding package ecosystems
+
+Example: laravel/sanctum → breeze, jetstream, fortify""",
+
+    "search_laravel_learning_resources": """Searches through learning resources (bootcamp, blog, news, etc.).
+
+When to use:
+- Finding tutorials and guides
+- Searching for recent Laravel articles
+- Looking for learning content beyond official docs
+- Finding practical examples and walkthroughs""",
+
+    "list_laravel_learning_resources": """Lists available learning resource sources and their content.
+
+When to use:
+- Discovering available learning content
+- Checking what resources have been fetched
+- Finding tutorials and guides
+- Exploring beyond official documentation""",
+
+    "list_laravel_categories": """Lists all documentation categories with topic counts.
+
+When to use:
+- Exploring documentation organization
+- Finding related topics
+- Understanding coverage by category
+- Planning what to learn next"""
 }
 
 def parse_arguments():
@@ -1826,6 +1918,71 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         except Exception as e:
             logger.error(f"Error getting service info: {str(e)}")
             return format_error(f"Error getting service info: {str(e)}")
+
+    # Register learning resource and discovery tools
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["find_laravel_docs_for_need"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def find_laravel_docs_for_need(need: str, version: Optional[str] = None) -> str:
+        """Find Laravel documentation for a specific user need."""
+        return find_laravel_docs_for_need_impl(docs_path, need, version, runtime_version=runtime_version)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_learning_path"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def get_laravel_learning_path(path_name: str = "") -> str:
+        """Get a specific curated learning path."""
+        return get_laravel_learning_path_impl(path_name)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["list_laravel_learning_paths"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def list_laravel_learning_paths() -> str:
+        """List all available learning paths."""
+        return list_laravel_learning_paths_impl()
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_laravel_content_by_difficulty"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def get_laravel_content_by_difficulty(difficulty: str, version: Optional[str] = None) -> str:
+        """Get Laravel documentation filtered by difficulty level."""
+        return get_laravel_content_by_difficulty_impl(docs_path, difficulty, version, runtime_version=runtime_version)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["get_related_laravel_packages"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def get_related_laravel_packages(package: str) -> str:
+        """Get packages related to a specific Laravel package."""
+        return get_related_laravel_packages_impl(package)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["search_laravel_learning_resources"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def search_laravel_learning_resources(query: str, sources: Optional[List[str]] = None) -> str:
+        """Search through learning resources."""
+        return search_laravel_learning_resources_impl(docs_path, query, sources, runtime_version=runtime_version)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["list_laravel_learning_resources"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def list_laravel_learning_resources(source: Optional[str] = None) -> str:
+        """List available learning resources."""
+        return list_laravel_learning_resources_impl(docs_path, source)
+
+    @mcp.tool(
+        description=TOOL_DESCRIPTIONS["list_laravel_categories"],
+        annotations={"readOnlyHint": True, "idempotentHint": True}
+    )
+    def list_laravel_categories() -> str:
+        """List all documentation categories."""
+        return list_laravel_categories_impl()
 
     # Register prompts to demonstrate common use cases
     @mcp.prompt(name="laravel-authentication-setup")

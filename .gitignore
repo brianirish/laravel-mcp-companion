@@ -42,4 +42,12 @@ logs/
 *_cache*.json
 .cache/
 
+# Test coverage
+.coverage
+coverage.xml
+htmlcov/
+
 CLAUDE.md
+
+# Claude Code
+.claude/
