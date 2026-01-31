@@ -13,7 +13,7 @@ import shutil
 import tempfile
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 import urllib.request
 import urllib.error
 import zipfile
@@ -2362,7 +2362,10 @@ class MultiSourceDocsUpdater:
         
         # Initialize community package fetcher
         self.package_fetcher = CommunityPackageFetcher(target_dir)
-    
+
+        # Initialize learning resource fetcher
+        self.learning_fetcher = LearningResourceFetcher(target_dir)
+
     def update_core_docs(self, force: bool = False) -> bool:
         """Update core Laravel documentation."""
         logger.info("Updating core Laravel documentation")
@@ -2417,57 +2420,95 @@ class MultiSourceDocsUpdater:
             return results
         else:
             return self.package_fetcher.fetch_all_packages(force=force)
-    
-    def update_all(self, force_core: bool = False, force_external: bool = False, force_packages: bool = False) -> Dict[str, object]:
+
+    def update_learning_docs(self, sources: Optional[List[str]] = None, force: bool = False) -> Dict[str, bool]:
+        """
+        Update learning resource documentation.
+
+        Args:
+            sources: List of specific sources to update. If None, updates all.
+            force: Force refresh even if cache is valid
+
+        Returns:
+            Dictionary mapping source names to success status
+        """
+        logger.info("Updating learning resource documentation")
+
+        if sources:
+            results = {}
+            for source in sources:
+                if source in self.learning_fetcher.learning_sources:
+                    results[source] = self.learning_fetcher.fetch_learning_source(source, force=force)
+                else:
+                    logger.error(f"Unknown learning source: {source}")
+                    results[source] = False
+            return results
+        else:
+            return self.learning_fetcher.fetch_all_sources(force=force)
+
+    def update_all(self, force_core: bool = False, force_external: bool = False, force_packages: bool = False, force_learning: bool = False) -> Dict[str, object]:
         """
         Update all documentation sources.
-        
+
         Args:
             force_core: Force update of core documentation
             force_external: Force update of external documentation
             force_packages: Force update of community packages
-            
+            force_learning: Force update of learning resources
+
         Returns:
-            Dictionary with results for core, external, and package updates
+            Dictionary with results for core, external, package, and learning updates
         """
         logger.info("Starting comprehensive documentation update")
-        
+
         results: Dict[str, object] = {
             "core": False,
             "external": {},
-            "packages": {}
+            "packages": {},
+            "learning": {}
         }
-        
+
         try:
             # Update core Laravel documentation
             results["core"] = self.update_core_docs(force=force_core)
-            
+
             # Update external services documentation
             results["external"] = self.update_external_docs(force=force_external)
-            
+
             # Update community package documentation
             results["packages"] = self.update_package_docs(force=force_packages)
-            
+
+            # Update learning resource documentation
+            results["learning"] = self.update_learning_docs(force=force_learning)
+
             # Log summary
             core_status = "updated" if results["core"] else "up-to-date"
             external_results = results["external"]
             package_results = results["packages"]
-            
+            learning_results = results["learning"]
+
             if isinstance(external_results, dict):
                 external_count = sum(1 for success in external_results.values() if success)
                 total_external = len(external_results)
             else:
                 external_count = 0
                 total_external = 0
-            
+
             if isinstance(package_results, dict):
                 package_count = sum(1 for success in package_results.values() if success)
                 total_packages = len(package_results)
             else:
                 package_count = 0
                 total_packages = 0
-            
-            logger.info(f"Documentation update complete: Core {core_status}, External {external_count}/{total_external} services, Packages {package_count}/{total_packages}")
+
+            if isinstance(learning_results, dict):
+                learning_count = sum(1 for success in learning_results.values() if success)
+                total_learning = len(learning_results)
+            else:
+                learning_count = 0
+                total_learning = 0
+
+            logger.info(f"Documentation update complete: Core {core_status}, External {external_count}/{total_external}, Packages {package_count}/{total_packages}, Learning {learning_count}/{total_learning}")
             
         except Exception as e:
             logger.error(f"Error during comprehensive documentation update: {str(e)}")
@@ -2479,7 +2520,8 @@ class MultiSourceDocsUpdater:
         status: Dict[str, Dict] = {
             "core": {},
             "external": {},
-            "packages": {}
+            "packages": {},
+            "learning": {}
         }
         
         # Get core documentation status
@@ -2575,24 +2617,57 @@ class MultiSourceDocsUpdater:
                 
             except Exception as e:
                 status["packages"][package] = {"error": str(e)}
-        
+
+        # Get learning resource documentation status
+        for source in self.learning_fetcher.list_available_sources():
+            try:
+                cache_valid = self.learning_fetcher.is_cache_valid(source)
+                source_info = self.learning_fetcher.get_source_info(source)
+
+                if source_info is None:
+                    continue
+
+                # Try to read cache metadata
+                metadata_path = self.learning_fetcher.get_cache_metadata_path(source)
+                if metadata_path.exists():
+                    try:
+                        with open(metadata_path, 'r') as f:
+                            metadata = json.load(f)
+                    except Exception:
+                        metadata = {}
+                else:
+                    metadata = {}
+
+                status["learning"][source] = {
+                    "name": source_info.get("name", source),
+                    "description": source_info.get("description", ""),
+                    "difficulty": source_info.get("difficulty", "mixed"),
+                    "cache_valid": cache_valid,
+                    "last_fetched": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(metadata.get("cached_at", 0))) if metadata.get("cached_at") else "never",
+                    "success_rate": metadata.get("success_rate", "unknown")
+                }
+            except Exception as e:
+                status["learning"][source] = {"error": str(e)}
+
         return status
-    
-    def needs_update(self, check_external: bool = True, check_packages: bool = True) -> Dict[str, Union[bool, Dict[str, bool]]]:
+
+    def needs_update(self, check_external: bool = True, check_packages: bool = True, check_learning: bool = True) -> Dict[str, Union[bool, Dict[str, bool]]]:
         """
         Check which documentation sources need updating.
-        
+
         Args:
             check_external: Whether to check external services
             check_packages: Whether to check community packages
-            
+            check_learning: Whether to check learning resources
+
         Returns:
             Dictionary indicating which sources need updates
         """
         needs_update: Dict[str, Union[bool, Dict[str, bool]]] = {
             "core": False,
             "external": {},
-            "packages": {}
+            "packages": {},
+            "learning": {}
         }
         
         # Check core documentation
@@ -2623,8 +2698,581 @@ class MultiSourceDocsUpdater:
                     except Exception as e:
                         logger.warning(f"Error checking {package} documentation status: {str(e)}")
                         packages_dict[package] = True
-        
+
+        # Check learning resource documentation
+        if check_learning:
+            learning_dict = needs_update["learning"]
+            if isinstance(learning_dict, dict):
+                for source in self.learning_fetcher.list_available_sources():
+                    try:
+                        learning_dict[source] = not self.learning_fetcher.is_cache_valid(source)
+                    except Exception as e:
+                        logger.warning(f"Error checking {source} learning resource status: {str(e)}")
+                        learning_dict[source] = True
+
         return needs_update
+
+
+class LearningResourceFetcher:
+    """Handles fetching documentation from learning resource sources."""
+
+    def __init__(self, target_dir: Path, cache_duration: int = 86400, max_retries: int = 3):
+        """
+        Initialize the learning resource fetcher.
+
+        Args:
+            target_dir: Directory where learning resources should be stored
+            cache_duration: Cache duration in seconds (default: 24 hours)
+            max_retries: Maximum number of retry attempts for failed requests
+        """
+        self.target_dir = target_dir
+        self.cache_duration = cache_duration
+        self.max_retries = max_retries
+        self.learning_dir = target_dir / "learning_resources"
+        self.learning_dir.mkdir(parents=True, exist_ok=True)
+
+        # Learning resource sources
+        self.learning_sources = {
+            "laravel-bootcamp": {
+                "name": "Laravel Bootcamp",
+                "type": DocumentationSourceType.DIRECT_URL,
+                "base_url": "https://bootcamp.laravel.com",
+                "description": "Official Laravel tutorial for beginners",
+                "difficulty": "beginner",
+                "sections": [
+                    "introduction",
+                    "installation",
+                    "creating-chirps",
+                    "showing-chirps",
+                    "editing-chirps",
+                    "deleting-chirps",
+                    "notifications-and-events",
+                    "deploying",
+                ],
+            },
+            "laravel-blog": {
+                "name": "Laravel Blog",
+                "type": DocumentationSourceType.DIRECT_URL,
+                "base_url": "https://blog.laravel.com",
+                "description": "Official Laravel announcements and articles",
+                "difficulty": "mixed",
+                "fetch_type": "index",  # Only fetch index/list, not full articles
+            },
+            "laravel-news": {
+                "name": "Laravel News",
+                "type": DocumentationSourceType.DIRECT_URL,
+                "base_url": "https://laravel-news.com",
+                "description": "Community news, tutorials, and package announcements",
+                "difficulty": "mixed",
+                "fetch_type": "index",  # Only fetch index/summaries
+            },
+            "laracasts-index": {
+                "name": "Laracasts Index",
+                "type": DocumentationSourceType.DIRECT_URL,
+                "base_url": "https://laracasts.com",
+                "description": "Video tutorial metadata (respects paywall)",
+                "difficulty": "mixed",
+                "fetch_type": "metadata",  # Only fetch metadata, respect paywall
+                "topics_url": "https://laracasts.com/topics",
+            },
+        }
+
+    def get_source_cache_path(self, source: str) -> Path:
+        """Get the cache directory path for a learning source."""
+        source_dir = self.learning_dir / source
+        source_dir.mkdir(parents=True, exist_ok=True)
+        return source_dir
+
+    def get_cache_metadata_path(self, source: str) -> Path:
+        """Get the metadata file path for a learning source."""
+        return self.get_source_cache_path(source) / ".cache_metadata.json"
+
+    def is_cache_valid(self, source: str) -> bool:
+        """Check if the cached learning resources for a source are still valid."""
+        metadata_path = self.get_cache_metadata_path(source)
+
+        if not metadata_path.exists():
+            return False
+
+        try:
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+
+            cache_time = metadata.get('cached_at', 0)
+            success_rate = metadata.get('success_rate', 0.0)
+
+            is_fresh = (time.time() - cache_time) < self.cache_duration
+            is_quality = success_rate >= 0.7  # Lower threshold for learning resources
+
+            if not is_quality:
+                logger.info(f"Cache for {source} has low success rate ({success_rate:.1%}), invalidating")
+                return False
+
+            return is_fresh
+        except Exception as e:
+            logger.warning(f"Error reading cache metadata for {source}: {str(e)}")
+            return False
+
+    def save_cache_metadata(self, source: str, metadata: Dict) -> None:
+        """Save cache metadata for a learning source."""
+        metadata_path = self.get_cache_metadata_path(source)
+        metadata["cached_at"] = time.time()
+
+        try:
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+        except Exception as e:
+            logger.error(f"Error saving cache metadata for {source}: {str(e)}")
+
+    def fetch_learning_source(self, source: str, force: bool = False) -> bool:
+        """
+        Fetch learning resources from a specific source.
+
+        Args:
+            source: Source name (laravel-bootcamp, laravel-blog, etc.)
+            force: Force refresh even if cache is valid
+
+        Returns:
+            True if successful, False otherwise
+        """
+        if source not in self.learning_sources:
+            logger.error(f"Unknown learning source: {source}")
+            return False
+
+        if not force and self.is_cache_valid(source):
+            logger.debug(f"Using cached learning resources for {source}")
+            return True
+
+        source_config = self.learning_sources[source]
+        logger.info(f"Fetching learning resources from {source_config['name']}")
+
+        try:
+            if source == "laravel-bootcamp":
+                return self._fetch_bootcamp_docs(source_config)
+            elif source == "laravel-blog":
+                return self._fetch_blog_index(source_config)
+            elif source == "laravel-news":
+                return self._fetch_news_index(source_config)
+            elif source == "laracasts-index":
+                return self._fetch_laracasts_metadata(source_config)
+            else:
+                logger.error(f"No fetch method implemented for source: {source}")
+                return False
+        except Exception as e:
+            logger.error(f"Error fetching learning resources from {source}: {str(e)}")
+            return False
+
+    def _fetch_bootcamp_docs(self, config: Dict) -> bool:
+        """Fetch Laravel Bootcamp documentation."""
+        base_url = config["base_url"]
+        sections = config.get("sections", [])
+        source_dir = self.get_source_cache_path("laravel-bootcamp")
+
+        fetched_sections = 0
+        for section in sections:
+            try:
+                # Bootcamp uses /docs/{section} URLs
+                section_url = f"{base_url}/blade/{section}" if section != "introduction" else f"{base_url}"
+                content = self._fetch_and_process_html(section_url, "laravel-bootcamp", section)
+
+                if content:
+                    file_path = source_dir / f"{section}.md"
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    fetched_sections += 1
+                    logger.debug(f"Fetched bootcamp section: {section}")
+            except Exception as e:
+                logger.warning(f"Error fetching bootcamp section {section}: {str(e)}")
+
+        if fetched_sections > 0:
+            metadata = {
+                "source": "laravel-bootcamp",
+                "name": config['name'],
+                "fetched_sections": fetched_sections,
+                "total_sections": len(sections),
+                "success_rate": fetched_sections / len(sections),
+                "difficulty": config.get("difficulty", "beginner"),
+            }
+            self.save_cache_metadata("laravel-bootcamp", metadata)
+            logger.info(f"Successfully fetched {fetched_sections}/{len(sections)} bootcamp sections")
+            return True
+
+        return False
+
+    def _fetch_blog_index(self, config: Dict) -> bool:
+        """Fetch Laravel Blog article index (summaries only)."""
+        base_url = config["base_url"]
+        source_dir = self.get_source_cache_path("laravel-blog")
+
+        try:
+            # Fetch the main blog page to get article list
+            content_bytes = self._retry_request(base_url)
+            content = content_bytes.decode('utf-8')
+
+            # Extract article titles and summaries
+            articles = self._extract_blog_articles(content)
+
+            if articles:
+                # Save as index file
+                index_content = "# Laravel Blog - Recent Articles\n\n"
+                index_content += f"Source: {base_url}\n\n"
+                index_content += "---\n\n"
+
+                for article in articles[:20]:  # Limit to 20 most recent
+                    index_content += f"## {article.get('title', 'Untitled')}\n\n"
+                    if article.get('date'):
+                        index_content += f"*Published: {article['date']}*\n\n"
+                    if article.get('summary'):
+                        index_content += f"{article['summary']}\n\n"
+                    if article.get('url'):
+                        index_content += f"[Read more]({article['url']})\n\n"
+                    index_content += "---\n\n"
+
+                index_file = source_dir / "index.md"
+                with open(index_file, 'w', encoding='utf-8') as f:
+                    f.write(index_content)
+
+                metadata = {
+                    "source": "laravel-blog",
+                    "name": config['name'],
+                    "article_count": len(articles),
+                    "success_rate": 1.0,
+                    "difficulty": "mixed",
+                }
+                self.save_cache_metadata("laravel-blog", metadata)
+                logger.info(f"Successfully fetched {len(articles)} blog article summaries")
+                return True
+
+        except Exception as e:
+            logger.error(f"Error fetching Laravel blog index: {str(e)}")
+
+        return False
+
+    def _fetch_news_index(self, config: Dict) -> bool:
+        """Fetch Laravel News article index (summaries only)."""
+        base_url = config["base_url"]
+        source_dir = self.get_source_cache_path("laravel-news")
+
+        try:
+            content_bytes = self._retry_request(base_url)
+            content = content_bytes.decode('utf-8')
+
+            # Extract article titles and summaries
+            articles = self._extract_news_articles(content)
+
+            if articles:
+                index_content = "# Laravel News - Recent Articles\n\n"
+                index_content += f"Source: {base_url}\n\n"
+                index_content += "---\n\n"
+
+                for article in articles[:30]:  # Limit to 30 most recent
+                    index_content += f"## {article.get('title', 'Untitled')}\n\n"
+                    if article.get('category'):
+                        index_content += f"*Category: {article['category']}*\n\n"
+                    if article.get('summary'):
+                        index_content += f"{article['summary']}\n\n"
+                    if article.get('url'):
+                        index_content += f"[Read more]({article['url']})\n\n"
+                    index_content += "---\n\n"
+
+                index_file = source_dir / "index.md"
+                with open(index_file, 'w', encoding='utf-8') as f:
+                    f.write(index_content)
+
+                metadata = {
+                    "source": "laravel-news",
+                    "name": config['name'],
+                    "article_count": len(articles),
+                    "success_rate": 1.0,
+                    "difficulty": "mixed",
+                }
+                self.save_cache_metadata("laravel-news", metadata)
+                logger.info(f"Successfully fetched {len(articles)} Laravel News article summaries")
+                return True
+
+        except Exception as e:
+            logger.error(f"Error fetching Laravel News index: {str(e)}")
+
+        return False
+
+    def _fetch_laracasts_metadata(self, config: Dict) -> bool:
+        """Fetch Laracasts topic metadata (respects paywall)."""
+        topics_url = config.get("topics_url", "https://laracasts.com/topics")
+        source_dir = self.get_source_cache_path("laracasts-index")
+
+        try:
+            content_bytes = self._retry_request(topics_url)
+            content = content_bytes.decode('utf-8')
+
+            # Extract topic list (publicly available)
+            topics = self._extract_laracasts_topics(content)
+
+            if topics:
+                index_content = "# Laracasts - Topic Index\n\n"
+                index_content += f"Source: {topics_url}\n\n"
+                index_content += "*Note: Laracasts is a premium service. This index provides topic metadata only.*\n\n"
+                index_content += "---\n\n"
+
+                for topic in topics:
+                    index_content += f"## {topic.get('name', 'Untitled')}\n\n"
+                    if topic.get('description'):
+                        index_content += f"{topic['description']}\n\n"
+                    if topic.get('series_count'):
+                        index_content += f"*{topic['series_count']} series available*\n\n"
+                    if topic.get('url'):
+                        index_content += f"[View on Laracasts]({topic['url']})\n\n"
+                    index_content += "---\n\n"
+
+                index_file = source_dir / "topics.md"
+                with open(index_file, 'w', encoding='utf-8') as f:
+                    f.write(index_content)
+
+                metadata = {
+                    "source": "laracasts-index",
+                    "name": config['name'],
+                    "topic_count": len(topics),
+                    "success_rate": 1.0,
+                    "difficulty": "mixed",
+                    "type": "metadata_only",
+                }
+                self.save_cache_metadata("laracasts-index", metadata)
+                logger.info(f"Successfully fetched {len(topics)} Laracasts topic metadata")
+                return True
+
+        except Exception as e:
+            logger.error(f"Error fetching Laracasts metadata: {str(e)}")
+
+        return False
+
+    def _extract_blog_articles(self, html_content: str) -> List[Dict]:
+        """Extract article summaries from Laravel Blog HTML."""
+        articles = []
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
+
+            # Look for article elements
+            article_elements = soup.find_all('article') or soup.find_all('div', class_=re.compile(r'post|article|entry', re.I))
+
+            for article in article_elements[:20]:
+                article_data: Dict[str, Any] = {}
+
+                # Find title
+                title_elem = article.find(['h1', 'h2', 'h3']) or article.find('a', class_=re.compile(r'title', re.I))
+                if title_elem:
+                    article_data['title'] = title_elem.get_text(strip=True)
+
+                # Find link
+                link_elem = article.find('a', href=True)
+                if link_elem:
+                    href = str(link_elem.get('href', ''))
+                    if href and not href.startswith('#'):
+                        article_data['url'] = href if href.startswith('http') else f"https://blog.laravel.com{href}"
+
+                # Find summary/excerpt
+                summary_elem = article.find('p') or article.find(class_=re.compile(r'excerpt|summary|description', re.I))
+                if summary_elem:
+                    summary = summary_elem.get_text(strip=True)
+                    if len(summary) > 20:
+                        article_data['summary'] = summary[:300] + "..." if len(summary) > 300 else summary
+
+                # Find date
+                date_elem = article.find('time') or article.find(class_=re.compile(r'date|time', re.I))
+                if date_elem:
+                    article_data['date'] = date_elem.get_text(strip=True)
+
+                if article_data.get('title'):
+                    articles.append(article_data)
+
+        except ImportError:
+            logger.warning("BeautifulSoup not installed, skipping article extraction")
+        except Exception as e:
+            logger.warning(f"Error extracting blog articles: {str(e)}")
+
+        return articles
+
+    def _extract_news_articles(self, html_content: str) -> List[Dict]:
+        """Extract article summaries from Laravel News HTML."""
+        articles = []
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
+
+            # Look for article cards
+            article_elements = soup.find_all('article') or soup.find_all('div', class_=re.compile(r'card|post|article', re.I))
+
+            for article in article_elements[:30]:
+                article_data: Dict[str, Any] = {}
+
+                # Find title
+                title_elem = article.find(['h1', 'h2', 'h3', 'h4'])
+                if title_elem:
+                    article_data['title'] = title_elem.get_text(strip=True)
+
+                # Find link
+                link_elem = article.find('a', href=True)
+                if link_elem:
+                    href = str(link_elem.get('href', ''))
+                    if href and not href.startswith('#'):
+                        article_data['url'] = href if href.startswith('http') else f"https://laravel-news.com{href}"
+
+                # Find category
+                category_elem = article.find(class_=re.compile(r'category|tag', re.I))
+                if category_elem:
+                    article_data['category'] = category_elem.get_text(strip=True)
+
+                # Find summary
+                summary_elem = article.find('p')
+                if summary_elem:
+                    summary = summary_elem.get_text(strip=True)
+                    if len(summary) > 20:
+                        article_data['summary'] = summary[:300] + "..." if len(summary) > 300 else summary
+
+                if article_data.get('title'):
+                    articles.append(article_data)
+
+        except ImportError:
+            logger.warning("BeautifulSoup not installed, skipping article extraction")
+        except Exception as e:
+            logger.warning(f"Error extracting news articles: {str(e)}")
+
+        return articles
+
+    def _extract_laracasts_topics(self, html_content: str) -> List[Dict]:
+        """Extract topic metadata from Laracasts topics page."""
+        topics = []
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
+
+            # Look for topic cards/links
+            topic_elements = soup.find_all('a', href=re.compile(r'/topics/'))
+
+            seen_topics: set = set()
+            for elem in topic_elements:
+                topic_data: Dict[str, Any] = {}
+
+                href = str(elem.get('href', ''))
+                if href and href not in seen_topics:
+                    seen_topics.add(href)
+                    topic_data['url'] = f"https://laracasts.com{href}" if not href.startswith('http') else href
+
+                    # Extract topic name from URL or text
+                    name = elem.get_text(strip=True) or href.split('/')[-1].replace('-', ' ').title()
+                    if name and len(name) > 1:
+                        topic_data['name'] = name
+
+                        # Look for description in parent or sibling
+                        parent = elem.parent
+                        if parent:
+                            desc_elem = parent.find('p') or parent.find(class_=re.compile(r'description', re.I))
+                            if desc_elem:
+                                topic_data['description'] = desc_elem.get_text(strip=True)[:200]
+
+                        if topic_data.get('name'):
+                            topics.append(topic_data)
+
+        except ImportError:
+            logger.warning("BeautifulSoup not installed, skipping topic extraction")
+        except Exception as e:
+            logger.warning(f"Error extracting Laracasts topics: {str(e)}")
+
+        return topics
+
+    def _fetch_and_process_html(self, url: str, source: str, section: str) -> Optional[str]:
+        """Fetch and process HTML content to markdown."""
+        try:
+            content_bytes = self._retry_request(url)
+            content = content_bytes.decode('utf-8')
+
+            try:
+                from bs4 import BeautifulSoup
+                from markdownify import markdownify as md
+
+                soup = BeautifulSoup(content, 'html.parser')
+
+                # Remove navigation, header, footer
+                for tag in soup.find_all(['nav', 'header', 'footer', 'aside', 'script', 'style']):
+                    tag.decompose()
+
+                # Find main content
+                main_content = (
+                    soup.find('main') or
+                    soup.find('article') or
+                    soup.find('div', class_=re.compile(r'content|prose|documentation', re.I)) or
+                    soup.find('body')
+                )
+
+                if main_content:
+                    markdown_content = md(str(main_content), strip=['a'], code_language='php')
+
+                    # Clean up
+                    markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
+                    markdown_content = markdown_content.strip()
+
+                    if len(markdown_content) > 100:
+                        header = f"# {source.replace('-', ' ').title()} - {section.replace('-', ' ').title()}\n\n"
+                        header += f"Source: {url}\n\n---\n\n"
+                        return header + markdown_content
+
+            except ImportError:
+                logger.warning("BeautifulSoup/markdownify not installed")
+
+        except Exception as e:
+            logger.error(f"Error fetching {url}: {str(e)}")
+
+        return None
+
+    def _retry_request(self, url: str, headers: Optional[Dict] = None) -> bytes:
+        """Make a request with retry logic."""
+        if headers is None:
+            headers = {"User-Agent": USER_AGENT}
+
+        last_exception: Optional[Exception] = None
+
+        for attempt in range(self.max_retries + 1):
+            try:
+                request = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    return response.read()
+            except urllib.error.HTTPError as e:
+                last_exception = e
+                if e.code == 404:
+                    raise
+                elif e.code >= 500 and attempt < self.max_retries:
+                    wait_time = (2 ** attempt) + random.uniform(0, 2)
+                    logger.warning(f"Server error {e.code}, retrying in {wait_time:.1f}s")
+                    time.sleep(wait_time)
+                else:
+                    raise
+            except Exception as e:
+                last_exception = e
+                if attempt < self.max_retries:
+                    wait_time = (2 ** attempt) + random.uniform(0, 2)
+                    logger.warning(f"Request error, retrying in {wait_time:.1f}s: {str(e)}")
+                    time.sleep(wait_time)
+                else:
+                    raise
+
+        if last_exception:
+            raise last_exception
+        raise RuntimeError(f"Failed to fetch {url}")
+
+    def fetch_all_sources(self, force: bool = False) -> Dict[str, bool]:
+        """Fetch learning resources from all sources."""
+        results = {}
+        for source in self.learning_sources.keys():
+            results[source] = self.fetch_learning_source(source, force=force)
+        return results
+
+    def list_available_sources(self) -> List[str]:
+        """List all available learning sources."""
+        return list(self.learning_sources.keys())
+
+    def get_source_info(self, source: str) -> Optional[Dict]:
+        """Get information about a specific learning source."""
+        return self.learning_sources.get(source)
+
 
 def parse_arguments():
     """Parse command line arguments."""
@@ -2743,8 +3391,8 @@ def update_version(target_dir: Path, version: str, force: bool, check_only: bool
 def handle_update_command(args, updater):
     """Handle the unified --update command - updates everything."""
     # Just update all documentation
-    results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
-    
+    results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
+
     core_success = results["core"]
     external_results = results["external"]
     package_results = results.get("packages", {})
@@ -2903,7 +3551,7 @@ def main():
         
         else:
             # Default: update all (core, external services, and packages)
-            results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
+            results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
             
             core_success = results["core"]
             external_results = results["external"]

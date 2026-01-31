@@ -1433,7 +1433,7 @@ class TestMainFunction:
             result = main()
             
             assert result == 0
-            mock_updater.update_all.assert_called_once_with(force_core=False, force_external=False, force_packages=False)
+            mock_updater.update_all.assert_called_once_with(force_core=False, force_external=False, force_packages=False, force_learning=False)
     
     @patch('docs_updater.MultiSourceDocsUpdater')
     def test_main_status_command(self, mock_updater_class):
@@ -1508,7 +1508,7 @@ class TestMainFunction:
             result = main()
             
             assert result == 0
-            mock_updater.update_all.assert_called_with(force_core=False, force_external=False, force_packages=False)
+            mock_updater.update_all.assert_called_with(force_core=False, force_external=False, force_packages=False, force_learning=False)
     
     def test_main_with_exception(self):
         """Test main function handling exceptions."""

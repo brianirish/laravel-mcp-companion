@@ -152,3 +152,89 @@ def format_version_comparison(
         data["filter_applied"] = file_filter
 
     return toon_encode(data)
+
+
+def format_learning_resources(
+    source: str,
+    resources: List[Dict[str, Any]],
+    total_count: Optional[int] = None
+) -> str:
+    """Format learning resources list."""
+    return toon_encode({
+        "source": source,
+        "count": total_count if total_count is not None else len(resources),
+        "resources": resources
+    })
+
+
+def format_learning_path(path_data: Dict[str, Any]) -> str:
+    """Format a single learning path."""
+    return toon_encode(path_data)
+
+
+def format_learning_paths_list(paths: List[Dict[str, Any]]) -> str:
+    """Format list of learning paths."""
+    return toon_encode({
+        "count": len(paths),
+        "paths": paths
+    })
+
+
+def format_need_docs(
+    need: str,
+    docs: List[str],
+    source_type: str = "core"
+) -> str:
+    """Format documentation results for a user need."""
+    return toon_encode({
+        "need": need,
+        "source_type": source_type,
+        "count": len(docs),
+        "docs": docs
+    })
+
+
+def format_related_packages(
+    package: str,
+    related: List[str]
+) -> str:
+    """Format related packages list."""
+    return toon_encode({
+        "package": package,
+        "related_count": len(related),
+        "related_packages": related
+    })
+
+
+def format_difficulty_content(
+    difficulty: str,
+    docs: List[str],
+    total_count: int
+) -> str:
+    """Format documentation filtered by difficulty level."""
+    return toon_encode({
+        "difficulty": difficulty,
+        "count": total_count,
+        "docs": docs
+    })
+
+
+def format_learning_resource_search(
+    query: str,
+    core_results: List[Dict[str, Any]],
+    learning_results: Optional[List[Dict[str, Any]]] = None,
+    external_results: Optional[List[Dict[str, Any]]] = None
+) -> str:
+    """Format search results that include learning resources."""
+    data: Dict[str, Any] = {
+        "query": query,
+        "core_results": core_results,
+        "core_count": len(core_results),
+    }
+    if learning_results:
+        data["learning_results"] = learning_results
+        data["learning_count"] = len(learning_results)
+    if external_results:
+        data["external_results"] = external_results
+        data["external_count"] = len(external_results)
+    return toon_encode(data)

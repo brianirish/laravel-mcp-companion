@@ -23,7 +23,27 @@ from toon_helpers import (
     format_doc_structure,
     format_error,
     format_feature_verification,
-    format_version_comparison
+    format_version_comparison,
+    format_learning_resources,
+    format_learning_path,
+    format_learning_paths_list,
+    format_need_docs,
+    format_related_packages,
+    format_difficulty_content
+)
+from learning_resources import (
+    DifficultyLevel,
+    EXPANDED_CATEGORIES,
+    NEED_MAPPINGS,
+    LEARNING_PATHS,
+    RELATED_PACKAGES,
+    get_topics_by_difficulty,
+    get_docs_for_need,
+    get_related_packages,
+    get_learning_path,
+    list_learning_paths,
+    get_category_docs,
+    list_categories
 )
 
 logger = logging.getLogger("laravel-mcp-companion")
@@ -487,17 +507,8 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
     if not version:
         version = runtime_version if runtime_version else DEFAULT_VERSION
 
-    # Define category mappings
-    categories = {
-        "authentication": ["authentication", "sanctum", "passport", "fortify", "breeze", "jetstream", "passwords", "verification"],
-        "database": ["database", "eloquent", "migrations", "seeding", "queries", "pagination", "redis"],
-        "frontend": ["blade", "frontend", "vite", "mix", "views", "localization", "validation"],
-        "api": ["api", "sanctum", "passport", "eloquent-resources", "routing"],
-        "testing": ["testing", "dusk", "http-tests", "console-tests", "database-testing", "mocking"],
-        "deployment": ["deployment", "octane", "sail", "homestead", "valet", "forge", "vapor"],
-        "packages": ["packages", "cashier", "scout", "socialite", "telescope", "horizon"],
-        "security": ["authentication", "authorization", "encryption", "hashing", "passwords", "csrf", "sanctum", "passport"]
-    }
+    # Use expanded categories from learning_resources module
+    categories = EXPANDED_CATEGORIES
 
     category_lower = category.lower()
     if category_lower not in categories:
@@ -701,6 +712,354 @@ def compare_laravel_versions_impl(docs_path: Path, from_version: str, to_version
     except Exception as e:
         logger.error(f"Error comparing versions {from_version} -> {to_version}: {str(e)}")
         return format_error(f"Error comparing versions: {str(e)}")
+
+
+def find_laravel_docs_for_need_impl(docs_path: Path, need: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
+    """Find Laravel documentation for a specific user need.
+
+    Args:
+        docs_path: Base path for documentation
+        need: User need description (e.g., "upload files", "send emails")
+        version: Specific Laravel version to search. If not provided, uses default version.
+        runtime_version: Runtime default version (from --version flag)
+
+    Returns:
+        TOON-encoded list of relevant documentation files.
+    """
+    logger.debug(f"find_laravel_docs_for_need_impl called with need: {need}")
+
+    if not need.strip():
+        return format_error("Need description cannot be empty")
+
+    if not version:
+        version = runtime_version if runtime_version else DEFAULT_VERSION
+
+    # Get docs for the need using the learning_resources mappings
+    docs = get_docs_for_need(need)
+
+    if not docs:
+        # Try fuzzy matching on the need
+        need_lower = need.lower()
+        all_needs = list(NEED_MAPPINGS.keys())
+        suggestions = [n for n in all_needs if any(word in n for word in need_lower.split())][:5]
+
+        return format_error(
+            f"No documentation found for need: '{need}'",
+            {"suggestions": suggestions} if suggestions else None
+        )
+
+    # Filter to only docs that exist in the version
+    version_path = docs_path / version
+    existing_docs = []
+
+    if version_path.exists():
+        available_files = set(f.replace('.md', '') for f in os.listdir(version_path) if f.endswith('.md'))
+        for doc in docs:
+            # Handle external and package docs differently
+            if doc.startswith('external/') or doc.startswith('packages/'):
+                existing_docs.append(doc)
+            elif doc in available_files:
+                existing_docs.append(f"{version}/{doc}.md")
+
+    if not existing_docs:
+        return format_error(
+            f"No documentation files found for need: '{need}' in version {version}",
+            {"suggested_docs": docs}
+        )
+
+    return format_need_docs(need, existing_docs, "core")
+
+
+def get_laravel_learning_path_impl(path_name: str) -> str:
+    """Get a specific curated learning path.
+
+    Args:
+        path_name: The learning path identifier (e.g., "getting-started", "api-development")
+
+    Returns:
+        TOON-encoded learning path with ordered documentation files.
+    """
+    logger.debug(f"get_laravel_learning_path_impl called with path_name: {path_name}")
+
+    if not path_name.strip():
+        # Return list of all available paths
+        paths = list_learning_paths()
+        return format_learning_paths_list(paths)
+
+    path_data = get_learning_path(path_name)
+
+    if not path_data:
+        available_paths = list(LEARNING_PATHS.keys())
+        return format_error(
+            f"Learning path '{path_name}' not found",
+            {"available_paths": available_paths}
+        )
+
+    # Convert DifficultyLevel enum to string for serialization
+    result = dict(path_data)
+    result["id"] = path_name
+    if isinstance(result.get("difficulty"), DifficultyLevel):
+        result["difficulty"] = result["difficulty"].value
+
+    return format_learning_path(result)
+
+
+def list_laravel_learning_paths_impl() -> str:
+    """List all available learning paths.
+
+    Returns:
+        TOON-encoded list of learning paths with summaries.
+    """
+    logger.debug("list_laravel_learning_paths_impl called")
+
+    paths = list_learning_paths()
+    return format_learning_paths_list(paths)
+
+
+def get_laravel_content_by_difficulty_impl(docs_path: Path, difficulty: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
+    """Get Laravel documentation filtered by difficulty level.
+
+    Args:
+        docs_path: Base path for documentation
+        difficulty: Difficulty level ("beginner", "intermediate", "advanced")
+        version: Specific Laravel version to search. If not provided, uses default version.
+        runtime_version: Runtime default version (from --version flag)
+
+    Returns:
+        TOON-encoded list of documentation files at the specified difficulty level.
+    """
+    logger.debug(f"get_laravel_content_by_difficulty_impl called with difficulty: {difficulty}")
+
+    # Validate difficulty level
+    try:
+        difficulty_level = DifficultyLevel(difficulty.lower())
+    except ValueError:
+        valid_levels = [level.value for level in DifficultyLevel]
+        return format_error(
+            f"Invalid difficulty level: '{difficulty}'",
+            {"valid_levels": valid_levels}
+        )
+
+    if not version:
+        version = runtime_version if runtime_version else DEFAULT_VERSION
+
+    # Get topics at this difficulty level
+    topics = get_topics_by_difficulty(difficulty_level)
+
+    # Filter to only topics that exist in the version
+    version_path = docs_path / version
+    existing_docs = []
+
+    if version_path.exists():
+        available_files = set(f.replace('.md', '') for f in os.listdir(version_path) if f.endswith('.md'))
+        for topic in topics:
+            if topic in available_files:
+                existing_docs.append(f"{version}/{topic}.md")
+
+    return format_difficulty_content(difficulty_level.value, existing_docs, len(existing_docs))
+
+
+def get_related_laravel_packages_impl(package: str) -> str:
+    """Get packages related to a specific Laravel package.
+
+    Args:
+        package: Package identifier (e.g., "laravel/sanctum")
+
+    Returns:
+        TOON-encoded list of related packages.
+    """
+    logger.debug(f"get_related_laravel_packages_impl called with package: {package}")
+
+    if not package.strip():
+        return format_error("Package name cannot be empty")
+
+    # Normalize package name
+    package_lower = package.lower().strip()
+
+    # Try exact match first
+    related = get_related_packages(package_lower)
+
+    # If not found, try partial match
+    if not related:
+        for pkg_id in RELATED_PACKAGES.keys():
+            if package_lower in pkg_id.lower() or pkg_id.lower() in package_lower:
+                related = RELATED_PACKAGES[pkg_id]
+                package = pkg_id
+                break
+
+    if not related:
+        available_packages = list(RELATED_PACKAGES.keys())
+        return format_error(
+            f"No related packages found for: '{package}'",
+            {"available_packages": available_packages[:10]}
+        )
+
+    return format_related_packages(package, related)
+
+
+def search_laravel_learning_resources_impl(
+    docs_path: Path,
+    query: str,
+    sources: Optional[List[str]] = None,
+    runtime_version: Optional[str] = None
+) -> str:
+    """Search through learning resources for a specific term.
+
+    Args:
+        docs_path: Base path for documentation
+        query: Search term to look for
+        sources: Specific sources to search (e.g., ["laravel-bootcamp", "laravel-blog"])
+        runtime_version: Runtime default version (from --version flag)
+
+    Returns:
+        TOON-encoded search results from learning resources.
+    """
+    logger.debug(f"search_laravel_learning_resources_impl called with query: {query}, sources: {sources}")
+
+    if not query.strip():
+        return format_error("Search query cannot be empty")
+
+    learning_dir = docs_path / "learning_resources"
+
+    if not learning_dir.exists():
+        return format_error(
+            "No learning resources found",
+            {"suggestion": "Use update_learning_docs() to fetch learning resources first"}
+        )
+
+    results_data: List[Dict] = []
+    pattern = re.compile(re.escape(query), re.IGNORECASE)
+
+    # Determine which sources to search
+    if sources:
+        search_dirs = [learning_dir / source for source in sources if (learning_dir / source).exists()]
+    else:
+        search_dirs = [d for d in learning_dir.iterdir() if d.is_dir()]
+
+    for source_dir in search_dirs:
+        source_name = source_dir.name
+        source_matches: List[Dict] = []
+
+        for file_path in source_dir.glob("*.md"):
+            try:
+                content = get_file_content_cached(str(file_path))
+                if not content.startswith("Error") and not content.startswith("File not found"):
+                    if pattern.search(content):
+                        count = len(pattern.findall(content))
+                        source_matches.append({
+                            "file": file_path.name,
+                            "matches": count
+                        })
+            except Exception as e:
+                logger.warning(f"Error searching {file_path}: {str(e)}")
+                continue
+
+        if source_matches:
+            results_data.append({
+                "source": source_name,
+                "files": source_matches
+            })
+
+    if not results_data:
+        return format_error(f"No results found for '{query}' in learning resources")
+
+    return toon_encode({
+        "query": query,
+        "results": results_data,
+        "source_count": len(results_data)
+    })
+
+
+def list_laravel_learning_resources_impl(docs_path: Path, source: Optional[str] = None) -> str:
+    """List available learning resources.
+
+    Args:
+        docs_path: Base path for documentation
+        source: Specific source to list (e.g., "laravel-bootcamp")
+
+    Returns:
+        TOON-encoded list of learning resources.
+    """
+    logger.debug(f"list_laravel_learning_resources_impl called with source: {source}")
+
+    learning_dir = docs_path / "learning_resources"
+
+    if not learning_dir.exists():
+        return format_error(
+            "No learning resources found",
+            {"suggestion": "Use update_learning_docs() to fetch learning resources first"}
+        )
+
+    if source:
+        source_dir = learning_dir / source
+        if not source_dir.exists():
+            available_sources = [d.name for d in learning_dir.iterdir() if d.is_dir()]
+            return format_error(
+                f"Learning source '{source}' not found",
+                {"available_sources": available_sources}
+            )
+
+        # List files in specific source
+        files = []
+        for file_path in source_dir.glob("*.md"):
+            files.append({
+                "file": file_path.name,
+                "size": file_path.stat().st_size
+            })
+
+        return format_learning_resources(source, files)
+
+    # List all sources
+    sources_data: List[Dict] = []
+    for source_dir in learning_dir.iterdir():
+        if source_dir.is_dir():
+            file_count = len(list(source_dir.glob("*.md")))
+            metadata_path = source_dir / ".cache_metadata.json"
+
+            source_info = {
+                "source": source_dir.name,
+                "file_count": file_count
+            }
+
+            if metadata_path.exists():
+                try:
+                    with open(metadata_path, 'r') as f:
+                        metadata = json.load(f)
+                    source_info["name"] = metadata.get("name", source_dir.name)
+                    source_info["difficulty"] = metadata.get("difficulty", "mixed")
+                except Exception:
+                    pass
+
+            sources_data.append(source_info)
+
+    return toon_encode({
+        "count": len(sources_data),
+        "sources": sources_data
+    })
+
+
+def list_laravel_categories_impl() -> str:
+    """List all available documentation categories.
+
+    Returns:
+        TOON-encoded list of categories.
+    """
+    logger.debug("list_laravel_categories_impl called")
+
+    categories = list_categories()
+    categories_with_counts = []
+
+    for cat in categories:
+        docs = get_category_docs(cat)
+        categories_with_counts.append({
+            "category": cat,
+            "doc_count": len(docs)
+        })
+
+    return toon_encode({
+        "count": len(categories_with_counts),
+        "categories": categories_with_counts
+    })
 
 
 def clear_caches():
