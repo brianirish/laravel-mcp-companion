@@ -93,6 +93,7 @@ Changelog
 
 On this page
 
+- [January 30, 2026](#january-30%2C-2026)
 - [January 23, 2026](#january-23%2C-2026)
 - [January 16, 2026](#january-16%2C-2026)
 - [January 9, 2026](#january-9%2C-2026)
@@ -115,6 +116,19 @@ Copy page
 New updates and improvements to Laravel Forge.
 
 Copy page
+
+[​](#january-30%2C-2026)
+
+January 30, 2026
+
+Show Improvements (2)
+
+- **MySQL 8.4**: MySQL 8.0 has been replaced with MySQL 8.4, making it the new default MySQL version for newly provisioned servers.
+- **Power cycle for Laravel VPS**: You can now power cycle Laravel VPS servers.
+
+Show Fixes (1)
+
+- Resolved an issue with duplicate backup configurations resulting in failed backups.
 
 [​](#january-23%2C-2026)
 
@@ -232,14 +246,6 @@ Show Fixes (9)
 - Resolved a bug preventing some organization owners from removing users.
 - Recipe logs now display properly, without collapsing when extensive.
 
-[​](#november-21%2C-2025)
-
-November 21, 2025
-
-## [​](#provision-aws-servers-with-ebs-gp3) Provision AWS servers with EBS gp3
-
-You can now provision an AWS server with EBS GP3. GP2 will remain the default for already provisioned AWS servers. All new servers will be provisioned with EBS gp3.To move your existing servers from gp2 to gp3, visit your AWS dashboard.
-
-![](https://mintcdn.com/forge-laravel/hcLEf7Sqd4f72HGx/images/chan
+[​](#
 
 *[Content truncated for length]*
