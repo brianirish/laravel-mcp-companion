@@ -3391,8 +3391,8 @@ def update_version(target_dir: Path, version: str, force: bool, check_only: bool
 def handle_update_command(args, updater):
     """Handle the unified --update command - updates everything."""
     # Just update all documentation
-    results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
-    
+    results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
+
     core_success = results["core"]
     external_results = results["external"]
     package_results = results.get("packages", {})
@@ -3551,7 +3551,7 @@ def main():
         
         else:
             # Default: update all (core, external services, and packages)
-            results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force)
+            results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
             
             core_success = results["core"]
             external_results = results["external"]
