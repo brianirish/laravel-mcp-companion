@@ -14,38 +14,23 @@
 
 **Laravel MCP Companion** is a documentation aggregator and navigator for the Laravel ecosystem. It centralizes and organizes high-quality documentation from across the Laravel ecosystem, making it easily discoverable through your AI assistant.
 
-## Laravel Boost vs Laravel MCP Companion
+## How It Compares
 
-These tools serve different purposes and work well together:
+| Feature | [Laravel Boost](https://github.com/laravel/boost) | Context7 | Laravel MCP Companion |
+|---------|:--------:|:--------:|:--------------------:|
+| **Focus** | Code generation | General docs | Laravel documentation |
+| **Best for** | Active development | Any library | Learning & reference |
+| **Project-aware context** | ✅ | ❌ | ❌ |
+| **Laravel multi-version support** (6.x - latest) | ❌ | ❌ | ✅ |
+| **Laravel service docs** (Forge, Vapor, Nova, Envoyer) | ❌ | ❌ | ✅ |
+| **Learning paths & difficulty levels** | ❌ | ❌ | ✅ |
+| **"I need X" documentation finder** | ❌ | ❌ | ✅ |
+| **Curated Laravel package recommendations** | ❌ | ❌ | ✅ |
+| **Offline documentation access** | ❌ | ❌ | ✅ |
+| **TOON format output** (30-60% fewer tokens) | ❌ | ❌ | ✅ |
+| **General documentation** (non-Laravel) | ❌ | ✅ | ❌ |
 
-| Aspect | [laravel/boost](https://github.com/laravel/boost) | Laravel MCP Companion |
-|--------|--------------|----------------------|
-| **Focus** | Code generation context | Documentation navigation |
-| **Use case** | Writing Laravel code | Learning & reference |
-| **Approach** | Project-aware context | Version-aware docs |
-| **Best for** | Active development | Research & learning |
-
-**Use Boost** when you're writing code and need project-aware context.
-**Use Companion** when you're learning, researching, or need documentation reference.
-
-## Why Laravel MCP Companion?
-
-| Feature | Laravel MCP Companion | Context7 |
-|---------|:--------------------:|:--------:|
-| **Instant documentation retrieval** (zero latency) | ✅ | ❌ |
-| **Laravel multi-version support** (6.x - latest) | ✅ | ❌ |
-| **Laravel service docs** (Forge, Vapor, Nova, Envoyer) | ✅ | ❌ |
-| **Learning paths & difficulty levels** | ✅ | ❌ |
-| **"I need X" documentation finder** | ✅ | ❌ |
-| **Curated Laravel package recommendations** | ✅ | ❌ |
-| **Offline documentation access** | ✅ | ❌ |
-| **TOON format output** (30-60% fewer tokens) | ✅ | ❌ |
-| **No internet requests during use** | ✅ | ❌ |
-| **Laravel-specific search** | ✅ | ❌ |
-| **Auto-discovery of service docs** | ✅ | ❌ |
-| **General documentation** (non-Laravel) | ❌ | ✅ |
-
-*Context7 excels at general documentation. Laravel MCP Companion is purpose-built for Laravel with faster, offline-capable, Laravel-specific features.*
+**Use Boost** when writing code and you need project-aware context. **Use Context7** for non-Laravel libraries. **Use Companion** when learning, researching, or need Laravel documentation reference.
 
 ### What you get:
 - **Multi-version Laravel documentation** (6.x through latest) with enhanced search
