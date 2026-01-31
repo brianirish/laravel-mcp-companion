@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "eba60c227efb738ce3825772a99e3fd7476bb8c5",
-  "commit_date": "2026-01-28T04:00:41Z",
-  "commit_message": "remove headings",
-  "commit_url": "https://github.com/laravel/docs/commit/eba60c227efb738ce3825772a99e3fd7476bb8c5",
-  "sync_time": "2026-01-29T02:40:57Z"
+  "commit_sha": "5cdd821b95fac15f0f1c16c06a7f20465750ef99",
+  "commit_date": "2026-01-30T22:57:50Z",
+  "commit_message": "Update queues.md (#11009)",
+  "commit_url": "https://github.com/laravel/docs/commit/5cdd821b95fac15f0f1c16c06a7f20465750ef99",
+  "sync_time": "2026-01-31T00:02:40Z"
 }
