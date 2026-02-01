@@ -101,7 +101,7 @@ Copy page
 
 You can get in touch with our support team the following ways:
 
-- **Email**: [[email protected]](/cdn-cgi/l/email-protection#adcbc2dfcac8edc1ccdfccdbc8c183cec2c0)
+- **Email**: [[email protected]](/cdn-cgi/l/email-protection#7c1a130e1b193c101d0e1d0a1910521f1311)
 - **Chat**: Click “Help” within the Laravel Forge dashboard nav bar to leave a message for the support team.
 
 Was this page helpful?
