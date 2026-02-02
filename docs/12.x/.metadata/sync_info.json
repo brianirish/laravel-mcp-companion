@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5cdd821b95fac15f0f1c16c06a7f20465750ef99",
-  "commit_date": "2026-01-30T22:57:50Z",
-  "commit_message": "Update queues.md (#11009)",
-  "commit_url": "https://github.com/laravel/docs/commit/5cdd821b95fac15f0f1c16c06a7f20465750ef99",
-  "sync_time": "2026-01-31T00:02:40Z"
+  "commit_sha": "b9903357d820d58a7b08a228857106f9e9e8bc4e",
+  "commit_date": "2026-02-01T16:26:10Z",
+  "commit_message": "Fix Eloquent Collections withoutAppends() method example (#11011)",
+  "commit_url": "https://github.com/laravel/docs/commit/b9903357d820d58a7b08a228857106f9e9e8bc4e",
+  "sync_time": "2026-02-02T00:02:46Z"
 }
