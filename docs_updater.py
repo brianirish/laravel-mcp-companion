@@ -206,6 +206,11 @@ class DocumentationAutoDiscovery:
 
                 # Remove the /docs/ prefix to get the section name
                 section = clean_link.replace('/docs/', '')
+
+                # Exclude non-documentation files
+                if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                    continue
+
                 if section and section not in sections:
                     sections.append(section)
                     
@@ -254,6 +259,11 @@ class DocumentationAutoDiscovery:
                 section_match = re.search(r'/docs/v\d+/(.+)', clean_link)
                 if section_match:
                     section = section_match.group(1)
+
+                    # Exclude non-documentation files
+                    if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                        continue
+
                     if section and section not in sections:
                         sections.append(section)
             
@@ -300,6 +310,11 @@ class DocumentationAutoDiscovery:
                         # Strip fragment identifier (everything after #)
                         path_without_fragment = path.split('#')[0]
                         section = path_without_fragment.lstrip('/')
+
+                        # Exclude non-documentation files
+                        if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                            continue
+
                         if section and section not in sections:
                             sections.append(section)
             
@@ -330,6 +345,11 @@ class DocumentationAutoDiscovery:
                 # Remove fragments and /docs/ prefix
                 clean_link = link.split('#')[0]
                 section = clean_link.replace('/docs/', '')
+
+                # Exclude non-documentation files
+                if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                    continue
+
                 if section and section not in sections:
                     # Test if this is a real page (not a redirect)
                     try:
@@ -475,7 +495,7 @@ class ExternalDocsFetcher:
                     "index_url": "https://forge.laravel.com/docs",
                     "link_pattern": r'href="(/docs/[^"]*)"',
                     "nested_sections": ["accounts", "servers", "sites", "resources"],
-                    "exclude_patterns": ["#", "javascript:", "mailto:"]
+                    "exclude_patterns": ["#", "javascript:", "mailto:", "sitemap.xml", "sitemap", "robots.txt"]
                 },
                 "sections": [
                     # Get Started (manual fallback)
@@ -953,8 +973,8 @@ class ExternalDocsFetcher:
         text_content = self._html_to_text(content_html)
         
         # Limit length to prevent extremely long outputs
-        if len(text_content) > 10000:
-            text_content = text_content[:10000] + "\n\n*[Content truncated for length]*"
+        if len(text_content) > 50000:
+            text_content = text_content[:50000] + "\n\n*[Content truncated for length]*"
         
         return text_content
     
@@ -1086,16 +1106,10 @@ class ExternalDocsFetcher:
         )
         
         # Post-process to handle CloudFlare email protection links
-        # Replace all email protection links with [email protected]
+        # Catch all CloudFlare email protection links regardless of link text
         markdown = re.sub(
-            r'\[\[email protected\]\]\(/cdn-cgi/l/email-protection#[a-f0-9]+\)',
+            r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
             '[email protected]',
-            markdown
-        )
-        # Handle Support links with email protection
-        markdown = re.sub(
-            r'\[Support\]\(/cdn-cgi/l/email-protection[^)]+\)',
-            'Support',
             markdown
         )
         
@@ -1110,9 +1124,104 @@ class ExternalDocsFetcher:
         
         # Clean up excessive newlines
         markdown = re.sub(r'\n\s*\n\s*\n', '\n\n', markdown)
-        
+
+        # Remove social media links
+        markdown = self._remove_social_media_lines(markdown)
+
+        # Remove image references
+        markdown = self._remove_image_references(markdown)
+
         return markdown.strip()
-    
+
+    def _remove_social_media_lines(self, content: str) -> str:
+        """
+        Remove lines that are purely social media links from scraped content.
+        Preserves legitimate documentation references (e.g., Envoy's @discord directive).
+        """
+        social_domains = ['x.com/laravelphp', 'x.com/laravel', 'twitter.com/laravelphp', 'twitter.com/laravel',
+                          'discord.com/invite', 'discord.gg',
+                          'linkedin.com/company', 'facebook.com', 'instagram.com', 'github.com/laravel']
+
+        lines = content.split('\n')
+        filtered = []
+
+        for line in lines:
+            stripped = line.strip()
+
+            # Skip empty lines
+            if not stripped:
+                filtered.append(line)
+                continue
+
+            # Skip nav list items pointing to social media
+            if re.match(r'^[-*+]\s*\[Community\]\(https?://(discord|twitter)', stripped, re.IGNORECASE):
+                continue
+
+            # Count links in the line
+            all_links = re.findall(r'\[([^\]]*)\]\(([^)]*)\)', stripped)
+            if len(all_links) >= 3:  # If line has 3+ links, check if most are social
+                social_link_count = sum(1 for text, url in all_links if any(domain in url for domain in social_domains))
+                # If 50% or more of the links are social media, remove the line
+                if social_link_count >= len(all_links) * 0.5:
+                    continue
+
+            # Check if line is entirely composed of social media links
+            # Remove all markdown links from the line to see what remains
+            text_without_links = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', stripped)
+
+            # If after removing links we have substantial text, keep the line
+            # But if it's only link text that are domain names or social network names, skip it
+            if text_without_links.strip():
+                # Check if the remaining text is just social network names strung together
+                social_names = ['x', 'github', 'discord', 'linkedin', 'facebook', 'instagram', 'twitter']
+                text_lower = text_without_links.lower().strip()
+
+                # Check if it's ONLY social network names concatenated or space-separated
+                # Remove all social names from the text and see if anything remains
+                remaining = text_lower
+                for name in social_names:
+                    remaining = remaining.replace(name, '')
+
+                # If nothing substantial remains after removing social names, it's a social media line
+                if not remaining.strip() and any(domain in stripped for domain in social_domains):
+                    continue
+
+            filtered.append(line)
+
+        return '\n'.join(filtered)
+
+    def _remove_image_references(self, content: str) -> str:
+        """
+        Remove markdown image references from scraped content.
+        Preserves images inside code blocks.
+        """
+        lines = content.split('\n')
+        in_code_block = False
+        filtered = []
+
+        for line in lines:
+            if line.strip().startswith('```'):
+                in_code_block = not in_code_block
+                filtered.append(line)
+                continue
+
+            if not in_code_block:
+                # Remove image references from the line
+                cleaned = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', line)
+
+                # Skip lines that became empty or just bullet/whitespace after removal
+                stripped_cleaned = cleaned.strip()
+                if not stripped_cleaned or stripped_cleaned in ('*', '-', '+'):
+                    # Line had only image(s), skip it
+                    continue
+
+                # Line has other content, keep the cleaned version
+                filtered.append(cleaned)
+            else:
+                filtered.append(line)
+
+        return '\n'.join(filtered)
+
     def fetch_all_services(self, force: bool = False) -> Dict[str, bool]:
         """
         Fetch documentation for all configured Laravel services.
@@ -2301,17 +2410,113 @@ class CommunityPackageFetcher:
         content = re.sub(r'```\s*\n', '```\n', content)
         
         # Remove CloudFlare email protection links
+        # Catch all CloudFlare email protection links regardless of link text
         content = re.sub(
-            r'\[\[email protected\]\]\(/cdn-cgi/l/email-protection#[a-f0-9]+\)',
+            r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
             '[email protected]',
             content
         )
         
         # Remove trailing whitespace
         content = '\n'.join(line.rstrip() for line in content.split('\n'))
-        
+
+        # Remove social media links
+        content = self._remove_social_media_lines(content)
+
+        # Remove image references
+        content = self._remove_image_references(content)
+
         return content.strip()
-    
+
+    def _remove_social_media_lines(self, content: str) -> str:
+        """
+        Remove lines that are purely social media links from scraped content.
+        Preserves legitimate documentation references (e.g., Envoy's @discord directive).
+        """
+        social_domains = ['x.com/laravelphp', 'x.com/laravel', 'twitter.com/laravelphp', 'twitter.com/laravel',
+                          'discord.com/invite', 'discord.gg',
+                          'linkedin.com/company', 'facebook.com', 'instagram.com', 'github.com/laravel']
+
+        lines = content.split('\n')
+        filtered = []
+
+        for line in lines:
+            stripped = line.strip()
+
+            # Skip empty lines
+            if not stripped:
+                filtered.append(line)
+                continue
+
+            # Skip nav list items pointing to social media
+            if re.match(r'^[-*+]\s*\[Community\]\(https?://(discord|twitter)', stripped, re.IGNORECASE):
+                continue
+
+            # Count links in the line
+            all_links = re.findall(r'\[([^\]]*)\]\(([^)]*)\)', stripped)
+            if len(all_links) >= 3:  # If line has 3+ links, check if most are social
+                social_link_count = sum(1 for text, url in all_links if any(domain in url for domain in social_domains))
+                # If 50% or more of the links are social media, remove the line
+                if social_link_count >= len(all_links) * 0.5:
+                    continue
+
+            # Check if line is entirely composed of social media links
+            # Remove all markdown links from the line to see what remains
+            text_without_links = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', stripped)
+
+            # If after removing links we have substantial text, keep the line
+            # But if it's only link text that are domain names or social network names, skip it
+            if text_without_links.strip():
+                # Check if the remaining text is just social network names strung together
+                social_names = ['x', 'github', 'discord', 'linkedin', 'facebook', 'instagram', 'twitter']
+                text_lower = text_without_links.lower().strip()
+
+                # Check if it's ONLY social network names concatenated or space-separated
+                # Remove all social names from the text and see if anything remains
+                remaining = text_lower
+                for name in social_names:
+                    remaining = remaining.replace(name, '')
+
+                # If nothing substantial remains after removing social names, it's a social media line
+                if not remaining.strip() and any(domain in stripped for domain in social_domains):
+                    continue
+
+            filtered.append(line)
+
+        return '\n'.join(filtered)
+
+    def _remove_image_references(self, content: str) -> str:
+        """
+        Remove markdown image references from scraped content.
+        Preserves images inside code blocks.
+        """
+        lines = content.split('\n')
+        in_code_block = False
+        filtered = []
+
+        for line in lines:
+            if line.strip().startswith('```'):
+                in_code_block = not in_code_block
+                filtered.append(line)
+                continue
+
+            if not in_code_block:
+                # Remove image references from the line
+                cleaned = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', line)
+
+                # Skip lines that became empty or just bullet/whitespace after removal
+                stripped_cleaned = cleaned.strip()
+                if not stripped_cleaned or stripped_cleaned in ('*', '-', '+'):
+                    # Line had only image(s), skip it
+                    continue
+
+                # Line has other content, keep the cleaned version
+                filtered.append(cleaned)
+            else:
+                filtered.append(line)
+
+        return '\n'.join(filtered)
+
     def list_available_packages(self) -> List[str]:
         """List all available community packages."""
         return list(self.community_packages.keys())
@@ -3208,6 +3413,20 @@ class LearningResourceFetcher:
 
                     # Clean up
                     markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
+
+                    # Remove CloudFlare email protection links
+                    markdown_content = re.sub(
+                        r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
+                        '[email protected]',
+                        markdown_content
+                    )
+
+                    # Remove social media links
+                    markdown_content = self._remove_social_media_lines(markdown_content)
+
+                    # Remove image references
+                    markdown_content = self._remove_image_references(markdown_content)
+
                     markdown_content = markdown_content.strip()
 
                     if len(markdown_content) > 100:
@@ -3222,6 +3441,95 @@ class LearningResourceFetcher:
             logger.error(f"Error fetching {url}: {str(e)}")
 
         return None
+
+    def _remove_social_media_lines(self, content: str) -> str:
+        """
+        Remove lines that are purely social media links from scraped content.
+        Preserves legitimate documentation references (e.g., Envoy's @discord directive).
+        """
+        social_domains = ['x.com/laravelphp', 'x.com/laravel', 'twitter.com/laravelphp', 'twitter.com/laravel',
+                          'discord.com/invite', 'discord.gg',
+                          'linkedin.com/company', 'facebook.com', 'instagram.com', 'github.com/laravel']
+
+        lines = content.split('\n')
+        filtered = []
+
+        for line in lines:
+            stripped = line.strip()
+
+            # Skip empty lines
+            if not stripped:
+                filtered.append(line)
+                continue
+
+            # Skip nav list items pointing to social media
+            if re.match(r'^[-*+]\s*\[Community\]\(https?://(discord|twitter)', stripped, re.IGNORECASE):
+                continue
+
+            # Count links in the line
+            all_links = re.findall(r'\[([^\]]*)\]\(([^)]*)\)', stripped)
+            if len(all_links) >= 3:  # If line has 3+ links, check if most are social
+                social_link_count = sum(1 for text, url in all_links if any(domain in url for domain in social_domains))
+                # If 50% or more of the links are social media, remove the line
+                if social_link_count >= len(all_links) * 0.5:
+                    continue
+
+            # Check if line is entirely composed of social media links
+            # Remove all markdown links from the line to see what remains
+            text_without_links = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', stripped)
+
+            # If after removing links we have substantial text, keep the line
+            # But if it's only link text that are domain names or social network names, skip it
+            if text_without_links.strip():
+                # Check if the remaining text is just social network names strung together
+                social_names = ['x', 'github', 'discord', 'linkedin', 'facebook', 'instagram', 'twitter']
+                text_lower = text_without_links.lower().strip()
+
+                # Check if it's ONLY social network names concatenated or space-separated
+                # Remove all social names from the text and see if anything remains
+                remaining = text_lower
+                for name in social_names:
+                    remaining = remaining.replace(name, '')
+
+                # If nothing substantial remains after removing social names, it's a social media line
+                if not remaining.strip() and any(domain in stripped for domain in social_domains):
+                    continue
+
+            filtered.append(line)
+
+        return '\n'.join(filtered)
+
+    def _remove_image_references(self, content: str) -> str:
+        """
+        Remove markdown image references from scraped content.
+        Preserves images inside code blocks.
+        """
+        lines = content.split('\n')
+        in_code_block = False
+        filtered = []
+
+        for line in lines:
+            if line.strip().startswith('```'):
+                in_code_block = not in_code_block
+                filtered.append(line)
+                continue
+
+            if not in_code_block:
+                # Remove image references from the line
+                cleaned = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', line)
+
+                # Skip lines that became empty or just bullet/whitespace after removal
+                stripped_cleaned = cleaned.strip()
+                if not stripped_cleaned or stripped_cleaned in ('*', '-', '+'):
+                    # Line had only image(s), skip it
+                    continue
+
+                # Line has other content, keep the cleaned version
+                filtered.append(cleaned)
+            else:
+                filtered.append(line)
+
+        return '\n'.join(filtered)
 
     def _retry_request(self, url: str, headers: Optional[Dict] = None) -> bytes:
         """Make a request with retry logic."""
