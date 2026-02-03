@@ -84,6 +84,7 @@ Aikido
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -135,7 +136,7 @@ Was this page helpful?
 
 YesNo
 
-[Sentry](/docs/integrations/sentry)[Support](/docs/support)
+[Sentry](/docs/integrations/sentry)[OpenClaw](/docs/integrations/openclaw)
 
 ⌘I
 

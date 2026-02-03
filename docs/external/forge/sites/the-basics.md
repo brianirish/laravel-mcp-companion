@@ -84,6 +84,7 @@ Creating and Managing Sites
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -216,6 +217,6 @@ Editing some variables such as `$table_prefix` will invoke the WordPress install
 
 Laravel Forge also supports installing [phpMyAdmin](https://phpmyadmin.net), allowing you to manage your server’s databases from anywhere.
 You will need to choose an existing database, or create a new one, to proceed. This database is used by phpMyAdmin to store the configuration of your databases and users.
-Once Laravel Forge has installed phpMyAdmin, you can visit your site using the provided Forge domain and 
+Once Laravel Forge has installed phpMyAdmin, you can visit your
 
 *[Content truncated for length]*

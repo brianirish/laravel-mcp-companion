@@ -84,6 +84,7 @@ Laravel Forge CLI
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -359,8 +360,6 @@ forge tinker example.com
 
 ## [​](#resources) Resources
 
-Laravel Forge provisions servers with a variety of resources and additional software, such as Nginx, MySQL, etc. You may use the Forge CLI to perform common actions on those resources.
-
-### [​](#checki
+Laravel Forge provisions servers with a variety of resources and additional software, such as Nginx, MySQL, etc. You may use the Forge CLI to perform common ac
 
 *[Content truncated for length]*

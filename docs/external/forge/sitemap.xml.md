@@ -39,6 +39,9 @@ https://forge.laravel.com/docs/integrations/aikido
 https://forge.laravel.com/docs/integrations/envoyer
 2026-01-22T19:25:17.423Z
 
+https://forge.laravel.com/docs/integrations/openclaw
+2026-02-02T20:15:29.223Z
+
 https://forge.laravel.com/docs/integrations/sentry
 2026-01-22T19:25:17.431Z
 
@@ -58,7 +61,7 @@ https://forge.laravel.com/docs/knowledge-base/sites
 2026-01-22T19:25:17.453Z
 
 https://forge.laravel.com/docs/knowledge-base/source-control
-2026-01-22T19:25:17.453Z
+2026-02-02T20:05:36.945Z
 
 https://forge.laravel.com/docs/organizations
 2026-01-22T19:25:17.450Z
@@ -118,7 +121,7 @@ https://forge.laravel.com/docs/servers/the-basics
 2026-01-22T19:25:17.506Z
 
 https://forge.laravel.com/docs/servers/types
-2026-01-22T19:25:17.509Z
+2026-02-02T20:25:37.306Z
 
 https://forge.laravel.com/docs/sites/commands
 2026-01-22T19:25:17.510Z
@@ -160,7 +163,7 @@ https://forge.laravel.com/docs/storage-providers
 2026-01-22T19:25:17.535Z
 
 https://forge.laravel.com/docs/support
-2026-01-22T19:25:17.538Z
+2026-02-02T20:05:37.102Z
 
 https://forge.laravel.com/docs/teams
 2026-01-22T19:25:17.553Z
