@@ -84,6 +84,7 @@ Server Providers
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -218,8 +219,6 @@ The Vultr server provider requires you to add the [Laravel Forge IP addresses](/
 
 ### [​](#hetzner-cloud-api-access) Hetzner Cloud API access
 
-Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forge has an API token for each Hetzner Project.
-
-## [​](#br
+Hetzner API tokens are specific to a Hetzner Project. If you utilize Hetzner Projects, you should ensure that Laravel Forge has an API t
 
 *[Content truncated for length]*

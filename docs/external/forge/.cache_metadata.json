@@ -8,6 +8,7 @@
     "cli",
     "integrations/aikido",
     "integrations/envoyer",
+    "integrations/openclaw",
     "integrations/sentry",
     "introduction",
     "knowledge-base/servers",
@@ -48,10 +49,10 @@
     "support",
     "teams"
   ],
-  "total_sections": 46,
+  "total_sections": 47,
   "success_rate": 1.0,
   "discovery_method": "auto-discovery",
   "auto_discovery_enabled": true,
-  "discovered_count": 46,
+  "discovered_count": 47,
   "manual_fallback": false
 }

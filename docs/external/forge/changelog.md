@@ -84,6 +84,7 @@ Changelog
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -244,8 +245,6 @@ Show Fixes (9)
 - DNS certificates will automatically reuse verification names for the same domain.
 - Resolved an error appearing in the console when using (command + K) to open the search feature.
 - Resolved a bug preventing some organization owners from removing users.
-- Recipe logs now display properly, without collapsing when extensive.
-
-[​](#
+- Recipe logs now display properly,
 
 *[Content truncated for length]*

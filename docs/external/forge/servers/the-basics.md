@@ -84,6 +84,7 @@ Creating and Managing Servers
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 

@@ -84,6 +84,7 @@ Domains
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -202,8 +203,6 @@ HTTP-01 is usually the best choice when:
 
 - You don’t have access to the domain’s DNS records to configure additional records.
 - You have strict restrictions around DNS record targets.
-- The domain points directly to Forge and you know it won’t be placed behind a CDN, proxy, or firewall later.
-
-While HTTP-01 ca
+- The domain points directly to Forge and you know it won’t be placed behind a CDN, p
 
 *[Content truncated for length]*

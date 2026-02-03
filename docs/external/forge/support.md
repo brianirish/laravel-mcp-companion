@@ -84,6 +84,7 @@ Support
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -101,14 +102,14 @@ Copy page
 
 You can get in touch with our support team the following ways:
 
-- **Email**: [[email protected]](/cdn-cgi/l/email-protection#2a4c45584d4f6a464b584b5c4f4604494547)
+- **Email**: [[email protected]](/cdn-cgi/l/email-protection#fc9a938e9b99bc909d8e9d8a9990d29f9391)
 - **Chat**: Click “Help” within the Laravel Forge dashboard nav bar to leave a message for the support team.
 
 Was this page helpful?
 
 YesNo
 
-[Aikido](/docs/integrations/aikido)[Changelog](/docs/changelog)
+[OpenClaw](/docs/integrations/openclaw)[Changelog](/docs/changelog)
 
 ⌘I
 

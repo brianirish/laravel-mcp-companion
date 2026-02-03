@@ -84,6 +84,7 @@ Deployments
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -195,6 +196,6 @@ You should not use zero-downtime deployments when using Laravel Octane, as Octan
 
 ### [​](#standard-deployments) Standard deployments
 
-The standard deployment strategy uses a simpler approach where your site’s code is kept in a single directory and
+The standard deployment strategy uses a simpler approach where your sit
 
 *[Content truncated for length]*

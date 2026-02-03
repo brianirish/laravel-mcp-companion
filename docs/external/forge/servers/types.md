@@ -84,6 +84,7 @@ Server Types
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -102,6 +103,7 @@ On this page
 - [Worker Servers](#worker-servers)
 - [Meilisearch Servers](#meilisearch-servers)
 - [Load Balancers](#load-balancers)
+- [OpenClaw Servers](#openclaw-servers)
 
 Servers
 
@@ -194,6 +196,14 @@ A Meilisearch server will only display and manage one [Site](/docs/sites/the-bas
 
 Load balancers are meant to distribute incoming web traffic across your servers. To do so, load balancers use Nginx as a “reverse proxy” to evenly distribute the incoming traffic. Therefore, load balancers are only provisioned with Nginx.
 Once provisioned you may [configure your load balancer](/docs/servers/load-balancing) to meet your needs.
+
+### [​](#openclaw-servers) OpenClaw Servers
+
+OpenClaw servers provide a minimal environment for running [OpenClaw](https://openclaw.ai) AI agents. These servers only install Homebrew and OpenClaw, and after provisioning, you are dropped straight into the shell to begin configuration.
+
+OpenClaw servers are only available on [Laravel VPS](/docs/servers/laravel-vps).
+
+For more information on configuring and managing OpenClaw servers, see the [OpenClaw integration](/docs/integrations/openclaw) documentation.
 
 Was this page helpful?
 

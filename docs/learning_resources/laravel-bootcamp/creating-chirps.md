@@ -102,13 +102,6 @@ Source: https://bootcamp.laravel.com/blade/creating-chirps
 
 All events
 
-* ![Laracon India](/images/community/events/laracon-in-2026.png )
-
-  Laracon India
-
-  Jan 31 - Feb 1 2026
-
-  Ahmedabad
 * ![Laracon EU](/images/community/events/laracon-eu-2026.png )
 
   Laracon EU

@@ -84,6 +84,7 @@ SSH Keys
 - [Envoyer](/docs/integrations/envoyer)
 - [Sentry](/docs/integrations/sentry)
 - [Aikido](/docs/integrations/aikido)
+- [OpenClaw](/docs/integrations/openclaw)
 
 ##### Other
 
@@ -218,6 +219,6 @@ YesNo
 
 ⌘I
 
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://l
+[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://disco
 
 *[Content truncated for length]*
