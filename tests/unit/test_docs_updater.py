@@ -554,36 +554,32 @@ class TestExternalDocsFetcher:
         assert "- Item 1" in text_content
         assert "`composer install`" in text_content
 
-    def test_html_to_text_support_link_filtering(self, external_docs_fetcher):
-        """Test that Support links with email protection are filtered out."""
+    def test_html_to_text_email_protection_filtering(self, external_docs_fetcher):
+        """Test that CloudFlare email protection links are replaced with placeholder."""
         html_content = """
         <div>
             <a href="https://forge.laravel.com">Laravel Forge home page</a>
-            <a href="/cdn-cgi/l/email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8">Support</a>
+            <a href="/cdn-cgi/l/email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8">[email protected]</a>
             <a href="/dashboard">Dashboard</a>
             <a href="https://support.laravel.com">Support</a>
-            <a href="/cdn-cgi/l/email-protection#123456">Contact Us</a>
+            <a href="/cdn-cgi/l/email-protection#123456">[email protected]</a>
         </div>
         """
-        
+
         text_content = external_docs_fetcher._html_to_text(html_content)
-        
+
         # Regular links should be converted
         assert "[Laravel Forge home page](https://forge.laravel.com)" in text_content
         assert "[Dashboard](/dashboard)" in text_content
-        
-        # Support link without email protection should be kept
         assert "[Support](https://support.laravel.com)" in text_content
-        
-        # Other link with email protection but not Support text should be kept
-        assert "[Contact Us](/cdn-cgi/l/email-protection#123456)" in text_content
-        
-        # Support links with email protection should have link removed but text kept
+
+        # All email protection links should be replaced with placeholder
         assert "email-protection#b5d3dac7d2d0f5d9d4c7d4c3d0d99bd6dad8" not in text_content
-        # Check that we have both Support texts - one as plain text, one as a link
-        assert text_content.count("Support") == 2  # Plain text Support + linked Support
-        assert "[Support](https://support.laravel.com)" in text_content  # Good Support link kept
-        assert "[Support](/cdn-cgi/l/email-protection" not in text_content  # Bad Support link removed
+        assert "email-protection#123456" not in text_content
+        assert "/cdn-cgi/l/email-protection" not in text_content
+
+        # Should have placeholder emails instead
+        assert text_content.count("[email protected]") >= 2
 
     def test_process_service_html(self, external_docs_fetcher, sample_html_content):
         """Test service HTML processing."""
