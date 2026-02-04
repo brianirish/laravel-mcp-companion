@@ -1196,9 +1196,11 @@ class ExternalDocsFetcher:
         )
         
         # Post-process to handle CloudFlare email protection links
-        # Catch all CloudFlare email protection links regardless of link text
+        # Replace all email protection links with placeholder
+        # In practice, these are always used for email addresses, not navigation
+        # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
         markdown = re.sub(
-            r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
+            r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
             '[email protected]',
             markdown
         )
