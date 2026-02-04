@@ -101,7 +101,7 @@ On this page
 - [Updating Assets and Translations](#updating-assets-and-translations)
 - [Updating Third-Party Nova Packages ​](#updating-third-party-nova-packages-%E2%80%8B)
 - [Upgrading Authentication Features](#upgrading-authentication-features)
-- [Updating Nova Components (Custom Tool, Cards, Fields, Filters)](#updating-nova-components-custom-tool%2C-cards%2C-fields%2C-filters)
+- [Updating Nova Components (Custom Tool, Cards, Fields, Filters)](#updating-nova-components-custom-tool-cards-fields-filters)
 - [Inertia 2 Compatibility](#inertia-2-compatibility)
 - [Replacing form-backend-validation](#replacing-form-backend-validation)
 - [Medium Impact Changes](#medium-impact-changes)
@@ -228,7 +228,7 @@ public function register(): void
 }
 ```
 
-## [​](#updating-nova-components-custom-tool,-cards,-fields,-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
+## [​](#updating-nova-components-custom-tool-cards-fields-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
 
 ### [​](#inertia-2-compatibility) Inertia 2 Compatibility
 

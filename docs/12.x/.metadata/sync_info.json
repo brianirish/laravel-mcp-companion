@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "0f6ae40e193b40e833701650b7cf7102f9dcb0bb",
-  "commit_date": "2026-02-02T21:32:46Z",
-  "commit_message": "Fix statement indentation (#11017)",
-  "commit_url": "https://github.com/laravel/docs/commit/0f6ae40e193b40e833701650b7cf7102f9dcb0bb",
-  "sync_time": "2026-02-03T00:03:01Z"
+  "commit_sha": "b41716082beaba8e1e2e1e1138f45ce5b0c3e17a",
+  "commit_date": "2026-02-03T06:58:33Z",
+  "commit_message": "Use distinct collection items (#11019)",
+  "commit_url": "https://github.com/laravel/docs/commit/b41716082beaba8e1e2e1e1138f45ce5b0c3e17a",
+  "sync_time": "2026-02-04T00:02:37Z"
 }
