@@ -97,8 +97,8 @@ On this page
 - [Modernizing Dependencies](#modernizing-dependencies)
 - [Tab Panels](#tab-panels)
 - [Fields & Filters Improvements](#fields-%26-filters-improvements)
-- [New Dependent Computed Field via Field::computed() method](#new-dependent-computed-field-via-field%3A%3Acomputed-method)
-- [New Field::immutable() method](#new-field%3A%3Aimmutable-method)
+- [New Dependent Computed Field via Field::computed() method](#new-dependent-computed-field-via-fieldcomputed-method)
+- [New Field::immutable() method](#new-fieldimmutable-method)
 - [Other Field Improvements](#other-field-improvements)
 - [Separate Policy Classes for Nova Resources](#separate-policy-classes-for-nova-resources)
 
@@ -165,7 +165,7 @@ To learn more about adding tab panels to your Nova resources, check out the [tab
 
 ## [​](#fields-&-filters-improvements) Fields & Filters Improvements
 
-### [​](#new-dependent-computed-field-via-field::computed-method) New Dependent Computed Field via `Field::computed()` method
+### [​](#new-dependent-computed-field-via-fieldcomputed-method) New Dependent Computed Field via `Field::computed()` method
 
 Nova 5 introduces an enhanced `computed` method that builds upon the previous computed fields feature. While computed fields have always been valuable for displaying additional resource information, they previously lacked a unique `$attribute` identifier, which limited their use as dependent fields. This limitation has been resolved in Nova 5:
 
@@ -195,7 +195,7 @@ Text::make('Comment')
 
 More information on computed fields can be found within the [computed field documentation](./resources/dependent-fields#dependable-computed-fields).
 
-### [​](#new-field::immutable-method) New `Field::immutable()` method
+### [​](#new-fieldimmutable-method) New `Field::immutable()` method
 
 While [readonly fields](./resources/fields#readonly-fields) disable a field’s input and prevent form submission of its value, immutable fields offer more flexibility. By invoking the `immutable` method on a field, you can prevent users from modifying the field’s value while still allowing it to be submitted with the form.
 You may also pass a boolean argument to the `immutable` method to dynamically control whether a field should be immutable:

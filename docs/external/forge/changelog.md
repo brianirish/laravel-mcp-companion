@@ -94,19 +94,19 @@ Changelog
 
 On this page
 
-- [January 30, 2026](#january-30%2C-2026)
-- [January 23, 2026](#january-23%2C-2026)
-- [January 16, 2026](#january-16%2C-2026)
-- [January 9, 2026](#january-9%2C-2026)
-- [December 12, 2025](#december-12%2C-2025)
-- [December 5, 2025](#december-5%2C-2025)
-- [November 21, 2025](#november-21%2C-2025)
-- [November 14, 2025](#november-14%2C-2025)
-- [November 7, 2025](#november-7%2C-2025)
-- [October 31, 2025](#october-31%2C-2025)
-- [October 24, 2025](#october-24%2C-2025)
-- [October 17, 2025](#october-17%2C-2025)
-- [October 7, 2025](#october-7%2C-2025)
+- [January 30, 2026](#january-30-2026)
+- [January 23, 2026](#january-23-2026)
+- [January 16, 2026](#january-16-2026)
+- [January 9, 2026](#january-9-2026)
+- [December 12, 2025](#december-12-2025)
+- [December 5, 2025](#december-5-2025)
+- [November 21, 2025](#november-21-2025)
+- [November 14, 2025](#november-14-2025)
+- [November 7, 2025](#november-7-2025)
+- [October 31, 2025](#october-31-2025)
+- [October 24, 2025](#october-24-2025)
+- [October 17, 2025](#october-17-2025)
+- [October 7, 2025](#october-7-2025)
 
 Other
 
@@ -245,6 +245,8 @@ Show Fixes (9)
 - DNS certificates will automatically reuse verification names for the same domain.
 - Resolved an error appearing in the console when using (command + K) to open the search feature.
 - Resolved a bug preventing some organization owners from removing users.
-- Recipe logs now display properly,
+- Recipe logs now display properly, without collapsing when extensive.
+
+[​
 
 *[Content truncated for length]*
