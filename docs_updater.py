@@ -2414,8 +2414,9 @@ class CommunityPackageFetcher:
         
         # Remove CloudFlare email protection links
         # Catch all CloudFlare email protection links regardless of link text
+        # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
         content = re.sub(
-            r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
+            r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
             '[email protected]',
             content
         )
@@ -3329,8 +3330,9 @@ class LearningResourceFetcher:
                     markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
 
                     # Remove CloudFlare email protection links
+                    # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
                     markdown_content = re.sub(
-                        r'\[[^\]]*\]\(/cdn-cgi/l/email-protection[^)]*\)',
+                        r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
                         '[email protected]',
                         markdown_content
                     )
