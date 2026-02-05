@@ -3,45 +3,33 @@
 Source: https://spatie.be/docs/laravel-backup/v9/installation-and-setup
 
 Docs
-
 Laravel-backup
-
 Installation and setup
-
 Installation and setup
 ======================
-
 ### On this page
-
 1. Basic installation
 2. Configuring the backup disk
 3. Scheduling
 4. Monitoring
 5. Dumping the database
 6. SkipSsl in MySQL/MariaDB database connection
-
 ##Basic installation
 --------------------
-
 You can install this package via composer using:
-
 ```php
 composer require spatie/laravel-backup
 ```
 The package will automatically register its service provider.
-
 To publish the config file to `config/backup.php` run:
-
 ```php
 php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider" --tag=backup-config
 ```
 You can also publish translation files using the command:
-
 ```php
 php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider" --tag=backup-translations
 ```
 This is the default contents of the configuration:
-
 ```php
 return [
 
@@ -338,17 +326,12 @@ return [
 ```
 ##Configuring the backup disk
 -----------------------------
-
 By default, the backup will be saved into the `storage/app/Laravel/` directory of your laravel application.
 We recommend that you create a disk named `backups` (you can use any name you prefer) in `filesystems.php` and specify that name in the `disk` key of the `backup.php` config file.
-
 ##Scheduling
 ------------
-
 After you have performed the basic installation you can start using the `backup:run`, `backup:clean`, `backup:list` and `backup:monitor`-commands. In most cases you'll want to schedule these commands so you don't have to manually run `backup:run` everytime you need a new backup.
-
 The commands can be scheduled in Laravel's console kernel, just like any other command.
-
 ```php
 // app/Console/Kernel.php
 
@@ -359,7 +342,6 @@ protected function schedule(Schedule $schedule)
 }
 ```
 Or for Laravel 11 or higher you just add them to the console routes file.
-
 ```php
 // routes/console.php
 
@@ -369,9 +351,7 @@ Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:30');
 ```
 Of course, the times used in the code above are just examples. Adjust them to suit your own preferences. It is generally a good idea to avoid the timeslot between 02:00 and 03:00 at night in areas where daylight saving time changes occur, as this causes sometimes a double backup or (worse) no backup at all.
-
 If a backup cannot be taken successfully, the `backup:run` command returns an exit code of 1 which signals a general error, so you can use laravel's task hooks to specify code to be executed if the scheduled backup succeeds or fails:
-
 ```php
    $schedule
       ->command('backup:run')->daily()->at('01:00')
@@ -384,22 +364,14 @@ If a backup cannot be taken successfully, the `backup:run` command returns an ex
 ```
 ##Monitoring
 ------------
-
 If your application is broken, the scheduled jobs cannot run anymore. You might also simply forget to add a cron job needed to trigger Laravel's scheduling. In either case, you may think backups are being made when in fact nothing is being backed up.
-
 To find out about problems with your backups, the package ships with monitoring functionality. It will inform you when backups become too old or when they take up too much storage.
-
 Learn how to set up monitoring.
-
 ##Dumping the database
 ----------------------
-
 `mysqldump` is used to backup MySQL databases. `pg_dump` is used to dump PostgreSQL databases. If these binaries are not installed in a default location, you can add a key named `dump.dump_binary_path` in Laravel's own `database.php` config file. **Only fill in the path to the binary**. Do not include the name of the binary itself.
-
 If your database dump takes a long time, you might exceed the default timeout of 60 seconds. You can set a higher (or lower) limit by providing a `dump.timeout` config key which specifies, in seconds, how long the command may run.
-
 Here's an example for MySQL:
-
 ```php
 //config/database.php
 'connections' => [
@@ -417,11 +389,8 @@ Here's an example for MySQL:
 ```
 ##SkipSsl in MySQL/MariaDB database connection
 ----------------------------------------------
-
 set the value of `dump.skip_ssl` to `true` in your `config/database.php` to bypass **`TLS/SSL error: self-signed certificate`** error while establishing a database connection
-
 Here's an example for MySQL:
-
 ```php
 //config/database.php
 'connections' => [
@@ -436,11 +405,8 @@ Here's an example for MySQL:
 	],
 ```
 ### ##Timestamp form of database dumps
-
 By default, database dump filenames do not contain a timestamp. If you would like to add a timestamp, you can set the timestamp format to be used in the config.
-
 For example, to save a database dump with a timestamp in the format of Y-m-d-H-i-s:
-
 ```php
 //config/backup.php
 'backup' => [
@@ -449,13 +415,9 @@ For example, to save a database dump with a timestamp in the format of Y-m-d-H-i
   ],
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
-
 ### ##Base name of database dumps
-
 By default, database dump filenames use the database name. If you would like to name dump files with the connection name, you can set that in the config.
-
 For example, to save a database dump using the connection name in the filename:
-
 ```php
 //config/backup.php
 'backup' => [
@@ -464,13 +426,9 @@ For example, to save a database dump using the connection name in the filename:
   ],
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
-
 ### ##File extensions of database dumps
-
 By default, database dump files are named `.sql`, except for the MongoDB driver which are named `.archive`. If you would like to override this, you can set the file extension to be used in the config.
-
 For example, to save a database dump as a `.txt` file:
-
 ```php
 //config/backup.php
 'backup' => [
@@ -479,11 +437,8 @@ For example, to save a database dump as a `.txt` file:
   ],
 ```
 > This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
-
 ### ##Custom database dumpers
-
 If you need to have a custom database dumper for a driver, you can use `DbDumpFactory::extend()`. It expects the first argument to be the driver name and the second to be a callback that returns an instance of `Spatie\DbDumper\DbDumper`.
-
 ```php
 DbDumperFactory::extend('mysql', function() {
     return new YourCustomMysqlDumper();
@@ -498,7 +453,5 @@ class YourCustomMysqlDumper extends DbDumper
 }
 ```
 High level overview
-
 Questions & issues
-
 Help us improve this page

@@ -4,40 +4,25 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
+[Laravel Nova home page](https://nova.laravel.com)
 v5
-
 Search...
-
 ⌘KAsk AI
-
-- Support
+- [email protected]
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
-
 Search...
-
 Navigation
-
 Digging Deeper
-
 Notifications
-
 [Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
-
 ##### Get Started
-
 - [Installation](/docs/v5/installation)
 - [Release Notes](/docs/v5/releases)
 - [Upgrade Guide](/docs/v5/upgrade)
-
 ##### Resources
-
 - [The Basics](/docs/v5/resources/the-basics)
 - [Fields](/docs/v5/resources/fields)
 - [Dependent Fields](/docs/v5/resources/dependent-fields)
@@ -48,35 +33,23 @@ Notifications
 - [Relationships](/docs/v5/resources/relationships)
 - [Validation](/docs/v5/resources/validation)
 - [Authorization](/docs/v5/resources/authorization)
-
 ##### Search
-
 - [The Basics](/docs/v5/search/the-basics)
 - [Global Search](/docs/v5/search/global-search)
 - [Scout Integration](/docs/v5/search/scout-integration)
-
 ##### Filters
-
 - [Defining Filters](/docs/v5/filters/defining-filters)
 - [Registering Filters](/docs/v5/filters/registering-filters)
-
 ##### Lenses
-
 - [Defining Lenses](/docs/v5/lenses/defining-lenses)
 - [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
 ##### Actions
-
 - [Defining Actions](/docs/v5/actions/defining-actions)
 - [Registering Actions](/docs/v5/actions/registering-actions)
-
 ##### Metrics
-
 - [Defining Metrics](/docs/v5/metrics/defining-metrics)
 - [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
 ##### Digging Deeper
-
 - [Dashboards](/docs/v5/customization/dashboards)
 - [Menus](/docs/v5/customization/menus)
 - [Notifications](/docs/v5/customization/notifications)
@@ -91,37 +64,23 @@ Notifications
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-
 On this page
-
 - [Overview](#overview)
 - [Sending Notifications](#sending-notifications)
 - [Opening Remote Action URLs in New Tabs](#opening-remote-action-urls-in-new-tabs)
 - [Notification Icons](#notification-icons)
 - [Disabling Notifications](#disabling-notifications)
 - [Enabling Unread Notifications Count](#enabling-unread-notifications-count)
-
 Digging Deeper
-
 # Notifications
-
 Learn how to send notifications to Nova users.
-
 ## [​](#overview) Overview
-
 Nova notifications allow you to notify Nova users of events within your application, such as a report being ready to download or of an invoice that needs attention. Nova notifications are displayed within a slide-out menu that can be accessed via the “bell” icon within Nova’s top navigation menu.
-
-![Notifications](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/notifications.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=5809b1bd2e07a05cb1d99d7b76a1e238)
-
 ## [​](#sending-notifications) Sending Notifications
-
 To send a notification, you simply need to send a `NovaNotification` instance to a user’s `notify` method. Of course, before getting started, you should ensure that your user model is [notifiable](https://laravel.com/docs/notifications).
 Nova notifications may be generated via the `NovaNotification` class, which provides convenient methods like `message`, `action`, `icon`, and `type`. The currently supported notification types include `success`, `error`, `warning`, and `info`:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\URL;
@@ -136,13 +95,9 @@ $request->user()->notify(
         ->type('info')
 );
 ```
-
 You may also send a Nova notification by including the `NovaChannel` in the array of channels returned by a notification’s `via` method:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\Notifications\NovaChannel;
@@ -175,36 +130,23 @@ public function toNova()
         ->type('info');
 }
 ```
-
 #### [​](#opening-remote-action-urls-in-new-tabs) Opening Remote Action URLs in New Tabs
-
 When defining a notification action, the `openInNewTab` method may be invoked to instruct Nova to open the given URL in a new browser tab:
-
 Copy
-
 Ask AI
-
 ```
 return (new NovaNotification)
     ->action(
         'Download', URL::remote('https://example.com/report.pdf')
     )->openInNewTab()
 ```
-
 #### [​](#notification-icons) Notification Icons
-
 Nova utilizes the free [Heroicons](https://heroicons.com/) icon set by [Steve Schoger](https://twitter.com/steveschoger). Therefore, you may simply specify the name of one of these icons when providing the icon name to the Nova notification’s `icon` method.
-
 ## [​](#disabling-notifications) Disabling Notifications
-
 If you wish to completely disable notifications inside Nova, you can call the `withoutNotifications` method from your `App/Providers/NovaServiceProvider`:
-
 app/Providers/NovaServiceProvider.php
-
 Copy
-
 Ask AI
-
 ```
 /**
  * Boot any application services.
@@ -216,18 +158,12 @@ public function boot(): void
     Nova::withoutNotificationCenter();
 }
 ```
-
 ## [​](#enabling-unread-notifications-count) Enabling Unread Notifications Count
-
 By default, Nova shows a visual indicator when there are unread notifications inside the notification center.
 If you would like Nova to show the number of unread notifications, you can call the `showUnreadCountInNotificationCenter` method from your `App/Providers/NovaServiceProvider`:
-
 app/Providers/NovaServiceProvider.php
-
 Copy
-
 Ask AI
-
 ```
 /**
  * Boot any application services.
@@ -239,25 +175,12 @@ public function boot(): void
     Nova::showUnreadCountInNotificationCenter();
 }
 ```
-
 Was this page helpful?
-
 YesNo
-
 [Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)
-
 ⌘I
-
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
+[Laravel Nova home page](https://nova.laravel.com)
 Platform
-
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
 Legal and Compliance
-
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

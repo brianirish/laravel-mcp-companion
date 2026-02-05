@@ -4,40 +4,25 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
+[Laravel Nova home page](https://nova.laravel.com)
 v5
-
 Search...
-
 ⌘KAsk AI
-
-- Support
+- [email protected]
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
-
 Search...
-
 Navigation
-
 Digging Deeper
-
 Impersonation
-
 [Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
-
 ##### Get Started
-
 - [Installation](/docs/v5/installation)
 - [Release Notes](/docs/v5/releases)
 - [Upgrade Guide](/docs/v5/upgrade)
-
 ##### Resources
-
 - [The Basics](/docs/v5/resources/the-basics)
 - [Fields](/docs/v5/resources/fields)
 - [Dependent Fields](/docs/v5/resources/dependent-fields)
@@ -48,35 +33,23 @@ Impersonation
 - [Relationships](/docs/v5/resources/relationships)
 - [Validation](/docs/v5/resources/validation)
 - [Authorization](/docs/v5/resources/authorization)
-
 ##### Search
-
 - [The Basics](/docs/v5/search/the-basics)
 - [Global Search](/docs/v5/search/global-search)
 - [Scout Integration](/docs/v5/search/scout-integration)
-
 ##### Filters
-
 - [Defining Filters](/docs/v5/filters/defining-filters)
 - [Registering Filters](/docs/v5/filters/registering-filters)
-
 ##### Lenses
-
 - [Defining Lenses](/docs/v5/lenses/defining-lenses)
 - [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
 ##### Actions
-
 - [Defining Actions](/docs/v5/actions/defining-actions)
 - [Registering Actions](/docs/v5/actions/registering-actions)
-
 ##### Metrics
-
 - [Defining Metrics](/docs/v5/metrics/defining-metrics)
 - [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
 ##### Digging Deeper
-
 - [Dashboards](/docs/v5/customization/dashboards)
 - [Menus](/docs/v5/customization/menus)
 - [Notifications](/docs/v5/customization/notifications)
@@ -91,35 +64,22 @@ Impersonation
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-
 On this page
-
 - [Overview](#overview)
 - [Enabling Impersonation](#enabling-impersonation)
 - [Customizing Impersonation Authorization](#customizing-impersonation-authorization)
 - [Inspecting Impersonation State](#inspecting-impersonation-state)
 - [Impersonation Events](#impersonation-events)
-
 Digging Deeper
-
 # Impersonation
-
 Learn how to impersonate other users in your application.
-
 ## [​](#overview) Overview
-
 After deploying your application to production, you may occasionally need to “impersonate” another user of your application in order to debug problems your customers are reporting. Thankfully, Nova includes built-in functionality to handle this exact scenario.
-
 ## [​](#enabling-impersonation) Enabling Impersonation
-
 To enable user impersonation, add the `Laravel\Nova\Auth\Impersonatable` trait to your application’s `User` model:
-
 app/Models/User.php
-
 Copy
-
 Ask AI
-
 ```
 namespace App\Models;
 
@@ -137,21 +97,12 @@ class User extends Authenticatable
     // ...
 }
 ```
-
 Once the `Impersonatable` trait has been added to your application’s `User` model, an “Impersonate” action will be available via the inline action menu for the corresponding resource:
-
-![Impersonation](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/impersonate.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=2998c68c60ae0a5a1e344a425f4ddf11)
-
 ### [​](#customizing-impersonation-authorization) Customizing Impersonation Authorization
-
 By default, any user that has permission to view the Nova dashboard can impersonate any other user. However, you may customize who can impersonate other users and what users can be impersonated by defining `canImpersonate` and `canBeImpersonated` methods on your application’s `Impersonatable` model:
-
 app/Models/User.php
-
 Copy
-
 Ask AI
-
 ```
 use Illuminate\Support\Facades\Gate;
 
@@ -177,17 +128,11 @@ public function canBeImpersonated()
     return true;
 }
 ```
-
 ## [​](#inspecting-impersonation-state) Inspecting Impersonation State
-
 By resolving an implementation of the `Laravel\Nova\Contracts\ImpersonatesUsers` interface via Laravel’s service container, you can inspect the current impersonation state of the application:
-
 routes/web.php
-
 Copy
-
 Ask AI
-
 ```
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -200,22 +145,14 @@ Route::get('/impersonation', function (Request $request, ImpersonatesUsers $impe
     }
 });
 ```
-
 ## [​](#impersonation-events) Impersonation Events
-
 By default, you add additional customisation by using available events for Impersonations:
-
 - `Laravel\Nova\Events\StartedImpersonating`
 - `Laravel\Nova\Events\StoppedImpersonating`
-
 For example, you may want to log impersonation events, which you can register listeners for in the `boot` method of your application’s `AppServiceProvider` or `EventServiceProvider`:
-
 app/Providers/EventServiceProvider.php
-
 Copy
-
 Ask AI
-
 ```
 use Illuminate\Support\Facades\Event;
 use Laravel\Nova\Events\StartedImpersonating;
@@ -239,25 +176,12 @@ public function boot(): void
     });
 }
 ```
-
 Was this page helpful?
-
 YesNo
-
 [Authentication](/docs/v5/customization/authentication)[Tools](/docs/v5/customization/tools)
-
 ⌘I
-
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
+[Laravel Nova home page](https://nova.laravel.com)
 Platform
-
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
 Legal and Compliance
-
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
