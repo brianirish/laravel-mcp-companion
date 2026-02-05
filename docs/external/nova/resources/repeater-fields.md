@@ -4,40 +4,25 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
+[Laravel Nova home page](https://nova.laravel.com)
 v5
-
 Search...
-
 ⌘KAsk AI
-
-- Support
+- [email protected]
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
-
 Search...
-
 Navigation
-
 Resources
-
 Repeater Fields
-
 [Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
-
 ##### Get Started
-
 - [Installation](/docs/v5/installation)
 - [Release Notes](/docs/v5/releases)
 - [Upgrade Guide](/docs/v5/upgrade)
-
 ##### Resources
-
 - [The Basics](/docs/v5/resources/the-basics)
 - [Fields](/docs/v5/resources/fields)
 - [Dependent Fields](/docs/v5/resources/dependent-fields)
@@ -48,35 +33,23 @@ Repeater Fields
 - [Relationships](/docs/v5/resources/relationships)
 - [Validation](/docs/v5/resources/validation)
 - [Authorization](/docs/v5/resources/authorization)
-
 ##### Search
-
 - [The Basics](/docs/v5/search/the-basics)
 - [Global Search](/docs/v5/search/global-search)
 - [Scout Integration](/docs/v5/search/scout-integration)
-
 ##### Filters
-
 - [Defining Filters](/docs/v5/filters/defining-filters)
 - [Registering Filters](/docs/v5/filters/registering-filters)
-
 ##### Lenses
-
 - [Defining Lenses](/docs/v5/lenses/defining-lenses)
 - [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
 ##### Actions
-
 - [Defining Actions](/docs/v5/actions/defining-actions)
 - [Registering Actions](/docs/v5/actions/registering-actions)
-
 ##### Metrics
-
 - [Defining Metrics](/docs/v5/metrics/defining-metrics)
 - [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
 ##### Digging Deeper
-
 - [Dashboards](/docs/v5/customization/dashboards)
 - [Menus](/docs/v5/customization/menus)
 - [Notifications](/docs/v5/customization/notifications)
@@ -91,9 +64,7 @@ Repeater Fields
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-
 On this page
-
 - [Overview](#overview)
 - [Repeatables](#repeatables)
 - [Generating Repeatables](#generating-repeatables)
@@ -105,23 +76,14 @@ On this page
 - [Repeater Field Capabilities](#repeater-field-capabilities)
 - [Supported Fields](#supported-fields)
 - [Partially-Supported Fields](#partially-supported-fields)
-
 Resources
-
 # Repeater Fields
-
 Repeater fields allow you to create and edit repeatable, structured data.
-
 ## [​](#overview) Overview
-
 The `Repeater` field allows you to create and edit repeatable, structured data and store that data in a JSON column or `HasMany` relationship:
-
 app/Nova/Invoice.php
-
 Copy
-
 Ask AI
-
 ```
 namespace App\Nova;
 
@@ -149,36 +111,21 @@ class Invoice extends Resource
 	}
 }
 ```
-
 After defining a `Repeater` field, your resource will have an elegant interface for adding and editing repeatable items in the field:
-
-![Repeater Field](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/repeater-field.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=c1b5036d6adaf9fbfb55f63722a0cd3b)
-
 ## [​](#repeatables) Repeatables
-
 A `Repeatable` object represents the repeatable data for a `Repeater` field. It defines the set of fields used for the repeatable item. It also optionally defines an Eloquent `Model` class when the `Repeater` is using the `HasMany` preset.
 The `Repeater` field is not limited to a single type of repeatable. It also supports multiple “repeatable” types, which may contain their own unique field sets and models. These repeatables could be used to create interfaces for editing flexible content areas, similar to those offered by content management systems.
-
 ### [​](#generating-repeatables) Generating Repeatables
-
 To generate a new `Repeatable`, invoke the `nova:repeatable` Artisan command:
-
 Copy
-
 Ask AI
-
 ```
 php artisan nova:repeatable LineItem
 ```
-
 After invoking the command above, Nova generates a new file at `app/Nova/Repeater/LineItem.php`. This file contains a `fields` method in which you may list any supported Nova field. For example, below we will define a `Repeatable` representing a line item for an invoice:
-
 app/Nova/Repeaters/LineItem.php
-
 Copy
-
 Ask AI
-
 ```
 namespace App\Nova\Repeaters;
 
@@ -205,15 +152,10 @@ class LineItem extends Repeatable
 	}
 }
 ```
-
 ### [​](#confirming-repeatable-removal) Confirming Repeatable Removal
-
 You may instruct Nova to present a confirmation modal before removing a repeatable by invoking the `confirmRemoval` method when defining the repeatable:
-
 Copy
-
 Ask AI
-
 ```
 use App\Nova\Repeaters;
 use Laravel\Nova\Fields\Repeater;
@@ -237,21 +179,14 @@ public function fields(NovaRequest $request): array
 	];
 }
 ```
-
 ## [​](#repeater-presets) Repeater Presets
-
 The `Repeater` field includes two storage “presets” out-of-the-box: `Json` and `HasMany`. Each preset defines how the repeatable data is stored and retrieved from your database.
 For example, an `Invoice` resource could use a `Repeater` field to edit the line items for an invoice. Using the `Laravel\Nova\Fields\Repeater\JSON` preset, those line items would be stored in a `line_items` JSON column. However, when using the `HasMany` preset, the line items would be stored in a separate ‘line_items’ database table, with fields corresponding to each database column.
-
 ### [​](#json-preset) JSON Preset
-
 The `JSON` preset stores repeatables in a `JSON` column in your database. For example, the line items for an invoice could be store in a `line_items` column. When a resource with a `Repeater` field using the `JSON` preset is saved, the repeatables are serialized and saved to the column.
 To use the `JSON` preset, simply invoke the `asJson` method on your `Repeater` field definition:
-
 Copy
-
 Ask AI
-
 ```
 use App\Nova\Repeaters;
 
@@ -273,15 +208,10 @@ public function fields(NovaRequest $request): array
 	];
 }
 ```
-
 Before using this preset, you should ensure that the underlying Eloquent attribute for the resource’s repeater column is configured to cast to an `array` (or equivalent) within your Eloquent model class:
-
 app/Models/Invoce.php
-
 Copy
-
 Ask AI
-
 ```
 /**
  * The attributes that should be cast.
@@ -292,16 +222,11 @@ protected $casts = [
 	'line_items' => 'array',
 ];
 ```
-
 ### [​](#hasmany-preset) HasMany Preset
-
 The `HasMany` preset stores repeatables via Eloquent using a `HasMany` relationship. For example, instead of storing the line items for an invoice in JSON format, the data would be saved in a separate `line_items` database table, complete with dedicated columns mapping to each field in the repeatable. The `Repeater` field will automatically manage these relations when editing your resources.
 To use the `HasMany` preset, simply invoke the `asHasMany` method on your `Repeater` field definition:
-
 Copy
-
 Ask AI
-
 ```
 use App\Nova\Repeaters;
 
@@ -323,15 +248,10 @@ public function fields(NovaRequest $request): array
 	];
 }
 ```
-
 The `HasMany` preset requires each repeatable to specify the underlying model it represents by setting the `model` property on the `Repeatable`. For example, a `LineItem` repeatable would need to specify the underlying `\App\Models\LineItem` model it represents:
-
 app/Nova/Repeaters/LineItem.php
-
 Copy
-
 Ask AI
-
 ```
 /**  
  * The underlying model the repeatable represents. 
@@ -339,6 +259,84 @@ Ask AI
  * @var class-string
  */
 public static $model = \App\Models\LineItem::class;
-`
+```
+## [​](#upserting-repeatables-using-unique-fields) Upserting Repeatables Using Unique Fields
+By default, when editing your repeatables configured with the `HasMany` preset, Nova will delete all of the related items and recreate them every time you save your resource. To instruct Nova to “upsert” the repeatable data instead, you should ensure you have a unique identifier column on your related models. Typically, this will be an auto-incrementing column or a UUID. You may then use the `uniqueField` method to specify which column contains the unique key for the database table:
+Copy
+Ask AI
+```
+use App\Nova\Repeaters;
 
-*[Content truncated for length]*
+// ...
+
+/**
+ * Get the fields displayed by the resource. 
+ * 
+ * @return array<int, \Laravel\Nova\Fields\Field>
+ */
+public function fields(NovaRequest $request): array
+{
+	return [
+		ID::make(),
+		
+		Repeater::make('Line Items')
+			->asHasMany()
+			->uniqueField('uuid')
+			->repeatables([
+				Repeaters\LineItem::make()
+			])
+	];
+}
+```
+In addition, the `fields` method for the `Repeatable` must contain a field matching the `uniqueField`:
+Copy
+Ask AI
+```
+use Laravel\Nova\Fields\ID;
+
+// ...
+
+/**  
+ * Get the fields displayed by the repeatable. 
+ * 
+ * @return array<int, \Laravel\Nova\Fields\Field>
+ */
+public function fields(NovaRequest $request): array
+{
+	return [
+		ID::hidden('uuid'), // The unique ID field...
+
+		// Other fields...
+	];
+}
+```
+In this example, we utilized the `ID::hidden` method, which prevents Nova from showing the `ID` field to the user, but still passes its value to Nova when saving or updating the resource.
+When used alongside JSON preset, Nova will generate the unique identifier by default (UUID) for each item. You may customize this using [field hydration](./fields#field-hydration) for the related field.
+## [​](#repeater-field-capabilities) Repeater Field Capabilities
+While a `Repeatable` can use many of the same fields as typical Nova resources and actions, they do not behave in the same way. For instance, methods like `creationRules`, and `updateRules` are not supported because the validation rules are the same for both creation and edit modes. Also, fields inside a `Repeatable` do not support dependent field (`dependsOn`) functionality.
+### [​](#supported-fields) Supported Fields
+The `Repeater` field allows for every field supported by Nova, except for the following:
+- HasOne
+- MorphOne
+- HasMany
+- MorphMany
+- BelongsTo
+- MorphTo
+- BelongsToMany
+- MorphToMany
+`File`, `Audio`, and `Image` fields are supported as long as the `Repeater` contains a `uniqueField`.
+### [​](#partially-supported-fields) Partially-Supported Fields
+The following fields are partially supported:
+- Vapor File Field
+- Markdown Field
+- Trix Field
+The `Markdown` and `Trix` fields support being used for text, but do not currently support attachments.
+Was this page helpful?
+YesNo
+[File Fields](/docs/v5/resources/file-fields)[Field Panels](/docs/v5/resources/panels)
+⌘I
+[Laravel Nova home page](https://nova.laravel.com)
+Platform
+[Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
+Legal and Compliance
+[Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)

@@ -4,40 +4,25 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
+[Laravel Nova home page](https://nova.laravel.com)
 v5
-
 Search...
-
 ⌘KAsk AI
-
-- Support
+- [email protected]
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
-
 Search...
-
 Navigation
-
 Get Started
-
 Release Notes
-
 [Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
-
 ##### Get Started
-
 - [Installation](/docs/v5/installation)
 - [Release Notes](/docs/v5/releases)
 - [Upgrade Guide](/docs/v5/upgrade)
-
 ##### Resources
-
 - [The Basics](/docs/v5/resources/the-basics)
 - [Fields](/docs/v5/resources/fields)
 - [Dependent Fields](/docs/v5/resources/dependent-fields)
@@ -48,35 +33,23 @@ Release Notes
 - [Relationships](/docs/v5/resources/relationships)
 - [Validation](/docs/v5/resources/validation)
 - [Authorization](/docs/v5/resources/authorization)
-
 ##### Search
-
 - [The Basics](/docs/v5/search/the-basics)
 - [Global Search](/docs/v5/search/global-search)
 - [Scout Integration](/docs/v5/search/scout-integration)
-
 ##### Filters
-
 - [Defining Filters](/docs/v5/filters/defining-filters)
 - [Registering Filters](/docs/v5/filters/registering-filters)
-
 ##### Lenses
-
 - [Defining Lenses](/docs/v5/lenses/defining-lenses)
 - [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
 ##### Actions
-
 - [Defining Actions](/docs/v5/actions/defining-actions)
 - [Registering Actions](/docs/v5/actions/registering-actions)
-
 ##### Metrics
-
 - [Defining Metrics](/docs/v5/metrics/defining-metrics)
 - [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
 ##### Digging Deeper
-
 - [Dashboards](/docs/v5/customization/dashboards)
 - [Menus](/docs/v5/customization/menus)
 - [Notifications](/docs/v5/customization/notifications)
@@ -91,9 +64,7 @@ Release Notes
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-
 On this page
-
 - [Modernizing Dependencies](#modernizing-dependencies)
 - [Tab Panels](#tab-panels)
 - [Fields & Filters Improvements](#fields-%26-filters-improvements)
@@ -101,30 +72,18 @@ On this page
 - [New Field::immutable() method](#new-fieldimmutable-method)
 - [Other Field Improvements](#other-field-improvements)
 - [Separate Policy Classes for Nova Resources](#separate-policy-classes-for-nova-resources)
-
 Get Started
-
 # Release Notes
-
 Laravel Nova Release Notes
-
 Nova 5 continues the improvements made in Nova 4.x by introducing support for tab panels, searchable select filters, dependent field improvements, third party component improvements, and dependency modernization with support for Inertia.js 2.x.
-
 ## [​](#modernizing-dependencies) Modernizing Dependencies
-
 Nova 5 removes support for Laravel 8.x and 9.x, while also requiring PHP 8.1+. This dependency upgrade allows for deeper integration with the Laravel ecosystem, including Fortify, Prompts, and Pennant.
 Furthermore, Nova’s frontend code has been updated to utilize Vue 3.5, Heroicons 2.x, and Inertia.js 2.x. Please refer to the Nova [upgrade guide](./upgrade#dependency-upgrades) for a detailed description of these changes and how they affect your application.
-
 ## [​](#tab-panels) Tab Panels
-
 Nova 5 further improves the resource UI with the introduction of **Tabs Panels** on the resource detail and form pages:
-
 app/Nova/Event.php
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
@@ -156,23 +115,13 @@ public function fields(NovaRequest $request): array
     ];
 }
 ```
-
 For example, the code snippet above will generate the following tabs:
-
-![Tab Panel](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/images/tab-panel.png?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=0f367b6ea661668155918888f4a39a7a)
-
 To learn more about adding tab panels to your Nova resources, check out the [tab documentation](./resources/panels#tabs).
-
 ## [​](#fields-&-filters-improvements) Fields & Filters Improvements
-
 ### [​](#new-dependent-computed-field-via-fieldcomputed-method) New Dependent Computed Field via `Field::computed()` method
-
 Nova 5 introduces an enhanced `computed` method that builds upon the previous computed fields feature. While computed fields have always been valuable for displaying additional resource information, they previously lacked a unique `$attribute` identifier, which limited their use as dependent fields. This limitation has been resolved in Nova 5:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\FormData;
@@ -192,18 +141,12 @@ Text::make('Comment')
         }
     }),
 ```
-
 More information on computed fields can be found within the [computed field documentation](./resources/dependent-fields#dependable-computed-fields).
-
 ### [​](#new-fieldimmutable-method) New `Field::immutable()` method
-
 While [readonly fields](./resources/fields#readonly-fields) disable a field’s input and prevent form submission of its value, immutable fields offer more flexibility. By invoking the `immutable` method on a field, you can prevent users from modifying the field’s value while still allowing it to be submitted with the form.
 You may also pass a boolean argument to the `immutable` method to dynamically control whether a field should be immutable:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -211,38 +154,23 @@ use Laravel\Nova\Fields\Text;
 
 Text::make('Name')->immutable(),
 ```
-
 Further reading is available on the [documentation](./resources/fields#immutable-fields).
-
 ### [​](#other-field-improvements) Other Field Improvements
-
 - [Enums may now be used as `Select::options()`](./resources/fields#using-enum-as-options)
 - [Searchable select filters are now supported](./filters/registering-filters#searchable-select-filter)
 - JSON `Repeater` fields are now displayed on the resource detail page
-
 ## [​](#separate-policy-classes-for-nova-resources) Separate Policy Classes for Nova Resources
-
 In previous Nova releases, Nova resources shared authorization policies with your user-facing application. This approach to authorization can present problems if your application’s authorization logic differs from how resource authorization should be handled for Nova operations.
 In Nova 5, you may now create a separate policy class that is only used for operations that are triggered via Nova:
-
 Copy
-
 Ask AI
-
 ```
 php artisan nova:policy
 ```
-
-![Create UserPolicy class](https://mintcdn.com/nova-laravel/ISBJ63muGLVA9l3K/images/make-policy-command.png?fit=max&auto=format&n=ISBJ63muGLVA9l3K&q=85&s=395eb3dcadcc578f9fc053ae7fa2aaea)
-
 To enable the new policy you need to add the following code:
-
 app/Nova/User.php
-
 Copy
-
 Ask AI
-
 ```
 namespace App\Nova;
 
@@ -256,27 +184,13 @@ class User extends Resource
     public static $policy = Policies\UserPolicy::class;
 }
 ```
-
 Further reading is available on the [Authorization](./resources/authorization#using-separate-policy-class-for-nova-resource) documentation.
-
 Was this page helpful?
-
 YesNo
-
 [Installation](/docs/v5/installation)[Upgrade Guide](/docs/v5/upgrade)
-
 ⌘I
-
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
+[Laravel Nova home page](https://nova.laravel.com)
 Platform
-
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
 Legal and Compliance
-
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

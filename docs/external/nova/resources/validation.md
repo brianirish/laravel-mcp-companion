@@ -4,40 +4,25 @@
 
 ---
 
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
+[Laravel Nova home page](https://nova.laravel.com)
 v5
-
 Search...
-
 ⌘KAsk AI
-
-- Support
+- [email protected]
 - [Platform Status](https://status.laravel.com/)
 - [Dashboard](https://nova.laravel.com)
 - [Dashboard](https://nova.laravel.com)
-
 Search...
-
 Navigation
-
 Resources
-
 Validation
-
 [Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-
-- [Community](https://discord.com/invite/laravel)
 - [Blog](https://blog.laravel.com)
-
 ##### Get Started
-
 - [Installation](/docs/v5/installation)
 - [Release Notes](/docs/v5/releases)
 - [Upgrade Guide](/docs/v5/upgrade)
-
 ##### Resources
-
 - [The Basics](/docs/v5/resources/the-basics)
 - [Fields](/docs/v5/resources/fields)
 - [Dependent Fields](/docs/v5/resources/dependent-fields)
@@ -48,35 +33,23 @@ Validation
 - [Relationships](/docs/v5/resources/relationships)
 - [Validation](/docs/v5/resources/validation)
 - [Authorization](/docs/v5/resources/authorization)
-
 ##### Search
-
 - [The Basics](/docs/v5/search/the-basics)
 - [Global Search](/docs/v5/search/global-search)
 - [Scout Integration](/docs/v5/search/scout-integration)
-
 ##### Filters
-
 - [Defining Filters](/docs/v5/filters/defining-filters)
 - [Registering Filters](/docs/v5/filters/registering-filters)
-
 ##### Lenses
-
 - [Defining Lenses](/docs/v5/lenses/defining-lenses)
 - [Registering Lenses](/docs/v5/lenses/registering-lenses)
-
 ##### Actions
-
 - [Defining Actions](/docs/v5/actions/defining-actions)
 - [Registering Actions](/docs/v5/actions/registering-actions)
-
 ##### Metrics
-
 - [Defining Metrics](/docs/v5/metrics/defining-metrics)
 - [Registering Metrics](/docs/v5/metrics/registering-metrics)
-
 ##### Digging Deeper
-
 - [Dashboards](/docs/v5/customization/dashboards)
 - [Menus](/docs/v5/customization/menus)
 - [Notifications](/docs/v5/customization/notifications)
@@ -91,9 +64,7 @@ Validation
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-
 On this page
-
 - [Rules](#rules)
 - [Attaching Rules](#attaching-rules)
 - [Creation Rules](#creation-rules)
@@ -102,27 +73,16 @@ On this page
 - [The afterValidation Method](#the-aftervalidation-method)
 - [The afterCreationValidation Method](#the-aftercreationvalidation-method)
 - [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
-
 Resources
-
 # Validation
-
 Nova provides a variety of ways to validate your resource fields.
-
 Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it’s a cinch to attach all of the Laravel validation rules you’re familiar with to your Nova resource fields. Let’s get started.
-
 ## [​](#rules) Rules
-
 ### [​](#attaching-rules) Attaching Rules
-
 When defining a field on a resource, you may use the `rules` method to attach [validation rules](https://laravel.com/docs/validation#available-validation-rules) to the field:
-
 app/Nova/~Resource.php
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -143,13 +103,9 @@ public function fields(NovaRequest $request): array
     ];
 }
 ```
-
 Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
-
 Copy
-
 Ask AI
-
 ```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
@@ -160,13 +116,9 @@ Text::make('State')
     ->sortable()
     ->rules('required', new ValidState),
 ```
-
 You may also provide rules to the `rules` method via an array or Closure:
-
 Copy
-
 Ask AI
-
 ```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
@@ -182,13 +134,9 @@ Text::make('State')->rules(fn ($request) => [
     new ValidState(),
 ]);
 ```
-
 Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -202,15 +150,10 @@ Text::make('State')
         }
     }),
 ```
-
 ### [​](#creation-rules) Creation Rules
-
 If you would like to define rules that only apply when a resource is being created, you may use the `creationRules` method:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -221,15 +164,10 @@ Text::make('Email')
     ->rules('required', 'email', 'max:255')
     ->creationRules('unique:users,email'),
 ```
-
 ### [​](#update-rules) Update Rules
-
 Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the `updateRules` method. If necessary, you may use `resourceId` place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
-
 Copy
-
 Ask AI
-
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -241,25 +179,16 @@ Text::make('Email')
     ->creationRules('unique:users,email')
     ->updateRules('unique:users,email,{{resourceId}}'),
 ```
-
 ## [​](#after-validation-hooks) After Validation Hooks
-
 Nova also provides several methods that allow you to perform tasks after a resource has been validated, providing the opportunity to perform more custom validation before the resource is persisted to the database:
-
 - [`afterValidation`](#after-validation-method)
 - [`afterCreationValidation`](#after-creation-validation-method)
 - [`afterUpdateValidation`](#after-update-validation-method)
-
 #### [​](#the-aftervalidation-method) The `afterValidation` Method
-
 The `afterValidation` method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling `afterCreationValidation` or `afterUpdateValidation`:
-
 app/Nova/~Resource.php
-
 Copy
-
 Ask AI
-
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -280,17 +209,11 @@ protected static function afterValidation(
     }
 }
 ```
-
 #### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
-
 The `afterCreationValidation` method will be called after a resource that is being created has been validated:
-
 app/Nova/~Resource.php
-
 Copy
-
 Ask AI
-
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -311,17 +234,11 @@ protected static function afterCreationValidation(
     }
 }
 ```
-
 #### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
-
 The `afterUpdateValidation` method will be called after a resource that is being updated has been validated:
-
 app/Nova/~Resource.php
-
 Copy
-
 Ask AI
-
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -342,25 +259,12 @@ protected static function afterUpdateValidation(
     }
 }
 ```
-
 Was this page helpful?
-
 YesNo
-
 [Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)
-
 ⌘I
-
-[Laravel Nova home page![light logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/light.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=d7b82e399050ba766ad412155b0dbc7a)![dark logo](https://mintcdn.com/nova-laravel/bY_66OSFONsRO54M/logo/dark.svg?fit=max&auto=format&n=bY_66OSFONsRO54M&q=85&s=a81b28aeb4ce32b7a8afd9ed1f9ce58b)](https://nova.laravel.com)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)
-
+[Laravel Nova home page](https://nova.laravel.com)
 Platform
-
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
-
 Legal and Compliance
-
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
-
-[x](https://x.com/laravelphp)[github](https://github.com/laravel)[discord](https://discord.com/invite/laravel)[linkedin](https://linkedin.com/company/laravel)

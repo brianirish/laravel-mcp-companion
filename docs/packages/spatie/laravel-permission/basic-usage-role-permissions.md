@@ -3,29 +3,20 @@
 Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/role-permissions
 
 Docs
-
 Laravel-permission
-
 Basic-usage
-
 Using Permissions via Roles
-
 Using Permissions via Roles
 ===========================
-
 ### On this page
-
 1. Assigning Roles
 2. Checking Roles
 3. Assigning Permissions to Roles
 4. What Permissions Does A Role Have?
 5. Assigning Direct Permissions To A User
-
 ##Assigning Roles
 -----------------
-
 A role can be assigned to any user:
-
 ```php
 $user->assignRole('writer');
 
@@ -35,21 +26,17 @@ $user->assignRole('writer', 'admin');
 $user->assignRole(['writer', 'admin']);
 ```
 A role can be removed from a user:
-
 ```php
 $user->removeRole('writer');
 ```
 Roles can also be synced:
-
 ```php
 // All current roles will be removed from the user and replaced by the array given
 $user->syncRoles(['writer', 'admin']);
 ```
 ##Checking Roles
 ----------------
-
 You can determine if a user has a certain role:
-
 ```php
 $user->hasRole('writer');
 
@@ -57,58 +44,45 @@ $user->hasRole('writer');
 $user->hasRole(['editor', 'moderator']);
 ```
 You can also determine if a user has any of a given list of roles:
-
 ```php
 $user->hasAnyRole(['writer', 'reader']);
 // or
 $user->hasAnyRole('writer', 'reader');
 ```
 You can also determine if a user has all of a given list of roles:
-
 ```php
 $user->hasAllRoles(Role::all());
 ```
 You can also determine if a user has exactly all of a given list of roles:
-
 ```php
 $user->hasExactRoles(Role::all());
 ```
 The `assignRole`, `hasRole`, `hasAnyRole`, `hasAllRoles`, `hasExactRoles` and `removeRole` functions can accept a
 string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
-
 ##Assigning Permissions to Roles
 --------------------------------
-
 A permission can be given to a role:
-
 ```php
 $role->givePermissionTo('edit articles');
 ```
 You can determine if a role has a certain permission:
-
 ```php
 $role->hasPermissionTo('edit articles');
 ```
 A permission can be revoked from a role:
-
 ```php
 $role->revokePermissionTo('edit articles');
 ```
 Or revoke & add new permissions in one go:
-
 ```php
 $role->syncPermissions(['edit articles', 'delete articles']);
 ```
 The `givePermissionTo` and `revokePermissionTo` functions can accept a
 string or a `Spatie\Permission\Models\Permission` object.
-
 **NOTE: Permissions are inherited from roles automatically.**
-
 ##What Permissions Does A Role Have?
 ------------------------------------
-
 The `permissions` property on any given role returns a collection with all the related permission objects. This collection can respond to usual Eloquent Collection operations, such as count, sort, etc.
-
 ```php
 // get collection
 $role->permissions;
@@ -123,10 +97,8 @@ $role->permissions->count();
 ```
 ##Assigning Direct Permissions To A User
 ----------------------------------------
-
 Additionally, individual permissions can be assigned to the user too.
 For instance:
-
 ```php
 $role = Role::findByName('writer');
 $role->givePermissionTo('edit articles');
@@ -139,11 +111,8 @@ In the above example, a role is given permission to edit articles and this role 
 Now the user can edit articles and additionally delete articles. The permission of 'delete articles' is the user's direct permission because it is assigned directly to them.
 When we call `$user->hasDirectPermission('delete articles')` it returns `true`,
 but `false` for `$user->hasDirectPermission('edit articles')`.
-
 This method is useful if one builds a form for setting permissions for roles and users in an application and wants to restrict or change inherited permissions of roles of the user, i.e. allowing to change only direct permissions of the user.
-
 You can check if the user has a Specific or All or Any of a set of permissions directly assigned:
-
 ```php
 // Check if the user has Direct permission
 $user->hasDirectPermission('edit articles')
@@ -158,9 +127,7 @@ By following the previous example, when we call `$user->hasAllDirectPermissions(
 it returns `false`, because the user does not have `edit articles` as a direct permission.
 When we call
 `$user->hasAnyDirectPermission('edit articles')`, it returns `true` because the user has one of the provided permissions.
-
 You can examine all of these permissions:
-
 ```php
 // Direct permissions
 $user->getDirectPermissions() // Or $user->permissions;
@@ -172,12 +139,8 @@ $user->getPermissionsViaRoles();
 $user->getAllPermissions();
 ```
 All these responses are collections of `Spatie\Permission\Models\Permission` objects.
-
 If we follow the previous example, the first response will be a collection with the `delete article` permission and
 the second will be a collection with the `edit article` permission and the third will contain both.
-
 Direct Permissions
-
 Enums
-
 Help us improve this page
