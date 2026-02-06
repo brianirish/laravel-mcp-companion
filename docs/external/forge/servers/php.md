@@ -115,7 +115,10 @@ Changing the following settings will apply the changes to all versions of PHP in
 ### [​](#max-file-upload-size) Max file upload size
 You may configure the maximum file upload size through the PHP tab of the server management dashboard. This value should be provided in megabytes. For reference, `1024MB` is `1GB`.
 ### [​](#max-execution-time) Max execution time
-You may configure the maximum execution time through the PHP tab of the server management dashboard. This value should be provided in seconds.
+You may configure the maximum execution time through the PHP tab of the server management dashboard. This value should be provided in seconds. Forge applies this value across your server by updating the following configurations:
+- `max_execution_time` in `php.ini`.
+- `request_terminate_timeout` in the PHP-FPM `www.conf` (for each installed PHP version).
+- `fastcgi_read_timeout` in your Nginx configuration.
 ### [​](#opcache) OPcache
 Optimizing the PHP OPcache for production will configure OPcache to store your compiled PHP code in memory to greatly improve performance. If you choose to optimize OPcache for production, you should verify that your deployment script [reloads the PHP-FPM service](/docs/knowledge-base/servers#restarting-php-fpm) at the end of each deployment unless you’re using zero-downtime deployments.
 OPcache is enabled by default for all newly created servers.
