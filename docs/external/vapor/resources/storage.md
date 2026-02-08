@@ -27,6 +27,7 @@ Storage
 - [Development](/projects/development)
 - [Domains](/projects/domains)
 ##### Resources
+- [Migrate to Cloud](/resources/migrate-to-cloud)
 - [Queues](/resources/queues)
 - [Storage](/resources/storage)
 - [Networks](/resources/networks)
