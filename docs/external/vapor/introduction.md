@@ -27,6 +27,7 @@ Introduction
 - [Development](/projects/development)
 - [Domains](/projects/domains)
 ##### Resources
+- [Migrate to Cloud](/resources/migrate-to-cloud)
 - [Queues](/resources/queues)
 - [Storage](/resources/storage)
 - [Networks](/resources/networks)
@@ -59,6 +60,7 @@ On this page
 Get Started
 # Introduction
 Manage your Laravel infrastructure on Vapor and fall in love with the scalability and simplicity of serverless.
+[Laravel Cloud](https://cloud.laravel.com) builds on the ideas behind Vapor while removing much of the operational complexity. [This migration guide](https://cloud.laravel.com/migration-vapor-cloud) explains why teams are migrating from Vapor to Cloud and what changes when moving an application.
 [## Create An Account
 Create your Vapor account today](https://vapor.laravel.com/register)[## Watch More
 Watch the free Vapor series on Laracasts](https://laracasts.com/series/serverless-laravel)

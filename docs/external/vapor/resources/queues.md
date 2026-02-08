@@ -27,6 +27,7 @@ Queues
 - [Development](/projects/development)
 - [Domains](/projects/domains)
 ##### Resources
+- [Migrate to Cloud](/resources/migrate-to-cloud)
 - [Queues](/resources/queues)
 - [Storage](/resources/storage)
 - [Networks](/resources/networks)
@@ -250,7 +251,7 @@ For applications that require Laravel Horizon’s powerful queue monitoring and 
 - **[Laravel Forge](https://forge.laravel.com/docs/sites/queues#laravel-horizon)** - Our VPS server management platform.
 Was this page helpful?
 YesNo
-[Domains](/projects/domains)[Storage](/resources/storage)
+[Migrate to Cloud](/resources/migrate-to-cloud)[Storage](/resources/storage)
 ⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform

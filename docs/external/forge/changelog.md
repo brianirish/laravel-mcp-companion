@@ -68,6 +68,7 @@ Changelog
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 On this page
+- [February 6, 2026](#february-6-2026)
 - [January 30, 2026](#january-30-2026)
 - [January 23, 2026](#january-23-2026)
 - [January 16, 2026](#january-16-2026)
@@ -86,6 +87,15 @@ Other
 Copy page
 New updates and improvements to Laravel Forge.
 Copy page
+[​](#february-6%2C-2026)
+February 6, 2026
+## [​](#openclaw-server-type) OpenClaw server type
+You can now create an OpenClaw servers on Laravel VPS.
+Show Improvements (2)
+- **Command palette filtering**: Improve accuracy of command filtering.
+- **Server list**: Display the OS version in the server list.
+Show Fixes (1)
+- Resolved an issue preventing the delivery of email notifications when a scheduled job’s heartbeat is in a failing state.
 [​](#january-30%2C-2026)
 January 30, 2026
 Show Improvements (2)
