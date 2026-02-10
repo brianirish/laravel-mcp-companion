@@ -89,11 +89,11 @@ Copy page
 When provisioning a new Laravel Forge server that requires a database, you can choose between installing an [app server](/docs/servers/types#app-servers) or a dedicated [database server](/docs/servers/types#database-servers). The Forge dashboard provides comprehensive tools for managing databases, users, and permissions across your infrastructure.
 ## [​](#creating-servers-with-databases) Creating servers with databases
 During server creation, you can select from several supported database servers:
-- MySQL (8.0)
+- MySQL (8.0, 8.4, 9.x)
 - MariaDB (10.11, 11.4)
 - PostgreSQL (13, 14, 15, 16, 17, 18)
 Laravel Forge automatically handles the installation process, creating a default `forge` database and user with a securely generated password. Both the database and root passwords are displayed upon server creation for your reference.
-Laravel VPS servers are limited to the latest MySQL and PostgreSQL versions only.
+MySQL 9.x is an [Innovation](https://dev.mysql.com/doc/refman/en/mysql-releases.html) release, designed for developers and teams who want access to the latest MySQL features and improvements. Innovation releases are production-ready, but each version is only supported until the next Innovation release ships.Laravel VPS servers are limited to the latest MySQL LTS and PostgreSQL versions only.
 ### [​](#installing-databases-later) Installing databases later
 If you need to add database functionality to an existing server, you can install one through the server’s “Databases” management tab. Once installed, you’ll have full database management capabilities through the Laravel Forge interface.
 If you created a “Web Server”, database installation is not supported. Web servers include only the essential software needed for PHP applications. For combined web and database functionality, provision an “App Server” instead.
