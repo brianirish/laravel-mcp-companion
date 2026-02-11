@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "5bba4d1dcdb6937c4705fefb45a8f65396e5e9e5",
-  "commit_date": "2026-02-09T20:40:22Z",
-  "commit_message": "Fix return type in schema method documentation (#11042)",
-  "commit_url": "https://github.com/laravel/docs/commit/5bba4d1dcdb6937c4705fefb45a8f65396e5e9e5",
-  "sync_time": "2026-02-10T00:02:55Z"
+  "commit_sha": "4621e2637f0f82084fd2f279fbee5e015dc2062b",
+  "commit_date": "2026-02-10T18:48:13Z",
+  "commit_message": "update docs for job batch hasJobs test method",
+  "commit_url": "https://github.com/laravel/docs/commit/4621e2637f0f82084fd2f279fbee5e015dc2062b",
+  "sync_time": "2026-02-11T00:02:52Z"
 }
