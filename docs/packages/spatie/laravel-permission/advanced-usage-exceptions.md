@@ -6,6 +6,9 @@ Docs
 Laravel-permission
 Advanced-usage
 Exceptions
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-permission`
 Exceptions
 ==========
 If you need to override exceptions thrown by this package, you can simply use normal Laravel practices for handling exceptions.

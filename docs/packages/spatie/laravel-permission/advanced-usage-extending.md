@@ -6,6 +6,9 @@ Docs
 Laravel-permission
 Advanced-usage
 Extending
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-permission`
 Extending
 =========
 ### On this page

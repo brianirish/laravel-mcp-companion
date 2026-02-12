@@ -6,6 +6,9 @@ Docs
 Laravel-permission
 Basic-usage
 Blade directives
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-permission`
 Blade directives
 ================
 ### On this page
