@@ -68,6 +68,7 @@ Changelog
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 On this page
+- [February 13, 2026](#february-13-2026)
 - [February 6, 2026](#february-6-2026)
 - [January 30, 2026](#january-30-2026)
 - [January 23, 2026](#january-23-2026)
@@ -87,6 +88,15 @@ Other
 Copy page
 New updates and improvements to Laravel Forge.
 Copy page
+[​](#february-13%2C-2026)
+February 13, 2026
+## [​](#mysql-9-x-support) MySQL 9.x support
+MySQL 9 is now available as a database option when provisioning new servers.
+Show Fixes (4)
+- Resolved an issue with Laravel VPS servers that do not have a private hostname.
+- Fixed an issue preventing the creation of scheduled jobs.
+- Fixed Aikido not finding the correct workspace.
+- Resolved an issue with database syncing creating duplicate entries.
 [​](#february-6%2C-2026)
 February 6, 2026
 ## [​](#openclaw-server-type) OpenClaw server type

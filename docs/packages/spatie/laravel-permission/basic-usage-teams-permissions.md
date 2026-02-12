@@ -6,6 +6,9 @@ Docs
 Laravel-permission
 Basic-usage
 Teams permissions
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-permission`
 Teams permissions
 =================
 ### On this page
