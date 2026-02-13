@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "30b2a783b3a586b14af4a3932158c2e6a93f3632",
-  "commit_date": "2026-02-11T16:54:12Z",
-  "commit_message": "improve search docs (#11051)",
-  "commit_url": "https://github.com/laravel/docs/commit/30b2a783b3a586b14af4a3932158c2e6a93f3632",
-  "sync_time": "2026-02-12T00:02:56Z"
+  "commit_sha": "ed0e1f2316022d6359af97fb1f683d640062efe6",
+  "commit_date": "2026-02-12T19:30:34Z",
+  "commit_message": "add azure",
+  "commit_url": "https://github.com/laravel/docs/commit/ed0e1f2316022d6359af97fb1f683d640062efe6",
+  "sync_time": "2026-02-13T00:02:59Z"
 }
