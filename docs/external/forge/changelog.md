@@ -100,7 +100,7 @@ Show Fixes (4)
 [​](#february-6%2C-2026)
 February 6, 2026
 ## [​](#openclaw-server-type) OpenClaw server type
-You can now create an OpenClaw servers on Laravel VPS.
+You can now create OpenClaw servers on Laravel VPS.
 Show Improvements (2)
 - **Command palette filtering**: Improve accuracy of command filtering.
 - **Server list**: Display the OS version in the server list.
@@ -125,7 +125,7 @@ Show Fixes (4)
 [​](#january-16%2C-2026)
 January 16, 2026
 Show Improvements (1)
-- **Hetzner S3**: Hetzner S3 object storage in now available as an option for database backups.
+- **Hetzner S3**: Hetzner S3 object storage is now available as an option for database backups.
 Show Fixes (7)
 - Addressed a bug preventing users from scrolling modals across Forge.
 - Modals in the create a certificate flow now display properly when using Safari.

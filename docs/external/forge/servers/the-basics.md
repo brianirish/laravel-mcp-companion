@@ -80,7 +80,7 @@ On this page
 - [Unarchiving servers](#unarchiving-servers)
 - [Transferring servers](#transferring-servers)
 - [Deleting servers](#deleting-servers)
-- [Deleting custom servers](#deleting-custom-servers)
+- [Preserving servers at the provider](#preserving-servers-at-the-provider)
 Servers
 # Creating and Managing Servers
 Copy page
@@ -121,9 +121,14 @@ You may only transfer servers to a Laravel Forge organization with an active sub
 Laravel Forge will not transfer a server on a server-provider level. You must do this manually.
 ### [​](#deleting-servers) Deleting servers
 To delete a server, navigate to the server and click the Settings tab. Locate the Danger zone and click Delete server. Enter the name of the server and click confirm.
-Deleting a server will permanently destroy the server from the connected provider, resulting in data loss that cannot be undone by the Laravel Forge team.
-### [​](#deleting-custom-servers) Deleting custom servers
-When deleting a custom server, the server will only be removed from Laravel Forge. The server itself will continue to run.
+By default, deleting a server will permanently destroy the server from the connected provider, resulting in data loss that cannot be undone by the Laravel Forge team.
+#### [​](#preserving-servers-at-the-provider) Preserving servers at the provider
+When deleting a server, you can choose to preserve the server at your server provider by enabling the “Preserve this server at [provider]” option in the deletion confirmation dialog. When this option is enabled, the server will only be removed from Laravel Forge and will not be deleted from your server provider’s infrastructure.
+This is useful in scenarios where:
+- You no longer have access to the server provider credentials
+- You want to remove the server from Forge management but keep it running
+- You’re transferring server management to another tool or team
+This option is not available for custom servers or Laravel VPS servers. Custom servers are not managed by Forge at the provider level, and Laravel VPS servers are always deleted from the underlying infrastructure when removed from Forge.
 Was this page helpful?
 YesNo
 [API](/docs/api)[Server Types](/docs/servers/types)
