@@ -35,6 +35,8 @@ On this page
 - [Configuring Multiple PHP Versions](#configuring-multiple-php-versions)
 - [Non-Standard PHP Services](#non-standard-php-services)
 - [Importing Laravel Forge Servers](#importing-laravel-forge-servers)
+- [Environment](#environment)
+- [Resetting your environment key](#resetting-your-environment-key)
 - [Managing Uploaded Files](#managing-uploaded-files)
 Projects
 # Servers
@@ -66,6 +68,14 @@ Some VPS providers run custom versions of Ubuntu that manage PHP services in a v
 If you have provisioned your server with [Laravel Forge](https://forge.laravel.com), you may import it into your Envoyer project. You’ll need to create an API token on your Forge account and then connect it to your Envoyer account from the [Integrations](https://envoyer.io/user/profile#/integrations) dashboard.
 When adding a server to your project, click the **Import Forge Server** button. Envoyer will display a modal asking you to select the server from your account and the site from the server.
 Once selected, Envoyer will add the required SSH key to the connected site’s user (typically `forge`, unless using a Forge configured isolated user). Envoyer will use this SSH key to connect to your server and deploy your site.
+## [​](#environment) Environment
+Envoyer can manage your application’s environment variables across all servers associated with a project. You may do so by clicking the **Manage Environment** button from the project’s **Servers** tab. You will need to provide a key to encrypt the variables stored on Envoyer’s servers.
+### [​](#resetting-your-environment-key) Resetting your environment key
+If you have forgotten your environment key, you can reset it by navigating to your project, clicking the **Servers** tab, then **Manage Environment**, and finally clicking the **Forgot your key?** link in the modal.
+This will prompt you to enter a new key however, resetting your key will result in the complete loss of your current environment variables.
+This action is irreversible. It is not possible for the support team to retrieve your current key.
+Before resetting your environment key, it is recommended to log directly into one of your project’s servers and download an unencrypted copy of the `.env` file. This allows you to repopulate your environment variables after the reset process.
+Any collaborator on the project may perform this action.
 ## [​](#managing-uploaded-files) Managing Uploaded Files
 When storing user uploaded files in an Envoyer deployed Laravel application, you should store them in the application’s `storage` directory. Then, you may use the “Manage Linked Folders” feature of Envoyer to create a symbolic link from your public directory to the `storage` directory. The “Manage Linked Folders” button can be found on the “Deployment Hooks” tab of your project.
 If you are not using Laravel, you will essentially follow the same process. However, you will need to manually create a `storage` directory in the deployment path of your application (the same directory level as the `current` symbolic link).
