@@ -398,6 +398,22 @@ Ask AI
   with:
     platforms: arm64
 ```
+When building a `docker-arm` image via GitHub Actions or other CI environments that emulate the `arm64` architecture using QEMU, you should disable Docker’s build provenance attestations by setting `provenance=false`. Without this option, the build may produce a manifest list instead of a single image, which can cause deployment failures.
+You may specify Docker build options via the `docker-build-options` configuration option within your application’s `vapor.yml` file. The `docker-build-options` option accepts an array of strings, where each string corresponds to a flag passed to the `docker build` command:
+vapor.yml
+Copy
+Ask AI
+```
+id: 2
+name: vapor-laravel-app
+environments:
+    production:
+        runtime: docker-arm
+        docker-build-options:
+            - provenance=false
+        build:
+            - 'composer install --no-dev'
+```
 ### [​](#example-with-chipper-ci) Example With Chipper CI
 If your application uses [Chipper CI](https://chipperci.com/) as its CI platform, the following guidelines will assist you in configuring Vapor deployments so that your application is automatically deployed when someone pushes a commit to the `master` branch:
 1. First, add the `VAPOR_API_TOKEN` environment variable to your “Chipper CI > Project Settings > Project Environment Variables” settings so that Chipper CI can authenticate with Vapor while running your build pipeline.

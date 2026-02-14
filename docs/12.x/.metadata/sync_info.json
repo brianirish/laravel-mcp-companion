@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "ed0e1f2316022d6359af97fb1f683d640062efe6",
-  "commit_date": "2026-02-12T19:30:34Z",
-  "commit_message": "add azure",
-  "commit_url": "https://github.com/laravel/docs/commit/ed0e1f2316022d6359af97fb1f683d640062efe6",
-  "sync_time": "2026-02-13T00:02:59Z"
+  "commit_sha": "19896d891cc0840c786cd9f43cf39919bcd2e263",
+  "commit_date": "2026-02-13T14:38:16Z",
+  "commit_message": "[12.x] Add Predis retry and backoff configuration documentation (#11057)\n\n* [12.x] Add Predis retry and backoff configuration documentation\n\n* Update redis.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/19896d891cc0840c786cd9f43cf39919bcd2e263",
+  "sync_time": "2026-02-14T00:03:05Z"
 }

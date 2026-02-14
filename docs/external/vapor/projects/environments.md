@@ -526,6 +526,8 @@ name: vapor-laravel-app
 environments:
     production:
         runtime: docker-arm
+        docker-build-options:
+            - provenance=false
         build:
             - 'composer install --no-dev'
 ```
