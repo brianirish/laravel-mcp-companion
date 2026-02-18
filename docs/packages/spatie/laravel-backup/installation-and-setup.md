@@ -5,6 +5,9 @@ Source: https://spatie.be/docs/laravel-backup/v9/installation-and-setup
 Docs
 Laravel-backup
 Installation and setup
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-backup`
 Installation and setup
 ======================
 ### On this page

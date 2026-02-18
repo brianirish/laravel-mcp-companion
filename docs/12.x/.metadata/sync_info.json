@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "82e0a981f83fca5366ec2b0e8b306a9819964bb5",
-  "commit_date": "2026-02-16T21:36:55Z",
-  "commit_message": "Document routing behavior change in upgrade guide (#11058)\n\n* Document routing behavior change in upgrade guide\n\nhttps://github.com/laravel/framework/pull/56920 was a bugfix to unify the cached and uncached route behaviour. While it was released mid Laravel 12, this caught me out when upgrading from Laravel 11 and it is not mentioned anywhere until you dig into git diffs for hours.\r\n\r\n According to https://github.com/laravel/framework/issues/57118 this behaviour is intended. That is fine (unified makes more sense), but it might save someone some pain by it being in the upgrade guide.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/82e0a981f83fca5366ec2b0e8b306a9819964bb5",
-  "sync_time": "2026-02-17T00:03:46Z"
+  "commit_sha": "b1c1e0e0a21f96cbd473274ae08e46e066af5c95",
+  "commit_date": "2026-02-17T23:59:06Z",
+  "commit_message": "Merge pull request #11061 from laravel/feat/svelte-starter-kit\n\nSvelte Starter Kits docs",
+  "commit_url": "https://github.com/laravel/docs/commit/b1c1e0e0a21f96cbd473274ae08e46e066af5c95",
+  "sync_time": "2026-02-18T00:02:56Z"
 }

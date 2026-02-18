@@ -5,6 +5,9 @@ Source: https://spatie.be/docs/laravel-backup/v9/backing-up/overview
 Docs
 Laravel-backup
 Introduction
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-backup`
 Laravel Backup
 ==============
 A modern backup solution for Laravel apps

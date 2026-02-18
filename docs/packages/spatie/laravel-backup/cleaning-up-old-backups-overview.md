@@ -6,6 +6,9 @@ Docs
 Laravel-backup
 Cleaning-up-old-backups
 Cleaning up old backups
+You are viewing the documentation for **an older version** of this package.
+You can check the version you are using with the following command:
+`composer show spatie/laravel-backup`
 Cleaning up old backups
 =======================
 ### On this page
