@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## Larabelles: Building Space in the Laravel Community
+## PyleSoft Cuts Infrastructure Costs 50% Migrating from Vapor to Cloud
+
+PyleSoft cut infrastructure costs 50% migrating from Laravel Vapor to Laravel Cloud. Learn how they moved six apps, 300 GB of data, and 1.5 M daily requests seamlessly.
+
+[Read more](https://blog.laravel.com/blog/category/customer-story)
+
+---
+
+## Larabelles: Building Space in the Laravel Community
 
 Larabelles creates space for underrepresented developers in Laravel through scholarships, mentorship, and community. See how to join or support the movement.
 
-[Read more](https://blog.laravel.com/blog/category/community)
+[Read more](https://laravel.com/blog/category/community)
 
 ---
 
@@ -25,14 +33,6 @@ Build AI-powered Laravel applications with a unified SDK. Generate text, images,
 January brings Private Cloud, Valkey caching, expanded Cloud API, plus Forge backup options and Nightwatch real-time exception detection.
 
 [Read more](https://laravel.com/blog/category/product)
-
----
-
-## Creating Backup Strategies in Serverless Postgres with Laravel Cloud
-
-Looking to save on costs while protecting your data? Read our tips for setting up a dynamic backup strategy in Laravel Cloud.
-
-[Read more](https://laravel.com/blog/category/laravel-cloud)
 
 ---
 
