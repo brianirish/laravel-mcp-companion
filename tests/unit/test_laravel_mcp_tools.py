@@ -233,19 +233,19 @@ class TestUtilityFunctions:
             '--docs-path', '/custom/docs',
             '--server-name', 'CustomServer',
             '--log-level', 'DEBUG',
-            '--transport', 'websocket',
+            '--transport', 'http',
             '--version', '11.x',
             '--update-docs',
             '--force-update'
         ]
-        
+
         with patch('sys.argv', test_args):
             args = laravel_mcp_companion.parse_arguments()
-            
+
             assert args.docs_path == '/custom/docs'
             assert args.server_name == 'CustomServer'
             assert args.log_level == 'DEBUG'
-            assert args.transport == 'websocket'
+            assert args.transport == 'http'
             assert args.version == '11.x'
             assert args.update_docs is True
             assert args.force_update is True
