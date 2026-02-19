@@ -37,36 +37,29 @@ class TestSetupServerEnvironment:
             log_level="INFO",
             docs_path=str(temp_dir),
             version="12.x",
-            transport="stdio",
-            websocket_host=None,
-            websocket_port=None
+            transport="stdio"
         )
-        
+
         with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir):
-            docs_path, transport_options = setup_server_environment(args)
-            
+            docs_path = setup_server_environment(args)
+
             assert docs_path == temp_dir
-            assert transport_options == {}
-    
-    def test_setup_with_websocket_transport(self, temp_dir):
-        """Test setup with websocket transport."""
+
+    def test_setup_with_http_transport(self, temp_dir):
+        """Test setup with HTTP transport."""
         args = argparse.Namespace(
             log_level="DEBUG",
             docs_path=str(temp_dir),
             version="12.x",
-            transport="websocket",
+            transport="http",
             host="localhost",
             port=8080
         )
-        
+
         with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir):
-            docs_path, transport_options = setup_server_environment(args)
-            
+            docs_path = setup_server_environment(args)
+
             assert docs_path == temp_dir
-            assert transport_options == {
-                "host": "localhost",
-                "port": 8080
-            }
     
     def test_setup_with_invalid_version(self, temp_dir):
         """Test setup with invalid version."""
@@ -74,9 +67,7 @@ class TestSetupServerEnvironment:
             log_level="INFO",
             docs_path=str(temp_dir),
             version="invalid",
-            transport="stdio",
-            websocket_host=None,
-            websocket_port=None
+            transport="stdio"
         )
         
         with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir), \
