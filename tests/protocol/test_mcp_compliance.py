@@ -95,7 +95,7 @@ class TestResourceTemplates:
             # URI templates use {param} or {param*} syntax
             if "{" in uri:
                 params = re.findall(r'\{(\w+)\*?\}', uri)
-                assert len(params) > 0, f"Template has braces but no params"
+                assert len(params) > 0, "Template has braces but no params"
 
 
 @pytest.mark.protocol
