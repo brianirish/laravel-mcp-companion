@@ -20,24 +20,19 @@ def mcp_server(temp_dir):
 class TestServerCapabilities:
     """Test that server capabilities are correctly advertised."""
 
-    def test_server_has_tools(self, mcp_server):
+    async def test_server_has_tools(self, mcp_server):
         """Server should advertise available tools."""
-        # FastMCP stores tools internally
-        assert hasattr(mcp_server, '_tool_manager')
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         assert len(tools) > 0, "Server should have at least one tool"
 
-    def test_server_has_resources(self, mcp_server):
+    async def test_server_has_resources(self, mcp_server):
         """Server should advertise available resources."""
-        assert hasattr(mcp_server, '_resource_manager')
-        # Check that resource templates are registered
-        templates = mcp_server._resource_manager._templates
+        templates = await mcp_server.get_resource_templates()
         assert len(templates) > 0, "Server should have resource templates"
 
-    def test_server_has_prompts(self, mcp_server):
+    async def test_server_has_prompts(self, mcp_server):
         """Server should advertise available prompts."""
-        assert hasattr(mcp_server, '_prompt_manager')
-        prompts = mcp_server._prompt_manager._prompts
+        prompts = await mcp_server.get_prompts()
         assert len(prompts) > 0, "Server should have at least one prompt"
 
 
@@ -45,15 +40,15 @@ class TestServerCapabilities:
 class TestToolSchemas:
     """Test that all tools have valid JSON schemas."""
 
-    def test_all_tools_have_descriptions(self, mcp_server):
+    async def test_all_tools_have_descriptions(self, mcp_server):
         """Every tool should have a description."""
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         for name, tool in tools.items():
             assert tool.description, f"Tool '{name}' missing description"
 
-    def test_tool_parameters_are_valid(self, mcp_server):
+    async def test_tool_parameters_are_valid(self, mcp_server):
         """Tool parameters should be valid JSON Schema."""
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         for name, tool in tools.items():
             # FastMCP tools have parameters defined via function signatures
             # The schema is generated automatically
@@ -62,9 +57,9 @@ class TestToolSchemas:
                 # Basic JSON Schema validation
                 assert isinstance(schema, dict), f"Tool '{name}' parameters not a dict"
 
-    def test_required_tools_exist(self, mcp_server):
+    async def test_required_tools_exist(self, mcp_server):
         """Required documentation tools should exist."""
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         required_tools = [
             "list_laravel_docs",
             "search_laravel_docs",
@@ -80,24 +75,24 @@ class TestToolSchemas:
 class TestResourceTemplates:
     """Test that resource templates are valid URI templates."""
 
-    def test_laravel_resource_template(self, mcp_server):
+    async def test_laravel_resource_template(self, mcp_server):
         """Laravel resource template should be valid."""
-        templates = mcp_server._resource_manager._templates
+        templates = await mcp_server.get_resource_templates()
         # Check that we have a laravel:// resource template
         template_uris = [str(t.uri_template) for t in templates.values()]
         assert any("laravel://" in uri for uri in template_uris), \
             "Missing laravel:// resource template"
 
-    def test_external_resource_template(self, mcp_server):
+    async def test_external_resource_template(self, mcp_server):
         """External Laravel services resource template should be valid."""
-        templates = mcp_server._resource_manager._templates
+        templates = await mcp_server.get_resource_templates()
         template_uris = [str(t.uri_template) for t in templates.values()]
         assert any("laravel-external://" in uri for uri in template_uris), \
             "Missing laravel-external:// resource template"
 
-    def test_resource_templates_have_parameters(self, mcp_server):
+    async def test_resource_templates_have_parameters(self, mcp_server):
         """Resource templates should define their parameters."""
-        templates = mcp_server._resource_manager._templates
+        templates = await mcp_server.get_resource_templates()
         for name, template in templates.items():
             uri = str(template.uri_template)
             # URI templates use {param} syntax
@@ -160,16 +155,16 @@ class TestToolInvocationStructure:
 class TestPromptStructure:
     """Test that prompts follow MCP specification."""
 
-    def test_prompts_have_names(self, mcp_server):
+    async def test_prompts_have_names(self, mcp_server):
         """All prompts should have names."""
-        prompts = mcp_server._prompt_manager._prompts
+        prompts = await mcp_server.get_prompts()
         for name, prompt in prompts.items():
             assert name, "Prompt must have a name"
             assert len(name) > 0, "Prompt name cannot be empty"
 
-    def test_prompts_return_strings(self, mcp_server):
+    async def test_prompts_return_strings(self, mcp_server):
         """Prompt functions should return strings."""
-        prompts = mcp_server._prompt_manager._prompts
+        prompts = await mcp_server.get_prompts()
         for name, prompt in prompts.items():
             # FastMCP prompts have a fn attribute
             if hasattr(prompt, 'fn') and prompt.fn:
@@ -182,9 +177,9 @@ class TestPromptStructure:
 class TestToolAnnotations:
     """Test that tools have correct MCP annotations."""
 
-    def test_readonly_tools_are_marked(self, mcp_server):
+    async def test_readonly_tools_are_marked(self, mcp_server):
         """Read-only tools should have readOnlyHint annotation."""
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         readonly_tools = [
             "list_laravel_docs",
             "search_laravel_docs",
@@ -200,9 +195,9 @@ class TestToolAnnotations:
                     assert tool.annotations.readOnlyHint is True, \
                         f"Tool '{tool_name}' should be marked read-only"
 
-    def test_update_tools_not_marked_readonly(self, mcp_server):
+    async def test_update_tools_not_marked_readonly(self, mcp_server):
         """Update tools should not be marked as read-only."""
-        tools = mcp_server._tool_manager._tools
+        tools = await mcp_server.get_tools()
         update_tools = ["update_laravel_docs", "update_external_laravel_docs"]
         for tool_name in update_tools:
             if tool_name in tools:
