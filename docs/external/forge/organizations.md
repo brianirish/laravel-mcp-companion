@@ -124,4 +124,5 @@ Deleting an organization is permanently destructive and cannot be undone. All or
 Was this page helpful?
 YesNo
 [Laravel Forge SDK](/docs/sdk)[Teams](/docs/teams)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

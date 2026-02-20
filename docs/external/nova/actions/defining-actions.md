@@ -653,9 +653,10 @@ public function actions(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Registering Lenses](/docs/v5/lenses/registering-lenses)[Registering Actions](/docs/v5/actions/registering-actions)
-⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

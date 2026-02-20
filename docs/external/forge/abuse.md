@@ -76,4 +76,5 @@ Please email us at [email protected]
 Was this page helpful?
 YesNo
 [Changelog](/docs/changelog)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

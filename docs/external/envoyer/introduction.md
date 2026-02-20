@@ -79,9 +79,10 @@ Our [Terms of Service](https://envoyer.io/terms) and [Privacy Policy](https://e
 Was this page helpful?
 YesNo
 [Quick Start](/quick-start)
-⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://envoyer.io/terms)[Privacy Policy](https://envoyer.io/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

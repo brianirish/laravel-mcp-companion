@@ -95,4 +95,5 @@ The CPU Load and Used Memory metric data will be collected every minute. The Dis
 Was this page helpful?
 YesNo
 [Security](/docs/servers/security)[Real-Time Metrics](/docs/servers/real-time-metrics)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

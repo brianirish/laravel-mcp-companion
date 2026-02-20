@@ -128,4 +128,5 @@ Although you can change the destination of a permanent redirect, you will need t
 Was this page helpful?
 YesNo
 [Queues](/docs/sites/queues)[Isolation](/docs/sites/user-isolation)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

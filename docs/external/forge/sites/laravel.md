@@ -169,4 +169,5 @@ If your server is already configured with a daemon that runs Inertia SSR, Larave
 Was this page helpful?
 YesNo
 [Isolation](/docs/sites/user-isolation)[Logs](/docs/sites/logs)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

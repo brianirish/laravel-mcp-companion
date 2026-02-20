@@ -211,9 +211,10 @@ php artisan nova:stubs --force
 Was this page helpful?
 YesNo
 [Release Notes](/docs/v5/releases)[The Basics](/docs/v5/resources/the-basics)
-⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

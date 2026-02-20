@@ -252,9 +252,10 @@ For applications that require Laravel Horizon’s powerful queue monitoring and 
 Was this page helpful?
 YesNo
 [Migrate to Cloud](/resources/migrate-to-cloud)[Storage](/resources/storage)
-⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://vapor.laravel.com/terms)[Privacy Policy](https://vapor.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

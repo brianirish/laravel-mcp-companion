@@ -115,4 +115,5 @@ There are a few requirements that must be met before migrating an existing Envoy
 Was this page helpful?
 YesNo
 [Packages](/docs/resources/packages)[Sentry](/docs/integrations/sentry)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

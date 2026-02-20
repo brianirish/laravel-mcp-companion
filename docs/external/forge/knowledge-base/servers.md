@@ -276,4 +276,5 @@ sudo npm install npm@latest -g
 Was this page helpful?
 YesNo
 [Sites](/docs/knowledge-base/sites)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

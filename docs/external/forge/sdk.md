@@ -152,4 +152,5 @@ $forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
 Was this page helpful?
 YesNo
 [Laravel Forge CLI](/docs/cli)[Organizations](/docs/organizations)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

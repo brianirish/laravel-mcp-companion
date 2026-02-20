@@ -89,4 +89,5 @@ Deleting an API token is permanent and cannot be undone. Any applications or ser
 Was this page helpful?
 YesNo
 [Recipes](/docs/recipes)[Managing Servers](/docs/servers/the-basics)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

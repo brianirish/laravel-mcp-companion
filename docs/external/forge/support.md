@@ -77,4 +77,5 @@ You can get in touch with our support team the following ways:
 Was this page helpful?
 YesNo
 [OpenClaw](/docs/integrations/openclaw)[Changelog](/docs/changelog)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

@@ -434,9 +434,10 @@ If you plan to use Docker based runtimes to run your Vapor application, you must
 Was this page helpful?
 YesNo
 [Environments](/projects/environments)[Development](/projects/development)
-⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://vapor.laravel.com/terms)[Privacy Policy](https://vapor.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.
