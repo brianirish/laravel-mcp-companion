@@ -102,4 +102,5 @@ While [recipes](/docs/recipes) also allow you to run arbitrary Bash scripts on y
 Was this page helpful?
 YesNo
 [Environment Variables](/docs/sites/environment-variables)[Queues](/docs/sites/queues)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

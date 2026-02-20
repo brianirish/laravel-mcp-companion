@@ -305,9 +305,10 @@ public function filters(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Scout Integration](/docs/v5/search/scout-integration)[Registering Filters](/docs/v5/filters/registering-filters)
-⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

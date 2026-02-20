@@ -103,4 +103,5 @@ To delete credentials, navigate to the appropriate Composer dashboard, locate th
 Was this page helpful?
 YesNo
 [Network](/docs/resources/network)[Envoyer](/docs/integrations/envoyer)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

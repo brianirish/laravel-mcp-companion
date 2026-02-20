@@ -117,4 +117,5 @@ When using Laravel Forge’s user isolation features, daemon log files are locat
 Was this page helpful?
 YesNo
 [Caches](/docs/resources/caches)[Scheduler](/docs/resources/scheduler)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

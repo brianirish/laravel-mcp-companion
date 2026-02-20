@@ -132,4 +132,5 @@ This option is not available for custom servers or Laravel VPS servers. Custom s
 Was this page helpful?
 YesNo
 [API](/docs/api)[Server Types](/docs/servers/types)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

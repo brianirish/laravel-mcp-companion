@@ -329,4 +329,5 @@ Ask AI
 Was this page helpful?
 YesNo
 [Domains](/docs/sites/domains)[Environment Variables](/docs/sites/environment-variables)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

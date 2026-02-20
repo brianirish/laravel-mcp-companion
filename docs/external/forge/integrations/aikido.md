@@ -93,4 +93,5 @@ The Aikido integration is only supported for GitHub, GitLab, GitLab Self-Hosted,
 Was this page helpful?
 YesNo
 [Sentry](/docs/integrations/sentry)[OpenClaw](/docs/integrations/openclaw)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

@@ -61,9 +61,10 @@ $schedule->command('foo')->thenPing('http://beats.envoyer.io/heartbeat-id');
 Was this page helpful?
 YesNo
 [Deployment Hooks](/projects/deployment-hooks)[Notifications](/projects/notifications)
-⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://envoyer.io/terms)[Privacy Policy](https://envoyer.io/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

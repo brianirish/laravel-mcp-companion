@@ -93,4 +93,5 @@ You can connect to your server via SFTP as the isolated user. We recommend using
 Was this page helpful?
 YesNo
 [Network](/docs/sites/network)[Laravel](/docs/sites/laravel)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

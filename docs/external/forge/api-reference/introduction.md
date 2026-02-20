@@ -99,4 +99,5 @@ The Laravel Forge API uses standard HTTP status codes to indicate the success or
 Was this page helpful?
 YesNo
 [Pagination](/docs/api-reference/pagination)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

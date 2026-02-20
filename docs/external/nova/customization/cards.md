@@ -244,9 +244,10 @@ npm run watch
 Was this page helpful?
 YesNo
 [Resource Tools](/docs/v5/customization/resource-tools)[Fields](/docs/v5/customization/fields)
-⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
 Legal and Compliance
 [Term of Service](https://nova.laravel.com/terms)[Privacy Policy](https://nova.laravel.com/privacy)
+Assistant
+Responses are generated using AI and may contain mistakes.

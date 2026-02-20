@@ -87,4 +87,5 @@ To view older “rotate” or “compressed” logs, you can use `cat` for non-c
 Was this page helpful?
 YesNo
 [Laravel](/docs/sites/laravel)[Databases](/docs/resources/databases)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

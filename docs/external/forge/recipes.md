@@ -116,4 +116,5 @@ Occasionally, Laravel Forge may provide recipes to perform adhoc fixes to your s
 Was this page helpful?
 YesNo
 [SSH Keys](/docs/ssh)[API](/docs/api)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

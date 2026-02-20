@@ -161,4 +161,5 @@ You may grant a team member authority to create and delete sites by granting the
 Was this page helpful?
 YesNo
 [Real-Time Metrics](/docs/servers/real-time-metrics)[Domains](/docs/sites/domains)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

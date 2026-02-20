@@ -107,4 +107,5 @@ You may grant a team member authority to create and manage queue workers by gran
 Was this page helpful?
 YesNo
 [Commands](/docs/sites/commands)[Network](/docs/sites/network)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

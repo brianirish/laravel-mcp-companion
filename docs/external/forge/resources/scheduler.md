@@ -117,4 +117,5 @@ Applications running Laravel can use the `pingBefore` and `thenPing` methods to 
 Was this page helpful?
 YesNo
 [Background Processes](/docs/resources/background-processes)[Network](/docs/resources/network)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

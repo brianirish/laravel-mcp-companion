@@ -88,7 +88,7 @@ Other
 Copy page
 New updates and improvements to Laravel Forge.
 Copy page
-[​](#february-13%2C-2026)
+[​](#february-13-2026)
 February 13, 2026
 ## [​](#mysql-9-x-support) MySQL 9.x support
 MySQL 9 is now available as a database option when provisioning new servers.
@@ -97,7 +97,7 @@ Show Fixes (4)
 - Fixed an issue preventing the creation of scheduled jobs.
 - Fixed Aikido not finding the correct workspace.
 - Resolved an issue with database syncing creating duplicate entries.
-[​](#february-6%2C-2026)
+[​](#february-6-2026)
 February 6, 2026
 ## [​](#openclaw-server-type) OpenClaw server type
 You can now create OpenClaw servers on Laravel VPS.
@@ -106,14 +106,14 @@ Show Improvements (2)
 - **Server list**: Display the OS version in the server list.
 Show Fixes (1)
 - Resolved an issue preventing the delivery of email notifications when a scheduled job’s heartbeat is in a failing state.
-[​](#january-30%2C-2026)
+[​](#january-30-2026)
 January 30, 2026
 Show Improvements (2)
 - **MySQL 8.4**: MySQL 8.0 has been replaced with MySQL 8.4, making it the new default MySQL version for newly provisioned servers.
 - **Power cycle for Laravel VPS**: You can now power cycle Laravel VPS servers.
 Show Fixes (1)
 - Resolved an issue with duplicate backup configurations resulting in failed backups.
-[​](#january-23%2C-2026)
+[​](#january-23-2026)
 January 23, 2026
 Show Improvements (1)
 - **Server configuration UI**: Advanced settings on the server configuration modal now detail which options are included in the advanced settings modal.
@@ -122,7 +122,7 @@ Show Fixes (4)
 - When a site stops using a PHP version, the corresponding PHP-FPM pool configuration and service are removed for that version.
 - Isolated users are now given updated SSH keys.
 - Fixed a bug causing the PM2 process to fail after changing primary domain on NextJS sites.
-[​](#january-16%2C-2026)
+[​](#january-16-2026)
 January 16, 2026
 Show Improvements (1)
 - **Hetzner S3**: Hetzner S3 object storage is now available as an option for database backups.
@@ -134,7 +134,7 @@ Show Fixes (7)
 - The tooltip under the deployment script form now displays a tooltip instead of submitting the form.
 - Resolved a bug preventing users from setting up Meilisearch servers.
 - The directory fields supports using slashes again, allowing users to point to subdirectories.
-[​](#january-9%2C-2026)
+[​](#january-9-2026)
 January 9, 2026
 Show Improvements (4)
 - **Default branch**: Forge will now automatically select the default branch in a repository in the new site modal.
@@ -148,7 +148,7 @@ Show Fixes (6)
 - Resolved a bug leaving SSL certificate renewals stuck in a renewing state.
 - Resolved a caching issue preventing the new site modal from appearing after backing out of this flow using the browser back button.
 - Users can now delete domains on sites even when there is no primary domain.
-[​](#december-12%2C-2025)
+[​](#december-12-2025)
 December 12, 2025
 Show Improvements (2)
 - **New heartbeat notification settings**: You can now choose to be notified about failed heartbeats after 30 or 60 minutes.
@@ -166,7 +166,7 @@ Show Fixes (12)
 - Fixed server metrics failures on Hetzner caused by a console error.
 - Corrected Let’s Encrypt domain builder so wildcard certificates no longer add an unnecessary www host.
 - Restored visibility of Hetzner Intel/AMD (x86) servers in Forge.
-[​](#december-5%2C-2025)
+[​](#december-5-2025)
 December 5, 2025
 ## [​](#package-manager-support) Package manager support
 You may now select your preferred package manager when creating new sites. Select from npm, pnpm, Bun, or Yarn.
@@ -191,7 +191,7 @@ Show Fixes (9)
 - Resolved an error appearing in the console when using (command + K) to open the search feature.
 - Resolved a bug preventing some organization owners from removing users.
 - Recipe logs now display properly, without collapsing when extensive.
-[​](#november-21%2C-2025)
+[​](#november-21-2025)
 November 21, 2025
 ## [​](#provision-aws-servers-with-ebs-gp3) Provision AWS servers with EBS gp3
 You can now provision an AWS server with EBS GP3. GP2 will remain the default for already provisioned AWS servers. All new servers will be provisioned with EBS gp3.To move your existing servers from gp2 to gp3, visit your AWS dashboard.
@@ -219,7 +219,7 @@ Show Fixes (14)
 - Backup configuration has been updated to ensure deleted databases are shown for removal.
 - Resolved a bug causing database backups with the server database driver set to MariaDB to fail.
 - Laravel VPS servers are now displayed in the drop-down when configuring a load balancer.
-[​](#november-14%2C-2025)
+[​](#november-14-2025)
 November 14, 2025
 ## [​](#introducing-support-for-postgresql-18) Introducing support for PostgreSQL 18
 Forge now offers support for PostgreSQL 18 when provisioning new servers, including Laravel VPS servers.
@@ -233,7 +233,7 @@ Show Fixes (4)
 - Fixed z-index issue on site deployment pages.
 - Fixed issue in Forge’s API `project_type` match statement causing HTTP 500 errors.
 - Improved reliability when adding and removing domains from sites with many domains has been improved.
-[​](#november-7%2C-2025)
+[​](#november-7-2025)
 November 7, 2025
 ## [​](#ssl-certificate-information) SSL Certificate Information
 We have made several improvements to the SSL certificate UI.You can now see relevant domains, status, issue date, and expiration date on the certificate card under Certificates, on the Domains tab.Details on why the most recent attempt to renew or issue a certificate are now easily accessible in the View Output option.Multiple domains sharing a certificate can be copied all at once by clicking on the domains listed in the card details. [Learn more](https://forge.laravel.com/docs/sites/domains)
@@ -248,7 +248,7 @@ Show Fixes (4)
 - Resolved a bug causing the deploy button to be unresponsive on the Deployments tab.
 - We now validate certificate field uploads in the existing certificate upload modal.
 - Addressed a bug causing site and server details to display over the navigation bar.
-[​](#october-31%2C-2025)
+[​](#october-31-2025)
 October 31, 2025
 ## [​](#deployment-pipeline-improvements) Deployment Pipeline Improvements
 We have made several improvements to the deployment pipeline to better recover from failed deployments and timeouts.Deployments will now always use the version of PHP configured on the site, even when calling `php` inside `composer.json` and `package.json` files. Notably, this fixes issues using Laravel Wayfinder during deployments.
@@ -274,7 +274,7 @@ Show Fixes (7)
 - Resolved a 404 when unsharing resources from teams.
 - Installing MariaDB 11.4 now works again.
 - Invitations can now be accepted at all times.
-[​](#october-24%2C-2025)
+[​](#october-24-2025)
 October 24, 2025
 ## [​](#improved-mobile-experience) Improved Mobile Experience
 We’ve improved the mobile experience for the following features: dropdowns, modals, notification center, tables, and breadcrumbs.
@@ -301,7 +301,7 @@ Show Fixes (8)
 - Outbound bandwidth metric display updated to scale appropriately.
 - Team members with View access can now see shared sites on the Site dashboard.
 - Creating Sites via API using a custom domain will no longer include the suffix on-Forge.
-[​](#october-17%2C-2025)
+[​](#october-17-2025)
 October 17, 2025
 ## [​](#optional-repositories) Optional Repositories
 It’s now possible to create new sites with any project type without specifying a repository. This is ideal if you’re starting a new project from scratch or want to deploy code manually.When creating a new site, leave the repository field blank. Forge will set up the server and web root for you, allowing you to upload your code later via SFTP, SCP, or any other method you prefer.
@@ -326,7 +326,7 @@ Show Fixes (8)
 - Accounts now can be deleted by users with organizations without servers.
 - Fixed duplicate Nginx upstream errors in load balancers.
 - Only attempt to symlink `auth.json` during zero-downtime deployments if the file exists.
-[​](#october-7%2C-2025)
+[​](#october-7-2025)
 October 7, 2025
 ## [​](#the-next-generation-of-forge-is-here) The Next Generation of Forge is Here
 Launched on October 1, [the next generation of Laravel Forge](https://laravel.com/blog/everything-you-need-to-know-about-the-new-forge-laravel-vps) delivers speed, control, and ease of use, supporting any modern web stack. This was Forge’s biggest update since its original release in 2014.
@@ -378,4 +378,5 @@ Show Fixes (18)
 Was this page helpful?
 YesNo
 [Support](/docs/support)[Abuse](/docs/abuse)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

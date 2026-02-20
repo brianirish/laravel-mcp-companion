@@ -121,4 +121,5 @@ The ability to manage storage providers is controlled by the `storage:manage` pe
 Was this page helpful?
 YesNo
 [Server Providers](/docs/server-providers)[Source Control](/docs/source-control)
-⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.
