@@ -40,6 +40,9 @@ Source: https://bootcamp.laravel.com/blade/creating-chirps
 * Livewire
   New
   Laravel, Livewire, and Tailwind
+* Svelte
+  New
+  Laravel, Inertia, Svelte, and Tailwind
 ### Packages
 * Scout
   Search for Eloquent models
