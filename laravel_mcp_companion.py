@@ -685,7 +685,7 @@ def parse_arguments():
         "--transport",
         type=str,
         default=os.environ.get("TRANSPORT", "stdio"),
-        choices=["stdio", "websocket", "sse", "http"],
+        choices=["stdio", "http"],
         help="Transport mechanism to use (default: stdio, env: TRANSPORT)"
     )
     parser.add_argument(
@@ -1083,36 +1083,28 @@ def validate_version(version: str) -> bool:
     return version in SUPPORTED_VERSIONS
 
 
-def setup_server_environment(args: argparse.Namespace) -> tuple[Path, Dict[str, Any]]:
+def setup_server_environment(args: argparse.Namespace) -> Path:
     """Setup the server environment based on command line arguments.
-    
+
     Args:
         args: Parsed command line arguments
-        
+
     Returns:
-        Tuple of (docs_path, transport_options)
+        Validated docs_path
     """
     # Set logging level
     logger.setLevel(getattr(logging, args.log_level))
-    
+
     # Setup docs path
     docs_path = setup_docs_path(args.docs_path)
     logger.info(f"Using docs path: {docs_path}")
-    
+
     # Validate version
     if not validate_version(args.version):
         logger.error(f"Unsupported version: {args.version}. Supported versions: {', '.join(SUPPORTED_VERSIONS)}")
         sys.exit(1)
-    
-    # Setup transport options
-    transport_options = {}
-    if args.transport == "websocket" and (args.host or args.port):
-        transport_options = {
-            "host": args.host,
-            "port": args.port,
-        }
-    
-    return docs_path, transport_options
+
+    return docs_path
 
 
 def handle_documentation_update(docs_path: Path, version: str, update_docs: bool, force_update: bool) -> bool:
@@ -1290,10 +1282,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -
             return f"Error reading file: {str(e)}"
     
     # Register resources using functional approach (decorator as function)
-    laravel_resource = mcp.resource("laravel://{path}")(read_laravel_doc)
-    external_resource = mcp.resource("laravel-external://{service}/{path}")(read_external_laravel_doc)
-    logger.debug(f"Registered Laravel resource: {laravel_resource}")
-    logger.debug(f"Registered external resource: {external_resource}")
+    mcp.resource("laravel://{path*}")(read_laravel_doc)
+    mcp.resource("laravel-external://{service}/{path*}")(read_external_laravel_doc)
+    logger.debug("Registered resource template: laravel://{path*}")
+    logger.debug("Registered resource template: laravel-external://{service}/{path*}")
     
     
     # Configure all tools
@@ -1317,7 +1309,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     # Register documentation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_docs"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def list_laravel_docs(version: Optional[str] = None) -> str:
         """List all available Laravel documentation files.
@@ -1330,7 +1323,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_laravel_docs"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True) -> str:
         """Search through Laravel documentation for a specific term.
@@ -1345,7 +1339,9 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],
-        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True}
+        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        tags={"docs", "write"},
+        timeout=120.0
     )
     def update_laravel_docs(version_param: Optional[str] = None, force: bool = False) -> str:
         """
@@ -1390,7 +1386,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["laravel_docs_info"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def laravel_docs_info(version: Optional[str] = None) -> str:
         """Get information about the documentation version and status.
@@ -1445,7 +1442,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     # Register package recommendation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"packages", "read"}
     )
     def get_laravel_package_recommendations(use_case: str) -> str:
         """
@@ -1481,7 +1479,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_info"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"packages", "read"}
     )
     def get_laravel_package_info(package_name: str) -> str:
         """
@@ -1507,7 +1506,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_categories"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"packages", "read"}
     )
     def get_laravel_package_categories(category: str) -> str:
         """
@@ -1542,7 +1542,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_features_for_laravel_package"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"packages", "read"}
     )
     def get_features_for_laravel_package(package: str) -> str:
         """
@@ -1573,7 +1574,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description="Read the full content of a specific Laravel documentation file",
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def read_laravel_doc_content(filename: str, version: Optional[str] = None) -> str:
         """
@@ -1590,7 +1592,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description="Search Laravel docs with context snippets",
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def search_laravel_docs_with_context(
         query: str,
@@ -1615,7 +1618,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description="Get the structure and sections of a documentation file",
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def get_doc_structure(filename: str, version: Optional[str] = None) -> str:
         """
@@ -1632,7 +1636,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description="Browse Laravel documentation by category",
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def browse_docs_by_category(category: str, version: Optional[str] = None) -> str:
         """
@@ -1649,7 +1654,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["verify_laravel_feature"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def verify_laravel_feature(feature: str, version: Optional[str] = None) -> str:
         """Quickly verify if a Laravel feature/topic exists in documentation.
@@ -1662,7 +1668,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["compare_laravel_versions"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def compare_laravel_versions(from_version: str, to_version: str, file_filter: Optional[str] = None) -> str:
         """Compare documentation files between two Laravel versions.
@@ -1677,7 +1684,9 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     # Register external documentation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_external_laravel_docs"],
-        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True}
+        annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
+        tags={"external", "write"},
+        timeout=300.0
     )
     def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
         """
@@ -1730,7 +1739,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_services"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"external", "read"}
     )
     def list_laravel_services() -> str:
         """
@@ -1767,7 +1777,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_external_laravel_docs"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"external", "read"}
     )
     def search_external_laravel_docs(query: str, services: Optional[List[str]] = None) -> str:
         """
@@ -1850,7 +1861,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_service_info"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"external", "read"}
     )
     def get_laravel_service_info(service: str) -> str:
         """
@@ -1922,7 +1934,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     # Register learning resource and discovery tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["find_laravel_docs_for_need"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def find_laravel_docs_for_need(need: str, version: Optional[str] = None) -> str:
         """Find Laravel documentation for a specific user need."""
@@ -1930,7 +1943,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_learning_path"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def get_laravel_learning_path(path_name: str = "") -> str:
         """Get a specific curated learning path."""
@@ -1938,7 +1952,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_learning_paths"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def list_laravel_learning_paths() -> str:
         """List all available learning paths."""
@@ -1946,7 +1961,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_content_by_difficulty"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def get_laravel_content_by_difficulty(difficulty: str, version: Optional[str] = None) -> str:
         """Get Laravel documentation filtered by difficulty level."""
@@ -1954,7 +1970,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_related_laravel_packages"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"packages", "read"}
     )
     def get_related_laravel_packages(package: str) -> str:
         """Get packages related to a specific Laravel package."""
@@ -1962,7 +1979,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_laravel_learning_resources"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def search_laravel_learning_resources(query: str, sources: Optional[List[str]] = None) -> str:
         """Search through learning resources."""
@@ -1970,7 +1988,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_learning_resources"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"learning", "read"}
     )
     def list_laravel_learning_resources(source: Optional[str] = None) -> str:
         """List available learning resources."""
@@ -1978,7 +1997,8 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_categories"],
-        annotations={"readOnlyHint": True, "idempotentHint": True}
+        annotations={"readOnlyHint": True, "idempotentHint": True},
+        tags={"docs", "read"}
     )
     def list_laravel_categories() -> str:
         """List all documentation categories."""
@@ -2028,7 +2048,7 @@ def main():
     args = parse_arguments()
     
     # Setup server environment
-    docs_path, transport_options = setup_server_environment(args)
+    docs_path = setup_server_environment(args)
     
     # Update documentation if requested
     handle_documentation_update(docs_path, args.version, args.update_docs, args.force_update)
@@ -2085,7 +2105,7 @@ def main():
             from starlette.middleware.cors import CORSMiddleware
 
             # Get the FastMCP HTTP app
-            app = mcp.streamable_http_app()
+            app = mcp.http_app()
 
             # Add CORS middleware for browser-based clients
             app.add_middleware(
@@ -2106,7 +2126,7 @@ def main():
             uvicorn.run(app, host=host, port=port, log_level="info")
         else:
             logger.info("Server ready. Press Ctrl+C to stop.")
-            mcp.run(transport=args.transport, **transport_options)
+            mcp.run()
     except Exception as e:
         logger.critical(f"Server error: {str(e)}")
         sys.exit(1)
