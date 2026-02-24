@@ -573,6 +573,7 @@ MenuItem::link('Cashier', '/cashier')
 Was this page helpful?
 YesNo
 [Dashboards](/docs/v5/customization/dashboards)[Notifications](/docs/v5/customization/notifications)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

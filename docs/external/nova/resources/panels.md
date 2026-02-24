@@ -216,6 +216,7 @@ Tab::group(fields: [
 Was this page helpful?
 YesNo
 [Repeater Fields](/docs/v5/resources/repeater-fields)[Relationships](/docs/v5/resources/relationships)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

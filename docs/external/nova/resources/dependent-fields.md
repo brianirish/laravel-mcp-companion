@@ -220,6 +220,7 @@ Currency::make('Price')
 Was this page helpful?
 YesNo
 [Fields](/docs/v5/resources/fields)[Date Fields](/docs/v5/resources/date-fields)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

@@ -1235,6 +1235,7 @@ public function name()
 Was this page helpful?
 YesNo
 [Registering Actions](/docs/v5/actions/registering-actions)[Registering Metrics](/docs/v5/metrics/registering-metrics)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

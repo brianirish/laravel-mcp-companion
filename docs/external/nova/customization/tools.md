@@ -238,6 +238,7 @@ Ask AI
 Was this page helpful?
 YesNo
 [Impersonation](/docs/v5/customization/impersonation)[Resource Tools](/docs/v5/customization/resource-tools)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

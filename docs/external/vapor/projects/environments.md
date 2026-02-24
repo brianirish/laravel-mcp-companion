@@ -704,6 +704,7 @@ vapor env:delete testing
 Was this page helpful?
 YesNo
 [The Basics](/projects/the-basics)[Deployments](/projects/deployments)
+⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)

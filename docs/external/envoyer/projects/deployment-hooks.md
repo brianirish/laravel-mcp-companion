@@ -81,6 +81,7 @@ Variables can be written with or without a space inside of the curly braces. For
 Was this page helpful?
 YesNo
 [Servers](/projects/servers)[Heartbeats](/projects/heartbeats)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

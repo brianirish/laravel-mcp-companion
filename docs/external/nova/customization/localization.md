@@ -335,6 +335,7 @@ export default {
 Was this page helpful?
 YesNo
 [Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

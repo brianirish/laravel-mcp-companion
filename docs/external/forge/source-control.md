@@ -114,5 +114,6 @@ First, choose the `Custom` option when creating your Git based site. Next, add t
 Was this page helpful?
 YesNo
 [Storage Providers](/docs/storage-providers)[SSH Keys](/docs/ssh)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

@@ -501,6 +501,7 @@ Our [Terms of Service](https://nova.laravel.com/terms) and [Privacy Policy](htt
 Was this page helpful?
 YesNo
 [Release Notes](/docs/v5/releases)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

@@ -80,6 +80,7 @@ To learn more about stub customization, please consult the [Laravel documentatio
 Was this page helpful?
 YesNo
 [Localization](/docs/v5/customization/localization)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

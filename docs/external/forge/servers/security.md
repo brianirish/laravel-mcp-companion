@@ -101,5 +101,6 @@ Laravel Forge does not automatically update w software such as PHP or MySQL, as 
 Was this page helpful?
 YesNo
 [Nginx Templates](/docs/servers/nginx-templates)[Monitoring](/docs/servers/monitoring)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

@@ -106,5 +106,6 @@ If your site is using a different project type, these features will not be avail
 Was this page helpful?
 YesNo
 [Deployments](/docs/sites/deployments)[Commands](/docs/sites/commands)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

@@ -62,6 +62,7 @@ If you unlink a source control provider, you will be unable to make new deployme
 Was this page helpful?
 YesNo
 [Quick Start](/quick-start)[Your Account](/accounts/your-account)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

@@ -467,6 +467,7 @@ Our [Terms of Service](https://vapor.laravel.com/terms) and [Privacy Policy](ht
 Was this page helpful?
 YesNo
 [The Basics](/projects/the-basics)
+⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)

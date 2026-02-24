@@ -113,5 +113,6 @@ The ability to manage Nginx Templates is determined by the `site:manage-nginx` p
 Was this page helpful?
 YesNo
 [Load Balancing](/docs/servers/load-balancing)[Security](/docs/servers/security)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

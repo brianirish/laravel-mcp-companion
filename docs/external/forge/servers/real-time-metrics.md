@@ -100,5 +100,6 @@ These time scopes allow you to quickly identify performance issues, correlate ev
 Was this page helpful?
 YesNo
 [Monitoring](/docs/servers/monitoring)[Managing Sites](/docs/sites/the-basics)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

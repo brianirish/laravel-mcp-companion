@@ -44,6 +44,7 @@ Only project owners are able to manage project collaborators.
 Was this page helpful?
 YesNo
 [Notifications](/projects/notifications)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

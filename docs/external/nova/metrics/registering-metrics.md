@@ -361,6 +361,7 @@ public function cards(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Defining Metrics](/docs/v5/metrics/defining-metrics)[Dashboards](/docs/v5/customization/dashboards)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

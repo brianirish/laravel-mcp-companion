@@ -190,6 +190,7 @@ environments:
 Was this page helpful?
 YesNo
 [Queues](/resources/queues)[Networks](/resources/networks)
+⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)

@@ -141,5 +141,6 @@ Deploy keys can be used on servers that have their SSH key attached to your sour
 Was this page helpful?
 YesNo
 [Source Control](/docs/source-control)[Recipes](/docs/recipes)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

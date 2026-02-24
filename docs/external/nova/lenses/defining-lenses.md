@@ -340,6 +340,7 @@ public static $perPageOptions = [50, 100, 150];
 Was this page helpful?
 YesNo
 [Registering Filters](/docs/v5/filters/registering-filters)[Registering Lenses](/docs/v5/lenses/registering-lenses)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

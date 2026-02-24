@@ -116,5 +116,6 @@ Our [Legal](https://laravel.com/legal) and [Trust Centers](https://trust.laravel
 Was this page helpful?
 YesNo
 [Laravel Forge CLI](/docs/cli)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.
