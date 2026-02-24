@@ -79,6 +79,7 @@ Congratulations, you’ve just successfully completed your first zero downtime d
 Was this page helpful?
 YesNo
 [Introduction](/introduction)[Source Control](/accounts/source-control)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

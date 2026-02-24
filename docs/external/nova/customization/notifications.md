@@ -178,6 +178,7 @@ public function boot(): void
 Was this page helpful?
 YesNo
 [Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

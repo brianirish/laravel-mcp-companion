@@ -181,6 +181,7 @@ npm run watch
 Was this page helpful?
 YesNo
 [Fields](/docs/v5/customization/fields)[CSS / JavaScript](/docs/v5/customization/frontend)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

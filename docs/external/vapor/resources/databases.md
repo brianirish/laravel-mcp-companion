@@ -253,6 +253,7 @@ When deleting a database via the UI, you can choose to **preserve the resource o
 Was this page helpful?
 YesNo
 [Networks](/resources/networks)[Caches](/resources/caches)
+⌘I
 [Laravel Vapor home page](https://vapor.laravel.com)
 Platform
 [Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)

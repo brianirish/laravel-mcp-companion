@@ -142,6 +142,7 @@ class User extends Resource
 Was this page helpful?
 YesNo
 [Global Search](/docs/v5/search/global-search)[Defining Filters](/docs/v5/filters/defining-filters)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

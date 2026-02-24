@@ -184,5 +184,6 @@ If you are using [Route53](https://docs.aws.amazon.com/Route53/latest/APIReferen
 Was this page helpful?
 YesNo
 [Managing Sites](/docs/sites/the-basics)[Deployments](/docs/sites/deployments)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

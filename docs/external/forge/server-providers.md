@@ -171,5 +171,6 @@ Provisioning an existing server with existing configurations or applications may
 Was this page helpful?
 YesNo
 [Teams](/docs/teams)[Storage Providers](/docs/storage-providers)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

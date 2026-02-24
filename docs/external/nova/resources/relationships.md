@@ -913,6 +913,7 @@ Inline relation creation only supports creating relations **one level deep**. Th
 Was this page helpful?
 YesNo
 [Field Panels](/docs/v5/resources/panels)[Validation](/docs/v5/resources/validation)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

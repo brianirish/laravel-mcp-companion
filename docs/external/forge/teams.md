@@ -108,5 +108,6 @@ You can leave a team that you are a member of by visiting the team dashboard and
 Was this page helpful?
 YesNo
 [Organizations](/docs/organizations)[Server Providers](/docs/server-providers)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

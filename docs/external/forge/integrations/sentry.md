@@ -89,5 +89,6 @@ Laravel Forge doesn’t automatically install Sentry into your application. You 
 Was this page helpful?
 YesNo
 [Envoyer](/docs/integrations/envoyer)[Aikido](/docs/integrations/aikido)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

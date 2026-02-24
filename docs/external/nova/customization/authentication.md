@@ -224,6 +224,7 @@ Ask AI
 Was this page helpful?
 YesNo
 [Notifications](/docs/v5/customization/notifications)[Impersonation](/docs/v5/customization/impersonation)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

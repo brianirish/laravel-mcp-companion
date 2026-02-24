@@ -104,5 +104,6 @@ Deleting a server will permanently destroy all data, including your OpenClaw con
 Was this page helpful?
 YesNo
 [Aikido](/docs/integrations/aikido)[Support](/docs/support)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

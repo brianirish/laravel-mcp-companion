@@ -130,5 +130,6 @@ This will re-establish Forge’s connection capability to your server.
 Was this page helpful?
 YesNo
 [Scheduler](/docs/resources/scheduler)[Packages](/docs/resources/packages)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

@@ -516,6 +516,7 @@ public static function scoutQuery(
 Was this page helpful?
 YesNo
 [Validation](/docs/v5/resources/validation)[The Basics](/docs/v5/search/the-basics)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

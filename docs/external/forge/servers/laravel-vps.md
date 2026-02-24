@@ -106,5 +106,6 @@ Free bandwidth is included when using Laravel VPS servers. This is subject to fa
 Was this page helpful?
 YesNo
 [Server Types](/docs/servers/types)[PHP](/docs/servers/php)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

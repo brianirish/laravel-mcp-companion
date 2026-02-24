@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "71f7d0b677c2216658b69f201494dfe12ff36c2c",
-  "commit_date": "2026-02-22T18:29:40Z",
-  "commit_message": "add note",
-  "commit_url": "https://github.com/laravel/docs/commit/71f7d0b677c2216658b69f201494dfe12ff36c2c",
-  "sync_time": "2026-02-23T00:02:14Z"
+  "commit_sha": "89ec4f0f815fde25dab8da4fca9d4d9f3d9d4ca1",
+  "commit_date": "2026-02-23T16:21:39Z",
+  "commit_message": "[12.x] Cache::funnel (#11069)\n\n* Document Cache::funnel\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/89ec4f0f815fde25dab8da4fca9d4d9f3d9d4ca1",
+  "sync_time": "2026-02-24T00:02:37Z"
 }

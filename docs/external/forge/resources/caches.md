@@ -105,5 +105,6 @@ For example, when connecting via [TablePlus](https://tableplus.com/):
 Was this page helpful?
 YesNo
 [Database Backups](/docs/resources/database-backups)[Background Processes](/docs/resources/background-processes)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

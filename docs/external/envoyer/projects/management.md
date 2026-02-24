@@ -75,6 +75,7 @@ Deleting your project is an irreversible action, and we will be unable to recove
 Was this page helpful?
 YesNo
 [Your Account](/accounts/your-account)[Servers](/projects/servers)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

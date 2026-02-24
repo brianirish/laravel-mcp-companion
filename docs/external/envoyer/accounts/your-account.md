@@ -58,6 +58,7 @@ Deleting your account will cancel your subscription and delete all of your accou
 Was this page helpful?
 YesNo
 [Source Control](/accounts/source-control)[Management](/projects/management)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

@@ -378,5 +378,6 @@ Show Fixes (18)
 Was this page helpful?
 YesNo
 [Support](/docs/support)[Abuse](/docs/abuse)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

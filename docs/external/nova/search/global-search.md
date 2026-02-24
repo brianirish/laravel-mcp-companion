@@ -200,6 +200,7 @@ public function boot(): void
 Was this page helpful?
 YesNo
 [The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

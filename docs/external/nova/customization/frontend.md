@@ -227,6 +227,7 @@ php artisan nova:enable-vue-devtool
 Was this page helpful?
 YesNo
 [Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

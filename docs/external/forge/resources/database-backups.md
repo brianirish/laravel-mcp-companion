@@ -126,5 +126,6 @@ The ability to manage database backups is split into two permissions.
 Was this page helpful?
 YesNo
 [Databases](/docs/resources/databases)[Caches](/docs/resources/caches)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

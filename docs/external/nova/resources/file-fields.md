@@ -549,6 +549,7 @@ Since the `acceptedTypes` method only performs client-side validation, you shoul
 Was this page helpful?
 YesNo
 [Date Fields](/docs/v5/resources/date-fields)[Repeater Fields](/docs/v5/resources/repeater-fields)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

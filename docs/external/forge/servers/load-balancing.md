@@ -107,5 +107,6 @@ When using SSL on a load balancer, you will likely need to configure the “trus
 Was this page helpful?
 YesNo
 [PHP](/docs/servers/php)[Nginx Templates](/docs/servers/nginx-templates)
+⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.

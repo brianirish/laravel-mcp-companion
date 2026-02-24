@@ -257,6 +257,7 @@ npm run watch
 Was this page helpful?
 YesNo
 [Tools](/docs/v5/customization/tools)[Cards](/docs/v5/customization/cards)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

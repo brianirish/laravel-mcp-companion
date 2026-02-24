@@ -82,6 +82,7 @@ If you are not using Laravel, you will essentially follow the same process. Howe
 Was this page helpful?
 YesNo
 [Management](/projects/management)[Deployment Hooks](/projects/deployment-hooks)
+⌘I
 [Envoyer home page](https://envoyer.io)
 Platform
 [Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)

@@ -544,6 +544,7 @@ public function actions(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Defining Actions](/docs/v5/actions/defining-actions)[Defining Metrics](/docs/v5/metrics/defining-metrics)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)

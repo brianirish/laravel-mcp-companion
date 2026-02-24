@@ -696,6 +696,7 @@ You may press the `C` key on a resource index to navigate to the “Create Resou
 Was this page helpful?
 YesNo
 [Upgrade Guide](/docs/v5/upgrade)[Fields](/docs/v5/resources/fields)
+⌘I
 [Laravel Nova home page](https://nova.laravel.com)
 Platform
 [Dashboard](https://nova.laravel.com/)[Status](https://status.laravel.com/)
