@@ -2,6 +2,9 @@
 
 Source: https://spatie.be/docs/laravel-medialibrary/v11/advanced-usage/using-s3
 
+laravel-medialibrary
+====================
+Associate files with Eloquent models
 Docs
 Laravel-medialibrary
 Introduction

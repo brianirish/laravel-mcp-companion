@@ -98,7 +98,7 @@ Laravel Forge provides first-class support for applications running [Laravel](ht
 - Inertia.js Server Side Rendering (SSR)
 To accomplish this, Laravel Forge parses the `composer.lock` file from your application and inspects for the presence and version of the packages above.
 ### [​](#requirements) Requirements
-Laravel Forge will only show the application panel for Laravel framework installations of version `5.0` or later. In addition, the panel’s supported packages must meet the following version requirements:
+Laravel Forge will only show the application panel in the site’s Overview tab for Laravel framework installations of version `5.0` or later. In addition, the panel’s supported packages must meet the following version requirements:
 | Dependency | Minimum Version |
 | --- | --- |
 | `laravel/framework` | `5.0` |
@@ -135,7 +135,7 @@ Determining the correct server type for hosting Laravel Reverb depends on your c
 | Dedicated Reverb server with Pulse | ⊙ |  |
 | Dedicated Reverb server with Pulse (separate ingest and / or database) |  | ⊙ |
 Once your preferred server has been provisioned, you should [add a new site](/docs/sites/the-basics#creating-sites) and [install your Reverb-enabled Laravel application](/docs/sites/the-basics#apps-projects) from your version control provider of choice.
-Now, you may quickly enable or disable Laravel Reverb via the “Laravel Reverb” toggle within Laravel Forge’s application panel. When enabling Reverb, Forge will create the Reverb daemon, install the required dependencies, and configure the server for optimum performance.
+Now, you may quickly enable or disable Laravel Reverb via the “Laravel Reverb” toggle within Laravel Forge’s application panel in the site’s Overview tab. When enabling Reverb, Forge will create the Reverb daemon, install the required dependencies, and configure the server for optimum performance.
 Additionally, Laravel Forge will prompt for additional information required to setup the server per your requirements.
 - **Public Hostname:** Used to update the Nginx configuration of the site, allowing Reverb connections to be accepted by the server on the given hostname. Laravel Forge will default to a subdomain of the site’s current hostname, but you are free to customize this value. For example, if the site’s hostname is `example.com`, Forge will default Reverb’s hostname to `ws.example.com`.
 - **Port:** Used to instruct the Reverb daemon which server port it should run on. Laravel Forge will proxy requests for the given public hostname to this port.

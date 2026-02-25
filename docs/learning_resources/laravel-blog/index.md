@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## Your AI Agent Can Now Deploy to Laravel Cloud (and Write This Blog)
+## From Heroku to Laravel Cloud: How Superscript Saved 30% in One Month
+
+How Superscript cut infrastructure costs 30% in month one on Laravel Private Cloud, migrating five apps and 80 GB of data while meeting strict insurance security requirements.
+
+[Read more](https://blog.laravel.com/blog/category/customer-story)
+
+---
+
+## Your AI Agent Can Now Deploy to Laravel Cloud (and Write This Blog)
 
 Laravel Cloud's API lets AI agents deploy, scale, and manage infrastructure through conversation. See how Florian built a working OpenClaw skill in a few hours.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+[Read more](https://laravel.com/blog/category/laravel-cloud)
 
 ---
 
@@ -25,14 +33,6 @@ PyleSoft cut infrastructure costs 50% migrating from Laravel Vapor to Laravel Cl
 Larabelles creates space for underrepresented developers in Laravel through scholarships, mentorship, and community. See how to join or support the movement.
 
 [Read more](https://laravel.com/blog/category/community)
-
----
-
-## Introducing the Laravel AI SDK
-
-Build AI-powered Laravel applications with a unified SDK. Generate text, images, audio, and more across OpenAI, Anthropic, and other providers with clean, organized code.
-
-[Read more](https://laravel.com/blog/category/announcement)
 
 ---
 

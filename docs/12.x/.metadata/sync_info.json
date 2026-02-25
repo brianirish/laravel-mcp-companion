@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "89ec4f0f815fde25dab8da4fca9d4d9f3d9d4ca1",
-  "commit_date": "2026-02-23T16:21:39Z",
-  "commit_message": "[12.x] Cache::funnel (#11069)\n\n* Document Cache::funnel\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/89ec4f0f815fde25dab8da4fca9d4d9f3d9d4ca1",
-  "sync_time": "2026-02-24T00:02:37Z"
+  "commit_sha": "65d742a9e95516c6de021176b95b2cfd628a894a",
+  "commit_date": "2026-02-24T14:00:05Z",
+  "commit_message": "Removed queue:work sqs env connection overwrite parameter from a Supervisor example configuration (#11072)",
+  "commit_url": "https://github.com/laravel/docs/commit/65d742a9e95516c6de021176b95b2cfd628a894a",
+  "sync_time": "2026-02-25T00:02:43Z"
 }

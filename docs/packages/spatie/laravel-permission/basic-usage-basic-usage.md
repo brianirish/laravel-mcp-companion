@@ -2,6 +2,9 @@
 
 Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/basic-usage
 
+laravel-permission
+==================
+Associate users with roles and permissions
 Docs
 Laravel-permission
 Basic-usage
