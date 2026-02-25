@@ -2,6 +2,9 @@
 
 Source: https://spatie.be/docs/laravel-backup/v9/installation-and-setup
 
+laravel-backup
+==============
+A package to backup your Laravel app
 Docs
 Laravel-backup
 Installation and setup

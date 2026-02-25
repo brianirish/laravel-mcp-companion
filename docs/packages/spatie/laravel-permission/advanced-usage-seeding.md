@@ -2,6 +2,9 @@
 
 Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/seeding
 
+laravel-permission
+==================
+Associate users with roles and permissions
 Docs
 Laravel-permission
 Advanced-usage
