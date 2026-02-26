@@ -464,7 +464,7 @@ You may configure alarms for all environment metrics using the Vapor UI. These a
 ## [​](#runtime) Runtime
 The `runtime` configuration option allows you to specify the runtime a given environment runs on.
 ### [​](#native-runtimes) Native Runtimes
-The currently supported native runtimes are `php-8.5:al2`, `php-8.5:al2-arm`, `php-8.4:al2`, `php-8.4:al2-arm`, `php-8.3:al2`, `php-8.3:al2-arm`, `php-8.2:al2`, `php-8.2:al2-arm` and `php-8.1:al2`. The runtimes that are suffixed with `al2` use Amazon Linux 2 while those without the suffix use Amazon Linux 1. Runtimes without the `-arm` suffix run on x86 artchitecture whereas those suffixed with `-arm` run on Arm architecture. Arm provides performance benefits and cost savings compared to its x86 equivalent:
+The currently supported native runtimes are `php-8.5:al2`, `php-8.5:al2-arm`, `php-8.5:al2023`, `php-8.5:al2023-arm`, `php-8.4:al2`, `php-8.4:al2-arm`, `php-8.4:al2023`, `php-8.4:al2023-arm`, `php-8.3:al2`, `php-8.3:al2-arm`, `php-8.3:al2023`, `php-8.3:al2023-arm`, `php-8.2:al2`, and `php-8.2:al2-arm`. Runtimes without the `-arm` suffix run on x86 architecture whereas those suffixed with `-arm` run on Arm architecture. Arm provides performance benefits and cost savings compared to its x86 equivalent:
 vapor.yml
 Copy
 Ask AI
@@ -473,11 +473,11 @@ id: 2
 name: vapor-laravel-app
 environments:
     production:
-        runtime: 'php-8.5:al2'
+        runtime: 'php-8.5:al2023'
         build:
             - 'composer install --no-dev'
 ```
-Using [Amazon Linux 2](https://aws.amazon.com/amazon-linux-2/) (`php-8.5:al2`, `php-8.5:al2-arm`, `php-8.4:al2`, `php-8.4:al2-arm`, `php-8.3:al2`, `php-8.3:al2-arm`, `php-8.2:al2`, `php-8.2:al2-arm`, `php-8.1:al2`) is **highly recommended**, as Amazon Linux 1 is no longer maintained as of December 31, 2020.
+Using [Amazon Linux 2023](https://aws.amazon.com/linux/amazon-linux-2023/) (`php-8.5:al2023`, `php-8.5:al2023-arm`, `php-8.4:al2023`, `php-8.4:al2023-arm`, `php-8.3:al2023`, `php-8.3:al2023-arm`) is **highly recommended**, as Amazon Linux 2 will no longer be maintained as of June 30, 2026.
 The following limitations apply to Vapor native runtimes:
 - The application size, including the runtime itself, must not exceed 250MB.
 - Additional PHP extensions or libraries (such as `imagick`) can not be installed.
@@ -642,7 +642,7 @@ name: my-application
 environments:
     staging:
         memory: 1024
-        runtime: 'php-8.5:al2'
+        runtime: 'php-8.5:al2023'
         octane: true
 ```
 In addition, if your project uses a database, you may use the `octane-database-session-persist` and `octane-database-session-ttl` options to instruct Octane that database connections should be reused between requests:

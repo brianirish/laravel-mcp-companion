@@ -68,6 +68,7 @@ Changelog
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
 On this page
+- [February 20, 2026](#february-20-2026)
 - [February 13, 2026](#february-13-2026)
 - [February 6, 2026](#february-6-2026)
 - [January 30, 2026](#january-30-2026)
@@ -88,6 +89,21 @@ Other
 Copy page
 New updates and improvements to Laravel Forge.
 Copy page
+[​](#february-20-2026)
+February 20, 2026
+## [​](#npm-private-packages) npm private packages
+You can now configure npm credentials at the server and site levels to install private packages during deployments. Forge manages the
+`.npmrc` configuration automatically, supporting scoped registries like GitHub Packages and custom registries.
+Show Improvements (2)
+- **Vultr VX1 servers**: Added support for Vultr VX1 server types when provisioning servers.
+- **Server unlinking**: Added the ability to unlink a server directly from the delete server modal.
+Show Fixes (6)
+- Fixed SSL certificates displaying incorrect expiry dates.
+- Resolved an issue preventing recipes from being unselected after selection.
+- Fixed wildcard domains being treated as literal values on legacy sites, causing site path and Nginx configuration conflicts.
+- Resolved storage provider credential fields being autofilled by the browser.
+- Fixed duplicated heartbeat notifications.
+- Fixed the add server to network modal layout issues.
 [​](#february-13-2026)
 February 13, 2026
 ## [​](#mysql-9-x-support) MySQL 9.x support
@@ -102,66 +118,66 @@ February 6, 2026
 ## [​](#openclaw-server-type) OpenClaw server type
 You can now create OpenClaw servers on Laravel VPS.
 Show Improvements (2)
-- **Command palette filtering**: Improve accuracy of command filtering.
-- **Server list**: Display the OS version in the server list.
+- **Command palette filtering**: Improved the accuracy of command filtering.
+- **Server list**: Displayed the OS version in the server list.
 Show Fixes (1)
 - Resolved an issue preventing the delivery of email notifications when a scheduled job’s heartbeat is in a failing state.
 [​](#january-30-2026)
 January 30, 2026
 Show Improvements (2)
-- **MySQL 8.4**: MySQL 8.0 has been replaced with MySQL 8.4, making it the new default MySQL version for newly provisioned servers.
-- **Power cycle for Laravel VPS**: You can now power cycle Laravel VPS servers.
+- **MySQL 8.4**: Updated the default MySQL version for newly provisioned servers from MySQL 8.0 to MySQL 8.4.
+- **Power cycle for Laravel VPS**: Added the ability to power cycle Laravel VPS servers.
 Show Fixes (1)
 - Resolved an issue with duplicate backup configurations resulting in failed backups.
 [​](#january-23-2026)
 January 23, 2026
 Show Improvements (1)
-- **Server configuration UI**: Advanced settings on the server configuration modal now detail which options are included in the advanced settings modal.
+- **Server configuration UI**: Improved the server configuration modal to clarify which options are included in advanced settings.
 Show Fixes (4)
-- Log viewer now refreshes after selecting “Delete contents” in the drop down.
-- When a site stops using a PHP version, the corresponding PHP-FPM pool configuration and service are removed for that version.
-- Isolated users are now given updated SSH keys.
+- Fixed the log viewer to refresh after selecting “Delete contents” in the dropdown.
+- Removed the corresponding PHP-FPM pool configuration and service when a site stops using a PHP version.
+- Updated SSH keys for isolated users.
 - Fixed a bug causing the PM2 process to fail after changing primary domain on NextJS sites.
 [​](#january-16-2026)
 January 16, 2026
 Show Improvements (1)
 - **Hetzner S3**: Hetzner S3 object storage is now available as an option for database backups.
 Show Fixes (7)
-- Addressed a bug preventing users from scrolling modals across Forge.
-- Modals in the create a certificate flow now display properly when using Safari.
-- Shared paths are now saving properly after being updated on the settings deployments page.
+- Fixed a bug preventing users from scrolling modals across Forge.
+- Fixed display issues in the create certificate flow when using Safari.
+- Fixed shared paths so updates save properly on the deployment settings page.
 - Removed access key and secret key required fields from the database backup configuration modal when using EC2 assumed role.
-- The tooltip under the deployment script form now displays a tooltip instead of submitting the form.
+- Fixed the tooltip under the deployment script form so it opens the tooltip instead of submitting the form.
 - Resolved a bug preventing users from setting up Meilisearch servers.
-- The directory fields supports using slashes again, allowing users to point to subdirectories.
+- Fixed the directory fields to support slashes again, allowing users to point to subdirectories.
 [​](#january-9-2026)
 January 9, 2026
 Show Improvements (4)
-- **Default branch**: Forge will now automatically select the default branch in a repository in the new site modal.
+- **Default branch**: Added automatic default branch selection in the new site modal.
 - **Zero downtime tooltip**: Added a tooltip under deployments clarifying that zero downtime deployment is only supported for new Forge sites.
 - **Handling text overflow**: Expanded the Migrate to Forge modal, and enabled multiple lines to prevent text overflow.
-- **Rate limit errors**: Forge now differentiates between user and service-driven rate limit errors for LetsEncrypt.
+- **Rate limit errors**: Improved LetsEncrypt rate limit errors by differentiating user-driven and service-driven failures.
 Show Fixes (6)
-- The second modal in the “create backup” flow now opens at the top of the page, instead of opening halfway down.
+- Fixed the second modal in the “create backup” flow to open at the top of the page instead of halfway down.
 - Resolved Let’s Encrypt modal display issues when using Safari.
-- The delete option in the drop-down has been removed from the final domain on sites.
+- Removed the delete option from a site’s final domain in the dropdown.
 - Resolved a bug leaving SSL certificate renewals stuck in a renewing state.
 - Resolved a caching issue preventing the new site modal from appearing after backing out of this flow using the browser back button.
-- Users can now delete domains on sites even when there is no primary domain.
+- Fixed domain deletion so users can delete domains even when no primary domain is set.
 [​](#december-12-2025)
 December 12, 2025
 Show Improvements (2)
-- **New heartbeat notification settings**: You can now choose to be notified about failed heartbeats after 30 or 60 minutes.
+- **New heartbeat notification settings**: Added 30-minute and 60-minute options for failed heartbeat notifications.
 - **Nginx API endpoints**: Implemented API endpoints to retrieve and update domain Nginx configurations.
 Show Fixes (12)
-- Let’s Encrypt certificates are no longer renewing prematurely.
-- Users without active subscriptions can now access past invoices on the billing page.
-- DNS verification now works when the root domain is not authoritative.
+- Fixed premature Let’s Encrypt certificate renewals.
+- Restored access to past invoices on the billing page for users without active subscriptions.
+- Fixed DNS verification when the root domain is not authoritative.
 - Fixed resized servers not updating to show new specs on the settings page.
 - Fixed ARIA attributes for dropdowns to resolve accessibility issues.
-- Ensured backup configuration API updates the DB backup script after database removal.
+- Fixed the backup configuration API to update the DB backup script after database removal.
 - Fixed the queue worker —force flag UI so the toggle state displays correctly.
-- Isolated Users are added to the supervisor sudoers so they can restart background tasks after deployment.
+- Added isolated users to supervisor sudoers so they can restart background tasks after deployment.
 - Aligned git clone authentication behavior between Zero Downtime Deployment and non‑Zero Downtime Deployment site creation.
 - Fixed server metrics failures on Hetzner caused by a console error.
 - Corrected Let’s Encrypt domain builder so wildcard certificates no longer add an unnecessary www host.
@@ -178,45 +194,45 @@ Show Improvements (8)
 - **Branch details**: Branch details are now visible on the deployments tab and the deployment details page.
 - **Deployment logs**: Deployment logs automatically open on the deployment details page after initiating a new deployment.
 - **Scheduled job frequency**: The cron expression now displays when hovering over Custom frequency on the scheduled job card.
-- **Copy certificate output**: There is now a button to copy the full certificate output in the output modal.
+- **Copy certificate output**: Added a button to copy the full certificate output in the output modal.
 - **Site install automation**: Site installation will trigger the install and build commands automatically.
 - **Accessibility**: Dropdowns are now navigable using the arrow keys when opened using the `Tab` key. Additionally, pressing `Esc` closes the dropdown.
 Show Fixes (9)
-- The add users modal is now properly sized to avoid overlapping.
-- Commenting out deployment script macros now works as expected.
-- Organizations no longer overlap when switching organizations when using the Safari browser.
-- The Let’s Encrypt modal now expands correctly for sites with many domains.
-- Users can now view archived servers even when there are no active servers.
-- DNS certificates will automatically reuse verification names for the same domain.
+- Fixed sizing for the Add Users modal to prevent overlapping.
+- Fixed deployment script macros so commented lines work as expected.
+- Fixed overlapping organizations when switching organizations in Safari.
+- Fixed the Let’s Encrypt modal to expand correctly for sites with many domains.
+- Restored archived server visibility when no active servers exist.
+- Updated DNS certificates to automatically reuse verification names for the same domain.
 - Resolved an error appearing in the console when using (command + K) to open the search feature.
 - Resolved a bug preventing some organization owners from removing users.
-- Recipe logs now display properly, without collapsing when extensive.
+- Fixed recipe logs so long output no longer collapses unexpectedly.
 [​](#november-21-2025)
 November 21, 2025
 ## [​](#provision-aws-servers-with-ebs-gp3) Provision AWS servers with EBS gp3
 You can now provision an AWS server with EBS GP3. GP2 will remain the default for already provisioned AWS servers. All new servers will be provisioned with EBS gp3.To move your existing servers from gp2 to gp3, visit your AWS dashboard.
 Show Improvements (8)
 - **Recipes search results**: Updated the recipe search UI to accurately show that a search returned zero matching results, instead of displaying “no recipes”.
-- **Manual certificate renewal**: You can now manually trigger a certificate renewal for Let’s Encrypt certificates after a failed attempt on the Domains tab.
-- **Site notes**: Sites now allow you to leave notes in the Settings tab, similar to the notes feature for servers. Use them to keep track of important information.
-- **Accessibility improvements**: Continued to improve color contrast and form labeling across the platform.
-- **Scheduled jobs paths**: Scheduled job paths are now copyable from the scheduler.
-- **Clone certificate endpoint**: Added an API endpoint to clone certificates. Mirroring functionality available in the Forge UI now.
+- **Manual certificate renewal**: Added manual certificate renewal for Let’s Encrypt certificates after a failed attempt on the Domains tab.
+- **Site notes**: Added site notes in the Settings tab, similar to notes on servers.
+- **Accessibility improvements**: Improved color contrast and form labeling across the platform.
+- **Scheduled jobs paths**: Added copy support for scheduled job paths in the scheduler.
+- **Clone certificate endpoint**: Added an API endpoint to clone certificates. This mirrors functionality already available in the Forge UI.
 - **Copy debug info**: Added the site path to the information included in the copy debug info action.
 - **Destructive commands**: Added a confirmation step when attempting to run destructive commands.
 Show Fixes (14)
 - Resolved a bug causing the Used Memory monitor to display “unknown” after being installed.
-- Scheduled jobs now accurately display the next expected run time instead of always showing as UTC.
-- A Z-index issue on the domain dropdown of the Let’s Encrypt modal has been fixed.
+- Fixed scheduled jobs to display the next expected run time instead of always showing UTC.
+- Fixed a z-index issue on the domain dropdown in the Let’s Encrypt modal.
 - Fixed a bug causing Forge to re-add server’s SSH key to the source control provider when creating a site with a deploy key.
-- Site logs are available in the Observe tab when Custom and Other are selected in the Framework setting.
-- Confirmed users assigned a Viewer role at an organization level are not shown organization-level settings they do not have permissions to edit.
-- Hetzner server sizes and prices now display accurate pricing when provisioning a new server.
-- The new schedule job modal now has a placeholder reflecting the current directory.
-- Confirmed users are being shown the billing button in the admin dashboard after they’ve completed onboarding, instead of being prompted to subscribe.
-- Sync database button is now showing for server types other than Database.
-- Log file dropdown has been expanded to accommodate longer options.
-- Backup configuration has been updated to ensure deleted databases are shown for removal.
+- Restored site logs in the Observe tab when Custom and Other are selected in the Framework setting.
+- Fixed organization-level permissions so users with the Viewer role are not shown settings they cannot edit.
+- Fixed Hetzner server sizes and prices to display accurate values during provisioning.
+- Added a current-directory placeholder to the new scheduled job modal.
+- Fixed onboarding state so users see the billing button in the admin dashboard instead of a subscribe prompt.
+- Added the Sync Database button for server types other than Database.
+- Expanded the log file dropdown to accommodate longer options.
+- Updated backup configuration to ensure deleted databases are shown for removal.
 - Resolved a bug causing database backups with the server database driver set to MariaDB to fail.
 - Laravel VPS servers are now displayed in the drop-down when configuring a load balancer.
 [​](#november-14-2025)
@@ -224,30 +240,30 @@ November 14, 2025
 ## [​](#introducing-support-for-postgresql-18) Introducing support for PostgreSQL 18
 Forge now offers support for PostgreSQL 18 when provisioning new servers, including Laravel VPS servers.
 Show Improvements (4)
-- **Sync network rules**: Automatically sync UFW rules with Forge. Missing server rules will be added to Forge and orphaned rules will be removed.
-- **Toggle certificates via API**: Enabling and disabling existing certificates is now possible via the API.
+- **Sync network rules**: Added automatic UFW rule syncing with Forge, including adding missing rules and removing orphaned rules.
+- **Toggle certificates via API**: Added API support for enabling and disabling existing certificates.
 - **Improved validation errors**: Validation errors for required fields are now easier to identify.
 - **Improved Composer credential validation**: Added context to clarify how fields should be formatted when adding Composer credentials.
 Show Fixes (4)
-- Fixed bug causing the Update Site API endpoint to reset other keys.
-- Fixed z-index issue on site deployment pages.
-- Fixed issue in Forge’s API `project_type` match statement causing HTTP 500 errors.
-- Improved reliability when adding and removing domains from sites with many domains has been improved.
+- Fixed a bug causing the Update Site API endpoint to reset other keys.
+- Fixed a z-index issue on site deployment pages.
+- Fixed an issue in Forge’s API `project_type` match statement causing HTTP 500 errors.
+- Resolved reliability issues when adding and removing domains on sites with many domains.
 [​](#november-7-2025)
 November 7, 2025
 ## [​](#ssl-certificate-information) SSL Certificate Information
-We have made several improvements to the SSL certificate UI.You can now see relevant domains, status, issue date, and expiration date on the certificate card under Certificates, on the Domains tab.Details on why the most recent attempt to renew or issue a certificate are now easily accessible in the View Output option.Multiple domains sharing a certificate can be copied all at once by clicking on the domains listed in the card details. [Learn more](https://forge.laravel.com/docs/sites/domains)
+We have made several improvements to the SSL certificate UI.You can now see relevant domains, status, issue date, and expiration date on the certificate card under Certificates, on the Domains tab.Details about why the most recent attempt to renew or issue a certificate failed are now easily accessible in the View Output option.Multiple domains sharing a certificate can be copied all at once by clicking on the domains listed in the card details. [Learn more](https://forge.laravel.com/docs/sites/domains)
 Show Improvements (5)
-- **Deployment error handling**: Continued work to ensure deployment error output is helpful to customers.
+- **Deployment error handling**: Improved deployment error output to make troubleshooting easier.
 - **Firewall rule order**: Updated the order that firewall rules display to mirror UFW order on the server.
-- **Command palette**: Use command/control + click in the command palette to open multiple selections at once.
-- **API command output**: The Forge API can now fetch command outputs.
-- **Update Ubuntu records**: You can manually update Forge’s Ubuntu records in the details section of the server overview.
+- **Command palette**: Added support for command/control + click in the command palette to open multiple selections at once.
+- **API command output**: Added Forge API support for fetching command outputs.
+- **Update Ubuntu records**: Added a manual update option for Forge’s Ubuntu records in server overview details.
 Show Fixes (4)
-- The health check URL will automatically update to reflect primary domain changes.
+- Fixed health check URLs to update automatically when the primary domain changes.
 - Resolved a bug causing the deploy button to be unresponsive on the Deployments tab.
-- We now validate certificate field uploads in the existing certificate upload modal.
-- Addressed a bug causing site and server details to display over the navigation bar.
+- Added validation for certificate field uploads in the existing certificate upload modal.
+- Fixed a bug causing site and server details to display over the navigation bar.
 [​](#october-31-2025)
 October 31, 2025
 ## [​](#deployment-pipeline-improvements) Deployment Pipeline Improvements
@@ -256,24 +272,22 @@ We have made several improvements to the deployment pipeline to better recover f
 Commands now correctly use the version of PHP configured for the site.
 ## [​](#reset-forge-sudo-password) Reset Forge Sudo Password
 It is now possible to reset the `forge` sudo password for Laravel VPS servers.
-Show Improvements (9)
-- **Tag API servers and sites**: Add tags to servers and sites when creating them via the API.
-- **Disk usage metric updates**: The disk usage metric now shows in the server’s Overview.
-- **Increased command palette results**: The command palette now shows 10 results for servers, sites and recipes.
-- **VAT ID improvements**: It’s now easier to fill in the VAT ID in EU countries.
-- **Searchable team members**: The team members page now allows you to search for members.
-- **Improved Octane and Reverb port selection**: The suggested next available port.
-- **Searchable team members**: Team members are now searchable.
-- **Improved EU VAT collection**: EU tax IDs are now easier to provide.
-- **Select everything:** It’s now possible to select all text within the UI.
+Show Improvements (7)
+- **Tag API servers and sites**: Added support for tagging servers and sites during API creation.
+- **Disk usage metric updates**: Added the disk usage metric to the server Overview.
+- **Increased command palette results**: Increased command palette results to 10 for servers, sites, and recipes.
+- **VAT ID improvements**: Improved VAT ID entry for EU countries.
+- **Searchable team members**: Added member search on the team members page.
+- **Improved Octane and Reverb port selection**: Forge now suggests the next available port.
+- **Select all text**: Added support for selecting all text within the UI.
 Show Fixes (7)
-- Sudo mode now enables correctly when restoring database backups.
-- Background process validation now correctly validates for sites and servers.
-- The command palette hotkey no longer shows ⌘ for Windows and Linux users.
-- The monitoring notification now links to the correct place.
+- Fixed sudo mode so it enables correctly when restoring database backups.
+- Fixed background process validation for sites and servers.
+- Fixed the command palette hotkey display so ⌘ is not shown for Windows and Linux users.
+- Fixed monitoring notifications to link to the correct location.
 - Resolved a 404 when unsharing resources from teams.
-- Installing MariaDB 11.4 now works again.
-- Invitations can now be accepted at all times.
+- Restored MariaDB 11.4 installation support.
+- Fixed invitation acceptance flow so invitations can be accepted at all times.
 [​](#october-24-2025)
 October 24, 2025
 ## [​](#improved-mobile-experience) Improved Mobile Experience
@@ -283,24 +297,24 @@ When Aikido is enabled at the organization level (via the Integrations page), it
 Sites under that organization can then individually opt in to Aikido, enabling security scans and syncing results from Aikido’s API. This ensures a consistent setup while maintaining per-site control. [Learn more about our Aikido integration](https://forge.laravel.com/docs/integrations/aikido#aikido)
 Show Improvements (10)
 - **Improved search results**: Archived servers have been removed from the command palette.
-- **Improved navigation**: Overview page section titles now link to the corresponding page.
-- **Subdomain aliases**: Can now retroactively enable/disable wildcards on domains.
-- **Pagination and search**: Continued work to ensure pages are searchable from the command palette.
-- **Let’s Encrypt controller validation**: Controller will now validate all domains to avoid errors.
-- **Restored databases**: Restoring databases now requires sudo mode (password confirmation).
-- **Site repository updates**: Sites can now change Git repository and branch.
-- **New metric**: Disk usage is now visible for Laravel VPS.
-- **Site queue workers**: Now display in Background Processes on a server level.
-- **EOL Ubuntu versions**: Improved handling of servers running EOL Ubuntu versions
+- **Improved navigation**: Linked overview page section titles to their corresponding pages.
+- **Subdomain aliases**: Added support for retroactively enabling and disabling wildcards on domains.
+- **Pagination and search**: Improved command palette searchability across pages.
+- **Let’s Encrypt controller validation**: Added domain-wide validation in the controller to avoid errors.
+- **Restored databases**: Added a sudo mode requirement (password confirmation) when restoring databases.
+- **Site repository updates**: Added support for changing site Git repositories and branches.
+- **New metric**: Added disk usage visibility for Laravel VPS.
+- **Site queue workers**: Added site queue workers to Background Processes at the server level.
+- **EOL Ubuntu versions**: Improved handling of servers running EOL Ubuntu versions.
 Show Fixes (8)
-- Add server and recipe buttons now appear for all users.
-- Closing the ellipsis button on the site page and server page will no longer open the selection.
-- Long branch names now display properly in the “Deploy Branch” dropdown.
-- Recently authorized server providers will appear in the server provider list.
-- Partial searches in the command palette will return complete results.
-- Outbound bandwidth metric display updated to scale appropriately.
-- Team members with View access can now see shared sites on the Site dashboard.
-- Creating Sites via API using a custom domain will no longer include the suffix on-Forge.
+- Fixed visibility of Add Server and Add Recipe buttons for all users.
+- Fixed the ellipsis button so closing it no longer opens a selection on site and server pages.
+- Fixed long branch names in the “Deploy Branch” dropdown.
+- Fixed the server provider list to show recently authorized providers.
+- Fixed command palette partial searches to return complete results.
+- Fixed outbound bandwidth metric display scaling.
+- Fixed shared site visibility for team members with View access on the Site dashboard.
+- Fixed API site creation with custom domains so the `on-Forge` suffix is not appended.
 [​](#october-17-2025)
 October 17, 2025
 ## [​](#optional-repositories) Optional Repositories
@@ -310,22 +324,22 @@ Laravel Forge will now show you the estimated size of databases on your server. 
 Show Improvements (9)
 - **Improved dark mode**: Improved contrast and readability for dark mode users.
 - **Pagination and searching:** Improved the pagination and searching of larger tables.
-- **Rename background processes:** Easily identify your background processes by giving them customizable names.
+- **Rename background processes:** Added customizable names for background processes.
 - **Clone SSL certificates:** We’ve reintroduced the ability to clone SSL certificates.
-- **Copyable IDs:** Quickly copy the ID of various resources from their dropdown menu.
-- **Deploy keys now work with zero-downtime deployments:** It’s now possible to use zero-downtime deployments in combination with deploy keys.
-- **Maintenance mode redirect path:** It’s now possible to provide a redirect path when enabling maintenance mode on your Laravel sites.
-- **Display more information about sites and servers:** Sites and server list items now display the version of PHP they’re running and the isolated username, if applicable.
+- **Copyable IDs:** Added quick copy support for resource IDs from dropdown menus.
+- **Deploy keys now work with zero-downtime deployments:** Added support for using deploy keys with zero-downtime deployments.
+- **Maintenance mode redirect path:** Added support for redirect paths when enabling maintenance mode on Laravel sites.
+- **Display more information about sites and servers:** Added PHP version and isolated username details to site and server list items when applicable.
 - **Better Statamic support:** Additional Laravel integrations have been enabled for sites using the Statamic project type.
 Show Fixes (8)
 - Fixed the environment encryption key resetting.
-- Deployments are now unavailable when a site does not have a deploy script.
-- Reinstate deploy keys for sites. You can find this in the site’s Deployments tab.
-- PHP 8.5 is not currently working, so the option has been disabled for now.
-- Improved the Envoyer deployment hooks migration flow.
-- Accounts now can be deleted by users with organizations without servers.
+- Disabled deployments when a site does not have a deploy script.
+- Reinstated deploy keys for sites. You can find this in the site’s Deployments tab.
+- Disabled the PHP 8.5 option while support is unavailable.
+- Fixed issues in the Envoyer deployment hooks migration flow.
+- Fixed account deletion for users with organizations that do not have servers.
 - Fixed duplicate Nginx upstream errors in load balancers.
-- Only attempt to symlink `auth.json` during zero-downtime deployments if the file exists.
+- Fixed zero-downtime deployments to symlink `auth.json` only when the file exists.
 [​](#october-7-2025)
 October 7, 2025
 ## [​](#the-next-generation-of-forge-is-here) The Next Generation of Forge is Here
@@ -340,7 +354,7 @@ You can now migrate sites from Envoyer to Forge’s zero-downtime deployment sys
 Forge now includes first-class support for Nuxt and Next.js applications. This update makes it easier than ever to manage full-stack applications on Forge. You can deploy modern JavaScript frameworks alongside your PHP or Laravel projects without extra configuration.When creating a new site, choose Nuxt or Next.js as the project type. Forge will automatically handle the build process, set up the correct runtime environment, and configure your site for production. [Start a Nuxt or Next.js project](https://forge.laravel.com/sign-in)
 ### [​](#improved-domain-and-ssl-management) Improved Domain and SSL Management
 Domains and TLS are now simpler, faster, and more reliable, especially for sites with multiple aliases. SSL certificates are now issued per domain, eliminating multi-domain delays and reducing configuration errors. Managing your Nginx configs is also much easier.Each new site also gets an optional default `on-forge.com` domain for quick testing and sharing, which can be disabled if you don’t need it. [Learn more](https://forge.laravel.com/docs/sites/domains#certificates)
-### [​](#streamlined-ui-and-command-palette) **Streamlined UI and Command Palette**
+### [​](#streamlined-ui-and-command-palette) Streamlined UI and Command Palette
 Forge’s interface has been redesigned for faster, more intuitive navigation. Features are now grouped into logical tabs at the top of each page, reducing clutter and making tools easier to find.The new command palette (`⌘K`) lets you jump to any page or action without reaching for the mouse, speeding up everyday tasks. [Explore the new interface](https://forge.laravel.com/sign-in)
 ### [​](#organizations-and-teams) Organizations and Teams
 Circles have been replaced with a more standard Organizations and Teams structure.
@@ -350,31 +364,31 @@ No action is required on your end: all existing Circles and shared resources are
 ### [​](#heartbeats-and-health-checks) Heartbeats and Health Checks
 You can now catch connectivity and routing issues before your users notice them with Forge’s Health checks. This feature pings your application from three regions (London, New York, and Singapore), so you’ll know right away if it’s reachable worldwide.Heartbeats monitor your scheduled jobs by expecting a ping when they finish. If a backup or data processing task fails silently, Forge alerts you immediately, turning job monitoring from a reactive chore into a proactive safeguard. [Enable Health checks and Heartbeats](https://forge.laravel.com/sign-in)
 Show Improvements (6)
-- **Stacked and queued deployments**: Gain complete visibility into what’s deploying and when.
-- **Health checks and Heartbeats**: Catch connectivity issues and routing problems before your users with proactive monitoring for your apps and scheduled jobs.
-- **Real-time metrics charts**: See live CPU, memory, and bandwidth usage data.
-- **Role-based access control**: Manage who accesses what with ease.
-- **Organizations as billable entities**: Working with multiple clients is now more straightforward.
-- **New modern API**: Access an API that is performant, scalable, and has comprehensive documentation.
+- **Stacked and queued deployments**: Added complete visibility into what is deploying and when.
+- **Health checks and Heartbeats**: Added proactive monitoring to catch connectivity issues and routing problems before they impact users.
+- **Real-time metrics charts**: Added live CPU, memory, and bandwidth usage charts.
+- **Role-based access control**: Added role-based access control for managing permissions.
+- **Organizations as billable entities**: Made multi-client billing management more straightforward.
+- **New modern API**: Added a performant, scalable API with comprehensive documentation.
 Show Fixes (18)
-- Improve performance and reliability of DNS verification.
-- Fix load-balanced servers appearing as “Unknown.”
-- Add support for configurable deployment retentions.
-- Fix organization-level SSH key creation and deletion.
-- Add permanent redirects from legacy URLs to new Forge URLs.
-- Widen allowed character sets for database passwords.
-- Fix `/storage` shared paths not being configured during Envoyer migration.
-- Fix Laravel Octane configuration file being written to incorrect folder.
-- Fix discounted Laravel VPS prices not showing inside of “Resize” dropdown.
-- Improve support for self-hosted GitLab and custom Git repositories with zero-downtime deployments.
-- Create breadcrumb dropdown item links so that Cmd/Ctrl+Click works as expected.
-- Add missing pagination to potentially long lists (databases, SSH keys, etc.).
-- Fix `.env` file reading from and writing to incorrect place for Nuxt.js sites.
-- Improve reliability of tax ID verification when editing billing information.
-- Fix team-scoped servers not being accessible.
-- Fix repository picker not loading more than 100 repositories when using Bitbucket.
-- Fix repeated tab navigation not working on smaller viewports.
-- Fix issue in support widget preventing customers from contacting support.
+- Improved DNS verification performance and reliability.
+- Fixed load-balanced servers appearing as “Unknown.”
+- Added support for configurable deployment retention.
+- Fixed organization-level SSH key creation and deletion.
+- Added permanent redirects from legacy URLs to new Forge URLs.
+- Expanded allowed character sets for database passwords.
+- Fixed `/storage` shared paths not being configured during Envoyer migration.
+- Fixed Laravel Octane configuration files being written to the incorrect folder.
+- Fixed discounted Laravel VPS prices not appearing in the “Resize” dropdown.
+- Improved support for self-hosted GitLab and custom Git repositories with zero-downtime deployments.
+- Added links to breadcrumb dropdown items so Cmd/Ctrl+Click works as expected.
+- Added missing pagination to potentially long lists (databases, SSH keys, etc.).
+- Fixed `.env` file reads and writes using the incorrect location for Nuxt.js sites.
+- Improved tax ID verification reliability when editing billing information.
+- Fixed team-scoped servers being inaccessible.
+- Fixed the repository picker not loading more than 100 repositories when using Bitbucket.
+- Fixed repeated tab navigation failures on smaller viewports.
+- Fixed an issue in the support widget that prevented customers from contacting support.
 Was this page helpful?
 YesNo
 [Support](/docs/support)[Abuse](/docs/abuse)

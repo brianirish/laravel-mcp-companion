@@ -111,6 +111,7 @@ Laravel Forge supports two deployment strategies, letting you choose the one tha
 ### [​](#zero-downtime-deployments) Zero-downtime deployments
 Zero-downtime deployments use a strategy where your new code is cloned into a special `releases` directory, and then a symbolic link is used to “activate” the new code once deployment is completed.
 This strategy greatly reduces the risk of your site going down during deployments, as the new code is only activated once all deployment steps have completed successfully. If any step in the deployment process fails, your site will continue to use the previous release.
+Nuxt.js and Next.js sites always use zero-downtime deployments. This behavior is not configurable and cannot be disabled, since it ensures that JavaScript-based, server-rendered applications are deployed safely without interrupting active requests or causing visible downtime during builds and restarts.
 Zero-downtime deployments are exclusively available for new sites and must be configured at the time of creation — they cannot be added to existing sites later.Laravel Forge automatically enables zero-downtime deployments for all new sites by default. If you prefer not to use this feature, you can disable it by toggling the “Zero-downtime deployments” option in the “Advanced settings” modal during site creation.
 #### [​](#release-creation-and-activation) Release creation and activation
 If you create a new site with zero-downtime deployments enabled, Laravel Forge will configure your site’s deployment script to include three special “macros”:
