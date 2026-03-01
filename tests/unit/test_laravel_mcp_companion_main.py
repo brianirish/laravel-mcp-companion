@@ -21,22 +21,22 @@ class TestParseArguments:
             assert not args.update_docs
             assert not args.force_update
     
-    def test_parse_websocket_transport(self):
-        """Test parsing websocket transport arguments."""
+    def test_parse_http_transport(self):
+        """Test parsing HTTP transport arguments."""
         test_args = [
             'laravel-mcp-companion',
-            '--transport', 'websocket',
+            '--transport', 'http',
             '--host', 'localhost',
             '--port', '8080'
         ]
-        
+
         with patch.object(sys, 'argv', test_args):
             args = parse_arguments()
-            
-            assert args.transport == "websocket"
+
+            assert args.transport == "http"
             assert args.host == "localhost"
             assert args.port == 8080
-    
+
     def test_parse_update_arguments(self):
         """Test parsing documentation update arguments."""
         test_args = [
@@ -103,8 +103,8 @@ class TestMainFunction:
             mock_fastmcp_class.assert_called_once_with("LaravelMCPCompanion")
             mock_updater_class.assert_called_once_with(temp_dir, "12.x")
             
-            # Verify server was started
-            mock_mcp.run.assert_called_once_with(transport="stdio")
+            # Verify server was started (stdio is default, no args needed)
+            mock_mcp.run.assert_called_once_with()
     
     @patch('laravel_mcp_companion.GracefulShutdown')
     @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
@@ -149,40 +149,6 @@ class TestMainFunction:
             main()
             
         assert exc_info.value.code == 1
-    
-    @patch('laravel_mcp_companion.GracefulShutdown')
-    @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
-    def test_main_websocket_transport(self, mock_setup_docs, mock_fastmcp_class, 
-                                      mock_updater_class, mock_shutdown_class, temp_dir):
-        """Test main function with websocket transport."""
-        # Setup mocks
-        mock_setup_docs.return_value = temp_dir
-        mock_mcp = MagicMock()
-        mock_fastmcp_class.return_value = mock_mcp
-        mock_updater = MagicMock()
-        mock_updater_class.return_value = mock_updater
-        mock_shutdown = MagicMock()
-        mock_shutdown_class.return_value = mock_shutdown
-        
-        # Mock command line arguments
-        test_args = [
-            'laravel-mcp-companion',
-            '--transport', 'websocket',
-            '--host', 'localhost',
-            '--port', '8080'
-        ]
-        
-        with patch.object(sys, 'argv', test_args):
-            main()
-            
-            # Verify server was started with websocket transport
-            mock_mcp.run.assert_called_once_with(
-                transport="websocket",
-                host="localhost",
-                port=8080
-            )
     
     @patch('laravel_mcp_companion.GracefulShutdown')
     @patch('laravel_mcp_companion.MultiSourceDocsUpdater')

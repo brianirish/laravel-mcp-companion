@@ -147,15 +147,12 @@ class TestMCPIntegration:
     async def test_list_all_resources(self, mcp_server):
         """Test listing all available resource templates."""
         async with Client(mcp_server) as client:
-            # Get list of resource templates (not static resources)
-            templates = await client.session.list_resource_templates()
+            templates = await client.list_resource_templates()
             assert templates is not None
-            # Check if any resource templates are registered
-            template_uris = [t.uriTemplate for t in templates.resourceTemplates]
+            template_uris = [str(t.uriTemplate) for t in templates]
             print(f"Registered resource templates: {template_uris}")
-            # We should have at least the laravel:// resource templates
-            assert any("laravel://" in str(uri) for uri in template_uris)
-            assert any("laravel-external://" in str(uri) for uri in template_uris)
+            assert any("laravel://" in uri for uri in template_uris)
+            assert any("laravel-external://" in uri for uri in template_uris)
 
 
 class TestMCPExternalDocumentation:
