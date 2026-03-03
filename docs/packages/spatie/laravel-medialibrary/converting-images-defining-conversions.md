@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-medialibrary/v11/converting-images/defining-conversions
 
-laravel-medialibrary
-====================
-Associate files with Eloquent models
+SPATIE
+Laravel Media Library
+=====================
+spatie.be/open-source
 Docs
 Laravel-medialibrary
 Converting-images

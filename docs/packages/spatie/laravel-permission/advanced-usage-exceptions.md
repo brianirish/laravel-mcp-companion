@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/exceptions
 
-laravel-permission
+SPATIE
+Laravel Permission
 ==================
-Associate users with roles and permissions
+spatie.be/open-source
 Docs
 Laravel-permission
 Advanced-usage
