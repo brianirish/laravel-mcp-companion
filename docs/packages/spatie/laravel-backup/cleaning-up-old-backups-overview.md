@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-backup/v9/cleaning-up-old-backups/overview
 
-laravel-backup
+SPATIE
+Laravel Backup
 ==============
-A package to backup your Laravel app
+spatie.be/open-source
 Docs
 Laravel-backup
 Cleaning-up-old-backups

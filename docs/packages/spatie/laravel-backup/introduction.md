@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-backup/v9/introduction
 
-laravel-backup
+SPATIE
+Laravel Backup
 ==============
-A package to backup your Laravel app
+spatie.be/open-source
 Docs
 Laravel-backup
 Introduction

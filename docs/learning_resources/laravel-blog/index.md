@@ -12,6 +12,14 @@ How Superscript cut infrastructure costs 30% in month one on Laravel Private Clo
 
 ---
 
+## Laravel February Product Updates
+
+Laravel Cloud API & CLI, MySQL 8.4 upgrade notice, Forge MySQL 9, Nightwatch MCP & Linear integration, and new Framework AI updates.
+
+[Read more](https://laravel.com/blog/category/product)
+
+---
+
 ## Your AI Agent Can Now Deploy to Laravel Cloud (and Write This Blog)
 
 Laravel Cloud's API lets AI agents deploy, scale, and manage infrastructure through conversation. See how Florian built a working OpenClaw skill in a few hours.
@@ -25,14 +33,6 @@ Laravel Cloud's API lets AI agents deploy, scale, and manage infrastructure thro
 PyleSoft cut infrastructure costs 50% migrating from Laravel Vapor to Laravel Cloud. Learn how they moved six apps, 300 GB of data, and 1.5 M daily requests seamlessly.
 
 [Read more](https://laravel.com/blog/category/customer-story)
-
----
-
-## Larabelles: Building Space in the Laravel Community
-
-Larabelles creates space for underrepresented developers in Laravel through scholarships, mentorship, and community. See how to join or support the movement.
-
-[Read more](https://laravel.com/blog/category/community)
 
 ---
 

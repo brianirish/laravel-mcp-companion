@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/teams-permissions
 
-laravel-permission
+SPATIE
+Laravel Permission
 ==================
-Associate users with roles and permissions
+spatie.be/open-source
 Docs
 Laravel-permission
 Basic-usage

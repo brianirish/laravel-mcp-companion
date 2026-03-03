@@ -2,9 +2,10 @@
 
 Source: https://spatie.be/docs/laravel-medialibrary/v11/basic-usage/associating-files
 
-laravel-medialibrary
-====================
-Associate files with Eloquent models
+SPATIE
+Laravel Media Library
+=====================
+spatie.be/open-source
 Docs
 Laravel-medialibrary
 Basic-usage
