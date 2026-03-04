@@ -23,16 +23,16 @@ class TestDockerArgumentHandling:
             'laravel-mcp-companion',
             '--version', '10.x',
             '--log-level', 'DEBUG',
-            '--transport', 'websocket',
+            '--transport', 'http',
             '--host', '0.0.0.0',
             '--port', '8080'
         ]
-        
+
         with patch.object(sys, 'argv', test_args):
             args = parse_arguments()
             assert args.version == "10.x"
             assert args.log_level == "DEBUG"
-            assert args.transport == "websocket"
+            assert args.transport == "http"
             assert args.host == "0.0.0.0"
             assert args.port == 8080
     
@@ -87,21 +87,21 @@ class TestDockerArgumentHandling:
     
     def test_combined_docker_scenario(self):
         """Test a typical Docker scenario with multiple arguments."""
-        # Simulating: docker run ... --version 11.x --transport websocket --host 0.0.0.0 --port 8080
+        # Simulating: docker run ... --version 11.x --transport http --host 0.0.0.0 --port 8080
         test_args = [
             'laravel-mcp-companion',
             '--version', '11.x',
-            '--transport', 'websocket',
+            '--transport', 'http',
             '--host', '0.0.0.0',
             '--port', '8080',
             '--log-level', 'INFO',
             '--server-name', 'DockerMCPServer'
         ]
-        
+
         with patch.object(sys, 'argv', test_args):
             args = parse_arguments()
             assert args.version == "11.x"
-            assert args.transport == "websocket"
+            assert args.transport == "http"
             assert args.host == "0.0.0.0"
             assert args.port == 8080
             assert args.log_level == "INFO"
