@@ -288,18 +288,18 @@ class TestMCPServerLifecycle:
 class TestTransformConfiguration:
     """Test transform configuration via CLI and server setup."""
 
-    def test_parse_arguments_code_mode_flag(self):
+    def test_parse_arguments_code_mode_flag(self, monkeypatch):
         """Test that --code-mode flag is parsed correctly."""
         import sys
         from laravel_mcp_companion import parse_arguments
 
         # Test default (no flag)
-        sys.argv = ["prog"]
+        monkeypatch.setattr(sys, "argv", ["prog"])
         args = parse_arguments()
         assert args.code_mode is False
 
         # Test with flag
-        sys.argv = ["prog", "--code-mode"]
+        monkeypatch.setattr(sys, "argv", ["prog", "--code-mode"])
         args = parse_arguments()
         assert args.code_mode is True
 
