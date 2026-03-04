@@ -2117,11 +2117,13 @@ def main():
                 logger.warning(f"Failed to remove temporary file {file_path}: {str(e)}")
     
     # Create and configure the MCP server
-    mcp = create_mcp_server(args.server_name, docs_path, args.version)
-    
+    transform_mode = "code" if args.code_mode else "search"
+    mcp = create_mcp_server(args.server_name, docs_path, args.version, transform_mode=transform_mode)
+
     # Log server startup
     logger.info(f"Starting Laravel MCP Companion ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
+    logger.info(f"Transform mode: {'Code Mode (experimental)' if args.code_mode else 'BM25 Search'}")
     logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     
     # Setup graceful shutdown handler
