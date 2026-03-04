@@ -18,6 +18,7 @@ from typing import Dict, Optional, List, Any
 from functools import lru_cache
 import threading
 from fastmcp import FastMCP
+from fastmcp.server.transforms.search import BM25SearchTransform
 
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
@@ -1185,14 +1186,17 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
-    
+
     Args:
         server_name: Name for the MCP server
         docs_path: Path to documentation directory
         runtime_version: Runtime default Laravel version (from --version flag)
-        
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+
     Returns:
         Configured FastMCP server instance
     """
@@ -1296,7 +1300,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -
     
     # Configure all tools
     configure_mcp_server(mcp, docs_path, runtime_version, multi_updater)
-    
+
+    # Apply transforms
+    apply_transforms(mcp, transform_mode)
+
     return mcp
 
 # Global configuration storage
@@ -2047,6 +2054,43 @@ Please help me:
 
 Start by providing information about Laravel Forge and its key features."""
 
+
+def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> None:
+    """Apply search or code mode transforms to the MCP server.
+
+    Args:
+        mcp: FastMCP server instance
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+    """
+    if transform_mode is None:
+        logger.info("No transforms applied (raw tool mode)")
+        return
+
+    if transform_mode == "code":
+        try:
+            from fastmcp.experimental.transforms.code_mode import (
+                CodeMode,
+                GetTags,
+                Search,
+                GetSchemas,
+            )
+
+            code_mode = CodeMode(
+                discovery_tools=[GetTags(), Search(), GetSchemas()],
+            )
+            mcp.add_transform(code_mode)
+            logger.info("Code Mode transform applied (experimental)")
+        except ImportError:
+            logger.error(
+                "Code Mode requires the code-mode extra. "
+                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
+            )
+            raise SystemExit(1)
+    else:
+        mcp.add_transform(BM25SearchTransform(max_results=10))
+        logger.info("BM25 Search transform applied (max_results=10)")
 
 
 def main():
