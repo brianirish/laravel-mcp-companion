@@ -706,7 +706,13 @@ def parse_arguments():
         default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
-    
+    parser.add_argument(
+        "--code-mode",
+        action="store_true",
+        default=os.environ.get("CODE_MODE", "").lower() == "true",
+        help="Enable experimental Code Mode transform instead of Search Transform (env: CODE_MODE=true)"
+    )
+
     return parser.parse_args()
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:
