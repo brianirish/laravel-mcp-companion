@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## From Heroku to Laravel Cloud: How Superscript Saved 30% in One Month
+## Laravel Cloud API and CLI: Ship Faster, Automate More
 
-How Superscript cut infrastructure costs 30% in month one on Laravel Private Cloud, migrating five apps and 80 GB of data while meeting strict insurance security requirements.
+The Laravel Cloud API and CLI are now GA. Ship faster, automate more, and manage more infrastructure without growing your team.
 
-[Read more](https://blog.laravel.com/blog/category/customer-story)
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
+## Introducing the Laravel Community App
+
+Discover Laravel events, meet your people, and level up as a developer. Download the Laravel Community app on iOS and Android.
+
+[Read more](https://laravel.com/blog/category/community)
 
 ---
 
@@ -20,17 +28,9 @@ Laravel Cloud API & CLI, MySQL 8.4 upgrade notice, Forge MySQL 9, Nightwatch MCP
 
 ---
 
-## Your AI Agent Can Now Deploy to Laravel Cloud (and Write This Blog)
+## From Heroku to Laravel Cloud: How Superscript Saved 30% in One Month
 
-Laravel Cloud's API lets AI agents deploy, scale, and manage infrastructure through conversation. See how Florian built a working OpenClaw skill in a few hours.
-
-[Read more](https://laravel.com/blog/category/laravel-cloud)
-
----
-
-## PyleSoft Cuts Infrastructure Costs 50% Migrating from Vapor to Cloud
-
-PyleSoft cut infrastructure costs 50% migrating from Laravel Vapor to Laravel Cloud. Learn how they moved six apps, 300 GB of data, and 1.5 M daily requests seamlessly.
+How Superscript cut infrastructure costs 30% in month one on Laravel Private Cloud, migrating five apps and 80 GB of data while meeting strict insurance security requirements.
 
 [Read more](https://laravel.com/blog/category/customer-story)
 
