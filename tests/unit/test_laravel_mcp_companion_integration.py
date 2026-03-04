@@ -346,3 +346,36 @@ class TestTransformConfiguration:
             assert "list_laravel_docs" in tool_names
             assert "search_laravel_docs" in tool_names
             assert len(tool_names) == 26
+
+    @pytest.mark.asyncio
+    async def test_search_tools_finds_relevant_tools(self, temp_docs_dir):
+        """Test that search_tools returns relevant results for a query."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
+        async with Client(server) as client:
+            result = await client.call_tool("search_tools", {"query": "documentation list search"})
+            if hasattr(result, 'content') and isinstance(result.content, list):
+                content = result.content[0].text if result.content else ""
+            else:
+                content = str(result)
+            # Should find doc-related tools
+            assert "list_laravel_docs" in content or "search_laravel_docs" in content
+
+    @pytest.mark.asyncio
+    async def test_call_tool_proxy_works(self, temp_docs_dir):
+        """Test that call_tool proxy can invoke underlying tools."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
+        async with Client(server) as client:
+            # Use the call_tool proxy to invoke a real tool
+            result = await client.call_tool("call_tool", {
+                "name": "list_laravel_docs",
+                "arguments": {"version": "12.x"}
+            })
+            if hasattr(result, 'content') and isinstance(result.content, list):
+                content = result.content[0].text if result.content else ""
+            else:
+                content = str(result)
+            assert "blade.md" in content
