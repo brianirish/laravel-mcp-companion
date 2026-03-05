@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "c15e8b60b97c7217b53a426e229f7da4bca8f070",
-  "commit_date": "2026-02-25T15:26:10Z",
-  "commit_message": "Document image, audio, and fromStorage response methods for MCP (#11073)\n\n* Document image, audio, and fromStorage response methods for MCP\n\n* Update mcp.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/c15e8b60b97c7217b53a426e229f7da4bca8f070",
-  "sync_time": "2026-02-26T00:02:51Z"
+  "commit_sha": "61a554c9cbc848c180ea75a712be9e43db8dd4f8",
+  "commit_date": "2026-03-04T09:13:49Z",
+  "commit_message": "Document fluent JSON 'each' testing method (#11079)\n\nThis method is quite useful for testing, so I figured I'd add an example to the docs.",
+  "commit_url": "https://github.com/laravel/docs/commit/61a554c9cbc848c180ea75a712be9e43db8dd4f8",
+  "sync_time": "2026-03-05T00:02:37Z"
 }
