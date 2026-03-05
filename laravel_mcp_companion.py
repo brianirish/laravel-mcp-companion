@@ -2088,9 +2088,11 @@ def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> 
                 "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
             )
             raise SystemExit(1)
-    else:
+    elif transform_mode == "search":
         mcp.add_transform(BM25SearchTransform(max_results=10))
         logger.info("BM25 Search transform applied (max_results=10)")
+    else:
+        raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
 
 
 def main():
