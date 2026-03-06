@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "61a554c9cbc848c180ea75a712be9e43db8dd4f8",
-  "commit_date": "2026-03-04T09:13:49Z",
-  "commit_message": "Document fluent JSON 'each' testing method (#11079)\n\nThis method is quite useful for testing, so I figured I'd add an example to the docs.",
-  "commit_url": "https://github.com/laravel/docs/commit/61a554c9cbc848c180ea75a712be9e43db8dd4f8",
-  "sync_time": "2026-03-05T00:02:37Z"
+  "commit_sha": "21748912671c7cf141bdab3b285891bbb5f7d980",
+  "commit_date": "2026-03-05T15:55:51Z",
+  "commit_message": "Update Exception to Throwable in retryWhenCallback (#11080)\n\nIn `Illuminate\\Http\\Client\\PendingRequest` this callback now expects the first parameter to be a Throwable.",
+  "commit_url": "https://github.com/laravel/docs/commit/21748912671c7cf141bdab3b285891bbb5f7d980",
+  "sync_time": "2026-03-06T00:03:20Z"
 }

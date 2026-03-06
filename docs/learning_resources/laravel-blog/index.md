@@ -12,27 +12,28 @@ The Laravel Cloud API and CLI are now GA. Ship faster, automate more, and manage
 
 ---
 
-## Introducing the Laravel Community App
+## Inertia.js v3 Is Now in Beta
 
-Discover Laravel events, meet your people, and level up as a developer. Download the Laravel Community app on iOS and Android.
+Inertia.js v3 beta is out. No more Axios, a new Vite plugin handles SSR automatically, and optimistic updates are now built in. Upgrade guide
+included.
 
-[Read more](https://laravel.com/blog/category/community)
+[Read more](https://laravel.com/blog/category/laravel-framework)
 
 ---
 
-## Laravel February Product Updates
+## Laravel AI SDK, Boost, or MCP: Which Tool Do You Need?
 
-Laravel Cloud API & CLI, MySQL 8.4 upgrade notice, Forge MySQL 9, Nightwatch MCP & Linear integration, and new Framework AI updates.
+Laravel AI SDK, Boost, and MCP serve different purposes. Learn when to use each one, how they work together, and how to build faster with Laravel.
 
 [Read more](https://laravel.com/blog/category/product)
 
 ---
 
-## From Heroku to Laravel Cloud: How Superscript Saved 30% in One Month
+## Introducing the Laravel Community App
 
-How Superscript cut infrastructure costs 30% in month one on Laravel Private Cloud, migrating five apps and 80 GB of data while meeting strict insurance security requirements.
+Discover Laravel events, meet your people, and level up as a developer. Download the Laravel Community app on iOS and Android.
 
-[Read more](https://laravel.com/blog/category/customer-story)
+[Read more](https://laravel.com/blog/category/community)
 
 ---
 
