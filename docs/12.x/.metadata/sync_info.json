@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "21748912671c7cf141bdab3b285891bbb5f7d980",
-  "commit_date": "2026-03-05T15:55:51Z",
-  "commit_message": "Update Exception to Throwable in retryWhenCallback (#11080)\n\nIn `Illuminate\\Http\\Client\\PendingRequest` this callback now expects the first parameter to be a Throwable.",
-  "commit_url": "https://github.com/laravel/docs/commit/21748912671c7cf141bdab3b285891bbb5f7d980",
-  "sync_time": "2026-03-06T00:03:20Z"
+  "commit_sha": "25faf886745a6ca2cf3fdfc02d33e991390d8a23",
+  "commit_date": "2026-03-09T14:41:11Z",
+  "commit_message": "Update default PHP version to 8.5 in documentation (#11082)",
+  "commit_url": "https://github.com/laravel/docs/commit/25faf886745a6ca2cf3fdfc02d33e991390d8a23",
+  "sync_time": "2026-03-10T00:03:13Z"
 }
