@@ -2082,12 +2082,15 @@ def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> 
             )
             mcp.add_transform(code_mode)
             logger.info("Code Mode transform applied (experimental)")
-        except ImportError:
+        except ImportError as e:
             logger.error(
                 "Code Mode requires the code-mode extra. "
                 "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
             )
-            raise SystemExit(1)
+            raise RuntimeError(
+                "Code Mode requires the code-mode extra. "
+                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
+            ) from e
     elif transform_mode == "search":
         mcp.add_transform(BM25SearchTransform(max_results=10))
         logger.info("BM25 Search transform applied (max_results=10)")
@@ -2120,6 +2123,11 @@ def main():
     
     # Create and configure the MCP server
     transform_mode = "code" if args.code_mode else "search"
+    if args.code_mode and args.transport == "http":
+        logger.warning(
+            "Code Mode over HTTP exposes an execution endpoint. "
+            "Do not expose this publicly unless you have reviewed sandbox and network risk."
+        )
     mcp = create_mcp_server(args.server_name, docs_path, args.version, transform_mode=transform_mode)
 
     # Log server startup

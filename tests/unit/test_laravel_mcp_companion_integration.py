@@ -294,11 +294,13 @@ class TestTransformConfiguration:
         from laravel_mcp_companion import parse_arguments
 
         # Test default (no flag)
+        monkeypatch.delenv("CODE_MODE", raising=False)
         monkeypatch.setattr(sys, "argv", ["prog"])
         args = parse_arguments()
         assert args.code_mode is False
 
         # Test with flag
+        monkeypatch.delenv("CODE_MODE", raising=False)
         monkeypatch.setattr(sys, "argv", ["prog", "--code-mode"])
         args = parse_arguments()
         assert args.code_mode is True
@@ -342,10 +344,11 @@ class TestTransformConfiguration:
         async with Client(server) as client:
             tools = await client.list_tools()
             tool_names = [t.name for t in tools]
-            # Should have raw tools
+            # Should have raw tools, not transform tools
             assert "list_laravel_docs" in tool_names
             assert "search_laravel_docs" in tool_names
-            assert len(tool_names) == 26
+            assert "search_tools" not in tool_names
+            assert "call_tool" not in tool_names
 
     @pytest.mark.asyncio
     async def test_search_tools_finds_relevant_tools(self, temp_docs_dir):
