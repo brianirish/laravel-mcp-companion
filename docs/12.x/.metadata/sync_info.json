@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "25faf886745a6ca2cf3fdfc02d33e991390d8a23",
-  "commit_date": "2026-03-09T14:41:11Z",
-  "commit_message": "Update default PHP version to 8.5 in documentation (#11082)",
-  "commit_url": "https://github.com/laravel/docs/commit/25faf886745a6ca2cf3fdfc02d33e991390d8a23",
-  "sync_time": "2026-03-10T00:03:13Z"
+  "commit_sha": "828d2b7e24e76a0b2c9e69e1f815f89d075d0797",
+  "commit_date": "2026-03-11T21:18:29Z",
+  "commit_message": "typo: `jobs_batches` \u2192 `job_batches` (#11085)",
+  "commit_url": "https://github.com/laravel/docs/commit/828d2b7e24e76a0b2c9e69e1f815f89d075d0797",
+  "sync_time": "2026-03-12T00:02:53Z"
 }
