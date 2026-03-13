@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "8147e0cd32640f422bb3b5b36a3cb79022a475fc",
-  "commit_date": "2026-03-11T14:10:03Z",
-  "commit_message": "update docs",
-  "commit_url": "https://github.com/laravel/docs/commit/8147e0cd32640f422bb3b5b36a3cb79022a475fc",
-  "sync_time": "2026-03-12T00:02:54Z"
+  "commit_sha": "e4cdfc20ba4415107fe039938330a736cc970dd0",
+  "commit_date": "2026-03-12T20:36:16Z",
+  "commit_message": "update notes",
+  "commit_url": "https://github.com/laravel/docs/commit/e4cdfc20ba4415107fe039938330a736cc970dd0",
+  "sync_time": "2026-03-13T00:03:58Z"
 }

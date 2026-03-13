@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "828d2b7e24e76a0b2c9e69e1f815f89d075d0797",
-  "commit_date": "2026-03-11T21:18:29Z",
-  "commit_message": "typo: `jobs_batches` \u2192 `job_batches` (#11085)",
-  "commit_url": "https://github.com/laravel/docs/commit/828d2b7e24e76a0b2c9e69e1f815f89d075d0797",
-  "sync_time": "2026-03-12T00:02:53Z"
+  "commit_sha": "fb1965eb9814b7ccbb0f375cf662cdb60be1cbf0",
+  "commit_date": "2026-03-12T19:44:28Z",
+  "commit_message": "add provider options",
+  "commit_url": "https://github.com/laravel/docs/commit/fb1965eb9814b7ccbb0f375cf662cdb60be1cbf0",
+  "sync_time": "2026-03-13T00:03:57Z"
 }
