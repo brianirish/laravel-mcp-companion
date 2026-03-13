@@ -12,6 +12,14 @@ The Laravel Cloud API and CLI are now GA. Ship faster, automate more, and manage
 
 ---
 
+## Laravel MCP: A Complete Guide
+
+Learn how to build a Laravel MCP server with tools, resources, and prompts. Step-by-step guide to exposing your app to AI clients like Claude and ChatGPT.
+
+[Read more](https://laravel.com/blog/category/laravel-framework)
+
+---
+
 ## Inertia.js v3 Is Now in Beta
 
 Inertia.js v3 beta is out. No more Axios, a new Vite plugin handles SSR automatically, and optimistic updates are now built in. Upgrade guide
@@ -26,14 +34,6 @@ included.
 Laravel AI SDK, Boost, and MCP serve different purposes. Learn when to use each one, how they work together, and how to build faster with Laravel.
 
 [Read more](https://laravel.com/blog/category/product)
-
----
-
-## Introducing the Laravel Community App
-
-Discover Laravel events, meet your people, and level up as a developer. Download the Laravel Community app on iOS and Android.
-
-[Read more](https://laravel.com/blog/category/community)
 
 ---
 
