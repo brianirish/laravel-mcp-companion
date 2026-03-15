@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## Laravel Cloud API and CLI: Ship Faster, Automate More
+## Building Multi-Agent Workflows with the Laravel AI SDK
 
-The Laravel Cloud API and CLI are now GA. Ship faster, automate more, and manage more infrastructure without growing your team.
+Build Anthropic's five multi-agent patterns with the Laravel AI SDK, from prompt chaining and routing to parallelization, and more.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+[Read more](https://blog.laravel.com/blog/category/laravel-framework)
+
+---
+
+## Laravel MCP Server: Auth & Security Best Practices
+
+Add authentication to your Laravel MCP server without writing an authorization server. Plus, security best practices.
+
+[Read more](https://laravel.com/blog/category/laravel-framework)
 
 ---
 
@@ -26,14 +34,6 @@ Inertia.js v3 beta is out. No more Axios, a new Vite plugin handles SSR automati
 included.
 
 [Read more](https://laravel.com/blog/category/laravel-framework)
-
----
-
-## Laravel AI SDK, Boost, or MCP: Which Tool Do You Need?
-
-Laravel AI SDK, Boost, and MCP serve different purposes. Learn when to use each one, how they work together, and how to build faster with Laravel.
-
-[Read more](https://laravel.com/blog/category/product)
 
 ---
 
