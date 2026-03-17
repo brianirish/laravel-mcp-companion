@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "fb1965eb9814b7ccbb0f375cf662cdb60be1cbf0",
-  "commit_date": "2026-03-12T19:44:28Z",
-  "commit_message": "add provider options",
-  "commit_url": "https://github.com/laravel/docs/commit/fb1965eb9814b7ccbb0f375cf662cdb60be1cbf0",
-  "sync_time": "2026-03-13T00:03:57Z"
+  "commit_sha": "d4377acd2d4d63ccb74f81f9da2cfb4144be2ff4",
+  "commit_date": "2026-03-16T17:25:47Z",
+  "commit_message": "svelte stream docs (#11091)",
+  "commit_url": "https://github.com/laravel/docs/commit/d4377acd2d4d63ccb74f81f9da2cfb4144be2ff4",
+  "sync_time": "2026-03-17T00:02:30Z"
 }
