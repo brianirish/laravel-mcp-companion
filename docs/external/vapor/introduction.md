@@ -61,9 +61,10 @@ Get Started
 # Introduction
 Manage your Laravel infrastructure on Vapor and fall in love with the scalability and simplicity of serverless.
 [Laravel Cloud](https://cloud.laravel.com) builds on the ideas behind Vapor while removing much of the operational complexity. [This migration guide](https://cloud.laravel.com/migration-vapor-cloud) explains why teams are migrating from Vapor to Cloud and what changes when moving an application.
-[## Create An Account
-Create your Vapor account today](https://vapor.laravel.com/register)[## Watch More
-Watch the free Vapor series on Laracasts](https://laracasts.com/series/serverless-laravel)
+## Create An Account
+Create your Vapor account today
+## Watch More
+Watch the free Vapor series on Laracasts
 ## [​](#what-is-vapor) What Is Vapor?
 Laravel Vapor is an auto-scaling, serverless deployment platform for Laravel, powered by AWS Lambda. Manage your Laravel infrastructure on Vapor and fall in love with the scalability and simplicity of serverless.
 Vapor abstracts the complexity of managing Laravel applications on AWS Lambda, as well as interfacing those applications with SQS queues, databases, Redis clusters, networks, CloudFront CDN, and more. Some highlights of Vapor’s features include:

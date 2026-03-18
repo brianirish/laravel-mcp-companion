@@ -53,6 +53,7 @@ Welcome to Laravel Forge
 ##### Resources
 - [Databases](/docs/resources/databases)
 - [Database Backups](/docs/resources/database-backups)
+- [Managed Databases](/docs/resources/managed-databases)
 - [Caches](/docs/resources/caches)
 - [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
@@ -78,9 +79,10 @@ Get Started
 Copy page
 A server management and application deployment service for your Laravel applications and beyond.
 Copy page
-[## Create an account
-Create your Laravel Forge account today](https://forge.laravel.com/sign-up)[## Watch more
-Watch the free Laravel Forge series on Laracasts](https://laracasts.com/series/learn-laravel-forge-2022-edition/)
+## Create an account
+Create your Laravel Forge account today
+## Watch more
+Watch the free Laravel Forge series on Laracasts
 ## [​](#what-is-laravel-forge) What is Laravel Forge?
 Laravel Forge is a server management and application deployment service. Forge takes the pain and hassle out of deploying servers and can be used to launch your next website. Whether your app is built with a framework such as [Laravel](https://github.com/laravel/laravel), [Symfony](https://github.com/symfony/symfony), [Statamic](https://github.com/statamic/cms), [WordPress](https://github.com/WordPress/WordPress), or is a vanilla PHP application - Forge is the solution for you.
 We live and breathe PHP here at Laravel Forge, but Forge is also ready to handle other tech stacks too, such as Node.js.

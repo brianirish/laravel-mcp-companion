@@ -53,6 +53,7 @@ Laravel Forge CLI
 ##### Resources
 - [Databases](/docs/resources/databases)
 - [Database Backups](/docs/resources/database-backups)
+- [Managed Databases](/docs/resources/managed-databases)
 - [Caches](/docs/resources/caches)
 - [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
@@ -91,9 +92,10 @@ Get Started
 Copy page
 Laravel Forge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.
 Copy page
-[## Laravel Forge CLI
-View the Laravel Forge CLI on GitHub](https://github.com/laravel/forge-cli)[## Laravel Forge API
-View the Laravel Forge API documentation](https://forge.laravel.com/api-documentation)
+## Laravel Forge CLI
+View the Laravel Forge CLI on GitHub
+## Laravel Forge API
+View the Laravel Forge API documentation
 ## [​](#introduction) Introduction
 Laravel Forge provides a command-line tool that you may use to manage your Forge servers, sites, and resources from the command-line.
 ## [​](#installation) Installation

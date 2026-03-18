@@ -53,6 +53,7 @@ Laravel Forge SDK
 ##### Resources
 - [Databases](/docs/resources/databases)
 - [Database Backups](/docs/resources/database-backups)
+- [Managed Databases](/docs/resources/managed-databases)
 - [Caches](/docs/resources/caches)
 - [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
@@ -77,9 +78,10 @@ Get Started
 Copy page
 A PHP SDK for interacting with Laravel Forge.
 Copy page
-[## Laravel Forge SDK
-View the Laravel Forge SDK on GitHub](https://github.com/laravel/forge-sdk)[## Laravel Forge API
-View the Laravel Forge API documentation](https://forge.laravel.com/api-documentation)
+## Laravel Forge SDK
+View the Laravel Forge SDK on GitHub
+## Laravel Forge API
+View the Laravel Forge API documentation
 ## [​](#introduction) Introduction
 The [Laravel Forge SDK](https://github.com/laravel/forge-sdk) provides an expressive interface for interacting with Forge’s API and managing Laravel Forge servers.
 ## [​](#installation) Installation
