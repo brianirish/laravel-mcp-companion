@@ -93,9 +93,10 @@ On this page
 Get Started
 # Installation
 Learn how to install Laravel Nova into your Laravel application.
-[## Purchase Nova
-Purchase a license for Laravel Nova](https://nova.laravel.com)[## Learn More
-Watch the free Nova series on Laracasts](https://laracasts.com/series/laravel-nova-mastery-2023-edition)
+## Purchase Nova
+Purchase a license for Laravel Nova
+## Learn More
+Watch the free Nova series on Laracasts
 ## [​](#requirements) Requirements
 Laravel Nova has a few minimum requirements you should be aware of before installing:
 - Composer 2

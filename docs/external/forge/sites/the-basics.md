@@ -53,6 +53,7 @@ Creating and Managing Sites
 ##### Resources
 - [Databases](/docs/resources/databases)
 - [Database Backups](/docs/resources/database-backups)
+- [Managed Databases](/docs/resources/managed-databases)
 - [Caches](/docs/resources/caches)
 - [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)

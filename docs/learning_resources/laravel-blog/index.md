@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## Building Multi-Agent Workflows with the Laravel AI SDK
+## Managed Databases Are Now Available in Laravel Forge
 
-Build Anthropic's five multi-agent patterns with the Laravel AI SDK, from prompt chaining and routing to parallelization, and more.
+Let Laravel Forge handle managed Postgres clusters for you with automated backups, PITR, high availability, and monitoring, all from your Forge dashboard.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-framework)
+[Read more](https://blog.laravel.com/blog/category/laravel-forge)
 
 ---
 

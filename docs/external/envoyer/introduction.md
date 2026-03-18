@@ -40,9 +40,10 @@ On this page
 Get Started
 # Introduction
 Welcome to Envoyer, a zero downtime deployment service for PHP.
-[## Create An Account
-Create your Envoyer account today](https://envoyer.io/auth/register)[## Watch More
-Watch the free Envoyer series on Laracasts](https://laracasts.com/series/envoyer)
+## Create An Account
+Create your Envoyer account today
+## Watch More
+Watch the free Envoyer series on Laracasts
 ## [​](#what-is-envoyer) What Is Envoyer?
 [Envoyer](https://envoyer.io) is a zero downtime deployment service for PHP. Some highlights of Envoyer’s features include:
 - GitHub, GitLab & Bitbucket Integration

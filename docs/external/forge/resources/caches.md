@@ -53,6 +53,7 @@ Caches
 ##### Resources
 - [Databases](/docs/resources/databases)
 - [Database Backups](/docs/resources/database-backups)
+- [Managed Databases](/docs/resources/managed-databases)
 - [Caches](/docs/resources/caches)
 - [Background Processes](/docs/resources/background-processes)
 - [Scheduler](/docs/resources/scheduler)
@@ -104,7 +105,7 @@ Laravel Forge servers require SSH key authentication and don’t support passwor
 For example, when connecting via [TablePlus](https://tableplus.com/):
 Was this page helpful?
 YesNo
-[Database Backups](/docs/resources/database-backups)[Background Processes](/docs/resources/background-processes)
+[Managed Databases](/docs/resources/managed-databases)[Background Processes](/docs/resources/background-processes)
 ⌘I
 Assistant
 Responses are generated using AI and may contain mistakes.
