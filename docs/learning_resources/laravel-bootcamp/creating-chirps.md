@@ -4,93 +4,23 @@ Source: https://bootcamp.laravel.com/blade/creating-chirps
 
 ---
 
-* Products
-* Framework
-* Resources
-* Docs
-* Partners
-### All Products
-* Cloud
-  New
-  Managed infrastructure
-* Nightwatch
-  New
-  Monitoring, logs, and insights
-* Forge
-  VPS server management
-* Nova
-  Production admin panels
-### PHP Framework
-* Laravel Framework
-  Open source PHP web framework
-### AI Tools
-* AI SDK
-  Build AI apps with Laravel
-* Boost
-  AI-powered development assistant
-* Laravel MCP
-  Build AI interactions with Laravel
-### Starter Kits
-* React
-  New
-  Laravel, Inertia, React, and Tailwind
-* Vue
-  New
-  Laravel, Inertia, Vue, and Tailwind
-* Livewire
-  New
-  Laravel, Livewire, and Tailwind
-* Svelte
-  New
-  Laravel, Inertia, Svelte, and Tailwind
-### Packages
-* Scout
-  Search for Eloquent models
-* Octane
-  High performance app server
-* Reverb
-  Fast, scalable WebSockets
-* Echo
-  Listen for WebSocket events
-* Pennant
-  Feature flag management
-* Cashier
-  Payments and subscriptions
-* Socialite
-  Social authentication
-* Sanctum
-  API authentication
-* Sail
-  Local Docker development
-* Pint
-  Code styler for minimalists
-* Horizon
-  Monitor Redis queues
-* Dusk
-  Automated browser testing
-* Telescope
-  Local debugging and insights
-* Pulse
-  Performance insights
-### Developers
-* Documentation
-* Release notes
-### Resources
-* Blog
-* Screencasts
-* Forums
-* News
-* Jobs
-### Upcoming Events
-All events
-  Laracon EU
-  Mar 2-3 2026
-  Amsterdam
-### Learn
-See the courses
-Laravel Bootcamp
-with Josh Cirre
-PHP fundamentals
-with Christoph Rumpel
-30 days to learn Laravel
-with Jeffrey Way
+Kickstart your journey with two mini video courses
+Bite-sized lessons. Real-world projects. All in one place.
+Getting Started with Laravel
+13 lessons
+120 min
+Welcome to the official Getting Started with Laravel course. In this bootcamp, we will learn how to build your first full-stack application with Laravel from start to finish.
+Build a fully functional Laravel application
+Learn Laravel fundamentals step by step
+Understand routing, controllers, and views
+Master database interactions with Eloquent
+Get started
+PHP Fundamentals
+10 lessons
+71 min
+This mini-course covers PHP fundamentals with a focus on modern PHP and Laravel development. In just 10 short videos, you'll learn the essential PHP concepts that will serve as your foundation for Laravel development. We focus on the PHP features and patterns you'll encounter most often in Laravel applications.
+Perfect if you're new to PHP or need a refresher
+Learn the PHP core in clear, bite-size lessons
+Build confidence before diving into Laravel
+Quick, practical examples you can follow along
+Get started

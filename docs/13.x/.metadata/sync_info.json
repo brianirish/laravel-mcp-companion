@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "f1c1c6e95216b88ba2211b41f21668dea874dfc2",
-  "commit_date": "2026-03-17T14:52:28Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/f1c1c6e95216b88ba2211b41f21668dea874dfc2",
-  "sync_time": "2026-03-18T00:02:54Z"
+  "commit_sha": "c9faa043d9093cc053fbe87e3cef3d8558fcd48f",
+  "commit_date": "2026-03-18T16:42:48Z",
+  "commit_message": "[13.x] fix typo in Upgrading Using AI (#11104)",
+  "commit_url": "https://github.com/laravel/docs/commit/c9faa043d9093cc053fbe87e3cef3d8558fcd48f",
+  "sync_time": "2026-03-19T00:02:54Z"
 }
