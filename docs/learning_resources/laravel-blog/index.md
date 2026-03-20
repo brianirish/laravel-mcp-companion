@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Which AI Model Is Best for Laravel?
+
+We benchmarked 6 AI models on 17 real Laravel tasks, with and without Laravel Boost. See which model wins, which fails, and by how much.
+
+[Read more](https://blog.laravel.com/blog/category/laravel-framework)
+
+---
+
 ## Managed Databases Are Now Available in Laravel Forge
 
 Let Laravel Forge handle managed Postgres clusters for you with automated backups, PITR, high availability, and monitoring, all from your Forge dashboard.
@@ -12,11 +20,11 @@ Let Laravel Forge handle managed Postgres clusters for you with automated backup
 
 ---
 
-## Building Multi-Agent Workflows with the Laravel AI SDK
+## Building Multi-Agent Workflows with the Laravel AI SDK
 
 Build Anthropic's five multi-agent patterns with the Laravel AI SDK, from prompt chaining and routing to parallelization, and more.
 
-[Read more](https://laravel.com/blog/category/laravel-framework)
+[Read more](https://blog.laravel.com/blog/category/laravel-framework)
 
 ---
 
@@ -24,15 +32,7 @@ Build Anthropic's five multi-agent patterns with the Laravel AI SDK, from prompt
 
 Add authentication to your Laravel MCP server without writing an authorization server. Plus, security best practices.
 
-[Read more](https://laravel.com/blog/category/laravel-framework)
-
----
-
-## Laravel MCP: A Complete Guide
-
-Learn how to build a Laravel MCP server with tools, resources, and prompts. Step-by-step guide to exposing your app to AI clients like Claude and ChatGPT.
-
-[Read more](https://laravel.com/blog/category/laravel-framework)
+[Read more](https://blog.laravel.com/blog/category/laravel-framework)
 
 ---
 

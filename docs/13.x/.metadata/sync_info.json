@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "c9faa043d9093cc053fbe87e3cef3d8558fcd48f",
-  "commit_date": "2026-03-18T16:42:48Z",
-  "commit_message": "[13.x] fix typo in Upgrading Using AI (#11104)",
-  "commit_url": "https://github.com/laravel/docs/commit/c9faa043d9093cc053fbe87e3cef3d8558fcd48f",
-  "sync_time": "2026-03-19T00:02:54Z"
+  "commit_sha": "fdc669d8b16dd68fb4ac6bcd1feb4b7eec402c72",
+  "commit_date": "2026-03-19T14:59:19Z",
+  "commit_message": "[13.x] Specify Laravel Boost version requirement for upgrade (#11105)\n\n* Specify Laravel Boost version requirement for upgrade\n\nAdded requirement for Laravel Boost version in upgrade instructions.\n\n* Fix formatting for upgrade command in documentation\n\n* Update upgrade.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/fdc669d8b16dd68fb4ac6bcd1feb4b7eec402c72",
+  "sync_time": "2026-03-20T00:03:11Z"
 }
