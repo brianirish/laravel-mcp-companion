@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "fdc669d8b16dd68fb4ac6bcd1feb4b7eec402c72",
-  "commit_date": "2026-03-19T14:59:19Z",
-  "commit_message": "[13.x] Specify Laravel Boost version requirement for upgrade (#11105)\n\n* Specify Laravel Boost version requirement for upgrade\n\nAdded requirement for Laravel Boost version in upgrade instructions.\n\n* Fix formatting for upgrade command in documentation\n\n* Update upgrade.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/fdc669d8b16dd68fb4ac6bcd1feb4b7eec402c72",
-  "sync_time": "2026-03-20T00:03:11Z"
+  "commit_sha": "86077535bbfdc2ab29cd9f202ee1ab3e7e6e18e6",
+  "commit_date": "2026-03-20T20:14:06Z",
+  "commit_message": "Update Spatie's Laravel Query Builder link (#11121)\n\nSpatie's Laravel Query released a new version, v7.  The current link redirect to an older version (v6). \r\n\r\nInstead of manually bumping the documentation URL for every major release, this PR uses the top-level redirect URL that will alwasy redirect the laster version.",
+  "commit_url": "https://github.com/laravel/docs/commit/86077535bbfdc2ab29cd9f202ee1ab3e7e6e18e6",
+  "sync_time": "2026-03-21T00:04:35Z"
 }

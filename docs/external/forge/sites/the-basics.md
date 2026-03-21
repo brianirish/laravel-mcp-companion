@@ -96,6 +96,7 @@ When you create a new site in Forge, you’re presented with a variety of config
 Laravel Forge allows you to install applications directly from your source control provider.
 If you’re using a hosted Git service (GitHub, Bitbucket, GitLab) then Laravel Forge will provide you with a list of repositories that you have access to. You can choose one of these repositories, as well as the branch, that you wish to install.
 When using a custom Git repository, you will need to provide the full SSH URL of the repository and manually enter the branch you wish to install.
+If you create a site without a repository, you cannot add one later. You need to recreate it.
 Laravel Forge must be able to access your repository via SSH. You will be prompted to add your server’s public SSH key to the source control provider during the site creation process.
 #### [​](#deploy-keys) Deploy keys
 Sometimes you may wish to only grant Laravel Forge access to a specific Git repository. If that is the case, you can generate a unique SSH key during the site creation process and add it to your source control provider’s “Deploy Keys” section in the GitHub, GitLab, or Bitbucket dashboard.
