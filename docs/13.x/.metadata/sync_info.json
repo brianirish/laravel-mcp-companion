@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "86077535bbfdc2ab29cd9f202ee1ab3e7e6e18e6",
-  "commit_date": "2026-03-20T20:14:06Z",
-  "commit_message": "Update Spatie's Laravel Query Builder link (#11121)\n\nSpatie's Laravel Query released a new version, v7.  The current link redirect to an older version (v6). \r\n\r\nInstead of manually bumping the documentation URL for every major release, this PR uses the top-level redirect URL that will alwasy redirect the laster version.",
-  "commit_url": "https://github.com/laravel/docs/commit/86077535bbfdc2ab29cd9f202ee1ab3e7e6e18e6",
-  "sync_time": "2026-03-21T00:04:35Z"
+  "commit_sha": "4cc5c5989704a960486fe7bcb3fcbd809b46dec0",
+  "commit_date": "2026-03-22T15:44:22Z",
+  "commit_message": "Revert \"Clarify assert*In behavior with multiple elements (#11122)\" (#11123)\n\nThis reverts commit 02a28395f2a208ef26448725593f2c0cb8775309.",
+  "commit_url": "https://github.com/laravel/docs/commit/4cc5c5989704a960486fe7bcb3fcbd809b46dec0",
+  "sync_time": "2026-03-23T00:02:26Z"
 }
