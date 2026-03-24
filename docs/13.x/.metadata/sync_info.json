@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "4cc5c5989704a960486fe7bcb3fcbd809b46dec0",
-  "commit_date": "2026-03-22T15:44:22Z",
-  "commit_message": "Revert \"Clarify assert*In behavior with multiple elements (#11122)\" (#11123)\n\nThis reverts commit 02a28395f2a208ef26448725593f2c0cb8775309.",
-  "commit_url": "https://github.com/laravel/docs/commit/4cc5c5989704a960486fe7bcb3fcbd809b46dec0",
-  "sync_time": "2026-03-23T00:02:26Z"
+  "commit_sha": "3dc9779800c6df016b4ae2447a63c0f9232ac3a9",
+  "commit_date": "2026-03-23T14:39:46Z",
+  "commit_message": "Document --discover option for boost:update command (#11124)\n\n* Document --discover option for boost:update command\n\nAdded information about the --discover option for boost:update command.\n\n* Update boost.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/3dc9779800c6df016b4ae2447a63c0f9232ac3a9",
+  "sync_time": "2026-03-24T00:03:20Z"
 }
