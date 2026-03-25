@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "3dc9779800c6df016b4ae2447a63c0f9232ac3a9",
-  "commit_date": "2026-03-23T14:39:46Z",
-  "commit_message": "Document --discover option for boost:update command (#11124)\n\n* Document --discover option for boost:update command\n\nAdded information about the --discover option for boost:update command.\n\n* Update boost.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/3dc9779800c6df016b4ae2447a63c0f9232ac3a9",
-  "sync_time": "2026-03-24T00:03:20Z"
+  "commit_sha": "1b9c63caf29657be5cd9eafbf7f0b2d2a45e740c",
+  "commit_date": "2026-03-24T19:01:41Z",
+  "commit_message": "document array",
+  "commit_url": "https://github.com/laravel/docs/commit/1b9c63caf29657be5cd9eafbf7f0b2d2a45e740c",
+  "sync_time": "2026-03-25T00:04:09Z"
 }
