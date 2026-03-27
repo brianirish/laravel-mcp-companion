@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "1b9c63caf29657be5cd9eafbf7f0b2d2a45e740c",
-  "commit_date": "2026-03-24T19:01:41Z",
-  "commit_message": "document array",
-  "commit_url": "https://github.com/laravel/docs/commit/1b9c63caf29657be5cd9eafbf7f0b2d2a45e740c",
-  "sync_time": "2026-03-25T00:04:09Z"
+  "commit_sha": "094b6c2f440fe6b90908d1a9c8c3414ec8e31f15",
+  "commit_date": "2026-03-26T14:26:59Z",
+  "commit_message": "Fix unreachable code in Queueing example (#11128)\n\nThe second return in the example is never executed, and returning a `QueuedAgentResponse` is useless in an HTTP response. This PR removes the first return to make the route behave correctly.",
+  "commit_url": "https://github.com/laravel/docs/commit/094b6c2f440fe6b90908d1a9c8c3414ec8e31f15",
+  "sync_time": "2026-03-27T00:03:38Z"
 }
