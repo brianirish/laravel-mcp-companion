@@ -100,8 +100,6 @@ Nova’s upstream dependencies have been upgraded. You will find a complete list
 ### [​](#updating-composer-dependencies) Updating Composer Dependencies
 You should update your `laravel/nova` dependency to `^5.0` in your application’s `composer.json` file:
 composer.json
-Copy
-Ask AI
 ```
     "require": {
 -       "laravel/nova": "^4.0",
@@ -109,8 +107,6 @@ Ask AI
     }
 ```
 Next, install your updated Composer dependencies:
-Copy
-Ask AI
 ```
 composer update mirrors
 
@@ -119,8 +115,6 @@ composer update
 ### [​](#updating-assets-and-translations) Updating Assets and Translations
 Next, you should update your application’s Nova assets and translation files. To get started, you may run the following commands to update your assets and translations.
 **You may wish to store a copy of your current translation file before running this command so you can easily port any custom translations back into the new file after running these commands.**:
-Copy
-Ask AI
 ```
 php artisan vendor:publish --tag=nova-assets --force
 php artisan vendor:publish --tag=nova-lang --force
@@ -130,8 +124,6 @@ If your application relies on Nova tools or packages developed by third-parties,
 ## [​](#upgrading-authentication-features) Upgrading Authentication Features
 Next, you will need to update your Nova configuration file. Ensure that the `api_middleware` configuration option within your application’s `nova` configuration file appears as follows:
 config/nova.php
-Copy
-Ask AI
 ```
 return [
 
@@ -148,8 +140,6 @@ return [
 ```
 Next, update the `register` method in your application’s `App\Providers\NovaServiceProvider` class to call the parent’s `register` method. The `parent::register()` method should be invoked before any other code in the method:
 app/Nova/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Register any application services.
@@ -164,8 +154,6 @@ public function register(): void
 ## [​](#updating-nova-components-custom-tool-cards-fields-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
 ### [​](#inertia-2-compatibility) Inertia 2 Compatibility
 In Nova 5, Nova’s frontend JavaScript now utilizes Inertia.js 2.x, which will affect any projects that directly import from `@inertiajs/inertia` or `@inertiajs/inertia-vue3`. You should inspect your custom components and packages to ensure all references have been updated as suggested in [Inertia’s upgrade guide](https://inertiajs.com/upgrade-guide).
-Copy
-Ask AI
 ```
 <script>
 -import { usePage } from '@inertiajs/inertia-vue3'
@@ -178,8 +166,6 @@ Ask AI
 ```
 ### [​](#replacing-form-backend-validation) Replacing `form-backend-validation`
 The `form-backend-validation` repository has been archived and should no longer be used by third-party packages or components. Instead, you may simply import `Errors` from `laravel-nova`:
-Copy
-Ask AI
 ```
 <script>
 -import { Errors } from 'form-backend-validation'
@@ -190,8 +176,6 @@ Ask AI
 </script>
 ```
 Then, you may remove `form-backend-validation` from your component’s `package.json`:
-Copy
-Ask AI
 ```
 npm remove form-backend-validation
 ```
@@ -203,8 +187,6 @@ Algolia [retired their “Places” API](https://www.algolia.com/blog/product/su
 ## [​](#low-impact-changes) Low Impact Changes
 ### [​](#update-published-stubs) Update Published Stubs
 Due to various changes in Nova 5.x, you should re-publish the Nova “stubs” if you have previously published them. You can accomplish this by executing the `nova:stubs` Artisan command with the `--force` option:
-Copy
-Ask AI
 ```
 php artisan nova:stubs --force
 ```

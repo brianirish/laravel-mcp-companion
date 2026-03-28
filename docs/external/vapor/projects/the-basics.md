@@ -51,8 +51,6 @@ Get started with Laravel Vapor.
 Vapor projects are created via the Vapor UI or the `vapor init` CLI command.
 We recommend using the Vapor UI if you wish to start a fresh Laravel project on Vapor. This option’s fully integrated with GitHub, and once you connect your GitHub account, Vapor automatically creates a new GitHub repository (with a fresh installation of Laravel), makes the first deployment, and sets up automatic deployments on code pushes.
 Or, if you need to deploy an existing project to Laravel Vapor, you may use the `vapor init` CLI command. This command should be executed within the root directory of the Laravel project you wish to deploy. The `init` command will prompt you to select the AWS account that the project should be associated with, as well as the AWS region that it should be deployed to.
-Copy
-Ask AI
 ```
 vapor init
 ```
@@ -60,14 +58,10 @@ The `init` command will generate a `vapor.yml` file within the root of your proj
 When creating a project in a region that you have not created previous projects in, Vapor will automatically begin building a “network” (AWS VPC) in that region. This network may take several minutes to finish provisioning. You can review its status in the “Networks” tab of the Vapor UI.
 ### [​](#projects-&-teams) Projects & Teams
 Before creating a project via the Vapor CLI, ensure your current team is the team you intend to create the project for. You may view your current team using the `team:current` command. You may switch your active team using the `team:switch` command.
-Copy
-Ask AI
 ```
 vapor team:switch
 ```
 You may view your current team’s project list via the Vapor UI or the `vapor project:list` CLI command:
-Copy
-Ask AI
 ```
 vapor project:list
 ```

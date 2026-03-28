@@ -91,14 +91,10 @@ Finally, if you wish to use Horizon’s [metrics graphs](https://laravel.com/doc
 ## [​](#restarting-queue-workers-after-deployment) Restarting queue workers after deployment
 When deploying your application, it is important that your existing queue workers or Horizon processes reflect the latest changes to your application. This can be achieved by gracefully restarting these services from your deployment script:
 When using queue workers:
-Copy
-Ask AI
 ```
 $FORGE_PHP artisan queue:restart
 ```
 When using Horizon:
-Copy
-Ask AI
 ```
 $FORGE_PHP artisan horizon:terminate
 ```

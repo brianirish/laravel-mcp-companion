@@ -57,8 +57,6 @@ When a deployment is triggered for your project, Envoyer will execute your deplo
 Of course, any deployment hooks you have configured will also be run during the deployment in their configured sequence.
 ## [​](#hook-variables) Hook Variables
 Within your deployment hook scripts, you may use the `release` variable to access the most current release directory. For example:
-Copy
-Ask AI
 ```
 cd {{ release }}
 

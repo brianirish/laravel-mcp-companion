@@ -81,8 +81,6 @@ Unless you like to live dangerously, any Nova fields that are displayed on the N
 ### [​](#attaching-rules) Attaching Rules
 When defining a field on a resource, you may use the `rules` method to attach [validation rules](https://laravel.com/docs/validation#available-validation-rules) to the field:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -104,8 +102,6 @@ public function fields(NovaRequest $request): array
 }
 ```
 Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
-Copy
-Ask AI
 ```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
@@ -117,8 +113,6 @@ Text::make('State')
     ->rules('required', new ValidState),
 ```
 You may also provide rules to the `rules` method via an array or Closure:
-Copy
-Ask AI
 ```
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
@@ -135,8 +129,6 @@ Text::make('State')->rules(fn ($request) => [
 ]);
 ```
 Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -152,8 +144,6 @@ Text::make('State')
 ```
 ### [​](#creation-rules) Creation Rules
 If you would like to define rules that only apply when a resource is being created, you may use the `creationRules` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -166,8 +156,6 @@ Text::make('Email')
 ```
 ### [​](#update-rules) Update Rules
 Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the `updateRules` method. If necessary, you may use `resourceId` place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -187,8 +175,6 @@ Nova also provides several methods that allow you to perform tasks after a resou
 #### [​](#the-aftervalidation-method) The `afterValidation` Method
 The `afterValidation` method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling `afterCreationValidation` or `afterUpdateValidation`:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -212,8 +198,6 @@ protected static function afterValidation(
 #### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
 The `afterCreationValidation` method will be called after a resource that is being created has been validated:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -237,8 +221,6 @@ protected static function afterCreationValidation(
 #### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
 The `afterUpdateValidation` method will be called after a resource that is being updated has been validated:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;

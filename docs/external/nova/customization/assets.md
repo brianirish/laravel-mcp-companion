@@ -76,8 +76,6 @@ Learn how to extend or add additional functionality to Nova.
 Assets allow you to extend or add additional functionality to Nova without the overhead of cards or resource tools. For example, you may wish to override a custom error component to match your branding or intercept Inertia interactions and provide additional data to routes.
 ## [​](#defining-assets) Defining Assets
 Assets may be generated using the `nova:asset` Artisan command. By default, all new assets will be placed in the `nova-components` directory of your application. When generating an asset using the `nova:asset` command, the asset name you pass to the command should follow the Composer `vendor/package` format:
-Copy
-Ask AI
 ```
 php artisan nova:asset acme/analytics
 ```
@@ -87,8 +85,6 @@ Nova assets include all of the scaffolding necessary to build your asset. Each a
 Nova assets are automatically loaded through the use of Laravel’s auto-loader, so no additional registration is required.
 ## [​](#compiling-assets) Compiling Assets
 Your Nova asset contains a `webpack.mix.js` file, which is generated when Nova creates your custom asset. You may build your custom asset using the NPM `dev` and `prod` commands:
-Copy
-Ask AI
 ```
 # Compile your assets for local development...
 npm run dev
@@ -97,8 +93,6 @@ npm run dev
 npm run prod
 ```
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-Copy
-Ask AI
 ```
 npm run watch
 ```

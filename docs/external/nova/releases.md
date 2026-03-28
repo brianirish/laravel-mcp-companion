@@ -82,8 +82,6 @@ Furthermore, Nova’s frontend code has been updated to utilize Vue 3.5, Heroico
 ## [​](#tab-panels) Tab Panels
 Nova 5 further improves the resource UI with the introduction of **Tabs Panels** on the resource detail and form pages:
 app/Nova/Event.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
@@ -120,8 +118,6 @@ To learn more about adding tab panels to your Nova resources, check out the [tab
 ## [​](#fields-&-filters-improvements) Fields & Filters Improvements
 ### [​](#new-dependent-computed-field-via-fieldcomputed-method) New Dependent Computed Field via `Field::computed()` method
 Nova 5 introduces an enhanced `computed` method that builds upon the previous computed fields feature. While computed fields have always been valuable for displaying additional resource information, they previously lacked a unique `$attribute` identifier, which limited their use as dependent fields. This limitation has been resolved in Nova 5:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\FormData;
@@ -145,8 +141,6 @@ More information on computed fields can be found within the [computed field docu
 ### [​](#new-fieldimmutable-method) New `Field::immutable()` method
 While [readonly fields](./resources/fields#readonly-fields) disable a field’s input and prevent form submission of its value, immutable fields offer more flexibility. By invoking the `immutable` method on a field, you can prevent users from modifying the field’s value while still allowing it to be submitted with the form.
 You may also pass a boolean argument to the `immutable` method to dynamically control whether a field should be immutable:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -162,15 +156,11 @@ Further reading is available on the [documentation](./resources/fields#immutable
 ## [​](#separate-policy-classes-for-nova-resources) Separate Policy Classes for Nova Resources
 In previous Nova releases, Nova resources shared authorization policies with your user-facing application. This approach to authorization can present problems if your application’s authorization logic differs from how resource authorization should be handled for Nova operations.
 In Nova 5, you may now create a separate policy class that is only used for operations that are triggered via Nova:
-Copy
-Ask AI
 ```
 php artisan nova:policy
 ```
 To enable the new policy you need to add the following code:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 

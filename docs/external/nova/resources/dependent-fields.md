@@ -74,8 +74,6 @@ Resources
 Dependent fields allow you to define fields that have unique configuration depending on the value of other fields.
 Dependent fields are created by invoking the `dependsOn` method when defining a field. The `dependsOn` method accepts an `array` of dependent field attributes and a closure that modifies the configuration of the current field instance.
 Dependent fields allow advanced customization, such as toggling read-only mode, validation rules, and more based on the state of another field:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\Select;
@@ -151,8 +149,6 @@ The following field types may not be depended upon by other fields since they do
 - VaporImage
 ## [​](#toggling-field-visibility-using-dependson) Toggling Field Visibility Using `dependsOn`
 One common use-case for dependent fields is toggling field visibility based on the value of another field. You can accomplish this using the `hide` and `show` methods:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsTo;
@@ -177,8 +173,6 @@ BelongsTo::make('User')
 ```
 ## [​](#setting-a-field’s-value-using-dependson) Setting a Field’s Value Using `dependsOn`
 Another common use-case for dependent fields is to set the value of a field based on the value of another field. You can accomplish this using the `setValue` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\FormData;
@@ -195,8 +189,6 @@ DateTime::make('Updated At')
 ```
 ## [​](#accessing-request-resource-ids) Accessing Request Resource IDs
 When interacting with dependent fields, you may retrieve the current resource and related resource IDs via the `resource` method:
-Copy
-Ask AI
 ```
 BelongsTo::make(__('Books'), 'books', Book::class),
 

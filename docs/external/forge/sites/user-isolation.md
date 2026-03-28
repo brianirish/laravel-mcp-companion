@@ -83,8 +83,6 @@ Via Laravel Forge’s “User Isolation” feature, Forge will create a separate
 The `forge` user is considered a “super user” and is therefore able to read all files within isolated user directories.
 ## [​](#sudo-access) Sudo access
 Like the `forge` user, newly created isolated users also have limited sudo access. They may reload the PHP-FPM services requiring a password:
-Copy
-Ask AI
 ```
 sudo -S service php8.5-fpm reload
 ```

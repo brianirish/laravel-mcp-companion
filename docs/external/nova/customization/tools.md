@@ -86,8 +86,6 @@ Learn how to build custom tools for your Nova application.
 Sometimes, your business may need additional functionality that isn’t provided by Nova. For this reason, Nova allows you to build custom tools and add them to the Nova sidebar. Nova tools are incredibly customizable, as they primarily consist of a single-file Vue component that is totally under your control. Within your Vue component, you are free to make HTTP requests to any controller within your application.
 ## [​](#defining-tools) Defining Tools
 Custom tools may be generated using the `nova:tool` Artisan command. By default, all new tools will be placed in the `nova-components` directory of your application. When generating a tool using the `nova:tool` command, the tool name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a price tracker tool, we might run the following command to generate our tool:
-Copy
-Ask AI
 ```
 php artisan nova:tool acme/price-tracker
 ```
@@ -96,8 +94,6 @@ Nova tools include all of the scaffolding necessary to build your tool. Each too
 ## [​](#registering-tools) Registering Tools
 Nova tools may be registered in your application’s `App/Providers/NovaServiceProvider` class. Your service provider contains a `tools` method, which returns an array of tools. To register your tool, simply add it to the list of tools returned by this method. For example, if you created a Nova tool named `acme/price-tracker`, you may register the tool like so:
 app/Nova/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 use Acme\PriceTracker\PriceTracker;
 
@@ -116,8 +112,6 @@ public function tools(): array
 ### [​](#authorization) Authorization
 If you would like to only expose a given tool to certain users, you may chain the `canSee` method onto your tool’s registration. The `canSee` method accepts a Closure which should return `true` or `false`. The Closure will receive the incoming HTTP request:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 use Acme\PriceTracker\PriceTracker;
 
@@ -149,8 +143,6 @@ Your Nova tool is generated with an `Authorize` middleware. You should not typic
 ### [​](#navigation) Navigation
 Your Nova tool class contains a `menu` method. This method should return a [custom menu](./menus) that renders your tool’s left-side navigation links. You are free to customize this method as needed:
 nova-components/PriceTracker/src/PriceTracker.php
-Copy
-Ask AI
 ```
 use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuSection;
@@ -179,8 +171,6 @@ The `Tool.vue` file is a single-file Vue component that contains your tool’s f
 ### [​](#registering-assets) Registering Assets
 Your Nova tool class contains a `boot` method. This method is executed when the tool is registered and available. By default, this method registers your tool’s compiled assets so that they will be available to the Nova front-end:
 nova-components/PriceTracker/src/ToolServiceProvider.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
@@ -202,8 +192,6 @@ public function boot(): void
 ### [​](#javascript-bootstrap-&-components) JavaScript Bootstrap & Components
 Your component is bootstrapped and Inertia.js components are registered in the `resources/js/tool.js` file. You are free to modify this file or register additional components here as needed:
 nova-components/PriceTracker/resources/js/tool.js
-Copy
-Ask AI
 ```
 Nova.booting((Vue, store) => {
   Vue.component("PriceTrackerHeader", require("./components/Header").default);
@@ -211,8 +199,6 @@ Nova.booting((Vue, store) => {
 ```
 ### [​](#compiling-assets) Compiling Assets
 Your Nova tool contains a `webpack.mix.js` file, which is generated when Nova creates your tool. You may build your tool using the NPM `dev` and `prod` commands:
-Copy
-Ask AI
 ```
 # Compile your assets for local development...
 npm run dev
@@ -221,15 +207,11 @@ npm run dev
 npm run prod
 ```
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-Copy
-Ask AI
 ```
 npm run watch
 ```
 ### [​](#vue-page-components-&-nova-plugins) Vue Page Components & Nova Plugins
 Vue page components contained by your tool have access to all of the components and plugins registered by Nova, including `v-tooltip`. For example, your tool’s `resources/js/pages/Tool.vue` stub will contain a default page title which is managed by the Inertia.js `Head` component:
-Copy
-Ask AI
 ```
 <template>
   <Head title="PriceTracker" />
