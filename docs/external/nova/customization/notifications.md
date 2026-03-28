@@ -79,8 +79,6 @@ Nova notifications allow you to notify Nova users of events within your applicat
 ## [​](#sending-notifications) Sending Notifications
 To send a notification, you simply need to send a `NovaNotification` instance to a user’s `notify` method. Of course, before getting started, you should ensure that your user model is [notifiable](https://laravel.com/docs/notifications).
 Nova notifications may be generated via the `NovaNotification` class, which provides convenient methods like `message`, `action`, `icon`, and `type`. The currently supported notification types include `success`, `error`, `warning`, and `info`:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\URL;
@@ -96,8 +94,6 @@ $request->user()->notify(
 );
 ```
 You may also send a Nova notification by including the `NovaChannel` in the array of channels returned by a notification’s `via` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Notifications\NovaNotification;
 use Laravel\Nova\Notifications\NovaChannel;
@@ -132,8 +128,6 @@ public function toNova()
 ```
 #### [​](#opening-remote-action-urls-in-new-tabs) Opening Remote Action URLs in New Tabs
 When defining a notification action, the `openInNewTab` method may be invoked to instruct Nova to open the given URL in a new browser tab:
-Copy
-Ask AI
 ```
 return (new NovaNotification)
     ->action(
@@ -145,8 +139,6 @@ Nova utilizes the free [Heroicons](https://heroicons.com/) icon set by [Steve Sc
 ## [​](#disabling-notifications) Disabling Notifications
 If you wish to completely disable notifications inside Nova, you can call the `withoutNotifications` method from your `App/Providers/NovaServiceProvider`:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Boot any application services.
@@ -162,8 +154,6 @@ public function boot(): void
 By default, Nova shows a visual indicator when there are unread notifications inside the notification center.
 If you would like Nova to show the number of unread notifications, you can call the `showUnreadCountInNotificationCenter` method from your `App/Providers/NovaServiceProvider`:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Boot any application services.

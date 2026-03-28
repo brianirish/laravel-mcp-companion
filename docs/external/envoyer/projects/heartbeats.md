@@ -45,16 +45,12 @@ If Envoyer does not receive a check-in from your job within the specified monito
 ### [​](#calling-manually) Calling Manually
 If you are manually modifying your server’s `/etc/crontab` file to define scheduled tasks, you can simply append a curl request to your Cron command. For example:
 /etc/crontab
-Copy
-Ask AI
 ```
 * * * * * user php command && curl http://beats.envoyer.io/heartbeat-id
 ```
 ### [​](#calling-with-laravel) Calling With Laravel
 If you’re using Laravel’s task scheduler, you may use the `thenPing` method on your scheduled job.
 app/Console/Kernel.php
-Copy
-Ask AI
 ```
 $schedule->command('foo')->thenPing('http://beats.envoyer.io/heartbeat-id');
 ```

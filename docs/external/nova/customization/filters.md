@@ -81,8 +81,6 @@ Learn how to build custom filters for your Nova resources.
 Nova ships with several filter types; however, sometimes you may need a filter type that isn’t provided out of the box. For this reason, Nova allows you to build custom filters.
 ## [​](#defining-filters) Defining Filters
 Custom filters may be generated using the `nova:custom-filter` Artisan command. By default, all new filters will be placed in the `nova-components` directory of your application. When generating a filter using the `nova:custom-filter` command, the filter name you pass to the command should follow the Composer `vendor/package` format. So, if we were building an age-range filter, we might run the following command:
-Copy
-Ask AI
 ```
 php artisan nova:custom-filter acme/age-range
 ```
@@ -92,8 +90,6 @@ Nova filters include all of the scaffolding necessary to build your filter. Each
 Nova filters may be registered in your resource’s `filters` method. This method returns an array of filters available to the resource. To register your filter, add your filter to the array of filters returned by this method:
 Construct
 Make
-Copy
-Ask AI
 ```
 use Acme\AgeRange\AgeRange;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -119,8 +115,6 @@ The filter’s service provider is also located within the `src` directory of th
 When Nova generates your filter, it creates a `resources/js/components/Filter.vue` Vue component. This component contains the template and logic for your filter when it is displayed in the filter dropdown menu. By default, the component displays a simple `select` filter component, along with the needed code for updating the filter’s state.
 ### [​](#managing-filter-state) Managing Filter State
 Custom Nova filters use Vuex to manage their state. By default, your filter’s Vue component stub contains the basic logic necessary to update the filter’s current state. When modifying your filter’s component, you should make sure the changes are committed to the Vuex store when your filter’s “selected” value changes:
-Copy
-Ask AI
 ```
 handleChange(event) {
     this.$store.commit('updateFilterState', {
@@ -136,8 +130,6 @@ When Nova generates your filter, `resources/js` and `resources/css` directories 
 ### [​](#registering-assets) Registering Assets
 Your Nova filter’s service provider registers your filter’s compiled assets so that they will be available to the Nova front-end:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
@@ -163,8 +155,6 @@ public function boot()
 Your components are bootstrapped and registered in the `resources/js/filter.js` file. You are free to modify this file or register additional components here as needed.
 ### [​](#compiling-assets) Compiling Assets
 Your Nova filter contains a `webpack.mix.js` file, which is generated when Nova creates your filter. You may build your filter using the NPM `dev` and `prod` commands:
-Copy
-Ask AI
 ```
 # Compile your assets for local development...
 npm run dev
@@ -173,8 +163,6 @@ npm run dev
 npm run prod
 ```
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-Copy
-Ask AI
 ```
 npm run watch
 ```

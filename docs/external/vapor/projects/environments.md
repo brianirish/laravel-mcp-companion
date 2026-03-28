@@ -85,15 +85,11 @@ As you may have noticed, projects do not contain much information or resources t
 Typically, you will have an environment for “production”, and a “staging” environment for testing your application. However, don’t be afraid to create more environments for testing new features without interrupting your main staging environment.
 ## [​](#creating-environments) Creating Environments
 Environments may be created using the `env` Vapor CLI command:
-Copy
-Ask AI
 ```
 vapor env my-environment
 ```
 This command will add a new environment entry to your project’s `vapor.yml` file that you may deploy when ready:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -106,23 +102,17 @@ environments:
             - 'composer install --no-dev'
 ```
 In addition to our native runtimes, Vapor supports Docker image deployments. If you would like an environment to use a Docker image runtime instead of the default Vapor runtime, use the `--docker` option when creating your environment:
-Copy
-Ask AI
 ```
 vapor env my-environment --docker
 ```
 This command will create a `my-environment.Dockerfile` file in your application’s root directory.
 ## [​](#opening-environments) Opening Environments
 Environments may be opened in your default browser using the Vapor CLI’s `open` command:
-Copy
-Ask AI
 ```
 vapor open my-environment
 ```
 ## [​](#default-environment) Default Environment
 When executing a Vapor CLI command, Vapor CLI uses the `staging` environment by default:
-Copy
-Ask AI
 ```
 vapor open // Opens the `staging` environment in your default browser...
 
@@ -130,8 +120,6 @@ vapor open production // Opens the `production` environment in your default brow
 ```
 However, within your application’s `vapor.yml` file, you may define a `default-environment` option to change the default environment for your project:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -176,14 +164,10 @@ Here is the full list of environment variables injected by Vapor on your environ
 You will not see these environment variables when you manage your environment via Vapor CLI or Vapor UI, and any variables you manually define will override Vapor’s automatically injected variables.
 ### [​](#updating-environment-variables) Updating Environment Variables
 You may update an environment’s variables via the Vapor UI or using the `env:pull` and `env:push` CLI commands. The `env:pull` command may be used to pull down an environment file for a given environment:
-Copy
-Ask AI
 ```
 vapor env:pull production
 ```
 Once this command has been executed, a `.env.{environment}` file will be placed in your application’s root directory. To update the environment’s variables, simply open and edit this file. When you are done editing the variables, use the `env:push` command to push the variables back to Vapor:
-Copy
-Ask AI
 ```
 vapor env:push production
 ```
@@ -216,22 +200,16 @@ Additionally, you should ensure the decryption key is available in the runtime b
 Utilizing encrypted environment files requires your application to be running Laravel >= v9.37 and Vapor Core >= v2.26.
 ### [​](#passport-keys) Passport Keys
 You may easily add your project’s Passport keys to your encrypted environment file using the `env:passport` CLI command:
-Copy
-Ask AI
 ```
 vapor env:passport production
 ```
 The `env:passport` command will append the contents of your local Passport keys to your `.env.production` file. When the command completes, you should re-encrypt the environment file using Laravel’s `env:encrypt` command and redeploy your project in order for the changes to take effect.
 ## [​](#maintenance-mode) Maintenance Mode
 When deploying a Laravel application using a traditional VPS like those managed by [Laravel Forge](https://forge.laravel.com), you may have used the `php artisan down` command to place your application in “maintenance mode”. To place a Vapor environment in maintenance mode, you may use the Vapor UI or the `down` CLI command:
-Copy
-Ask AI
 ```
 vapor down production
 ```
 To remove an environment from maintenance mode, you may use the `up` command:
-Copy
-Ask AI
 ```
 vapor up production
 ```
@@ -240,14 +218,10 @@ When an environment is in maintenance mode, the environment’s custom domain wi
 You may customize the maintenance mode splash screen for your application by placing a `503.html` file in your application’s root directory. In addition, you may also place a `503.json` file in your application’s root directory for requests asking for JSON responses.
 ### [​](#bypassing-maintenance-mode) Bypassing Maintenance Mode
 You may find it useful to be able to access your site on its custom domain rather than the vanity domain while in maintenance mode. To accomplish this, you may provide a secret when invoking the `down` command:
-Copy
-Ask AI
 ```
 vapor down --secret="example-secret"
 ```
 You may then access your application using the secret key as the URL path:
-Copy
-Ask AI
 ```
 https://example.com/example-secret
 ```
@@ -259,8 +233,6 @@ This means:
 - There is no way to selectively process critical jobs during maintenance.
 ## [​](#commands) Commands
 Commands allow you to execute an arbitrary Artisan command against an environment. You may issue a command via the Vapor UI or using the `command` CLI command. The `command` command will prompt you for the Artisan command you would like to run:
-Copy
-Ask AI
 ```
 vapor command production
 
@@ -268,8 +240,6 @@ vapor command production --command="php artisan inspire"
 ```
 By default, your command will timeout after one minute. You can configure the timeout of your CLI commands using the `cli-timeout` option within your `vapor.yml` file. This option allows you to specify the maximum number of seconds a CLI command should be allowed to run:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -280,8 +250,6 @@ environments:
             - 'composer install --no-dev'
 ```
 Sometimes you may need to run the previous command again. To accomplish this, you may use the Vapor UI or the `command:again` CLI command:
-Copy
-Ask AI
 ```
 # Run the previous command again...
 vapor command:again
@@ -292,8 +260,6 @@ vapor command:again 50
 ## [​](#memory) Memory
 Vapor (via AWS Lambda) allocates CPU power to your Lambda function in proportion to the amount of memory configured for the application. You may increase or decrease the configured memory using the `memory` option in your environment’s `vapor.yml` configuration:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -309,8 +275,6 @@ When configuring the memory for your Lambda function, you may define a value bet
 By default, Vapor will allow your application to process web requests at max concurrency, which is typically 1,000 requests executing at the same time at any given moment across all of your AWS Lambda functions in a given region. If you would like to reduce the maximum web concurrency, you may define the `concurrency` option in the environment’s `vapor.yml` configuration. Additionally, if you need more than 1,000 concurrent requests, you can submit a limit increase request in the AWS Support Center console.
 While maximum performance is certainly appealing, in some situations it may make sense to set this value to the maximum concurrency you reasonably expect for your particular application. Otherwise, a DDoS attack against your application could result in larger than expected AWS costs:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -324,8 +288,6 @@ environments:
 By default, when an environment is deployed, the first request it receives may encounter “cold starts”. These requests typically incur a penalty of a few seconds while AWS loads a serverless container to serve the request. Once a request has been served by that container, it is typically kept warm to serve further requests with no delay.
 To mitigate “cold starts” after a fresh deployment, Vapor allows you to define a `warm` configuration value for an environment in your `vapor.yml` file. The `warm` value represents how many serverless containers Vapor will “pre-warm” by making concurrent requests to the newly deployed application **before it is activated for public accessibility**. Vapor will continue to pre-warm this many containers every 5 minutes while the application is deployed so the specified number of containers are always ready to serve requests:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -340,8 +302,6 @@ You may instruct Vapor to automatically configure a firewall that provides basic
 Before getting started, keep in mind that Vapor’s managed firewall inspects requests using the IP address from the web request origin. Therefore, this feature should only be used if the requests are not already being reversed proxied through a service such as Cloudflare. **If you are already using a reverse proxy, you should not use this feature**.
 You may use Vapor’s managed firewall by defining the `firewall` configuration option within your application’s `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -361,8 +321,6 @@ When using the `rate-limit` option, Vapor’s managed firewall tracks the rate o
 ### [​](#bot-control) `bot-control`
 When using the `bot-control` option, Vapor’s managed firewall blocks requests from pervasive bots, such as scrapers or search engines. You may customize the “category” of requests the `bot-control` should block by providing an `array` of categories within your application’s `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 firewall:
     bot-control:
@@ -394,8 +352,6 @@ Behind the scenes, Vapor’s managed firewall uses **[Amazon WAF](https://aws.am
 ## [​](#timeout) Timeout
 By default, Vapor will limit web request execution time to 10 seconds. If you would like to change the timeout value, you may add a `timeout` value (in seconds) to the environment’s configuration. API Gateway has a maximum timeout of 30 seconds. Should you require a longer request duration, you may utilize a [load balancer](/resources/networks#load-balancers). Note that AWS does not allow Lambda executions to process for more than 15 minutes:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -411,8 +367,6 @@ Vapor automatically configures Laravel’s task scheduler and instructs it to us
 Due to the serverless nature of Vapor, you should avoid using the `runInBackground` method when scheduling jobs. Doing so may prevent other tasks from running in the event the Lambda container shuts down before the current task completes.
 If you would like to disable the scheduler, you may set an environment’s `scheduler` option to `false`:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -426,8 +380,6 @@ Due to Vapor limitations, log messages from scheduled tasks will not appear in A
 ### [​](#sub-minute-scheduled-tasks) Sub-Minute Scheduled Tasks
 Due to AWS limitations, there is no guarantee the scheduler will be invoked at the very beginning of any given minute. Therefore, you may find that, by default, sub-minute tasks scheduled early in the `schedule:run` process do not run as expected and those which run later in the schedule may not start at the expected time. For example, when scheduling a command using `everyThirtySeconds` and assuming the scheduler is invoked by AWS at 12:00:10, you should expect your command to run at 12:00:10 and 12:00:40.
 To work around these limitations for sub-minute tasks, you may enable Vapor’s own scheduler engine by adding `scheduler: sub-minute` to your application’s `vapor.yml` file:
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -446,8 +398,6 @@ By default, Vapor configures the “From Address” and “From Name” Laravel 
 Finally, if you haven’t used Amazon SES before, your SES account will be in “sandbox” mode. Sandbox mode only allows you to send emails to manually verified domains. To move out of SES sandbox mode, follow these instructions: **<https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html>**.
 ## [​](#metrics) Metrics
 A variety of environment performance metrics may be found in the Vapor UI or using the `metrics` CLI command:
-Copy
-Ask AI
 ```
 vapor metrics production
 vapor metrics production 5m
@@ -466,8 +416,6 @@ The `runtime` configuration option allows you to specify the runtime a given env
 ### [​](#native-runtimes) Native Runtimes
 The currently supported native runtimes are `php-8.5:al2`, `php-8.5:al2-arm`, `php-8.5:al2023`, `php-8.5:al2023-arm`, `php-8.4:al2`, `php-8.4:al2-arm`, `php-8.4:al2023`, `php-8.4:al2023-arm`, `php-8.3:al2`, `php-8.3:al2-arm`, `php-8.3:al2023`, `php-8.3:al2023-arm`, `php-8.2:al2`, and `php-8.2:al2-arm`. Runtimes without the `-arm` suffix run on x86 architecture whereas those suffixed with `-arm` run on Arm architecture. Arm provides performance benefits and cost savings compared to its x86 equivalent:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -483,24 +431,18 @@ The following limitations apply to Vapor native runtimes:
 - Additional PHP extensions or libraries (such as `imagick`) can not be installed.
 #### [​](#customizing-core-php-ini-directives) Customizing Core `php.ini` Directives
 To customize core `php.ini` directives on our native runtimes, create a `php.ini` file in the `php/conf.d` directory of your project with the desired directives. For example, to change the `upload_max_filesize`, add the following line to your application’s `php.ini` file:
-Copy
-Ask AI
 ```
 upload_max_filesize = 4M
 ```
 After deploying, the new directive will take effect in your Vapor environment.
 ### [​](#docker-runtimes) Docker Runtimes
 Docker based runtimes allow you to package and deploy applications up to 10GB in size and allow you to install additional PHP extensions or libraries by updating the environment’s corresponding `.Dockerfile`. For every new Docker based environment, Vapor creates a `.Dockerfile` file within your application that uses one of Vapor’s base images as a starting point for building your image. All of Vapor’s Docker images are based on Alpine Linux:
-Copy
-Ask AI
 ```
 FROM laravelphp/vapor:php85
 
 COPY . /var/task
 ```
 Vapor’s Docker runtimes also support Arm architecture, which provides increased performance and cost savings. If you want to take advantage of Arm architecture, you should update your base image as follows:
-Copy
-Ask AI
 ```
 FROM laravelphp/vapor:php85-arm
 
@@ -508,8 +450,6 @@ COPY . /var/task
 ```
 If you would like to use a Docker image instead of the Vapor native runtimes, you should set your `vapor.yml` configuration file’s `runtime` option to `docker` (for x86 architecture) or `docker-arm` (for Arm architecture):
 vapor.yml
-Copy
-Ask AI
 ```
 # x86
 id: 2
@@ -534,8 +474,6 @@ environments:
 To avoid errors when compiling an image for the `docker-arm` runtime, it is essential to ensure that the environment where the image is built is compatible with `arm64` based architecture. To avoid such issues, it may be necessary to emulate the `arm64` architecture using a tool such as QEMU. The [Docker documentation](https://docs.docker.com/build/building/multi-platform/#building-multi-platform-images) provides further guidance on this topic.
 If you would like to rename the Dockerfile or use a shared Dockerfile across multiple environments, you may define a `dockerfile` option within your `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -560,8 +498,6 @@ Vapor will build, tag, and publish your environment’s image during your deploy
 - `laravelphp/vapor:php80`
 - `laravelphp/vapor:php74`
 Of course, you are free to modify your environment’s `Dockerfile` to install additional dependencies or PHP extensions. Here are a few examples:
-Copy
-Ask AI
 ```
 FROM laravelphp/vapor:php85
 
@@ -580,14 +516,10 @@ COPY . /var/task
 ```
 #### [​](#customizing-core-php-ini-directives-2) Customizing Core `php.ini` Directives
 To customize core `php.ini` directives on our Docker runtimes, create a `php.ini` file in the **root** directory of your project with the desired directives. For example, to change the `upload_max_filesize` directive, add the following line to your `php.ini` file:
-Copy
-Ask AI
 ```
 upload_max_filesize = 4M
 ```
 Next, in your Dockerfile, include a new `COPY` command that copies the local `php.ini` file into the Docker image:
-Copy
-Ask AI
 ```
 FROM laravelphp/vapor:php85
 
@@ -598,8 +530,6 @@ COPY . /var/task
 After deploying, the new directive will take effect in your Vapor environment.
 #### [​](#docker-build-arguments) Docker Build Arguments
 When using Docker, is common to use `ARG` instructions in `.Dockerfile` files to define build-time variables:
-Copy
-Ask AI
 ```
 ARG VERSION=php85
 
@@ -609,8 +539,6 @@ COPY . /var/task
 ```
 You may set Docker build arguments via the `docker-build-args` configuration option within your application’s `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -623,8 +551,6 @@ environments:
             - 'composer install --no-dev'
 ```
 Alternatively, you may provide one or multiple `--build-arg` options to the `deploy` Vapor CLI command to specify the values of the build arguments:
-Copy
-Ask AI
 ```
 vapor deploy --build-arg VERSION=php74 --build-arg KEY=value
 ```
@@ -634,8 +560,6 @@ If you wish to reduce the overhead involved in using PHP-FPM, you may opt-in to 
 To get started, [install Laravel Octane](https://laravel.com/docs/octane#installation) in your project. After installing Octane, don’t forget to review important [Octane documentation](https://laravel.com/docs/octane) topics such as [dependency injection](https://laravel.com/docs/octane#dependency-injection-and-octane) and [managing memory leaks](https://laravel.com/docs/octane#managing-memory-leaks).
 Finally, you may instruct Vapor to use Octane by setting the `octane` configuration option within your application’s `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 1
 name: my-application
@@ -647,8 +571,6 @@ environments:
 ```
 In addition, if your project uses a database, you may use the `octane-database-session-persist` and `octane-database-session-ttl` options to instruct Octane that database connections should be reused between requests:
 vapor.yml
-Copy
-Ask AI
 ```
         database: my-database
         octane: true
@@ -663,8 +585,6 @@ Vapor does not use standard Octane runtimes like Swoole, RoadRunner, or FrankenP
 By default, Vapor routes HTTP traffic to your serverless applications using AWS API Gateway v1 (REST APIs). Your application may run on either API Gateway v1 (REST APIs) or API Gateway v2 (HTTP APIs). By default, applications deploy using API Gateway v1 as it provides a fuller feature set such as Vapor’s managed Firewall, and more.
 However, API Gateway v2 offers a cost reduction per million requests to your application ($1.00 per million vs. $3.50 per million). If you would like to use API Gateway v2, you may specify the `gateway-version` configuration option for a given environment in your `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -681,8 +601,6 @@ In addition, when using Cloudflare, you should set your Cloudflare SSL / TLS mod
 ## [​](#custom-vpcs) Custom VPCs
 If you want to place your Lambda functions within a VPC that is not managed by Vapor, you may specify the `subnets` and `security-groups` configuration options for a given environment in your `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -696,8 +614,6 @@ environments:
 ```
 ## [​](#deleting-environments) Deleting Environments
 Environments may be deleted via the Vapor UI or using the `env:delete` CLI command:
-Copy
-Ask AI
 ```
 vapor env:delete testing
 ```

@@ -107,8 +107,6 @@ Nova ships with a variety of fields out of the box, including fields for text in
 In addition to the variety of fields we’ve already discussed, Nova has full support for all of Laravel’s relationships. Once you add relationship fields to your Nova resources, you’ll start to experience the full power of the Nova dashboard, as the resource detail page will allow you to quickly view and search a resource’s related models:
 ## [​](#hasone) HasOne
 The `HasOne` field corresponds to a `hasOne` Eloquent relationship. For example, let’s assume a `User` model `hasOne` `Address` model. We may add the relationship to our `User` Nova resource like so:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasOne;
 
@@ -117,8 +115,6 @@ use Laravel\Nova\Fields\HasOne;
 HasOne::make('Address'),
 ```
 Like other types of fields, relationship fields will automatically “camel case” the displayable name of the field to determine the underlying relationship method / attribute. However, you may explicitly specify the name of the relationship method by passing it as the second argument to the field’s `make` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasOne;
 
@@ -128,8 +124,6 @@ HasOne::make('Dirección', 'address'),
 ```
 ### [​](#hasoneofmany) HasOneOfMany
 The `HasOne` relationship field can be transformed into an “has one of many” Eloquent relationship using the `ofMany` method. For example, let’s assume a `User` model `hasMany` `Post` models. We may add the “has one of many” relationship to our `User` Nova resource like so:
-Copy
-Ask AI
 ```
 use App\Nova\Post;
 use Laravel\Nova\Fields\HasOne;
@@ -140,8 +134,6 @@ HasOne::ofMany('Latest Post', 'latestPost', Post::class),
 ```
 ## [​](#hasmany) HasMany
 The `HasMany` field corresponds to a `hasMany` Eloquent relationship. For example, let’s assume a `User` model `hasMany` `Post` models. We may add the relationship to our `User` Nova resource like so:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasMany;
 
@@ -151,8 +143,6 @@ HasMany::make('Posts'),
 ```
 Once the field has been added to your resource, it will be displayed on the resource’s detail page.
 When defining `HasMany` relationships, make sure to use the plural form of the relationship so Nova can infer the correct singular resource name:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasMany;
 
@@ -162,8 +152,6 @@ HasMany::make('Posts'),
 ```
 ## [​](#hasonethrough) HasOneThrough
 The `HasOneThrough` field corresponds to a `hasOneThrough` Eloquent relationship. For example, let’s assume a `Mechanic` model has one `Car`, and each `Car` may have one `Owner`. While the `Mechanic` and the `Owner` have no direct connection, the `Mechanic` can access the `Owner` through the `Car` itself. You can display this relationship by adding it to your Nova resource:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasOneThrough;
 
@@ -173,8 +161,6 @@ HasOneThrough::make('Owner'),
 ```
 ## [​](#hasmanythrough) HasManyThrough
 The `HasManyThrough` field corresponds to a `hasManyThrough` Eloquent relationship. For example, a `Country` model might have many `Post` models through an intermediate `User` model. In this example, you could easily gather all blog posts for a given country. To display this relationship within Nova, you may add it to your Nova resource:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\HasManyThrough;
 
@@ -184,8 +170,6 @@ HasManyThrough::make('Posts'),
 ```
 ## [​](#belongsto) BelongsTo
 The `BelongsTo` field corresponds to a `belongsTo` Eloquent relationship. For example, let’s assume a `Post` model `belongsTo` a `User` model. We may add the relationship to our `Post` Nova resource like so:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -194,8 +178,6 @@ use Laravel\Nova\Fields\BelongsTo;
 BelongsTo::make('User'),
 ```
 You may customize the resource class used by the relation field by providing the second and third arguments of the `make` method, which define the name of the relationship and the underlying Nova resource class:
-Copy
-Ask AI
 ```
 use App\Nova\User;
 use Laravel\Nova\Fields\BelongsTo;
@@ -208,8 +190,6 @@ BelongsTo::make('Author', 'author', User::class),
 When hovering over a `BelongsTo` link when viewing the index or detail views, Nova will show a small card allowing you to “take a peek” at the linked relation:
 ### [​](#preventing-peeking-at-belongsto-relationships) Preventing Peeking at `BelongsTo` Relationships
 Relationship peeking is enabled by default; however, you can prevent the user from peeking at the relation using the `noPeeking` helper on your `BelongsTo` field:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -219,8 +199,6 @@ BelongsTo::make('Author')
     ->noPeeking(),
 ```
 You may also use the `peekable` method to determine whether the user should be allowed to peek at the relation:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -234,8 +212,6 @@ BelongsTo::make('Author')
 ```
 #### [​](#nullable-relationships) Nullable Relationships
 If you would like your `BelongsTo` relationship to be `nullable`, you may simply chain the `nullable` method onto the field’s definition:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -249,8 +225,6 @@ When a `BelongsTo` field is shown on a resource creation / update page, a drop-d
 To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
 Property
 Method
-Copy
-Ask AI
 ```
 /**
  * The single value that should be used to represent the resource when being displayed.
@@ -261,8 +235,6 @@ public static $title = 'name';
 ```
 #### [​](#disable-ordering-by-title) Disable Ordering by Title
 By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAssociatables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](./authorization#relatable-filtering):
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -273,8 +245,6 @@ BelongsTo::make('User')
 ```
 #### [​](#filter-trashed-items) Filter Trashed Items
 By default, the `BelongsTo` field will allow users to select soft-deleted models; however, this can be disabled using the `withoutTrashed` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -286,8 +256,6 @@ BelongsTo::make('User')
 ## [​](#belongstomany) BelongsToMany
 The `BelongsToMany` field corresponds to a `belongsToMany` Eloquent relationship. For example, let’s assume a `User` model `belongsToMany` `Role` models:
 app/Models/User.php
-Copy
-Ask AI
 ```
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -301,8 +269,6 @@ public function roles(): BelongsToMany
 ```
 We may add the relationship to our `User` Nova resource like so:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsToMany;
 
@@ -321,8 +287,6 @@ public function fields(NovaRequest $request): array
 }
 ```
 You may customize the resource class used by the relationship field by providing the second and third arguments to the `make` method:
-Copy
-Ask AI
 ```
 use App\Nova\Author;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -336,8 +300,6 @@ Once the field has been added to your resource, it will be displayed on the reso
 If your `belongsToMany` relationship interacts with additional “pivot” fields that are stored on the intermediate table of the many-to-many relationship, you may also attach those to your `BelongsToMany` Nova relationship. Once these fields are attached to the relationship field, and the relationship has been defined on both of the related models / resources, they will be displayed on the related resource index.
 For example, let’s assume our `User` model `belongsToMany` `Role` models. On our `role_user` intermediate table, let’s imagine we have a `notes` field that contains some simple text notes about the relationship. We can attach this pivot field to the `BelongsToMany` field using the `fields` method:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Text;
@@ -353,8 +315,6 @@ BelongsToMany::make('Roles')
 ```
 Of course, it is likely we would also define this field on the inverse of the relationship. So, if we define the `BelongsToMany` field on the `User` resource, we would define its inverse on the `Role` resource:
 app/Nova/Role.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Text;
@@ -378,10 +338,6 @@ Don’t forget to define the pivot fields inside your Model’s relationship def
 
 Laravel Nova also allows you to define computed fields within the field list of a `belongsToMany` relationship field:
 
-Copy
-
-Ask AI
-
 ```
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
@@ -401,10 +357,6 @@ BelongsToMany::make('Users')
 #### [​](#pivot-actions) Pivot Actions
 
 Typically, [Nova actions](./../actions/defining-actions) operate on a resource. However, you may also attach actions to `belongsToMany` fields so that they can operate on pivot / intermediate table records. To accomplish this, you may chain the `actions` method onto your field’s definition:
-
-Copy
-
-Ask AI
 
 ```
 use App\Nova\Actions\MarkAsActive;
@@ -432,10 +384,6 @@ Property
 
 Method
 
-Copy
-
-Ask AI
-
 ```
 /**
  * The single value that should be used to represent the resource when being displayed.
@@ -447,10 +395,6 @@ public static $title = 'name';
 #### [​](#disabling-ordering-by-title) Disabling Ordering by Title
 
 By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAttachables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](./authorization#relatable-filtering):
-
-Copy
-
-Ask AI
 
 ```
 use Laravel\Nova\Fields\BelongsToMany;
@@ -466,10 +410,6 @@ To get started, you should ensure that your pivot record’s `id` column is avai
 
 app/Models/User.php
 
-Copy
-
-Ask AI
-
 ```
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // ...
@@ -483,10 +423,6 @@ public function books(): BelongsToMany
 ```
 
 Next, we can define the Nova relationship that allows duplicate relations using the `allowDuplicateRelations` method:
-
-Copy
-
-Ask AI
 
 ```
 use Laravel\Nova\Fields\BelongsToMany;
@@ -510,10 +446,6 @@ public function fields(NovaRequest $request): array
 
 The `MorphOne` field corresponds to a `morphOne` Eloquent relationship. For example, let’s assume a `Post` has a one-to-one polymorphic relationship with the `Image` model. We may add the relationship to our `Post` Nova resource like so:
 
-Copy
-
-Ask AI
-
 ```
 use Laravel\Nova\Fields\MorphOne;
 // ...
@@ -523,10 +455,6 @@ MorphOne::make('Image'),
 ### [​](#morphoneofmany) MorphOneOfMany
 
 The `MorphOne` relationship field can be transformed into a “morph one of many” Eloquent relationship using the `ofMany` method. For example, let’s assume a `Post` has a one-to-many polymorphic relationship with the `Comment` model. We may add the relationship to our `Post` Nova resource like so:
-
-Copy
-
-Ask AI
 
 ```
 use App\Nova\Comment;
@@ -539,10 +467,6 @@ MorphOne::ofMany('Latest Comment', 'latestComment', Comment::class),
 
 The `MorphMany` field corresponds to a `morphMany` Eloquent relationship. For example, let’s assume a `Post` has a one-to-many polymorphic relationship with the `Comment` model. We may add the relationship to our `Post` Nova resource like so:
 
-Copy
-
-Ask AI
-
 ```
 use Laravel\Nova\Fields\MorphMany;
 // ...
@@ -552,10 +476,6 @@ MorphMany::make('Comments'),
 ## [​](#morphto) MorphTo
 
 The `MorphTo` field corresponds to a `morphTo` Eloquent relationship. For example, let’s assume a `Comment` model has a polymorphic relationship with both the `Post` and `Video` models. We may add the relationship to our `Comment` Nova resource like so:
-
-Copy
-
-Ask AI
 
 ```
 use App\Nova\Post;
@@ -579,10 +499,6 @@ When a `MorphTo` field is shown on a resource creation / update page, the [title
 
 If you would like your `MorphTo` relationship to be `nullable`, chain the `nullable` method onto the field’s definition:
 
-Copy
-
-Ask AI
-
 ```
 use App\Nova\Post;
 use App\Nova\Video;
@@ -605,10 +521,6 @@ When hovering over a `MorphTo` link when viewing the index or detail views, Nova
 
 Relationship peeking is enabled by default; however, you can prevent the user from peeking at the relation using the `noPeeking` helper on your `MorphTo` field:
 
-Copy
-
-Ask AI
-
 ```
 use Laravel\Nova\Fields\MorphTo;
 // ...
@@ -617,10 +529,6 @@ MorphTo::make('Author')
 ```
 
 You may also use the `peekable` method to determine whether the user should be allowed to peek at the relation:
-
-Copy
-
-Ask AI
 
 ```
 use Laravel\Nova\Fields\MorphTo;
@@ -636,10 +544,6 @@ MorphTo::make('Author')
 
 When setting the default value for a `MorphTo` field, in addition to setting the field’s initial value using the `default` method, you also need to specify the class name of the resource to be used. You may accomplish this via the `defaultResource` method:
 
-Copy
-
-Ask AI
-
 ```
 use App\Nova\Post;
 use Laravel\Nova\Fields\MorphTo;
@@ -653,10 +557,6 @@ MorphTo::make('Commentable')
 
 The `MorphToMany` field corresponds to a `morphToMany` Eloquent relationship. For example, let’s assume a `Post` has a many-to-many polymorphic relationship with the `Tag` model. We may add the relationship to our `Post` Nova resource like so:
 
-Copy
-
-Ask AI
-
 ```
 use Laravel\Nova\Fields\MorphToMany;
 // ...
@@ -669,10 +569,6 @@ If your `morphToMany` relationship interacts with additional “pivot” fields 
 For example, on our `taggables` intermediate table, let’s imagine we have a `notes` field that contains some simple text notes about the relationship. We can attach this pivot field to the `MorphToMany` field using the `fields` method:
 
 app/Nova/Post.php
-
-Copy
-
-Ask AI
 
 ```
 use Laravel\Nova\Fields\MorphToMany;
@@ -697,10 +593,6 @@ public function fields(NovaRequest $request): array
 Of course, it is likely we would also define this field on the inverse of the relationship. So, if we define the `MorphToMany` field on the `Post` resource, we would define it’s inverse on the `Tag` resource:
 
 app/Nova/Tag.php
-
-Copy
-
-Ask AI
 
 ```
 use Laravel\Nova\Fields\MorphToMany;
@@ -732,8 +624,6 @@ When a `MorphToMany` field is shown on a resource creation / update page, a drop
 To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
 Property
 Method
-Copy
-Ask AI
 ```
 /**
  * The single value that should be used to represent the resource when being displayed.
@@ -745,8 +635,6 @@ public static $title = 'name';
 ## [​](#collapsable-relations) Collapsable Relations
 By default, the `BelongsToMany`, `HasMany`, and `MorphToMany` relationship fields are shown on the resource detail page. However, this can quickly become cumbersome if a resource has many performance-intensive relationships which cause the page to be slow.
 For this reason, Nova allows you to mark as relationship as `collapsable`. When a relationship is collapsable, users may collapse some of the relations for a given resource and Nova will remember their preferences on subsequent page loads. Collapsed relationships are not retrieved from the database until the relationship is expanded in Nova’s user interface:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\MorphToMany;
 
@@ -756,8 +644,6 @@ MorphToMany::make('Tags')
     ->collapsable(),
 ```
 You may also indicate a relationship should always be collapsed by default via the `collapsedByDefault` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\MorphToMany;
 
@@ -770,8 +656,6 @@ MorphToMany::make('Tags')
 By default, when the `BelongsTo`, `MorphTo`, `BelongsToMany` and `MorphToMany` relationship fields are shown on a resource creation / update page, a simple drop-down selection menu will be displayed. However, this can quickly become cumbersome if a resource model has many records. For example, imagine a drop-down selection menu populated with over 10,000 users!
 Instead of displaying a drop-down selection menu, you may mark your relationships as `searchable`. When a relationship is marked as `searchable`, a beautiful search input control will be displayed instead:
 To mark a relationship as `searchable`, chain the `searchable` method onto the field’s definition. If you would like to conditionally determine if a field should be searchable, you may pass a closure to the `searchable` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -786,8 +670,6 @@ BelongsTo::make('User')
     }),
 ```
 You may also instruct the relation field to display the [resource’s subtitle](./../search/global-search) by invoking the `withSubtitles` method when defining the field:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -799,8 +681,6 @@ BelongsTo::make('User')
 ```
 #### [​](#relatable-query-filtering) Relatable Query Filtering
 If you would like to customize the relatable query, you may do so by invoking the `relatableQueryUsing` method:
-Copy
-Ask AI
 ```
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Fields\BelongsTo;
@@ -814,8 +694,6 @@ BelongsTo::make('User')
     }),
 ```
 The `relatableQueryUsing` method may also prove useful when you need to adjust the query based on the value of another field:
-Copy
-Ask AI
 ```
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Fields\BelongsTo;
@@ -836,8 +714,6 @@ BelongsTo::make('User')
 #### [​](#limiting-relation-results) Limiting Relation Results
 You can limit the number of results that are returned when searching the field by defining a `relatableSearchResults` property on the class of the resource that you are searching for:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 /**
  * The number of results to display when searching for relatable resources without Scout.
@@ -849,8 +725,6 @@ public static $relatableSearchResults = 200;
 ## [​](#creating-inline-relations) Creating Inline Relations
 For convenience, When `BelongsTo` or `MorphTo` relationship fields are shown on a resource create or update page, you may create the related resource inline via a modal window without leaving the creation / update page:
 To enable this functionality, invoke the `showCreateRelationButton` method when defining the relationship field:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -860,8 +734,6 @@ BelongsTo::make('User')
     ->showCreateRelationButton(),
 ```
 You may also pass a closure to the `showCreateRelationButton` method to conditionally determine if inline resource creation should be enabled:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -873,8 +745,6 @@ BelongsTo::make('User')
     }),
 ```
 You may also create related many-to-many relationships from the “attach” and “update attached” pages. To enable this feature, invoke the `showCreateRelationButton` when defining a `BelongsToMany` or `MorphToMany` relationship:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsToMany;
 
@@ -884,8 +754,6 @@ BelongsToMany::make('Roles')
     ->showCreateRelationButton(),
 ```
 To hide the inline creation button, invoke the `hideCreateRelationButton` method when defining the relationship field:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -897,8 +765,6 @@ BelongsTo::make('User')
 The inline relation creation process will respect any [authorization policies](./authorization) you have defined.
 ### [​](#inline-creation-modal-size) Inline Creation Modal Size
 You may adjust the size of the modal using the `modalSize` method:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\BelongsTo;
 

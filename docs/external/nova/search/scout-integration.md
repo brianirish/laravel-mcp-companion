@@ -77,8 +77,6 @@ For this reason, Nova integrates seamlessly with [Laravel Scout](https://laravel
 ## [​](#customizing-scout-searches) Customizing Scout Searches
 If you would like to call methods on the `Laravel\Scout\Builder` instance before it executes your search query against your search engine, you may override the `scoutQuery` method on your resource:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -101,8 +99,6 @@ class User extends Resource
 ### [​](#limiting-scout-search-results) Limiting Scout Search Results
 You can customize the amount of search results returned from your Scout search engine by defining the `scoutSearchResults` property on the resource class that is associated with the Scout searchable model:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -121,8 +117,6 @@ class User extends Resource
 ## [​](#disabling-scout-search) Disabling Scout Search
 You may disable Scout search support for a specific resource by defining a `usesScout` method on the resource class. When Scout search support is disabled, simple database queries will be used to search against the given resource, even if the associated resource model includes the Scout `Searchable` trait:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 

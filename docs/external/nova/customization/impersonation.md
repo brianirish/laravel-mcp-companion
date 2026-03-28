@@ -78,8 +78,6 @@ After deploying your application to production, you may occasionally need to “
 ## [​](#enabling-impersonation) Enabling Impersonation
 To enable user impersonation, add the `Laravel\Nova\Auth\Impersonatable` trait to your application’s `User` model:
 app/Models/User.php
-Copy
-Ask AI
 ```
 namespace App\Models;
 
@@ -101,8 +99,6 @@ Once the `Impersonatable` trait has been added to your application’s `User` mo
 ### [​](#customizing-impersonation-authorization) Customizing Impersonation Authorization
 By default, any user that has permission to view the Nova dashboard can impersonate any other user. However, you may customize who can impersonate other users and what users can be impersonated by defining `canImpersonate` and `canBeImpersonated` methods on your application’s `Impersonatable` model:
 app/Models/User.php
-Copy
-Ask AI
 ```
 use Illuminate\Support\Facades\Gate;
 
@@ -131,8 +127,6 @@ public function canBeImpersonated()
 ## [​](#inspecting-impersonation-state) Inspecting Impersonation State
 By resolving an implementation of the `Laravel\Nova\Contracts\ImpersonatesUsers` interface via Laravel’s service container, you can inspect the current impersonation state of the application:
 routes/web.php
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -151,8 +145,6 @@ By default, you add additional customisation by using available events for Imper
 - `Laravel\Nova\Events\StoppedImpersonating`
 For example, you may want to log impersonation events, which you can register listeners for in the `boot` method of your application’s `AppServiceProvider` or `EventServiceProvider`:
 app/Providers/EventServiceProvider.php
-Copy
-Ask AI
 ```
 use Illuminate\Support\Facades\Event;
 use Laravel\Nova\Events\StartedImpersonating;

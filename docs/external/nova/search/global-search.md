@@ -83,8 +83,6 @@ When a resource is shown within the search results, the results will display the
 To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
 Property
 Method
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -103,8 +101,6 @@ You may also display resource’s “avatar” next to the title in the search r
 You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:
 To define a resource’s subtitle, you should override the `subtitle` method of the resource:
 app/Nova/Post.php
-Copy
-Ask AI
 ```
 /**
  * Get the search result subtitle for the resource.
@@ -121,8 +117,6 @@ If your subtitle accesses information on a related resource, you should consider
 ### [​](#limiting-global-search-results) Limiting Global Search Results
 You can limit the number of results that are returned via global search for a given resource by overriding the `globalSearchResults` property on the resource:
 app/Nova/Post.php
-Copy
-Ask AI
 ```
 /**
  * The maximum number of results to include when searching globally.
@@ -134,8 +128,6 @@ public static $globalSearchResults = 5;
 ### [​](#global-search-debounce) Global Search Debounce
 You can configure the debounce timing of the global search field using the `Nova::globalSearchDebounce` method. Normally, this method should be called from within your application’s `NovaServiceProvider`:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Boot any application services.
@@ -150,8 +142,6 @@ public function boot(): void
 ### [​](#custom-avatars-/-covers) Custom Avatars / Covers
 If you are building a [custom field](./../customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
 app/Nova/Team.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -171,8 +161,6 @@ class Team extends Resource
 ## [​](#disabling-global-search-for-a-resource) Disabling Global Search for a Resource
 By default, all Nova resources are globally searchable; however, you may exclude a given resource from the global search by overriding the `globallySearchable` property on the resource:
 app/Nova/Team.php
-Copy
-Ask AI
 ```
 /**
  * Indicates if the resource should be globally searchable.
@@ -184,8 +172,6 @@ public static $globallySearchable = false;
 ## [​](#disabling-global-search-globally) Disabling Global Search Globally
 If you wish to completely disable global search inside of Nova, you can call the `withoutGlobalSearch` method from your `App/Providers/NovaServiceProvider`:
 app/Providers/NovaServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Boot any application services.

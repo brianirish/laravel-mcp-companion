@@ -59,8 +59,6 @@ Resources
 Using queues with Laravel Vapor.
 ## [​](#introduction) Introduction
 Laravel’s queues are one of the framework’s most powerful features. With Vapor, you can continue writing and dispatching queued jobs exactly as you would in a traditional server-hosted Laravel application. The only difference is that Vapor will automatically scale your queue processing throughput on-demand within seconds:
-Copy
-Ask AI
 ```
 use App\Jobs\ProcessPodcast;
 
@@ -71,8 +69,6 @@ Currently, serverless applications on AWS may only process a single request (web
 ## [​](#custom-queue-names) Custom Queue Names
 By default, Vapor will create an SQS queue that has the same name as your project and inject the proper environment variables to make this queue the default queue. If you would like to specify your own custom queue names that Vapor should create instead, you may define a `queues` option in your environment’s `vapor.yml` configuration. The first queue in the list of queues will be considered your “default” queue and will automatically be set as the `SQS_QUEUE` environment variable:
 vapor.yml vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -85,8 +81,6 @@ environments:
 ### [​](#queue-names-should-be-unique) Queue Names Should Be Unique
 When using custom queue names, it is important to ensure the names are unique between projects and environments. For instance, you can add suffix values such as `-staging` and `-production` to the queue names specified in your application’s `vapor.yml` file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -101,8 +95,6 @@ environments:
             - invoices-staging
 ```
 Because it is cumbersome to include these suffixes when dispatching jobs to specific queues in Laravel, Laravel’s `sqs` queue configuration includes a `suffix` option that references the `SQS_SUFFIX` environment variable by default. When this option and variable are defined, you may provide the queue name without its suffix when dispatching jobs and Laravel will automatically append the suffix to the queue name when interacting with SQS:
-Copy
-Ask AI
 ```
 // Environment should include...
 // SQS_SUFFIX="-production"
@@ -122,8 +114,6 @@ SendInvoice::dispatch($invoice)->onQueue('invoices');
 ### [​](#disabling-the-queue) Disabling The Queue
 If your application does not use queues, you may set the environment’s `queues` option to `false`:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -137,8 +127,6 @@ environments:
 AWS SQS FIFO (First-In-First-Out) queues guarantee that messages are processed exactly once and in the exact order they are sent. To use FIFO queues with Vapor, you must first create the FIFO queue directly in the AWS Console. FIFO queue names must end with the `.fifo` suffix, such as `notifications-production.fifo`.
 Once you have created the FIFO queue in AWS, you may add it to your environment’s `vapor.yml` configuration file:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -150,8 +138,6 @@ environments:
 ## [​](#queue-concurrency) Queue Concurrency
 By default, Vapor will allow your queue to process jobs at max concurrency, which is typically 1,000 concurrent jobs executing at the same time. If you would like to reduce the maximum queue concurrency, you may define the `queue-concurrency` option in the environment’s `vapor.yml` configuration:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -166,8 +152,6 @@ For the queue Lambda, Vapor defaults to the value of the `cli-concurrency` optio
 ### [​](#individual-queue-concurrency) Individual Queue Concurrency
 In addition to setting the overall queue concurrency, you may also set the maximum concurrency of each queue. Doing so can be helpful if you wish to prevent certain queues from consuming all available resources:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -180,8 +164,6 @@ environments:
 In the example above, the concurrency of the `emails` and `invoices` queue is 10, meaning if the queue Lambda function is processing ten jobs concurrently, it will not pick up any more jobs from the queue until jobs are finished and capacity becomes available. This behavior differs from when the total invocations reach the queue function’s overall capacity, where throttling occurs instead.
 You may also set the maximum concurrency on some queues but not others. In the example below, the `emails` queue is not allowed more than ten concurrent invocations, whereas it’s possible to invoke the `invoices` queue until the overall capacity is reached:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -195,8 +177,6 @@ It is not possible to set the maximum concurrency of an individual queue higher 
 ## [​](#queue-visibility-timeout) Queue Visibility Timeout
 By default, if your queued job is not deleted or released within one minute of beginning to process, SQS will retry the job. To configure this “visibility timeout”, you may define the `queue-timeout` option in the environment’s `vapor.yml` configuration. For example, we may set this timeout to five minutes:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -209,8 +189,6 @@ environments:
 ## [​](#queue-memory) Queue Memory
 You may use the `queue-memory` option in your environment’s `vapor.yml` configuration to define the memory that should be available to your queue worker Lambda function:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app
@@ -223,8 +201,6 @@ environments:
 ## [​](#queue-database-connections) Queue Database Connections
 By default, database connections do not persist between queued jobs, ensuring that the database does not get overwhelmed with active connections. However, if your database can handle a large number of connections and you want to reduce the overhead involved in creating a database connection on each job, you may define the `queue-database-session-persist` option in your environment’s `vapor.yml` configuration file to instruct Vapor to reuse the same database connection across jobs:
 vapor.yml
-Copy
-Ask AI
 ```
 id: 2
 name: vapor-laravel-app

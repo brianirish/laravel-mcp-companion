@@ -88,37 +88,27 @@ Vapor requires that your application be compatible with PHP 7.3+ and Laravel 6.0
 Before integrating Vapor into your application, you should create a Vapor account. If you are just collaborating with others on their projects, you are not required to have a Vapor subscription. To create and manage your own projects, you will need a Vapor subscription.
 ## [​](#installing-the-vapor-cli) Installing The Vapor CLI
 You will deploy your Laravel Vapor applications using the [Vapor CLI](https://github.com/laravel/vapor-cli). This CLI may be installed globally or on a per-project basis using Composer:
-Copy
-Ask AI
 ```
 composer require laravel/vapor-cli --update-with-dependencies
 
 composer global require laravel/vapor-cli --update-with-dependencies
 ```
 When the CLI is installed per project, you will likely need to execute it via the `vendor/bin` directory of your project, which is where Composer installs executables. For example, to view all of the available Vapor CLI commands, you may use the `list` command:
-Copy
-Ask AI
 ```
 php vendor/bin/vapor list
 ```
 To save keystrokes when interacting with per-project installations of the Vapor CLI, you may add a shell alias to your operating system that aliases the `vapor` command to `php vendor/bin/vapor`.
 To learn more about a command and its arguments, execute the `help` command with the name of the command you wish to explore:
-Copy
-Ask AI
 ```
 php vendor/bin/vapor help deploy
 ```
 ### [​](#logging-in) Logging In
 After you have installed the Vapor CLI, you should authenticate with your Vapor account using the `login` command:
-Copy
-Ask AI
 ```
 vapor login
 ```
 ## [​](#installing-the-vapor-core) Installing The Vapor Core
 The `laravel/vapor-core` [package](https://github.com/laravel/vapor-core) must be installed as a dependency of every Laravel application that is deployed using Vapor. This package contains various Vapor runtime files and a service provider to allow your application to run on Vapor. You may install the Vapor Core into your project using Composer:
-Copy
-Ask AI
 ```
 composer require laravel/vapor-core --update-with-dependencies
 ```
@@ -129,14 +119,10 @@ Sandbox projects may not utilize API Gateway versions, load balancers, firewalls
 When you create your Vapor account, a “Personal” team is automatically created for you. You can rename this team in your team settings. All projects, databases, caches, and other Vapor resources belong to a team. You are free to create as many teams as you wish via the Vapor UI or the `team` CLI command. There is no additional charge for creating teams, and they serve as a great way to organize your projects by client or topic.
 ### [​](#current-team-&-switching-teams) Current Team & Switching Teams
 When managing Vapor resources via the CLI, you will need to be aware of your currently active team. You may view your current team using the `team:current` command:
-Copy
-Ask AI
 ```
 vapor team:current
 ```
 To change your active team, you may use the `team:switch` command:
-Copy
-Ask AI
 ```
 vapor team:switch
 ```
@@ -159,8 +145,6 @@ The process for creating the role is outlined in these steps:
 Since Vapor manages many types of resources across more than a dozen AWS services, it may be convenient to create a role with the `AdministratorAccess` policy. If desired, you may create a separate AWS account to house this role and contain all of your Vapor resources.
 On the permissions management screen, you may grant full administrator access to the IAM role by selecting the “AdministratorAccess” policy. Or, you would prefer to not provide administrator access to Vapor, you may instead create a custom permission policy with the specific permissions needed by Vapor.
 It is necessary to create two policies due to the policy size limit set by AWS. To do so, select “Create policy” from the “Permissions policies” panel. Choose the JSON option and provide the first permission definition below. Then, follow the same process to create another policy using the second definition listed below. Once the policies have been defined, you may attach them to your new IAM role:
-Copy
-Ask AI
 ```
 {
     "Version": "2012-10-17",
@@ -401,8 +385,6 @@ Ask AI
     ]
 }
 ```
-Copy
-Ask AI
 ```
 {
     "Version": "2012-10-17",

@@ -82,8 +82,6 @@ Repeater fields allow you to create and edit repeatable, structured data.
 ## [​](#overview) Overview
 The `Repeater` field allows you to create and edit repeatable, structured data and store that data in a JSON column or `HasMany` relationship:
 app/Nova/Invoice.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -117,15 +115,11 @@ A `Repeatable` object represents the repeatable data for a `Repeater` field. It 
 The `Repeater` field is not limited to a single type of repeatable. It also supports multiple “repeatable” types, which may contain their own unique field sets and models. These repeatables could be used to create interfaces for editing flexible content areas, similar to those offered by content management systems.
 ### [​](#generating-repeatables) Generating Repeatables
 To generate a new `Repeatable`, invoke the `nova:repeatable` Artisan command:
-Copy
-Ask AI
 ```
 php artisan nova:repeatable LineItem
 ```
 After invoking the command above, Nova generates a new file at `app/Nova/Repeater/LineItem.php`. This file contains a `fields` method in which you may list any supported Nova field. For example, below we will define a `Repeatable` representing a line item for an invoice:
 app/Nova/Repeaters/LineItem.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Repeaters;
 
@@ -154,8 +148,6 @@ class LineItem extends Repeatable
 ```
 ### [​](#confirming-repeatable-removal) Confirming Repeatable Removal
 You may instruct Nova to present a confirmation modal before removing a repeatable by invoking the `confirmRemoval` method when defining the repeatable:
-Copy
-Ask AI
 ```
 use App\Nova\Repeaters;
 use Laravel\Nova\Fields\Repeater;
@@ -185,8 +177,6 @@ For example, an `Invoice` resource could use a `Repeater` field to edit the line
 ### [​](#json-preset) JSON Preset
 The `JSON` preset stores repeatables in a `JSON` column in your database. For example, the line items for an invoice could be store in a `line_items` column. When a resource with a `Repeater` field using the `JSON` preset is saved, the repeatables are serialized and saved to the column.
 To use the `JSON` preset, simply invoke the `asJson` method on your `Repeater` field definition:
-Copy
-Ask AI
 ```
 use App\Nova\Repeaters;
 
@@ -210,8 +200,6 @@ public function fields(NovaRequest $request): array
 ```
 Before using this preset, you should ensure that the underlying Eloquent attribute for the resource’s repeater column is configured to cast to an `array` (or equivalent) within your Eloquent model class:
 app/Models/Invoce.php
-Copy
-Ask AI
 ```
 /**
  * The attributes that should be cast.
@@ -225,8 +213,6 @@ protected $casts = [
 ### [​](#hasmany-preset) HasMany Preset
 The `HasMany` preset stores repeatables via Eloquent using a `HasMany` relationship. For example, instead of storing the line items for an invoice in JSON format, the data would be saved in a separate `line_items` database table, complete with dedicated columns mapping to each field in the repeatable. The `Repeater` field will automatically manage these relations when editing your resources.
 To use the `HasMany` preset, simply invoke the `asHasMany` method on your `Repeater` field definition:
-Copy
-Ask AI
 ```
 use App\Nova\Repeaters;
 
@@ -250,8 +236,6 @@ public function fields(NovaRequest $request): array
 ```
 The `HasMany` preset requires each repeatable to specify the underlying model it represents by setting the `model` property on the `Repeatable`. For example, a `LineItem` repeatable would need to specify the underlying `\App\Models\LineItem` model it represents:
 app/Nova/Repeaters/LineItem.php
-Copy
-Ask AI
 ```
 /**  
  * The underlying model the repeatable represents. 
@@ -262,8 +246,6 @@ public static $model = \App\Models\LineItem::class;
 ```
 ## [​](#upserting-repeatables-using-unique-fields) Upserting Repeatables Using Unique Fields
 By default, when editing your repeatables configured with the `HasMany` preset, Nova will delete all of the related items and recreate them every time you save your resource. To instruct Nova to “upsert” the repeatable data instead, you should ensure you have a unique identifier column on your related models. Typically, this will be an auto-incrementing column or a UUID. You may then use the `uniqueField` method to specify which column contains the unique key for the database table:
-Copy
-Ask AI
 ```
 use App\Nova\Repeaters;
 
@@ -289,8 +271,6 @@ public function fields(NovaRequest $request): array
 }
 ```
 In addition, the `fields` method for the `Repeatable` must contain a field matching the `uniqueField`:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Fields\ID;
 

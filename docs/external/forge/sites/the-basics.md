@@ -107,8 +107,6 @@ You can customize the subdomain used for your site during the site creation proc
 When creating a new PHP site (Laravel, Statamic, Symfony, vanilla PHP), you can choose to have Laravel Forge automatically install Composer dependencies for you.
 This is done after the site has been created, but will also update your site’s default deploy script to include the `composer install` command for future deployments.
 Laravel Forge will run the following command to install your Composer dependencies:
-Copy
-Ask AI
 ```
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 ```

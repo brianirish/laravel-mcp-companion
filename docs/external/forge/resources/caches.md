@@ -84,8 +84,6 @@ Copy page
 Laravel Forge automatically installs both [Memcached](https://www.memcached.org/) and [Redis™](https://redis.io/) when provisioning [App Servers](/docs/servers/types#app-servers) or [Cache Servers](/docs/servers/types#cache-servers). Both services are secured by default, remaining inaccessible from external networks and only available for local server connections.
 ## [​](#connecting-to-redis-and-memcached) Connecting to Redis and Memcached
 Both caching services are accessible via localhost using their standard ports:
-Copy
-Ask AI
 ```
 MEMCACHED_HOST=127.0.0.1
 MEMCACHED_PORT=11211

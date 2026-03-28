@@ -69,8 +69,6 @@ Digging Deeper
 Customize the stubs used by Nova to generate various classes.
 When creating new resources, actions, filters, lens and metrics, Nova will publish files using the default stub files that exist within Nova. However, you may wish to customize these stubs for your own projects in order to apply common modifications automatically.
 To publish the stubs used by Nova to generate various classes, execute the following command:
-Copy
-Ask AI
 ```
 php artisan nova:stubs
 ```

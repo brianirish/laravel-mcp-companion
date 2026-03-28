@@ -84,8 +84,6 @@ Learn how to build custom tools for your Nova resources.
 Resource tools are very similar to [custom tools](./tools); however, instead of being listed in the Nova sidebar, resource tools are displayed on a particular resource’s detail page. Like Nova tools, resource tools are incredibly customizable, and primarily consist of a single-file Vue component that is totally under your control.
 ## [​](#defining-tools) Defining Tools
 Resource tools may be generated using the `nova:resource-tool` Artisan command. By default, all new tools will be placed in the `nova-components` directory of your application. When generating a tool using the `nova:resource-tool` command, the tool name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a Stripe inspector tool, we might run the following command:
-Copy
-Ask AI
 ```
 php artisan nova:resource-tool acme/stripe-inspector
 ```
@@ -94,8 +92,6 @@ Nova resource tools include all of the scaffolding necessary to build your tool.
 ## [​](#registering-tools) Registering Tools
 Nova resource tools may be registered in your resource’s `fields` method. This method returns an array of fields and tools available to the resource. To register your resource tool, add your tool to the array of fields returned by this method:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Acme\StripeInspector\StripeInspector;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -119,8 +115,6 @@ public function fields(NovaRequest $request): array
 ### [​](#authorization) Authorization
 If you would like to only expose a given tool to certain users, you may invoke the `canSee` method when registering your tool. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 app/Nova/~Resource.php
-Copy
-Ask AI
 ```
 use Acme\StripeInspector\StripeInspector;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -146,8 +140,6 @@ public function fields(NovaRequest $request): array
 ### [​](#tool-options) Tool Options
 Often, you will need to allow the consumer’s of your tool to customize run-time configuration options on the tool. You may do this by exposing methods on your tool class. These methods may call the tool’s underlying `withMeta` method to add information to the tool’s metadata, which will be available within your `Tool.vue` component. The `withMeta` method accepts an array of key / value options:
 nova-components/StripeInspector/src/StripeInspector.php
-Copy
-Ask AI
 ```
 namespace Acme\StripeInspector;
 
@@ -170,15 +162,11 @@ class StripeInspector extends ResourceTool
 ```
 #### [​](#accessing-tool-options) Accessing Tool Options
 Your resource tool’s `Tool.vue` component receives several Vue `props`: `resourceName`, `resourceId`, and `panel`. The `resourceId` property contains the primary key of the resource the tool is currently attached to. You may use the `resourceId` when making requests to your controllers. The `panel` prop provides access to any tool options that may be available via the `fields`:
-Copy
-Ask AI
 ```
 const issuesRefunds = this.panel.fields[0].issuesRefunds;
 ```
 #### [​](#dynamic-options) Dynamic Options
 Resource tools also offer the ability to dynamically set options on the tool without a setter method by simple calling the desired option as a method when registering the tool. If called with an argument, it will be set as the option’s value:
-Copy
-Ask AI
 ```
 use Acme\StripeInspector\StripeInspector;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -212,8 +200,6 @@ The `Tool.vue` file is a single-file Vue component that contains your tool’s f
 ### [​](#registering-assets) Registering Assets
 Your Nova tool’s service provider registers your tool’s compiled assets so that they will be available to the Nova front-end:
 nova-components/StripeInspector/src/ToolServiceProvider.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
@@ -239,8 +225,6 @@ public function boot(): void
 Your component is bootstrapped and registered in the `resources/js/tool.js` file. You are free to modify this file or register additional components here as needed.
 ### [​](#compiling-assets) Compiling Assets
 Your Nova resource tool contains a `webpack.mix.js` file, which is generated when Nova creates your tool. You may build your tool using the NPM `dev` and `prod` commands:
-Copy
-Ask AI
 ```
 # Compile your assets for local development...
 npm run dev
@@ -249,8 +233,6 @@ npm run dev
 npm run prod
 ```
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-Copy
-Ask AI
 ```
 npm run watch
 ```

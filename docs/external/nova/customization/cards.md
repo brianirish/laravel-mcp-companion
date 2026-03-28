@@ -83,8 +83,6 @@ Learn how to build custom cards for your Nova application.
 Cards are similar to resource tools, but are small, miniature tools that are typically displayed at the top of your dashboard, resource index, or resource detail pages. In fact, if you have used [Nova metrics](./../metrics/defining-metrics), you have already seen Nova cards. Custom Nova cards allow you to build your own, metric-sized tools.
 ## [​](#defining-cards) Defining Cards
 Cards may be generated using the `nova:card` Artisan command. By default, all new cards will be placed in the `nova-components` directory of your application. When generating a card using the `nova:card` command, the card name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a traffic analytics card, we might run the following command:
-Copy
-Ask AI
 ```
 php artisan nova:card acme/analytics
 ```
@@ -93,8 +91,6 @@ Nova cards include all of the scaffolding necessary to build your card. Each car
 ## [​](#registering-cards) Registering Cards
 Nova cards may be registered in your resource’s `cards` method. This method returns an array of cards available to the resource. To register your card, add your card to the array of cards returned by this method:
 app/Nova/Post.php
-Copy
-Ask AI
 ```
 namespace App\Nova;
 
@@ -119,8 +115,6 @@ class Post extends Resource
 ### [​](#authorization) Authorization
 If you would like to only expose a given card to certain users, you may invoke the `canSee` method when registering your card. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 app/Nova/Post.php
-Copy
-Ask AI
 ```
 use Acme\Analytics\Analytics;
 
@@ -143,8 +137,6 @@ public function cards(NovaRequest $request)
 ### [​](#card-options) Card Options
 Often, you will need to allow the consumer’s of your card to customize run-time configuration options on the card. You may do this by exposing methods on your card class. These methods may call the card’s underlying `withMeta` method to add information to the card’s metadata, which will be available within your `Card.vue` component. The `withMeta` method accepts an array of key / value options:
 nova-components/Analytics/src/Analytics.php
-Copy
-Ask AI
 ```
 namespace Acme\Analytics;
 
@@ -166,15 +158,11 @@ class Analytics extends Card
 }
 ```
 After registering your custom card, don’t forget to actually call any custom option methods you defined:
-Copy
-Ask AI
 ```
 (new Acme\Analytics\Analytics)->currentVisitors(),
 ```
 #### [​](#accessing-card-options) Accessing Card Options
 Your card’s `Card.vue` component receives a `card` Vue `prop`. This property provides access to any card options that may be available on the card:
-Copy
-Ask AI
 ```
 const currentVisitors = this.card.currentVisitors;
 ```
@@ -191,8 +179,6 @@ The `Card.vue` file is a single-file Vue component that contains your card’s f
 ### [​](#registering-assets) Registering Assets
 Your Nova card’s service provider registers your card’s compiled assets so that they will be available to the Nova front-end:
 nova-components/Analytics/src/CardServiceProvider.php
-Copy
-Ask AI
 ```
 /**
  * Bootstrap any application services.
@@ -213,8 +199,6 @@ public function boot(): void
 }
 ```
 Alternatively you can also explicitly register `script` and `style` using the following code:
-Copy
-Ask AI
 ```
 Nova::serving(function (ServingNova $event) {
 -   Nova::mix('acme-analytic', __DIR__.'/../dist/mix-manifest.json');
@@ -226,8 +210,6 @@ Nova::serving(function (ServingNova $event) {
 Your component is bootstrapped and registered in the `resources/js/card.js` file. You are free to modify this file or register additional components here as needed.
 ### [​](#compiling-assets) Compiling Assets
 Your Nova resource card contains a `webpack.mix.js` file, which is generated when Nova creates your card. You may build your card using the NPM `dev` and `prod` commands:
-Copy
-Ask AI
 ```
 # Compile your assets for local development...
 npm run dev
@@ -236,8 +218,6 @@ npm run dev
 npm run prod
 ```
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-Copy
-Ask AI
 ```
 npm run watch
 ```

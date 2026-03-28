@@ -175,16 +175,12 @@ Laravel Forge will automatically inject a number of environment variables into y
 | `FORGE_SITE_ROOT` | The site’s root directory, e.g., `/home/forge/mysite.com` |
 | `FORGE_SITE_USER` | The name of the user deploying the site. |
 You may use these variables as you would any other Bash variable:
-Copy
-Ask AI
 ```
 if [[ $FORGE_MANUAL_DEPLOY -eq 1 ]]; then
     echo "This deploy was triggered manually."
 fi
 ```
 For example, you may wish to prevent deployments if the commit message contains “wip”:
-Copy
-Ask AI
 ```
 if [[ $FORGE_DEPLOY_MESSAGE =~ "wip" ]]; then
     echo "WORK IN PROGRESS, DO NOT CONTINUE."
@@ -196,8 +192,6 @@ Laravel Forge prefixes injected variables with `FORGE_`.We do not recommend usin
 Laravel Forge makes it easy to include your site’s `.env` variables in your deploy script.
 You may enable this feature by navigating to the “Deployments” tab of your site’s settings and checking the “Make .env variables available to deployment script” checkbox.
 When enabled, Laravel Forge will automatically inject the variables in your site’s `.env` file into the deploy script, allowing them to be accessed like any normal Bash variable:
-Copy
-Ask AI
 ```
 echo "${APP_NAME} is deploying..."
 ```
@@ -206,8 +200,6 @@ Sites use the `$FORGE_PHP` environment variable when invoking PHP commands in th
 During a deployment, Forge also configures the `php` binary to be the PHP version configured on your site. This ensures that `composer` and `npm` scripts which invoke PHP will use the site’s PHP version.
 ### [​](#restarting-background-processes) Restarting background processes
 When deploying applications that use [background processes](/docs/resources/background-processes) such as daemons, you may need to restart the process to ensure it picks up your code changes. You can do this by adding the restart command to your deployment script:
-Copy
-Ask AI
 ```
 # Restart your daemon (replace 12345 with your daemon's ID)...
 sudo supervisorctl restart daemon-12345:*
@@ -243,8 +235,6 @@ If your site uses [GitHub Actions](https://github.com/features/actions) as its C
 2. Next, add the `SSH_PRIVATE_KEY` environment variable to your “GitHub > Project Settings > Secrets” settings so that GitHub can have SSH Access to your site’s server.
 3. Then, create a `deploy.yml` file within the `your-project/.github/workflows` directory. The file should have the following contents:
 .github/workflows/deploy.yml
-Copy
-Ask AI
 ```
 name: Deploy
 
@@ -309,8 +299,6 @@ To enable Discord notifications, you first need to create a new “Incoming Webh
 If you wish to change the webhook URL, you first need to disable Discord notifications and then re-enable the notifications.
 ### [​](#webhooks) Webhooks
 Laravel Forge can also send an HTTP POST request to arbitrary URLs after each deployment. The payload of the request will contain the server ID, site ID, deployment status, and the relevant commit information:
-Copy
-Ask AI
 ```
 {
   "status": "success",

@@ -116,16 +116,12 @@ Nova offers several types of built-in metrics: value, trend, partition, and prog
 ## [​](#value-metrics) Value Metrics
 Value metrics display a single value and, if desired, its change compared to a previous time interval. For example, a value metric might display the total number of users created in the last thirty days compared with the previous thirty days:
 Value metrics may be generated using the `nova:value` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
-Copy
-Ask AI
 ```
 php artisan nova:value NewUsers
 ```
 Once your value metric class has been generated, you’re ready to customize it. Each value metric class contains a `calculate` method. This method should return a `Laravel\Nova\Metrics\ValueResult` instance. Don’t worry, Nova ships with a variety of helpers for quickly generating metric results.
 In this example, we are using the `count` helper, which will automatically perform a `count` query against the specified Eloquent model for the selected range, as well as automatically retrieve the count for the “previous” range:
 app/Nova/Metrics/NewUsers.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -167,8 +163,6 @@ Value metrics don’t only ship with a `count` helper. You may also use a variet
 #### [​](#average) Average
 The `average` method may be used to calculate the average of a given column compared to the previous time interval / range:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Post;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -187,8 +181,6 @@ public function calculate(NovaRequest $request): ValueResult
 #### [​](#sum) Sum
 The `sum` method may be used to calculate the sum of a given column compared to the previous time interval / range:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -207,8 +199,6 @@ public function calculate(NovaRequest $request): ValueResult
 #### [​](#max) Max
 The `max` method may be used to calculate the maximum value of a given column compared to the previous time interval / range:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -227,8 +217,6 @@ public function calculate(NovaRequest $request): ValueResult
 #### [​](#min) Min
 The `min` method may be used to calculate the minimum value of a given column compared to the previous time interval / range:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -247,8 +235,6 @@ public function calculate(NovaRequest $request): ValueResult
 ### [​](#value-ranges) Value Ranges
 Every value metric class contains a `ranges` method. This method determines the ranges that will be available in the value metric’s range selection menu. The array’s keys determine the number of days that should be included in the query, while the values determine the “human readable” text that will be placed in the range selection menu. Of course, you are not required to define any ranges at all:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Nova;
 
@@ -274,8 +260,6 @@ You may customize these ranges to suit your needs; however, if you are using the
 ### [​](#zero-result-values) Zero Result Values
 By default, Nova will handle results of `0` as a result containing no data. This may not always be correct, which is why you can use the `allowZeroResult` method to indicate that `0` is a valid value result:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -294,8 +278,6 @@ public function calculate(NovaRequest $request): ValueResult
 ### [​](#formatting-the-value) Formatting the Value
 You can add a prefix and / or suffix to the Value metric’s result by invoking the `prefix` and `suffix` methods when returning the `ValueResult` instance:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -315,8 +297,6 @@ public function calculate(NovaRequest $request): ValueResult
 ```
 You may also use the `currency` method to specify that a given value result represents a currency value:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -336,8 +316,6 @@ public function calculate(NovaRequest $request): ValueResult
 ```
 By default, the currency symbol will be `$`, but you may also specify your own currency symbol by passing the symbol as an argument to the `currency` method:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -358,8 +336,6 @@ public function calculate(NovaRequest $request): ValueResult
 To customize the display format of a value result, you may use the `format` method. The format must be one of the formats supported by [Numbro](http://numbrojs.com):
 Numbro v2.0+
 Numbro < v2.0
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -383,8 +359,6 @@ public function calculate(NovaRequest $request): ValueResult
 ### [​](#transforming-a-value-result) Transforming a Value Result
 There may be times you need to “transform” a value result before it is displayed to the user. For example, let’s say you have a “Total Revenue” metric which calculates the total revenue for a product in cents. You may wish to present this value to the user in dollars versus cents. To transform the value before it’s displayed, you can use the `transform` helper:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Invoice;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -404,8 +378,6 @@ public function calculate(NovaRequest $request): ValueResult
 ### [​](#manually-building-value-results) Manually Building Value Results
 If you are not able to use the included query helpers for building your value metric, you may easily manually provide the final values to the metric using the `result` and `previous` methods, giving you full control over the calculation of these values:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ValueResult;
@@ -423,16 +395,12 @@ public function calculate(NovaRequest $request): ValueResult
 ## [​](#trend-metrics) Trend Metrics
 Trend metrics display values over time via a line chart. For example, a trend metric might display the number of new users created per day over the previous thirty days:
 Trend metrics may be generated using the `nova:trend` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
-Copy
-Ask AI
 ```
 php artisan nova:trend UsersPerDay
 ```
 Once your trend metric class has been generated, you’re ready to customize it. Each trend metric class contains a `calculate` method. This method should return a `Laravel\Nova\Metrics\TrendResult` object. Don’t worry, Nova ships with a variety of helpers for quickly generating results.
 In this example, we are using the `countByDays` helper, which will automatically perform a `count` query against the specified Eloquent model for the selected range and for the selected interval unit (in this case, days):
 app/Nova/Metrics/UsersPerDay.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -469,8 +437,6 @@ class UsersPerDay extends Trend
 Trend metrics don’t only ship with a `countByDays` helper. You may also use a variety of other aggregate functions and time intervals when building your metric.
 #### [​](#count) Count
 The `count` methods may be used to calculate the count of a given column over time:
-Copy
-Ask AI
 ```
 use App\Models\User;
 
@@ -484,8 +450,6 @@ return $this->countByMinutes($request, User::class);
 ```
 #### [​](#average-2) Average
 The `average` methods may be used to calculate the average of a given column over time:
-Copy
-Ask AI
 ```
 use App\Models\Post;
 
@@ -499,8 +463,6 @@ return $this->averageByMinutes($request, Post::class, 'word_count');
 ```
 #### [​](#sum-2) Sum
 The `sum` methods may be used to calculate the sum of a given column over time:
-Copy
-Ask AI
 ```
 use App\Models\Order;
 
@@ -514,8 +476,6 @@ return $this->sumByMinutes($request, Order::class, 'price');
 ```
 #### [​](#max-2) Max
 The `max` methods may be used to calculate the maximum value of a given column over time:
-Copy
-Ask AI
 ```
 use App\Models\Order;
 
@@ -529,8 +489,6 @@ return $this->maxByMinutes($request, Order::class, 'total');
 ```
 #### [​](#min-2) Min
 The `min` methods may be used to calculate the minimum value of a given column over time:
-Copy
-Ask AI
 ```
 use App\Models\Order;
 
@@ -545,8 +503,6 @@ return $this->minByMinutes($request, Order::class, 'total');
 ### [​](#trend-ranges) Trend Ranges
 Every trend metric class contains a `ranges` method. This method determines the ranges that will be available in the trend metric’s range selection menu. The array’s keys determine the number of time interval units (months, weeks, days, etc.) that should be included in the query, while the values determine the “human readable” text that will be placed in the range selection menu. Of course, you are not required to define any ranges at all:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Nova;
 
@@ -568,8 +524,6 @@ public function ranges(): array
 Sometimes, you may wish to emphasize the value for the latest trend metric time interval. For example, in this screenshot, six users have been created during the last day:
 To accomplish this, you may use the `showLatestValue` method:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -589,8 +543,6 @@ public function calculate(NovaRequest $request): TrendResult
 To customize the display format of a value result, you may use the `format` method. The format must be one of the formats supported by [Numbro](http://numbrojs.com):
 Numbro v2.0+
 Numbro < v2.0
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -614,8 +566,6 @@ public function calculate(NovaRequest $request): TrendResult
 #### [​](#displaying-the-trend-sum) Displaying the Trend Sum
 By default, Nova only displays the last value of a trend metric as the emphasized, “current” value. However, sometimes you may wish to show the total count of the trend instead. You can accomplish this by invoking the `showSumValue` method when returning your values from a trend metric:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -634,8 +584,6 @@ public function calculate(NovaRequest $request): TrendResult
 ```
 ### [​](#formatting-the-trend-value) Formatting the Trend Value
 Sometimes you may wish to add a prefix or suffix to the emphasized, “current” trend value. To accomplish this, you may use the `prefix` and `suffix` methods:
-Copy
-Ask AI
 ```
 use App\Models\Order;
 
@@ -644,8 +592,6 @@ use App\Models\Order;
 return $this->sumByDays($request, Order::class, 'price')->prefix('$');
 ```
 If your trend metric is displaying a monetary value, you may use the `dollars` and `euros` convenience methods for quickly prefixing a Dollar or Euro sign to the trend values:
-Copy
-Ask AI
 ```
 use App\Models\Order;
 
@@ -656,8 +602,6 @@ return $this->sumByDays($request, Order::class, 'price')->dollars();
 ### [​](#manually-building-trend-results) Manually Building Trend Results
 If you are not able to use the included query helpers for building your trend metric, you may manually construct the `Laravel\Nova\Metrics\TrendResult` object and return it from your metric’s `calculate` method. This approach to calculating trend data gives you total flexibility when building the data that should be graphed:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\TrendResult;
@@ -679,16 +623,12 @@ public function calculate(NovaRequest $request): TrendResult
 ## [​](#partition-metrics) Partition Metrics
 Partition metrics displays a pie chart of values. For example, a partition metric might display the total number of users for each billing plan offered by your application:
 Partition metrics may be generated using the `nova:partition` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
-Copy
-Ask AI
 ```
 php artisan nova:partition UsersPerPlan
 ```
 Once your partition metric class has been generated, you’re ready to customize it. Each partition metric class contains a `calculate` method. This method should return a `Laravel\Nova\Metrics\PartitionResult` object. Don’t worry, Nova ships with a variety of helpers for quickly generating results.
 In this example, we are using the `count` helper, which will automatically perform a `count` query against the specified Eloquent model and retrieve the number of models belonging to each distinct value of your specified “group by” column:
 app/Nova/Metrics/UsersPerPlan.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -713,8 +653,6 @@ Partition metrics don’t only ship with a `count` helper. You may also use a va
 #### [​](#average-3) Average
 The `average` method may be used to calculate the average of a given column within distinct groups. For example, the following call to the `average` method will display a pie chart with the average order price for each department of the company:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -733,8 +671,6 @@ public function calculate(NovaRequest $request): PartitionResult
 #### [​](#sum-3) Sum
 The `sum` method may be used to calculate the sum of a given column within distinct groups. For example, the following call to the `sum` method will display a pie chart with the sum of all order prices for each department of the company:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -755,8 +691,6 @@ public function calculate(NovaRequest $request): PartitionResult
 #### [​](#max-3) Max
 The `max` method may be used to calculate the max of a given column within distinct groups. For example, the following call to the `max` method will display a pie chart with the maximum order price for each department of the company:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -777,8 +711,6 @@ public function calculate(NovaRequest $request): PartitionResult
 #### [​](#min-3) Min
 The `min` method may be used to calculate the min of a given column within distinct groups. For example, the following call to the `min` method will display a pie chart with the minimum order price for each department of the company:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -799,8 +731,6 @@ public function calculate(NovaRequest $request): PartitionResult
 ### [​](#customizing-partition-labels) Customizing Partition Labels
 Often, the column values that divide your partition metrics into groups will be simple keys, and not something that is “human readable”. Or, if you are displaying a partition metric grouped by a column that is a boolean, Nova will display your group labels as “0” and “1”. For this reason, Nova allows you to provide a Closure that formats the label into something more readable:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -824,8 +754,6 @@ public function calculate(NovaRequest $request): PartitionResult
 ### [​](#customizing-partition-colors) Customizing Partition Colors
 By default, Nova will choose the colors used in a partition metric. Sometimes, you may wish to change these colors to better match the type of data they represent. To accomplish this, you may call the `colors` method when returning your partition result from the metric:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Post;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -851,8 +779,6 @@ public function calculate(NovaRequest $request): PartitionResult
 ### [​](#manually-building-partition-results) Manually Building Partition Results
 If you are not able to use the included query helpers for building your partition metric, you may manually provide the final values to the metric using the `result` method, providing maximum flexibility:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\PartitionResult;
@@ -873,16 +799,12 @@ public function calculate(NovaRequest $request): PartitionResult
 ## [​](#progress-metric) Progress Metric
 Progress metrics display current progress against a target value within a bar chart. For example, a progress metric might display the number of users registered for the given month compared to a target goal:
 Progress metrics may be generated using the `nova:progress` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
-Copy
-Ask AI
 ```
 php artisan nova:progress NewUsers
 ```
 Once your progress metric class has been generated, you’re ready to customize it. Each progress metric class contains a `calculate` method. This method should return a `Laravel\Nova\Metrics\ProgressResult` object. Don’t worry, Nova ships with a variety of helpers for quickly generating results.
 In this example, we are using the `count` helper to determine if we have reached our new user registration goal for the month. The `count` helper will automatically perform a `count` query against the specified Eloquent model:
 app/Nova/Metrics/NewUsers.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -910,8 +832,6 @@ class NewUsers extends Progress
 #### [​](#sum-4) Sum
 Progress metrics don’t only ship with a `count` helper. You may also use the `sum` aggregate method when building your metric. For example, the following call to the `sum` method will display a progress metric with the sum of the completed transaction amounts against a target sales goal:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Transaction;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -938,8 +858,6 @@ public function calculate(NovaRequest $request): ProgressResult
 Sometimes you may be tracking progress towards a “goal” you would rather avoid, such as the number of customers that have cancelled in a given month. In this case, you would typically want the color of the progress metric to no longer be green as you approach your “goal”.
 When using the `avoid` method to specify that the metric is something you wish to avoid, Nova will use green to indicate lack of progress towards the “goal”, while using yellow to indicate the approaching completion of the “goal”:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -964,8 +882,6 @@ public function calculate(NovaRequest $request): ProgressResult
 ### [​](#formatting-the-progress-value) Formatting the Progress Value
 Sometimes you may wish to add a prefix or suffix to the current progress value. To accomplish this, you may use the `prefix` and `suffix` methods:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Transaction;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -989,8 +905,6 @@ public function calculate(NovaRequest $request): ProgressResult
 ```
 If your progress metric is displaying a monetary value, you may use the `dollars` and `euros` convenience methods for quickly prefixing a Dollar or Euro sign to the progress values:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use App\Models\Transaction;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -1015,8 +929,6 @@ public function calculate(NovaRequest $request): ProgressResult
 ### [​](#manually-building-progress-results) Manually Building Progress Results
 If you are not able to use the included query helpers for building your progress metric, you may manually provide the final values to the metric using the `result` method:
 app/Nova/Metrics/~Metric.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\ProgressResult;
@@ -1034,15 +946,11 @@ public function calculate(NovaRequest $request): ProgressResult
 ## [​](#table-metrics) Table Metrics
 Table metrics allow you to display custom lists of links along with a list of actions, as well as an optional icon.
 Table metrics may be generated using the `nova:table` Artisan command. By default, all new metrics will be placed in the `app/Nova/Metrics` directory:
-Copy
-Ask AI
 ```
 php artisan nova:table NewReleases
 ```
 Once your table metric class has been generated, you’re ready to customize it. Each table metric class contains a `calculate` method. This method should return an array of `Laravel\Nova\Metrics\MetricTableRow` objects. Each metric row allows you to specify a title and subtitle, which will be displayed stacked on the row:
 app/Nova/Metrics/NewReleases.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -1074,8 +982,6 @@ class NewReleases extends Table
 ### [​](#adding-actions-to-table-rows) Adding Actions to Table Rows
 While table metrics are great for showing progress, documentation links, or recent entries to your models, they become even more powerful by attaching actions to them.
 You can use the `actions` method to return an array of `Laravel\Nova\Menu\MenuItem` instances, which will be displayed in a dropdown menu:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Menu\MenuItem;
@@ -1115,8 +1021,6 @@ You can learn more about menu customization by reading the [menu item customizat
 Table metrics also support displaying an icon to the left of the title and subtitle for each row. You can use this information to visually delineate different table rows by type, or by using them to show progress on an internal process.
 To show an icon on your table metric row, use the `icon` method and pass in the key for the icon you wish to use:
 app/Nova/Metrics/NextSteps.php
-Copy
-Ask AI
 ```
 namespace App\Nova\Metrics;
 
@@ -1156,8 +1060,6 @@ class NextSteps extends Table
 }
 ```
 You may customize the icon’s color via CSS by using the `iconClass` method to add the needed classes to the icon:
-Copy
-Ask AI
 ```
 use Laravel\Nova\Metrics\MetricTableRow;
 
@@ -1174,8 +1076,6 @@ Nova utilizes the free icon set [Heroicons UI](https://heroicons.com/) from desi
 If you’re dynamically generating rows for your table metric, there may be times where there are no results to display. By default, Nova will show the user “No Results Found…”.
 But, sometimes you may wish to customize this text to give the user more context. For example, a metric named “Recent Users” may not have any users to display because there are no recent users. In these situations, you may customize the “no results” message using the `emptyText` method:
 app/Nova/User.php
-Copy
-Ask AI
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -1196,8 +1096,6 @@ public function cards(NovaRequest $request): array
 ```
 ## [​](#caching) Caching
 Occasionally the calculation of a metric’s values can be slow and expensive. For this reason, all Nova metrics contain a `cacheFor` method which allows you to specify the duration the metric result should be cached:
-Copy
-Ask AI
 ```
 use DateTimeInterface;
 
@@ -1219,8 +1117,6 @@ Alternatively, you can also return either one of the following via `cacheFor` me
 - `null`
 ## [​](#customizing-metric-names) Customizing Metric Names
 By default, Nova will use the metric class name as the displayable name of your metric. You may customize the name of the metric displayed on the metric card by overriding the `name` method within your metric class:
-Copy
-Ask AI
 ```
 /**
  * Get the displayable name of the metric
