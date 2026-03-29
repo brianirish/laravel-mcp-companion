@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "5e6c56a7a3ddbd4486de33e99a52ea5355b80438",
-  "commit_date": "2026-03-27T21:16:16Z",
-  "commit_message": "onboarding with ai",
-  "commit_url": "https://github.com/laravel/docs/commit/5e6c56a7a3ddbd4486de33e99a52ea5355b80438",
-  "sync_time": "2026-03-28T00:03:28Z"
+  "commit_sha": "7bc551d049b74d4c8ab9a2777bdb3fbbe182cc8d",
+  "commit_date": "2026-03-29T00:01:09Z",
+  "commit_message": "Add starter kit docs for teams support (#11131)\n\n* Add teams details to starter kits docs\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/7bc551d049b74d4c8ab9a2777bdb3fbbe182cc8d",
+  "sync_time": "2026-03-29T00:02:44Z"
 }
