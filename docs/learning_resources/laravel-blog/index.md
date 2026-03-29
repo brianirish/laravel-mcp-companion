@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## Scheduled Autoscaling for Laravel Cloud
+## Cutting Laravel Cloud Load Times by 60% with Nightwatch
 
-You can now define a scaling schedule on Laravel Cloud and let it handle the rest. Set your autoscaling limits once for each traffic window, whether that’s peak hours, business hours, batch jobs, or w...
+How we cut environment dashboard response times from 907ms to 354ms with Laravel Nightwatch by fixing N+1 queries, redundant data, and deferring load.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
+## Laravel AI SDK: Building Production-Safe Database Tools for Agents
+
+Build production-safe database tools with the Laravel AI SDK. Scope Eloquent queries by user, add vector search with SimilaritySearch, and prevent prompt injection.
+
+[Read more](https://blog.laravel.com/blog/category/laravel-framework)
 
 ---
 
@@ -25,14 +33,6 @@ You can now define a scaling schedule on Laravel Cloud and let it handle the res
 What changed in Inertia v3 since the first beta: simpler layout props, Vite 8 support, a withApp callback, and new Blade components.
 
 [Read more](https://blog.laravel.com/blog/category/general)
-
----
-
-## K6 Load Testing on Laravel Cloud: 17,000 Requests per Second and Autoscaling Under Pressure
-
-Learn how to load test a Laravel app with k6: 20,000 virtual users, bimodal latency jitter, and Laravel Cloud autoscaling under real pressure. Here's what happened.
-
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
 
 ---
 
