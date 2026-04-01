@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "85cfaa6bb689d73da71c25097e9c1a943e9c65c1",
-  "commit_date": "2026-03-29T14:48:44Z",
-  "commit_message": "docs: add Laravel 13.x to Boost support tables (#11134)",
-  "commit_url": "https://github.com/laravel/docs/commit/85cfaa6bb689d73da71c25097e9c1a943e9c65c1",
-  "sync_time": "2026-03-30T00:02:57Z"
+  "commit_sha": "92df666532c15918c840cc774355b77b761bd1f2",
+  "commit_date": "2026-03-31T14:51:05Z",
+  "commit_message": "[13.x] Fix boost chapter order to reflect sections (#11136)",
+  "commit_url": "https://github.com/laravel/docs/commit/92df666532c15918c840cc774355b77b761bd1f2",
+  "sync_time": "2026-04-01T00:02:51Z"
 }
