@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "92df666532c15918c840cc774355b77b761bd1f2",
-  "commit_date": "2026-03-31T14:51:05Z",
-  "commit_message": "[13.x] Fix boost chapter order to reflect sections (#11136)",
-  "commit_url": "https://github.com/laravel/docs/commit/92df666532c15918c840cc774355b77b761bd1f2",
-  "sync_time": "2026-04-01T00:02:51Z"
+  "commit_sha": "90cead6181b4af2623432dc0ad7cb2340d40fe38",
+  "commit_date": "2026-04-01T07:28:43Z",
+  "commit_message": "echo svelte docs (#11137)",
+  "commit_url": "https://github.com/laravel/docs/commit/90cead6181b4af2623432dc0ad7cb2340d40fe38",
+  "sync_time": "2026-04-02T00:02:48Z"
 }
