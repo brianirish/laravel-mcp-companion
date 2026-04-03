@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "88036f5428a996e6abd66fe28d4415c4623b2760",
-  "commit_date": "2026-03-17T16:42:04Z",
-  "commit_message": "Update prompts.md (#11098)",
-  "commit_url": "https://github.com/laravel/docs/commit/88036f5428a996e6abd66fe28d4415c4623b2760",
-  "sync_time": "2026-03-18T00:02:53Z"
+  "commit_sha": "82abc86b5b653845880d0856243e0a151fc4b073",
+  "commit_date": "2026-04-02T17:12:47Z",
+  "commit_message": "[12.x] Document client credentials token ID collision risk (#11141)\n\n* Document client credentials token ID collision risk\n\n* Update passport.md\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>\n\n---------\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/82abc86b5b653845880d0856243e0a151fc4b073",
+  "sync_time": "2026-04-03T00:02:44Z"
 }
