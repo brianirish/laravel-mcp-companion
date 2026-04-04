@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "43c8629a6913d8462bca3e2d2faa4dced24d3928",
-  "commit_date": "2026-04-02T17:17:00Z",
-  "commit_message": "[13.x] document validation change for database upsert method (#11140)\n\n* [13.x] document validation change for database upsert method\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/43c8629a6913d8462bca3e2d2faa4dced24d3928",
-  "sync_time": "2026-04-03T00:02:45Z"
+  "commit_sha": "a9c4937a1a88ff77a80067845fa5a4c0019393a3",
+  "commit_date": "2026-04-03T18:08:17Z",
+  "commit_message": "formatting",
+  "commit_url": "https://github.com/laravel/docs/commit/a9c4937a1a88ff77a80067845fa5a4c0019393a3",
+  "sync_time": "2026-04-04T00:02:51Z"
 }

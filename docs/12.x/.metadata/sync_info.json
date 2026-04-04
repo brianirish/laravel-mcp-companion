@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "82abc86b5b653845880d0856243e0a151fc4b073",
-  "commit_date": "2026-04-02T17:12:47Z",
-  "commit_message": "[12.x] Document client credentials token ID collision risk (#11141)\n\n* Document client credentials token ID collision risk\n\n* Update passport.md\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>\n\n---------\n\nCo-authored-by: Hafez Divandari <hafezdivandari@gmail.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/82abc86b5b653845880d0856243e0a151fc4b073",
-  "sync_time": "2026-04-03T00:02:44Z"
+  "commit_sha": "00b62b1b29bf1e2b7d39734efd5355e095ade837",
+  "commit_date": "2026-04-03T15:21:27Z",
+  "commit_message": "[12.x] Update queues.md - warn constructor-based queue assignment does not work for event listeners (#11142)",
+  "commit_url": "https://github.com/laravel/docs/commit/00b62b1b29bf1e2b7d39734efd5355e095ade837",
+  "sync_time": "2026-04-04T00:02:51Z"
 }
