@@ -13,6 +13,7 @@ import shutil
 import tempfile
 import re
 from pathlib import Path
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Union
 import urllib.request
 import urllib.error
@@ -126,16 +127,59 @@ GITHUB_API_URL = "https://api.github.com"
 LARAVEL_DOCS_REPO = "laravel/docs"
 USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
-def get_supported_versions() -> list[str]:
-    """Get supported Laravel versions dynamically from GitHub API.
-    
+# Default cache file path (relative to this script)
+VERSIONS_CACHE_FILE = Path(__file__).parent / "docs" / ".versions_cache.json"
+
+LAST_RESORT_VERSIONS = ["12.x"]
+
+
+def _write_versions_cache(versions: list[str], cache_file: Path) -> None:
+    """Write versions to cache file. Errors are logged but not raised."""
+    try:
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        cache_file.write_text(json.dumps({
+            "versions": versions,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }, indent=2))
+    except Exception as e:
+        logger.warning(f"Failed to write versions cache: {e}")
+
+
+def _read_versions_cache(cache_file: Path) -> list[str] | None:
+    """Read versions from cache file. Returns None if unavailable or corrupt."""
+    try:
+        if not cache_file.exists():
+            return None
+        data = json.loads(cache_file.read_text())
+        versions = data.get("versions")
+        if isinstance(versions, list) and len(versions) > 0:
+            return versions
+        return None
+    except Exception as e:
+        logger.warning(f"Failed to read versions cache: {e}")
+        return None
+
+
+def get_supported_versions(cache_file: Path | None = None) -> list[str]:
+    """Get supported Laravel versions with three-tier fallback.
+
+    1. GitHub API (writes cache on success)
+    2. Cache file (docs/.versions_cache.json)
+    3. Last resort: ["12.x"]
+
+    Args:
+        cache_file: Override cache file path (for testing). Defaults to VERSIONS_CACHE_FILE.
+
     Returns:
         List of supported version branches (e.g., ['6.x', '7.x', '8.x', ...])
     """
+    if cache_file is None:
+        cache_file = VERSIONS_CACHE_FILE
+
     logger.debug("Fetching supported Laravel versions from GitHub API")
-    
+
     url = f"{GITHUB_API_URL}/repos/{LARAVEL_DOCS_REPO}/branches"
-    
+
     try:
         request = urllib.request.Request(
             url,
@@ -144,11 +188,10 @@ def get_supported_versions() -> list[str]:
                 "Accept": "application/vnd.github.v3+json"
             }
         )
-        
+
         with urllib.request.urlopen(request) as response:
             branches = json.loads(response.read().decode())
-            
-            # Filter for version branches (X.x format) starting from 6.x
+
             version_branches = []
             for branch in branches:
                 name = branch["name"]
@@ -156,20 +199,28 @@ def get_supported_versions() -> list[str]:
                     major_version = int(name.split('.')[0])
                     if major_version >= 6:
                         version_branches.append(name)
-            
-            # Sort versions numerically
+
             version_branches.sort(key=lambda v: int(v.split('.')[0]))
-            
+
             if not version_branches:
-                logger.warning("No version branches found, falling back to hardcoded list")
-                return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x"]
+                logger.warning("No version branches found from API, trying cache")
+                cached = _read_versions_cache(cache_file)
+                if cached:
+                    return cached
+                logger.warning("No cache available, using last resort")
+                return LAST_RESORT_VERSIONS
 
             logger.debug(f"Found {len(version_branches)} supported versions: {', '.join(version_branches)}")
+            _write_versions_cache(version_branches, cache_file)
             return version_branches
 
     except Exception as e:
-        logger.warning(f"Error fetching versions from GitHub API: {str(e)}, falling back to hardcoded list")
-        return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x"]
+        logger.warning(f"Error fetching versions from GitHub API: {e}, trying cache")
+        cached = _read_versions_cache(cache_file)
+        if cached:
+            return cached
+        logger.warning("No cache available, using last resort")
+        return LAST_RESORT_VERSIONS
 
 # Cache supported versions to avoid repeated API calls
 _SUPPORTED_VERSIONS_CACHE = None

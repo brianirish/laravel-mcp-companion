@@ -1214,7 +1214,7 @@ class TestVersionSupport:
     """Test version support functionality."""
 
     @patch('docs_updater.urllib.request.urlopen')
-    def test_get_supported_versions_success(self, mock_urlopen):
+    def test_get_supported_versions_success(self, mock_urlopen, tmp_path):
         """Test successful version fetching from GitHub API."""
         mock_response_data = [
             {"name": "6.x"},
@@ -1227,41 +1227,41 @@ class TestVersionSupport:
             {"name": "master"},  # Should be filtered out
             {"name": "feature-branch"},  # Should be filtered out
         ]
-        
+
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps(mock_response_data).encode()
         mock_response.__enter__ = lambda self: self
         mock_response.__exit__ = lambda self, *args: None
         mock_urlopen.return_value = mock_response
-        
-        versions = get_supported_versions()
-        
+
+        versions = get_supported_versions(cache_file=tmp_path / ".versions_cache.json")
+
         expected_versions = ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
         assert versions == expected_versions
-    
+
     @patch('docs_updater.urllib.request.urlopen')
-    def test_get_supported_versions_no_versions_found(self, mock_urlopen):
+    def test_get_supported_versions_no_versions_found(self, mock_urlopen, tmp_path):
         """Test version fetching when no valid versions found."""
         mock_response_data = [
             {"name": "master"},
             {"name": "develop"},
             {"name": "feature-branch"},
         ]
-        
+
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps(mock_response_data).encode()
         mock_response.__enter__ = lambda self: self
         mock_response.__exit__ = lambda self, *args: None
         mock_urlopen.return_value = mock_response
-        
-        versions = get_supported_versions()
-        
-        # Should return fallback list
+
+        versions = get_supported_versions(cache_file=tmp_path / "nonexistent" / ".versions_cache.json")
+
+        # Should return last-resort list
         assert "12.x" in versions
         assert len(versions) > 0
     
     @patch('docs_updater.urllib.request.urlopen')
-    def test_get_supported_versions_old_versions_filtered(self, mock_urlopen):
+    def test_get_supported_versions_old_versions_filtered(self, mock_urlopen, tmp_path):
         """Test that versions older than 6.x are filtered out."""
         mock_response_data = [
             {"name": "4.x"},  # Should be filtered out
@@ -1269,28 +1269,29 @@ class TestVersionSupport:
             {"name": "6.x"},
             {"name": "7.x"},
         ]
-        
+
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps(mock_response_data).encode()
         mock_response.__enter__ = lambda self: self
         mock_response.__exit__ = lambda self, *args: None
         mock_urlopen.return_value = mock_response
-        
-        versions = get_supported_versions()
-        
+
+        versions = get_supported_versions(cache_file=tmp_path / ".versions_cache.json")
+
         assert "4.x" not in versions
         assert "5.x" not in versions
         assert "6.x" in versions
         assert "7.x" in versions
 
     @patch('docs_updater.urllib.request.urlopen')
-    def test_get_supported_versions_api_error(self, mock_urlopen):
-        """Test version fetching with API error (fallback to hardcoded list)."""
+    def test_get_supported_versions_api_error(self, mock_urlopen, tmp_path):
+        """Test version fetching with API error (fallback to last resort)."""
         mock_urlopen.side_effect = Exception("API Error")
-        
-        versions = get_supported_versions()
-        
-        # Should return fallback list
+        cache_file = tmp_path / "nonexistent" / ".versions_cache.json"
+
+        versions = get_supported_versions(cache_file=cache_file)
+
+        # Should return last-resort list
         assert isinstance(versions, list)
         assert len(versions) > 0
         assert "12.x" in versions
@@ -1316,6 +1317,63 @@ class TestVersionSupport:
         """Test that default version is the latest supported version."""
         # DEFAULT_VERSION should be the last item in SUPPORTED_VERSIONS
         assert DEFAULT_VERSION == SUPPORTED_VERSIONS[-1]
+
+    @patch('docs_updater.urllib.request.urlopen')
+    def test_get_supported_versions_writes_cache_on_success(self, mock_urlopen, tmp_path):
+        """Test that successful API fetch writes the cache file."""
+        mock_response_data = [
+            {"name": "6.x"}, {"name": "12.x"}, {"name": "13.x"},
+            {"name": "master"},
+        ]
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps(mock_response_data).encode()
+        mock_response.__enter__ = lambda self: self
+        mock_response.__exit__ = lambda self, *args: None
+        mock_urlopen.return_value = mock_response
+
+        cache_file = tmp_path / ".versions_cache.json"
+        versions = get_supported_versions(cache_file=cache_file)
+
+        assert versions == ["6.x", "12.x", "13.x"]
+        assert cache_file.exists()
+        cached = json.loads(cache_file.read_text())
+        assert cached["versions"] == ["6.x", "12.x", "13.x"]
+        assert "updated_at" in cached
+
+    @patch('docs_updater.urllib.request.urlopen')
+    def test_get_supported_versions_reads_cache_on_api_failure(self, mock_urlopen, tmp_path):
+        """Test that API failure falls back to cache file."""
+        cache_file = tmp_path / ".versions_cache.json"
+        cache_file.write_text(json.dumps({
+            "versions": ["6.x", "11.x", "12.x", "13.x"],
+            "updated_at": "2026-04-01T00:00:00Z"
+        }))
+        mock_urlopen.side_effect = Exception("API down")
+
+        versions = get_supported_versions(cache_file=cache_file)
+
+        assert versions == ["6.x", "11.x", "12.x", "13.x"]
+
+    @patch('docs_updater.urllib.request.urlopen')
+    def test_get_supported_versions_corrupt_cache_uses_last_resort(self, mock_urlopen, tmp_path):
+        """Test that corrupt cache file falls through to last resort."""
+        cache_file = tmp_path / ".versions_cache.json"
+        cache_file.write_text("not valid json{{{")
+        mock_urlopen.side_effect = Exception("API down")
+
+        versions = get_supported_versions(cache_file=cache_file)
+
+        assert versions == ["12.x"]
+
+    @patch('docs_updater.urllib.request.urlopen')
+    def test_get_supported_versions_missing_cache_uses_last_resort(self, mock_urlopen, tmp_path):
+        """Test that missing cache file falls through to last resort."""
+        cache_file = tmp_path / "nonexistent" / ".versions_cache.json"
+        mock_urlopen.side_effect = Exception("API down")
+
+        versions = get_supported_versions(cache_file=cache_file)
+
+        assert versions == ["12.x"]
 
 
 @pytest.mark.slow
