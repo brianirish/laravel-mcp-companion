@@ -1362,7 +1362,7 @@ class TestMainFunction:
             from docs_updater import parse_arguments
             args = parse_arguments()
             
-            assert args.version == '12.x'  # Should use DEFAULT_VERSION
+            assert args.version == DEFAULT_VERSION
             assert args.target_dir == './docs'
             assert args.force is False
             assert args.check_only is False

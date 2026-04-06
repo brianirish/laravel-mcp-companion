@@ -2,6 +2,7 @@
 
 from unittest.mock import patch
 
+from docs_updater import DEFAULT_VERSION
 from mcp_tools import (
     get_version_from_path,
     read_laravel_doc_content_impl,
@@ -16,7 +17,7 @@ class TestRuntimeVersion:
     def test_get_version_from_path_without_runtime(self):
         """Test get_version_from_path without runtime_version uses DEFAULT_VERSION."""
         version, path = get_version_from_path("blade.md")
-        assert version == "12.x"  # DEFAULT_VERSION
+        assert version == DEFAULT_VERSION
         assert path == "blade.md"
     
     def test_get_version_from_path_with_runtime(self):
@@ -34,14 +35,14 @@ class TestRuntimeVersion:
     def test_read_laravel_doc_content_with_runtime_version(self, test_docs_dir):
         """Test reading docs with runtime_version parameter."""
         # Create test files for different versions
-        for ver in ["10.x", "11.x", "12.x"]:
+        for ver in ["10.x", "11.x", DEFAULT_VERSION]:
             version_dir = test_docs_dir / ver
             version_dir.mkdir(parents=True, exist_ok=True)
             (version_dir / "test.md").write_text(f"# Test for {ver}")
-        
-        # Without runtime_version, should use DEFAULT_VERSION (12.x)
+
+        # Without runtime_version, should use DEFAULT_VERSION
         content = read_laravel_doc_content_impl(test_docs_dir, "test.md")
-        assert "Test for 12.x" in content
+        assert f"Test for {DEFAULT_VERSION}" in content
         
         # With runtime_version, should use that version
         content = read_laravel_doc_content_impl(test_docs_dir, "test.md", runtime_version="10.x")
@@ -61,7 +62,7 @@ class TestRuntimeVersion:
         with patch('mcp_tools.os.listdir', return_value=['blade.md']):
             # Without runtime_version, should use DEFAULT_VERSION
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert "12.x" in result
+            assert DEFAULT_VERSION in result
 
             # With runtime_version, should use that version
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", runtime_version="10.x")
@@ -150,16 +151,15 @@ class TestVersionArgumentIntegration:
     def test_backward_compatibility_without_runtime_version(self, test_docs_dir):
         """Test that functions still work without runtime_version (backward compatibility)."""
         # Create test content for DEFAULT_VERSION
-        version_dir = test_docs_dir / "12.x"
+        version_dir = test_docs_dir / DEFAULT_VERSION
         version_dir.mkdir(parents=True, exist_ok=True)
         (version_dir / "test.md").write_text("# Default version content")
         (version_dir / "blade.md").write_text("# Blade Templates")  # Frontend-related file
-        
+
         # All functions should work without runtime_version parameter
         content = read_laravel_doc_content_impl(test_docs_dir, "test.md")
         assert "Default version content" in content
-        
+
         with patch('mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            # TOON format: version: 12.x
-            assert "12.x" in result
+            assert DEFAULT_VERSION in result

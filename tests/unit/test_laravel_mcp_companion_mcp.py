@@ -23,7 +23,7 @@ class TestValidateVersion:
     def test_validate_invalid_version(self):
         """Test validation of invalid version."""
         assert validate_version("5.x") is False
-        assert validate_version("13.x") is False
+        assert validate_version("99.x") is False
         assert validate_version("invalid") is False
         assert validate_version("") is False
 

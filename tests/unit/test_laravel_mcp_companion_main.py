@@ -4,6 +4,7 @@ import pytest
 import sys
 from unittest.mock import patch, MagicMock
 
+from docs_updater import DEFAULT_VERSION
 from laravel_mcp_companion import main, parse_arguments
 
 
@@ -101,7 +102,7 @@ class TestMainFunction:
             # Verify setup was called
             mock_setup_docs.assert_called_once()
             mock_fastmcp_class.assert_called_once_with("LaravelMCPCompanion")
-            mock_updater_class.assert_called_once_with(temp_dir, "12.x")
+            mock_updater_class.assert_called_once_with(temp_dir, DEFAULT_VERSION)
             
             # Verify server was started (stdio is default, no args needed)
             mock_mcp.run.assert_called_once_with()
@@ -132,7 +133,7 @@ class TestMainFunction:
             main()
             
             # Verify documentation was updated
-            mock_update_docs.assert_called_once_with(temp_dir, "12.x", False)
+            mock_update_docs.assert_called_once_with(temp_dir, DEFAULT_VERSION, False)
     
     @patch('laravel_mcp_companion.FastMCP')
     @patch('laravel_mcp_companion.setup_docs_path')
