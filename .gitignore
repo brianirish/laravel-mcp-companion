@@ -40,6 +40,7 @@ logs/
 
 # Cache files
 *_cache*.json
+!docs/.versions_cache.json
 .cache/
 
 # Test coverage
