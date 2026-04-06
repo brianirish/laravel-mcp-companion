@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import laravel_mcp_companion
+from docs_updater import DEFAULT_VERSION
 from laravel_mcp_companion import (
     search_by_use_case,
     format_package_recommendation,
@@ -96,11 +97,10 @@ class TestMCPTools:
 
     def test_get_version_from_path_without_version(self):
         """Test version extraction from path without version."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
-            version, relative_path = get_version_from_path("blade.md")
-            
-            assert version == "12.x"
-            assert relative_path == "blade.md"
+        version, relative_path = get_version_from_path("blade.md")
+
+        assert version == DEFAULT_VERSION
+        assert relative_path == "blade.md"
 
     def test_get_version_from_path_nested(self):
         """Test version extraction from nested path."""

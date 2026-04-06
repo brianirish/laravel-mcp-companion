@@ -162,14 +162,14 @@ def get_supported_versions() -> list[str]:
             
             if not version_branches:
                 logger.warning("No version branches found, falling back to hardcoded list")
-                return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
-            
+                return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x"]
+
             logger.debug(f"Found {len(version_branches)} supported versions: {', '.join(version_branches)}")
             return version_branches
-            
+
     except Exception as e:
         logger.warning(f"Error fetching versions from GitHub API: {str(e)}, falling back to hardcoded list")
-        return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
+        return ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x"]
 
 # Cache supported versions to avoid repeated API calls
 _SUPPORTED_VERSIONS_CACHE = None
