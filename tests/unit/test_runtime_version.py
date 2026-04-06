@@ -251,11 +251,29 @@ class TestNewVersionSimulation:
 
             mock_updater_class.assert_called_once_with("/tmp/test", self.FUTURE_VERSION)
 
-    def test_fallback_list_includes_current_latest(self):
-        """Hardcoded fallback list includes the current latest version."""
-        from docs_updater import DEFAULT_VERSION
+    def test_cache_file_contains_current_default(self):
+        """Committed cache file includes the current DEFAULT_VERSION."""
+        from docs_updater import DEFAULT_VERSION, VERSIONS_CACHE_FILE
+        import json
+        assert VERSIONS_CACHE_FILE.exists(), f"Cache file missing: {VERSIONS_CACHE_FILE}"
+        data = json.loads(VERSIONS_CACHE_FILE.read_text())
+        assert DEFAULT_VERSION in data["versions"], (
+            f"Cache file is stale: missing {DEFAULT_VERSION}"
+        )
+
+    def test_api_failure_with_cache_returns_cached_versions(self, tmp_path):
+        """When API fails, the cache file provides the fallback."""
+        import json
+        from docs_updater import get_supported_versions
+        cache_file = tmp_path / ".versions_cache.json"
+        cache_file.write_text(json.dumps({
+            "versions": self.FUTURE_VERSIONS,
+            "updated_at": "2026-04-05T00:00:00Z"
+        }))
+
         with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_urlopen.side_effect = Exception("API down")
-            from docs_updater import get_supported_versions
-            fallback = get_supported_versions()
-            assert DEFAULT_VERSION in fallback
+            versions = get_supported_versions(cache_file=cache_file)
+
+        assert versions == self.FUTURE_VERSIONS
+        assert self.FUTURE_VERSION in versions
