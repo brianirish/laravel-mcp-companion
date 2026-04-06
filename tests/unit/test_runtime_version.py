@@ -1,6 +1,7 @@
 """Unit tests for the runtime_version functionality (--version argument fix)."""
 
-from unittest.mock import patch
+import sys
+from unittest.mock import patch, MagicMock
 
 from docs_updater import DEFAULT_VERSION
 from mcp_tools import (
@@ -163,3 +164,98 @@ class TestVersionArgumentIntegration:
         with patch('mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
             assert DEFAULT_VERSION in result
+
+
+class TestNewVersionSimulation:
+    """Simulate a new Laravel version (e.g. 14.x) appearing in the GitHub API.
+
+    These tests verify that the entire stack handles a version bump gracefully
+    without hardcoded version assumptions breaking things.
+    """
+
+    FUTURE_VERSION = "14.x"
+    FUTURE_VERSIONS = ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x", "14.x"]
+
+    def test_version_parsing_accepts_future_version(self):
+        """New version from API is recognized as valid."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+            version, path = get_version_from_path("blade.md")
+            assert version == self.FUTURE_VERSION
+            assert path == "blade.md"
+
+    def test_explicit_version_still_overrides(self):
+        """Explicit version in path overrides the new default."""
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+            version, path = get_version_from_path("12.x/blade.md")
+            assert version == "12.x"
+            assert path == "blade.md"
+
+    def test_read_doc_uses_future_default(self, test_docs_dir):
+        """Reading a doc without explicit version uses the new default."""
+        future_dir = test_docs_dir / self.FUTURE_VERSION
+        future_dir.mkdir(parents=True, exist_ok=True)
+        (future_dir / "routing.md").write_text("# Routing for 14.x")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+            content = read_laravel_doc_content_impl(test_docs_dir, "routing.md")
+            assert "Routing for 14.x" in content
+
+    def test_browse_category_uses_future_default(self, test_docs_dir):
+        """Browsing by category uses the new default version."""
+        future_dir = test_docs_dir / self.FUTURE_VERSION
+        future_dir.mkdir(parents=True, exist_ok=True)
+        (future_dir / "blade.md").write_text("# Blade")
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('mcp_tools.os.listdir', return_value=['blade.md']):
+            result = browse_docs_by_category_impl(test_docs_dir, "frontend")
+            assert self.FUTURE_VERSION in result
+
+    def test_search_includes_future_version(self, test_docs_dir):
+        """Search across all versions includes the new one."""
+        future_dir = test_docs_dir / self.FUTURE_VERSION
+        future_dir.mkdir(parents=True, exist_ok=True)
+
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('mcp_tools.os.listdir', return_value=['routing.md']), \
+             patch('mcp_tools.get_file_content_cached', return_value="New routing features"):
+            result = search_laravel_docs_impl(test_docs_dir, "routing")
+            assert "routing" in result.lower()
+
+    def test_validate_version_accepts_future(self):
+        """validate_version recognizes the new version."""
+        with patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
+            from laravel_mcp_companion import validate_version
+            assert validate_version(self.FUTURE_VERSION) is True
+
+    def test_main_uses_future_default(self):
+        """Main function wires through the new default version."""
+        with patch('laravel_mcp_companion.GracefulShutdown'), \
+             patch('laravel_mcp_companion.MultiSourceDocsUpdater') as mock_updater_class, \
+             patch('laravel_mcp_companion.FastMCP') as mock_fastmcp_class, \
+             patch('laravel_mcp_companion.setup_docs_path') as mock_setup_docs, \
+             patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch.object(sys, 'argv', ['laravel-mcp-companion']):
+            mock_setup_docs.return_value = "/tmp/test"
+            mock_mcp = MagicMock()
+            mock_fastmcp_class.return_value = mock_mcp
+
+            from laravel_mcp_companion import main
+            main()
+
+            mock_updater_class.assert_called_once_with("/tmp/test", self.FUTURE_VERSION)
+
+    def test_fallback_list_includes_current_latest(self):
+        """Hardcoded fallback list includes the current latest version."""
+        from docs_updater import DEFAULT_VERSION
+        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+            mock_urlopen.side_effect = Exception("API down")
+            from docs_updater import get_supported_versions
+            fallback = get_supported_versions()
+            assert DEFAULT_VERSION in fallback
