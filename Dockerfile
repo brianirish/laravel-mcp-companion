@@ -22,7 +22,7 @@ ENV TRANSPORT=stdio
 ENV DOCS_PATH="./docs"
 ENV SERVER_NAME="LaravelMCPCompanion"
 ENV LOG_LEVEL="INFO"
-ENV VERSION="13.x"
+
 
 # Set the entrypoint to the Python script
 ENTRYPOINT ["python", "laravel_mcp_companion.py"]
