@@ -89,8 +89,8 @@ The `--scope project` option creates a `.mcp.json` file in your project root tha
 These options can be used with the Docker command. For example:
 
 ```bash
-# Update docs for Laravel 11.x only
-docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --version 12.x
+# Pin to a specific older Laravel version
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --version 11.x
 
 # Force update all documentation
 docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-update
@@ -98,7 +98,7 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--version VERSION` | Laravel version (e.g., "13.x", "12.x") | Latest |
+| `--version VERSION` | Laravel version (e.g., "11.x", "12.x") | Latest |
 | `--docs-path PATH` | Documentation directory | `./docs` |
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
 | `--update-docs` | Update documentation on startup | false |
@@ -209,7 +209,7 @@ The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) provides 
 npx @modelcontextprotocol/inspector python laravel_mcp_companion.py
 
 # With specific version
-npx @modelcontextprotocol/inspector python laravel_mcp_companion.py --version 13.x
+npx @modelcontextprotocol/inspector python laravel_mcp_companion.py --version 11.x
 ```
 
 Use the Inspector to:
