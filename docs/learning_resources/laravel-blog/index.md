@@ -4,9 +4,9 @@ Source: https://blog.laravel.com
 
 ---
 
-## Scheduled Autoscaling for Laravel Cloud
+## How Filament Achieved 3x Performance by Migrating from Laravel Forge to Cloud
 
-You can now define a scaling schedule on Laravel Cloud and let it handle the rest. Set your autoscaling limits once for each traffic window, whether that’s peak hours, business hours, batch jobs, or w...
+Filament kept hitting capacity limits during launches. After migrating to Laravel Cloud, they saw 3x faster requests, autoscaling, and 4x smaller replicas.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
 

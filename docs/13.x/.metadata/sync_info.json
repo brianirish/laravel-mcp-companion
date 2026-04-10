@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "07c51e5f267093a8922be49f06d733abdab9b93a",
-  "commit_date": "2026-04-08T13:21:15Z",
-  "commit_message": "Update ai-sdk.md - add nested object and array schema examples (#11146)\n\n* doc: add complex schema examples\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/07c51e5f267093a8922be49f06d733abdab9b93a",
-  "sync_time": "2026-04-09T00:02:29Z"
+  "commit_sha": "6621156f08f41f3d9450b238b31c5d42cb6e400f",
+  "commit_date": "2026-04-09T14:56:27Z",
+  "commit_message": "Sail is no longer installed by default on new Laravel installations (#11153)\n\n* Sail is no longer installed by default on new Laravel installations\n\n* Remove TOC link\n\n* Update sail.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/6621156f08f41f3d9450b238b31c5d42cb6e400f",
+  "sync_time": "2026-04-10T00:02:17Z"
 }
