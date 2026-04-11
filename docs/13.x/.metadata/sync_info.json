@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "6621156f08f41f3d9450b238b31c5d42cb6e400f",
-  "commit_date": "2026-04-09T14:56:27Z",
-  "commit_message": "Sail is no longer installed by default on new Laravel installations (#11153)\n\n* Sail is no longer installed by default on new Laravel installations\n\n* Remove TOC link\n\n* Update sail.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/6621156f08f41f3d9450b238b31c5d42cb6e400f",
-  "sync_time": "2026-04-10T00:02:17Z"
+  "commit_sha": "ebca9dbb437fb4bcb5b2ae0a0bd48d75e065e697",
+  "commit_date": "2026-04-10T18:50:51Z",
+  "commit_message": "Fix formatting in deployment.md (#11155)\n\nI found a vali, simple documentation error:\r\n\r\nFile: /home/runner/work/docs/docs/deployment.md\r\nLine: 184\r\nCurrent text: you should manually  configure\r\nIssue: double space typo\r\nSuggested fix: you should manually configure",
+  "commit_url": "https://github.com/laravel/docs/commit/ebca9dbb437fb4bcb5b2ae0a0bd48d75e065e697",
+  "sync_time": "2026-04-11T00:02:38Z"
 }
