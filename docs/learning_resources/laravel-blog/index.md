@@ -4,7 +4,15 @@ Source: https://blog.laravel.com
 
 ---
 
-## How Filament Achieved 3x Performance by Migrating from Laravel Forge to Cloud
+## How I Built an AI-Powered CRM with Laravel in a Week
+
+How a senior freelance developer built a full Laravel MVP in under a week using Laravel Herd, Cloud, and the AI SDK to automate critical workflows.
+
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
+## How Filament Achieved 3x Faster Requests by Migrating from Laravel Forge to Cloud
 
 Filament kept hitting capacity limits during launches. After migrating to Laravel Cloud, they saw 3x faster requests, autoscaling, and 4x smaller replicas.
 
@@ -26,14 +34,6 @@ Laravel March Product Updates
 March was a big month for product updates. Laravel 13 brings first-party AI tooling to the framework, Laravel Cloud now has a free trial with no credit card required, and...
 
 [Read more](https://blog.laravel.com/blog/category/product)
-
----
-
-## Laravel AI SDK: Building Production-Safe Database Tools for Agents
-
-Build production-safe database tools with the Laravel AI SDK. Scope Eloquent queries by user, add vector search with SimilaritySearch, and prevent prompt injection.
-
-[Read more](https://blog.laravel.com/blog/category/laravel-framework)
 
 ---
 
