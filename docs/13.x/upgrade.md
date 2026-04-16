@@ -94,7 +94,7 @@ Or, if you are using [Laravel Herd's](https://herd.laravel.com) bundled copy of 
 
 **Likelihood Of Impact: Low**
 
-Laravel's default cache and Redis key prefixes now use hyphenated suffixes. In addition, the default session cookie name now uses `Str::snake(...)` for the application name.
+Laravel's default cache and Redis key prefixes now use hyphenated suffixes.
 
 In most applications, this change will not apply because application-level configuration files already define these values. This primarily affects applications that rely on framework-level fallback configuration when corresponding application config values are not present.
 
@@ -109,7 +109,7 @@ Str::slug((string) env('APP_NAME', 'laravel'), '_').'_session';
 // Laravel >= 13.x
 Str::slug((string) env('APP_NAME', 'laravel')).'-cache-';
 Str::slug((string) env('APP_NAME', 'laravel')).'-database-';
-Str::snake((string) env('APP_NAME', 'laravel')).'_session';
+Str::slug((string) env('APP_NAME', 'laravel')).'-session';
 ```
 
 To retain previous behavior, explicitly configure `CACHE_PREFIX`, `REDIS_PREFIX`, and `SESSION_COOKIE` in your environment.
@@ -427,6 +427,28 @@ If your tests depended on custom UUID / ULID / random string factories persistin
 `Illuminate\Support\Js::from` now uses `JSON_UNESCAPED_UNICODE` by default.
 
 If your tests or frontend output comparisons depended on escaped Unicode sequences (for example `\u00e8`), update your expectations.
+
+<a name="utilities"></a>
+### Utilities
+
+<a name="symfony-polyfill"></a>
+#### Symfony PHP 8.5 Polyfill and Global Function Conflicts
+
+**Likelihood Of Impact: Low**
+
+Laravel 13 introduces a dependency on `symfony/polyfill-php85`. On PHP versions below 8.5, this polyfill defines global functions such as `array_first()` and `array_last()` unless they have already been defined earlier during bootstrap.
+
+These functions may conflict with legacy helper packages like `laravel/helpers` or custom global helpers using the same names. For example, the historical `array_first()` helper accepted a callback to return the first matching element, while the polyfilled version only returns the first element of the array.
+
+To avoid conflicts and ensure consistent behavior across PHP versions, you should prefer the `Illuminate\Support\Arr` methods:
+
+```php
+use Illuminate\Support\Arr;
+
+Arr::first($array, function ($value) {
+  return /* condition */;
+});
+```
 
 <a name="views"></a>
 ### Views
