@@ -97,6 +97,7 @@ Laravel Forge automatically handles the installation process, creating a default
 MySQL 9.x is an [Innovation](https://dev.mysql.com/doc/refman/en/mysql-releases.html) release, designed for developers and teams who want access to the latest MySQL features and improvements. Innovation releases are production-ready, but each version is only supported until the next Innovation release ships.Laravel VPS servers are limited to the latest MySQL LTS and PostgreSQL versions only.
 ### [​](#installing-databases-later) Installing databases later
 If you need to add database functionality to an existing server, you can install one through the server’s “Databases” management tab. Once installed, you’ll have full database management capabilities through the Laravel Forge interface.
+If the server already has a database installed (MySQL, MariaDB, or PostgreSQL), Forge will not allow installing a different database type on the same server.
 If you created a “Web Server”, database installation is not supported. Web servers include only the essential software needed for PHP applications. For combined web and database functionality, provision an “App Server” instead.
 ## [​](#managing-database-passwords) Managing database passwords
 You can reset both `root` and `forge` database user passwords using the password reset feature in Laravel Forge’s “Databases” management tab.
