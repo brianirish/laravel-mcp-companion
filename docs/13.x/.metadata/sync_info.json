@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "dd1d7bfc3f534716b7935d0a1fdfaf15decca9d9",
-  "commit_date": "2026-04-15T21:20:59Z",
-  "commit_message": "[13.x] Document potential array_first and array_last conflict due to symfony/polyfill-php85 (#11161)\n\n* Updated the upgrade guide with the potential symfony/polyfill-php85 conflict\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/dd1d7bfc3f534716b7935d0a1fdfaf15decca9d9",
-  "sync_time": "2026-04-16T00:03:04Z"
+  "commit_sha": "33a0f8ebb3dfd9750db18b71a783c69964590bfc",
+  "commit_date": "2026-04-16T13:58:37Z",
+  "commit_message": "Fix typo in assertDataAttribute documentation (#11163)",
+  "commit_url": "https://github.com/laravel/docs/commit/33a0f8ebb3dfd9750db18b71a783c69964590bfc",
+  "sync_time": "2026-04-17T00:02:31Z"
 }
