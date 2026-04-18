@@ -13,7 +13,7 @@ from laravel_mcp_companion import create_mcp_server
 @pytest.fixture
 def mcp_server(temp_dir):
     """Create an MCP server instance for testing."""
-    return create_mcp_server("TestServer", temp_dir, "12.x")
+    return create_mcp_server("TestServer", temp_dir, "12.x", transform_mode=None)
 
 
 @pytest.mark.protocol

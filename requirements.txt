@@ -1,4 +1,4 @@
-fastmcp>=3.0.0,<4
+fastmcp[code-mode]>=3.1.0,<4
 markdownify>=1.2.2
 beautifulsoup4>=4.14.3
 uvicorn>=0.38.0

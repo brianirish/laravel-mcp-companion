@@ -18,6 +18,7 @@ from typing import Dict, Optional, List, Any
 from functools import lru_cache
 import threading
 from fastmcp import FastMCP
+from fastmcp.server.transforms.search import BM25SearchTransform
 
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
@@ -706,7 +707,13 @@ def parse_arguments():
         default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
-    
+    parser.add_argument(
+        "--code-mode",
+        action="store_true",
+        default=os.environ.get("CODE_MODE", "").lower() == "true",
+        help="Enable experimental Code Mode transform instead of Search Transform (env: CODE_MODE=true)"
+    )
+
     return parser.parse_args()
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:
@@ -1179,14 +1186,17 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
-    
+
     Args:
         server_name: Name for the MCP server
         docs_path: Path to documentation directory
         runtime_version: Runtime default Laravel version (from --version flag)
-        
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+
     Returns:
         Configured FastMCP server instance
     """
@@ -1290,7 +1300,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -
     
     # Configure all tools
     configure_mcp_server(mcp, docs_path, runtime_version, multi_updater)
-    
+
+    # Apply transforms
+    apply_transforms(mcp, transform_mode)
+
     return mcp
 
 # Global configuration storage
@@ -2042,6 +2055,48 @@ Please help me:
 Start by providing information about Laravel Forge and its key features."""
 
 
+def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> None:
+    """Apply search or code mode transforms to the MCP server.
+
+    Args:
+        mcp: FastMCP server instance
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+    """
+    if transform_mode is None:
+        logger.info("No transforms applied (raw tool mode)")
+        return
+
+    if transform_mode == "code":
+        try:
+            from fastmcp.experimental.transforms.code_mode import (
+                CodeMode,
+                GetTags,
+                Search,
+                GetSchemas,
+            )
+
+            code_mode = CodeMode(
+                discovery_tools=[GetTags(), Search(), GetSchemas()],
+            )
+            mcp.add_transform(code_mode)
+            logger.info("Code Mode transform applied (experimental)")
+        except ImportError as e:
+            logger.error(
+                "Code Mode requires the code-mode extra. "
+                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
+            )
+            raise RuntimeError(
+                "Code Mode requires the code-mode extra. "
+                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
+            ) from e
+    elif transform_mode == "search":
+        mcp.add_transform(BM25SearchTransform(max_results=10))
+        logger.info("BM25 Search transform applied (max_results=10)")
+    else:
+        raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
+
 
 def main():
     """Main entry point for the Laravel MCP Companion."""
@@ -2067,11 +2122,18 @@ def main():
                 logger.warning(f"Failed to remove temporary file {file_path}: {str(e)}")
     
     # Create and configure the MCP server
-    mcp = create_mcp_server(args.server_name, docs_path, args.version)
-    
+    transform_mode = "code" if args.code_mode else "search"
+    if args.code_mode and args.transport == "http":
+        logger.warning(
+            "Code Mode over HTTP exposes an execution endpoint. "
+            "Do not expose this publicly unless you have reviewed sandbox and network risk."
+        )
+    mcp = create_mcp_server(args.server_name, docs_path, args.version, transform_mode=transform_mode)
+
     # Log server startup
     logger.info(f"Starting Laravel MCP Companion ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
+    logger.info(f"Transform mode: {'Code Mode (experimental)' if args.code_mode else 'BM25 Search'}")
     logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     
     # Setup graceful shutdown handler
