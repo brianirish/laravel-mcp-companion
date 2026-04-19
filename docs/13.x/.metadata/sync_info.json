@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "49106591ee64e65cd6abcf47592924e684a84d0d",
-  "commit_date": "2026-04-17T13:33:46Z",
-  "commit_message": "[13.x] Add docs for hasAttached pivot array (#11164)\n\n* Update eloquent-factories.md\n\n* use active",
-  "commit_url": "https://github.com/laravel/docs/commit/49106591ee64e65cd6abcf47592924e684a84d0d",
-  "sync_time": "2026-04-18T00:02:35Z"
+  "commit_sha": "0c28388c5674293f7fc63549240f30184e150d27",
+  "commit_date": "2026-04-18T13:26:54Z",
+  "commit_message": "Added exmples to 'host' request properties (#11166)\n\n* Added exmples to 'host' request properties\n\n* Update requests.md\n\nupdated HTTP requests back to the correct spelling\n\n* Update requests.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/0c28388c5674293f7fc63549240f30184e150d27",
+  "sync_time": "2026-04-19T00:03:55Z"
 }
