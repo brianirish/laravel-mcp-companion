@@ -12,6 +12,14 @@ How a senior freelance developer built a full Laravel MVP in under a week using 
 
 ---
 
+## How I Built an AI-Powered CRM with Laravel in a Week
+
+How a senior freelance developer built a full Laravel MVP in under a week using Laravel Herd, Cloud, and the AI SDK to automate critical workflows.
+
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
 ## How Filament Achieved 3x Faster Requests by Migrating from Laravel Forge to Cloud
 
 Filament kept hitting capacity limits during launches. After migrating to Laravel Cloud, they saw 3x faster requests, autoscaling, and 4x smaller replicas.
@@ -25,15 +33,6 @@ Filament kept hitting capacity limits during launches. After migrating to Larave
 Learn how Maestro solves the challenge of maintaining 21 Laravel starter kit variants across 8 repositories, using layered builds, priority-based sync, and a contributor workflow designed to scale.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-framework)
-
----
-
-## Laravel March Product Updates
-
-Laravel March Product Updates
-March was a big month for product updates. Laravel 13 brings first-party AI tooling to the framework, Laravel Cloud now has a free trial with no credit card required, and...
-
-[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 
