@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "0c28388c5674293f7fc63549240f30184e150d27",
-  "commit_date": "2026-04-18T13:26:54Z",
-  "commit_message": "Added exmples to 'host' request properties (#11166)\n\n* Added exmples to 'host' request properties\n\n* Update requests.md\n\nupdated HTTP requests back to the correct spelling\n\n* Update requests.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/0c28388c5674293f7fc63549240f30184e150d27",
-  "sync_time": "2026-04-19T00:03:55Z"
+  "commit_sha": "bfe8937090d4303afed6e92ce40b6606f08e158f",
+  "commit_date": "2026-04-20T13:13:31Z",
+  "commit_message": "add missing API key in docs (#11167)",
+  "commit_url": "https://github.com/laravel/docs/commit/bfe8937090d4303afed6e92ce40b6606f08e158f",
+  "sync_time": "2026-04-21T00:03:05Z"
 }

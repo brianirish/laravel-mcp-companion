@@ -26,7 +26,7 @@ Internally, spatie/image is used to manipulate the images. You can use any manip
 Please check the image generator docs for additional installation requirements when working with PDF, SVG or video formats.
 ##Are you a visual learner?
 ---------------------------
-Here's a video that shows how to working with conversion.
+Here's a video that shows how to work with conversions.
 Want to see more videos like this? Check out our free video course on how to use Laravel Media Library.
 ##A single conversion
 ---------------------
@@ -56,10 +56,10 @@ $media = YourModel::first()->addMedia($pathToImage)->toMediaCollection();
 ```
 Besides storing the original item, the media library also has created a derived image.
 ```php
-$media->getPath();  // the path to the where the original image is stored
+$media->getPath();  // the path to where the original image is stored
 $media->getPath('thumb'); // the path to the converted image with dimensions 368x232
 
-$media->getUrl();  // the url to the where the original image is stored
+$media->getUrl();  // the url to where the original image is stored
 $media->getUrl('thumb'); // the url to the converted image with dimensions 368x232
 ```
 ##Using multiple conversions
