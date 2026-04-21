@@ -1,8 +1,8 @@
 {
   "version": "11.x",
-  "commit_sha": "b92d6219333339c3bf96e75d7fdc7a35bc0b538c",
-  "commit_date": "2025-10-12T14:22:07Z",
-  "commit_message": "Wrong anchor for section `Resources` (#10858)",
-  "commit_url": "https://github.com/laravel/docs/commit/b92d6219333339c3bf96e75d7fdc7a35bc0b538c",
-  "sync_time": "2025-10-13T01:18:57Z"
+  "commit_sha": "be9d43b96acd98dc32872b7498d158430c251f1c",
+  "commit_date": "2026-04-20T13:07:11Z",
+  "commit_message": "Fix broken link in Laravel 11.x upgrade guide for Carbon 3 documentation (#11168)",
+  "commit_url": "https://github.com/laravel/docs/commit/be9d43b96acd98dc32872b7498d158430c251f1c",
+  "sync_time": "2026-04-21T00:03:04Z"
 }
