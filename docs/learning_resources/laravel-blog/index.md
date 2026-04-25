@@ -4,6 +4,22 @@ Source: https://blog.laravel.com
 
 ---
 
+## Laravel Cloud Pre-Check: Is Your App Ready to Deploy?
+
+Run the free Laravel Cloud Pre-Check to get an instant compatibility report for your app. Find out what to fix before you migrate in just a few minutes.
+
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
+## Why You Should Consider a Laravel Partner for Your Next Project
+
+Learn more about the Laravel Partner program and why you should choose a Laravel Partner for your next project.
+
+[Read more](https://blog.laravel.com/blog/category/community)
+
+---
+
 ## Deploy a Laravel MCP App to Production with Laravel Cloud
 
 Build and deploy a Laravel MCP app on Laravel Cloud. We cover tool implementation, error handling, authentication, testing, and production monitoring.
@@ -17,22 +33,6 @@ Build and deploy a Laravel MCP app on Laravel Cloud. We cover tool implementatio
 How a senior freelance developer built a full Laravel MVP in under a week using Laravel Herd, Cloud, and the AI SDK to automate critical workflows.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
-
----
-
-## How Filament Achieved 3x Faster Requests by Migrating from Laravel Forge to Cloud
-
-Filament kept hitting capacity limits during launches. After migrating to Laravel Cloud, they saw 3x faster requests, autoscaling, and 4x smaller replicas.
-
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
-
----
-
-## Meet Maestro: How We Manage 21 Laravel Starter Kit Variants Without Losing Our Minds
-
-Learn how Maestro solves the challenge of maintaining 21 Laravel starter kit variants across 8 repositories, using layered builds, priority-based sync, and a contributor workflow designed to scale.
-
-[Read more](https://blog.laravel.com/blog/category/laravel-framework)
 
 ---
 
