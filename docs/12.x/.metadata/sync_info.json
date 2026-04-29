@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "00b62b1b29bf1e2b7d39734efd5355e095ade837",
-  "commit_date": "2026-04-03T15:21:27Z",
-  "commit_message": "[12.x] Update queues.md - warn constructor-based queue assignment does not work for event listeners (#11142)",
-  "commit_url": "https://github.com/laravel/docs/commit/00b62b1b29bf1e2b7d39734efd5355e095ade837",
-  "sync_time": "2026-04-04T00:02:51Z"
+  "commit_sha": "09475b0c7d41d69841e8bbb2817f05a197d49bae",
+  "commit_date": "2026-04-28T17:15:29Z",
+  "commit_message": "[12.x] Add assertFailedDependency method to http-tests (#11175)",
+  "commit_url": "https://github.com/laravel/docs/commit/09475b0c7d41d69841e8bbb2817f05a197d49bae",
+  "sync_time": "2026-04-29T00:02:47Z"
 }
