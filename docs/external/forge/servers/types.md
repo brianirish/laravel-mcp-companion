@@ -84,6 +84,11 @@ Servers
 Copy page
 Learn about the different types of servers you can provision with Laravel Forge.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Forge supports provisioning several different types of servers:
 - Application Servers

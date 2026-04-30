@@ -50,6 +50,11 @@ On this page
 Resources
 # Caches
 Using caches with Laravel Vapor.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Vapor allows you to easily create and manage scalable Redis clusters directly from the Vapor UI or using the Vapor CLI. AWS requires all cache clusters to be private, meaning Vapor will place any application that uses them in a network with a [NAT Gateway](./networks#nat-gateways).
 If you are primarily using a cache for Laravel’s task scheduler and atomic locks, you may find that using a [DynamoDB cache](#dynamodb-caches) is a cost-efficient alternative to using Redis clusters. In addition, DynamoDB caches do not require Vapor to attach a NAT Gateway to your application’s network.If no Redis cache is attached to the environment, the DynamoDB cache will automatically be set as the default cache driver.

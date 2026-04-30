@@ -78,6 +78,11 @@ Get Started
 Copy page
 A PHP SDK for interacting with Laravel Forge.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## Laravel Forge SDK
 View the Laravel Forge SDK on GitHub
 ## Laravel Forge API

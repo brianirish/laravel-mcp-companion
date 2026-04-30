@@ -47,6 +47,11 @@ On this page
 Projects
 # The Basics
 Get started with Laravel Vapor.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#creating-projects) Creating Projects
 Vapor projects are created via the Vapor UI or the `vapor init` CLI command.
 We recommend using the Vapor UI if you wish to start a fresh Laravel project on Vapor. This option’s fully integrated with GitHub, and once you connect your GitHub account, Vapor automatically creates a new GitHub repository (with a fresh installation of Laravel), makes the first deployment, and sets up automatic deployments on code pushes.

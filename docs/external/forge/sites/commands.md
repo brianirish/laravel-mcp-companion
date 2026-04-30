@@ -78,6 +78,11 @@ Sites
 Copy page
 Learn how to run arbitrary commands from the Commands panel.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 You may execute arbitrary Bash commands from the “Commands” panel. Commands are executed from within the site’s root directory, e.g., `/home/forge/site.com`. If you need to run commands within another directory you may prefix the command with a `cd` operation:
 ```

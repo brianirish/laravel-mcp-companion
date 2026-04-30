@@ -19,7 +19,8 @@ Defining conversions
 4. Performing conversions on specific collections
 5. Using a specific disk
 6. Queuing conversions
-7. Using model properties in a conversion
+7. Deferred conversions
+8. Using model properties in a conversion
 When adding files to the media library it can automatically create derived versions such as thumbnails and banners.
 Media conversions will be executed whenever a `jpg`, `png`, `svg`, `webp`, `avif`, `pdf`, `mp4` , `mov` or `webm` file is added to the media library. By default, the conversions will be saved as a `jpg` files. This can be overwritten using the `format()` or `keepOriginalImageFormat()` methods.
 Internally, spatie/image is used to manipulate the images. You can use any manipulation function from that package.
@@ -155,6 +156,22 @@ The default behaviour is that queued conversions will run **after all database t
 This prevents unexpected behaviour where the model does not yet exist in the database and the conversion is disregarded.
 If you need the conversions to run within your transaction, you can set the `queue_conversions_after_database_commit`
 in the `media-library` config file to `false`.
+##Deferred conversions
+----------------------
+Instead of processing a conversion synchronously or dispatching it to a queue, you can use `deferred()` to schedule the conversion to run after the HTTP response has been sent to the browser. This uses Laravel's `defer()` helper under the hood.
+Deferred conversions are useful when you need a conversion to happen promptly after upload without blocking the upload request itself. A common case is generating an avatar thumbnail that should be available quickly, but doesn't need to delay the response.
+```php
+// in your model
+public function registerMediaConversions(?Media $media = null): void
+{
+    $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232)
+            ->deferred();
+}
+```
+Deferred conversions run inline in the same PHP process after the response is flushed, so they keep the worker busy until they finish. For slow conversions, or models with many conversions, prefer `queued()` so the work runs on a queue worker instead.
+Deferred conversions require Laravel 11.23 or higher (the version that introduced the `defer()` helper). On older versions, use `queued()` or `nonQueued()`.
 ##Using model properties in a conversion
 ----------------------------------------
 When registering conversions inside the `registerMediaConversions` function you won't have access to your model properties by default. If you want to use a property of your model as input for defining a conversion you must set `registerMediaConversionsUsingModelInstance` to  `true` on your model.

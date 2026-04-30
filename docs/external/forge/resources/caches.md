@@ -80,6 +80,11 @@ Resources
 Copy page
 Learn how to connect to Redis™ and Memcached on your Laravel Forge server.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Forge automatically installs both [Memcached](https://www.memcached.org/) and [Redis™](https://redis.io/) when provisioning [App Servers](/docs/servers/types#app-servers) or [Cache Servers](/docs/servers/types#cache-servers). Both services are secured by default, remaining inaccessible from external networks and only available for local server connections.
 ## [​](#connecting-to-redis-and-memcached) Connecting to Redis and Memcached
