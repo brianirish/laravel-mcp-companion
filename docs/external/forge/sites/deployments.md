@@ -103,6 +103,11 @@ Sites
 Copy page
 Manage code deployments with scripts, queues, and CI tools
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Forge makes it easy to deploy your applications on demand, whether that be manually, automatically when pushing new code to your source control provider, or via a webhook from your CI platform of choice.
 You can see a list of your site’s deployments by navigating to the “Deployments” tab within your site’s management dashboard. Laravel Forge provides a paginated list of your site’s deployments, including what was deployed, when it was deployed, how long it took to be deployed, and also the output of your deploy script.

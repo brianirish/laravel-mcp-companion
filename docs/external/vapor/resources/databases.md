@@ -62,6 +62,11 @@ On this page
 Resources
 # Databases
 Managing databases within Laravel Vapor.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Vapor allows you to easily create and manage RDS and Aurora Serverless databases directly from the Vapor UI or using the Vapor CLI. **Database backups are automatically performed and you may restore a database to any point in time (down to the second) within the backup retention window.**
 ## [​](#creating-databases) Creating Databases

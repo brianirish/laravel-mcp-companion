@@ -88,6 +88,11 @@ Sites
 Copy page
 Learn how to create sites and install applications.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Forge provides a simple and intuitive interface for managing and deploying your web applications.
 ## [​](#creating-sites) Creating sites

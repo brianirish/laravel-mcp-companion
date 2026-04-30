@@ -82,6 +82,11 @@ Servers
 Copy page
 Learn how to horizontally scale your application using load balancers.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Load balancers are used to distribute web traffic amongst two or more servers and are often used for websites which receive high volumes of traffic.
 ## [​](#creating-load-balanced-sites) Creating load balanced sites

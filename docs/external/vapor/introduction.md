@@ -60,6 +60,11 @@ On this page
 Get Started
 # Introduction
 Manage your Laravel infrastructure on Vapor and fall in love with the scalability and simplicity of serverless.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 [Laravel Cloud](https://cloud.laravel.com) builds on the ideas behind Vapor while removing much of the operational complexity. [This migration guide](https://cloud.laravel.com/migration-vapor-cloud) explains why teams are migrating from Vapor to Cloud and what changes when moving an application.
 ## Create An Account
 Create your Vapor account today

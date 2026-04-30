@@ -85,6 +85,11 @@ Resources
 Copy page
 Learn how to configure and manage scheduled jobs on your Laravel Forge server.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#scheduled-jobs) Scheduled jobs
 Laravel Forge enables you to configure scheduled jobs that run commands at specified intervals on either a server or site level. You can choose from predefined frequencies or create custom Cron schedules tailored to your specific needs.
 If your scheduled job fails to run, verify that the command path is correct and accessible.

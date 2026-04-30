@@ -79,6 +79,11 @@ Get Started
 Copy page
 A server management and application deployment service for your Laravel applications and beyond.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## Create an account
 Create your Laravel Forge account today
 ## Watch more

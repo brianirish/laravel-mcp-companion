@@ -80,6 +80,11 @@ On this page
 Projects
 # Environments
 Learn how to manage environments in Laravel Vapor.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 As you may have noticed, projects do not contain much information or resources themselves. All of your deployments and invoked commands are stored within environments. Each project may have as many environments as needed.
 Typically, you will have an environment for “production”, and a “staging” environment for testing your application. However, don’t be afraid to create more environments for testing new features without interrupting your main staging environment.

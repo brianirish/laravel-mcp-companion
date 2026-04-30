@@ -92,6 +92,11 @@ Get Started
 Copy page
 Laravel Forge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## Laravel Forge CLI
 View the Laravel Forge CLI on GitHub
 ## Laravel Forge API

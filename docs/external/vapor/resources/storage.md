@@ -52,6 +52,11 @@ On this page
 Resources
 # Storage
 Storing files in a serverless environment.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.vapor.build/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 When running an application in a serverless environment, you may not store files permanently on the local filesystem, since you can never be sure that the same serverless “container” will be used on a subsequent request. All files should be stored in a cloud storage system, such as AWS S3, or in a shared file system through AWS EFS.
 ## [​](#attaching-storage) Attaching Storage

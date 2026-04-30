@@ -81,6 +81,11 @@ Servers
 Copy page
 Learn how to use Nginx templates to customize your site configurations.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Nginx templates allow you to customize the Nginx site configuration that Laravel Forge uses when creating your new site.
 Nginx templates that are not valid will prevent Nginx from properly working and your existing sites may stop responding. You should proceed with caution when creating and deploying custom Nginx templates.

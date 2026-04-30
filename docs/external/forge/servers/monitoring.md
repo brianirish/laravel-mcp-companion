@@ -79,6 +79,11 @@ Servers
 Copy page
 Learn how to configure server monitoring in Laravel Forge.
 Copy page
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://forge.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Forge can be configured to monitor the following metrics on your server and email you when their state changes:
 - **CPU Load Average** - tracks the server’s load average. This is based on the average system load over a one-minute interval.
