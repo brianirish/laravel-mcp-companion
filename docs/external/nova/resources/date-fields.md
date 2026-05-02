@@ -73,6 +73,11 @@ On this page
 Resources
 # Date Fields
 Date fields allow you to collect and display date and time information.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Nova offers two types of date fields: `Date` and `DateTime`. As you may have guessed, the `Date` field does not store time information while the `DateTime` field does:
 ```
 use Laravel\Nova\Fields\Date;

@@ -38,6 +38,11 @@ On this page
 Accounts
 # Your Account
 Learn how to manage your Envoyer account.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#updating-your-profile-information) Updating Your Profile Information
 You may update your name, email and password from the [Account dashboard](https://envoyer.io/user/profile#/account) within your user profile at any time.
 ## [​](#securing-your-account-with-two-factor-authentication) Securing Your Account With Two-Factor Authentication

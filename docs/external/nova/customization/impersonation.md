@@ -73,6 +73,11 @@ On this page
 Digging Deeper
 # Impersonation
 Learn how to impersonate other users in your application.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 After deploying your application to production, you may occasionally need to “impersonate” another user of your application in order to debug problems your customers are reporting. Thankfully, Nova includes built-in functionality to handle this exact scenario.
 ## [​](#enabling-impersonation) Enabling Impersonation

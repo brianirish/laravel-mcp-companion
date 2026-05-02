@@ -35,6 +35,11 @@ On this page
 Projects
 # Collaborators
 Manage who can collaborate on your projects.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Collaborators can be added to projects to help manage projects and deployments. Note that collaborators are not permitted to invite additional collaborators or delete a project.
 In addition, you can invite collaborators to your project who do not have a paid Envoyer subscription plan. This means that your company or team only need one active subscription to Envoyer.

@@ -79,6 +79,11 @@ On this page
 Digging Deeper
 # Cards
 Learn how to build custom cards for your Nova application.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Cards are similar to resource tools, but are small, miniature tools that are typically displayed at the top of your dashboard, resource index, or resource detail pages. In fact, if you have used [Nova metrics](./../metrics/defining-metrics), you have already seen Nova cards. Custom Nova cards allow you to build your own, metric-sized tools.
 ## [​](#defining-cards) Defining Cards

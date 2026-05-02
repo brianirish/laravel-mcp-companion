@@ -104,6 +104,11 @@ On this page
 Resources
 # Relationships
 Nova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 In addition to the variety of fields we’ve already discussed, Nova has full support for all of Laravel’s relationships. Once you add relationship fields to your Nova resources, you’ll start to experience the full power of the Nova dashboard, as the resource detail page will allow you to quickly view and search a resource’s related models:
 ## [​](#hasone) HasOne
 The `HasOne` field corresponds to a `hasOne` Eloquent relationship. For example, let’s assume a `User` model `hasOne` `Address` model. We may add the relationship to our `User` Nova resource like so:

@@ -41,6 +41,11 @@ On this page
 Projects
 # Management
 How to manage your Envoyer projects.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Within Envoyer, your application is represented by a “project”. Projects can be deployed to one or more servers at the same time.
 ## [​](#creating-a-project) Creating a Project

@@ -41,6 +41,11 @@ On this page
 Projects
 # Servers
 Learn how Envoyer deploys your projects to servers.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 After creating a project, you may add as many servers as you like to the project. After adding a server, you will be given an SSH key to add to your server. You should add the SSH key to the `~/.ssh/authorized_keys` file for the users Envoyer should connect to the server as.
 After you have added the SSH key to the server, click the “refresh” icon next to the server’s “Connection Status” indicator. Envoyer will attempt to connect to your server and run a few health checks on the server, such as attempting to restart PHP FPM (if it is installed on the server).

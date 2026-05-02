@@ -83,6 +83,11 @@ On this page
 Get Started
 # Upgrade Guide
 Learn how to upgrade your Laravel Nova installation to the latest version.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#dependency-upgrades) Dependency Upgrades
 Nova’s upstream dependencies have been upgraded. You will find a complete list of our dependency upgrades below:
 #### [​](#server) Server

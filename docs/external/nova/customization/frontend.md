@@ -77,6 +77,11 @@ On this page
 Digging Deeper
 # CSS / JavaScript
 Learn how to customize the CSS and JavaScript of your Nova application.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers that are globally available to your JavaScript components.
 ### [​](#nova-requests) Nova Requests
 You may use the `Nova.request()` method to make XHR requests to backend routes provided by your application or custom tools, cards, and fields. The `Nova.request()` method is powered by [Axios](https://github.com/axios/axios) and offers the same API. However, the `Nova.request()` method configures its own instance of Axios that has pre-configured interceptors to properly handle and redirect on `401`, `403`, and `500` level HTTP server responses:

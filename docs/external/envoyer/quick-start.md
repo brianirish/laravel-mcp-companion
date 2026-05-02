@@ -41,6 +41,11 @@ On this page
 Get Started
 # Quick Start
 There are just a few simple and intuitive steps to get started.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 The following documentation provides a step-by-step guide to configure your application and infrastructure for zero downtime deployments with Envoyer.
 ## [​](#source-control-providers) Source Control Providers

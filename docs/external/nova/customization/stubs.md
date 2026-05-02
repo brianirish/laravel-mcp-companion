@@ -67,6 +67,11 @@ Stubs
 Digging Deeper
 # Stubs
 Customize the stubs used by Nova to generate various classes.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 When creating new resources, actions, filters, lens and metrics, Nova will publish files using the default stub files that exist within Nova. However, you may wish to customize these stubs for your own projects in order to apply common modifications automatically.
 To publish the stubs used by Nova to generate various classes, execute the following command:
 ```

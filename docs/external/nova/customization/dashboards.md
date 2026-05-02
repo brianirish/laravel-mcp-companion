@@ -77,6 +77,11 @@ On this page
 Digging Deeper
 # Dashboards
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](./../metrics/defining-metrics) and [cards](../customization/cards).
 ### [​](#default-dashboard) Default Dashboard

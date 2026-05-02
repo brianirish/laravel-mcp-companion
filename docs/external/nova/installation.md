@@ -93,6 +93,11 @@ On this page
 Get Started
 # Installation
 Learn how to install Laravel Nova into your Laravel application.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## Purchase Nova
 Purchase a license for Laravel Nova
 ## Learn More

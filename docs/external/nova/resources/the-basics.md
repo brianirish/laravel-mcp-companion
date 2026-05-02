@@ -95,6 +95,11 @@ On this page
 Resources
 # The Basics
 Learn how to define, register, and customize Nova resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#introduction) Introduction
 Laravel Nova is a beautiful administration dashboard for Laravel applications. Of course, the primary feature of Nova is the ability to administer your underlying database records using Eloquent. Nova accomplishes this by allowing you to define a Nova “resource” that corresponds to each Eloquent model in your application.
 ## [​](#defining-resources) Defining Resources

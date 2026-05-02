@@ -74,6 +74,11 @@ On this page
 Filters
 # Defining Filters
 Nova filters are simple classes that allow you to scope your Nova index queries with custom conditions.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Nova filters are simple classes that allow you to scope your Nova index queries with custom conditions.
 Before creating your own filters, you may want to check out [filterable fields](./../resources/fields#filterable-fields). Filterable fields can solve the filtering needs of most Nova installations without the need to write custom code.
 ## [​](#select-filters) Select Filters

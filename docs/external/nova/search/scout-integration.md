@@ -71,6 +71,11 @@ On this page
 Search
 # Scout Integration
 Integrate Laravel Scout with your Nova resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 By default, Nova searches your resources using the resource’s database columns.
 However, this can become inefficient and lacks support for robust fuzzy matching capabilities provided by dedicated search engines.
 For this reason, Nova integrates seamlessly with [Laravel Scout](https://laravel.com/docs/scout). When the `Laravel\Scout\Searchable` trait is attached to a model associated with a Nova resource, Nova will automatically begin using Scout when performing searches against that resource. There is no other configuration required.

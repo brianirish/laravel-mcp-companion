@@ -82,6 +82,11 @@ On this page
 Digging Deeper
 # Tools
 Learn how to build custom tools for your Nova application.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Sometimes, your business may need additional functionality that isn’t provided by Nova. For this reason, Nova allows you to build custom tools and add them to the Nova sidebar. Nova tools are incredibly customizable, as they primarily consist of a single-file Vue component that is totally under your control. Within your Vue component, you are free to make HTTP requests to any controller within your application.
 ## [​](#defining-tools) Defining Tools

@@ -89,6 +89,11 @@ On this page
 Resources
 # File Fields
 Learn how to work with file fields in Nova.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Nova offers several types of file fields: `File`, `Image`, `Avatar`, `VaporFile`, and `VaporImage`. The `File` field is the most basic form of file upload field, and is the base class for both the `Image` and `Avatar` fields. In the following documentation, we will explore each of these fields and discuss their similarities and differences.
 ## [​](#overview) Overview
 To illustrate the behavior of Nova file upload fields, let’s assume our application’s users can upload “profile photos” to their account. So, our `users` database table will have a `profile_photo` column. This column will contain the path to the profile photo on disk, or, when using a cloud storage provider such as Amazon S3, the profile photo’s path within its “bucket”.

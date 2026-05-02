@@ -72,6 +72,11 @@ On this page
 Resources
 # Dependent Fields
 Dependent fields allow you to define fields that have unique configuration depending on the value of other fields.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Dependent fields are created by invoking the `dependsOn` method when defining a field. The `dependsOn` method accepts an `array` of dependent field attributes and a closure that modifies the configuration of the current field instance.
 Dependent fields allow advanced customization, such as toggling read-only mode, validation rules, and more based on the state of another field:
 ```
