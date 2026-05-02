@@ -38,6 +38,11 @@ On this page
 Projects
 # Deployment Hooks
 Learn how to deploy your projects with Deployment Hooks.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Deployment hooks allow you to customize your entire deployment plan by writing small Bash scripts to automate parts of your deployment. You may also specify the servers on which each hook is executed and the user that runs the hook.
 Envoyer creates several first-party deployment hooks that cannot be modified or re-ordered:

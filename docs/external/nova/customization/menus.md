@@ -90,6 +90,11 @@ On this page
 Digging Deeper
 # Menus
 Nova menus provide a convenient way to customize the main and user menus.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 By default, Nova’s main left-side navigation menu displays all of your application’s dashboards, resources, and any custom tools you have registered.
 When rendering the main menu, Nova will order your dashboards according to the order in which they are returned by the `dashboards` method within your application’s `App\Providers\NovaServiceProvider` class.

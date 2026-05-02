@@ -79,6 +79,11 @@ On this page
 Resources
 # Repeater Fields
 Repeater fields allow you to create and edit repeatable, structured data.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 The `Repeater` field allows you to create and edit repeatable, structured data and store that data in a JSON column or `HasMany` relationship:
 app/Nova/Invoice.php

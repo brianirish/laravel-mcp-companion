@@ -35,6 +35,11 @@ On this page
 Projects
 # Notifications
 Receive notifications from Envoyer.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Envoyer can optionally notify you after a deployment completes and inform you whether it’s deployed successfully or not. Configured notification channels will also be used by Envoyer’s Heartbeat and health check services.
 ## [​](#channels) Channels

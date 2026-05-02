@@ -84,6 +84,11 @@ On this page
 Digging Deeper
 # Fields
 Learn how to build custom fields for your Nova resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Nova ships with a variety of field types; however, sometimes you may need a field type that isn’t provided out of the box. For this reason, Nova allows you to build custom fields. Custom fields consist of three Vue components that determine how the field is displayed in various contexts.
 ## [​](#defining-fields) Defining Fields

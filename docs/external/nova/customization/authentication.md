@@ -72,6 +72,11 @@ On this page
 Digging Deeper
 # Authentication
 Learn how to customize the Nova authentication logic.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Nova utilizes [Laravel Fortify](https://laravel.com/docs/fortify) and offers two-factor authentication, email address verification, and password confirmation. By default, these features are not enabled but can be enabled with just a few changes to your application’s `app/Providers/NovaServiceProvider.php` file.
 ### [​](#using-nova-as-your-application’s-default-login) Using Nova as Your Application’s Default Login
 Sometimes you might want to use Nova as the default authentication UI for your application. To accomplish this, you should enable Nova’s authentication and password reset routes within the `routes` method of your application’s `App\Providers\NovaServiceProvider` class:

@@ -38,6 +38,11 @@ On this page
 Accounts
 # Source Control
 Connect to source control providers to deploy your projects.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://docs.envoyer.io/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Project owners must connect their source control providers before they can deploy projects. You can manage source control providers from the [Integrations tab](https://envoyer.io/user/profile#/integrations) within your account dashboard.
 ## [​](#supported-providers) Supported Providers

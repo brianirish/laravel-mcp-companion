@@ -77,6 +77,11 @@ On this page
 Digging Deeper
 # Filters
 Learn how to build custom filters for your Nova resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Nova ships with several filter types; however, sometimes you may need a filter type that isn’t provided out of the box. For this reason, Nova allows you to build custom filters.
 ## [​](#defining-filters) Defining Filters

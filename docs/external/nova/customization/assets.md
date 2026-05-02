@@ -72,6 +72,11 @@ On this page
 Digging Deeper
 # Assets
 Learn how to extend or add additional functionality to Nova.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#overview) Overview
 Assets allow you to extend or add additional functionality to Nova without the overhead of cards or resource tools. For example, you may wish to override a custom error component to match your branding or intercept Inertia interactions and provide additional data to routes.
 ## [​](#defining-assets) Defining Assets

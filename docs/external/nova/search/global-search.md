@@ -76,6 +76,11 @@ On this page
 Search
 # Global Search
 Learn how to use Nova’s global search feature to search across all your resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 Nova not only allows you to search within specific resources and relationships, you may also globally search across all your resources using the global search input located within the top-navigation bar of the Nova administration panel:
 You can focus the global search input by pressing `/` (forward slash) on your keyboard. Pressing `ESC` (the escape key) will also close the global search input.
 ## [​](#title-/-subtitle-attributes) Title / Subtitle Attributes

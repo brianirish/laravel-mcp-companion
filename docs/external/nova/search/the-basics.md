@@ -73,6 +73,11 @@ On this page
 Search
 # The Basics
 Learn how to define searchable columns for your Nova resources.
+> ## Documentation Index
+>
+> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
+>
+> Use this file to discover all available pages before exploring further.
 ## [​](#searchable-columns) Searchable Columns
 To define which resource fields are searchable, you may assign an array of database columns to the `search` property or `searchableColumns` method of your resource class. This array includes the `id` column by default:
 Property
