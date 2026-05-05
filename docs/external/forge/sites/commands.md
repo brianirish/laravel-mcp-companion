@@ -6,7 +6,7 @@
 
 [Laravel Forge home page](https://forge.laravel.com)
 Search...
-⌘K
+⌘KAsk AI
 - [Get started](https://forge.laravel.com)
 - [Get started](https://forge.laravel.com)
 Search...
@@ -107,3 +107,5 @@ Was this page helpful?
 YesNo
 [Environment Variables](/docs/sites/environment-variables)[Queues](/docs/sites/queues)
 ⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.
