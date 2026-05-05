@@ -6,7 +6,7 @@
 
 [Laravel Forge home page](https://forge.laravel.com)
 Search...
-⌘K
+⌘KAsk AI
 - [Get started](https://forge.laravel.com)
 - [Get started](https://forge.laravel.com)
 Search...
@@ -167,3 +167,5 @@ Was this page helpful?
 YesNo
 [Real-Time Metrics](/docs/servers/real-time-metrics)[Domains](/docs/sites/domains)
 ⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.

@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "95f09089c165a4aa8e700a339c31ea419c404871",
-  "commit_date": "2026-04-30T12:20:19Z",
-  "commit_message": "document interruptible",
-  "commit_url": "https://github.com/laravel/docs/commit/95f09089c165a4aa8e700a339c31ea419c404871",
-  "sync_time": "2026-05-01T00:02:50Z"
+  "commit_sha": "367ba1e26a3f9445151e76f234dcb3e4de0d8034",
+  "commit_date": "2026-05-04T12:34:37Z",
+  "commit_message": "Fix validation rule syntax errors. (#11179)\n\nSigned-off-by: ajiho <lujiahao@88.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/367ba1e26a3f9445151e76f234dcb3e4de0d8034",
+  "sync_time": "2026-05-05T00:02:38Z"
 }

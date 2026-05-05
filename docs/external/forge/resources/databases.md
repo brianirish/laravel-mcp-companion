@@ -6,7 +6,7 @@
 
 [Laravel Forge home page](https://forge.laravel.com)
 Search...
-⌘K
+⌘KAsk AI
 - [Get started](https://forge.laravel.com)
 - [Get started](https://forge.laravel.com)
 Search...
@@ -140,3 +140,5 @@ Was this page helpful?
 YesNo
 [Logs](/docs/sites/logs)[Database Backups](/docs/resources/database-backups)
 ⌘I
+Assistant
+Responses are generated using AI and may contain mistakes.
