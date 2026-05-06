@@ -12,6 +12,14 @@ Laravel MCP Apps let your MCP tools return live, interactive HTML, all rendered 
 
 ---
 
+## Laravel April Product Updates
+
+Passkeys, debounceable jobs, MCP UI app support, mobile Cloud, and PHP 8.5 in Forge. Here's everything that shipped in April.
+
+[Read more](https://blog.laravel.com/blog/category/product)
+
+---
+
 ## From Zero to Product: A Guide for Building a SaaS with Laravel
 
 Build a production-ready SaaS the Artisan way with Laravel: Starter Kits, Socialite, Cashier, Pennant, and Laravel Cloud.
@@ -25,14 +33,6 @@ Build a production-ready SaaS the Artisan way with Laravel: Starter Kits, Social
 Run the free Laravel Cloud Pre-Check to get an instant compatibility report for your app. Find out what to fix before you migrate in just a few minutes.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
-
----
-
-## Why You Should Consider a Laravel Partner for Your Next Project
-
-Learn more about the Laravel Partner program and why you should choose a Laravel Partner for your next project.
-
-[Read more](https://blog.laravel.com/blog/category/community)
 
 ---
 
