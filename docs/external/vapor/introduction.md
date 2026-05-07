@@ -316,6 +316,7 @@ It is necessary to create two policies due to the policy size limit set by AWS. 
                 "lambda:GetLayerVersion",
                 "lambda:GetPolicy",
                 "lambda:InvokeFunction",
+                "lambda:InvokeFunctionUrl",
                 "lambda:ListEventSourceMappings",
                 "lambda:ListVersionsByFunction",
                 "lambda:PublishVersion",
