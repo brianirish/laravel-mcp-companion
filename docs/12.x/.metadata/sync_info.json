@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "09475b0c7d41d69841e8bbb2817f05a197d49bae",
-  "commit_date": "2026-04-28T17:15:29Z",
-  "commit_message": "[12.x] Add assertFailedDependency method to http-tests (#11175)",
-  "commit_url": "https://github.com/laravel/docs/commit/09475b0c7d41d69841e8bbb2817f05a197d49bae",
-  "sync_time": "2026-04-29T00:02:47Z"
+  "commit_sha": "bee7a0c1569677e5a96c03d1bc5c94ee06bd4070",
+  "commit_date": "2026-05-07T18:39:23Z",
+  "commit_message": "Document method-based agent text generation options (#11194)",
+  "commit_url": "https://github.com/laravel/docs/commit/bee7a0c1569677e5a96c03d1bc5c94ee06bd4070",
+  "sync_time": "2026-05-08T00:02:27Z"
 }
