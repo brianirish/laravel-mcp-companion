@@ -125,12 +125,12 @@ The AI SDK supports a variety of providers across its features. The following ta
 
 | Feature | Providers |
 |---|---|
-| Text | OpenAI, Anthropic, Gemini, Azure, Groq, xAI, DeepSeek, Mistral, Ollama |
-| Images | OpenAI, Gemini, xAI |
-| TTS | OpenAI, ElevenLabs |
-| STT | OpenAI, ElevenLabs, Mistral |
-| Embeddings | OpenAI, Gemini, Azure, Cohere, Mistral, Jina, VoyageAI |
-| Reranking | Cohere, Jina |
+| Text | OpenAI, Anthropic, Gemini, Azure, Bedrock, Groq, xAI, DeepSeek, Mistral, Ollama, OpenRouter |
+| Images | OpenAI, Gemini, xAI, Azure, Bedrock, OpenRouter |
+| TTS | OpenAI, ElevenLabs, Gemini |
+| STT | OpenAI, ElevenLabs, Mistral, Gemini |
+| Embeddings | OpenAI, Gemini, Azure, Bedrock, Cohere, Mistral, Jina, VoyageAI, Ollama, OpenRouter |
+| Reranking | Cohere, Jina, VoyageAI |
 | Files | OpenAI, Anthropic, Gemini |
 
 The `Laravel\Ai\Enums\Lab` enum may be used to reference providers throughout your code instead of using plain strings:
@@ -925,6 +925,7 @@ You may configure text generation options for an agent using PHP attributes. The
 - `Provider`: The AI provider (or providers for failover) to use for the agent.
 - `Temperature`: The sampling temperature to use for generation (0.0 to 1.0).
 - `Timeout`: The HTTP timeout in seconds for agent requests (default: 60).
+- `TopP`: The nucleus sampling probability to use for generation (0.0 to 1.0).
 - `UseCheapestModel`: Use the provider's cheapest text model for cost optimization.
 - `UseSmartestModel`: Use the provider's most capable text model for complex tasks.
 
@@ -939,6 +940,7 @@ use Laravel\Ai\Attributes\Model;
 use Laravel\Ai\Attributes\Provider;
 use Laravel\Ai\Attributes\Temperature;
 use Laravel\Ai\Attributes\Timeout;
+use Laravel\Ai\Attributes\TopP;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
@@ -949,6 +951,7 @@ use Laravel\Ai\Promptable;
 #[MaxTokens(4096)]
 #[Temperature(0.7)]
 #[Timeout(120)]
+#[TopP(0.9)]
 class SalesCoach implements Agent
 {
     use Promptable;
