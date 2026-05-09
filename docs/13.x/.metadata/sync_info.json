@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "9735c239ec2955fe3410cbd84b3b5a07a1703d33",
-  "commit_date": "2026-05-07T18:40:27Z",
-  "commit_message": "Document #[TopP] agent configuration attribute (#11193)",
-  "commit_url": "https://github.com/laravel/docs/commit/9735c239ec2955fe3410cbd84b3b5a07a1703d33",
-  "sync_time": "2026-05-08T00:02:28Z"
+  "commit_sha": "878cafa2bf8bfe3b1224a4fdf1096ab864982785",
+  "commit_date": "2026-05-08T22:27:46Z",
+  "commit_message": "Update dusk.md with click method examples (#11195)\n\nAdded examples for clickWhenVisible and clickWhenEnabled methods in Dusk documentation.",
+  "commit_url": "https://github.com/laravel/docs/commit/878cafa2bf8bfe3b1224a4fdf1096ab864982785",
+  "sync_time": "2026-05-09T00:02:44Z"
 }
