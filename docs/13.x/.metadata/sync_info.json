@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "878cafa2bf8bfe3b1224a4fdf1096ab864982785",
-  "commit_date": "2026-05-08T22:27:46Z",
-  "commit_message": "Update dusk.md with click method examples (#11195)\n\nAdded examples for clickWhenVisible and clickWhenEnabled methods in Dusk documentation.",
-  "commit_url": "https://github.com/laravel/docs/commit/878cafa2bf8bfe3b1224a4fdf1096ab864982785",
-  "sync_time": "2026-05-09T00:02:44Z"
+  "commit_sha": "75bcf0cdf20551d9547b8fea7feebe312e2a4de2",
+  "commit_date": "2026-05-11T14:04:08Z",
+  "commit_message": "document sub-agents",
+  "commit_url": "https://github.com/laravel/docs/commit/75bcf0cdf20551d9547b8fea7feebe312e2a4de2",
+  "sync_time": "2026-05-12T00:02:52Z"
 }
