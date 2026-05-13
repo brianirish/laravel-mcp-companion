@@ -101,6 +101,7 @@ Server networks simplify the process of connecting servers for dedicated databas
 - Owned by the same user account
 - Located within the same geographical region and VPC
 Once network access is granted between servers, you can connect using private IP addresses for secure, high-performance internal communication.
+Laravel VPS servers created within the same organization are automatically placed on a shared VPC that is private to that organisation, so traffic between them is routed internally even when using public IP addresses. No private IP is provided in the Forge UI as a result.
 ## [​](#firewall-management) Firewall management
 Laravel Forge provides complete firewall control, allowing you to open specific ports to internet traffic. Common use cases include opening port `21` for FTP services or custom application ports.
 ### [​](#creating-firewall-rules) Creating firewall rules
