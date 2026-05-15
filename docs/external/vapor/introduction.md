@@ -275,6 +275,7 @@ It is necessary to create two policies due to the policy size limit set by AWS. 
                 "elasticloadbalancing:CreateRule",
                 "elasticloadbalancing:CreateTargetGroup",
                 "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DescribeListenerCertificates",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeRules",
                 "elasticloadbalancing:DescribeTargetGroups",

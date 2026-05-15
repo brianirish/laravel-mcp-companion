@@ -51,7 +51,6 @@ On this page
 - [Jumpboxes + GUI Tool](#jumpboxes-%2B-gui-tool)
 - [Shell Command](#shell-command)
 - [Existing Databases](#existing-databases)
-- [Database Proxies](#database-proxies)
 - [Database Users](#database-users)
 - [Scaling Databases](#scaling-databases)
 - [Restoring Databases](#restoring-databases)
@@ -134,31 +133,6 @@ If your database is hosted by [PlanetScale](https://planetscale.com/), the SSL c
 ```
 MYSQL_ATTR_SSL_CA=/opt/lib/curl/cert.pem
 ```
-## [​](#database-proxies) Database Proxies
-Even though your serverless Laravel applications running on Vapor can handle extreme amounts of web traffic, traditional relational databases such as MySQL can become overwhelmed and crash due to connection limit restrictions. To solve this, you may use an RDS proxy to efficiently manage your database connections and allow many more connections than would typically be possible.
-The database proxy can be added via the Vapor UI or the `database:proxy` CLI command:
-```
-vapor database:proxy my-application-db
-```
-Next, you may instruct an environment to use the proxy associated with the database using the `database-proxy` configuration option within your `vapor.yml` file:
-vapor.yml
-```
-id: 3
-name: vapor-app
-environments:
-    production:
-        database: my-application-db
-        database-proxy: true
-        build:
-            - 'composer install --no-dev'
-        deploy:
-            - 'php artisan migrate --force'
-```
-You can delete the proxy at any time using the Vapor UI or the `database:delete-proxy` CLI command. Before deleting a proxy, make sure none of your applications are using the associated proxy:
-```
-vapor database:delete-proxy my-application-db
-```
-Before considering the usage of database proxies in Vapor, please consult Amazon’s [list of limitations](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy.html#rds-proxy.limitations).
 ## [​](#database-users) Database Users
 When a database is created, Vapor creates a “vapor” master user. You may create additional database users, which will automatically be assigned a secure, random password, using the Vapor UI or the `database:user` CLI command:
 ```
