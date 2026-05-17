@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "bee7a0c1569677e5a96c03d1bc5c94ee06bd4070",
-  "commit_date": "2026-05-07T18:39:23Z",
-  "commit_message": "Document method-based agent text generation options (#11194)",
-  "commit_url": "https://github.com/laravel/docs/commit/bee7a0c1569677e5a96c03d1bc5c94ee06bd4070",
-  "sync_time": "2026-05-08T00:02:27Z"
+  "commit_sha": "48d5b36420accaa6ca8c5bc1cd7600c56f820e37",
+  "commit_date": "2026-05-16T20:41:14Z",
+  "commit_message": "Fix stray markdown asterisks (#11206)",
+  "commit_url": "https://github.com/laravel/docs/commit/48d5b36420accaa6ca8c5bc1cd7600c56f820e37",
+  "sync_time": "2026-05-17T00:02:46Z"
 }
