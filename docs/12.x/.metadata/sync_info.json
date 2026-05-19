@@ -1,8 +1,8 @@
 {
   "version": "12.x",
-  "commit_sha": "48d5b36420accaa6ca8c5bc1cd7600c56f820e37",
-  "commit_date": "2026-05-16T20:41:14Z",
-  "commit_message": "Fix stray markdown asterisks (#11206)",
-  "commit_url": "https://github.com/laravel/docs/commit/48d5b36420accaa6ca8c5bc1cd7600c56f820e37",
-  "sync_time": "2026-05-17T00:02:46Z"
+  "commit_sha": "4711785bc0c5f3be06ec6cd803e8fd2deb3938a2",
+  "commit_date": "2026-05-18T14:07:40Z",
+  "commit_message": "Clarify SIGTERM behavior (#11209)",
+  "commit_url": "https://github.com/laravel/docs/commit/4711785bc0c5f3be06ec6cd803e8fd2deb3938a2",
+  "sync_time": "2026-05-19T00:02:37Z"
 }
