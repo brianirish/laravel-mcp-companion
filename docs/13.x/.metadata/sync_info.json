@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "0ff47b138c368174d68ca9380269dc3178c4ab11",
-  "commit_date": "2026-05-15T14:29:20Z",
-  "commit_message": "Fix stray markdown asterisks (#11205)",
-  "commit_url": "https://github.com/laravel/docs/commit/0ff47b138c368174d68ca9380269dc3178c4ab11",
-  "sync_time": "2026-05-16T00:03:56Z"
+  "commit_sha": "11f9ff2a7521744facd522db89277fd9a14b4828",
+  "commit_date": "2026-05-18T12:51:28Z",
+  "commit_message": "docs: add resource_link content type to MCP documentation (#11207)\n\n* docs: add resource_link content type to MCP documentation\n\nAdds documentation for the `resource_link` content type introduced in the MCP specification (2025-06-18).\r\n\r\nThis feature was implemented in laravel/mcp PR #200 by @rupeshstha.\r\n\r\nChanges:\r\n- Added \"Resource Link Responses\" subsection under Resource Responses\r\n- Updated table of contents\r\n- Added examples for plain URI links, resource class/instance links, overrides, and annotations\n\n* fixup: follow documentation conventions for resource_link section\n\n- Remove TOC entry (#### subsections like Blob/Error are not listed in TOC)\r\n- Simplify description to match the concise \"To return X, use the Y method\" pattern\r\n- Remove verbose JSON wire payload example (not present in other response docs)\r\n- Reduce to 3 focused code examples following the existing conventions\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/11f9ff2a7521744facd522db89277fd9a14b4828",
+  "sync_time": "2026-05-19T00:02:38Z"
 }
