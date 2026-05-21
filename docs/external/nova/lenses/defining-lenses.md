@@ -64,11 +64,11 @@ Defining Lenses
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
-- [Query Helpers](#query-helpers)
+  - [Query Helpers](#query-helpers)
 - [Lens Polling](#lens-polling)
-- [Toggling Lens Polling](#toggling-lens-polling)
+  - [Toggling Lens Polling](#toggling-lens-polling)
 - [Lens Filters](#lens-filters)
 - [Lens Actions](#lens-actions)
 - [Lens Metrics](#lens-metrics)

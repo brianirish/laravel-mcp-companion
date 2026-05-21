@@ -64,17 +64,17 @@ Registering Metrics
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
-- [Detail Metrics](#detail-metrics)
-- [Dashboard Metrics](#dashboard-metrics)
+  - [Detail Metrics](#detail-metrics)
+  - [Dashboard Metrics](#dashboard-metrics)
 - [Authorization](#authorization)
 - [Default Metric Range](#default-metric-range)
 - [Metric Sizes](#metric-sizes)
 - [Metric Help Text / Tooltips](#metric-help-text-%2F-tooltips)
 - [Refreshing Metrics](#refreshing-metrics)
-- [Refresh After Actions](#refresh-after-actions)
-- [Refresh After Filter Changes](#refresh-after-filter-changes)
+  - [Refresh After Actions](#refresh-after-actions)
+  - [Refresh After Filter Changes](#refresh-after-filter-changes)
 Metrics
 # Registering Metrics
 Learn how to register metrics in Nova.

@@ -64,21 +64,21 @@ Tools
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Defining Tools](#defining-tools)
 - [Registering Tools](#registering-tools)
-- [Authorization](#authorization)
+  - [Authorization](#authorization)
 - [Building Tools](#building-tools)
-- [Routing](#routing)
-- [Routing Authorization](#routing-authorization)
-- [Navigation](#navigation)
-- [Sidebar Icons](#sidebar-icons)
+  - [Routing](#routing)
+  - [Routing Authorization](#routing-authorization)
+  - [Navigation](#navigation)
+  - [Sidebar Icons](#sidebar-icons)
 - [Assets](#assets)
-- [Registering Assets](#registering-assets)
-- [JavaScript Bootstrap & Components](#javascript-bootstrap-%26-components)
-- [Compiling Assets](#compiling-assets)
-- [Vue Page Components & Nova Plugins](#vue-page-components-%26-nova-plugins)
+  - [Registering Assets](#registering-assets)
+  - [JavaScript Bootstrap & Components](#javascript-bootstrap-%26-components)
+  - [Compiling Assets](#compiling-assets)
+  - [Vue Page Components & Nova Plugins](#vue-page-components-%26-nova-plugins)
 Digging Deeper
 # Tools
 Learn how to build custom tools for your Nova application.

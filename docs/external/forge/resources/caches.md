@@ -68,13 +68,13 @@ Caches
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Connecting to Redis and Memcached](#connecting-to-redis-and-memcached)
 - [Managing cache services](#managing-cache-services)
-- [Configuring Redis password](#configuring-redis-password)
+  - [Configuring Redis password](#configuring-redis-password)
 - [Network connectivity](#network-connectivity)
-- [External connections](#external-connections)
+  - [External connections](#external-connections)
 Resources
 # Caches
 Copy page

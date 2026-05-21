@@ -29,9 +29,9 @@ Introduction
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [What Is Envoyer?](#what-is-envoyer)
-- [Requirements](#requirements)
+  - [Requirements](#requirements)
 - [Forge Integration](#forge-integration)
 - [Envoyer IP Addresses](#envoyer-ip-addresses)
 - [Envoyer API](#envoyer-api)

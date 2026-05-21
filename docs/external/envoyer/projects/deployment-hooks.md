@@ -29,10 +29,10 @@ Deployment Hooks
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Push To Deploy URL](#push-to-deploy-url)
-- [Deployment URL Options](#deployment-url-options)
+  - [Deployment URL Options](#deployment-url-options)
 - [Deployment Lifecycle](#deployment-lifecycle)
 - [Hook Variables](#hook-variables)
 Projects

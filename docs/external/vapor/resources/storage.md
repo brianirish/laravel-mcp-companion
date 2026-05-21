@@ -38,16 +38,16 @@ Storage
 - [Sentry](/integrations/sentry)
 ##### Other
 - [Abuse](/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Attaching Storage](#attaching-storage)
 - [Mounting A Persistent File System](#mounting-a-persistent-file-system)
 - [File Uploads](#file-uploads)
-- [Installing The Vapor NPM Package](#installing-the-vapor-npm-package)
-- [Authorization](#authorization)
-- [Streaming Files To S3](#streaming-files-to-s3)
-- [Acknowledge File Uploads & Permanent Storage](#acknowledge-file-uploads-%26-permanent-storage)
-- [Local Development](#local-development)
+  - [Installing The Vapor NPM Package](#installing-the-vapor-npm-package)
+  - [Authorization](#authorization)
+  - [Streaming Files To S3](#streaming-files-to-s3)
+  - [Acknowledge File Uploads & Permanent Storage](#acknowledge-file-uploads-%26-permanent-storage)
+  - [Local Development](#local-development)
 - [Temporary Storage](#temporary-storage)
 Resources
 # Storage

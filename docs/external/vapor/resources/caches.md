@@ -38,11 +38,11 @@ Caches
 - [Sentry](/integrations/sentry)
 ##### Other
 - [Abuse](/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating Caches](#creating-caches)
 - [Using Caches](#using-caches)
-- [Connecting To Caches Locally](#connecting-to-caches-locally)
+  - [Connecting To Caches Locally](#connecting-to-caches-locally)
 - [Scaling Caches](#scaling-caches)
 - [Metrics](#metrics)
 - [DynamoDB Caches](#dynamodb-caches)

@@ -68,14 +68,14 @@ Load Balancing
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating load balanced sites](#creating-load-balanced-sites)
 - [Load balancer methods](#load-balancer-methods)
 - [Server configurations](#server-configurations)
-- [Server weights](#server-weights)
-- [Backup servers](#backup-servers)
-- [Pausing traffic](#pausing-traffic)
+  - [Server weights](#server-weights)
+  - [Backup servers](#backup-servers)
+  - [Pausing traffic](#pausing-traffic)
 - [SSL](#ssl)
 Servers
 # Load Balancing

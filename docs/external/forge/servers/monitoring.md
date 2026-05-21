@@ -68,11 +68,11 @@ Monitoring
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Managing server monitors](#managing-server-monitors)
-- [Creating monitors](#creating-monitors)
-- [Deleting monitors](#deleting-monitors)
+  - [Creating monitors](#creating-monitors)
+  - [Deleting monitors](#deleting-monitors)
 - [Stat collection frequencies](#stat-collection-frequencies)
 Servers
 # Monitoring

@@ -68,7 +68,7 @@ User Isolation
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Sudo access](#sudo-access)
 - [Connecting via SFTP](#connecting-via-sftp)

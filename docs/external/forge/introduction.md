@@ -68,10 +68,10 @@ Welcome to Laravel Forge
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [What is Laravel Forge?](#what-is-laravel-forge)
 - [Laravel Forge IP addresses](#laravel-forge-ip-addresses)
-- [Laravel Forge support jumpbox](#laravel-forge-support-jumpbox)
+  - [Laravel Forge support jumpbox](#laravel-forge-support-jumpbox)
 - [Laravel Forge API](#laravel-forge-api)
 - [Legal and compliance](#legal-and-compliance)
 Get Started

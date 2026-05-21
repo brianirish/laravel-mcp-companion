@@ -68,18 +68,18 @@ Scheduler
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Scheduled jobs](#scheduled-jobs)
-- [Laravel application scheduling](#laravel-application-scheduling)
-- [Default scheduled jobs](#default-scheduled-jobs)
+  - [Laravel application scheduling](#laravel-application-scheduling)
+  - [Default scheduled jobs](#default-scheduled-jobs)
 - [Managing scheduled jobs](#managing-scheduled-jobs)
-- [Creating scheduled jobs](#creating-scheduled-jobs)
-- [Editing scheduled jobs](#editing-scheduled-jobs)
-- [Running scheduled jobs manually](#running-scheduled-jobs-manually)
-- [Deleting scheduled jobs](#deleting-scheduled-jobs)
+  - [Creating scheduled jobs](#creating-scheduled-jobs)
+  - [Editing scheduled jobs](#editing-scheduled-jobs)
+  - [Running scheduled jobs manually](#running-scheduled-jobs-manually)
+  - [Deleting scheduled jobs](#deleting-scheduled-jobs)
 - [Heartbeats](#heartbeats)
-- [Configuring heartbeat monitoring](#configuring-heartbeat-monitoring)
-- [Using heartbeat endpoints](#using-heartbeat-endpoints)
+  - [Configuring heartbeat monitoring](#configuring-heartbeat-monitoring)
+  - [Using heartbeat endpoints](#using-heartbeat-endpoints)
 Resources
 # Scheduler
 Copy page

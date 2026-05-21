@@ -29,14 +29,14 @@ Servers
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Server Configuration](#server-configuration)
-- [Configuring Multiple PHP Versions](#configuring-multiple-php-versions)
-- [Non-Standard PHP Services](#non-standard-php-services)
+  - [Configuring Multiple PHP Versions](#configuring-multiple-php-versions)
+  - [Non-Standard PHP Services](#non-standard-php-services)
 - [Importing Laravel Forge Servers](#importing-laravel-forge-servers)
 - [Environment](#environment)
-- [Resetting your environment key](#resetting-your-environment-key)
+  - [Resetting your environment key](#resetting-your-environment-key)
 - [Managing Uploaded Files](#managing-uploaded-files)
 Projects
 # Servers

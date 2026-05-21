@@ -64,19 +64,19 @@ Resource Tools
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Defining Tools](#defining-tools)
 - [Registering Tools](#registering-tools)
-- [Authorization](#authorization)
-- [Tool Options](#tool-options)
-- [Accessing Tool Options](#accessing-tool-options)
-- [Dynamic Options](#dynamic-options)
+  - [Authorization](#authorization)
+  - [Tool Options](#tool-options)
+  - [Accessing Tool Options](#accessing-tool-options)
+  - [Dynamic Options](#dynamic-options)
 - [Building Tools](#building-tools)
-- [Routing](#routing)
+  - [Routing](#routing)
 - [Assets](#assets)
-- [Registering Assets](#registering-assets)
-- [Compiling Assets](#compiling-assets)
+  - [Registering Assets](#registering-assets)
+  - [Compiling Assets](#compiling-assets)
 Digging Deeper
 # Resource Tools
 Learn how to build custom tools for your Nova resources.

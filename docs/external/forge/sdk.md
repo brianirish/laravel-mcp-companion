@@ -68,7 +68,7 @@ Laravel Forge SDK
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Upgrading](#upgrading)

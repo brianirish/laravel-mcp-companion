@@ -68,7 +68,7 @@ Laravel Forge CLI
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Get started](#get-started)
@@ -76,17 +76,17 @@ On this page
 - [Current server & switching servers](#current-server-%26-switching-servers)
 - [SSH key authentication](#ssh-key-authentication)
 - [Sites](#sites)
-- [Initiating deployments](#initiating-deployments)
-- [Updating environment variables](#updating-environment-variables)
-- [Viewing application logs](#viewing-application-logs)
-- [Reviewing deployment output / logs](#reviewing-deployment-output-%2F-logs)
-- [Running commands](#running-commands)
-- [Tinker](#tinker)
+  - [Initiating deployments](#initiating-deployments)
+  - [Updating environment variables](#updating-environment-variables)
+  - [Viewing application logs](#viewing-application-logs)
+  - [Reviewing deployment output / logs](#reviewing-deployment-output-%2F-logs)
+  - [Running commands](#running-commands)
+  - [Tinker](#tinker)
 - [Resources](#resources)
-- [Checking resource status](#checking-resource-status)
-- [Viewing resources logs](#viewing-resources-logs)
-- [Restarting resources](#restarting-resources)
-- [Connecting to resources locally](#connecting-to-resources-locally)
+  - [Checking resource status](#checking-resource-status)
+  - [Viewing resources logs](#viewing-resources-logs)
+  - [Restarting resources](#restarting-resources)
+  - [Connecting to resources locally](#connecting-to-resources-locally)
 Get Started
 # Laravel Forge CLI
 Copy page

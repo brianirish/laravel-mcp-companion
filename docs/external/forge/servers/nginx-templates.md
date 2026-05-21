@@ -68,12 +68,12 @@ Nginx Templates
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Managing templates](#managing-templates)
-- [Create template](#create-template)
-- [Edit templates](#edit-templates)
-- [Delete templates](#delete-templates)
+  - [Create template](#create-template)
+  - [Edit templates](#edit-templates)
+  - [Delete templates](#delete-templates)
 - [Template variables](#template-variables)
 - [Team permissions](#team-permissions)
 Servers

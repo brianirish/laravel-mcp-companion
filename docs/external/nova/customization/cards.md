@@ -64,18 +64,18 @@ Cards
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Defining Cards](#defining-cards)
 - [Registering Cards](#registering-cards)
-- [Authorization](#authorization)
-- [Card Options](#card-options)
-- [Accessing Card Options](#accessing-card-options)
+  - [Authorization](#authorization)
+  - [Card Options](#card-options)
+  - [Accessing Card Options](#accessing-card-options)
 - [Building Cards](#building-cards)
-- [Routing](#routing)
+  - [Routing](#routing)
 - [Assets](#assets)
-- [Registering Assets](#registering-assets)
-- [Compiling Assets](#compiling-assets)
+  - [Registering Assets](#registering-assets)
+  - [Compiling Assets](#compiling-assets)
 Digging Deeper
 # Cards
 Learn how to build custom cards for your Nova application.

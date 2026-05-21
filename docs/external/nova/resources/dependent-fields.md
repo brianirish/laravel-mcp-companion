@@ -64,7 +64,7 @@ Dependent Fields
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Supported Dependent Fields](#supported-dependent-fields)
 - [Toggling Field Visibility Using dependsOn](#toggling-field-visibility-using-dependson)
 - [Setting a Field’s Value Using dependsOn](#setting-a-field%E2%80%99s-value-using-dependson)

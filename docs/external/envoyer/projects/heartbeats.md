@@ -29,11 +29,11 @@ Heartbeats
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Heartbeat URLs](#heartbeat-urls)
-- [Calling Manually](#calling-manually)
-- [Calling With Laravel](#calling-with-laravel)
+  - [Calling Manually](#calling-manually)
+  - [Calling With Laravel](#calling-with-laravel)
 Projects
 # Heartbeats
 Learn how to monitor your application’s cron jobs.

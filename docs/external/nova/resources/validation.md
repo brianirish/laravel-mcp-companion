@@ -64,15 +64,15 @@ Validation
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Rules](#rules)
-- [Attaching Rules](#attaching-rules)
-- [Creation Rules](#creation-rules)
-- [Update Rules](#update-rules)
+  - [Attaching Rules](#attaching-rules)
+  - [Creation Rules](#creation-rules)
+  - [Update Rules](#update-rules)
 - [After Validation Hooks](#after-validation-hooks)
-- [The afterValidation Method](#the-aftervalidation-method)
-- [The afterCreationValidation Method](#the-aftercreationvalidation-method)
-- [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
+  - [The afterValidation Method](#the-aftervalidation-method)
+  - [The afterCreationValidation Method](#the-aftercreationvalidation-method)
+  - [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
 Resources
 # Validation
 Nova provides a variety of ways to validate your resource fields.

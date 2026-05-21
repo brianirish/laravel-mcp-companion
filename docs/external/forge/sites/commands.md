@@ -68,10 +68,10 @@ Commands
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Running commands](#running-commands)
-- [Command history](#command-history)
+  - [Command history](#command-history)
 - [Commands vs. recipes](#commands-vs-recipes)
 Sites
 # Commands

@@ -68,18 +68,18 @@ Databases
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating servers with databases](#creating-servers-with-databases)
-- [Installing databases later](#installing-databases-later)
+  - [Installing databases later](#installing-databases-later)
 - [Managing database passwords](#managing-database-passwords)
 - [Connecting to databases via database clients](#connecting-to-databases-via-database-clients)
-- [Using database connection URLs](#using-database-connection-urls)
+  - [Using database connection URLs](#using-database-connection-urls)
 - [Connecting to external databases](#connecting-to-external-databases)
 - [Managing databases](#managing-databases)
-- [Creating databases](#creating-databases)
-- [Syncing databases](#syncing-databases)
-- [Creating database users](#creating-database-users)
+  - [Creating databases](#creating-databases)
+  - [Syncing databases](#syncing-databases)
+  - [Creating database users](#creating-database-users)
 - [Database upgrades](#database-upgrades)
 Resources
 # Databases
