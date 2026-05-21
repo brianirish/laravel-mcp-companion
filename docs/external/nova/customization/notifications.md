@@ -64,11 +64,11 @@ Notifications
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Sending Notifications](#sending-notifications)
-- [Opening Remote Action URLs in New Tabs](#opening-remote-action-urls-in-new-tabs)
-- [Notification Icons](#notification-icons)
+  - [Opening Remote Action URLs in New Tabs](#opening-remote-action-urls-in-new-tabs)
+  - [Notification Icons](#notification-icons)
 - [Disabling Notifications](#disabling-notifications)
 - [Enabling Unread Notifications Count](#enabling-unread-notifications-count)
 Digging Deeper

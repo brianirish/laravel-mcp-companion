@@ -38,11 +38,11 @@ The Basics
 - [Sentry](/integrations/sentry)
 ##### Other
 - [Abuse](/abuse)
-On this page
+## On this page
 - [Creating Projects](#creating-projects)
-- [Projects & Teams](#projects-%26-teams)
+  - [Projects & Teams](#projects-%26-teams)
 - [Project Settings](#project-settings)
-- [GitHub Repository](#github-repository)
+  - [GitHub Repository](#github-repository)
 - [Deleting Projects](#deleting-projects)
 Projects
 # The Basics

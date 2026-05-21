@@ -68,17 +68,17 @@ Server Types
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Server Types](#server-types)
-- [App Servers](#app-servers)
-- [Web Servers](#web-servers)
-- [Database Servers](#database-servers)
-- [Cache Servers](#cache-servers)
-- [Worker Servers](#worker-servers)
-- [Meilisearch Servers](#meilisearch-servers)
-- [Load Balancers](#load-balancers)
-- [OpenClaw Servers](#openclaw-servers)
+  - [App Servers](#app-servers)
+  - [Web Servers](#web-servers)
+  - [Database Servers](#database-servers)
+  - [Cache Servers](#cache-servers)
+  - [Worker Servers](#worker-servers)
+  - [Meilisearch Servers](#meilisearch-servers)
+  - [Load Balancers](#load-balancers)
+  - [OpenClaw Servers](#openclaw-servers)
 Servers
 # Server Types
 Copy page

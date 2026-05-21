@@ -29,14 +29,14 @@ Quick Start
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Source Control Providers](#source-control-providers)
 - [Projects](#projects)
 - [Servers](#servers)
-- [Import From Forge](#import-from-forge)
-- [Manual Import](#manual-import)
-- [Connect From Forge](#connect-from-forge)
+  - [Import From Forge](#import-from-forge)
+  - [Manual Import](#manual-import)
+  - [Connect From Forge](#connect-from-forge)
 - [Deployments](#deployments)
 Get Started
 # Quick Start

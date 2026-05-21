@@ -64,16 +64,16 @@ Dashboards
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
-- [Default Dashboard](#default-dashboard)
+  - [Default Dashboard](#default-dashboard)
 - [Defining Dashboards](#defining-dashboards)
-- [Dashboard Names](#dashboard-names)
-- [Dashboard URI Keys](#dashboard-uri-keys)
+  - [Dashboard Names](#dashboard-names)
+  - [Dashboard URI Keys](#dashboard-uri-keys)
 - [Registering Dashboards](#registering-dashboards)
-- [Customizing Dashboard Menus](#customizing-dashboard-menus)
-- [Refreshing Dashboard Metrics](#refreshing-dashboard-metrics)
-- [Authorization](#authorization)
+  - [Customizing Dashboard Menus](#customizing-dashboard-menus)
+  - [Refreshing Dashboard Metrics](#refreshing-dashboard-metrics)
+  - [Authorization](#authorization)
 Digging Deeper
 # Dashboards
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.

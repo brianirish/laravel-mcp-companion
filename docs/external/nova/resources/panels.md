@@ -64,11 +64,11 @@ Field Panels
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Limiting Displayed Fields](#limiting-displayed-fields)
 - [Collapsible Panels](#collapsible-panels)
 - [Tabs](#tabs)
-- [Omitting Tab Group Titles](#omitting-tab-group-titles)
+  - [Omitting Tab Group Titles](#omitting-tab-group-titles)
 Resources
 # Field Panels
 > ## Documentation Index

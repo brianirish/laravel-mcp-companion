@@ -29,12 +29,12 @@ Your Account
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Updating Your Profile Information](#updating-your-profile-information)
 - [Securing Your Account With Two-Factor Authentication](#securing-your-account-with-two-factor-authentication)
 - [Billing](#billing)
-- [Business Receipts](#business-receipts)
-- [Deleting Your Account](#deleting-your-account)
+  - [Business Receipts](#business-receipts)
+  - [Deleting Your Account](#deleting-your-account)
 Accounts
 # Your Account
 Learn how to manage your Envoyer account.

@@ -64,9 +64,9 @@ Scout Integration
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Customizing Scout Searches](#customizing-scout-searches)
-- [Limiting Scout Search Results](#limiting-scout-search-results)
+  - [Limiting Scout Search Results](#limiting-scout-search-results)
 - [Disabling Scout Search](#disabling-scout-search)
 Search
 # Scout Integration

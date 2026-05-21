@@ -38,14 +38,14 @@ Queues
 - [Sentry](/integrations/sentry)
 ##### Other
 - [Abuse](/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Custom Queue Names](#custom-queue-names)
-- [Queue Names Should Be Unique](#queue-names-should-be-unique)
-- [Disabling The Queue](#disabling-the-queue)
+  - [Queue Names Should Be Unique](#queue-names-should-be-unique)
+  - [Disabling The Queue](#disabling-the-queue)
 - [FIFO Queues](#fifo-queues)
 - [Queue Concurrency](#queue-concurrency)
-- [Individual Queue Concurrency](#individual-queue-concurrency)
+  - [Individual Queue Concurrency](#individual-queue-concurrency)
 - [Queue Visibility Timeout](#queue-visibility-timeout)
 - [Queue Memory](#queue-memory)
 - [Queue Database Connections](#queue-database-connections)
@@ -53,7 +53,7 @@ On this page
 - [Failed Jobs](#failed-jobs)
 - [Queues and Maintenance Mode](#queues-and-maintenance-mode)
 - [Laravel Horizon on Vapor](#laravel-horizon-on-vapor)
-- [Alternative Solutions](#alternative-solutions)
+  - [Alternative Solutions](#alternative-solutions)
 Resources
 # Queues
 Using queues with Laravel Vapor.

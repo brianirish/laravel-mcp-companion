@@ -64,18 +64,18 @@ Repeater Fields
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Repeatables](#repeatables)
-- [Generating Repeatables](#generating-repeatables)
-- [Confirming Repeatable Removal](#confirming-repeatable-removal)
+  - [Generating Repeatables](#generating-repeatables)
+  - [Confirming Repeatable Removal](#confirming-repeatable-removal)
 - [Repeater Presets](#repeater-presets)
-- [JSON Preset](#json-preset)
-- [HasMany Preset](#hasmany-preset)
+  - [JSON Preset](#json-preset)
+  - [HasMany Preset](#hasmany-preset)
 - [Upserting Repeatables Using Unique Fields](#upserting-repeatables-using-unique-fields)
 - [Repeater Field Capabilities](#repeater-field-capabilities)
-- [Supported Fields](#supported-fields)
-- [Partially-Supported Fields](#partially-supported-fields)
+  - [Supported Fields](#supported-fields)
+  - [Partially-Supported Fields](#partially-supported-fields)
 Resources
 # Repeater Fields
 Repeater fields allow you to create and edit repeatable, structured data.

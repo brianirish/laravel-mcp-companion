@@ -29,7 +29,7 @@ Collaborators
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Inviting Collaborators](#inviting-collaborators)
 Projects

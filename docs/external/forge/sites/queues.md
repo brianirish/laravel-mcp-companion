@@ -68,7 +68,7 @@ Queues
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating a queue worker](#creating-a-queue-worker)
 - [Laravel Horizon](#laravel-horizon)

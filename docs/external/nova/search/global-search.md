@@ -64,13 +64,13 @@ Global Search
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Title / Subtitle Attributes](#title-%2F-subtitle-attributes)
-- [Subtitles](#subtitles)
+  - [Subtitles](#subtitles)
 - [Customization](#customization)
-- [Limiting Global Search Results](#limiting-global-search-results)
-- [Global Search Debounce](#global-search-debounce)
-- [Custom Avatars / Covers](#custom-avatars-%2F-covers)
+  - [Limiting Global Search Results](#limiting-global-search-results)
+  - [Global Search Debounce](#global-search-debounce)
+  - [Custom Avatars / Covers](#custom-avatars-%2F-covers)
 - [Disabling Global Search for a Resource](#disabling-global-search-for-a-resource)
 - [Disabling Global Search Globally](#disabling-global-search-globally)
 Search

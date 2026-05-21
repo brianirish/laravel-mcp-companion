@@ -64,7 +64,7 @@ CSS / JavaScript
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Nova Requests](#nova-requests)
 - [Manual Navigation](#manual-navigation)
 - [Event Bus](#event-bus)

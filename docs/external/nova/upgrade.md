@@ -64,22 +64,22 @@ Upgrade Guide
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Dependency Upgrades](#dependency-upgrades)
-- [Server](#server)
-- [Client](#client)
-- [Updating Composer Dependencies](#updating-composer-dependencies)
-- [Updating Assets and Translations](#updating-assets-and-translations)
-- [Updating Third-Party Nova Packages ​](#updating-third-party-nova-packages-%E2%80%8B)
+  - [Server](#server)
+  - [Client](#client)
+  - [Updating Composer Dependencies](#updating-composer-dependencies)
+  - [Updating Assets and Translations](#updating-assets-and-translations)
+  - [Updating Third-Party Nova Packages ​](#updating-third-party-nova-packages-%E2%80%8B)
 - [Upgrading Authentication Features](#upgrading-authentication-features)
 - [Updating Nova Components (Custom Tool, Cards, Fields, Filters)](#updating-nova-components-custom-tool-cards-fields-filters)
-- [Inertia 2 Compatibility](#inertia-2-compatibility)
-- [Replacing form-backend-validation](#replacing-form-backend-validation)
+  - [Inertia 2 Compatibility](#inertia-2-compatibility)
+  - [Replacing form-backend-validation](#replacing-form-backend-validation)
 - [Medium Impact Changes](#medium-impact-changes)
-- [Form Abandonment (Using Browser Navigation)](#form-abandonment-using-browser-navigation)
-- [Algolia Place Field Removed](#algolia-place-field-removed)
+  - [Form Abandonment (Using Browser Navigation)](#form-abandonment-using-browser-navigation)
+  - [Algolia Place Field Removed](#algolia-place-field-removed)
 - [Low Impact Changes](#low-impact-changes)
-- [Update Published Stubs](#update-published-stubs)
+  - [Update Published Stubs](#update-published-stubs)
 Get Started
 # Upgrade Guide
 Learn how to upgrade your Laravel Nova installation to the latest version.

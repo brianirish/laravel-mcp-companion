@@ -29,15 +29,15 @@ Management
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Creating a Project](#creating-a-project)
 - [Project Settings](#project-settings)
-- [Health Checks](#health-checks)
-- [Health Check IP Addresses](#health-check-ip-addresses)
-- [Source Control](#source-control)
-- [Transfer Project](#transfer-project)
-- [Delete Project](#delete-project)
+  - [Health Checks](#health-checks)
+  - [Health Check IP Addresses](#health-check-ip-addresses)
+  - [Source Control](#source-control)
+  - [Transfer Project](#transfer-project)
+  - [Delete Project](#delete-project)
 Projects
 # Management
 How to manage your Envoyer projects.

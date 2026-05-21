@@ -64,16 +64,16 @@ Filters
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Defining Filters](#defining-filters)
 - [Registering Filters](#registering-filters)
 - [Building Filters](#building-filters)
-- [The Filter Vue Component](#the-filter-vue-component)
-- [Managing Filter State](#managing-filter-state)
+  - [The Filter Vue Component](#the-filter-vue-component)
+  - [Managing Filter State](#managing-filter-state)
 - [Assets](#assets)
-- [Registering Assets](#registering-assets)
-- [Compiling Assets](#compiling-assets)
+  - [Registering Assets](#registering-assets)
+  - [Compiling Assets](#compiling-assets)
 Digging Deeper
 # Filters
 Learn how to build custom filters for your Nova resources.

@@ -64,13 +64,13 @@ Release Notes
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Modernizing Dependencies](#modernizing-dependencies)
 - [Tab Panels](#tab-panels)
 - [Fields & Filters Improvements](#fields-%26-filters-improvements)
-- [New Dependent Computed Field via Field::computed() method](#new-dependent-computed-field-via-fieldcomputed-method)
-- [New Field::immutable() method](#new-fieldimmutable-method)
-- [Other Field Improvements](#other-field-improvements)
+  - [New Dependent Computed Field via Field::computed() method](#new-dependent-computed-field-via-fieldcomputed-method)
+  - [New Field::immutable() method](#new-fieldimmutable-method)
+  - [Other Field Improvements](#other-field-improvements)
 - [Separate Policy Classes for Nova Resources](#separate-policy-classes-for-nova-resources)
 Get Started
 # Release Notes

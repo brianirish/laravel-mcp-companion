@@ -64,11 +64,11 @@ The Basics
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Searchable Columns](#searchable-columns)
 - [Full-Text Indexes](#full-text-indexes)
 - [Searching Relationships](#searching-relationships)
-- [MorphTo Relationships](#morphto-relationships)
+  - [MorphTo Relationships](#morphto-relationships)
 - [Searching JSON Data](#searching-json-data)
 Search
 # The Basics

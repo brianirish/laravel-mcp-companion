@@ -64,7 +64,7 @@ Registering Lenses
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Authorization](#authorization)
 Lenses
 # Registering Lenses

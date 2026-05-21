@@ -29,12 +29,12 @@ Source Control
 - [Heartbeats](/projects/heartbeats)
 - [Notifications](/projects/notifications)
 - [Collaborators](/projects/collaborators)
-On this page
+## On this page
 - [Overview](#overview)
 - [Supported Providers](#supported-providers)
 - [Provider Management](#provider-management)
-- [Connecting Providers](#connecting-providers)
-- [Unlinking Providers](#unlinking-providers)
+  - [Connecting Providers](#connecting-providers)
+  - [Unlinking Providers](#unlinking-providers)
 Accounts
 # Source Control
 Connect to source control providers to deploy your projects.

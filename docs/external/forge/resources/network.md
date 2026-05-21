@@ -68,18 +68,18 @@ Network
 - [Support](/docs/support)
 - [Changelog](/docs/changelog)
 - [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Managing server networks and firewalls](#managing-server-networks-and-firewalls)
-- [Server networks](#server-networks)
+  - [Server networks](#server-networks)
 - [Firewall management](#firewall-management)
-- [Creating firewall rules](#creating-firewall-rules)
-- [Deleting firewall rules](#deleting-firewall-rules)
-- [Enhanced security options](#enhanced-security-options)
-- [Allow and deny rules](#allow-and-deny-rules)
+  - [Creating firewall rules](#creating-firewall-rules)
+  - [Deleting firewall rules](#deleting-firewall-rules)
+  - [Enhanced security options](#enhanced-security-options)
+  - [Allow and deny rules](#allow-and-deny-rules)
 - [Default firewall configuration](#default-firewall-configuration)
-- [Health check service IP addresses](#health-check-service-ip-addresses)
-- [Recovering from deleted SSH rules](#recovering-from-deleted-ssh-rules)
+  - [Health check service IP addresses](#health-check-service-ip-addresses)
+  - [Recovering from deleted SSH rules](#recovering-from-deleted-ssh-rules)
 Resources
 # Network
 Copy page

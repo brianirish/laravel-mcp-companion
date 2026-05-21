@@ -64,7 +64,7 @@ Date Fields
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Options](#options)
 - [Steps](#steps)
 - [Minimum and Maximum Values](#minimum-and-maximum-values)

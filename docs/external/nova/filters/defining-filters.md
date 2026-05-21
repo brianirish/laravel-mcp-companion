@@ -64,7 +64,7 @@ Defining Filters
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Select Filters](#select-filters)
 - [Boolean Filters](#boolean-filters)
 - [Date Filters](#date-filters)

@@ -64,10 +64,10 @@ Impersonation
 - [Assets](/docs/v5/customization/assets)
 - [Localization](/docs/v5/customization/localization)
 - [Stubs](/docs/v5/customization/stubs)
-On this page
+## On this page
 - [Overview](#overview)
 - [Enabling Impersonation](#enabling-impersonation)
-- [Customizing Impersonation Authorization](#customizing-impersonation-authorization)
+  - [Customizing Impersonation Authorization](#customizing-impersonation-authorization)
 - [Inspecting Impersonation State](#inspecting-impersonation-state)
 - [Impersonation Events](#impersonation-events)
 Digging Deeper

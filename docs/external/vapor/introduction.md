@@ -38,24 +38,24 @@ Introduction
 - [Sentry](/integrations/sentry)
 ##### Other
 - [Abuse](/abuse)
-On this page
+## On this page
 - [What Is Vapor?](#what-is-vapor)
 - [Requirements](#requirements)
 - [Account Creation](#account-creation)
 - [Installing The Vapor CLI](#installing-the-vapor-cli)
-- [Logging In](#logging-in)
+  - [Logging In](#logging-in)
 - [Installing The Vapor Core](#installing-the-vapor-core)
 - [Sandbox Accounts](#sandbox-accounts)
 - [Teams](#teams)
-- [Current Team & Switching Teams](#current-team-%26-switching-teams)
-- [Collaborators](#collaborators)
+  - [Current Team & Switching Teams](#current-team-%26-switching-teams)
+  - [Collaborators](#collaborators)
 - [Linking With AWS](#linking-with-aws)
-- [Creating An IAM Role](#creating-an-iam-role)
-- [Permissions](#permissions)
-- [Defining Your AWS Budget](#defining-your-aws-budget)
-- [AWS Service Limits](#aws-service-limits)
+  - [Creating An IAM Role](#creating-an-iam-role)
+  - [Permissions](#permissions)
+  - [Defining Your AWS Budget](#defining-your-aws-budget)
+  - [AWS Service Limits](#aws-service-limits)
 - [Notification Methods](#notification-methods)
-- [Slack](#slack)
+  - [Slack](#slack)
 - [Legal and Compliance](#legal-and-compliance)
 Get Started
 # Introduction
