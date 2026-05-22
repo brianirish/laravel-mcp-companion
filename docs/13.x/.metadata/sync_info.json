@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "e0b8aa3eba3b402707b8ba75c14adf2250a22d00",
-  "commit_date": "2026-05-20T15:44:13Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/e0b8aa3eba3b402707b8ba75c14adf2250a22d00",
-  "sync_time": "2026-05-21T00:02:57Z"
+  "commit_sha": "c76d93a66cdf307e84af308cfa68d961f1c591f3",
+  "commit_date": "2026-05-21T17:53:06Z",
+  "commit_message": "Document caveats of UseCheapestModel and UseSmartestModel (#11212)\n\n* Document caveats of UseCheapestModel and UseSmartestModel\n\n* Update ai-sdk.md",
+  "commit_url": "https://github.com/laravel/docs/commit/c76d93a66cdf307e84af308cfa68d961f1c591f3",
+  "sync_time": "2026-05-22T00:02:35Z"
 }

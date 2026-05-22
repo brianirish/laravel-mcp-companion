@@ -4,11 +4,19 @@ Source: https://blog.laravel.com
 
 ---
 
-## Building AI Agents with Laravel: No Python Required
+## Migrating a Hybrid Architecture to Laravel Cloud: Top Q&A Questions Answered
 
-The Laravel AI SDK is the LangChain PHP alternative: agents, tools, memory, streaming, and multi-agent workflows, entirely in PHP. No Python required.
+Trybe shared how they migrated from Laravel Vapor to Laravel Cloud in a live webinar. Here are the top developer questions from the Q&A, answered.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-ai)
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+
+---
+
+## How Webkul Built a $2M Open-Source Ecommerce Platform on Laravel
+
+How Webkul bootstrapped Bagisto into one of the fastest-growing open-source ecommerce platforms, with 200,000 users and $2M in revenue, built entirely on Laravel.
+
+[Read more](https://blog.laravel.com/blog/category/customer-story)
 
 ---
 
@@ -23,14 +31,6 @@ The Laravel AI SDK is the LangChain PHP alternative: agents, tools, memory, stre
 ## Introducing Laravel PAO: Cleaner Output for AI Agents
 
 Laravel PAO formats PHPUnit, Pest, PHPStan, Rector, and Artisan output into structured JSON for AI agents automatically and without changing your terminal.
-
-[Read more](https://blog.laravel.com/blog/category/laravel-ai)
-
----
-
-## Laravel AI Integration: Build a Document Search Agent
-
-Learn how to build a document search agent with the Laravel AI SDK. Upload files, generate vector embeddings, and stream answers to the browser in real time.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-ai)
 
