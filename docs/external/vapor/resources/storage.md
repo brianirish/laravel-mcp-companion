@@ -4,40 +4,6 @@
 
 ---
 
-[Migrating from Vapor to Cloud? See how Pyle did it (Webinar)](https://lrvl.co/vapor-cloud)
-[Laravel Vapor home page](https://vapor.laravel.com)
-Search...
-⌘KAsk AI
-- [email protected]
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://vapor.laravel.com)
-- [Dashboard](https://vapor.laravel.com)
-Search...
-Navigation
-Resources
-Storage
-[Documentation](/introduction)[Knowledge Base](/kb/troubleshooting)
-- [Blog](https://blog.laravel.com)
-##### Get Started
-- [Introduction](/introduction)
-##### Projects
-- [The Basics](/projects/the-basics)
-- [Environments](/projects/environments)
-- [Deployments](/projects/deployments)
-- [Development](/projects/development)
-- [Domains](/projects/domains)
-##### Resources
-- [Migrate to Cloud](/resources/migrate-to-cloud)
-- [Queues](/resources/queues)
-- [Storage](/resources/storage)
-- [Networks](/resources/networks)
-- [Databases](/resources/databases)
-- [Caches](/resources/caches)
-- [Logs](/resources/logs)
-##### Integrations
-- [Sentry](/integrations/sentry)
-##### Other
-- [Abuse](/abuse)
 ## On this page
 - [Introduction](#introduction)
 - [Attaching Storage](#attaching-storage)
@@ -176,10 +142,3 @@ Was this page helpful?
 YesNo
 [Queues](/resources/queues)[Networks](/resources/networks)
 ⌘I
-[Laravel Vapor home page](https://vapor.laravel.com)
-Platform
-[Dashboard](https://vapor.laravel.com/)[Status](https://status.laravel.com/)
-Legal and Compliance
-[Term of Service](https://vapor.laravel.com/terms)[Privacy Policy](https://vapor.laravel.com/privacy)
-Assistant
-Responses are generated using AI and may contain mistakes.

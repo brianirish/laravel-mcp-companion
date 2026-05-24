@@ -4,31 +4,6 @@
 
 ---
 
-[Envoyer home page](https://envoyer.io)
-Search...
-⌘KAsk AI
-- [email protected]
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://envoyer.io)
-- [Dashboard](https://envoyer.io)
-Search...
-Navigation
-Get Started
-Quick Start
-- [Documentation](/introduction)
-##### Get Started
-- [Introduction](/introduction)
-- [Quick Start](/quick-start)
-##### Accounts
-- [Source Control](/accounts/source-control)
-- [Your Account](/accounts/your-account)
-##### Projects
-- [Management](/projects/management)
-- [Servers](/projects/servers)
-- [Deployment Hooks](/projects/deployment-hooks)
-- [Heartbeats](/projects/heartbeats)
-- [Notifications](/projects/notifications)
-- [Collaborators](/projects/collaborators)
 ## On this page
 - [Overview](#overview)
 - [Source Control Providers](#source-control-providers)
@@ -85,10 +60,3 @@ Was this page helpful?
 YesNo
 [Introduction](/introduction)[Source Control](/accounts/source-control)
 ⌘I
-[Envoyer home page](https://envoyer.io)
-Platform
-[Dashboard](https://envoyer.io/)[Status](https://status.laravel.com/)
-Legal and Compliance
-[Term of Service](https://envoyer.io/terms)[Privacy Policy](https://envoyer.io/privacy)
-Assistant
-Responses are generated using AI and may contain mistakes.
