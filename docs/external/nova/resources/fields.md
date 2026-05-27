@@ -4,66 +4,6 @@
 
 ---
 
-[Laravel Nova home page](https://nova.laravel.com)
-v5
-Search...
-⌘KAsk AI
-- [email protected]
-- [Platform Status](https://status.laravel.com/)
-- [Dashboard](https://nova.laravel.com)
-- [Dashboard](https://nova.laravel.com)
-Search...
-Navigation
-Resources
-Fields
-[Documentation](/docs/v5/installation)[Knowledge Base](/docs/kb/support)
-- [Blog](https://blog.laravel.com)
-##### Get Started
-- [Installation](/docs/v5/installation)
-- [Release Notes](/docs/v5/releases)
-- [Upgrade Guide](/docs/v5/upgrade)
-##### Resources
-- [The Basics](/docs/v5/resources/the-basics)
-- [Fields](/docs/v5/resources/fields)
-- [Dependent Fields](/docs/v5/resources/dependent-fields)
-- [Date Fields](/docs/v5/resources/date-fields)
-- [File Fields](/docs/v5/resources/file-fields)
-- [Repeater Fields](/docs/v5/resources/repeater-fields)
-- [Field Panels](/docs/v5/resources/panels)
-- [Relationships](/docs/v5/resources/relationships)
-- [Validation](/docs/v5/resources/validation)
-- [Authorization](/docs/v5/resources/authorization)
-##### Search
-- [The Basics](/docs/v5/search/the-basics)
-- [Global Search](/docs/v5/search/global-search)
-- [Scout Integration](/docs/v5/search/scout-integration)
-##### Filters
-- [Defining Filters](/docs/v5/filters/defining-filters)
-- [Registering Filters](/docs/v5/filters/registering-filters)
-##### Lenses
-- [Defining Lenses](/docs/v5/lenses/defining-lenses)
-- [Registering Lenses](/docs/v5/lenses/registering-lenses)
-##### Actions
-- [Defining Actions](/docs/v5/actions/defining-actions)
-- [Registering Actions](/docs/v5/actions/registering-actions)
-##### Metrics
-- [Defining Metrics](/docs/v5/metrics/defining-metrics)
-- [Registering Metrics](/docs/v5/metrics/registering-metrics)
-##### Digging Deeper
-- [Dashboards](/docs/v5/customization/dashboards)
-- [Menus](/docs/v5/customization/menus)
-- [Notifications](/docs/v5/customization/notifications)
-- [Authentication](/docs/v5/customization/authentication)
-- [Impersonation](/docs/v5/customization/impersonation)
-- [Tools](/docs/v5/customization/tools)
-- [Resource Tools](/docs/v5/customization/resource-tools)
-- [Cards](/docs/v5/customization/cards)
-- [Fields](/docs/v5/customization/fields)
-- [Filters](/docs/v5/customization/filters)
-- [CSS / JavaScript](/docs/v5/customization/frontend)
-- [Assets](/docs/v5/customization/assets)
-- [Localization](/docs/v5/customization/localization)
-- [Stubs](/docs/v5/customization/stubs)
 ## On this page
 - [Defining Fields](#defining-fields)
   - [Field Column Conventions](#field-column-conventions)
@@ -1417,6 +1357,76 @@ Instead of displaying your tags as an inline group, you may instead display your
 ```
 use Laravel\Nova\Fields\Tag;
 
-// 
+// ...
+
+Tag::make('Tags')->displayAsList(),
+```
+This allows tags to be displayed with their title, subtitle, and a configured image field:
+#### [​](#creating-new-tags-inline) Creating New Tags Inline
+For convenience, when `Tag` fields are shown on a resource create or update page, you may create the related resource inline via a modal window without leaving the creation / update page:
+To enable this functionality, invoke the `showCreateRelationButton` method when defining the field:
+```
+use Laravel\Nova\Fields\Tag;
+
+// ...
+
+Tag::make('Tags')->showCreateRelationButton(),
+```
+#### [​](#adjusting-the-inline-creation-modal’s-size) Adjusting the Inline Creation Modal’s Size
+You may adjust the size of the modal using the `modalSize` method:
+```
+use Laravel\Nova\Fields\Tag;
+
+// ...
+
+// Can be "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl".
+Tag::make('Tags')->showCreateRelationButton()->modalSize('7xl'),
+```
+#### [​](#preloading-available-tags) Preloading Available Tags
+To make existing tags more discoverable, you may show the user all available tags during resource creation or update by invoking the `preload` method when defining the field:
+```
+use Laravel\Nova\Fields\Tag;
+
+// ...
+
+Tag::make('Tags')->preload(),
+```
+### [​](#text-field) Text Field
+The `Text` field provides an `input` control with a `type` attribute of `text`:
+```
+use Laravel\Nova\Fields\Text;
+
+// ...
+
+Text::make('Name'),
+```
+Text fields may be further customized by setting any attribute on the field. This can be done by calling the `withMeta` method and providing an `extraAttributes` array containing key / value pairs of HTML attributes:
+```
+use Laravel\Nova\Fields\Text;
+
+// ...
+
+Text::make('Name')->withMeta([
+    'extraAttributes' => ['aria-label' => 'Name'],
+]),
+```
+#### [​](#text-field-suggestions) Text Field Suggestions
+To offer auto-complete suggestions when typing into the `Text` field, you may invoke the `suggestions` method when defining the field. The `suggestions` method should return an `array` of suggestions:
+```
+use Laravel\Nova\Fields\Text;
+
+// ...
+
+Text::make('Name')->required()
+    ->suggestions([
+        'David Hemphill',
+        'Taylor Otwell',
+        'James Brooks',
+    ]),
+```
+#### [​](#formatting-text-as-links) Formatting Text as Links
+To format a `Text` field as a link, you may invoke the `asHtml` method when defining the field:
+```
+use Larav
 
 *[Content truncated for length]*
