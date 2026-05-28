@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## Introducing Moat: A Security Review for Your GitHub Account
+## Managed Queues: Autoscaling Queue Workers on Laravel Cloud
 
-Moat scans your GitHub user, org, or repo with one command, and surfaces misconfigured security settings, including 2FA, pinned actions, branch protection, and more.
+Laravel Cloud’s managed queues autoscale workers on queue pressure, surface failed jobs in a built-in dashboard, and scale to zero when idle.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-framework)
+[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 
