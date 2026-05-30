@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "67f17210b4ba48ec6374f64d9568724b02f10b07",
-  "commit_date": "2026-05-28T23:35:59Z",
-  "commit_message": "docs: numbers parse (#11217)\n\nImplemented Numbers::parse() example\n\nCo-authored-by: Rana Omar <omar@rana.ai>",
-  "commit_url": "https://github.com/laravel/docs/commit/67f17210b4ba48ec6374f64d9568724b02f10b07",
-  "sync_time": "2026-05-29T00:03:36Z"
+  "commit_sha": "2e6b75f4f189e57a3868884986706564547347eb",
+  "commit_date": "2026-05-29T23:29:53Z",
+  "commit_message": "[13.x] Document model-per-provider failover and failover-triggering exceptions (#11218)\n\n* Update failover documentation in ai-sdk.md\n\nThe current Failover docs don't mention that a plain list of providers ignores the agent's #[Model] attribute and falls back to each provider's default model. This PR documents the associative-array form for specifying a model per provider, and lists which exceptions actually trigger failover.\n\n* Update ai-sdk.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/2e6b75f4f189e57a3868884986706564547347eb",
+  "sync_time": "2026-05-30T00:03:26Z"
 }
