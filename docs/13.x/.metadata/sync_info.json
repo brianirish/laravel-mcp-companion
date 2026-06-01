@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "2e6b75f4f189e57a3868884986706564547347eb",
-  "commit_date": "2026-05-29T23:29:53Z",
-  "commit_message": "[13.x] Document model-per-provider failover and failover-triggering exceptions (#11218)\n\n* Update failover documentation in ai-sdk.md\n\nThe current Failover docs don't mention that a plain list of providers ignores the agent's #[Model] attribute and falls back to each provider's default model. This PR documents the associative-array form for specifying a model per provider, and lists which exceptions actually trigger failover.\n\n* Update ai-sdk.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/2e6b75f4f189e57a3868884986706564547347eb",
-  "sync_time": "2026-05-30T00:03:26Z"
+  "commit_sha": "d68e6718245c78790aedb070fd6a627f4e930523",
+  "commit_date": "2026-05-31T22:06:55Z",
+  "commit_message": "[13.x] Document ShouldBeDiscovered (#11219)\n\n* Update events.md\n\n* Update events.md\n\n* Update events.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/d68e6718245c78790aedb070fd6a627f4e930523",
+  "sync_time": "2026-06-01T00:03:22Z"
 }
