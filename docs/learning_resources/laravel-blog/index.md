@@ -4,9 +4,9 @@ Source: https://blog.laravel.com
 
 ---
 
-## Managed Queues: Autoscaling Queue Workers on Laravel Cloud
+## Your Laravel Cloud Stack Now Scales to Zero and Wakes 20x Faster
 
-Laravel Cloud’s managed queues autoscale workers on queue pressure, surface failed jobs in a built-in dashboard, and scale to zero when idle.
+Laravel Cloud’s full stack now scales to zero and wakes in under 500 ms. A new $5 Starter plan and spending limits keep your bill in check.
 
 [Read more](https://blog.laravel.com/blog/category/product)
 
