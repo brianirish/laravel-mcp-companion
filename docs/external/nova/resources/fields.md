@@ -97,11 +97,6 @@
 Resources
 # Fields
 Nova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.
-> ## Documentation Index
->
-> Fetch the complete documentation index at: <https://nova.laravel.com/docs/llms.txt>
->
-> Use this file to discover all available pages before exploring further.
 ## [​](#defining-fields) Defining Fields
 Each Nova resource contains a `fields` method. This method returns an array of fields, which generally extend the `Laravel\Nova\Fields\Field` class. Nova ships with a variety of fields out of the box, including fields for text inputs, booleans, dates, file uploads, Markdown, and more.
 To add a field to a resource, you may simply add it to the resource’s `fields` method. Typically, fields may be created using their static `make` method. This method accepts several arguments; however, you usually only need to pass the “human readable” name of the field. Nova will automatically “snake case” this string to determine the underlying database column:
@@ -1427,6 +1422,14 @@ Text::make('Name')->required()
 #### [​](#formatting-text-as-links) Formatting Text as Links
 To format a `Text` field as a link, you may invoke the `asHtml` method when defining the field:
 ```
-use Larav
+use Laravel\Nova\Fields\Text;
+
+// ...
+
+Text::make('Twitter Profile', function () {
+    $username = $this->twitterUsername;
+
+    return "<a href='https://twitter.com/{$username}'>@{$username}</a>";
+}
 
 *[Content truncated for length]*
