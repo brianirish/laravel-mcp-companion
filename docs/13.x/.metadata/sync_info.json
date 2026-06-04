@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "1dc954d01e43f1913fd9d533db0be0db06c18eac",
-  "commit_date": "2026-06-02T18:17:28Z",
-  "commit_message": "Document Vite font optimization (#11221)\n\n* [13.x] Document Vite font optimization\n\n* formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/1dc954d01e43f1913fd9d533db0be0db06c18eac",
-  "sync_time": "2026-06-03T00:03:18Z"
+  "commit_sha": "d6a3cb993b6c1f8b99aaf3f6044f4396ffc3a06c",
+  "commit_date": "2026-06-03T01:24:44Z",
+  "commit_message": "Update broadcasting.md (#11222)",
+  "commit_url": "https://github.com/laravel/docs/commit/d6a3cb993b6c1f8b99aaf3f6044f4396ffc3a06c",
+  "sync_time": "2026-06-04T00:03:35Z"
 }
