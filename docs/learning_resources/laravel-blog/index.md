@@ -28,11 +28,11 @@ Trybe shared how they migrated from Laravel Vapor to Laravel Cloud in a live web
 
 ---
 
-## How Webkul Built a $2M Open-Source Ecommerce Platform on Laravel
+## Building AI Agents with Laravel: No Python Required
 
-How Webkul bootstrapped Bagisto into one of the fastest-growing open-source ecommerce platforms, with 200,000 users and $2M in revenue, built entirely on Laravel.
+The Laravel AI SDK is the LangChain PHP alternative: agents, tools, memory, streaming, and multi-agent workflows, entirely in PHP. No Python required.
 
-[Read more](https://blog.laravel.com/blog/category/customer-story)
+[Read more](https://blog.laravel.com/blog/category/laravel-ai)
 
 ---
 
