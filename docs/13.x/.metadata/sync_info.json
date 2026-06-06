@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "d6a3cb993b6c1f8b99aaf3f6044f4396ffc3a06c",
-  "commit_date": "2026-06-03T01:24:44Z",
-  "commit_message": "Update broadcasting.md (#11222)",
-  "commit_url": "https://github.com/laravel/docs/commit/d6a3cb993b6c1f8b99aaf3f6044f4396ffc3a06c",
-  "sync_time": "2026-06-04T00:03:35Z"
+  "commit_sha": "17cdd666996eef5b905942c15efc26768d2e8a46",
+  "commit_date": "2026-06-05T22:27:56Z",
+  "commit_message": "fix(docs): add missing spaces in vite.md note blocks (#11227)",
+  "commit_url": "https://github.com/laravel/docs/commit/17cdd666996eef5b905942c15efc26768d2e8a46",
+  "sync_time": "2026-06-06T00:03:17Z"
 }
