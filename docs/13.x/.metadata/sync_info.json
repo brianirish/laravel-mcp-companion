@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "17cdd666996eef5b905942c15efc26768d2e8a46",
-  "commit_date": "2026-06-05T22:27:56Z",
-  "commit_message": "fix(docs): add missing spaces in vite.md note blocks (#11227)",
-  "commit_url": "https://github.com/laravel/docs/commit/17cdd666996eef5b905942c15efc26768d2e8a46",
-  "sync_time": "2026-06-06T00:03:17Z"
+  "commit_sha": "7625dc556c6f366f894fecc9e5cc2ab76834d8db",
+  "commit_date": "2026-06-06T13:59:00Z",
+  "commit_message": "[13.x] Add note on the limitations of the attributed `#[Scope]` variant (#11229)\n\n* Add note on the limitations of the attributed `#[Scope]` variant\n\n* update wording\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/7625dc556c6f366f894fecc9e5cc2ab76834d8db",
+  "sync_time": "2026-06-07T00:03:08Z"
 }
