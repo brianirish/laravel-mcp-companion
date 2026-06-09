@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "411630e61946abc4843fbfbfbf050278312093f5",
-  "commit_date": "2026-06-07T15:41:39Z",
-  "commit_message": "Add warning about messages() method conflict with RemembersConversati\u2026 (#11231)\n\n* Add warning about messages() method conflict with RemembersConversations trait\n\nWhen using the RemembersConversations trait, defining a messages() method \r\nin the agent class causes PHP to silently prioritize the class method over \r\nthe trait's implementation, resulting in conversation history never being \r\nloaded from the database.\r\n\r\nThis is a common pitfall because the make:agent Artisan command generates \r\na messages() method by default. Developers adding RemembersConversations \r\nto an existing agent may not realize they need to remove it.\r\n\r\nConfirmed via ReflectionMethod:\r\n- Agent with messages(): method resolves to the agent class \u2192 trait ignored\r\n- Agent without messages(): method resolves to RemembersConversations.php \u2192 works correctly\n\n* Update ai-sdk.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/411630e61946abc4843fbfbfbf050278312093f5",
-  "sync_time": "2026-06-08T00:03:21Z"
+  "commit_sha": "a817f1f75f587d1899c5251672d9178497da3497",
+  "commit_date": "2026-06-08T14:00:58Z",
+  "commit_message": "Document MCP client and using MCP tools with agents (#11232)\n\n* Document MCP client and using MCP tools with agents\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/a817f1f75f587d1899c5251672d9178497da3497",
+  "sync_time": "2026-06-09T00:04:27Z"
 }
