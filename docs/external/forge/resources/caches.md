@@ -39,5 +39,5 @@ Laravel Forge servers require SSH key authentication and don’t support passwor
 For example, when connecting via [TablePlus](https://tableplus.com/):
 Was this page helpful?
 YesNo
-[Managed Databases](/docs/resources/managed-databases)[Background Processes](/docs/resources/background-processes)
+[Object Storage](/docs/resources/object-storage)[Background Processes](/docs/resources/background-processes)
 ⌘I
