@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "d2fa772bf85c9e8291470414315ce6a83f228811",
-  "commit_date": "2026-06-09T13:49:21Z",
-  "commit_message": "document new features",
-  "commit_url": "https://github.com/laravel/docs/commit/d2fa772bf85c9e8291470414315ce6a83f228811",
-  "sync_time": "2026-06-10T00:03:00Z"
+  "commit_sha": "b4ed00f43fa410230130f73acb56ea11c6c4033c",
+  "commit_date": "2026-06-10T14:08:02Z",
+  "commit_message": "Warn about concurrency race in manual rate limiter example (#11234)\n\n* Warn about concurrency race in manual rate limiter example\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/b4ed00f43fa410230130f73acb56ea11c6c4033c",
+  "sync_time": "2026-06-11T00:03:44Z"
 }
