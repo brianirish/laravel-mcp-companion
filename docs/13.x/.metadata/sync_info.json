@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "b4ed00f43fa410230130f73acb56ea11c6c4033c",
-  "commit_date": "2026-06-10T14:08:02Z",
-  "commit_message": "Warn about concurrency race in manual rate limiter example (#11234)\n\n* Warn about concurrency race in manual rate limiter example\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/b4ed00f43fa410230130f73acb56ea11c6c4033c",
-  "sync_time": "2026-06-11T00:03:44Z"
+  "commit_sha": "867bdd5c00ab00089355fe629370f4c0ce78f248",
+  "commit_date": "2026-06-11T20:16:39Z",
+  "commit_message": "Document MCP client prompts and resources (#11236)",
+  "commit_url": "https://github.com/laravel/docs/commit/867bdd5c00ab00089355fe629370f4c0ce78f248",
+  "sync_time": "2026-06-12T00:03:29Z"
 }
