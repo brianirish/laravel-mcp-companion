@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## 5 Tips to Save Money on Laravel Cloud
+## How We Built Laravel Cloud’s Scale to Zero
 
-Five ways to reduce your Laravel Cloud bill: enable scale to zero, set a spending cap, use the usage page, switch to managed queues, and share resources.
+Learn how the Laravel Cloud team built sub-500 ms scale to zero using checkpoint/restore, and how spending limits enforce a hard monthly ceiling for your apps.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 

@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "867bdd5c00ab00089355fe629370f4c0ce78f248",
-  "commit_date": "2026-06-11T20:16:39Z",
-  "commit_message": "Document MCP client prompts and resources (#11236)",
-  "commit_url": "https://github.com/laravel/docs/commit/867bdd5c00ab00089355fe629370f4c0ce78f248",
-  "sync_time": "2026-06-12T00:03:29Z"
+  "commit_sha": "2793708535657469c3738d966eff207fb18d4106",
+  "commit_date": "2026-06-15T15:16:54Z",
+  "commit_message": "Update API documentation link to 13.x (#11238)",
+  "commit_url": "https://github.com/laravel/docs/commit/2793708535657469c3738d966eff207fb18d4106",
+  "sync_time": "2026-06-16T00:04:42Z"
 }
