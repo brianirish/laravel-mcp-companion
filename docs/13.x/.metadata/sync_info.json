@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "2793708535657469c3738d966eff207fb18d4106",
-  "commit_date": "2026-06-15T15:16:54Z",
-  "commit_message": "Update API documentation link to 13.x (#11238)",
-  "commit_url": "https://github.com/laravel/docs/commit/2793708535657469c3738d966eff207fb18d4106",
-  "sync_time": "2026-06-16T00:04:42Z"
+  "commit_sha": "0d61029ee4473fc32ef843ea6051b2db54647a34",
+  "commit_date": "2026-06-16T15:46:19Z",
+  "commit_message": "create section",
+  "commit_url": "https://github.com/laravel/docs/commit/0d61029ee4473fc32ef843ea6051b2db54647a34",
+  "sync_time": "2026-06-17T00:03:52Z"
 }
