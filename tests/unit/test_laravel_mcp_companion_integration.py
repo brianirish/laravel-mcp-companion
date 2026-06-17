@@ -38,8 +38,8 @@ def temp_docs_dir():
 
 @pytest.fixture
 def mcp_server(temp_docs_dir):
-    """Create an MCP server instance for testing."""
-    server = create_mcp_server("TestLaravelMCP", temp_docs_dir, "12.x")
+    """Create an MCP server instance for testing (no transforms for raw tool access)."""
+    server = create_mcp_server("TestLaravelMCP", temp_docs_dir, "12.x", transform_mode=None)
     return server
 
 
@@ -283,3 +283,102 @@ class TestMCPServerLifecycle:
             # Verify all results
             assert len(results) == 3
             assert all(result is not None for result in results)
+
+
+class TestTransformConfiguration:
+    """Test transform configuration via CLI and server setup."""
+
+    def test_parse_arguments_code_mode_flag(self, monkeypatch):
+        """Test that --code-mode flag is parsed correctly."""
+        import sys
+        from laravel_mcp_companion import parse_arguments
+
+        # Test default (no flag)
+        monkeypatch.delenv("CODE_MODE", raising=False)
+        monkeypatch.setattr(sys, "argv", ["prog"])
+        args = parse_arguments()
+        assert args.code_mode is False
+
+        # Test with flag
+        monkeypatch.delenv("CODE_MODE", raising=False)
+        monkeypatch.setattr(sys, "argv", ["prog", "--code-mode"])
+        args = parse_arguments()
+        assert args.code_mode is True
+
+    @pytest.mark.asyncio
+    async def test_search_transform_applied_by_default(self, temp_docs_dir):
+        """Test that BM25SearchTransform is applied when code_mode=False."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
+        async with Client(server) as client:
+            tools = await client.list_tools()
+            tool_names = [t.name for t in tools]
+            # Should have synthetic search tools, not raw tools
+            assert "search_tools" in tool_names
+            assert "call_tool" in tool_names
+            # Raw tools should NOT be listed
+            assert "list_laravel_docs" not in tool_names
+
+    @pytest.mark.asyncio
+    async def test_code_mode_transform_applied(self, temp_docs_dir):
+        """Test that CodeMode is applied when code_mode=True."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="code")
+        async with Client(server) as client:
+            tools = await client.list_tools()
+            tool_names = [t.name for t in tools]
+            # Should have Code Mode meta-tools
+            assert "search" in tool_names
+            assert "execute" in tool_names
+            # Raw tools should NOT be listed
+            assert "list_laravel_docs" not in tool_names
+
+    @pytest.mark.asyncio
+    async def test_no_transforms_mode(self, temp_docs_dir):
+        """Test that transform_mode=None applies no transforms (for backward compat)."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode=None)
+        async with Client(server) as client:
+            tools = await client.list_tools()
+            tool_names = [t.name for t in tools]
+            # Should have raw tools, not transform tools
+            assert "list_laravel_docs" in tool_names
+            assert "search_laravel_docs" in tool_names
+            assert "search_tools" not in tool_names
+            assert "call_tool" not in tool_names
+
+    @pytest.mark.asyncio
+    async def test_search_tools_finds_relevant_tools(self, temp_docs_dir):
+        """Test that search_tools returns relevant results for a query."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
+        async with Client(server) as client:
+            result = await client.call_tool("search_tools", {"query": "documentation list search"})
+            if hasattr(result, 'content') and isinstance(result.content, list):
+                content = result.content[0].text if result.content else ""
+            else:
+                content = str(result)
+            # Should find doc-related tools
+            assert "list_laravel_docs" in content or "search_laravel_docs" in content
+
+    @pytest.mark.asyncio
+    async def test_call_tool_proxy_works(self, temp_docs_dir):
+        """Test that call_tool proxy can invoke underlying tools."""
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
+        async with Client(server) as client:
+            # Use the call_tool proxy to invoke a real tool
+            result = await client.call_tool("call_tool", {
+                "name": "list_laravel_docs",
+                "arguments": {"version": "12.x"}
+            })
+            if hasattr(result, 'content') and isinstance(result.content, list):
+                content = result.content[0].text if result.content else ""
+            else:
+                content = str(result)
+            assert "blade.md" in content
