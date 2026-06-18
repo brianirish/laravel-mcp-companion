@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Laravel Live Japan 2026 Recap
+
+A recap of the first Laravel Live Japan: two days in Tokyo, 550+ attendees from 40 countries, live AI translation, and a community that proved PHP has no borders.
+
+[Read more](https://blog.laravel.com/blog/category/community)
+
+---
+
 ## How We Built Laravel Cloud’s Scale to Zero
 
 Learn how the Laravel Cloud team built sub-500 ms scale to zero using checkpoint/restore, and how spending limits enforce a hard monthly ceiling for your apps.
@@ -25,14 +33,6 @@ Laravel Cloud is now available in Stripe Projects. Provision your application, d
 Five ways to reduce your Laravel Cloud bill: enable scale to zero, set a spending cap, use the usage page, switch to managed queues, and share resources.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
-
----
-
-## Your Laravel Cloud Stack Now Scales to Zero and Wakes 20x Faster
-
-Laravel Cloud’s full stack now scales to zero and wakes in under 500 ms. A new $5 Starter plan and spending limits keep your bill in check.
-
-[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 
