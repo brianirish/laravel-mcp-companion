@@ -66,6 +66,7 @@ Once Statamic has been installed, you can visit your site using the provided For
 ### [​](#wordpress) WordPress
 When creating a new WordPress site, Laravel Forge will automatically install the latest version of WordPress for you, as well as the WordPress CLI so that you can manage your installation with the `wp` command.
 You will need to choose an existing database for WordPress to use, or create a new one, to proceed.
+If you plan to use a custom domain with your WordPress site, you should configure your custom domain in Forge before you install WordPress, as WordPress will use the domain you provide during installation to generate URLs for your site.
 Once WordPress has been installed, you can visit your site using the provided Forge domain and complete the WordPress installation from your browser.
 You should continue installing WordPress as soon as Laravel Forge has installed it for you, so that it’s made secure with your username and password.You could also choose to create a new [“security rule”](/docs/sites/network#security-rules) before you install WordPress so that your installation is password protected.
 #### [​](#customizing-wp-config-php) Customizing `wp-config.php`
