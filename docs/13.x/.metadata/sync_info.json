@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "0d61029ee4473fc32ef843ea6051b2db54647a34",
-  "commit_date": "2026-06-16T15:46:19Z",
-  "commit_message": "create section",
-  "commit_url": "https://github.com/laravel/docs/commit/0d61029ee4473fc32ef843ea6051b2db54647a34",
-  "sync_time": "2026-06-17T00:03:52Z"
+  "commit_sha": "b23e6bee79d4ec078bea45eee0037ded121db4b8",
+  "commit_date": "2026-06-18T15:58:21Z",
+  "commit_message": "Document MCP icon support (#11240)\n\n* Document MCP icon support\n\n* Add missing icon path resolution list",
+  "commit_url": "https://github.com/laravel/docs/commit/b23e6bee79d4ec078bea45eee0037ded121db4b8",
+  "sync_time": "2026-06-19T00:02:49Z"
 }
