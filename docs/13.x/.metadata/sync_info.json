@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "b23e6bee79d4ec078bea45eee0037ded121db4b8",
-  "commit_date": "2026-06-18T15:58:21Z",
-  "commit_message": "Document MCP icon support (#11240)\n\n* Document MCP icon support\n\n* Add missing icon path resolution list",
-  "commit_url": "https://github.com/laravel/docs/commit/b23e6bee79d4ec078bea45eee0037ded121db4b8",
-  "sync_time": "2026-06-19T00:02:49Z"
+  "commit_sha": "fb0b6701362e25bcd0b924395e20991df15d80ce",
+  "commit_date": "2026-06-19T13:43:22Z",
+  "commit_message": "docs(ai-sdk): correct environment variable for custom base URL (#11243)\n\nThe AI SDK documentation incorrectly referenced  for the custom provider URL configuration.\nThe actual environment variable used in the  file is .\n\nFixes the example in the \"Custom Base URLs\" section.",
+  "commit_url": "https://github.com/laravel/docs/commit/fb0b6701362e25bcd0b924395e20991df15d80ce",
+  "sync_time": "2026-06-20T00:02:14Z"
 }
