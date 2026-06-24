@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "fb0b6701362e25bcd0b924395e20991df15d80ce",
-  "commit_date": "2026-06-19T13:43:22Z",
-  "commit_message": "docs(ai-sdk): correct environment variable for custom base URL (#11243)\n\nThe AI SDK documentation incorrectly referenced  for the custom provider URL configuration.\nThe actual environment variable used in the  file is .\n\nFixes the example in the \"Custom Base URLs\" section.",
-  "commit_url": "https://github.com/laravel/docs/commit/fb0b6701362e25bcd0b924395e20991df15d80ce",
-  "sync_time": "2026-06-20T00:02:14Z"
+  "commit_sha": "f3703da6c13a41336515e7875070b25747546b5e",
+  "commit_date": "2026-06-23T19:50:14Z",
+  "commit_message": "update for new features",
+  "commit_url": "https://github.com/laravel/docs/commit/f3703da6c13a41336515e7875070b25747546b5e",
+  "sync_time": "2026-06-24T00:05:34Z"
 }
