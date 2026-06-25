@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "f3703da6c13a41336515e7875070b25747546b5e",
-  "commit_date": "2026-06-23T19:50:14Z",
-  "commit_message": "update for new features",
-  "commit_url": "https://github.com/laravel/docs/commit/f3703da6c13a41336515e7875070b25747546b5e",
-  "sync_time": "2026-06-24T00:05:34Z"
+  "commit_sha": "c53d56ec116e2aeb65c8d4c14d2f7cf2aef86513",
+  "commit_date": "2026-06-24T19:12:37Z",
+  "commit_message": "Update Mailgun region API documentation link (#11250)",
+  "commit_url": "https://github.com/laravel/docs/commit/c53d56ec116e2aeb65c8d4c14d2f7cf2aef86513",
+  "sync_time": "2026-06-25T00:04:03Z"
 }
