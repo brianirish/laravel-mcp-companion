@@ -7,6 +7,7 @@
 ## On this page
 - [Using Nova as Your Application’s Default Login](#using-nova-as-your-application%E2%80%99s-default-login)
 - [Using Custom Authentication Routes](#using-custom-authentication-routes)
+- [Enabling Passkey Authentication](#enabling-passkey-authentication)
 - [Enabling Two Factor Authentication](#enabling-two-factor-authentication)
 - [Enabling Email Verification](#enabling-email-verification)
 Digging Deeper
@@ -47,6 +48,54 @@ protected function routes(): void
         ->register();
 }
 ```
+### [​](#enabling-passkey-authentication) Enabling Passkey Authentication
+To allow your users to authenticate with passkey authentication, you will need to update your application’s `User` model and `App\Providers\NovaServiceProvider` service provider.
+First, add the `Laravel\Fortify\PasskeyAuthenticatable` trait and `Laravel\Fortify\Contracts\PasskeyUser` interface to your application’s `User` model:
+```
+<?php
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\Contracts\PasskeyUser;
+use Laravel\Fortify\PasskeyAuthenticatable;
+ 
+class User extends Authenticatable implements PasskeyUser
+{
+    use Notifiable, PasskeyAuthenticatable;
+
+    // ...
+}
+```
+Next, update the `features` method in your application’s `App\Providers\NovaServiceProvider` class to enable passkey authentication:
+```
+use Laravel\Fortify\Features;
+use Laravel\Nova\Nova;
+
+// ...
+
+/**
+ * Register the configurations for Laravel Fortify.
+ */
+protected function fortify(): void
+{
+    Nova::fortify()
+        ->features([
+            Features::updatePasswords(),
+            // Features::emailVerification(),
+            Features::passkeys(),
+        ])
+        ->register();
+}
+```
+Finally, run the `nova:publish` Artisan command to publish the required Fortify migrations. Then, run the `migrate` command:
+```
+php artisan nova:publish
+
+php artisan migrate
+```
+Once completed, Nova users will be able to access a new **User Security** page from the User Menu. Please refer to Fortify’s [passkey authentication documentation](https://laravel.com/docs/fortify#passkeys) for more information.
 ### [​](#enabling-two-factor-authentication) Enabling Two Factor Authentication
 To allow your users to authenticate with two-factor authentication, you will need to update your application’s `User` model and `App\Providers\NovaServiceProvider` service provider.
 First, add the `Laravel\Fortify\TwoFactorAuthenticatable` trait to your application’s `User` model:
@@ -66,7 +115,7 @@ class User extends Authenticatable
     // ...
 }
 ```
-Next, update the `routes` method in your application’s `App\Providers\NovaServiceProvider` class to enable two-factor authentication:
+Next, update the `features` method in your application’s `App\Providers\NovaServiceProvider` class to enable two-factor authentication:
 ```
 use Laravel\Fortify\Features;
 use Laravel\Nova\Nova;
