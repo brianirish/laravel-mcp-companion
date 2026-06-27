@@ -20,6 +20,7 @@
     "filters/defining-filters",
     "filters/registering-filters",
     "installation",
+    "installation.md",
     "lenses/defining-lenses",
     "lenses/registering-lenses",
     "metrics/defining-metrics",
@@ -40,10 +41,10 @@
     "search/the-basics",
     "upgrade"
   ],
-  "total_sections": 38,
+  "total_sections": 39,
   "success_rate": 1.0,
   "discovery_method": "auto-discovery",
   "auto_discovery_enabled": true,
-  "discovered_count": 38,
+  "discovered_count": 39,
   "manual_fallback": false
 }
