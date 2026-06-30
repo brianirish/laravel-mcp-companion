@@ -9,6 +9,7 @@
 - [Installation](#installation)
 - [Get started](#get-started)
 - [Authenticating](#authenticating)
+- [Current organization & switching organizations](#current-organization-%26-switching-organizations)
 - [Current server & switching servers](#current-server-%26-switching-servers)
 - [SSH key authentication](#ssh-key-authentication)
 - [Sites](#sites)
@@ -18,6 +19,7 @@
   - [Reviewing deployment output / logs](#reviewing-deployment-output-%2F-logs)
   - [Running commands](#running-commands)
   - [Tinker](#tinker)
+  - [Opening a site in the dashboard](#opening-a-site-in-the-dashboard)
 - [Resources](#resources)
   - [Checking resource status](#checking-resource-status)
   - [Viewing resources logs](#viewing-resources-logs)
@@ -35,7 +37,7 @@ View the Laravel Forge API documentation
 ## [​](#introduction) Introduction
 Laravel Forge provides a command-line tool that you may use to manage your Forge servers, sites, and resources from the command-line.
 ## [​](#installation) Installation
-> **Requires [PHP 8.0+](https://php.net/releases/)**
+> **Requires [PHP 8.2+](https://php.net/releases/)**
 You may install the **[Laravel Forge CLI](https://github.com/laravel/forge-cli)** as a global [Composer](https://getcomposer.org) dependency:
 ```
 composer global require laravel/forge-cli
@@ -50,9 +52,30 @@ You will need to generate an API token to interact with the Laravel Forge CLI. T
 After you have generated an API token, you should authenticate with your Laravel Forge account using the login command:
 ```
 forge login
-forge login --token=your-api-token
+forge login --token="your-api-token"
+```
+To remove your stored credentials and log out, use the `logout` command:
+```
+forge logout
 ```
 Alternatively, if you plan to authenticate with Laravel Forge from your CI platform, you may set a `FORGE_API_TOKEN` environment variable in your CI build environment.
+## [​](#current-organization-&-switching-organizations) Current organization & switching organizations
+Laravel Forge groups your servers and resources within organizations. CLI commands run against your currently active organization, so you should ensure the correct organization is selected before managing servers or sites.
+When you log in, if your account belongs to a single organization it is selected automatically. Otherwise, you should select one using the `organization:switch` command.
+You may view your current organization using the `organization:current` command:
+```
+forge organization:current  # org:current is available as a shorter alias
+```
+To view a list of all organizations your account belongs to, use the `organization:list` command:
+```
+forge organization:list  # org:list is available as a shorter alias
+```
+To change your active organization, use the `organization:switch` command:
+```
+forge organization:switch        # org:switch is available as a shorter alias
+forge organization:switch acme
+```
+Switching organizations resets your active server, since each server belongs to a specific organization. After switching, select a server using the `server:switch` command.
 ## [​](#current-server-&-switching-servers) Current server & switching servers
 When managing Laravel Forge servers, sites, and resources via the CLI, you will need to be aware of your currently active server. You may view your current server using the `server:current` command. Typically, most of the commands you execute using the Forge CLI will be executed against the active server.
 ```
@@ -120,11 +143,11 @@ forge site:logs example.com
 forge site:logs example.com --follow  # View logs in realtime
 ```
 ### [​](#reviewing-deployment-output-/-logs) Reviewing deployment output / logs
-When a deployment fails, you may review the output / logs via the Laravel Forge UI’s deployment history screen. You may also review the output at any time on the command-line using the `deploy:logs` command. If the `deploy:logs` command is called with no additional arguments, the logs for the latest deployment will be displayed. Or, you may pass the deployment ID to the `deploy:logs` command to display the logs for a particular deployment:
+When a deployment fails, you may review the output / logs via the Laravel Forge UI’s deployment history screen. You may also review the output at any time on the command-line using the `deploy:logs` command, which displays the logs for the site’s latest deployment:
 ```
 forge deploy:logs
 
-forge deploy:logs 12345
+forge deploy:logs example.com
 ```
 ### [​](#running-commands) Running commands
 Sometimes you may wish to run an arbitrary shell command against a site. The `command` command will prompt you for the command you would like to run. The command will be run relative to the site’s root directory.
@@ -142,12 +165,19 @@ forge tinker
 
 forge tinker example.com
 ```
+### [​](#opening-a-site-in-the-dashboard) Opening a site in the dashboard
+To quickly open a site within the Forge dashboard in your browser, use the `open` command:
+```
+forge open
+
+forge open example.com
+```
 ## [​](#resources) Resources
 Laravel Forge provisions servers with a variety of resources and additional software, such as Nginx, MySQL, etc. You may use the Forge CLI to perform common actions on those resources.
 ### [​](#checking-resource-status) Checking resource status
 To check the current status of a resource, you may use the `{resource}:status` command:
 ```
-forge daemon:status
+forge background-process:status  # daemon:status is available as a legacy alias
 forge database:status
 
 forge nginx:status
@@ -158,8 +188,8 @@ forge php:status 8.5  # View PHP 8.5 status
 ### [​](#viewing-resources-logs) Viewing resources logs
 You may also view logs directly from the command-line. To do so, use the `{resource}:logs` command:
 ```
-forge daemon:logs
-forge daemon:logs --follow  # View logs in realtime
+forge background-process:logs           # daemon:logs is available as a legacy alias
+forge background-process:logs --follow  # View logs in realtime
 
 forge database:logs
 
@@ -172,7 +202,7 @@ forge php:logs 8.5       # View PHP 8.5 logs
 ### [​](#restarting-resources) Restarting resources
 Resources may be restarted using the `{resource}:restart` command:
 ```
-forge daemon:restart
+forge background-process:restart  # daemon:restart is available as a legacy alias
 
 forge database:restart
 

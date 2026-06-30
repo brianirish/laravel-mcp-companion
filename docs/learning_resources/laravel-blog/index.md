@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## Laravel Live Japan 2026 Recap
+## Your Symfony App Now Runs on Laravel Cloud
 
-A recap of the first Laravel Live Japan: two days in Tokyo, 550+ attendees from 40 countries, live AI translation, and a community that proved PHP has no borders.
+Run your Symfony app on Laravel Cloud. Deploy faster, cut infrastructure costs, and spend your time building features instead of managing hosting.
 
-[Read more](https://blog.laravel.com/blog/category/community)
+[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
 
 ---
 
