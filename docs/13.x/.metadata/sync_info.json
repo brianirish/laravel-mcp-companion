@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "0ea3f2b9bc04fb5e946ddb0a1b2b03831e78c351",
-  "commit_date": "2026-06-25T17:05:15Z",
-  "commit_message": "Clarify installer configuration flow (#11253)\n\n* Clarify installer configuration flow\n\n* Clarify installer configuration flow",
-  "commit_url": "https://github.com/laravel/docs/commit/0ea3f2b9bc04fb5e946ddb0a1b2b03831e78c351",
-  "sync_time": "2026-06-26T00:03:56Z"
+  "commit_sha": "8d66e681ac2a4a3be38d79939509e5cf68738ff9",
+  "commit_date": "2026-06-30T23:31:33Z",
+  "commit_message": "Update prompts.md (#11254)",
+  "commit_url": "https://github.com/laravel/docs/commit/8d66e681ac2a4a3be38d79939509e5cf68738ff9",
+  "sync_time": "2026-07-01T00:03:25Z"
 }
