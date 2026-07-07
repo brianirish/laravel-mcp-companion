@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "94c3467e621c30e07bc7c9c4d4fd7acfa6b53e87",
-  "commit_date": "2026-07-04T20:38:37Z",
-  "commit_message": "Fix typo in installation instructions (#11258)",
-  "commit_url": "https://github.com/laravel/docs/commit/94c3467e621c30e07bc7c9c4d4fd7acfa6b53e87",
-  "sync_time": "2026-07-05T00:02:59Z"
+  "commit_sha": "a656f28557de9c3b98926eebd87bc1e578b0436e",
+  "commit_date": "2026-07-06T15:29:20Z",
+  "commit_message": "fix wording and terminology inconsistencies (#11260)\n\n* fix wording and terminology inconsistencies\n\n* fix invalid Facades imports in examples\n\n* revert facade changes\n\n---------\n\nCo-authored-by: Abhishek Tiwari <abhishekabhit57@gmail.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/a656f28557de9c3b98926eebd87bc1e578b0436e",
+  "sync_time": "2026-07-07T00:03:27Z"
 }
