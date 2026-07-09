@@ -244,6 +244,19 @@ export default {
 }
 </script>
 ```
+```
+<template>
+  <h2>{{ __('Total Users') }}</h2>
+</template>
+
+<script setup>
+import { useLocalization } from 'laravel-nova'
+
+const { __ } = useLocalization()
+
+// ...
+</script>
+```
 Was this page helpful?
 YesNo
 [Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)

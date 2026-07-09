@@ -36,6 +36,23 @@ class Team extends Resource
     public static $title = 'name';
 }
 ```
+Alternatively, you may override the resource’s `title` method:
+```
+namespace App\Nova;
+
+class Team extends Resource 
+{
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title()
+    {
+        return $this->name;
+    }
+}
+```
 You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](./../resources/fields#avatar-field) field to the resource.
 ### [​](#subtitles) Subtitles
 You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:

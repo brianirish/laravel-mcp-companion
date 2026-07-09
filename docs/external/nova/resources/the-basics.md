@@ -178,6 +178,19 @@ Method
  */
 public static $clickAction = 'edit';
 ```
+```
+/**
+ * Get the click action to use when clicking on the resource in the table.
+ *
+ * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+ *
+ * @return string
+ */
+public static function clickAction()
+{
+    return 'edit';
+}
+```
 Choosing the `select` option will select the resource row’s checkbox. The `ignore` option instructs Nova to ignore click events altogether.
 ## [​](#eager-loading) Eager Loading
 If you routinely need to access a resource’s relationships within your fields, [resource title](./../search/global-search#title-subtitle-attributes), or [resource subtitle](./../search/global-search#title-subtitle-attributes), it may be a good idea to add the relationship to the `with` property of your resource. This property instructs Nova to always eager load the listed relationships when retrieving the resource.
@@ -353,6 +366,17 @@ Method
  */
 public static $trafficCop = false;
 ```
+```
+/**
+ * Indicates whether Nova should check for modifications between viewing and updating a resource.
+ *
+ * @return  bool
+*/
+public static function trafficCop(Request $request)
+{
+    return false;
+}
+```
 If you are experiencing issues with traffic cop you should ensure that your system time is correctly synchronized using NTP.
 ## [​](#resource-polling) Resource Polling
 Nova can automatically fetch the latest records for a resource at a specified interval. To enable polling, override the `polling` property of your Resource class:
@@ -476,6 +500,17 @@ Method
  */
 public static $perPageOptions = [50, 100, 150];
 ```
+```
+/**
+ * The pagination per-page options configured for this resource.
+ *
+ * @return array<int, int>
+ */
+public static function perPageOptions()
+{
+    return [50, 100, 150];
+}
+```
 Changing the value of `perPageOptions` on your `Resource` will cause Nova to fetch the number of resources equal to the first value in the `perPageOptions` array.
 Using the `$perPageViaRelationshipOptions` property, you may also customize the number of resources displayed when a particular resource is displayed on another resource’s detail view as a relationship:
 Property
@@ -487,6 +522,17 @@ Method
  * @return int|array<int, int>|null
  */
 public static $perPageViaRelationshipOptions = 10;
+```
+```
+/**
+ * The pagination per-page options configured for this resource via relationship.
+ *
+ * @return array<int, int>
+ */
+public static function perPageViaRelationshipOptions()
+{
+    return [50, 100, 150];
+}
 ```
 ## [​](#csv-export) CSV Export
 Occasionally you may need to export a group of resource records as a CSV file so that you can interact with the data in a spreadsheet application or import the data into another system. Thankfully, Nova includes built-in support for exporting resource data.

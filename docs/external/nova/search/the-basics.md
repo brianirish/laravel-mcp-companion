@@ -34,6 +34,26 @@ class Post extends Resource
     ];
 }
 ```
+```
+namespace App\Nova;
+
+class Post extends Resource 
+{
+    // ... 
+
+    /**
+     * Get the searchable columns for the resource.
+     *
+     * @return array
+     */
+    public static function searchableColumns()
+    {
+        return [
+            'id', 'title', 'content',
+        ];
+    }
+}
+```
 If you are using Nova’s Scout integration, the `$search` property has no effect on your search results and may be ignored. You should manage the searchable columns within the Algolia or Meilisearch dashboard.
 ## [​](#full-text-indexes) Full-Text Indexes
 Typically, Nova searches your database columns using simple `LIKE` clauses. However, if you are using MySQL or Postgres, you may take advantage of any full-text indexes you have defined. To do so, you should define a `searchableColumns` method on your Nova resource class instead of defining a `$search` property.

@@ -140,6 +140,9 @@ Package
 ```
 php artisan nova:enable-vue-devtool
 ```
+```
+php vendor/bin/testbench nova:enable-vue-devtool
+```
 Was this page helpful?
 YesNo
 [Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)

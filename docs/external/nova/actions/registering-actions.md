@@ -49,6 +49,24 @@ public function actions(NovaRequest $request): array
     ];
 }
 ```
+```
+use App\Nova\Actions\EmailAccountProfile;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ...
+
+/**
+ * Get the actions available for the resource.
+ *
+ * @return array<int, \Laravel\Nova\Actions\Action>
+ */
+public function actions(NovaRequest $request): array
+{
+    return [
+        Actions\EmailAccountProfile::make(),
+    ];
+}
+```
 ## [​](#authorization) Authorization
 If you would like to only expose a given action to certain users, you may invoke the `canSee` method when registering your action. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 app/Nova/~Resource.php
