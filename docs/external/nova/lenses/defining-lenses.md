@@ -257,6 +257,17 @@ Method
  */
 public static $perPageOptions = [50, 100, 150];
 ```
+```
+/**
+ * The pagination per-page options configured for this lens.
+ *
+ * @return array<int, int>
+ */
+public static function perPageOptions()
+{
+    return [50, 100, 150];
+}
+```
 Was this page helpful?
 YesNo
 [Registering Filters](/docs/v5/filters/registering-filters)[Registering Lenses](/docs/v5/lenses/registering-lenses)

@@ -296,6 +296,23 @@ public function calculate(NovaRequest $request): ValueResult
                 ]);
 }
 ```
+```
+use App\Models\User;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Metrics\ValueResult;
+
+// ...
+
+/**
+ * Calculate the value of the metric.
+ */
+public function calculate(NovaRequest $request): ValueResult
+{
+    // @see http://numbrojs.com/old-format.html
+    return $this->count($request, User::class)
+                ->format('0,0');
+}
+```
 ### [​](#transforming-a-value-result) Transforming a Value Result
 There may be times you need to “transform” a value result before it is displayed to the user. For example, let’s say you have a “Total Revenue” metric which calculates the total revenue for a product in cents. You may wish to present this value to the user in dollars versus cents. To transform the value before it’s displayed, you can use the `transform` helper:
 app/Nova/Metrics/~Metric.php
@@ -501,6 +518,23 @@ public function calculate(NovaRequest $request): TrendResult
                     'thousandSeparated' => true,
                     'mantissa' => 2,
                 ]);
+}
+```
+```
+use App\Models\User;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Metrics\TrendResult;
+
+// ...
+
+/**
+ * Calculate the value of the metric.
+ */
+public function calculate(NovaRequest $request): TrendResult
+{
+    // @see http://numbrojs.com/old-format.html
+    return $this->count($request, User::class)
+                ->format('0,0');
 }
 ```
 #### [​](#displaying-the-trend-sum) Displaying the Trend Sum

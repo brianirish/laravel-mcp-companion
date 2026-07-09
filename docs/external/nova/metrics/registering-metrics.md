@@ -40,6 +40,24 @@ public function cards(NovaRequest $request): array
     ];
 }
 ```
+```
+use App\Nova\Metrics\UsersPerDay;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ...
+
+/**
+ * Get the cards available for the resource.
+ *
+ * @return array<int, \Laravel\Nova\Card>
+ */
+public function cards(NovaRequest $request): array
+{
+    return [
+        UsersPerDay::make(),
+    ];
+}
+```
 ### [​](#detail-metrics) Detail Metrics
 In addition to placing metrics on the resource index page, you may also attach a metric to the resource detail page. For example, if you are building a podcasting application, you may wish to display the total number of podcasts created by a specific user over time. To instruct a metric to be displayed on the detail page instead of the index page, invoke the `onlyOnDetail` method when registering your metric:
 app/Nova/~Resource.php

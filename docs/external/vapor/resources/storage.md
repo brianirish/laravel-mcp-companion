@@ -81,6 +81,21 @@ JavaScript
 ```
 <input type="file" id="file" ref="file">
 ```
+```
+Vapor.store(this.$refs.file.files[0], {
+    progress: progress => {
+        this.uploadProgress = Math.round(progress * 100);
+    }
+}).then(response => {
+    axios.post('/api/profile-photo', {
+        uuid: response.uuid,
+        key: response.key,
+        bucket: response.bucket,
+        name: this.$refs.file.files[0].name,
+        content_type: this.$refs.file.files[0].type,
+    })
+});
+```
 All uploaded files will be placed in a `tmp` directory within the bucket. **This directory is automatically configured to purge any files older than 24 hours.** This feature serves to conveniently clean up file uploads that are initiated but not completed, such as a user that begins updating their profile photo but does not save the change.
 The `tmp` directory is private by default. To override this for a given file you may add a `visibility` property to the options provided to the `Vapor.store` method. The `visibility` property should be assigned one of [S3’s predefined permission grants](https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl):
 ```

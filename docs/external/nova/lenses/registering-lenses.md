@@ -29,6 +29,23 @@ public function lenses(NovaRequest $request): array
     ];
 }
 ```
+```
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ...
+
+/**
+ * Get the lenses available for the resource.
+ *
+ * @return array<int, \Laravel\Nova\Lenses\Lens>
+ */
+public function lenses(NovaRequest $request): array
+{
+    return [
+        Lenses\MostValuableUsers::make(),
+    ];
+}
+```
 ## [​](#authorization) Authorization
 If you would like to only expose a given lens to certain users, you may invoke the `canSee` method when registering your lens. The `canSee` method accepts a closure which should return `true` or `false`. The closure will receive the incoming HTTP request:
 app/Nova/User.php

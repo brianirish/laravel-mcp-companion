@@ -120,6 +120,9 @@ config/nova.php
 ```
 NOVA_LICENSE_KEY=
 ```
+```
+'license_key' => env('NOVA_LICENSE_KEY', ''),
+```
 ### [​](#verifying-your-nova-license-key-configuration) Verifying Your Nova License Key Configuration
 To verify everything has been configured correctly, you should run the `nova:check-license` command:
 ```
@@ -229,12 +232,18 @@ config/nova.php
 ```
 NOVA_GUARD=(null)
 ```
+```
+'guard' => env('NOVA_GUARD', null),
+```
 ### [​](#customizing-nova’s-storage-disk-driver) Customizing Nova’s Storage Disk Driver
 Nova uses the default storage disk driver defined in your `filesystems` configuration file. If you would like to customize this disk, you may set the `NOVA_STORAGE_DISK` value using `.env` file the `storage_disk` value within Nova’s configuration file:
 .env
 config/nova.php
 ```
 NOVA_STORAGE_DISK=public
+```
+```
+'storage_disk' => env('NOVA_STORAGE_DISK', 'public'),
 ```
 ### [​](#customizing-nova’s-initial-path) Customizing Nova’s Initial Path
 When visiting Nova, the `Main` dashboard is typically loaded by default. However, you are free to define a different initial path that should be loaded using Nova’s `initialPath` method. Typically, this method may be invoked from the `register` method of your application’s `App\Providers\NovaServiceProvider` service provider:

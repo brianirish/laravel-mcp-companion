@@ -173,6 +173,17 @@ Method
  */
 public static $title = 'name';
 ```
+```
+/**
+ * Get the value that should be displayed to represent the resource.
+ *
+ * @return \Stringable|string
+ */
+public function title()
+{
+    return $this->name;
+}
+```
 #### [​](#disable-ordering-by-title) Disable Ordering by Title
 By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAssociatables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](./authorization#relatable-filtering):
 ```
@@ -330,6 +341,17 @@ Method
  * @var string
  */
 public static $title = 'name';
+```
+
+```
+/**
+ * Get the value that should be displayed to represent the resource.
+ * @return \Stringable|string
+ */
+public function title()
+{
+    return $this->name;
+}
 ```
 
 #### [​](#disabling-ordering-by-title) Disabling Ordering by Title
@@ -571,6 +593,17 @@ Method
  * @var string
  */
 public static $title = 'name';
+```
+```
+/**
+ * Get the value that should be displayed to represent the resource.
+ *
+ * @return string
+ */
+public function title()
+{
+    return $this->name;
+}
 ```
 ## [​](#collapsable-relations) Collapsable Relations
 By default, the `BelongsToMany`, `HasMany`, and `MorphToMany` relationship fields are shown on the resource detail page. However, this can quickly become cumbersome if a resource has many performance-intensive relationships which cause the page to be slow.

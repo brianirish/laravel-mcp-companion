@@ -29,6 +29,23 @@ public function filters(NovaRequest $request): array
     ];
 }
 ```
+```
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+// ...
+
+/**
+ * Get the filters available for the resource.
+ *
+ * @return array<int, \Laravel\Nova\Filters\Filter>
+ */
+public function filters(NovaRequest $request): array
+{
+    return [
+        Filters\UserType::make(),
+    ];
+}
+```
 ## [​](#searchable-select-filters) Searchable Select Filters
 Select filters may be optionally searchable. To allow your select filter to be searchable, invoke the `searchable` method when registering your filter:
 app/Nova/~Resource.php
