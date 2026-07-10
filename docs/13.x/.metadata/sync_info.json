@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "7e0ec215e19fda46743ef7eaca7f83c2916db281",
-  "commit_date": "2026-07-07T19:38:08Z",
-  "commit_message": "Document OpenAI-compatible providers and additional AI SDK features (#11263)\n\n* Document OpenAI-compatible providers and additional AI SDK features\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/7e0ec215e19fda46743ef7eaca7f83c2916db281",
-  "sync_time": "2026-07-08T00:04:17Z"
+  "commit_sha": "8fb05cb0b601ab4935b29eb531ea18073a17cd1f",
+  "commit_date": "2026-07-09T22:46:30Z",
+  "commit_message": "[13.x] Improve reduce into (#11283)\n\n* Document `reduceInto` pass-by-reference pattern for scalars and arrays\n\n* Add `reduceInto` to lazy collection methods list",
+  "commit_url": "https://github.com/laravel/docs/commit/8fb05cb0b601ab4935b29eb531ea18073a17cd1f",
+  "sync_time": "2026-07-10T00:04:00Z"
 }

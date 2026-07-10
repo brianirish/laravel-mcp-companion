@@ -185,7 +185,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup SSH
-        uses: webfactory/[email protected]
+        uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Setup PHP

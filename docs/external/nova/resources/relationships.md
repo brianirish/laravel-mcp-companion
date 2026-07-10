@@ -679,7 +679,7 @@ BelongsTo::make('User')
     ->dependsOn('topic', function (BelongsTo $field, NovaRequest $request, FormData $formData) {
         if ($formData->topic === 'laravel-nova') {
             $field->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
-                $query->whereIn('email', ['[email protected]', '[email protected]']);
+                $query->whereIn('email', ['taylor@laravel.com', 'david@laravel.com']);
             });
         }
     }),
