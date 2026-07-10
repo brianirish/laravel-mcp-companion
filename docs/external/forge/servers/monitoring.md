@@ -24,7 +24,7 @@ Server monitoring is only available on the Business plan.
 ## [​](#managing-server-monitors) Managing server monitors
 ### [​](#creating-monitors) Creating monitors
 To create a server monitor, navigate to the server’s dashboard, click the “Observe” tab, and click the “Add monitor” button. Select the metric type, configure the thresholds and provide an email address to notify. Once done, click “Create server monitor”.
-Laravel Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `[email protected]`.
+Laravel Forge will only accept one email address to notify. If you need to notify multiple people, you should create a distribution list such as `team@example.com`.
 ### [​](#deleting-monitors) Deleting monitors
 To delete a server monitor, navigate to the server’s dashboard and click the “Observe” tab. Locate the server monitor you wish to delete, click the action dropdown next to the server monitor, and select “Delete”.
 ## [​](#stat-collection-frequencies) Stat collection frequencies

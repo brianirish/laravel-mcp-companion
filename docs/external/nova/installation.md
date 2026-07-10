@@ -82,7 +82,7 @@ composer update --prefer-dist
 When running `composer update`, you will be prompted to provide a username and password. You should use your Nova website email for the username and a [license key](https://nova.laravel.com/licenses) should be used as the password. These credentials will authenticate your Composer session as having permission to download the Nova source code.
 To avoid manually typing these credentials, you may create a [Composer auth.json file](https://getcomposer.org/doc/articles/http-basic-authentication) while using your [license key](https://nova.laravel.com/licenses) in place of your password:
 ```
-composer config http-basic.nova.laravel.com [email protected] your-license-key
+composer config http-basic.nova.laravel.com your-nova-account-email@your-domain.com your-license-key
 ```
 Finally, run the `nova:install` and `migrate` Artisan commands. The `nova:install` command will install Nova’s service provider and public assets within your application:
 ```
@@ -166,7 +166,7 @@ protected function gate(): void
 {
     Gate::define('viewNova', function ($user) {
         return in_array($user->email, [
-            '[email protected]',
+            'taylor@laravel.com',
         ]);
     });
 }
