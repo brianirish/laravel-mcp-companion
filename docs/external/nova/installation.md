@@ -40,7 +40,7 @@ Watch the free Nova series on Laracasts
 ## [​](#requirements) Requirements
 Laravel Nova has a few minimum requirements you should be aware of before installing:
 - Composer 2
-- Laravel Framework 10.x, 11.x, or 12.x
+- Laravel Framework 10.x, 11.x, 12.x, or 13.x
 - Inertia.js 2.x
 - Laravel Mix 6.x
 - Node.js (Version 18.x+)
@@ -71,7 +71,7 @@ composer.json
 ```
 "require": {
     "php": "^8.2",
-    "laravel/framework": "^12.0",
+    "laravel/framework": "^13.0",
     "laravel/nova": "^5.0"
 },
 ```
