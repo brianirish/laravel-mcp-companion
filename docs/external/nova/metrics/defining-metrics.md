@@ -47,6 +47,7 @@
   - [Displaying Icons on Table Rows](#displaying-icons-on-table-rows)
   - [Customizing Table Metric Empty Text](#customizing-table-metric-empty-text)
 - [Caching](#caching)
+  - [Laravel 13 Compatibility](#laravel-13-compatibility)
 - [Customizing Metric Names](#customizing-metric-names)
 Metrics
 # Defining Metrics
@@ -990,7 +991,7 @@ public function calculate(NovaRequest $request): array
     ];
 }
 ```
-You can learn more about menu customization by reading the [menu item customization documentation](./../customization/menus#menu-items).
+You can learn more about menu customization by reading the [menu item customization documentation](/docs/v5/customization/menus#menu-items).
 ### [​](#displaying-icons-on-table-rows) Displaying Icons on Table Rows
 Table metrics also support displaying an icon to the left of the title and subtitle for each row. You can use this information to visually delineate different table rows by type, or by using them to show progress on an internal process.
 To show an icon on your table metric row, use the `icon` method and pass in the key for the icon you wish to use:
@@ -1069,7 +1070,7 @@ public function cards(NovaRequest $request): array
 }
 ```
 ## [​](#caching) Caching
-Occasionally the calculation of a metric’s values can be slow and expensive. For this reason, all Nova metrics contain a `cacheFor` method which allows you to specify the duration the metric result should be cached:
+Calculating a metric’s values can occasionally be slow and expensive. Therefore, all Nova metrics include a `cacheFor` method that lets you specify how long to cache the metric result:
 ```
 use DateTimeInterface;
 
@@ -1083,12 +1084,38 @@ public function cacheFor(): DateTimeInterface|null
     return now()->addMinutes(5);
 }
 ```
-Alternatively, you can also return either one of the following via `cacheFor` method:
+Alternatively, the `cacheFor` method may return any of the following:
 - `DateTimeInterface`
 - `DateInterval`
 - `float`
 - `int`
 - `null`
+### [​](#laravel-13-compatibility) Laravel 13 Compatibility
+Laravel 13’s `cache.serializable_classes` configuration option defaults to `false`, preventing PHP objects stored in the cache from being unserialized. Because cached Nova metric results contain PHP objects, add Nova’s serializable classes to the `serializable_classes` array when using `cacheFor`:
+config/cache.php
+```
+use Laravel\Nova\Nova;
+
+'serializable_classes' => [
+    // ...
+
+    ...Nova::serializableClasses(),
+],
+```
+Earlier versions of Nova require you to declare these classes manually:
+config/cache.php
+```
+'serializable_classes' => [
+    // ...
+
+    \Laravel\Nova\Metrics\MetricTableRow::class,
+    \Laravel\Nova\Metrics\PartitionResult::class,
+    \Laravel\Nova\Metrics\ProgressResult::class,
+    \Laravel\Nova\Metrics\TrendResult::class,
+    \Laravel\Nova\Metrics\ValueResult::class,
+],
+```
+For more information, see Laravel’s [cache `serializable_classes` configuration documentation](https://laravel.com/docs/13.x/upgrade#cache-serializable_classes-configuration).
 ## [​](#customizing-metric-names) Customizing Metric Names
 By default, Nova will use the metric class name as the displayable name of your metric. You may customize the name of the metric displayed on the metric card by overriding the `name` method within your metric class:
 ```
