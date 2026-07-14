@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "8fb05cb0b601ab4935b29eb531ea18073a17cd1f",
-  "commit_date": "2026-07-09T22:46:30Z",
-  "commit_message": "[13.x] Improve reduce into (#11283)\n\n* Document `reduceInto` pass-by-reference pattern for scalars and arrays\n\n* Add `reduceInto` to lazy collection methods list",
-  "commit_url": "https://github.com/laravel/docs/commit/8fb05cb0b601ab4935b29eb531ea18073a17cd1f",
-  "sync_time": "2026-07-10T00:04:00Z"
+  "commit_sha": "6d8246ff751a299421520660979cc34a2b255bc9",
+  "commit_date": "2026-07-13T16:23:57Z",
+  "commit_message": "queue:work --timeout has no effect when used with --once (#11287)\n\n* Note that --timeout has no effect with --once\n\n* Update queues.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/6d8246ff751a299421520660979cc34a2b255bc9",
+  "sync_time": "2026-07-14T00:07:01Z"
 }
