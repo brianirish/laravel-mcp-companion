@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "27d3ab4c864685ca8457fc48258c4b844a200844",
-  "commit_date": "2026-07-14T17:09:25Z",
-  "commit_message": "Fix duplicate anchor name in notifications.md (#11291)",
-  "commit_url": "https://github.com/laravel/docs/commit/27d3ab4c864685ca8457fc48258c4b844a200844",
-  "sync_time": "2026-07-15T00:03:34Z"
+  "commit_sha": "13c877b30631902df5ccab30be80b560cac41382",
+  "commit_date": "2026-07-16T20:26:58Z",
+  "commit_message": "Document the `artisan dev` command (#11288)\n\n* Update artisan.md\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/13c877b30631902df5ccab30be80b560cac41382",
+  "sync_time": "2026-07-17T00:03:12Z"
 }

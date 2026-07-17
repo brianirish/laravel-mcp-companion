@@ -19,9 +19,9 @@
 - [Database upgrades](#database-upgrades)
 Resources
 # Databases
-Copy page
+Copy pageCopy page
 Learn how to manage databases on your Laravel Forge server.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 When provisioning a new Laravel Forge server that requires a database, you can choose between installing an [app server](/docs/servers/types#app-servers) or a dedicated [database server](/docs/servers/types#database-servers). The Forge dashboard provides comprehensive tools for managing databases, users, and permissions across your infrastructure.
 ## [​](#creating-servers-with-databases) Creating servers with databases

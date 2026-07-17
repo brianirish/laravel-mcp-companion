@@ -21,9 +21,9 @@
 - [Team permissions](#team-permissions)
 Sites
 # Creating and Managing Sites
-Copy page
+Copy pageCopy page
 Learn how to create sites and install applications.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge provides a simple and intuitive interface for managing and deploying your web applications.
 ## [​](#creating-sites) Creating sites

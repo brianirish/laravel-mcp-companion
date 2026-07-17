@@ -17,9 +17,9 @@
   - [OpenClaw Servers](#openclaw-servers)
 Servers
 # Server Types
-Copy page
+Copy pageCopy page
 Learn about the different types of servers you can provision with Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge supports provisioning several different types of servers:
 - Application Servers

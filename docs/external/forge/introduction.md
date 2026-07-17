@@ -12,9 +12,9 @@
 - [Legal and compliance](#legal-and-compliance)
 Get Started
 # Welcome to Laravel Forge
-Copy page
+Copy pageCopy page
 A server management and application deployment service for your Laravel applications and beyond.
-Copy page
+Copy pageCopy page
 ## Create an account
 Create your Laravel Forge account today
 ## Watch more
