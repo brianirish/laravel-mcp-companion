@@ -27,9 +27,9 @@
   - [Connecting to resources locally](#connecting-to-resources-locally)
 Get Started
 # Laravel Forge CLI
-Copy page
+Copy pageCopy page
 Laravel Forge CLI is a command-line tool that you may use to manage your Forge resources from the command-line.
-Copy page
+Copy pageCopy page
 ## Laravel Forge CLI
 View the Laravel Forge CLI on GitHub
 ## Laravel Forge API

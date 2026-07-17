@@ -12,9 +12,9 @@
 - [Stat collection frequencies](#stat-collection-frequencies)
 Servers
 # Monitoring
-Copy page
+Copy pageCopy page
 Learn how to configure server monitoring in Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge can be configured to monitor the following metrics on your server and email you when their state changes:
 - **CPU Load Average** - tracks the server’s load average. This is based on the average system load over a one-minute interval.

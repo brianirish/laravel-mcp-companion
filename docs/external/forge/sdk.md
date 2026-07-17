@@ -33,9 +33,9 @@
 - [Error Handling](#error-handling)
 Get Started
 # Laravel Forge SDK
-Copy page
+Copy pageCopy page
 A PHP SDK for interacting with the Laravel Forge API.
-Copy page
+Copy pageCopy page
 ## Laravel Forge SDK
 View the Laravel Forge SDK on GitHub
 ## Laravel Forge API

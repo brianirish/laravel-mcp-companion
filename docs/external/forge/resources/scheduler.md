@@ -18,9 +18,9 @@
   - [Using heartbeat endpoints](#using-heartbeat-endpoints)
 Resources
 # Scheduler
-Copy page
+Copy pageCopy page
 Learn how to configure and manage scheduled jobs on your Laravel Forge server.
-Copy page
+Copy pageCopy page
 ## [​](#scheduled-jobs) Scheduled jobs
 Laravel Forge enables you to configure scheduled jobs that run commands at specified intervals on either a server or site level. You can choose from predefined frequencies or create custom Cron schedules tailored to your specific needs.
 If your scheduled job fails to run, verify that the command path is correct and accessible.

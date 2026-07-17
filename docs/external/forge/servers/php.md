@@ -20,9 +20,9 @@
 - [Beta and release candidates](#beta-and-release-candidates)
 Servers
 # PHP
-Copy page
+Copy pageCopy page
 Learn how to manage PHP versions on your Laravel Forge server.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge makes it easy to install and configure multiple versions of PHP on your server. Each installed PHP version runs its own FPM process. In addition, you may [update the PHP version used by specific sites at any time](/docs/sites/the-basics#php-version).
 Laravel Forge is only aware of PHP installations that are managed through the Forge dashboard and not manually installed on the server.

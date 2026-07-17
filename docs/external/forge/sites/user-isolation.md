@@ -10,9 +10,9 @@
 - [Connecting via SFTP](#connecting-via-sftp)
 Sites
 # User Isolation
-Copy page
+Copy pageCopy page
 Learn how to isolate your sites on Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 By default, Laravel Forge uses the default `forge` user that is created as part of the server’s initial provisioning process for all deployments, daemons, scheduled jobs, PHP-FPM, and other processes.
 Via Laravel Forge’s “User Isolation” feature, Forge will create a separate user for a given site. This is particularly useful when combined with a project like WordPress in order to prevent plugins from maliciously accessing content in your `forge` user (or other isolated user) owned directories.

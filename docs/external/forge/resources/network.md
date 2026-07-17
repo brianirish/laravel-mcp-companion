@@ -18,9 +18,9 @@
   - [Recovering from deleted SSH rules](#recovering-from-deleted-ssh-rules)
 Resources
 # Network
-Copy page
+Copy pageCopy page
 Learn how to manage your server network and firewall.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge provides comprehensive network management capabilities. This includes firewall configuration and server-to-server connectivity management, allowing you to control traffic flow and establish secure connections between your infrastructure components.
 Manually created `ufw` rules on your server won’t appear in the Laravel Forge dashboard. Forge only displays and manages rules created through its interface.
