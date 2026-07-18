@@ -7,6 +7,7 @@
 ## On this page
 - [What is Laravel Forge?](#what-is-laravel-forge)
 - [Laravel Forge IP addresses](#laravel-forge-ip-addresses)
+  - [Forge Terminal](#forge-terminal)
   - [Laravel Forge support jumpbox](#laravel-forge-support-jumpbox)
 - [Laravel Forge API](#laravel-forge-api)
 - [Legal and compliance](#legal-and-compliance)
@@ -44,6 +45,9 @@ In order to provision and communicate with your servers, Laravel Forge requires 
 You can also access the IP addresses via the following URL: <https://forge.laravel.com/ips-v4.txt>. This is particularly useful if you intend on automating your network or firewall infrastructure.
 If you are restricting HTTP traffic, your server must also allow incoming and outgoing traffic from `forge.laravel.com`.
 The Laravel Forge IP addresses may change from time to time; however, we will always email you several weeks prior to an IP address change.
+#### [​](#forge-terminal) Forge Terminal
+Laravel VPS customers benefit from an [integrated terminal](/docs/servers/laravel-vps#forge-terminal) within the Forge Control Panel. To ensure this is functional, you must allow the following IP:
+- `142.93.78.212`
 ### [​](#laravel-forge-support-jumpbox) Laravel Forge support jumpbox
 To enable the Laravel Forge Support team to provide more efficient technical assistance, you can optionally allow our support jumpbox IP address to access your server in your firewall settings:
 - `129.212.144.126`

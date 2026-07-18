@@ -95,6 +95,7 @@ protected function resources(): void
 }
 ```
 Once your resources are registered with Nova, they will be available in the Nova sidebar:
+Dashboard
 If you do not want a resource to appear in the sidebar, you may override the `displayInNavigation` property of your resource class:
 app/Nova/Post.php
 ```
@@ -152,6 +153,7 @@ app/Nova/Post.php
 public static $tableStyle = 'tight';
 ```
 This will display your table rows with less visual height, enabling more data to be shown:
+Tight Table Style
 ### [​](#column-borders) Column Borders
 You can instruct Nova to display column borders by overriding the static `$showColumnBorders` property or the static `showColumnBorders` method on your resource class:
 app/Nova/Post.php
@@ -164,6 +166,7 @@ app/Nova/Post.php
 public static $showColumnBorders = true;
 ```
 Setting this property to `true` will instruct Nova to display the table with borders on every table item:
+Table Column Borders
 ## [​](#resource-table-click-action) Resource Table Click Action
 By default, when clicking on a resource table row, Nova will navigate to the detail view for the resource. However, you may want Nova to navigate to the edit form instead. You can customize this behavior by changing the `clickAction` property or the static `clickAction` method on your resource class:
 Property
@@ -221,6 +224,7 @@ public static function defaultAttributes(): array
 ```
 ## [​](#resource-replication) Resource Replication
 Sometimes, you may want to create a new resource while using all of the data from an existing resource as a starting point. Nova’s resource replication feature does just that. After clicking the replicate button, you’ll be whisked away to a resource creation form with all of the replicated resource’s data hydrated into the form and ready for tweaking:
+Resource Replication
 To customize the replication model, you can override the `replicate` method on the resource class:
 app/Nova/Post.php
 ```
@@ -411,6 +415,7 @@ app/Nova/User.php
 public static $showPollingToggle = true;
 ```
 Nova will then display a clickable button that you may use to enable / disable polling for the resource:
+Resource Polling
 ## [​](#redirection) Redirection
 Nova allows you to easily customize where a user is redirected after performing resource actions such as creating or updating a resource:
 - [redirectAfterCreate()](#after-creating-redirection)
@@ -483,6 +488,9 @@ public static function redirectAfterDelete(NovaRequest $request)
 ```
 ## [​](#pagination) Pagination
 Nova has the ability to show pagination links for your Resource listings. You can choose between three different styles: “simple”, “load-more”, and “links”, depending on your application’s needs:
+Simple Pagination
+Load-more Pagination
+Links Pagination
 By default, Nova Resources are displayed using the “simple” style. However, you may customize this to use either the `load-more` or `links` styles by changing the value of the `pagination` configuration option within your application’s `config/nova.php` configuration file:
 config/nova.php
 ```
