@@ -23,10 +23,14 @@
     - [Anonymous Agents](#anonymous-agents)
     - [Agent Configuration](#agent-configuration)
     - [Provider Options](#provider-options)
+- [Human Tool Approval](#human-tool-approval)
+    - [Complete Approval Flow](#complete-approval-flow)
 - [Images](#images)
 - [Audio (TTS)](#audio)
 - [Transcription (STT)](#transcription)
+- [Text Summarization](#text-summarization)
 - [Embeddings](#embeddings)
+    - [Multimodal Embeddings](#multimodal-embeddings)
     - [Querying Embeddings](#querying-embeddings)
     - [Caching Embeddings](#caching-embeddings)
 - [Reranking](#reranking)
@@ -303,7 +307,7 @@ By passing additional arguments to the `prompt` method, you may override the def
 $response = (new SalesCoach)->prompt(
     'Analyze this sales transcript...',
     provider: Lab::Anthropic,
-    model: 'claude-haiku-4-5-20251001',
+    model: 'claude-sonnet-5',
     timeout: 120,
 );
 ```
@@ -336,7 +340,7 @@ public function messages(): iterable
 <a name="remembering-conversations"></a>
 #### Remembering Conversations
 
-> **Note:** Before using the `RemembersConversations` trait, you should publish and run the AI SDK migrations using the `vendor:publish` Artisan command. These migrations will create the necessary database tables to store conversations.
+> **Warning:** Before using the `RemembersConversations` trait, you should publish and run the AI SDK migrations using the `vendor:publish` Artisan command. These migrations will create the necessary database tables to store conversations.
 
 If you would like Laravel to automatically store and retrieve conversation history for your agent, you may use the `RemembersConversations` trait. This trait provides a simple way to persist conversation messages to the database without manually implementing the `Conversational` interface:
 
@@ -407,6 +411,48 @@ $response = (new SalesCoach)
 ```
 
 When using the `RemembersConversations` trait, previous messages are automatically loaded and included in the conversation context when prompting. New messages (both user and assistant) are automatically stored after each interaction.
+
+<a name="conversation-participants"></a>
+#### Conversation Participants
+
+Although users are the most common conversation participants, conversations may belong to any Eloquent model. Use the `forParticipant` method to start a conversation for another type of model:
+
+```php
+$response = (new SalesCoach)
+    ->forParticipant($team)
+    ->prompt('Review our latest sales results.');
+```
+
+The participant's morph class and primary key are stored with the conversation. Therefore, models of different types that have the same primary key, such as `User` ID `1` and `Team` ID `1`, have separate conversation histories. The `forUser` method is an alias for `forParticipant`.
+
+You may continue the participant's most recent conversation using the `continueLastConversation` method:
+
+```php
+$response = (new SalesCoach)
+    ->continueLastConversation($team)
+    ->prompt('Tell me more about that.');
+```
+
+When continuing a specific conversation, pass the participant to the `continue` method:
+
+```php
+$response = (new SalesCoach)
+    ->continue($conversationId, as: $team)
+    ->prompt('Tell me more about that.');
+```
+
+The `HasConversations` trait may be added to any Eloquent model that participates in conversations. The resulting `conversations` relationship is a polymorphic relationship scoped to that model's type and primary key. You may also access the participant that owns a conversation through its inverse relationship:
+
+```php
+$conversations = $team->conversations;
+
+$participant = $conversation->participant;
+```
+
+If your application uses multiple participant model types, you should consider defining an [Eloquent morph map](/docs/{{version}}/eloquent-relationships#custom-polymorphic-types) so that stored participant types are not coupled to your model class names.
+
+> [!WARNING]
+> The `continue` method does not verify that the given participant owns the conversation. Your application should authorize access to the conversation before continuing it.
 
 <a name="structured-output"></a>
 ### Structured Output
@@ -1257,7 +1303,7 @@ use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
 
 #[Provider(Lab::Anthropic)]
-#[Model('claude-haiku-4-5-20251001')]
+#[Model('claude-sonnet-5')]
 #[MaxSteps(10)]
 #[MaxTokens(4096)]
 #[Temperature(0.7)]
@@ -1344,6 +1390,221 @@ class SalesCoach implements Agent, HasProviderOptions
 The `providerOptions` method receives the provider currently being used (`Lab` enum or string), allowing you to return different options per provider. This is especially useful when using [failover](#failover), since each fallback provider can receive its own configuration.
 
 The Anthropic example above also enables [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) via `cache_control`.
+
+<a name="human-tool-approval"></a>
+## Human Tool Approval
+
+> [!WARNING]
+> Tool approval requires a `Conversational` agent whose conversation history is persisted so the paused call can be resumed. The `RemembersConversations` trait provides the necessary persistence.
+
+Tools that perform sensitive or irreversible actions may require human approval before they are executed. To make a tool approvable, implement the `Approvable` contract and use the `InteractsWithApprovals` trait. Approvable tools require approval by default:
+
+```php
+<?php
+
+namespace App\Ai\Tools;
+
+use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Ai\Concerns\InteractsWithApprovals;
+use Laravel\Ai\Contracts\Approvable;
+use Laravel\Ai\Contracts\Tool;
+use Laravel\Ai\Tools\Request;
+use Stringable;
+
+class DeleteFile implements Approvable, Tool
+{
+    use InteractsWithApprovals;
+
+    /**
+     * Get the description of the tool's purpose.
+     */
+    public function description(): Stringable|string
+    {
+        return 'Delete a file from storage.';
+    }
+
+    /**
+     * Execute the tool.
+     */
+    public function handle(Request $request): Stringable|string
+    {
+        Storage::delete($request['path']);
+
+        return "Deleted [{$request['path']}].";
+    }
+
+    /**
+     * Get the tool's schema definition.
+     */
+    public function schema(JsonSchema $schema): array
+    {
+        return [
+            'path' => $schema->string()->required(),
+        ];
+    }
+}
+```
+
+To determine whether approval is needed based on the tool call's arguments, define a `needsApproval` method on the tool. This method may return a boolean or an `Approval` instance that includes a reason for the approval request:
+
+```php
+use Laravel\Ai\Approvals\Approval;
+
+/**
+ * Determine whether the tool needs approval for the given request.
+ */
+protected function needsApproval(Request $request): Approval|bool
+{
+    return str_starts_with($request['path'], 'temporary/')
+        ? false
+        : Approval::required('This will permanently delete a file.');
+}
+```
+
+You may override a tool's approval requirement when returning it from an agent's `tools` method:
+
+```php
+public function tools(): iterable
+{
+    return [
+        (new SendNotification)->withoutApproval(),
+        (new DeleteFile)->requireApproval('Deletion review required.'),
+    ];
+}
+```
+
+When an approvable tool is called, the agent pauses before executing it. You may inspect the response's pending approvals, which contain each tool call's ID, tool name, arguments, and approval reason:
+
+```php
+$response = (new FileAssistant)
+    ->forUser($user)
+    ->prompt('Delete the old invoice.');
+
+if ($response->hasPendingApprovals()) {
+    foreach ($response->pendingApprovals as $approval) {
+        // $approval->id
+        // $approval->tool
+        // $approval->arguments
+        // $approval->reason
+    }
+}
+```
+
+To resume the agent, continue the conversation and provide a `Decisions` instance containing a decision for each pending tool call. Decisions may approve the call, reject it, or edit its arguments before execution:
+
+```php
+use Laravel\Ai\Approvals\Decision;
+use Laravel\Ai\Approvals\Decisions;
+
+$response = (new FileAssistant)
+    ->continue($conversationId, as: $user)
+    ->prompt(Decisions::from([
+        'call_abc' => Decision::approve(),
+        'call_ghi' => Decision::reject('The invoice must be retained.'),
+    ]));
+```
+
+The boolean values `true` and `false` may be used as shorthand for approval and rejection. Every pending tool call must receive a decision. Unknown, missing, or previously resolved tool call IDs will cause an `ApprovalMismatchException` to be thrown. You may provide a default for calls without an explicit decision using the `approveRemaining` or `rejectRemaining` methods:
+
+```php
+$decisions = Decisions::from([
+    'call_abc' => true,
+])->rejectRemaining('Not approved.');
+
+$response = (new FileAssistant)
+    ->continue($conversationId, as: $user)
+    ->prompt($decisions);
+```
+
+A rejection with a result, such as `Decision::reject('Not approved.')`, is returned to the model so it may continue responding. A rejection without a result stops the generation loop after recording the rejection.
+
+Tool approval is supported by the `prompt`, `stream`, `queue`, `broadcast`, `broadcastNow`, and `broadcastOnQueue` methods.
+
+During streaming and broadcasting, a pause is represented by a `tool_approval_request` event. When using the [Vercel AI SDK stream protocol](#streaming-using-the-vercel-ai-sdk-protocol), approval requests and results are emitted using the protocol's native tool approval parts.
+
+For queued agents, the resulting response is passed to the `then` callback, and Laravel also dispatches a `ToolApprovalRequested` event.
+
+Laravel stores the result of an approved tool before asking the model to continue. If generation then fails, the approval has already been resolved. Continue the conversation with a normal text prompt instead of submitting the same approval decisions again.
+
+<a name="complete-approval-flow"></a>
+### Complete Approval Flow
+
+The following routes demonstrate a complete approval flow. The `GET` route returns the chat screen, while the `POST` route accepts either a new text prompt or approval decisions from the chat screen. This example assumes the application's `User` model uses the `HasConversations` trait:
+
+```php
+use App\Ai\Agents\FileAssistant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
+use Laravel\Ai\Approvals\Decision;
+use Laravel\Ai\Approvals\Decisions;
+use Laravel\Ai\Models\Conversation;
+
+Route::get('/chat/{conversation}', function (Request $request, Conversation $conversation) {
+    Gate::authorize('view', $conversation);
+
+    return view('chat', [
+        'conversation' => $conversation,
+    ]);
+})->middleware('auth');
+
+Route::post('/chat/{conversation}', function (Request $request, Conversation $conversation) {
+    Gate::authorize('view', $conversation);
+
+    $validated = $request->validate([
+        'message' => ['nullable', 'string', 'required_without:decisions', 'prohibited_with:decisions'],
+        'decisions' => ['nullable', 'array', 'required_without:message', 'prohibited_with:message'],
+        'decisions.*.action' => ['required_with:decisions', Rule::in(['approve', 'reject'])],
+        'decisions.*.result' => ['nullable', 'string'],
+    ]);
+
+    $prompt = isset($validated['decisions'])
+        ? Decisions::from($validated->collect('decisions')->map(
+            fn (array $decision) => match ($decision['action']) {
+                'approve' => Decision::approve(),
+                'reject' => Decision::reject($decision['result'] ?? null),
+            }
+        )->all())
+        : $validated['message'];
+
+    $response = (new FileAssistant)
+        ->continue($conversation->id, as: $request->user())
+        ->prompt($prompt);
+
+    return [
+        'conversation_id' => $response->conversationId,
+        'status' => $response->hasPendingApprovals() ? 'awaiting_approval' : 'complete',
+        'message' => $response->text,
+        'approvals' => $response->pendingApprovals,
+    ];
+})->middleware('auth');
+```
+
+When the response status is `awaiting_approval`, the chat screen should render the pending approvals and submit the user's choices to the same endpoint using the tool call ID as each decision's key:
+
+```json
+{
+    "decisions": {
+        "call_abc": {
+            "action": "approve"
+        },
+        "call_def": {
+            "action": "reject",
+            "result": "The invoice must be retained."
+        }
+    }
+}
+```
+
+For a normal chat message, the screen may instead submit a `message` value:
+
+```json
+{
+    "message": "Delete the old invoice."
+}
+```
 
 <a name="images"></a>
 ## Images
@@ -1518,6 +1779,32 @@ Transcription::fromStorage('audio.mp3')
     });
 ```
 
+<a name="text-summarization"></a>
+## Text Summarization
+
+You may summarize text using the `summarize` method available via Laravel's `Stringable` class. By default, the summary will contain no more than three sentences and will be generated using the configured provider's cheapest text model:
+
+```php
+use Illuminate\Support\Str;
+
+$summary = Str::of($article)->summarize();
+```
+
+You may specify the maximum number of sentences, provider, model, and timeout used to generate the summary. The `Str` class also offers a static version of the method:
+
+```php
+use Laravel\Ai\Enums\Lab;
+
+$summary = Str::of($article)->summarize(
+    sentences: 4,
+    provider: Lab::Anthropic,
+    model: 'claude-sonnet-5',
+    timeout: 30,
+);
+
+$summary = Str::summarize($article, sentences: 4);
+```
+
 <a name="embeddings"></a>
 ## Embeddings
 
@@ -1549,6 +1836,52 @@ $response = Embeddings::for(['Napa Valley has great wine.'])
     ->dimensions(1536)
     ->generate(Lab::OpenAI, 'text-embedding-3-small');
 ```
+
+<a name="multimodal-embeddings"></a>
+### Multimodal Embeddings
+
+In addition to strings, the `Embeddings::for` method accepts image, audio, document, and video inputs, allowing you to generate embeddings for non-text content. Gemini supports image, audio, document, and video embeddings, while VoyageAI supports image and video embeddings:
+
+```php
+use Laravel\Ai\Embeddings;
+use Laravel\Ai\Enums\Lab;
+use Laravel\Ai\Files\Image;
+use Laravel\Ai\Files\Video;
+
+$response = Embeddings::for([
+    'A vineyard at sunset.',
+    Image::fromStorage('vineyard.jpg'),
+    Video::fromPath('/home/laravel/tour.mp4'),
+])->generate(Lab::Gemini);
+```
+
+Multimodal inputs use the same [file classes used for attachments](#attachments). These files may be created from a local path, a filesystem disk, a remote URL, or Base64-encoded content. Images, documents, and videos may also be created from uploaded files, while documents may be created from raw string content:
+
+```php
+use Laravel\Ai\Files\Audio;
+use Laravel\Ai\Files\Document;
+use Laravel\Ai\Files\Image;
+use Laravel\Ai\Files\Video;
+
+Image::fromPath('/home/laravel/photo.jpg');
+Image::fromStorage('photo.jpg');
+Image::fromUpload($request->file('photo'));
+
+Audio::fromPath('/home/laravel/clip.mp3');
+Audio::fromStorage('clip.mp3');
+Audio::fromUpload($request->file('clip.mp3'));
+
+Video::fromPath('/home/laravel/video.mp4');
+Video::fromStorage('video.mp4');
+Video::fromUpload($request->file('video'));
+
+Document::fromUrl('https://example.com/report.pdf');
+Document::fromString('Laravel is a PHP framework.', 'text/plain');
+Document::fromUpload($request->file('report'));
+```
+
+> [!NOTE]
+> VoyageAI does not allow remote URL media and Base64-encoded media to be mixed in a single request. Local, stored, and uploaded files are sent as Base64-encoded content, and text inputs may be combined with either media source. Consult your provider's documentation to determine which multimodal models and inputs are available.
 
 <a name="querying-embeddings"></a>
 ### Querying Embeddings
@@ -2027,6 +2360,28 @@ SalesCoach::fake([
 ]);
 ```
 
+You may also fake a response that is awaiting tool approval:
+
+```php
+use Laravel\Ai\Approvals\PendingApproval;
+use Laravel\Ai\Responses\AgentResponse;
+
+FileAssistant::fake([
+    AgentResponse::fakeWithPendingApprovals([
+        new PendingApproval(
+            id: 'call_abc',
+            tool: 'DeleteFile',
+            arguments: ['path' => 'invoice.pdf'],
+            reason: 'This will permanently delete a file.',
+        ),
+    ]),
+]);
+
+$response = (new FileAssistant)->prompt('Delete the invoice.');
+
+$response->hasPendingApprovals(); // true
+```
+
 > **Note:** When `Agent::fake()` is invoked on an agent that returns structured output and fake output was not explicitly provided, Laravel will automatically generate fake data that matches your agent's defined output schema.
 
 After prompting the agent, you may make assertions about the prompts that were received:
@@ -2043,6 +2398,24 @@ SalesCoach::assertPrompted(function (AgentPrompt $prompt) {
 SalesCoach::assertNotPrompted('Missing prompt');
 
 SalesCoach::assertNeverPrompted();
+```
+
+When asserting an approval continuation, you may inspect the prompt's approval decisions:
+
+```php
+use Laravel\Ai\Approvals\Decisions;
+use Laravel\Ai\Prompts\AgentPrompt;
+
+FileAssistant::fake();
+
+(new FileAssistant)->prompt(Decisions::from([
+    'call_abc' => true,
+]));
+
+FileAssistant::assertPrompted(function (AgentPrompt $prompt) {
+    return $prompt->hasApprovalDecisions()
+        && $prompt->approvalDecisions->get('call_abc')->isApproved();
+});
 ```
 
 For queued agent invocations, use the queued assertion methods:
@@ -2475,6 +2848,8 @@ The Laravel AI SDK dispatches a variety of [events](/docs/{{version}}/events), i
 - `StoreCreated`
 - `StoringFile`
 - `StreamingAgent`
+- `ToolApprovalRequested`
+- `ToolApprovalResolved`
 - `ToolInvoked`
 - `TranscriptionGenerated`
 
