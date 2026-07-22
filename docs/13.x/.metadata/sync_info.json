@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "2887d9c578f550445e033569f0650ae546815f5e",
-  "commit_date": "2026-07-20T20:18:57Z",
-  "commit_message": "Document Horizon::cspNonce method (#11298)\n\n* Document Horizon::cspNonce method\n\nReleased in Laravel Horizon 5.48.0\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/2887d9c578f550445e033569f0650ae546815f5e",
-  "sync_time": "2026-07-21T00:03:49Z"
+  "commit_sha": "8574413789b7c9fc3602e09407a3146ebaba94cd",
+  "commit_date": "2026-07-21T17:39:05Z",
+  "commit_message": "Document new AI SDK features (#11295)\n\n* Document new AI SDK features from v0.9.1...0.x\n\nAdds documentation for Amazon Bedrock cross-account AssumeRole\ncredentials and multimodal embeddings.\n\nHuman tool approval and text summarization were dropped from this\nbranch because they are already documented on 13.x (#11299 and the\nText Summarization section).\n\n* fixes\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/8574413789b7c9fc3602e09407a3146ebaba94cd",
+  "sync_time": "2026-07-22T00:02:37Z"
 }
