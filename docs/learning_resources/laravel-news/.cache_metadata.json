@@ -1,8 +1,8 @@
 {
   "source": "laravel-news",
   "name": "Laravel News",
-  "article_count": 1,
+  "article_count": 9,
   "success_rate": 1.0,
   "difficulty": "mixed",
-  "cached_at": 1784765031.3403072
+  "cached_at": 1784938007.4073384
 }

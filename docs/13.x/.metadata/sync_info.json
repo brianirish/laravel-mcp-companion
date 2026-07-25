@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "ce4a1bf093c2c09e3a029090136d6bea88b07d48",
-  "commit_date": "2026-07-22T04:01:18Z",
-  "commit_message": "Remove/bump outdated predis/predis versions (#11300)",
-  "commit_url": "https://github.com/laravel/docs/commit/ce4a1bf093c2c09e3a029090136d6bea88b07d48",
-  "sync_time": "2026-07-23T00:02:32Z"
+  "commit_sha": "b0b1c3e17c715880e0c380cd30061da6ca952c9d",
+  "commit_date": "2026-07-24T14:37:00Z",
+  "commit_message": "Recommend Passport for MCP servers when choosing an authentication stack (#11303)\n\nCo-authored-by: Claude Fable 5 <noreply@anthropic.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/b0b1c3e17c715880e0c380cd30061da6ca952c9d",
+  "sync_time": "2026-07-25T00:04:32Z"
 }
