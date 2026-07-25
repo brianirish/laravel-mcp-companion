@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## Laravel Cloud Security Defaults Behind Every Deploy
+## AI coding agents pass tests. Can they write idiomatic Laravel?
 
-Laravel Cloud handles WAF, runtime patching, audit logs, network isolation, and package vulnerability scans by default. See what runs in the background.
+AI coding agents can now pass every Laravel Boost eval. Next up: measuring idiomatic Laravel and correct code per token.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-cloud)
+[Read more](https://blog.laravel.com/blog/category/laravel-ai)
 
 ---
 
