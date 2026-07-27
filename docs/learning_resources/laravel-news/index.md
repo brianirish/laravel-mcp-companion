@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## HTTP Query Method Support in Laravel 13.19
+## Laravel Black Friday Deals
 
-[Read more](https://laravel-news.com/laravel-13-19-0)
+[Read more](https://laravel-news.com/laravel-black-friday-deals-2025)
 
 ---
 
