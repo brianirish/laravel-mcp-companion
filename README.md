@@ -1,4 +1,6 @@
 # Laravel MCP Companion
+
+[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fbrianirish%2Flaravel-docs-mcp.svg)](https://mcptoplist.com/server/glama%2Fbrianirish%2Flaravel-docs-mcp)
 *formerly Laravel Docs MCP Server*
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/releases)
