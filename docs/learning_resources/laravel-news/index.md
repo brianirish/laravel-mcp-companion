@@ -4,17 +4,17 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel Black Friday Deals
+## Add Enterprise SSO/SAML to your product today
 
-[Read more](https://laravel-news.com/laravel-black-friday-deals-2025)
+[Read more](https://laravel-news.com/add-enterprise-ssosaml-to-your-product-today)
 
 ---
 
-## RouteKey Model Attribute in Laravel 13.21
+## BindWhen Container Attribute in Laravel 13.22
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-21-0)
+[Read more](https://laravel-news.com/laravel-13-22-0)
 
 ---
 
@@ -24,27 +24,27 @@ Latest Laravel Release
 
 ---
 
-## A Practical Guide to Laravel's First-Party Image Processing
-
-[Read more](https://laravel-news.com/a-practical-guide-to-laravels-first-party-image-processing)
-
----
-
 ## Building and Deploying a Laravel App With Claude Code on Zerops
 
 [Read more](https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops)
 
 ---
 
-## The first hands-on AI Developer Certification
+## Building a Live Match Scoreboard With Laravel Reverb
 
-[Read more](https://laravel-news.com/the-first-hands-on-ai-developer-certification)
+[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
 
 ---
 
-## Building and Deploying a Laravel App With Claude Code on Zerops
+## Pinion UI: Restyle an Entire Laravel App by Changing Two HTML Attributes
 
-[Read more](https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops)
+[Read more](https://laravel-news.com/pinion-ui-restyle-an-entire-laravel-app-by-changing-two-html-attributes)
+
+---
+
+## Building a Live Match Scoreboard With Laravel Reverb
+
+[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Ship AI with Laravel: Test Your AI System with Zero API Calls
+## Ship AI with Laravel: I Tricked My Own AI Into Leaking Everything
 
-[Read more](https://laravel-news.com/ship-ai-with-laravel-test-your-ai-system-with-zero-api-calls)
+[Read more](https://laravel-news.com/ship-ai-with-laravel-i-tricked-my-own-ai-into-leaking-everything)
 
 ---
 
