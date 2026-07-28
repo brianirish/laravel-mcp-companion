@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "b0b1c3e17c715880e0c380cd30061da6ca952c9d",
-  "commit_date": "2026-07-24T14:37:00Z",
-  "commit_message": "Recommend Passport for MCP servers when choosing an authentication stack (#11303)\n\nCo-authored-by: Claude Fable 5 <noreply@anthropic.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/b0b1c3e17c715880e0c380cd30061da6ca952c9d",
-  "sync_time": "2026-07-25T00:04:32Z"
+  "commit_sha": "946622229fa1d90052b7d51614a4a14a7156b9b0",
+  "commit_date": "2026-07-27T13:22:19Z",
+  "commit_message": "Added the $flags parameter to the method signature for Illuminate\\Http\\Client\\Response::json() (#11306)",
+  "commit_url": "https://github.com/laravel/docs/commit/946622229fa1d90052b7d51614a4a14a7156b9b0",
+  "sync_time": "2026-07-28T00:02:08Z"
 }
