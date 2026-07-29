@@ -4,35 +4,35 @@ Source: https://laravel-news.com
 
 ---
 
-## Add Enterprise SSO/SAML to your product today
+## Laravel LSP: A First-Party Language Server Announced at Laracon US 2026
 
-[Read more](https://laravel-news.com/add-enterprise-ssosaml-to-your-product-today)
+[Read more](https://laravel-news.com/laravel-lsp-a-first-party-language-server-announced-at-laracon-us-2026)
 
 ---
 
-## BindWhen Container Attribute in Laravel 13.22
+## Monthly Log Driver in Laravel 13.23
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-22-0)
+[Read more](https://laravel-news.com/laravel-13-23-0)
 
 ---
 
-## Laravel Announces the Founders Summit, a One-Day Event for Founders
+## Inertia DevTools Is Now on the Chrome Web Store
 
-[Read more](https://laravel-news.com/laravel-founders-summit-2026)
-
----
-
-## Building and Deploying a Laravel App With Claude Code on Zerops
-
-[Read more](https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops)
+[Read more](https://laravel-news.com/inertia-devtools-is-now-on-the-chrome-web-store)
 
 ---
 
 ## Building a Live Match Scoreboard With Laravel Reverb
 
 [Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
+
+---
+
+## Watch Laracon US 2026 Live on YouTube
+
+[Read more](https://laravel-news.com/watch-laracon-us-2026-day-one-live-on-youtube)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Building a Live Match Scoreboard With Laravel Reverb
+## Watch Laracon US 2026 Live on YouTube
 
-[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
+[Read more](https://laravel-news.com/watch-laracon-us-2026-day-one-live-on-youtube)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Ship AI with Laravel: I Tricked My Own AI Into Leaking Everything
+## A Practical Guide to Laravel's First-Party Image Processing
 
-[Read more](https://laravel-news.com/ship-ai-with-laravel-i-tricked-my-own-ai-into-leaking-everything)
+[Read more](https://laravel-news.com/a-practical-guide-to-laravels-first-party-image-processing)
 
 ---
 
