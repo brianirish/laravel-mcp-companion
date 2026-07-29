@@ -4,11 +4,11 @@ Source: https://blog.laravel.com
 
 ---
 
-## AI coding agents pass tests. Can they write idiomatic Laravel?
+## Deploy Next.js and Nuxt apps on Laravel Cloud
 
-AI coding agents can now pass every Laravel Boost eval. Next up: measuring idiomatic Laravel and correct code per token.
+Deploy your Next.js or Nuxt frontend alongside your Laravel app on Laravel Cloud: one platform, one deploy workflow, one bill.
 
-[Read more](https://blog.laravel.com/blog/category/laravel-ai)
+[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 
