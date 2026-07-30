@@ -16,10 +16,14 @@ pipeline:
         type: CI
         spec:
           cloneCodebase: true
-          caching:
-            enabled: true
-            paths:
-              - .venv
+          # Caching is intentionally disabled. The previous config cached `.venv`,
+          # which this pipeline never creates (dependencies are installed with a
+          # plain `pip install`), and supplied no cache key, which the cache plugin
+          # requires whenever custom paths are used. Both cache steps therefore
+          # failed on every run and left the stage permanently IGNORE_FAILED,
+          # masking the status of the steps that actually matter.
+          # To reinstate caching, point it at a directory the pipeline populates
+          # (e.g. ~/.cache/pip) with a key derived from requirements*.txt.
           platform:
             os: Linux
             arch: Amd64
