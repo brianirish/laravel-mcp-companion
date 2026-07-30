@@ -26,6 +26,11 @@ classifiers = [
 Repository = "https://github.com/brianirish/laravel-mcp-companion"
 Issues = "https://github.com/brianirish/laravel-mcp-companion/issues"
 
+[tool.ruff.lint]
+# ruff 0.15 broadened its default rule set; keep the pre-0.15 defaults explicit.
+# Broader adoption (UP/SIM/BLE/etc.) should be its own PR.
+select = ["E4", "E7", "E9", "F"]
+
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = [
