@@ -37,32 +37,48 @@ pipeline:
                   name: Install Dependencies
                   type: Run
                   spec:
-                    shell: Sh
+                    shell: Bash
                     command: |
-                      python -m pip install --upgrade pip
-                      pip install -r requirements.txt
-                      pip install -r requirements-dev.txt
+                      set -euo pipefail
+
+                      # The runner image ships Python 3.10, but this project
+                      # declares requires-python = ">=3.12" (see also
+                      # .python-version and the package classifiers). CI was
+                      # therefore testing an interpreter the project does not
+                      # claim to support. Install the declared version rather
+                      # than inheriting whatever the image happens to provide.
+                      curl -LsSf https://astral.sh/uv/install.sh | sh
+                      export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+                      uv python install 3.12
+                      uv venv --python 3.12 .venv
+                      uv pip install --python .venv/bin/python \
+                        -r requirements.txt -r requirements-dev.txt
+
+                      # Later steps run in fresh shells, so they invoke the
+                      # interpreter by path rather than activating the venv.
+                      .venv/bin/python --version
               - step:
                   identifier: lint
                   name: Lint with ruff
                   type: Run
                   spec:
                     shell: Sh
-                    command: ruff check .
+                    command: .venv/bin/ruff check .
               - step:
                   identifier: typecheck
                   name: Type check with mypy
                   type: Run
                   spec:
                     shell: Sh
-                    command: mypy --ignore-missing-imports .
+                    command: .venv/bin/mypy --ignore-missing-imports .
               - step:
                   identifier: test
                   name: Run tests
                   type: Run
                   spec:
                     shell: Sh
-                    command: pytest --cov --cov-branch --cov-report=xml --junitxml=results.xml
+                    command: .venv/bin/pytest --cov --cov-branch --cov-report=xml --junitxml=results.xml
                     reports:
                       type: JUnit
                       spec:
@@ -81,6 +97,7 @@ pipeline:
                       eval "$(fnm env)"
                       fnm install 22
                       fnm use 22
-                      # Inspector 2.0 requires the server command before --method
-                      npx @modelcontextprotocol/inspector@2 --cli python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
+                      # Inspector 2.0 requires the server command before --method.
+                      # Use the project venv, not the image's default interpreter.
+                      npx @modelcontextprotocol/inspector@2 --cli .venv/bin/python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
 
