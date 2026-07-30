@@ -51,7 +51,15 @@ logger = logging.getLogger("laravel-mcp-companion")
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
 
-# Global caches for performance optimization
+# Global caches for performance optimization.
+# A single version of the Laravel docs is ~103 files, so a 100-entry cache was
+# evicted continuously by any full-corpus search. Size it to hold several
+# versions plus external service docs.
+_FILE_CACHE_MAX_ENTRIES = 512
+_FILE_CACHE_EVICT_COUNT = 64
+_SEARCH_CACHE_MAX_ENTRIES = 100
+_SEARCH_CACHE_EVICT_COUNT = 20
+
 _file_content_cache: Dict[str, str] = {}
 _search_result_cache: Dict[str, str] = {}
 _cache_lock = threading.Lock()
@@ -63,21 +71,21 @@ def get_file_content_cached(file_path: str) -> str:
         if file_path in _file_content_cache:
             logger.debug(f"Cache hit for file: {file_path}")
             return _file_content_cache[file_path]
-    
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Cache the content
         with _cache_lock:
             _file_content_cache[file_path] = content
             # Limit cache size to prevent memory issues
-            if len(_file_content_cache) > 100:
+            if len(_file_content_cache) > _FILE_CACHE_MAX_ENTRIES:
                 # Remove oldest entries
-                oldest_keys = list(_file_content_cache.keys())[:20]
+                oldest_keys = list(_file_content_cache.keys())[:_FILE_CACHE_EVICT_COUNT]
                 for key in oldest_keys:
                     del _file_content_cache[key]
-        
+
         return content
     except FileNotFoundError:
         return f"File not found: {file_path}"
@@ -107,16 +115,75 @@ def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> t
 
 
 def is_safe_path(base_path: Path, target_path: Path) -> bool:
-    """Check if target path is within base path (prevent directory traversal)."""
+    """Check if target path is within base path (prevent directory traversal).
+
+    Uses is_relative_to() on fully resolved paths. A plain string prefix check is
+    not sufficient: it treats "/docs/12.x-backup" as living under "/docs/12.x".
+
+    Fails closed: any error resolving either path denies access.
+    """
     try:
-        # Resolve both paths to handle any .. or . components
-        base = base_path.resolve()
-        target = target_path.resolve()
-        
-        # Check if target is within base
-        return str(target).startswith(str(base))
+        return Path(target_path).resolve().is_relative_to(Path(base_path).resolve())
     except Exception:
         return False
+
+
+def validate_version(version: Optional[str]) -> Optional[str]:
+    """Validate a caller-supplied Laravel version against the supported allowlist.
+
+    Version strings are used to build filesystem paths, so anything outside the
+    allowlist is rejected before it can be joined onto a base directory.
+
+    Returns:
+        A TOON-encoded error string if the version is invalid, otherwise None.
+    """
+    if version is not None and version not in SUPPORTED_VERSIONS:
+        logger.warning(f"Rejected unsupported version parameter: {version!r}")
+        return format_error(
+            f"Invalid version: {version}",
+            {"supported_versions": SUPPORTED_VERSIONS}
+        )
+    return None
+
+
+def resolve_search_versions(
+    version: Optional[str],
+    runtime_version: Optional[str] = None,
+    all_versions: bool = False,
+) -> List[str]:
+    """Decide which versions a search should cover.
+
+    Searching every supported version re-reads the entire corpus and returns
+    near-duplicate hits for the same file, so scope defaults to the configured
+    version unless the caller explicitly asks for all of them.
+    """
+    if version:
+        return [version]
+    if all_versions:
+        return list(SUPPORTED_VERSIONS)
+    default = runtime_version or DEFAULT_VERSION
+    return [default] if default in SUPPORTED_VERSIONS else list(SUPPORTED_VERSIONS)
+
+
+def count_matches(pattern: re.Pattern, content: str) -> int:
+    """Count regex matches in a single pass.
+
+    Replaces the search()-then-findall() pattern, which scanned each file twice
+    and materialized every match just to take its length.
+    """
+    return sum(1 for _ in pattern.finditer(content))
+
+
+def validate_subdirectory(base_dir: Path, name: str) -> bool:
+    """Check that `name` refers to a direct subdirectory of base_dir.
+
+    Guards caller-supplied directory names (learning resource sources, service
+    names) that would otherwise be joined onto a base path unchecked.
+    """
+    if not name or '/' in name or '\\' in name or name in ('.', '..') or '\x00' in name:
+        return False
+    candidate = base_dir / name
+    return is_safe_path(base_dir, candidate) and candidate.is_dir()
 
 
 def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
@@ -150,6 +217,10 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
     """
     logger.debug(f"list_laravel_docs_impl called (version: {version})")
 
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
     try:
         if version:
             # List docs for specific version
@@ -178,9 +249,13 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
             versions_data: List[Dict] = []
             for v in SUPPORTED_VERSIONS:
                 version_path = docs_path / v
-                if version_path.exists() and any(f.endswith('.md') for f in os.listdir(version_path) if os.path.isfile(version_path / f)):
+                if not version_path.is_dir():
+                    continue
+                # Single scandir pass instead of two listdir calls plus a stat per file
+                with os.scandir(version_path) as entries:
+                    md_files = [e.name for e in entries if e.name.endswith('.md') and e.is_file()]
+                if md_files:
                     metadata = get_laravel_docs_metadata(docs_path, v)
-                    md_files = [f for f in os.listdir(version_path) if f.endswith('.md')]
                     versions_data.append({
                         "version": v,
                         "last_updated": metadata.get('sync_time', 'unknown'),
@@ -209,7 +284,11 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         version: Specific Laravel version to use. Overridden if filename includes version.
     """
     logger.debug(f"read_laravel_doc_content_impl called with filename: {filename}, version: {version}, runtime_version: {runtime_version}")
-    
+
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
     # Extract version and relative path
     if '/' in filename and filename.split('/')[0] in SUPPORTED_VERSIONS:
         # Filename includes version
@@ -247,26 +326,33 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
-def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None) -> str:
+def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None, all_versions: bool = False) -> str:
     """Search through Laravel documentation for a specific term.
 
     Args:
         docs_path: Base path for documentation
         query: Search term to look for
-        version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
+        version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
         include_external: Whether to include external Laravel services documentation in search
         external_dir: Path to external documentation directory
+        all_versions: Search every supported version instead of just the configured one
 
     Returns:
         TOON-encoded structured search results.
     """
     logger.debug(f"search_laravel_docs_impl called with query: {query}, version: {version}, include_external: {include_external}")
 
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
     if not query.strip():
         return format_error("Search query cannot be empty")
 
+    search_versions = resolve_search_versions(version, runtime_version, all_versions)
+
     # Check cache for search results
-    cache_key = f"search:{query}:{version}:{include_external}"
+    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}"
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
@@ -278,8 +364,6 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
     try:
         # Search core Laravel documentation
-        search_versions = [version] if version else SUPPORTED_VERSIONS
-
         for v in search_versions:
             version_path = docs_path / v
             if not version_path.exists():
@@ -291,8 +375,8 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
                     content = get_file_content_cached(str(file_path))
                     if not content.startswith("Error") and not content.startswith("File not found"):
-                        if pattern.search(content):
-                            count = len(pattern.findall(content))
+                        count = count_matches(pattern, content)
+                        if count:
                             core_results_data.append({
                                 "file": f"{v}/{file}",
                                 "matches": count
@@ -308,8 +392,8 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
                         try:
                             content = get_file_content_cached(str(file_path))
                             if not content.startswith("Error") and not content.startswith("File not found"):
-                                if pattern.search(content):
-                                    count = len(pattern.findall(content))
+                                count = count_matches(pattern, content)
+                                if count:
                                     external_results_data.append({
                                         "service": service_name,
                                         "file": file_path.name,
@@ -321,7 +405,7 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
         # Format combined results
         if not core_results_data and not external_results_data:
-            search_scope = f"version {version}" if version else "all sources"
+            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
             result = format_error(f"No results found for '{query}'", {"scope": search_scope})
         else:
             result = format_search_results(
@@ -334,9 +418,9 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
         with _cache_lock:
             _search_result_cache[cache_key] = result
             # Limit cache size
-            if len(_search_result_cache) > 100:
+            if len(_search_result_cache) > _SEARCH_CACHE_MAX_ENTRIES:
                 # Remove oldest entries
-                oldest_keys = list(_search_result_cache.keys())[:20]
+                oldest_keys = list(_search_result_cache.keys())[:_SEARCH_CACHE_EVICT_COUNT]
                 for key in oldest_keys:
                     del _search_result_cache[key]
 
@@ -346,31 +430,37 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
         return format_error(f"Error searching documentation: {str(e)}")
 
 
-def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None, 
+def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None,
                                          context_length: int = 200, include_external: bool = True,
-                                         external_dir: Optional[Path] = None, runtime_version: Optional[str] = None) -> str:
+                                         external_dir: Optional[Path] = None, runtime_version: Optional[str] = None,
+                                         all_versions: bool = False) -> str:
     """Search Laravel documentation and return matches with surrounding context.
-    
+
     Args:
         docs_path: Base path for documentation
         query: Search term to look for
-        version: Specific Laravel version to search. If not provided, searches all versions.
+        version: Specific Laravel version to search. Defaults to the configured version.
         context_length: Number of characters to show before/after match
         include_external: Whether to include external Laravel services documentation
         external_dir: Path to external documentation directory
+        all_versions: Search every supported version instead of just the configured one
     """
     logger.debug(f"search_laravel_docs_with_context_impl called with query: {query}")
-    
+
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
     if not query.strip():
         return "Search query cannot be empty"
-    
+
     results = []
     pattern = re.compile(re.escape(query), re.IGNORECASE)
-    
+
     try:
         # Search core documentation
-        search_versions = [version] if version else SUPPORTED_VERSIONS
-        
+        search_versions = resolve_search_versions(version, runtime_version, all_versions)
+
         for v in search_versions:
             version_path = docs_path / v
             if not version_path.exists():
@@ -440,7 +530,7 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
         if results:
             return f"Search results for '{query}':\n" + "".join(results)
         else:
-            search_scope = f"version {version}" if version else "all sources"
+            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
             return f"No results found for '{query}' in {search_scope}"
             
     except Exception as e:
@@ -461,10 +551,15 @@ def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str
     """
     logger.debug(f"get_doc_structure_impl called with filename: {filename}")
 
-    # Use read_laravel_doc_content_impl to get the content
-    content = read_laravel_doc_content_impl(docs_path, filename, version)
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
 
-    if content.startswith("Error") or content.startswith("Documentation file not found") or content.startswith("Access denied"):
+    # Use read_laravel_doc_content_impl to get the content
+    content = read_laravel_doc_content_impl(docs_path, filename, version, runtime_version=runtime_version)
+
+    if (content.startswith("Error") or content.startswith("error:")
+            or content.startswith("Documentation file not found") or content.startswith("Access denied")):
         return content
 
     try:
@@ -503,6 +598,10 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
         TOON-encoded category documentation files with descriptions.
     """
     logger.debug(f"browse_docs_by_category_impl called with category: {category}, version: {version}, runtime_version: {runtime_version}")
+
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
 
     if not version:
         version = runtime_version if runtime_version else DEFAULT_VERSION
@@ -575,6 +674,10 @@ def verify_laravel_feature_impl(docs_path: Path, feature: str, version: Optional
         TOON-encoded verification results with match status and matching files.
     """
     logger.debug(f"verify_laravel_feature_impl called with feature: {feature}, version: {version}")
+
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
 
     # Validate inputs
     if not feature.strip():
@@ -728,6 +831,10 @@ def find_laravel_docs_for_need_impl(docs_path: Path, need: str, version: Optiona
     """
     logger.debug(f"find_laravel_docs_for_need_impl called with need: {need}")
 
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
     if not need.strip():
         return format_error("Need description cannot be empty")
 
@@ -829,6 +936,10 @@ def get_laravel_content_by_difficulty_impl(docs_path: Path, difficulty: str, ver
         TOON-encoded list of documentation files at the specified difficulty level.
     """
     logger.debug(f"get_laravel_content_by_difficulty_impl called with difficulty: {difficulty}")
+
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
 
     # Validate difficulty level
     try:
@@ -932,7 +1043,15 @@ def search_laravel_learning_resources_impl(
 
     # Determine which sources to search
     if sources:
-        search_dirs = [learning_dir / source for source in sources if (learning_dir / source).exists()]
+        invalid = [s for s in sources if not validate_subdirectory(learning_dir, s)]
+        if invalid:
+            available = sorted(d.name for d in learning_dir.iterdir() if d.is_dir())
+            logger.warning(f"Rejected invalid learning resource sources: {invalid}")
+            return format_error(
+                f"Invalid sources: {', '.join(invalid)}",
+                {"available_sources": available}
+            )
+        search_dirs = [learning_dir / source for source in sources]
     else:
         search_dirs = [d for d in learning_dir.iterdir() if d.is_dir()]
 
@@ -944,8 +1063,8 @@ def search_laravel_learning_resources_impl(
             try:
                 content = get_file_content_cached(str(file_path))
                 if not content.startswith("Error") and not content.startswith("File not found"):
-                    if pattern.search(content):
-                        count = len(pattern.findall(content))
+                    count = count_matches(pattern, content)
+                    if count:
                         source_matches.append({
                             "file": file_path.name,
                             "matches": count
@@ -991,13 +1110,14 @@ def list_laravel_learning_resources_impl(docs_path: Path, source: Optional[str] 
         )
 
     if source:
-        source_dir = learning_dir / source
-        if not source_dir.exists():
-            available_sources = [d.name for d in learning_dir.iterdir() if d.is_dir()]
+        if not validate_subdirectory(learning_dir, source):
+            available_sources = sorted(d.name for d in learning_dir.iterdir() if d.is_dir())
+            logger.warning(f"Rejected invalid learning resource source: {source!r}")
             return format_error(
                 f"Learning source '{source}' not found",
                 {"available_sources": available_sources}
             )
+        source_dir = learning_dir / source
 
         # List files in specific source
         files = []

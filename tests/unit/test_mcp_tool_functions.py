@@ -399,12 +399,13 @@ class TestMcpToolsEdgeCases:
         assert "available_categories" in result.lower() or "frontend" in result.lower()
 
     def test_browse_docs_by_category_version_not_found(self, test_docs_dir):
-        """Test browsing docs when version doesn't exist."""
+        """Unsupported versions are rejected before touching the filesystem."""
         from mcp_tools import browse_docs_by_category_impl
 
         result = browse_docs_by_category_impl(test_docs_dir, "frontend", "99.x")
 
-        assert "No documentation found for version 99.x" in result
+        assert "Invalid version: 99.x" in result
+        assert "supported_versions" in result
 
     def test_browse_docs_by_category_no_matching_files(self, test_docs_dir):
         """Test browsing category with no matching files."""
