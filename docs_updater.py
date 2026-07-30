@@ -132,6 +132,38 @@ VERSIONS_CACHE_FILE = Path(__file__).parent / "docs" / ".versions_cache.json"
 
 LAST_RESORT_VERSIONS = ["12.x"]
 
+# Network timeout for documentation fetches. Without this, urllib blocks
+# indefinitely and a stalled connection hangs startup or pins a worker thread.
+DEFAULT_REQUEST_TIMEOUT = 30
+
+# How long a cached version list stays fresh before we ask GitHub again.
+VERSIONS_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+# Section/version names become filesystem paths, so they are restricted to a
+# conservative character set: alphanumerics, dot, dash, underscore, and single
+# forward slashes for nesting. No leading slash, no '..', no backslash, no NUL.
+_SAFE_PATH_SEGMENT = re.compile(r'[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*')
+
+
+def is_safe_section_name(name: str) -> bool:
+    """Check that a discovered section name is safe to use as a relative path.
+
+    Section names are parsed out of remote HTML, so they are untrusted input.
+    """
+    if not name or len(name) > 255:
+        return False
+    if '..' in name or name.startswith('/') or '\\' in name or '\x00' in name:
+        return False
+    return _SAFE_PATH_SEGMENT.fullmatch(name) is not None
+
+
+def is_within_directory(base_dir: Path, target: Path) -> bool:
+    """Check that target resolves to a location inside base_dir."""
+    try:
+        return target.resolve().is_relative_to(base_dir.resolve())
+    except (OSError, ValueError):
+        return False
+
 
 def _write_versions_cache(versions: list[str], cache_file: Path) -> None:
     """Write versions to cache file. Errors are logged but not raised."""
@@ -145,16 +177,38 @@ def _write_versions_cache(versions: list[str], cache_file: Path) -> None:
         logger.warning(f"Failed to write versions cache: {e}")
 
 
-def _read_versions_cache(cache_file: Path) -> list[str] | None:
-    """Read versions from cache file. Returns None if unavailable or corrupt."""
+def _read_versions_cache(cache_file: Path, max_age_seconds: float | None = None) -> list[str] | None:
+    """Read versions from cache file. Returns None if unavailable or corrupt.
+
+    Args:
+        cache_file: Path to the cache file.
+        max_age_seconds: If set, ignore the cache when its timestamp is older
+            than this (or missing/unparseable).
+    """
     try:
         if not cache_file.exists():
             return None
         data = json.loads(cache_file.read_text())
         versions = data.get("versions")
-        if isinstance(versions, list) and len(versions) > 0:
-            return versions
-        return None
+        if not (isinstance(versions, list) and len(versions) > 0):
+            return None
+
+        if max_age_seconds is not None:
+            updated_at = data.get("updated_at")
+            if not updated_at:
+                return None
+            try:
+                cached_at = datetime.fromisoformat(updated_at)
+            except (TypeError, ValueError):
+                return None
+            if cached_at.tzinfo is None:
+                cached_at = cached_at.replace(tzinfo=timezone.utc)
+            age = (datetime.now(timezone.utc) - cached_at).total_seconds()
+            if age > max_age_seconds:
+                logger.debug(f"Versions cache is stale ({age:.0f}s old)")
+                return None
+
+        return versions
     except Exception as e:
         logger.warning(f"Failed to read versions cache: {e}")
         return None
@@ -163,9 +217,13 @@ def _read_versions_cache(cache_file: Path) -> list[str] | None:
 def get_supported_versions(cache_file: Path | None = None) -> list[str]:
     """Get supported Laravel versions with three-tier fallback.
 
-    1. GitHub API (writes cache on success)
-    2. Cache file (docs/.versions_cache.json)
-    3. Last resort: ["12.x"]
+    1. Fresh cache file (docs/.versions_cache.json, younger than the TTL)
+    2. GitHub API (writes cache on success)
+    3. Stale cache file, then last resort: ["12.x"]
+
+    This runs at import time, so the cache is consulted first: a network round
+    trip on every process start is wasteful, and a stalled connection would
+    otherwise block startup.
 
     Args:
         cache_file: Override cache file path (for testing). Defaults to VERSIONS_CACHE_FILE.
@@ -175,6 +233,11 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
     """
     if cache_file is None:
         cache_file = VERSIONS_CACHE_FILE
+
+    fresh = _read_versions_cache(cache_file, max_age_seconds=VERSIONS_CACHE_TTL_SECONDS)
+    if fresh:
+        logger.debug(f"Using cached Laravel versions: {', '.join(fresh)}")
+        return fresh
 
     logger.debug("Fetching supported Laravel versions from GitHub API")
 
@@ -189,7 +252,7 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
             }
         )
 
-        with urllib.request.urlopen(request) as response:
+        with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
             branches = json.loads(response.read().decode())
 
             version_branches = []
@@ -565,7 +628,7 @@ class DocumentationAutoDiscovery:
                     time.sleep(self.request_delay * (2 ** (attempt - 1)))
                 
                 request = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(request) as response:
+                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                     return response.read()
                     
             except urllib.error.HTTPError as e:
@@ -874,9 +937,19 @@ class ExternalDocsFetcher:
             if self.auto_discovery._is_asset_file(section):
                 logger.debug(f"Skipping asset file: {section}")
                 continue
-                
+
+            # Section names come from remote HTML and are used as file paths
+            if not is_safe_section_name(section):
+                logger.warning(f"Skipping section with unsafe name for {service}: {section!r}")
+                continue
+
             section_url = f"{base_url}/{section}"
             section_file = target_dir / f"{section}.md"
+
+            # Defence in depth: reject anything that still escapes the target dir
+            if not is_within_directory(target_dir, section_file):
+                logger.warning(f"Skipping out-of-tree section path for {service}: {section!r}")
+                continue
             
             # Create parent directories if needed for nested sections
             section_file.parent.mkdir(parents=True, exist_ok=True)
@@ -1329,7 +1402,7 @@ class ExternalDocsFetcher:
         for attempt in range(retries + 1):
             try:
                 request = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(request) as response:
+                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                     return response.read()
             except urllib.error.HTTPError as e:
                 last_exception = e
@@ -1386,13 +1459,20 @@ class DocsUpdater:
             target_dir: Directory where docs should be stored
             version: Laravel version branch to pull documentation from (e.g., "12.x")
         """
+        # `version` is joined onto target_dir, so validate before any mkdir.
+        # Callers include MCP tools, which may pass caller-supplied values.
+        if not is_safe_section_name(version) or '/' in version:
+            raise ValueError(f"Invalid Laravel version: {version!r}")
+
         self.target_dir = target_dir
         self.version = version
         self.github_api_url = GITHUB_API_URL
         self.repo = LARAVEL_DOCS_REPO
-        
+
         # Create version-specific directory
         self.version_dir = target_dir / version
+        if not is_within_directory(target_dir, self.version_dir):
+            raise ValueError(f"Version directory escapes target directory: {version!r}")
         self.version_dir.mkdir(parents=True, exist_ok=True)
         
         # Create metadata directory if it doesn't exist
@@ -1417,7 +1497,7 @@ class DocsUpdater:
                     }
                 )
                 
-                with urllib.request.urlopen(request) as response:
+                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                     data = json.loads(response.read().decode())
                     return {
                         "sha": data["commit"]["sha"],
@@ -1517,7 +1597,7 @@ class DocsUpdater:
                         headers={"User-Agent": USER_AGENT}
                     )
 
-                    with urllib.request.urlopen(request) as response, open(zip_path, 'wb') as out_file:
+                    with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response, open(zip_path, 'wb') as out_file:
                         shutil.copyfileobj(response, out_file)
                     break  # Success, exit retry loop
                 except Exception as e:
@@ -1549,12 +1629,18 @@ class DocsUpdater:
             logger.error(f"Error downloading documentation: {str(e)}")
             raise
     
-    def needs_update(self) -> bool:
-        """Check if documentation needs to be updated based on remote commits."""
+    def needs_update(self, latest_commit: Optional[Dict[str, str]] = None) -> bool:
+        """Check if documentation needs to be updated based on remote commits.
+
+        Args:
+            latest_commit: Already-fetched commit info, to avoid a redundant
+                GitHub API request (the unauthenticated limit is 60/hour).
+        """
         try:
             # Get the latest commit info
-            latest_commit = self.get_latest_commit()
-            
+            if latest_commit is None:
+                latest_commit = self.get_latest_commit()
+
             # Get local metadata
             local_meta = self.read_local_metadata()
             
@@ -1580,13 +1666,24 @@ class DocsUpdater:
         Returns:
             True if update was performed, False otherwise
         """
-        if not force and not self.needs_update():
-            return False
-        
+        # Fetch the commit once and reuse it for both the up-to-date check and
+        # the metadata written below, instead of hitting the API twice.
+        latest_commit: Optional[Dict[str, str]] = None
+        if not force:
+            try:
+                latest_commit = self.get_latest_commit()
+            except Exception as e:
+                logger.error(f"Error checking for updates: {str(e)}")
+                logger.info("Assuming update is needed due to error")
+
+            if latest_commit is not None and not self.needs_update(latest_commit):
+                return False
+
         try:
             # Get the latest commit info for metadata
-            latest_commit = self.get_latest_commit()
-            
+            if latest_commit is None:
+                latest_commit = self.get_latest_commit()
+
             # Download the documentation
             source_dir = self.download_documentation()
             
@@ -1966,7 +2063,7 @@ class CommunityPackageFetcher:
                     headers={"User-Agent": "Laravel-MCP-Companion/1.0"}
                 )
                 
-                with urllib.request.urlopen(request) as response:
+                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                     jsx_content = response.read().decode('utf-8')
                 
                 # Extract content from JSX file and convert to markdown
@@ -2281,7 +2378,7 @@ class CommunityPackageFetcher:
                 headers={"User-Agent": USER_AGENT}
             )
             
-            with urllib.request.urlopen(request) as response:
+            with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                 content = response.read().decode('utf-8')
             
             # Process the README content
@@ -2342,7 +2439,7 @@ class CommunityPackageFetcher:
                 }
             )
             
-            with urllib.request.urlopen(request, timeout=30) as response:
+            with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                 content_bytes = response.read()
                 content = content_bytes.decode('utf-8')
             
@@ -3419,7 +3516,7 @@ class LearningResourceFetcher:
         for attempt in range(self.max_retries + 1):
             try:
                 request = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(request, timeout=30) as response:
+                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                     return response.read()
             except urllib.error.HTTPError as e:
                 last_exception = e

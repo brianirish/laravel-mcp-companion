@@ -15,7 +15,6 @@ import argparse
 import json
 from pathlib import Path
 from typing import Dict, Optional, List, Any
-from functools import lru_cache
 import threading
 from fastmcp import FastMCP
 from fastmcp.server.transforms.search import BM25SearchTransform
@@ -48,7 +47,11 @@ from mcp_tools import (
     get_related_laravel_packages_impl,
     search_laravel_learning_resources_impl,
     list_laravel_learning_resources_impl,
-    list_laravel_categories_impl
+    list_laravel_categories_impl,
+    is_safe_path,
+    validate_version as validate_version_arg,
+    count_matches,
+    clear_caches as clear_mcp_tools_caches
 )
 
 # Import learning resources
@@ -646,6 +649,13 @@ When to use:
 - Planning what to learn next"""
 }
 
+def _split_env_list(env_var: str) -> Optional[List[str]]:
+    """Parse a comma-separated environment variable into a list of values."""
+    raw = os.environ.get(env_var, "")
+    values = [item.strip() for item in raw.split(",") if item.strip()]
+    return values or None
+
+
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -708,6 +718,23 @@ def parse_arguments():
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
     parser.add_argument(
+        "--cors-origin",
+        action="append",
+        default=_split_env_list("CORS_ORIGINS"),
+        metavar="ORIGIN",
+        help="Browser origin allowed to call the HTTP transport (repeatable). "
+             "CORS is disabled unless at least one origin is given. "
+             "Wildcards are not accepted (env: CORS_ORIGINS, comma-separated)"
+    )
+    parser.add_argument(
+        "--allowed-host",
+        action="append",
+        default=_split_env_list("ALLOWED_HOSTS"),
+        metavar="HOST",
+        help="Host header value accepted by the HTTP transport (repeatable). "
+             "Required to serve on a non-loopback interface (env: ALLOWED_HOSTS, comma-separated)"
+    )
+    parser.add_argument(
         "--transform-mode",
         type=str,
         default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
@@ -743,18 +770,13 @@ def setup_docs_path(user_path: Optional[str] = None) -> Path:
     
     return docs_path
 
-def is_safe_path(base_path: Path, path: Path) -> bool:
-    """Check if a path is safe (doesn't escape the base directory)."""
-    return base_path in path.absolute().parents or base_path == path.absolute()
-
-@lru_cache(maxsize=100)
 def get_file_content_cached(file_path: str) -> str:
     """
-    Get file content with caching.
-    
+    Get file content, keyed on path and modification time.
+
     Args:
         file_path: Absolute path to the file
-        
+
     Returns:
         File content as string
     """
@@ -762,46 +784,49 @@ def get_file_content_cached(file_path: str) -> str:
         path_obj = Path(file_path)
         if not path_obj.exists():
             return f"File not found: {file_path}"
-        
+
         # Check file modification time for cache invalidation
         mtime = path_obj.stat().st_mtime
         cache_key = f"{file_path}:{mtime}"
-        
+
         with _cache_lock:
             if cache_key in _file_content_cache:
                 return _file_content_cache[cache_key]
-        
+
         # Read file content
         with open(path_obj, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Cache the content
         with _cache_lock:
-            # Clear old cache entries for this file
+            # Clear stale entries for this file (previous mtimes)
             keys_to_remove = [k for k in _file_content_cache.keys() if k.startswith(f"{file_path}:")]
             for key in keys_to_remove:
                 del _file_content_cache[key]
-            
+
             # Add new cache entry
             _file_content_cache[cache_key] = content
-            
+
             # Limit cache size
             if len(_file_content_cache) > 200:
                 # Remove oldest entries
                 oldest_keys = list(_file_content_cache.keys())[:50]
                 for key in oldest_keys:
                     del _file_content_cache[key]
-        
+
         return content
     except Exception as e:
         logger.error(f"Error reading file {file_path}: {str(e)}")
         return f"Error reading file: {str(e)}"
 
 def clear_file_cache():
-    """Clear the file content cache."""
+    """Clear every documentation cache, in this module and in mcp_tools."""
     with _cache_lock:
         _file_content_cache.clear()
         _search_result_cache.clear()
+    # The tool implementations keep their own caches; stale entries there would
+    # otherwise survive a docs update until the process restarts.
+    clear_mcp_tools_caches()
 
 def update_documentation(docs_path: Path, version: str, force: bool = False) -> bool:
     """Update the documentation if needed or forced."""
@@ -882,10 +907,10 @@ def search_by_use_case(use_case: str) -> List[Dict]:
     words = words - stop_words
     
     # Score packages based on matching words
-    scores = {}
+    scores: Dict[str, float] = {}
     for pkg_id, pkg_info in PACKAGE_CATALOG.items():
-        score = 0
-        
+        score = 0.0
+
         # Check categories
         for category in pkg_info.get('categories', []):
             if any(word in category.lower() for word in words):
@@ -902,7 +927,7 @@ def search_by_use_case(use_case: str) -> List[Dict]:
         name_desc = (str(pkg_info.get('name', '')) + ' ' + str(pkg_info.get('description', ''))).lower()
         for word in words:
             if word in name_desc:
-                score += int(0.5)
+                score += 0.5
         
         if score > 0:
             scores[pkg_id] = score
@@ -1353,16 +1378,17 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"docs", "read"}
     )
-    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True) -> str:
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> str:
         """Search through Laravel documentation for a specific term.
 
         Args:
             query: Search term to look for
-            version: Specific Laravel version to search (e.g., "12.x"). If not provided, searches all versions.
+            version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
             include_external: Whether to include external Laravel services documentation in search
+            all_versions: Search every supported version instead of just the configured one
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version)
+        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions)
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],
@@ -1379,34 +1405,34 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             force: Force update even if already up to date
         """
         logger.debug(f"update_laravel_docs function called (version: {version_param}, force: {force})")
-        
+
         # Use provided version or default to the one specified at startup
         doc_version = version_param or runtime_version
-        
+
+        version_error = validate_version_arg(version_param)
+        if version_error:
+            return version_error
+
         try:
             updater = DocsUpdater(docs_path, doc_version)
-            
-            # Check if update is needed
-            if not force and not updater.needs_update():
-                return f"Documentation is already up to date (version: {doc_version})"
-            
-            # Perform the update
+
+            # update() performs its own needs_update() check; calling it here too
+            # would spend an extra unauthenticated GitHub API request (60/hr limit).
             updated = updater.update(force=force)
-            
-            if updated:
-                # Clear caches when documentation is updated
-                clear_file_cache()
-                get_file_content_cached.cache_clear()
-                
-                metadata = get_laravel_docs_metadata(docs_path, doc_version)
-                return (
-                    f"Documentation updated successfully to {doc_version}\n"
-                    f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
-                    f"Date: {metadata.get('commit_date', 'unknown')}\n"
-                    f"Message: {metadata.get('commit_message', 'unknown')}"
-                )
-            else:
-                return "Documentation update not performed or not needed"
+
+            if not updated:
+                return f"Documentation is already up to date (version: {doc_version})"
+
+            # Clear caches when documentation is updated
+            clear_file_cache()
+
+            metadata = get_laravel_docs_metadata(docs_path, doc_version)
+            return (
+                f"Documentation updated successfully to {doc_version}\n"
+                f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
+                f"Date: {metadata.get('commit_date', 'unknown')}\n"
+                f"Message: {metadata.get('commit_message', 'unknown')}"
+            )
         except Exception as e:
             logger.error(f"Error updating documentation: {str(e)}")
             return f"Error updating documentation: {str(e)}"
@@ -1626,22 +1652,24 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         query: str,
         version: Optional[str] = None,
         context_length: int = 200,
-        include_external: bool = True
+        include_external: bool = True,
+        all_versions: bool = False
     ) -> str:
         """
         Search through Laravel documentation with context snippets.
-        
+
         Args:
             query: Search term
-            version: Specific version or None for all
+            version: Specific version, or None for the configured version
             context_length: Characters of context to show (default: 200)
             include_external: Whether to include external Laravel services documentation
-        
+            all_versions: Search every supported version instead of just the configured one
+
         Returns:
             Search results with context snippets
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir, runtime_version=runtime_version)
+        return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions)
 
     @mcp.tool(
         description="Get the structure and sections of a documentation file",
@@ -1746,8 +1774,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             
             if successful:
                 clear_file_cache()
-                get_file_content_cached.cache_clear()
-            
+
             response = []
             response.append("External Laravel Services Documentation Update Results:")
             response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
@@ -1856,14 +1883,13 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 service_matches: List[Dict[str, Any]] = []
                 for file_path in service_dir.glob("*.md"):
                     try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            content = f.read()
-                            if pattern.search(content):
-                                count = len(pattern.findall(content))
-                                service_matches.append({
-                                    "file": file_path.name,
-                                    "matches": count
-                                })
+                        content = get_file_content_cached(str(file_path))
+                        count = count_matches(pattern, content)
+                        if count:
+                            service_matches.append({
+                                "file": file_path.name,
+                                "matches": count
+                            })
                     except Exception as e:
                         logger.warning(f"Error searching {file_path}: {str(e)}")
                         continue
@@ -2193,23 +2219,47 @@ def main():
             import uvicorn
             from starlette.middleware.cors import CORSMiddleware
 
-            # Get the FastMCP HTTP app
-            app = mcp.http_app()
+            # Use PORT from environment or args, default to 8081.
+            # Bind loopback by default: this server ships no authentication, so
+            # every tool is exposed to anyone who can reach the socket.
+            port = args.port if args.port else 8081
+            host = args.host or "127.0.0.1"
+            is_loopback = host in ("127.0.0.1", "::1", "localhost")
 
-            # Add CORS middleware for browser-based clients
-            app.add_middleware(
-                CORSMiddleware,
-                allow_origins=["*"],
-                allow_credentials=True,
-                allow_methods=["GET", "POST", "OPTIONS"],
-                allow_headers=["*"],
-                expose_headers=["mcp-session-id", "mcp-protocol-version"],
-                max_age=86400,
+            cors_origins = [o for o in (args.cors_origin or []) if o != "*"]
+            if args.cors_origin and not cors_origins:
+                logger.error("Wildcard CORS origins are not supported; pass explicit origins")
+                sys.exit(1)
+
+            if not is_loopback:
+                logger.warning(
+                    f"Binding {host} exposes an unauthenticated MCP server to the network. "
+                    "Restrict access at the network layer and set --allowed-host."
+                )
+
+            # Enable FastMCP's Host/Origin guard (off by default upstream). Strict
+            # mode is required off-loopback, where the 'auto' heuristic disengages.
+            app = mcp.http_app(
+                host_origin_protection="auto" if is_loopback else True,
+                allowed_hosts=args.allowed_host or None,
+                allowed_origins=cors_origins or None,
             )
 
-            # Use PORT from environment or args, default to 8081
-            port = args.port if args.port else 8081
-            host = args.host or "0.0.0.0"
+            # Browser clients need CORS; everything else does not. Only add the
+            # middleware when explicit origins are configured, and never reflect
+            # arbitrary origins with credentials attached.
+            if cors_origins:
+                app.add_middleware(
+                    CORSMiddleware,
+                    allow_origins=cors_origins,
+                    allow_credentials=False,
+                    allow_methods=["GET", "POST", "OPTIONS"],
+                    allow_headers=["content-type", "mcp-session-id", "mcp-protocol-version", "authorization"],
+                    expose_headers=["mcp-session-id", "mcp-protocol-version"],
+                    max_age=86400,
+                )
+                logger.info(f"CORS enabled for: {', '.join(cors_origins)}")
+
             logger.info(f"Listening on {host}:{port}")
 
             uvicorn.run(app, host=host, port=port, log_level="info")

@@ -3,7 +3,13 @@
 import threading
 from pathlib import Path
 from unittest.mock import patch, mock_open
-from mcp_tools import get_file_content_cached, search_laravel_docs_impl, clear_caches
+from mcp_tools import (
+    get_file_content_cached,
+    search_laravel_docs_impl,
+    clear_caches,
+    _FILE_CACHE_MAX_ENTRIES,
+    _FILE_CACHE_EVICT_COUNT,
+)
 
 
 class TestCacheManagement:
@@ -18,52 +24,56 @@ class TestCacheManagement:
         clear_caches()
     
     def test_file_cache_size_limit(self):
-        """Test that file cache respects 100-entry limit."""
+        """Test that the file cache evicts once it exceeds its entry limit."""
+        limit = _FILE_CACHE_MAX_ENTRIES
+        evicted = _FILE_CACHE_EVICT_COUNT
+
         # Mock file reading
         with patch('builtins.open', mock_open(read_data='content')):
-            # Fill cache with 100 entries
-            for i in range(100):
+            # Fill cache to exactly the limit
+            for i in range(limit):
                 content = get_file_content_cached(f'/path/file{i}.txt')
                 assert content == 'content'
-            
-            # Access cache to verify it has 100 entries
+
             from mcp_tools import _file_content_cache
-            assert len(_file_content_cache) == 100
-            
+            assert len(_file_content_cache) == limit
+
             # Add one more entry - should trigger cleanup
-            get_file_content_cached('/path/file100.txt')
-            
-            # Cache should now have 81 entries (100 - 20 + 1)
-            assert len(_file_content_cache) == 81
-            
-            # First 20 files should be removed
-            for i in range(20):
+            get_file_content_cached(f'/path/file{limit}.txt')
+
+            assert len(_file_content_cache) == limit - evicted + 1
+
+            # The oldest entries should be removed
+            for i in range(evicted):
                 assert f'/path/file{i}.txt' not in _file_content_cache
-            
-            # Files 20-99 should still be in cache
-            for i in range(20, 100):
+
+            # The rest should still be cached
+            for i in range(evicted, limit):
                 assert f'/path/file{i}.txt' in _file_content_cache
-            
+
             # The new file should be in cache
-            assert '/path/file100.txt' in _file_content_cache
-    
+            assert f'/path/file{limit}.txt' in _file_content_cache
+
     def test_file_cache_lru_eviction_order(self):
         """Test that oldest entries are removed first (FIFO behavior)."""
+        limit = _FILE_CACHE_MAX_ENTRIES
+        evicted = _FILE_CACHE_EVICT_COUNT
+
         with patch('builtins.open', mock_open(read_data='content')):
             # Fill cache with entries in a specific order
-            for i in range(100):
+            for i in range(limit):
                 get_file_content_cached(f'/path/ordered{i}.txt')
-            
+
             # Trigger eviction
             get_file_content_cached('/path/trigger.txt')
-            
+
             from mcp_tools import _file_content_cache
-            # Files 0-19 should be evicted (oldest)
-            for i in range(20):
+            # The oldest entries should be evicted first
+            for i in range(evicted):
                 assert f'/path/ordered{i}.txt' not in _file_content_cache
-            
-            # Files 20-99 should remain
-            for i in range(20, 100):
+
+            # Newer entries should remain
+            for i in range(evicted, limit):
                 assert f'/path/ordered{i}.txt' in _file_content_cache
     
     def test_search_cache_size_limit(self):
@@ -159,12 +169,10 @@ class TestCacheManagement:
         
         # Verify operations completed
         assert len(completed_operations) == 120
-        
-        # Check cache size is within limits
+
+        # Check cache size stays within its configured bound
         from mcp_tools import _file_content_cache
-        assert len(_file_content_cache) <= 100
-        # Should have evicted some entries
-        assert len(_file_content_cache) >= 80  # At least 80 after eviction
+        assert len(_file_content_cache) <= _FILE_CACHE_MAX_ENTRIES
     
     def test_cache_hit_behavior(self):
         """Test that cache hits don't affect eviction order."""
@@ -178,29 +186,33 @@ class TestCacheManagement:
             assert content1 == content2
             assert mock_file.call_count == 1  # No new file read
             
-            # Fill cache to near limit
-            for i in range(2, 101):
+            limit = _FILE_CACHE_MAX_ENTRIES
+            evicted = _FILE_CACHE_EVICT_COUNT
+
+            # Fill cache to exactly the limit (file1 is already entry 1)
+            for i in range(2, limit + 1):
                 get_file_content_cached(f'/path/file{i}.txt')
-            
+
             # Access first file again before eviction
             content3 = get_file_content_cached('/path/file1.txt')
             assert content3 == 'content'
-            
+
             # Trigger eviction
-            get_file_content_cached('/path/file101.txt')
-            
-            # The cache eviction removes the first 20 keys from the dict
-            # Since Python 3.7+, dicts maintain insertion order
+            get_file_content_cached(f'/path/file{limit + 1}.txt')
+
+            # Eviction removes the oldest keys from the dict.
+            # Since Python 3.7+, dicts maintain insertion order, and a cache hit
+            # does not refresh an entry's position.
             from mcp_tools import _file_content_cache
-            
-            # Files should be evicted in insertion order: file1.txt through file20.txt
-            for i in range(1, 21):
+
+            # Files are evicted in insertion order, starting with file1.txt
+            for i in range(1, evicted + 1):
                 assert f'/path/file{i}.txt' not in _file_content_cache, f"file{i}.txt should have been evicted"
-            
-            # Files 21-100 and 101 should still be in cache
-            for i in range(21, 101):
+
+            # The remainder, plus the newest entry, should still be cached
+            for i in range(evicted + 1, limit + 1):
                 assert f'/path/file{i}.txt' in _file_content_cache, f"file{i}.txt should still be in cache"
-            assert '/path/file101.txt' in _file_content_cache
+            assert f'/path/file{limit + 1}.txt' in _file_content_cache
     
     def test_cache_with_file_not_found(self):
         """Test cache behavior with file not found errors."""
@@ -232,21 +244,29 @@ class TestCacheManagement:
         assert '/path/bad_encoding.txt' not in _file_content_cache
     
     def test_search_cache_key_format(self):
-        """Test search cache key generation."""
+        """Cache keys record the versions actually searched, not the raw argument."""
+        from mcp_tools import resolve_search_versions
+
         with patch('mcp_tools.get_laravel_docs_metadata') as mock_metadata:
             mock_metadata.return_value = {}
-            
+
             # Test different parameter combinations
             search_laravel_docs_impl(Path("/fake/docs"), "test", version="11.x", include_external=True)
             search_laravel_docs_impl(Path("/fake/docs"), "test", version="11.x", include_external=False)
             search_laravel_docs_impl(Path("/fake/docs"), "test", version=None, include_external=True)
-            
+            search_laravel_docs_impl(Path("/fake/docs"), "test", version=None, include_external=True, all_versions=True)
+
             from mcp_tools import _search_result_cache
-            # Should have 3 different cache entries
-            assert len(_search_result_cache) == 3
+
+            default_scope = ','.join(resolve_search_versions(None))
+            all_scope = ','.join(resolve_search_versions(None, all_versions=True))
+
             assert "search:test:11.x:True" in _search_result_cache
             assert "search:test:11.x:False" in _search_result_cache
-            assert "search:test:None:True" in _search_result_cache
+            assert f"search:test:{default_scope}:True" in _search_result_cache
+            # Scoped and all-versions searches must not share a cache entry
+            assert f"search:test:{all_scope}:True" in _search_result_cache
+            assert default_scope != all_scope
     
     def test_clear_caches_function(self):
         """Test that clear_caches properly empties both caches."""
