@@ -104,6 +104,9 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
 | `--transform-mode MODE` | Tool exposure mode: `search`, `code`, or `none` (env: `TRANSFORM_MODE`) | search |
+| `--host HOST` | Interface to bind in HTTP mode (env: `HOST`) | `127.0.0.1` (`0.0.0.0` in Docker) |
+| `--cors-origin ORIGIN` | Browser origin allowed to call the HTTP transport, repeatable (env: `CORS_ORIGINS`) | none |
+| `--allowed-host HOST` | Host header accepted in HTTP mode, repeatable (env: `ALLOWED_HOSTS`) | localhost only |
 
 ### Transform Modes
 
@@ -117,6 +120,27 @@ By default the server no longer lists all of its tools. Instead it exposes a com
 # Restore the old flat tool listing
 docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --transform-mode none
 ```
+
+### HTTP transport security
+
+**This server ships no authentication.** Anyone who can reach the HTTP port can call every tool, so treat network exposure as granting full access to the documentation tree.
+
+Defaults are conservative:
+
+- **Binds `127.0.0.1`** outside Docker. Inside the container it binds `0.0.0.0`, where the container boundary and explicit `-p` publishing are the access control.
+- **Host and Origin validation is on**, which blocks DNS-rebinding and drive-by-localhost attacks from a victim's browser.
+- **CORS is disabled** unless you pass `--cors-origin`. Wildcard origins are rejected; credentials are never allowed cross-origin.
+
+To serve browser clients or a non-loopback interface, list exactly what you trust:
+
+```bash
+python laravel_mcp_companion.py --transport http \
+  --host 0.0.0.0 \
+  --allowed-host mcp.internal.example \
+  --cors-origin https://app.example
+```
+
+Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origin` get `403`. If you expose this beyond localhost, put an authenticating reverse proxy in front of it. Avoid `--transform-mode code` over HTTP entirely — `execute` is a code execution endpoint.
 
 
 ## Features (v0.9.0)

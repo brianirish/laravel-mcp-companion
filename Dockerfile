@@ -23,6 +23,13 @@ ENV DOCS_PATH="./docs"
 ENV SERVER_NAME="LaravelMCPCompanion"
 ENV LOG_LEVEL="INFO"
 
+# Bind all interfaces inside the container; the container network boundary and
+# explicit port publishing are the access control. Outside Docker the server
+# defaults to loopback. The server has no built-in authentication, so only
+# publish this port to networks you trust, and set ALLOWED_HOSTS when serving
+# under a hostname other than localhost.
+ENV HOST=0.0.0.0
+
 
 # Set the entrypoint to the Python script
 ENTRYPOINT ["python", "laravel_mcp_companion.py"]
