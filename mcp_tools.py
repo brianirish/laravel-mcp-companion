@@ -530,7 +530,7 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
         if results:
             return f"Search results for '{query}':\n" + "".join(results)
         else:
-            search_scope = f"version {version}" if version else "all sources"
+            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
             return f"No results found for '{query}' in {search_scope}"
             
     except Exception as e:

@@ -179,6 +179,11 @@ class TestSectionNameSanitization:
         "back\\slash",
         "nul\x00byte",
         "",
+        # Dot components: `base / "."` collapses to `base` itself
+        ".",
+        "./x",
+        "a/./b",
+        "a//b",
     ])
     def test_rejects_unsafe_section_names(self, bad):
         assert is_safe_section_name(bad) is False
@@ -197,10 +202,29 @@ class TestSectionNameSanitization:
 class TestDocsUpdaterVersionValidation:
     """DocsUpdater creates directories from `version` before any network call."""
 
-    @pytest.mark.parametrize("bad", ["../../pwned", "/tmp/pwned_abs", "..", "a/b"])
+    @pytest.mark.parametrize("bad", ["../../pwned", "/tmp/pwned_abs", "..", "a/b", ".", "./"])
     def test_rejects_traversal_version(self, tmp_path, bad):
         with pytest.raises(ValueError, match="Invalid Laravel version|escapes target"):
             DocsUpdater(tmp_path / "docs", bad)
+
+    def test_dot_version_cannot_target_the_docs_root(self, tmp_path):
+        """`docs_root / "."` collapses to docs_root, whose contents update() clears."""
+        docs = tmp_path / "docs"
+        (docs / "12.x").mkdir(parents=True)
+        (docs / "12.x" / "blade.md").write_text("important")
+
+        with pytest.raises(ValueError):
+            DocsUpdater(docs, ".")
+
+        # Every existing version must survive the rejected call
+        assert (docs / "12.x" / "blade.md").exists()
+
+    def test_version_dir_must_be_strict_subdirectory(self, tmp_path):
+        """A version resolving to the docs root itself is rejected."""
+        docs = tmp_path / "docs"
+        docs.mkdir(parents=True)
+        updater = DocsUpdater(docs, "12.x")
+        assert updater.version_dir.resolve() != docs.resolve()
 
     def test_creates_no_directories_when_rejected(self, tmp_path):
         target = tmp_path / "docs"
@@ -213,3 +237,55 @@ class TestDocsUpdaterVersionValidation:
         updater = DocsUpdater(tmp_path / "docs", "12.x")
         assert updater.version_dir == tmp_path / "docs" / "12.x"
         assert updater.version_dir.is_dir()
+
+
+class TestAllowlistArgumentParsing:
+    """CLI allowlists must replace the environment, not union with it.
+
+    argparse's "append" action appends to the default, so a non-empty default
+    would leave stale env entries trusted alongside the explicit CLI values.
+    """
+
+    def _parse(self, monkeypatch, argv, env):
+        import sys
+        from laravel_mcp_companion import parse_arguments
+
+        for var in ("CORS_ORIGINS", "ALLOWED_HOSTS"):
+            monkeypatch.delenv(var, raising=False)
+        for key, value in env.items():
+            monkeypatch.setenv(key, value)
+        monkeypatch.setattr(sys, "argv", ["prog"] + argv)
+        return parse_arguments()
+
+    def test_cli_origin_replaces_env(self, monkeypatch):
+        args = self._parse(
+            monkeypatch,
+            ["--cors-origin", "https://cli.example"],
+            {"CORS_ORIGINS": "https://env.example"},
+        )
+        assert args.cors_origin == ["https://cli.example"]
+
+    def test_cli_allowed_host_replaces_env(self, monkeypatch):
+        args = self._parse(
+            monkeypatch,
+            ["--allowed-host", "cli.example"],
+            {"ALLOWED_HOSTS": "env.example"},
+        )
+        assert args.allowed_host == ["cli.example"]
+
+    def test_env_used_when_flag_absent(self, monkeypatch):
+        args = self._parse(monkeypatch, [], {"CORS_ORIGINS": "https://env.example,https://two.example"})
+        assert args.cors_origin == ["https://env.example", "https://two.example"]
+
+    def test_repeated_flags_accumulate(self, monkeypatch):
+        args = self._parse(
+            monkeypatch,
+            ["--cors-origin", "https://a.example", "--cors-origin", "https://b.example"],
+            {},
+        )
+        assert args.cors_origin == ["https://a.example", "https://b.example"]
+
+    def test_defaults_are_empty(self, monkeypatch):
+        args = self._parse(monkeypatch, [], {})
+        assert args.cors_origin == []
+        assert args.allowed_host == []

@@ -154,14 +154,22 @@ def is_safe_section_name(name: str) -> bool:
         return False
     if '..' in name or name.startswith('/') or '\\' in name or '\x00' in name:
         return False
+    # Reject dot and empty components. "." is otherwise accepted by the pattern
+    # below, and `base / "."` collapses to `base` itself, which would silently
+    # retarget a version directory at the whole documentation root.
+    if any(part in ('', '.', '..') for part in name.split('/')):
+        return False
     return _SAFE_PATH_SEGMENT.fullmatch(name) is not None
 
 
 def is_within_directory(base_dir: Path, target: Path) -> bool:
-    """Check that target resolves to a location inside base_dir."""
+    """Check that target resolves to a location inside base_dir.
+
+    Fails closed: any error resolving either path denies the write.
+    """
     try:
         return target.resolve().is_relative_to(base_dir.resolve())
-    except (OSError, ValueError):
+    except Exception:
         return False
 
 
@@ -1469,9 +1477,12 @@ class DocsUpdater:
         self.github_api_url = GITHUB_API_URL
         self.repo = LARAVEL_DOCS_REPO
 
-        # Create version-specific directory
+        # Create version-specific directory. update() clears everything under
+        # version_dir, so it must be a strict subdirectory of target_dir --
+        # equality would wipe every version in the documentation root.
         self.version_dir = target_dir / version
-        if not is_within_directory(target_dir, self.version_dir):
+        if (not is_within_directory(target_dir, self.version_dir)
+                or self.version_dir.resolve() == target_dir.resolve()):
             raise ValueError(f"Version directory escapes target directory: {version!r}")
         self.version_dir.mkdir(parents=True, exist_ok=True)
         

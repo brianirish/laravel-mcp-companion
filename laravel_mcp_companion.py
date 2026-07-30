@@ -717,22 +717,27 @@ def parse_arguments():
         default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
+    # These default to None rather than the env list: argparse's "append" action
+    # appends to the default, so a non-empty default would union env values with
+    # CLI values instead of letting the CLI replace them. The env fallback is
+    # applied below, only when the flag is absent.
     parser.add_argument(
         "--cors-origin",
         action="append",
-        default=_split_env_list("CORS_ORIGINS"),
+        default=None,
         metavar="ORIGIN",
         help="Browser origin allowed to call the HTTP transport (repeatable). "
-             "CORS is disabled unless at least one origin is given. "
-             "Wildcards are not accepted (env: CORS_ORIGINS, comma-separated)"
+             "Replaces CORS_ORIGINS when given. CORS is disabled unless at least "
+             "one origin is set. Wildcards are not accepted (env: CORS_ORIGINS, comma-separated)"
     )
     parser.add_argument(
         "--allowed-host",
         action="append",
-        default=_split_env_list("ALLOWED_HOSTS"),
+        default=None,
         metavar="HOST",
         help="Host header value accepted by the HTTP transport (repeatable). "
-             "Required to serve on a non-loopback interface (env: ALLOWED_HOSTS, comma-separated)"
+             "Replaces ALLOWED_HOSTS when given. Required to serve under a hostname "
+             "other than localhost (env: ALLOWED_HOSTS, comma-separated)"
     )
     parser.add_argument(
         "--transform-mode",
@@ -754,6 +759,13 @@ def parse_arguments():
     # argparse does not validate defaults against choices, so check env-provided values
     if args.transform_mode is not None and args.transform_mode not in ("search", "code", "none"):
         parser.error(f"invalid TRANSFORM_MODE: {args.transform_mode!r} (choose from 'search', 'code', 'none')")
+
+    # Fall back to the environment only when the flag was not given, so an
+    # explicit allowlist on the command line fully replaces the env value.
+    if args.cors_origin is None:
+        args.cors_origin = _split_env_list("CORS_ORIGINS") or []
+    if args.allowed_host is None:
+        args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
 
     return args
 
@@ -1884,6 +1896,11 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 for file_path in service_dir.glob("*.md"):
                     try:
                         content = get_file_content_cached(str(file_path))
+                        # The cached reader signals failure with a sentinel string;
+                        # matching against it would fabricate hits for queries like
+                        # "error" or "file" on a file that was never read.
+                        if content.startswith("Error") or content.startswith("File not found"):
+                            continue
                         count = count_matches(pattern, content)
                         if count:
                             service_matches.append({
