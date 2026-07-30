@@ -18,6 +18,7 @@ from typing import Dict, Optional, List, Any
 from functools import lru_cache
 import threading
 from fastmcp import FastMCP
+from fastmcp.server.transforms.search import BM25SearchTransform
 
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
@@ -706,8 +707,28 @@ def parse_arguments():
         default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
-    
-    return parser.parse_args()
+    parser.add_argument(
+        "--transform-mode",
+        type=str,
+        default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
+        choices=["search", "code", "none"],
+        help="Tool exposure mode: 'search' exposes BM25 search_tools/call_tool (default), "
+             "'code' enables experimental Code Mode, 'none' exposes all raw tools (env: TRANSFORM_MODE)"
+    )
+    parser.add_argument(
+        "--code-mode",
+        action="store_true",
+        default=os.environ.get("CODE_MODE", "").lower() == "true",
+        help="Deprecated: use --transform-mode code (env: CODE_MODE=true)"
+    )
+
+    args = parser.parse_args()
+
+    # argparse does not validate defaults against choices, so check env-provided values
+    if args.transform_mode is not None and args.transform_mode not in ("search", "code", "none"):
+        parser.error(f"invalid TRANSFORM_MODE: {args.transform_mode!r} (choose from 'search', 'code', 'none')")
+
+    return args
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:
     """Set up and validate the docs directory path."""
@@ -1179,14 +1200,17 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
-    
+
     Args:
         server_name: Name for the MCP server
         docs_path: Path to documentation directory
         runtime_version: Runtime default Laravel version (from --version flag)
-        
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+
     Returns:
         Configured FastMCP server instance
     """
@@ -1290,7 +1314,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str) -
     
     # Configure all tools
     configure_mcp_server(mcp, docs_path, runtime_version, multi_updater)
-    
+
+    # Apply transforms
+    apply_transforms(mcp, transform_mode)
+
     return mcp
 
 # Global configuration storage
@@ -2042,6 +2069,47 @@ Please help me:
 Start by providing information about Laravel Forge and its key features."""
 
 
+def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> None:
+    """Apply search or code mode transforms to the MCP server.
+
+    Args:
+        mcp: FastMCP server instance
+        transform_mode: "search" for BM25SearchTransform (default),
+                       "code" for CodeMode transform,
+                       None for no transforms
+    """
+    if transform_mode is None:
+        logger.info("No transforms applied (raw tool mode)")
+        return
+
+    if transform_mode == "code":
+        try:
+            from fastmcp.experimental.transforms.code_mode import (
+                CodeMode,
+                GetTags,
+                Search,
+                GetSchemas,
+            )
+        except ImportError as e:
+            raise RuntimeError(
+                "Code Mode requires the code-mode extra. "
+                "Install with: pip install 'fastmcp[code-mode]'"
+            ) from e
+
+        code_mode = CodeMode(
+            discovery_tools=[GetTags(), Search(), GetSchemas()],
+        )
+        mcp.add_transform(code_mode)
+        logger.info("Code Mode transform applied (experimental)")
+    elif transform_mode == "search":
+        mcp.add_transform(BM25SearchTransform(
+            max_results=10,
+            always_visible=["search_laravel_docs"],
+        ))
+        logger.info("BM25 Search transform applied (max_results=10, search_laravel_docs pinned)")
+    else:
+        raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
+
 
 def main():
     """Main entry point for the Laravel MCP Companion."""
@@ -2066,12 +2134,33 @@ def main():
             except Exception as e:
                 logger.warning(f"Failed to remove temporary file {file_path}: {str(e)}")
     
+    # Resolve transform mode (--code-mode is a deprecated alias for --transform-mode code)
+    if args.transform_mode is not None:
+        mode = args.transform_mode
+        if args.code_mode and mode != "code":
+            logger.warning(f"--code-mode ignored because --transform-mode={mode} was given")
+    elif args.code_mode:
+        logger.warning("--code-mode is deprecated; use --transform-mode code")
+        mode = "code"
+    else:
+        mode = "search"
+
+    if mode == "code" and args.transport == "http":
+        logger.warning(
+            "Code Mode over HTTP exposes an execution endpoint. "
+            "Do not expose this publicly unless you have reviewed sandbox and network risk."
+        )
+
     # Create and configure the MCP server
-    mcp = create_mcp_server(args.server_name, docs_path, args.version)
-    
+    mcp = create_mcp_server(
+        args.server_name, docs_path, args.version,
+        transform_mode=None if mode == "none" else mode
+    )
+
     # Log server startup
     logger.info(f"Starting Laravel MCP Companion ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
+    logger.info(f"Transform mode: {mode}")
     logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     
     # Setup graceful shutdown handler
