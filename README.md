@@ -143,7 +143,7 @@ python laravel_mcp_companion.py --transport http \
 Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origin` get `403`. If you expose this beyond localhost, put an authenticating reverse proxy in front of it. Avoid `--transform-mode code` over HTTP entirely — `execute` is a code execution endpoint.
 
 
-## Features (v0.9.0)
+## Features (v0.10.0)
 
 ### Documentation Aggregation
 - **Multi-version Laravel docs** - All versions from 6.x to latest

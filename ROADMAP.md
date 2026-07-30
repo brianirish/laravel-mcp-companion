@@ -10,7 +10,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## Current Version: v0.9.0
+## Current Version: v0.10.0
 
 ### ✅ Completed Features
 - **Multi-version Laravel documentation** support (6.x through latest)
@@ -53,8 +53,37 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## v0.10.0 - MCP Modernization
-**Target: Q2 2026**
+## ✅ v0.10.0 - Security Hardening (COMPLETED)
+**Released: Q3 2026**
+
+Pulled forward from v0.12.0 after an audit found exploitable path traversal in
+tool arguments. Contains breaking changes — see the release notes before upgrading.
+
+### Path Traversal Fixes ✅
+- ✅ Validate the `version` argument against supported versions in every tool
+  (it was joined onto the docs path unchecked, allowing arbitrary `.md` reads)
+- ✅ Single correct containment helper using `resolve()` + `is_relative_to()`,
+  replacing two broken implementations
+- ✅ Validate learning resource `source`/`sources` as real subdirectories
+- ✅ Sanitize remotely-discovered section names before using them as file paths
+- ✅ Validate `version` in `DocsUpdater` before creating directories
+
+### HTTP Transport Hardening ✅
+- ✅ Bind loopback by default instead of all interfaces
+- ✅ Enable Host/Origin validation (blocks DNS rebinding and drive-by localhost)
+- ✅ Require explicit `--cors-origin`; no wildcard reflection with credentials
+- ✅ 47 regression tests covering every traversal
+
+### Performance ✅
+- ✅ Cache-first version lookup with TTL; timeouts on all network calls
+- ✅ Fixed stale documentation served after updates (caches were not all cleared)
+- ✅ Version-scoped search by default; right-sized file cache
+- ✅ One GitHub API call per update instead of three
+
+---
+
+## v0.11.0 - MCP Modernization
+**Target: Q4 2026**
 
 ### MCP 2025-11-25 Spec Compatibility
 - [ ] **Tasks primitive** for async documentation updates and background indexing
@@ -74,18 +103,19 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## v0.11.0 - Production Readiness
-**Target: Q3 2026**
+## v0.12.0 - Production Readiness
+**Target: Q1 2027**
 
 ### Reliability & Monitoring
 - [ ] Health monitoring and metrics endpoints
 - [ ] Rate limiting and quota management
 - [ ] Error recovery and graceful degradation improvements
-- [ ] Performance optimization and caching improvements
+- [x] Performance optimization and caching improvements *(delivered in v0.10.0)*
 
 ### Security & Stability
-- [ ] Security audit and hardening
-- [ ] Input validation improvements
+- [x] Security audit and hardening *(delivered in v0.10.0)*
+- [x] Input validation improvements *(delivered in v0.10.0)*
+- [ ] Authentication for the HTTP transport
 - [ ] Dependency security scanning
 
 ### Quality Assurance
@@ -96,7 +126,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 ---
 
 ## v1.0.0 - First Stable Release
-**Target: Q4 2026**
+**Target: Q2 2027**
 
 ### Stability Commitments
 - [ ] Feature freeze and API stability
@@ -173,8 +203,13 @@ We welcome community input! If you have ideas, feature requests, or want to cont
 
 ## Versioning Strategy
 
-- **Patch releases (v0.x.y)**: Bug fixes, documentation updates
-- **Minor releases (v0.x.0)**: New features, backward-compatible changes
-- **Major releases (v1.0.0+)**: Stability guarantee, potential breaking changes with migration guides
+We follow [Semantic Versioning](https://semver.org). While the project is on
+`0.x`, the public API is not yet stable and the **minor** version carries
+breaking changes:
 
-Each release maintains backward compatibility within the same major version.
+- **Patch releases (v0.x.y)**: Bug fixes, documentation updates
+- **Minor releases (v0.x.0)**: New features, and breaking changes where needed,
+  called out in the release notes
+- **v1.0.0 onward**: Breaking changes only in major releases, with migration guides
+
+Backward compatibility is guaranteed within a major version starting at v1.0.0.
