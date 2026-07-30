@@ -103,6 +103,20 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
+| `--transform-mode MODE` | Tool exposure mode: `search`, `code`, or `none` (env: `TRANSFORM_MODE`) | search |
+
+### Transform Modes
+
+By default the server no longer lists all of its tools. Instead it exposes a compact, search-first interface that keeps your AI client's context window lean:
+
+- **`search`** (default) — Exposes `search_tools` (BM25 relevance search over the tool catalog) and `call_tool` (proxy to invoke any underlying tool). `search_laravel_docs` stays pinned and directly callable.
+- **`code`** (experimental) — Exposes Code Mode meta-tools (`tags`, `search`, `get_schema`, `execute`) that let the client discover tools and orchestrate them with sandboxed Python. Requires the `fastmcp[code-mode]` extra (included in `requirements.txt`). Avoid exposing this publicly over HTTP — `execute` is a code execution endpoint.
+- **`none`** — Pre-0.9 behavior: every tool listed directly. Use this if your MCP client doesn't handle the synthetic search tools well.
+
+```bash
+# Restore the old flat tool listing
+docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --transform-mode none
+```
 
 
 ## Features (v0.9.0)

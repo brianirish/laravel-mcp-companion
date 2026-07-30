@@ -708,13 +708,27 @@ def parse_arguments():
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
     )
     parser.add_argument(
+        "--transform-mode",
+        type=str,
+        default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
+        choices=["search", "code", "none"],
+        help="Tool exposure mode: 'search' exposes BM25 search_tools/call_tool (default), "
+             "'code' enables experimental Code Mode, 'none' exposes all raw tools (env: TRANSFORM_MODE)"
+    )
+    parser.add_argument(
         "--code-mode",
         action="store_true",
         default=os.environ.get("CODE_MODE", "").lower() == "true",
-        help="Enable experimental Code Mode transform instead of Search Transform (env: CODE_MODE=true)"
+        help="Deprecated: use --transform-mode code (env: CODE_MODE=true)"
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    # argparse does not validate defaults against choices, so check env-provided values
+    if args.transform_mode is not None and args.transform_mode not in ("search", "code", "none"):
+        parser.error(f"invalid TRANSFORM_MODE: {args.transform_mode!r} (choose from 'search', 'code', 'none')")
+
+    return args
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:
     """Set up and validate the docs directory path."""
@@ -2076,24 +2090,23 @@ def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> 
                 Search,
                 GetSchemas,
             )
-
-            code_mode = CodeMode(
-                discovery_tools=[GetTags(), Search(), GetSchemas()],
-            )
-            mcp.add_transform(code_mode)
-            logger.info("Code Mode transform applied (experimental)")
         except ImportError as e:
-            logger.error(
-                "Code Mode requires the code-mode extra. "
-                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
-            )
             raise RuntimeError(
                 "Code Mode requires the code-mode extra. "
-                "Install with: pip install 'fastmcp[code-mode]>=3.1.0'"
+                "Install with: pip install 'fastmcp[code-mode]'"
             ) from e
+
+        code_mode = CodeMode(
+            discovery_tools=[GetTags(), Search(), GetSchemas()],
+        )
+        mcp.add_transform(code_mode)
+        logger.info("Code Mode transform applied (experimental)")
     elif transform_mode == "search":
-        mcp.add_transform(BM25SearchTransform(max_results=10))
-        logger.info("BM25 Search transform applied (max_results=10)")
+        mcp.add_transform(BM25SearchTransform(
+            max_results=10,
+            always_visible=["search_laravel_docs"],
+        ))
+        logger.info("BM25 Search transform applied (max_results=10, search_laravel_docs pinned)")
     else:
         raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
 
@@ -2121,19 +2134,33 @@ def main():
             except Exception as e:
                 logger.warning(f"Failed to remove temporary file {file_path}: {str(e)}")
     
-    # Create and configure the MCP server
-    transform_mode = "code" if args.code_mode else "search"
-    if args.code_mode and args.transport == "http":
+    # Resolve transform mode (--code-mode is a deprecated alias for --transform-mode code)
+    if args.transform_mode is not None:
+        mode = args.transform_mode
+        if args.code_mode and mode != "code":
+            logger.warning(f"--code-mode ignored because --transform-mode={mode} was given")
+    elif args.code_mode:
+        logger.warning("--code-mode is deprecated; use --transform-mode code")
+        mode = "code"
+    else:
+        mode = "search"
+
+    if mode == "code" and args.transport == "http":
         logger.warning(
             "Code Mode over HTTP exposes an execution endpoint. "
             "Do not expose this publicly unless you have reviewed sandbox and network risk."
         )
-    mcp = create_mcp_server(args.server_name, docs_path, args.version, transform_mode=transform_mode)
+
+    # Create and configure the MCP server
+    mcp = create_mcp_server(
+        args.server_name, docs_path, args.version,
+        transform_mode=None if mode == "none" else mode
+    )
 
     # Log server startup
     logger.info(f"Starting Laravel MCP Companion ({args.server_name})")
     logger.info(f"Transport: {args.transport}")
-    logger.info(f"Transform mode: {'Code Mode (experimental)' if args.code_mode else 'BM25 Search'}")
+    logger.info(f"Transform mode: {mode}")
     logger.info(f"Supported Laravel versions: {', '.join(SUPPORTED_VERSIONS)}")
     
     # Setup graceful shutdown handler

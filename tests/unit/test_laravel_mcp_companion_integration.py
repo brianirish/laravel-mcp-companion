@@ -305,6 +305,34 @@ class TestTransformConfiguration:
         args = parse_arguments()
         assert args.code_mode is True
 
+    def test_parse_arguments_transform_mode(self, monkeypatch):
+        """Test that --transform-mode flag and TRANSFORM_MODE env are parsed correctly."""
+        import sys
+        from laravel_mcp_companion import parse_arguments
+
+        monkeypatch.delenv("TRANSFORM_MODE", raising=False)
+        monkeypatch.delenv("CODE_MODE", raising=False)
+
+        # Default: unset (main() resolves this to "search")
+        monkeypatch.setattr(sys, "argv", ["prog"])
+        assert parse_arguments().transform_mode is None
+
+        # Explicit CLI values
+        for mode in ("search", "code", "none"):
+            monkeypatch.setattr(sys, "argv", ["prog", "--transform-mode", mode])
+            assert parse_arguments().transform_mode == mode
+
+        # Env var
+        monkeypatch.setenv("TRANSFORM_MODE", "code")
+        monkeypatch.setattr(sys, "argv", ["prog"])
+        assert parse_arguments().transform_mode == "code"
+
+        # Invalid env var is rejected (argparse doesn't validate defaults)
+        monkeypatch.setenv("TRANSFORM_MODE", "garbage")
+        monkeypatch.setattr(sys, "argv", ["prog"])
+        with pytest.raises(SystemExit):
+            parse_arguments()
+
     @pytest.mark.asyncio
     async def test_search_transform_applied_by_default(self, temp_docs_dir):
         """Test that BM25SearchTransform is applied when code_mode=False."""
@@ -317,7 +345,9 @@ class TestTransformConfiguration:
             # Should have synthetic search tools, not raw tools
             assert "search_tools" in tool_names
             assert "call_tool" in tool_names
-            # Raw tools should NOT be listed
+            # search_laravel_docs is pinned via always_visible (CI smoke test relies on this)
+            assert "search_laravel_docs" in tool_names
+            # Other raw tools should NOT be listed
             assert "list_laravel_docs" not in tool_names
 
     @pytest.mark.asyncio
