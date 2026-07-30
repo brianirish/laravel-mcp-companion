@@ -77,5 +77,6 @@ pipeline:
                       eval "$(fnm env)"
                       fnm install 22
                       fnm use 22
-                      npx @modelcontextprotocol/inspector --cli --method tools/list python laravel_mcp_companion.py | grep -q "search_laravel_docs"
+                      # Inspector 2.0 requires the server command before --method
+                      npx @modelcontextprotocol/inspector@2 --cli python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
 

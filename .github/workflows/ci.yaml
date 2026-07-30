@@ -40,7 +40,7 @@ jobs:
         node-version: '20'
     - name: MCP Inspector smoke test
       run: |
-        npx @modelcontextprotocol/inspector --cli --method tools/list python laravel_mcp_companion.py | grep -q "search_laravel_docs"
+        npx @modelcontextprotocol/inspector@2 --cli python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       if: success()
