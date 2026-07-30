@@ -31,40 +31,30 @@ Issues = "https://github.com/brianirish/laravel-mcp-companion/issues"
 # Broader adoption (UP/SIM/BLE/etc.) should be its own PR.
 select = ["E4", "E7", "E9", "F"]
 
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = [
-    "-ra",
-    "--strict-markers",
-    "--strict-config",
-    "--cov=laravel_mcp_companion",
-    "--cov=docs_updater", 
-    "--cov=shutdown_handler",
-    "--cov=mcp_tools",
-    "--cov-report=term-missing",
-    "--cov-report=html:htmlcov",
-    "--cov-report=xml:coverage.xml"
+# pytest configuration lives in pytest.ini, which takes precedence over this
+# file. A [tool.pytest.ini_options] block here would be silently ignored, so
+# it is deliberately absent -- the previous one had drifted to a stale, shorter
+# module list that nothing was reading.
+
+[tool.coverage.run]
+# Branch coverage is on here rather than passed on the command line, so a bare
+# `pytest` and CI's `pytest --cov --cov-branch` report the identical number.
+branch = true
+# Measure the product modules only. Without this, CI's bare `--cov` also
+# measured the test suite, whose near-total coverage inflated the number well
+# past the threshold while product coverage sat much lower.
+source = [
+    "laravel_mcp_companion",
+    "docs_updater",
+    "shutdown_handler",
+    "toon_helpers",
+    "mcp_tools",
+    "learning_resources",
 ]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
-    "network: marks tests that require network access",
-    "external: marks tests that interact with external services"
+omit = [
+    "tests/*",
+    "*/site-packages/*",
 ]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning"
-]
-log_cli = true
-log_cli_level = "INFO"
-log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
-log_cli_date_format = "%Y-%m-%d %H:%M:%S"
-asyncio_mode = "auto"
 
 [dependency-groups]
 dev = [
