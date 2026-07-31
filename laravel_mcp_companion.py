@@ -419,7 +419,7 @@ When to use:
 - Checking which versions have specific documentation
 - Getting an overview of documentation coverage""",
 
-    "read_laravel_doc_content": """Reads the complete content of a specific Laravel documentation file. This is the primary tool for accessing actual documentation content.
+    "read_laravel_doc_content": """Reads a whole Laravel documentation file. Prefer read_laravel_doc_section, which returns just the section you need -- a full file can exceed 30,000 tokens against a few hundred for one section.
 
 When to use:
 - Reading full documentation for a feature
@@ -433,14 +433,6 @@ When to use:
 - Finding which files mention a specific feature
 - Quick lookup of where topics are discussed
 - Discovering related documentation files""",
-
-    "search_laravel_docs_with_context": """Advanced search that returns matching text with surrounding context. Shows exactly how terms are used in documentation.
-
-When to use:
-- Understanding how a feature is described
-- Finding specific code examples
-- Getting quick answers without reading full files
-- Seeing usage context for technical terms""",
 
     "get_doc_structure": """Extracts the table of contents and structure from a documentation file. Shows headers and brief content previews.
 
@@ -1746,7 +1738,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         })
 
     @mcp.tool(
-        description="Read the full content of a specific Laravel documentation file",
+        description=TOOL_DESCRIPTIONS["read_laravel_doc_content"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"docs", "read"}
     )
@@ -1786,7 +1778,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         )
 
     @mcp.tool(
-        description="Get the structure and sections of a documentation file",
+        description=TOOL_DESCRIPTIONS["get_doc_structure"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"docs", "read"}
     )
@@ -1804,7 +1796,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         return get_doc_structure_impl(docs_path, filename, version, runtime_version=runtime_version)
 
     @mcp.tool(
-        description="Browse Laravel documentation by category",
+        description=TOOL_DESCRIPTIONS["browse_docs_by_category"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"docs", "read"}
     )
@@ -2249,9 +2241,15 @@ def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> 
     elif transform_mode == "search":
         mcp.add_transform(BM25SearchTransform(
             max_results=10,
-            always_visible=["search_laravel_docs"],
+            # Search returns section anchors; reading one is the other half of
+            # the same move. Leaving the reader behind a search_tools lookup put
+            # a round trip in the middle of the most common path.
+            always_visible=["search_laravel_docs", "read_laravel_doc_section"],
         ))
-        logger.info("BM25 Search transform applied (max_results=10, search_laravel_docs pinned)")
+        logger.info(
+            "BM25 Search transform applied (max_results=10; search_laravel_docs "
+            "and read_laravel_doc_section pinned)"
+        )
     else:
         raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
 

@@ -1180,7 +1180,7 @@ def search_laravel_learning_resources_impl(
     if not learning_dir.exists():
         return format_error(
             "No learning resources found",
-            {"suggestion": "Use update_learning_docs() to fetch learning resources first"}
+            {"suggestion": "Learning resources ship with the server; this documentation path is missing them. Check DOCS_PATH, or the mount if running in Docker."}
         )
 
     results_data: List[Dict] = []
@@ -1251,7 +1251,7 @@ def list_laravel_learning_resources_impl(docs_path: Path, source: Optional[str] 
     if not learning_dir.exists():
         return format_error(
             "No learning resources found",
-            {"suggestion": "Use update_learning_docs() to fetch learning resources first"}
+            {"suggestion": "Learning resources ship with the server; this documentation path is missing them. Check DOCS_PATH, or the mount if running in Docker."}
         )
 
     if source:
