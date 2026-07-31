@@ -51,7 +51,11 @@ from mcp_tools import (
     is_safe_path,
     validate_version as validate_version_arg,
     count_matches,
-    clear_caches as clear_mcp_tools_caches
+    clear_caches as clear_mcp_tools_caches,
+    describe_docs_freshness,
+    get_docs_snapshot_age,
+    docs_are_stale,
+    DOCS_STALE_AFTER_DAYS
 )
 
 # Import learning resources
@@ -1129,6 +1133,37 @@ def laravel_docs_info(version: Optional[str] = None) -> str:
     return "This function requires server context to execute"
 
 
+def build_server_instructions(docs_path: Path, runtime_version: str) -> str:
+    """Compose the instructions an MCP client injects into the model's context.
+
+    This is where the assistant learns how old the bundled documentation is.
+    Without it, a stale snapshot produces confidently wrong answers about recent
+    Laravel features, because nothing in the tool output says how old the corpus
+    is and the user has no reason to suspect it.
+    """
+    freshness = describe_docs_freshness(docs_path)
+
+    instructions = f"""Laravel documentation for the whole ecosystem: core Laravel {', '.join(SUPPORTED_VERSIONS)}, \
+the first-party services (Forge, Vapor, Nova, Envoyer), and community packages \
+(Spatie, Livewire, Filament, Inertia).
+
+Typical flow: search_laravel_docs to locate relevant files, then \
+read_laravel_doc_content for the full text. For a natural-language request such as \
+"I need to upload files", find_laravel_docs_for_need maps it to the right pages. \
+get_laravel_package_recommendations suggests packages for a described use case.
+
+Documentation defaults to Laravel {runtime_version}; pass `version` to target another, \
+or `all_versions` to search every one.
+
+The documentation is a local snapshot, last synced {freshness}. If you are asked \
+about a feature that may have landed after that date, say so rather than answering \
+from the snapshot, and offer to run update_laravel_docs (or \
+update_external_laravel_docs for the first-party services and package docs) to \
+refresh it first. laravel_docs_info reports the current snapshot date at any time."""
+
+    return instructions
+
+
 def validate_version(version: str) -> bool:
     """Validate that the version is supported.
     
@@ -1259,7 +1294,7 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     }
     
     # Create the MCP server
-    mcp: FastMCP = FastMCP(server_name)
+    mcp: FastMCP = FastMCP(server_name, instructions=build_server_instructions(docs_path, runtime_version))
     
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
@@ -1480,14 +1515,23 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
                 )
 
-            return toon_encode({
+            snapshot, age_days = get_docs_snapshot_age(docs_path, version)
+            info: Dict[str, Any] = {
                 "version": version,
                 "last_updated": metadata.get('sync_time', 'unknown'),
+                "snapshot_date": snapshot or "unknown",
+                "snapshot_age_days": age_days if age_days is not None else "unknown",
                 "commit_sha": metadata.get('commit_sha', 'unknown'),
                 "commit_date": metadata.get('commit_date', 'unknown'),
                 "commit_message": metadata.get('commit_message', 'unknown'),
                 "github_url": metadata.get('commit_url', 'unknown')
-            })
+            }
+            if docs_are_stale(docs_path, version):
+                info["note"] = (
+                    f"This snapshot is more than {DOCS_STALE_AFTER_DAYS} days old. "
+                    "Run update_laravel_docs() before relying on it for recent features."
+                )
+            return toon_encode(info)
         else:
             # Show info for all available versions
             versions_data: List[Dict[str, Any]] = []
@@ -1508,7 +1552,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                         "available": False
                     })
 
-            return toon_encode({"versions": versions_data})
+            snapshot, age_days = get_docs_snapshot_age(docs_path)
+            summary: Dict[str, Any] = {
+                "snapshot_date": snapshot or "unknown",
+                "snapshot_age_days": age_days if age_days is not None else "unknown",
+                "versions": versions_data
+            }
+            if docs_are_stale(docs_path):
+                summary["note"] = (
+                    f"This snapshot is more than {DOCS_STALE_AFTER_DAYS} days old. "
+                    "Run update_laravel_docs() before relying on it for recent features."
+                )
+            return toon_encode(summary)
     
     # Register package recommendation tools
     @mcp.tool(

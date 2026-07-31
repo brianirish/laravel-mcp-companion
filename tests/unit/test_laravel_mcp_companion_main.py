@@ -101,7 +101,12 @@ class TestMainFunction:
             
             # Verify setup was called
             mock_setup_docs.assert_called_once()
-            mock_fastmcp_class.assert_called_once_with("LaravelMCPCompanion")
+            # The server is constructed with its name plus instructions telling
+            # the assistant how old the documentation snapshot is.
+            mock_fastmcp_class.assert_called_once()
+            args, kwargs = mock_fastmcp_class.call_args
+            assert args[0] == "LaravelMCPCompanion"
+            assert "instructions" in kwargs and kwargs["instructions"]
             mock_updater_class.assert_called_once_with(temp_dir, DEFAULT_VERSION)
             
             # Verify server was started (stdio is default, no args needed)

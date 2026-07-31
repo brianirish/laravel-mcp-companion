@@ -9,6 +9,7 @@ that can be imported and tested independently of the FastMCP server setup.
 import os
 import re
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 import json
@@ -184,6 +185,66 @@ def validate_subdirectory(base_dir: Path, name: str) -> bool:
         return False
     candidate = base_dir / name
     return is_safe_path(base_dir, candidate) and candidate.is_dir()
+
+
+# Documentation is shipped as a snapshot, so it ages. Past this many days we
+# start saying so out loud rather than letting the assistant answer from a stale
+# corpus without realising it.
+DOCS_STALE_AFTER_DAYS = 30
+
+
+def parse_sync_time(value: Optional[str]) -> Optional[datetime]:
+    """Parse a metadata sync_time into an aware UTC datetime, or None."""
+    if not value or value == "unknown":
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def get_docs_snapshot_age(docs_path: Path, version: Optional[str] = None) -> tuple[Optional[str], Optional[int]]:
+    """Return (sync_time, age_in_days) for the freshest documentation snapshot.
+
+    Checks the requested version, or every supported version when none is given,
+    and reports the most recent sync. Returns (None, None) when no metadata is
+    readable, which is the normal case for a fresh checkout.
+    """
+    # Callers reach this through server construction, where docs_path may still
+    # be a plain string; joining one would raise rather than report "unknown".
+    base = Path(docs_path)
+    versions = [version] if version else SUPPORTED_VERSIONS
+    newest: Optional[datetime] = None
+
+    for candidate in versions:
+        synced = parse_sync_time(get_laravel_docs_metadata(base, candidate).get("sync_time"))
+        if synced and (newest is None or synced > newest):
+            newest = synced
+
+    if newest is None:
+        return None, None
+
+    age = (datetime.now(timezone.utc) - newest).days
+    return newest.strftime("%Y-%m-%d"), max(age, 0)
+
+
+def describe_docs_freshness(docs_path: Path, version: Optional[str] = None) -> str:
+    """Human-readable snapshot age, for tool output and server instructions."""
+    snapshot, age = get_docs_snapshot_age(docs_path, version)
+    if snapshot is None:
+        return "unknown (no documentation synced yet)"
+    if age == 0:
+        return f"{snapshot} (today)"
+    return f"{snapshot} ({age} day{'s' if age != 1 else ''} ago)"
+
+
+def docs_are_stale(docs_path: Path, version: Optional[str] = None) -> bool:
+    """Whether the snapshot is old enough to be worth mentioning."""
+    _, age = get_docs_snapshot_age(docs_path, version)
+    return age is not None and age > DOCS_STALE_AFTER_DAYS
 
 
 def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
