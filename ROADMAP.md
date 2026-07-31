@@ -10,7 +10,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## Current Version: v0.10.0
+## Current Version: v0.11.0
 
 ### ✅ Completed Features
 - **Multi-version Laravel documentation** support (6.x through latest)
@@ -19,10 +19,11 @@ This roadmap outlines the planned development path toward v1.0.0.
 - **Learning Resource Infrastructure**: Difficulty classification, 15 semantic categories
 - **8 New MCP Tools**: Learning paths, "I need X" finder, category browsing, difficulty filtering
 - **Package recommendation system** with 50+ curated packages
-- **Context-aware search** with surrounding text snippets
+- **Ranked section search** with BM25 relevance, snippets, and section-level reads
+- **Documentation currency reporting** so the assistant knows what date its corpus covers
 - **Future-proof version detection** via GitHub API
 - **Automated daily documentation updates** with auto-discovery metrics
-- **Comprehensive test suite** with 85%+ code coverage
+- **Test suite** at 67% coverage of product code (branch coverage, tests excluded)
 
 ---
 
@@ -56,8 +57,9 @@ This roadmap outlines the planned development path toward v1.0.0.
 ## ✅ v0.10.0 - Security Hardening (COMPLETED)
 **Released: Q3 2026**
 
-Pulled forward from v0.12.0 after an audit found exploitable path traversal in
-tool arguments. Contains breaking changes — see the release notes before upgrading.
+Pulled forward from the Production Readiness milestone after an audit found
+exploitable path traversal in tool arguments. Contains breaking changes — see the
+release notes before upgrading.
 
 ### Path Traversal Fixes ✅
 - ✅ Validate the `version` argument against supported versions in every tool
@@ -82,8 +84,50 @@ tool arguments. Contains breaking changes — see the release notes before upgra
 
 ---
 
-## v0.11.0 - MCP Modernization
-**Target: Q4 2026**
+## ✅ v0.11.0 - Retrieval Quality & Currency (COMPLETED)
+**Released: Q3 2026**
+
+Not the MCP Modernization originally planned for this slot — that moved to
+v0.12.0. An audit of whether the project actually delivers "the latest Laravel
+documentation at the ready" found retrieval and currency both broken, and those
+are the point of the project. Contains breaking changes; see the release notes.
+
+### Retrieval ✅
+- ✅ BM25 ranking over documentation *sections* instead of substring match counts
+  on whole files — four of seven realistic developer questions previously
+  returned nothing at all
+- ✅ `read_laravel_doc_section` for section-level reads; a full answer costs
+  ~3,200 tokens against ~34,000 for the whole-file path
+- ✅ Lazy per-version index with an LRU cap; substring fallback preserved for
+  exact-symbol queries like `queue:retry`
+
+### Documentation Currency ✅
+- ✅ Report the date Laravel last changed each version, not the date we fetched
+  it — five of eight versions were being called stale while byte-identical to
+  upstream, with a warning no tool could clear
+- ✅ Staleness now judges the copy rather than a version, and says to pull a
+  newer image rather than run a tool that cannot help
+- ✅ `update_laravel_docs` accepts `version` like every other tool
+
+### Security ✅
+- ✅ Validate `version` in `laravel_docs_info`, which v0.10.0 missed despite
+  claiming otherwise
+- ✅ Filter the supported-versions cache on read; it is the trust root for every
+  allowlist and was writable through a bind-mounted file
+- ✅ One containment rule across reading, listing, and searching
+- ✅ Close the check-to-open TOCTOU with `O_NOFOLLOW`
+- ✅ Reject wildcard entries in `ALLOWED_HOSTS`
+
+### Release & CI ✅
+- ✅ Documentation syncs tagged `docs-YYYY-MM-DD` instead of consuming semver
+- ✅ CI runs the Python version the project actually declares
+- ✅ Coverage measured against product code only, so the reported figure is real
+- ✅ Version-drift guards that compare against release tags, not just each other
+
+---
+
+## v0.12.0 - MCP Modernization
+**Target: Q1 2027**
 
 ### MCP 2025-11-25 Spec Compatibility
 - [ ] **Tasks primitive** for async documentation updates and background indexing
@@ -103,8 +147,8 @@ tool arguments. Contains breaking changes — see the release notes before upgra
 
 ---
 
-## v0.12.0 - Production Readiness
-**Target: Q1 2027**
+## v0.13.0 - Production Readiness
+**Target: Q2 2027**
 
 ### Reliability & Monitoring
 - [ ] Health monitoring and metrics endpoints
@@ -113,20 +157,20 @@ tool arguments. Contains breaking changes — see the release notes before upgra
 - [x] Performance optimization and caching improvements *(delivered in v0.10.0)*
 
 ### Security & Stability
-- [x] Security audit and hardening *(delivered in v0.10.0)*
-- [x] Input validation improvements *(delivered in v0.10.0)*
+- [x] Security audit and hardening *(v0.10.0, extended in v0.11.0)*
+- [x] Input validation improvements *(v0.10.0, completed in v0.11.0)*
+- [x] Dependency security scanning *(CodeQL and Dependabot)*
 - [ ] Authentication for the HTTP transport
-- [ ] Dependency security scanning
 
 ### Quality Assurance
-- [ ] 90%+ test coverage target
+- [ ] 80%+ coverage of product code, from 67% today
 - [ ] Load testing and performance benchmarks
 - [ ] Documentation completeness audit
 
 ---
 
 ## v1.0.0 - First Stable Release
-**Target: Q2 2027**
+**Target: Q3 2027**
 
 ### Stability Commitments
 - [ ] Feature freeze and API stability
@@ -143,7 +187,7 @@ tool arguments. Contains breaking changes — see the release notes before upgra
 ### Success Criteria
 - Documentation coverage for 95% of common Laravel development scenarios
 - Sub-100ms response times for documentation queries
-- 85%+ test coverage with comprehensive integration tests
+- 80%+ coverage of product code, with integration tests through a real MCP client
 - MCP Registry listing with verified status
 - Active community of users and contributors
 

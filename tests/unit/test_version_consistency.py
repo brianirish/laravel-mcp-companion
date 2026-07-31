@@ -57,6 +57,72 @@ def newest_release_tag() -> str | None:
     return None
 
 
+def parse_version(value: str) -> tuple[int, int, int] | None:
+    match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)", value.strip())
+    if not match:
+        return None
+    return tuple(int(part) for part in match.groups())  # type: ignore[return-value]
+
+
+def is_release_successor(tag: str, manifest: str) -> bool:
+    """Whether `manifest` is the tag's version or the next release after it.
+
+    "Next release" means exactly one bump in exactly one slot, with the lower
+    slots reset -- 0.10.0 may become 0.10.1, 0.11.0 or 1.0.0 and nothing else.
+    Anything further ahead skipped a release; anything behind is the drift this
+    guard exists to catch.
+    """
+    current = parse_version(tag)
+    proposed = parse_version(manifest)
+    if current is None or proposed is None:
+        return False
+
+    major, minor, patch = current
+    return proposed in {
+        current,
+        (major, minor, patch + 1),
+        (major, minor + 1, 0),
+        (major + 1, 0, 0),
+    }
+
+
+class TestReleaseSuccessor:
+    """A release PR bumps the manifest before the tag it will carry exists.
+
+    Requiring exact equality made every release PR red, which is the failure
+    mode the coverage-gate guard warns about: a check that cannot pass trains
+    everyone to ignore it. Being one release ahead is the normal in-flight
+    state; being *behind*, or ahead by more than one bump, is the drift.
+    """
+
+    @pytest.mark.parametrize("tag,manifest", [
+        ("v0.10.0", "0.10.0"),   # steady state, between releases
+        ("v0.10.0", "0.10.1"),   # patch release in flight
+        ("v0.10.0", "0.11.0"),   # minor release in flight
+        ("v0.10.0", "1.0.0"),    # the 1.0.0 commitment in flight
+        ("v0.9.145", "0.10.0"),  # minor bump off a long patch series
+    ])
+    def test_at_most_one_bump_ahead_is_allowed(self, tag, manifest):
+        assert is_release_successor(tag, manifest)
+
+    @pytest.mark.parametrize("tag,manifest", [
+        ("v0.9.145", "0.9.0"),   # the drift that motivated the guard
+        ("v0.10.0", "0.9.0"),    # behind by a minor
+        ("v0.11.0", "0.10.9"),   # behind by a minor, ahead on patch
+        ("v0.10.0", "0.12.0"),   # skipped a minor
+        ("v0.10.0", "0.10.3"),   # skipped patches
+        ("v0.10.0", "2.0.0"),    # skipped a major
+        ("v0.10.0", "1.1.0"),    # major bump must reset minor and patch
+        ("v0.10.0", "0.11.2"),   # minor bump must reset patch
+    ])
+    def test_anything_else_is_drift(self, tag, manifest):
+        assert not is_release_successor(tag, manifest)
+
+    def test_unparseable_versions_are_not_treated_as_successors(self):
+        assert not is_release_successor("v0.10.0", "not-a-version")
+        assert not is_release_successor("vlatest", "0.11.0")
+
+
 def test_pyproject_version_is_valid_semver():
     version = project_version()
     assert re.fullmatch(r"\d+\.\d+\.\d+", version), f"Not a semver version: {version!r}"
@@ -78,20 +144,26 @@ def test_readme_features_heading_matches_pyproject():
     )
 
 
-def test_pyproject_version_matches_newest_release_tag():
+def test_pyproject_version_tracks_the_newest_release_tag():
     """The drift that actually happened: manifest 0.9.0 vs tag v0.9.145.
 
     The three files agreed with each other throughout, so only a tag comparison
     catches it.
+
+    The manifest is allowed to sit one release ahead, because a release PR must
+    bump it before the tag it will carry exists. Demanding exact equality made
+    every release PR red for a reason that resolves itself on merge.
     """
     tag = newest_release_tag()
     if tag is None:
         pytest.skip("no git tags available (shallow clone or non-git checkout)")
 
-    assert tag.lstrip("v") == project_version(), (
+    assert is_release_successor(tag, project_version()), (
         f"pyproject.toml says {project_version()} but the newest release tag is {tag}. "
-        "Bump the manifest (and ROADMAP.md / README.md) to match, or add the tag to "
-        "NON_RELEASE_TAGS if it is not a software release."
+        "The manifest may match that tag or be exactly one release ahead while a "
+        "release is in flight. Bump the manifest (and ROADMAP.md / README.md), tag "
+        "the release, or add the tag to NON_RELEASE_TAGS if it is not a software "
+        "release."
     )
 
 
