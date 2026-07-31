@@ -39,6 +39,11 @@ docs-only commit and contains no code change.
   stage permanently degraded and masking the status of the steps that matter.
 
 ### Added
+- The server now reports how old its documentation snapshot is. MCP server
+  instructions carry the snapshot date for the version being served, so an
+  assistant asked about a feature newer than that snapshot says so and offers to
+  refresh rather than answering from stale pages. `laravel_docs_info` reports
+  `snapshot_date` and `snapshot_age_days`, and flags snapshots older than 30 days.
 - Tests asserting the project version matches the newest release tag, and stays
   consistent across `pyproject.toml`, `ROADMAP.md`, and `README.md`. The tag
   comparison is the one that matters: during the drift that motivated these

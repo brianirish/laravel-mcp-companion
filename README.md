@@ -108,6 +108,51 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--cors-origin ORIGIN` | Browser origin allowed to call the HTTP transport, repeatable (env: `CORS_ORIGINS`) | none (CORS off) |
 | `--allowed-host HOST` | Additional `Host` header accepted in HTTP mode, repeatable (env: `ALLOWED_HOSTS`) | `localhost`, `127.0.0.1`, `::1` |
 
+### Keeping documentation current
+
+Documentation ships inside the image, and a new image is published whenever the
+documentation is refreshed, so `:latest` carries the most recently published
+snapshot. The catch is that **`docker run` reuses the copy you already have** —
+once you've pulled the image, you keep running it until you pull again. Refresh
+whenever you like:
+
+```bash
+docker pull ghcr.io/brianirish/laravel-mcp-companion:latest
+```
+
+Or add `--pull=always` to your MCP config so every start checks for a newer image.
+It costs a moment of startup time and needs a working connection, so it's opt-in
+rather than the default:
+
+```jsonc
+"args": ["run", "--rm", "-i", "--pull=always",
+         "ghcr.io/brianirish/laravel-mcp-companion:latest"]
+```
+
+You don't have to track this yourself. The server tells your assistant how old the
+documentation is for the Laravel version it's serving, so if you ask about something
+newer than that snapshot it will say so and offer to refresh instead of answering
+from stale pages. You can also just ask — *"how current are your Laravel docs?"*
+
+To update in place without pulling a new image, `--update-docs` fetches fresh
+documentation for the selected Laravel version during startup. Documentation for
+Forge, Vapor, Nova, Envoyer and community packages refreshes separately, through the
+`update_external_laravel_docs` tool your assistant can call.
+
+With `--rm` the download is discarded when the container exits, so it repeats on
+every start. A named volume keeps it — but note the trade-off:
+
+```bash
+docker run --rm -i -v laravel-mcp-docs:/app/docs \
+  ghcr.io/brianirish/laravel-mcp-companion:latest --update-docs
+```
+
+> **A volume overrides the image's documentation.** Once populated it masks
+> `/app/docs`, so pulling a newer image no longer updates what the server reads —
+> the volume becomes your source of truth and `--update-docs` becomes the way you
+> refresh it. Use a volume when you want to control updates explicitly; stick to
+> plain `docker pull` if you'd rather the image stay in charge.
+
 ### Transform Modes
 
 By default the server no longer lists all of its tools. Instead it exposes a compact, search-first interface that keeps your AI client's context window lean:

@@ -9,6 +9,7 @@ that can be imported and tested independently of the FastMCP server setup.
 import os
 import re
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 import json
@@ -184,6 +185,90 @@ def validate_subdirectory(base_dir: Path, name: str) -> bool:
         return False
     candidate = base_dir / name
     return is_safe_path(base_dir, candidate) and candidate.is_dir()
+
+
+# Documentation is shipped as a snapshot, so it ages. Past this many days we
+# start saying so out loud rather than letting the assistant answer from a stale
+# corpus without realising it.
+DOCS_STALE_AFTER_DAYS = 30
+
+
+def parse_sync_time(value: object) -> Optional[datetime]:
+    """Parse a metadata sync_time into an aware UTC datetime, or None.
+
+    Total by design. Metadata lives in a mutable, network-populated directory
+    that users can mount over, and this runs during server construction -- a
+    malformed value must degrade to "unknown", never raise.
+    """
+    if not isinstance(value, str) or not value or value == "unknown":
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def get_docs_snapshot_age(docs_path: Path, version: Optional[str] = None) -> tuple[Optional[str], Optional[int]]:
+    """Return (sync_date, age_in_days) for the documentation snapshot.
+
+    For a specific version, reports that version. Across all versions, reports
+    the *oldest* one: the caller is asking whether the corpus can be trusted,
+    and the answer is governed by its stalest part. Reporting the newest would
+    describe a version the user may not be reading.
+
+    Returns (None, None) when no metadata is readable, or when a timestamp is
+    in the future -- a clock skew we cannot interpret and must not present as
+    fresh.
+    """
+    # Callers reach this through server construction, where docs_path may still
+    # be a plain string; joining one would raise rather than report "unknown".
+    base = Path(docs_path)
+    versions = [version] if version is not None else SUPPORTED_VERSIONS
+    oldest: Optional[datetime] = None
+
+    for candidate in versions:
+        metadata = get_laravel_docs_metadata(base, candidate)
+        if not isinstance(metadata, dict):
+            continue
+        synced = parse_sync_time(metadata.get("sync_time"))
+        if synced and (oldest is None or synced < oldest):
+            oldest = synced
+
+    if oldest is None:
+        return None, None
+
+    age = (datetime.now(timezone.utc) - oldest).days
+    if age < 0:
+        # Timestamp is in the future. Treating it as fresh would permanently
+        # disable the staleness warning under routine container clock skew.
+        logger.warning(f"Documentation sync_time is in the future: {oldest.isoformat()}")
+        return None, None
+
+    return oldest.strftime("%Y-%m-%d"), age
+
+
+def describe_docs_freshness(docs_path: Path, version: Optional[str] = None) -> str:
+    """Human-readable snapshot age, for tool output and server instructions."""
+    snapshot, age = get_docs_snapshot_age(docs_path, version)
+    if snapshot is None:
+        return "unknown (no documentation synced yet)"
+    if age == 0:
+        return f"{snapshot} (today)"
+    return f"{snapshot} ({age} day{'s' if age != 1 else ''} ago)"
+
+
+def docs_are_stale(docs_path: Path, version: Optional[str] = None, age_days: Optional[int] = None) -> bool:
+    """Whether the snapshot is old enough to be worth mentioning.
+
+    Pass `age_days` when the caller has already computed it, to avoid re-reading
+    every version's metadata a second time.
+    """
+    if age_days is None:
+        _, age_days = get_docs_snapshot_age(docs_path, version)
+    return age_days is not None and age_days > DOCS_STALE_AFTER_DAYS
 
 
 def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
