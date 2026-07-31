@@ -68,6 +68,24 @@ pipeline:
                       .venv/bin/python -c "import fastmcp, pytest, ruff" 2>/dev/null \
                         || .venv/bin/python -c "import fastmcp"
               - step:
+                  identifier: fetch_tags
+                  name: Fetch release tags
+                  type: Run
+                  spec:
+                    shell: Bash
+                    command: |
+                      # The clone carries no tags, so the version-drift guard in
+                      # test_version_consistency.py found none and skipped -- it
+                      # has never actually run in CI. That guard exists because
+                      # the manifest once sat at 0.9.0 while tags reached
+                      # v0.9.145, which is precisely the drift CI should catch.
+                      #
+                      # Non-fatal on purpose: if the fetch cannot authenticate,
+                      # the guard skips exactly as it does today rather than
+                      # turning a credentials problem into a red build.
+                      git fetch --tags --quiet || echo "no tags fetched; version guard will skip"
+                      echo "newest release tag: $(git tag --list 'v*' --sort=-v:refname | head -1)"
+              - step:
                   identifier: lint
                   name: Lint with ruff
                   type: Run
