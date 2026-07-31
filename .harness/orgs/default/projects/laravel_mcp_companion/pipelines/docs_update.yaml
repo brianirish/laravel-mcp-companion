@@ -53,9 +53,26 @@ pipeline:
                   spec:
                     shell: Bash
                     command: |
-                      python -m venv .venv
-                      source .venv/bin/activate
-                      pip install fastmcp "mcp[cli,client]" markdownify beautifulsoup4 feedparser
+                      set -euo pipefail
+
+                      # This job runs docs_updater.py daily in production, so it
+                      # needs the interpreter the project declares (>=3.12) rather
+                      # than whatever the runner image ships, which is 3.10. CI was
+                      # fixed for this; the pipeline that actually runs was not.
+                      export UV_INSTALL_DIR="$HOME/.local/bin"
+                      curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
+                      export PATH="$UV_INSTALL_DIR:$PATH"
+
+                      uv python install 3.12
+                      uv venv --python 3.12 .venv
+
+                      # Install from requirements.txt rather than a hand-listed
+                      # set. The previous list had drifted: it omitted toon-format
+                      # (which the tools import) and pinned feedparser, which no
+                      # module uses. Later steps `source .venv/bin/activate`.
+                      uv pip install --python .venv/bin/python -r requirements.txt
+
+                      .venv/bin/python --version
               - step:
                   identifier: check_updates
                   name: Check for documentation updates

@@ -12,6 +12,10 @@ Releases before v0.10.0 predate this file; see the
 for their notes. Documentation-sync snapshots are tagged `docs-YYYY-MM-DD` and are
 not releases — they do not appear here.
 
+`v0.10.1` is absent deliberately: it was cut by the documentation cron shortly
+before that pipeline stopped consuming semantic versions. It points at a
+docs-only commit and contains no code change.
+
 ## [Unreleased]
 
 ### Changed
@@ -23,16 +27,23 @@ not releases — they do not appear here.
   previous CI invocation also measured the test suite, inflating the reported
   number well above actual product coverage.
 
+- CI installs Python 3.12 rather than inheriting the runner image's 3.10. The
+  project declares `requires-python = ">=3.12"`, so the only pipeline that runs
+  had never validated a supported interpreter. The daily documentation job now
+  does the same, and installs from `requirements.txt` instead of a hand-listed
+  set that had drifted from it.
+
 ### Fixed
-- Removed a Harness cache configuration that failed on every run — it cached a
-  `.venv` the pipeline never creates and supplied no cache key — leaving the
-  test stage permanently degraded and masking the status of the steps that
-  matter.
+- Removed a Harness cache configuration that failed on every run — it supplied
+  no cache key, which the plugin requires for custom paths — leaving the test
+  stage permanently degraded and masking the status of the steps that matter.
 
 ### Added
-- Tests asserting the project version stays consistent across `pyproject.toml`,
-  `ROADMAP.md`, and `README.md`, and that pytest and coverage are configured in
-  exactly one place each.
+- Tests asserting the project version matches the newest release tag, and stays
+  consistent across `pyproject.toml`, `ROADMAP.md`, and `README.md`. The tag
+  comparison is the one that matters: during the drift that motivated these
+  guards, all three files agreed with each other and only the tags disagreed.
+- Tests asserting pytest and coverage are each configured in exactly one place.
 
 ## [0.10.0] - 2026-07-30
 
