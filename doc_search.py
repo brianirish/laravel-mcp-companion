@@ -148,3 +148,46 @@ class BM25Index:
 
         ranked = sorted(range(self._n), key=lambda i: scores[i], reverse=True)
         return [(i, scores[i]) for i in ranked[:top_k] if scores[i] > 0]
+
+
+def extract_snippet(text: str, query: str, max_chars: int = 300) -> str:
+    """Return a readable window of `text` around the best query-term match.
+
+    Aligns to line boundaries so the result reads as prose rather than a
+    mid-word slice. Falls back to the start of the section when no query term
+    appears, which happens when a section matched on terms that the snippet
+    window did not reach.
+    """
+    body = text.strip()
+    if len(body) <= max_chars:
+        return body
+
+    lowered = body.lower()
+    position = -1
+    for term in sorted(tokenize(query), key=len, reverse=True):
+        position = lowered.find(term)
+        if position != -1:
+            break
+
+    if position == -1:
+        window = body[:max_chars]
+        return (window.rsplit("\n", 1)[0].strip() or window.strip()) + "..."
+
+    start = max(0, position - max_chars // 2)
+    end = min(len(body), start + max_chars)
+
+    if start > 0:
+        newline = body.find("\n", start)
+        if newline != -1 and newline < position:
+            start = newline + 1
+    if end < len(body):
+        newline = body.rfind("\n", start, end)
+        if newline != -1 and newline > position:
+            end = newline
+
+    snippet = body[start:end].strip()
+    if start > 0:
+        snippet = "..." + snippet
+    if end < len(body):
+        snippet = snippet + "..."
+    return snippet

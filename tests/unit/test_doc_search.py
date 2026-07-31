@@ -101,3 +101,32 @@ def test_index_releases_token_lists_after_build():
     idx = BM25Index()
     idx.build(CORPUS)
     assert not getattr(idx, "_doc_tokens", None)
+
+
+from doc_search import extract_snippet
+
+LONG = (
+    "Preamble line that is not relevant at all.\n"
+    + ("filler line\n" * 40)
+    + "Jobs that exceed their maximum attempts are inserted into the failed_jobs table.\n"
+    + ("more filler\n" * 40)
+)
+
+
+def test_snippet_centres_on_the_query_terms():
+    snippet = extract_snippet(LONG, "failed_jobs table", max_chars=200)
+    assert "failed_jobs" in snippet
+
+
+def test_snippet_respects_max_chars():
+    snippet = extract_snippet(LONG, "failed_jobs", max_chars=200)
+    assert len(snippet) <= 260
+
+
+def test_snippet_falls_back_to_the_start_when_no_term_matches():
+    snippet = extract_snippet(LONG, "kubernetes", max_chars=100)
+    assert snippet.startswith("Preamble")
+
+
+def test_snippet_of_short_text_returns_it_whole():
+    assert extract_snippet("short body", "body", max_chars=300) == "short body"
