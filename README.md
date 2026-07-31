@@ -204,6 +204,12 @@ Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origi
 - **Related resources** - Find connected documentation automatically
 
 ### Search & Navigation
+- **Ranked section search** - Ask in plain language ("how do I retry a failed
+  queue job") and get the relevant *sections* ranked by relevance, each with a
+  snippet and an anchor
+- **Section-level reads** - Fetch just the section you need. A whole
+  documentation file can exceed 30,000 tokens; a section is typically a few
+  hundred, so answers leave room for your actual code
 - **Use case mapping** - Describe what you need, get relevant packages
 - **Package integration guides** - Installation and setup for 50+ packages
 - **Cross-package compatibility** - Documentation for package combinations

@@ -276,8 +276,8 @@ class TestCachingWorkflows:
             
             # Second search with same query - should use cache
             # We can verify by checking the cache directly
-            # The cache key format is "search:query:version:include_external"
-            cache_key = "search:keyword:12.x:True"
+            # Key includes the result limit, which changes the response
+            cache_key = "search:keyword:12.x:True:5"
             assert cache_key in _search_result_cache
             cached_result = _search_result_cache[cache_key]
             assert "test.md" in cached_result

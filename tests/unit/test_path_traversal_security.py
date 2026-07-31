@@ -16,7 +16,7 @@ from mcp_tools import (
     list_laravel_docs_impl,
     verify_laravel_feature_impl,
     browse_docs_by_category_impl,
-    search_laravel_docs_with_context_impl,
+    search_laravel_docs_impl,
     list_laravel_learning_resources_impl,
     search_laravel_learning_resources_impl,
 )
@@ -75,8 +75,8 @@ class TestVersionArgumentTraversal:
         assert SECRET not in result
         assert "Invalid version" in result
 
-    def test_search_with_context_rejects_traversal_version(self, docs_tree):
-        result = search_laravel_docs_with_context_impl(
+    def test_search_rejects_traversal_version(self, docs_tree):
+        result = search_laravel_docs_impl(
             docs_tree, "TOPSECRET", version="..", include_external=False
         )
         assert SECRET not in result

@@ -15,11 +15,11 @@ from typing import Dict, List, Optional
 import json
 import threading
 
+from doc_search import Section, chunk_markdown
 from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
 from toon_helpers import (
     toon_encode,
     format_version_list,
-    format_search_results,
     format_category_docs,
     format_doc_structure,
     format_error,
@@ -205,6 +205,41 @@ def list_contained_markdown(version_path: Path) -> List[tuple[str, Path]]:
                     f"Skipping documentation file outside its version directory: {entry.name}"
                 )
     return contained
+
+
+def load_version_sections(docs_path: Path, version: str) -> List["Section"]:
+    """Chunk every contained markdown file of a version into sections.
+
+    Enumeration goes through list_contained_markdown and reads through
+    get_file_content_cached, so containment and the refusal to follow symlinks
+    at open time both carry over unchanged rather than being reimplemented.
+    """
+    version_path = Path(docs_path) / version
+    if not version_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for name, path in list_contained_markdown(version_path):
+        content = get_file_content_cached(str(path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            continue
+        sections.extend(chunk_markdown(content, name, version))
+    return sections
+
+
+def load_service_sections(external_dir: Path, service: str) -> List["Section"]:
+    """Chunk an external service's documentation, keyed by service name."""
+    service_path = Path(external_dir) / service
+    if not service_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for name, path in list_contained_markdown(service_path):
+        content = get_file_content_cached(str(path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            continue
+        sections.extend(chunk_markdown(content, name, service))
+    return sections
 
 
 def validate_version(version: Optional[str]) -> Optional[str]:
@@ -499,21 +534,77 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
-def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None, all_versions: bool = False) -> str:
-    """Search through Laravel documentation for a specific term.
+def read_laravel_doc_section_impl(
+    docs_path: Path,
+    filename: str,
+    section: str,
+    version: Optional[str] = None,
+    runtime_version: Optional[str] = None,
+) -> str:
+    """Return one ## section of a documentation file.
 
-    Args:
-        docs_path: Base path for documentation
-        query: Search term to look for
-        version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
-        include_external: Whether to include external Laravel services documentation in search
-        external_dir: Path to external documentation directory
-        all_versions: Search every supported version instead of just the configured one
+    `section` matches either the anchor or the heading text, case-insensitively.
+    Search output shows both, and the caller should not have to guess which one
+    is canonical.
 
-    Returns:
-        TOON-encoded structured search results.
+    This exists because whole-file reads are the dominant cost of answering a
+    question: queues.md alone is around 34,000 tokens, of which a typical answer
+    needs a small fraction.
     """
-    logger.debug(f"search_laravel_docs_impl called with query: {query}, version: {version}, include_external: {include_external}")
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
+    if not version:
+        version = runtime_version if runtime_version else DEFAULT_VERSION
+
+    if not filename.endswith('.md'):
+        filename = f"{filename}.md"
+
+    version_path = Path(docs_path) / version
+    safe_path = resolve_contained_path(version_path, version_path / filename)
+    if safe_path is None:
+        logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+        return f"Access denied: {filename} (attempted directory traversal)"
+
+    if not safe_path.exists():
+        return f"Documentation file not found: {filename} (version: {version})"
+
+    content = get_file_content_cached(str(safe_path))
+    if content.startswith("Error") or content.startswith("File not found"):
+        return content
+
+    wanted = section.strip().lower().lstrip('#')
+    sections = chunk_markdown(content, filename, version)
+
+    for candidate in sections:
+        if (candidate.anchor or "").lower() == wanted or candidate.heading.lower() == wanted:
+            return candidate.text.strip()
+
+    return format_error(
+        f"Section '{section}' not found in {filename}",
+        {"available_sections": [s.anchor or s.heading for s in sections]},
+    )
+
+
+def search_laravel_docs_impl(
+    docs_path: Path,
+    query: str,
+    version: Optional[str] = None,
+    include_external: bool = True,
+    external_dir: Optional[Path] = None,
+    runtime_version: Optional[str] = None,
+    all_versions: bool = False,
+    limit: int = 5,
+) -> str:
+    """Search documentation, returning ranked sections with snippets.
+
+    Ranked by BM25 over ## sections rather than by literal substring count, so a
+    multi-word question matches at all and long files no longer outrank relevant
+    ones. Each hit carries an anchor so the full section can be fetched with
+    read_laravel_doc_section instead of reading the whole file.
+    """
+    from doc_search import extract_snippet, get_index
 
     version_error = validate_version(version)
     if version_error:
@@ -524,185 +615,68 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
     search_versions = resolve_search_versions(version, runtime_version, all_versions)
 
-    # Check cache for search results
-    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}"
+    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}:{limit}"
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
             return _search_result_cache[cache_key]
 
-    core_results_data: List[Dict] = []
-    external_results_data: List[Dict] = []
-    pattern = re.compile(re.escape(query), re.IGNORECASE)
+    hits: List[tuple] = []
 
-    try:
-        # Search core Laravel documentation
-        for v in search_versions:
-            version_path = docs_path / v
-            if not version_path.exists():
+    for candidate in search_versions:
+        def load_version(c: str = candidate) -> List[Section]:
+            return load_version_sections(docs_path, c)
+
+        index = get_index(docs_path, f"version:{candidate}", load_version)
+        # Literal fallback preserves exact-symbol lookup such as `queue:retry`,
+        # which tokenized scoring splits apart.
+        hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+
+    if include_external and external_dir and Path(external_dir).is_dir():
+        for service_dir in sorted(Path(external_dir).iterdir()):
+            if not service_dir.is_dir():
                 continue
+            service = service_dir.name
+            def load_service(name: str = service) -> List[Section]:
+                return load_service_sections(external_dir, name)
 
-            for file, file_path in list_contained_markdown(version_path):
-                content = get_file_content_cached(str(file_path))
-                if not content.startswith("Error") and not content.startswith("File not found"):
-                    count = count_matches(pattern, content)
-                    if count:
-                        core_results_data.append({
-                            "file": f"{v}/{file}",
-                            "matches": count
-                        })
+            index = get_index(docs_path, f"service:{service}", load_service)
+            hits.extend(index.search(query, limit) or index.substring_search(query, limit))
 
-        # Search external documentation if requested
-        if include_external and external_dir and external_dir.exists():
-            for service_dir in external_dir.iterdir():
-                if service_dir.is_dir():
-                    service_name = service_dir.name
+    # Scores from separate indexes are only approximately comparable, since IDF
+    # is per-corpus. These corpora are the same documentation at different
+    # versions, so they are close enough to rank against each other.
+    hits.sort(key=lambda pair: pair[1], reverse=True)
+    hits = hits[:limit]
 
-                    for file_path in service_dir.glob("*.md"):
-                        try:
-                            content = get_file_content_cached(str(file_path))
-                            if not content.startswith("Error") and not content.startswith("File not found"):
-                                count = count_matches(pattern, content)
-                                if count:
-                                    external_results_data.append({
-                                        "service": service_name,
-                                        "file": file_path.name,
-                                        "matches": count
-                                    })
-                        except Exception as e:
-                            logger.warning(f"Error searching {file_path}: {str(e)}")
-                            continue
+    if not hits:
+        result = format_error(
+            f"No results found for '{query}'",
+            {"scope": ", ".join(search_versions)},
+        )
+    else:
+        result = toon_encode({
+            "query": query,
+            "scope": ", ".join(search_versions),
+            "results": [
+                {
+                    "file": f"{section.version}/{section.filename}",
+                    "anchor": section.anchor or "",
+                    "heading": section.heading,
+                    "score": round(score, 2),
+                    "snippet": extract_snippet(section.text, query),
+                }
+                for section, score in hits
+            ],
+        })
 
-        # Format combined results
-        if not core_results_data and not external_results_data:
-            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
-            result = format_error(f"No results found for '{query}'", {"scope": search_scope})
-        else:
-            result = format_search_results(
-                query,
-                core_results_data,
-                external_results_data if external_results_data else None
-            )
+    with _cache_lock:
+        _search_result_cache[cache_key] = result
+        if len(_search_result_cache) > _SEARCH_CACHE_MAX_ENTRIES:
+            for key in list(_search_result_cache.keys())[:_SEARCH_CACHE_EVICT_COUNT]:
+                del _search_result_cache[key]
 
-        # Cache the search result
-        with _cache_lock:
-            _search_result_cache[cache_key] = result
-            # Limit cache size
-            if len(_search_result_cache) > _SEARCH_CACHE_MAX_ENTRIES:
-                # Remove oldest entries
-                oldest_keys = list(_search_result_cache.keys())[:_SEARCH_CACHE_EVICT_COUNT]
-                for key in oldest_keys:
-                    del _search_result_cache[key]
-
-        return result
-    except Exception as e:
-        logger.error(f"Error searching documentation: {str(e)}")
-        return format_error(f"Error searching documentation: {str(e)}")
-
-
-def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None,
-                                         context_length: int = 200, include_external: bool = True,
-                                         external_dir: Optional[Path] = None, runtime_version: Optional[str] = None,
-                                         all_versions: bool = False) -> str:
-    """Search Laravel documentation and return matches with surrounding context.
-
-    Args:
-        docs_path: Base path for documentation
-        query: Search term to look for
-        version: Specific Laravel version to search. Defaults to the configured version.
-        context_length: Number of characters to show before/after match
-        include_external: Whether to include external Laravel services documentation
-        external_dir: Path to external documentation directory
-        all_versions: Search every supported version instead of just the configured one
-    """
-    logger.debug(f"search_laravel_docs_with_context_impl called with query: {query}")
-
-    version_error = validate_version(version)
-    if version_error:
-        return version_error
-
-    if not query.strip():
-        return "Search query cannot be empty"
-
-    results = []
-    pattern = re.compile(re.escape(query), re.IGNORECASE)
-
-    try:
-        # Search core documentation
-        search_versions = resolve_search_versions(version, runtime_version, all_versions)
-
-        for v in search_versions:
-            version_path = docs_path / v
-            if not version_path.exists():
-                continue
-            
-            for file, file_path in list_contained_markdown(version_path):
-                content = get_file_content_cached(str(file_path))
-                if not content.startswith("Error") and not content.startswith("File not found"):
-                    matches = list(pattern.finditer(content))
-                    if matches:
-                        file_results = [f"\n### {v}/{file} ({len(matches)} matches):\n"]
-
-                        for i, match in enumerate(matches[:5]):  # Limit to 5 matches per file
-                            start = max(0, match.start() - context_length)
-                            end = min(len(content), match.end() + context_length)
-
-                            # Find line boundaries
-                            while start > 0 and content[start] != '\n':
-                                start -= 1
-                            while end < len(content) and content[end] != '\n':
-                                end += 1
-
-                            context = content[start:end].strip()
-                            # Highlight the match
-                            context = pattern.sub(lambda m: f"**{m.group()}**", context)
-
-                            file_results.append(f"Match {i+1}:\n```\n{context}\n```\n")
-
-                        results.extend(file_results)
-        
-        # Search external documentation if requested
-        if include_external and external_dir and external_dir.exists():
-            for service_dir in external_dir.iterdir():
-                if service_dir.is_dir():
-                    service_name = service_dir.name
-                    
-                    for file_path in service_dir.glob("*.md"):
-                        try:
-                            content = get_file_content_cached(str(file_path))
-                            if not content.startswith("Error") and not content.startswith("File not found"):
-                                matches = list(pattern.finditer(content))
-                                if matches:
-                                    file_results = [f"\n### {service_name.title()}/{file_path.name} ({len(matches)} matches):\n"]
-                                    
-                                    for i, match in enumerate(matches[:5]):
-                                        start = max(0, match.start() - context_length)
-                                        end = min(len(content), match.end() + context_length)
-                                        
-                                        while start > 0 and content[start] != '\n':
-                                            start -= 1
-                                        while end < len(content) and content[end] != '\n':
-                                            end += 1
-                                        
-                                        context = content[start:end].strip()
-                                        context = pattern.sub(lambda m: f"**{m.group()}**", context)
-                                        
-                                        file_results.append(f"Match {i+1}:\n```\n{context}\n```\n")
-                                    
-                                    results.extend(file_results)
-                        except Exception as e:
-                            logger.warning(f"Error searching {file_path}: {str(e)}")
-                            continue
-        
-        if results:
-            return f"Search results for '{query}':\n" + "".join(results)
-        else:
-            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
-            return f"No results found for '{query}' in {search_scope}"
-            
-    except Exception as e:
-        logger.error(f"Error searching documentation: {str(e)}")
-        return f"Error searching documentation: {str(e)}"
+    return result
 
 
 def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
@@ -1350,8 +1324,15 @@ def list_laravel_categories_impl() -> str:
 
 
 def clear_caches():
-    """Clear all caches."""
+    """Clear all caches, including the documentation search indexes.
+
+    Imported locally: doc_search does not import mcp_tools, but mcp_tools
+    imports doc_search, and a module-level import here would be circular.
+    """
+    from doc_search import clear_indexes
+
     with _cache_lock:
         _file_content_cache.clear()
         _search_result_cache.clear()
+    clear_indexes()
     logger.info("Caches cleared")

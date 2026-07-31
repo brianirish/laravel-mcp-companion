@@ -18,6 +18,21 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Breaking
+- `search_laravel_docs` returns ranked documentation *sections* with snippets and
+  anchors, rather than files with match counts, and
+  `search_laravel_docs_with_context` is removed. Both matched the query as a
+  literal substring, so four of seven realistic developer questions returned
+  nothing at all; ranking by raw match count also placed `queues.md` 13th of 24
+  for "queues", behind a file with a single match. An exact-symbol query such as
+  `queue:retry` still works, via a substring fallback.
+
+### Added
+- `read_laravel_doc_section` reads one section by anchor or heading, as returned
+  by search. Answering "how do I retry a failed queue job" end to end now costs
+  about 3,200 tokens against roughly 34,000 for the whole-file path — `queues.md`
+  alone is 34,048 tokens, and a quarter of the files exceed 10,000.
+
 ### Changed
 - Documentation syncs are tagged `docs-YYYY-MM-DD` instead of incrementing the
   patch version, and no longer publish a GitHub Release. Version numbers now
