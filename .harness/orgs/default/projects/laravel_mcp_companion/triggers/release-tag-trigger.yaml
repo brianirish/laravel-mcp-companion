@@ -1,31 +1,16 @@
 # MIRROR ONLY -- Harness does not read this file. See README.md.
 #
-# ⚠️ CAPTURED IN A BROKEN STATE, 2026-07-31.
+# Captured from the Harness UI on 2026-07-31, after the fix below was applied.
 #
-# The two payloadConditions below are combined with AND, not OR. A ref cannot
-# begin with both "refs/tags/v" and "refs/tags/docs-", so this trigger currently
-# matches nothing and no tag of any kind publishes a Docker image.
+# History worth keeping: this trigger previously carried two payloadConditions,
+# StartsWith "refs/tags/v" and StartsWith "refs/tags/docs-", added in the belief
+# that a second condition widens the match. Conditions are ANDed, so it required
+# a ref beginning with both prefixes at once and matched nothing -- no tag of any
+# kind published a Docker image, with no error anywhere. The v0.10.1 tag produced
+# no activation entry at all.
 #
-# Confirmed from the trigger's Activity History: the newest activation is
-# v0.10.0 (2026-07-29 23:19 local), recorded before the docs- condition was
-# added. The v0.10.1 tag pushed roughly a day later produced no activation
-# entry at all -- it was rejected at condition evaluation, not failed in flight.
-#
-# The fix is a single condition matching both families, e.g.
-#
-#   payloadConditions:
-#     - key: <+trigger.payload.ref>
-#       operator: Regex
-#       value: ^refs/tags/(v|docs-).*
-#
-# or, if Regex is unavailable for payload conditions, the broader
-#
-#   payloadConditions:
-#     - key: <+trigger.payload.ref>
-#       operator: StartsWith
-#       value: refs/tags/
-#
-# Update this file once the change is applied in the Harness UI.
+# A single Regex condition covers both families. Verified against real refs:
+# v0.11.0 and docs-2026-08-01 match; refs/heads/main and unrelated tags do not.
 
 trigger:
   name: release-tag-trigger
@@ -49,11 +34,8 @@ trigger:
           autoAbortPreviousExecutions: false
           payloadConditions:
             - key: <+trigger.payload.ref>
-              operator: StartsWith
-              value: refs/tags/v
-            - key: <+trigger.payload.ref>
-              operator: StartsWith
-              value: refs/tags/docs-
+              operator: Regex
+              value: ^refs/tags/(v|docs-).*
           headerConditions: []
           actions: []
   pipelineBranchName: main
