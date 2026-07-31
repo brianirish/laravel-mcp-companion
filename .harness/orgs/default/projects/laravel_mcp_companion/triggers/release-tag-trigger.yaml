@@ -1,0 +1,61 @@
+# MIRROR ONLY -- Harness does not read this file. See README.md.
+#
+# ⚠️ CAPTURED IN A BROKEN STATE, 2026-07-31.
+#
+# The two payloadConditions below are combined with AND, not OR. A ref cannot
+# begin with both "refs/tags/v" and "refs/tags/docs-", so this trigger currently
+# matches nothing and no tag of any kind publishes a Docker image.
+#
+# Confirmed from the trigger's Activity History: the newest activation is
+# v0.10.0 (2026-07-29 23:19 local), recorded before the docs- condition was
+# added. The v0.10.1 tag pushed roughly a day later produced no activation
+# entry at all -- it was rejected at condition evaluation, not failed in flight.
+#
+# The fix is a single condition matching both families, e.g.
+#
+#   payloadConditions:
+#     - key: <+trigger.payload.ref>
+#       operator: Regex
+#       value: ^refs/tags/(v|docs-).*
+#
+# or, if Regex is unavailable for payload conditions, the broader
+#
+#   payloadConditions:
+#     - key: <+trigger.payload.ref>
+#       operator: StartsWith
+#       value: refs/tags/
+#
+# Update this file once the change is applied in the Harness UI.
+
+trigger:
+  name: release-tag-trigger
+  identifier: release_tag_trigger
+  enabled: true
+  encryptedWebhookSecretIdentifier: ""
+  description: Trigger release on version tags
+  tags: {}
+  orgIdentifier: default
+  stagesToExecute: []
+  projectIdentifier: laravel_mcp_companion
+  pipelineIdentifier: release
+  source:
+    type: Webhook
+    spec:
+      type: Github
+      spec:
+        type: Push
+        spec:
+          connectorRef: Laravel_MCP_Companion
+          autoAbortPreviousExecutions: false
+          payloadConditions:
+            - key: <+trigger.payload.ref>
+              operator: StartsWith
+              value: refs/tags/v
+            - key: <+trigger.payload.ref>
+              operator: StartsWith
+              value: refs/tags/docs-
+          headerConditions: []
+          actions: []
+  pipelineBranchName: main
+  inputSetRefs:
+    - release_tag_input_set
