@@ -7,7 +7,10 @@ readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.12"
 dependencies = [
-    "uvicorn>=0.30.0",
+    "fastmcp[code-mode]>=3.4.5,<4",
+    "markdownify>=1.2.2",
+    "beautifulsoup4>=4.14.3",
+    "uvicorn>=0.38.0",
     "starlette>=1.3.1",
     "toon-format @ git+https://github.com/toon-format/toon-python.git@e475c82e9da03dfaf88c0b277dee6b5d17100b13"
 ]
@@ -25,6 +28,17 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/brianirish/laravel-mcp-companion"
 Issues = "https://github.com/brianirish/laravel-mcp-companion/issues"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.3",
+    "mypy>=1.16.1",
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio>=1.0.0",
+    "black",
+    "inline-snapshot",
+]
 
 [tool.ruff.lint]
 # ruff 0.15 broadened its default rule set; keep the pre-0.15 defaults explicit.
@@ -54,11 +68,4 @@ source = [
 omit = [
     "tests/*",
     "*/site-packages/*",
-]
-
-[dependency-groups]
-dev = [
-    "mypy>=1.16.1",
-    "pytest-asyncio>=1.0.0",
-    "ruff>=0.12.3",
 ]
