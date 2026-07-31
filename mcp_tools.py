@@ -1350,8 +1350,15 @@ def list_laravel_categories_impl() -> str:
 
 
 def clear_caches():
-    """Clear all caches."""
+    """Clear all caches, including the documentation search indexes.
+
+    Imported locally: doc_search does not import mcp_tools, but mcp_tools
+    imports doc_search, and a module-level import here would be circular.
+    """
+    from doc_search import clear_indexes
+
     with _cache_lock:
         _file_content_cache.clear()
         _search_result_cache.clear()
+    clear_indexes()
     logger.info("Caches cleared")

@@ -188,3 +188,15 @@ def test_clear_indexes_empties_the_registry():
     get_index(Path("/unused"), "13.x", lambda: _sections("13.x", "content"))
     clear_indexes()
     assert resident_index_count() == 0
+
+
+def test_clear_caches_also_clears_indexes():
+    """Documentation updates call clear_caches; a stale index must not survive."""
+    from mcp_tools import clear_caches
+
+    clear_indexes()
+    get_index(Path("/unused"), "13.x", lambda: _sections("13.x", "content"))
+    assert resident_index_count() == 1
+
+    clear_caches()
+    assert resident_index_count() == 0
