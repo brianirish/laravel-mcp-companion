@@ -18,25 +18,45 @@ diff against and to rebuild from.
 | Trigger | Pipeline | Fires on |
 |---------|----------|----------|
 | `ci-push-trigger.yaml` | `ci` | Every push, any branch |
+| `release-tag-trigger.yaml` | `release` | Tag pushes matching `^refs/tags/(v\|docs-).*` |
 
 ## Not yet mirrored
 
-- **Release trigger** (`release` pipeline) — paste its YAML here when convenient.
 - **Docs update cron** (`docs_update` pipeline) — scheduled, feeds `docs_update_cron_input_set`.
 
-## What the release trigger must satisfy
+## Payload conditions are ANDed, not ORed
 
-Recorded here because it is currently misconfigured and this is the requirement
-it has to meet, independent of the exact YAML:
+This is the trap that broke Docker publishing, and it is worth knowing before
+editing any trigger here.
+
+Adding a second `payloadConditions` entry **narrows** the match; it does not
+widen it. The release trigger was given a `refs/tags/docs-` condition alongside
+its existing `refs/tags/v` one, with the intent of matching both. Because the
+two are ANDed, it began requiring a ref that starts with both prefixes at once —
+which no tag can do — and stopped firing for everything.
+
+The symptom was silent: tag `v0.10.1` was created and simply produced no
+activation entry, so `:latest` quietly stopped receiving documentation updates
+and no error appeared anywhere.
+
+To match several patterns, use **one** condition with a pattern that covers them:
+
+```yaml
+payloadConditions:
+  - key: <+trigger.payload.ref>
+    operator: Regex
+    value: ^refs/tags/(v|docs-).*
+```
+
+## What the release trigger must satisfy
 
 - It feeds `release_tag_input_set`, which builds `type: tag` from `<+trigger.tag>`,
   so it must be a tag-ref trigger.
 - It must match **both** tag families:
   - `v*` — software releases, which publish a Docker image and a GitHub Release
   - `docs-*` — documentation snapshots, which publish a Docker image only
-- Matching only one family breaks the other. Matching only `docs-*` means version
-  releases publish no image; matching only `v*` means documentation updates never
-  reach `:latest`, which is the state that motivated this note.
+- Matching only one family breaks the other, and — per the section above —
+  matching them with two separate conditions breaks both.
 
 After changing it, verify a tag of each kind produces an image:
 
