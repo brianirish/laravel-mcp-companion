@@ -4,7 +4,8 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch
 
-from laravel_mcp_companion import is_safe_path, get_version_from_path
+from laravel_mcp_companion import get_version_from_path
+from mcp_tools import is_safe_path
 import laravel_mcp_companion
 
 

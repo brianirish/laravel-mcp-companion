@@ -66,15 +66,38 @@ _search_result_cache: Dict[str, str] = {}
 _cache_lock = threading.Lock()
 
 
+def _no_follow_opener(path, flags):
+    """open() opener that refuses to follow a symlink in the final component.
+
+    Passed to open() rather than calling os.open directly so that the read still
+    goes through the normal open(), which keeps the behaviour observable to
+    callers and testable in the usual way.
+
+    O_NOFOLLOW is POSIX. Where it is unavailable this degrades to an ordinary
+    open rather than refusing to read anything.
+    """
+    return os.open(path, flags | getattr(os, "O_NOFOLLOW", 0))
+
+
 def get_file_content_cached(file_path: str) -> str:
-    """Get file content with caching."""
+    """Get file content with caching.
+
+    Refuses to open a path whose final component is a symbolic link. Containment
+    is checked before the open, and a path that is a regular file when checked
+    can be replaced by a link before it is opened -- resolving first does not
+    help, because a regular file resolves to itself. O_NOFOLLOW closes that
+    window by making the refusal part of the open itself.
+
+    Callers that legitimately want a linked file should resolve it first (see
+    resolve_contained_path) and pass the resolved path, which is not a link.
+    """
     with _cache_lock:
         if file_path in _file_content_cache:
             logger.debug(f"Cache hit for file: {file_path}")
             return _file_content_cache[file_path]
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8', opener=_no_follow_opener) as f:
             content = f.read()
 
         # Cache the content
@@ -115,40 +138,72 @@ def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> t
         return default_version, path
 
 
-def is_safe_path(base_path: Path, target_path: Path) -> bool:
-    """Check if target path is within base path (prevent directory traversal).
+def resolve_contained_path(base_path: Path, target_path: Path) -> Optional[Path]:
+    """Resolve target_path, returning it only if it lands inside base_path.
 
-    Uses is_relative_to() on fully resolved paths. A plain string prefix check is
-    not sufficient: it treats "/docs/12.x-backup" as living under "/docs/12.x".
+    Callers must read the path this returns, not the one they passed in.
+    Validating one path and then opening another leaves a window in which a
+    symlink can be swapped between the check and the open, so the file that was
+    approved and the file that gets read need not be the same one.
 
-    Fails closed: any error resolving either path denies access.
+    Uses is_relative_to() on fully resolved paths. A plain string prefix check
+    is not sufficient: it treats "/docs/12.x-backup" as living under "/docs/12.x".
+
+    Returns None if the path escapes, or if either path cannot be resolved --
+    any error denies access.
     """
     try:
-        return Path(target_path).resolve().is_relative_to(Path(base_path).resolve())
+        base = Path(base_path).resolve()
+        resolved = Path(target_path).resolve()
     except Exception:
-        return False
+        return None
+    return resolved if resolved.is_relative_to(base) else None
 
 
-def list_contained_markdown(version_path: Path) -> List[str]:
-    """List .md filenames in version_path that actually resolve inside it.
+def is_safe_path(base_path: Path, target_path: Path) -> bool:
+    """Whether target_path resolves to a location inside base_path.
+
+    Prefer resolve_contained_path when the caller goes on to read the file, so
+    that the path checked is the path opened.
+    """
+    return resolve_contained_path(base_path, target_path) is not None
+
+
+def list_contained_markdown(version_path: Path) -> List[tuple[str, Path]]:
+    """Return (name, readable_path) for .md files that stay inside version_path.
 
     Enumeration has to apply the same containment rule as reading. Without it a
     symlink pointing out of the tree is listed and searched while
     read_laravel_doc_content refuses to serve it -- which turns search into an
     oracle over content the read path deliberately withholds.
+
+    The second element is the path callers should read: for a symlink it is the
+    resolved target, since the reader refuses to follow links at open time.
+
+    Only symlinks are resolved. A plain file that is a direct child of
+    version_path cannot escape it, and resolving every file turned a search over
+    the corpus into hundreds of unnecessary readlink walks.
     """
     # Errors are deliberately not swallowed. An unreadable documentation
     # directory must surface as an error, not as "no files found" -- the callers
     # already wrap this and turn exceptions into a message.
+    contained: List[tuple[str, Path]] = []
     with os.scandir(version_path) as entries:
-        names = [e.name for e in entries if e.name.endswith('.md')]
+        for entry in entries:
+            if not entry.name.endswith('.md'):
+                continue
 
-    contained = []
-    for name in names:
-        if is_safe_path(version_path, version_path / name):
-            contained.append(name)
-        else:
-            logger.warning(f"Skipping documentation file outside its version directory: {name}")
+            if not entry.is_symlink():
+                contained.append((entry.name, Path(entry.path)))
+                continue
+
+            resolved = resolve_contained_path(version_path, Path(entry.path))
+            if resolved is not None:
+                contained.append((entry.name, resolved))
+            else:
+                logger.warning(
+                    f"Skipping documentation file outside its version directory: {entry.name}"
+                )
     return contained
 
 
@@ -349,7 +404,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
                 )
 
             metadata = get_laravel_docs_metadata(docs_path, version)
-            md_files = sorted(list_contained_markdown(version_path))
+            md_files = sorted(name for name, _ in list_contained_markdown(version_path))
 
             if not md_files:
                 return format_error(f"No documentation files found in version {version}")
@@ -368,7 +423,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
                 version_path = docs_path / v
                 if not version_path.is_dir():
                     continue
-                md_files = list_contained_markdown(version_path)
+                md_files = [name for name, _ in list_contained_markdown(version_path)]
                 if md_files:
                     metadata = get_laravel_docs_metadata(docs_path, v)
                     versions_data.append({
@@ -421,23 +476,26 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
     
     file_path = docs_path / version / relative_path
     
-    # Security check - ensure we stay within version directory
+    # Security check - ensure we stay within version directory. Read the
+    # resolved path this returns, not file_path: opening the unresolved path
+    # would follow the symlink a second time, after the check.
     version_path = docs_path / version
-    if not is_safe_path(version_path, file_path):
+    safe_path = resolve_contained_path(version_path, file_path)
+    if safe_path is None:
         logger.warning(f"Access denied: {filename} (attempted directory traversal)")
         return f"Access denied: {filename} (attempted directory traversal)"
-    
-    if not file_path.exists():
-        logger.warning(f"Documentation file not found: {file_path}")
+
+    if not safe_path.exists():
+        logger.warning(f"Documentation file not found: {safe_path}")
         return f"Documentation file not found: {filename} (version: {version})"
-    
+
     try:
-        content = get_file_content_cached(str(file_path))
+        content = get_file_content_cached(str(safe_path))
         if not content.startswith("Error") and not content.startswith("File not found"):
-            logger.debug(f"Successfully read file: {file_path} ({len(content)} bytes)")
+            logger.debug(f"Successfully read file: {safe_path} ({len(content)} bytes)")
         return content
     except Exception as e:
-        logger.error(f"Error reading file {file_path}: {str(e)}")
+        logger.error(f"Error reading file {safe_path}: {str(e)}")
         return f"Error reading file: {str(e)}"
 
 
@@ -484,9 +542,7 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
             if not version_path.exists():
                 continue
 
-            for file in list_contained_markdown(version_path):
-                file_path = version_path / file
-
+            for file, file_path in list_contained_markdown(version_path):
                 content = get_file_content_cached(str(file_path))
                 if not content.startswith("Error") and not content.startswith("File not found"):
                     count = count_matches(pattern, content)
@@ -580,9 +636,7 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
             if not version_path.exists():
                 continue
             
-            for file in list_contained_markdown(version_path):
-                file_path = version_path / file
-
+            for file, file_path in list_contained_markdown(version_path):
                 content = get_file_content_cached(str(file_path))
                 if not content.startswith("Error") and not content.startswith("File not found"):
                     matches = list(pattern.finditer(content))

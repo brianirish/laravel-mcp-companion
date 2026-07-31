@@ -189,3 +189,98 @@ class TestLearningResourceSymlinkConsistency:
             learning_with_symlinked_source, source="tutorials"
         )
         assert "intro.md" in result
+
+
+class TestOpensThePathItValidated:
+    """The containment check must hand back the path the caller then opens.
+
+    `is_safe_path` resolved the target, threw the resolved value away, and the
+    caller opened the original. Between those two steps a symlink can be
+    swapped, so the path that was checked and the path that was opened are not
+    guaranteed to be the same file. Resolving once and opening that result
+    closes the window.
+    """
+
+    def test_read_opens_the_resolved_target_not_the_link(self, tmp_path):
+        from unittest.mock import patch
+
+        from mcp_tools import read_laravel_doc_content_impl
+
+        docs = tmp_path / "docs"
+        version_dir = docs / VERSION
+        version_dir.mkdir(parents=True)
+        (version_dir / "real.md").write_text("# Real\n\ncontent")
+        os.symlink(version_dir / "real.md", version_dir / "alias.md")
+
+        with patch("mcp_tools.get_file_content_cached", return_value="# Real") as reader:
+            read_laravel_doc_content_impl(docs, "alias.md", VERSION)
+
+        opened = os.path.basename(reader.call_args[0][0])
+        assert opened == "real.md", (
+            f"opened {opened!r}; must open the resolved path that was validated, "
+            "not the link that was validated through"
+        )
+
+    def test_resolved_contained_path_returns_the_resolution(self, tmp_path):
+        from mcp_tools import resolve_contained_path
+
+        base = tmp_path / "base"
+        base.mkdir()
+        (base / "real.md").write_text("x")
+        os.symlink(base / "real.md", base / "alias.md")
+
+        resolved = resolve_contained_path(base, base / "alias.md")
+
+        assert resolved is not None
+        assert resolved.name == "real.md", "must return what the path resolves to"
+
+    def test_resolved_contained_path_rejects_escapes(self, tmp_path):
+        from mcp_tools import resolve_contained_path
+
+        base = tmp_path / "base"
+        base.mkdir()
+        outside = tmp_path / "outside.md"
+        outside.write_text("secret")
+        os.symlink(outside, base / "escape.md")
+
+        assert resolve_contained_path(base, base / "escape.md") is None
+        assert resolve_contained_path(base, base / ".." / "outside.md") is None
+
+    def test_resolved_contained_path_fails_closed(self):
+        from mcp_tools import resolve_contained_path
+
+        assert resolve_contained_path(None, None) is None
+
+
+class TestReaderRefusesToFollowLinks:
+    """Resolving before opening is necessary but not sufficient.
+
+    A path that is a regular file when checked can be replaced by a symlink
+    before it is opened, and the open follows it. Resolving first does not help
+    -- a regular file resolves to itself. Only refusing to follow a link at open
+    time closes that window, because the refusal is part of the open itself.
+    """
+
+    def test_reader_refuses_a_symlink(self, tmp_path):
+        from mcp_tools import clear_caches, get_file_content_cached
+
+        secret = tmp_path / "secret.md"
+        secret.write_text("TOCTOU-CANARY-7712")
+        link = tmp_path / "link.md"
+        os.symlink(secret, link)
+
+        clear_caches()
+        content = get_file_content_cached(str(link))
+
+        assert "TOCTOU-CANARY-7712" not in content, "followed a symlink at open time"
+
+    def test_reader_still_reads_regular_files(self, tmp_path):
+        from mcp_tools import clear_caches, get_file_content_cached
+
+        regular = tmp_path / "regular.md"
+        regular.write_text("# Regular\n\nordinary content")
+
+        clear_caches()
+        content = get_file_content_cached(str(regular))
+
+        assert "ordinary content" in content

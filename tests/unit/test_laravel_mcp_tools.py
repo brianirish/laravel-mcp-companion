@@ -5,12 +5,12 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import laravel_mcp_companion
+from mcp_tools import is_safe_path
 from docs_updater import DEFAULT_VERSION
 from laravel_mcp_companion import (
     search_by_use_case,
     format_package_recommendation,
     get_version_from_path,
-    is_safe_path,
     get_file_content_cached,
     clear_file_cache,
     setup_docs_path,
