@@ -18,6 +18,8 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-07-31
+
 ### Breaking
 - `search_laravel_docs` returns ranked documentation *sections* with snippets and
   anchors, rather than files with match counts, and
@@ -56,6 +58,36 @@ docs-only commit and contains no code change.
   guards, all three files agreed with each other and only the tags disagreed.
 - Tests asserting pytest and coverage are each configured in exactly one place.
 
+### Security
+- `laravel_docs_info` never validated its `version` argument. v0.10.0 claimed the
+  validator ran "in every tool implementation"; it was called exactly once. The
+  value was joined onto the documentation path, giving a read of any
+  `<dir>/.metadata/sync_info.json` on the filesystem plus an existence oracle for
+  that path — reachable unauthenticated through the default search transform's
+  `call_tool` proxy. Being written inline rather than delegating to an `*_impl`
+  is how it escaped the sweep.
+- The supported-versions cache is now filtered on read. It is the trust root for
+  every version allowlist, and the `\d+\.x` shape was enforced only on the GitHub
+  API response — so editing one value in `docs/.versions_cache.json`, a file
+  shipped in the image and living in a directory users bind-mount, put arbitrary
+  strings into the allowlist and disabled every check downstream.
+- Enumeration now applies the same containment rule as reading. A symlink inside
+  a version directory pointing out of the tree was denied on read but listed by
+  `list_laravel_docs` and match-counted by search, and the context search
+  returned the surrounding content outright — an oracle over exactly the material
+  the read path withholds.
+- Closed a TOCTOU between the containment check and the open. Resolving first was
+  necessary but not sufficient: a path that is a regular file when checked
+  resolves to itself, so replacing it with a symlink before the open still
+  leaked, within two attempts under test. `O_NOFOLLOW` makes the refusal part of
+  the open. Verified over 88,820 reads against a thread flipping the file between
+  a regular file and a symlink to a planted secret: zero leaks.
+- `ALLOWED_HOSTS` rejects wildcards. FastMCP matches allowed hosts with `fnmatch`,
+  so a pattern entry matched every `Host` header and silently disabled
+  DNS-rebinding protection while still presenting as a configured allowlist.
+  Wildcard CORS origins were already rejected; hosts now are too, on both the flag
+  and the environment path.
+
 ### Changed
 - Documentation syncs are tagged `docs-YYYY-MM-DD` instead of incrementing the
   patch version, and no longer publish a GitHub Release. Version numbers now
@@ -74,6 +106,11 @@ docs-only commit and contains no code change.
 - Removed a Harness cache configuration that failed on every run — it supplied
   no cache key, which the plugin requires for custom paths — leaving the test
   stage permanently degraded and masking the status of the steps that matter.
+- The release pipeline fires on version tags again. Its trigger carried two
+  payload conditions, `v*` and `docs-*`, and Harness ANDs them, so no tag could
+  ever satisfy both and nothing released. Both triggers are now mirrored into
+  `.harness/` so the configuration is reviewable rather than living only in
+  clickops.
 
 ## [0.10.0] - 2026-07-30
 
@@ -119,5 +156,6 @@ docs-only commit and contains no code change.
 - Startup reads the supported-version list from cache with a 24-hour TTL, and
   all network calls have timeouts.
 
-[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.9.145...v0.10.0
