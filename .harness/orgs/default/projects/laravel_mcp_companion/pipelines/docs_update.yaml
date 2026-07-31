@@ -278,34 +278,43 @@ pipeline:
                       git fetch origin
                       git checkout <+execution.steps.wait_for_merge.output.outputVariables.MERGE_COMMIT>
               - step:
-                  identifier: create_tag_and_release
-                  name: Create tag and release
+                  identifier: create_docs_tag
+                  name: Create docs tag
                   type: Run
                   spec:
                     shell: Bash
                     envVariables:
                       GH_TOKEN: <+secrets.getValue("PAT_FOR_WORKFLOWS")>
                     command: |
+                      set -euo pipefail
+
+                      # Documentation syncs are tagged by date, not by semantic
+                      # version. They previously incremented the patch number on
+                      # every run, so ~145 consecutive releases were content
+                      # refreshes and the version number tracked days elapsed
+                      # rather than anything about the software. Each one also
+                      # published a GitHub Release marked --latest, which pushed
+                      # real releases off the repository front page.
+                      #
+                      # NOTE: the release pipeline builds Docker images from tag
+                      # pushes, so its trigger must match BOTH "v*" and "docs-*".
+                      # If docs images stop publishing, check that trigger first.
                       git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/brianirish/laravel-mcp-companion.git"
 
-                      # Get the latest tag, default to v0.0.0 if no tags exist
-                      LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-                      echo "Latest tag: $LATEST_TAG"
+                      TAG="docs-$(date -u +%Y-%m-%d)"
 
-                      # Extract version numbers
-                      VERSION=${LATEST_TAG#v}
-                      IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+                      # A second sync on the same day would collide; fall back to
+                      # a minute-precision tag rather than failing the pipeline.
+                      git fetch --tags --quiet origin
+                      if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+                        TAG="docs-$(date -u +%Y-%m-%d-%H%M)"
+                        echo "Daily tag already exists, using ${TAG}"
+                      fi
 
-                      # Increment patch version for docs updates
-                      NEW_PATCH=$((PATCH + 1))
-                      NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+                      echo "Creating docs tag: ${TAG}"
+                      git tag "$TAG"
+                      git push origin "$TAG"
 
-                      echo "Creating new tag: $NEW_VERSION"
-                      git tag "$NEW_VERSION"
-                      git push origin "$NEW_VERSION"
-
-                      echo "Creating GitHub release: $NEW_VERSION"
-                      gh release create "$NEW_VERSION" \
-                        --title "$NEW_VERSION" \
-                        --notes "Documentation Update - Updated Laravel and external services documentation to latest version" \
-                        --latest
+                      # Intentionally no `gh release create` here. Docs syncs are
+                      # not releases; the tag exists to identify the snapshot and
+                      # to trigger the Docker image build.
