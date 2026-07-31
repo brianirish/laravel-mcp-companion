@@ -5,6 +5,7 @@ Kept separate from mcp_tools so chunking and scoring can be tested without the
 MCP tool layer, and so mcp_tools does not grow further.
 """
 
+import math
 import re
 from dataclasses import dataclass
 from typing import Optional
@@ -75,3 +76,75 @@ def chunk_markdown(text: str, filename: str, version: str) -> list[Section]:
         )
 
     return sections
+
+
+_TOKEN = re.compile(r"[a-z0-9]+")
+
+BM25_K1 = 1.5
+BM25_B = 0.75
+
+
+def tokenize(text: str) -> list[str]:
+    """Lowercase alphanumeric tokens."""
+    return _TOKEN.findall(text.lower())
+
+
+class BM25Index:
+    """Okapi BM25 over a fixed document set.
+
+    Owned rather than imported. fastmcp ships an equivalent, but it is a private
+    underscore-prefixed class in a fast-moving dependency, and it retains its
+    tokenized documents after building -- which is most of the memory cost. Only
+    term counts are kept here; the token lists go out of scope during build.
+    """
+
+    def __init__(self, k1: float = BM25_K1, b: float = BM25_B) -> None:
+        self.k1 = k1
+        self.b = b
+        self._n = 0
+        self._avg_dl = 0.0
+        self._lengths: list[int] = []
+        self._df: dict[str, int] = {}
+        self._tf: list[dict[str, int]] = []
+
+    def build(self, documents: list[str]) -> None:
+        self._n = len(documents)
+        self._lengths = []
+        self._df = {}
+        self._tf = []
+
+        for doc in documents:
+            tokens = tokenize(doc)
+            self._lengths.append(len(tokens))
+            tf: dict[str, int] = {}
+            for token in tokens:
+                tf[token] = tf.get(token, 0) + 1
+            self._tf.append(tf)
+            for token in tf:
+                self._df[token] = self._df.get(token, 0) + 1
+            # `tokens` is released here; only counts are retained.
+
+        self._avg_dl = (sum(self._lengths) / self._n) if self._n else 0.0
+
+    def query(self, text: str, top_k: int) -> list[tuple[int, float]]:
+        """Return (document_index, score) pairs, best first, omitting zero scores."""
+        terms = tokenize(text)
+        if not terms or not self._n:
+            return []
+
+        scores = [0.0] * self._n
+        for term in terms:
+            df = self._df.get(term)
+            if not df:
+                continue
+            idf = math.log((self._n - df + 0.5) / (df + 0.5) + 1.0)
+            for i, tf_map in enumerate(self._tf):
+                tf = tf_map.get(term, 0)
+                if not tf:
+                    continue
+                dl = self._lengths[i]
+                denom = tf + self.k1 * (1 - self.b + self.b * dl / self._avg_dl)
+                scores[i] += idf * tf * (self.k1 + 1) / denom
+
+        ranked = sorted(range(self._n), key=lambda i: scores[i], reverse=True)
+        return [(i, scores[i]) for i in ranked[:top_k] if scores[i] > 0]

@@ -52,3 +52,52 @@ def test_chunk_records_provenance():
     assert all(s.filename == "queues.md" for s in sections)
     assert all(s.version == "13.x" for s in sections)
     assert isinstance(sections[0], Section)
+
+
+from doc_search import BM25Index
+
+CORPUS = [
+    "queue jobs are processed by workers and can fail",
+    "failed jobs are stored in the failed_jobs table and can be retried",
+    "blade templates render views with directives",
+]
+
+
+def test_index_ranks_the_relevant_document_first():
+    idx = BM25Index()
+    idx.build(CORPUS)
+    ranked = idx.query("retry failed jobs", top_k=3)
+    assert ranked, "expected at least one hit"
+    assert ranked[0][0] == 1
+
+
+def test_index_returns_scores_in_descending_order():
+    idx = BM25Index()
+    idx.build(CORPUS)
+    scores = [score for _, score in idx.query("jobs", top_k=3)]
+    assert scores == sorted(scores, reverse=True)
+
+
+def test_index_returns_nothing_for_unknown_terms():
+    idx = BM25Index()
+    idx.build(CORPUS)
+    assert idx.query("kubernetes helm chart", top_k=3) == []
+
+
+def test_index_handles_empty_corpus():
+    idx = BM25Index()
+    idx.build([])
+    assert idx.query("anything", top_k=3) == []
+
+
+def test_index_respects_top_k():
+    idx = BM25Index()
+    idx.build(CORPUS)
+    assert len(idx.query("jobs", top_k=1)) <= 1
+
+
+def test_index_releases_token_lists_after_build():
+    """Retaining tokenized documents is the bulk of the memory cost."""
+    idx = BM25Index()
+    idx.build(CORPUS)
+    assert not getattr(idx, "_doc_tokens", None)
