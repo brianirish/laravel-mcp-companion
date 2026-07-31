@@ -535,21 +535,24 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
-def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str] = None, include_external: bool = True, external_dir: Optional[Path] = None, runtime_version: Optional[str] = None, all_versions: bool = False) -> str:
-    """Search through Laravel documentation for a specific term.
+def search_laravel_docs_impl(
+    docs_path: Path,
+    query: str,
+    version: Optional[str] = None,
+    include_external: bool = True,
+    external_dir: Optional[Path] = None,
+    runtime_version: Optional[str] = None,
+    all_versions: bool = False,
+    limit: int = 5,
+) -> str:
+    """Search documentation, returning ranked sections with snippets.
 
-    Args:
-        docs_path: Base path for documentation
-        query: Search term to look for
-        version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
-        include_external: Whether to include external Laravel services documentation in search
-        external_dir: Path to external documentation directory
-        all_versions: Search every supported version instead of just the configured one
-
-    Returns:
-        TOON-encoded structured search results.
+    Ranked by BM25 over ## sections rather than by literal substring count, so a
+    multi-word question matches at all and long files no longer outrank relevant
+    ones. Each hit carries an anchor so the full section can be fetched with
+    read_laravel_doc_section instead of reading the whole file.
     """
-    logger.debug(f"search_laravel_docs_impl called with query: {query}, version: {version}, include_external: {include_external}")
+    from doc_search import extract_snippet, get_index
 
     version_error = validate_version(version)
     if version_error:
@@ -560,80 +563,70 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
 
     search_versions = resolve_search_versions(version, runtime_version, all_versions)
 
-    # Check cache for search results
-    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}"
+    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}:{limit}"
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
             return _search_result_cache[cache_key]
 
-    core_results_data: List[Dict] = []
-    external_results_data: List[Dict] = []
-    pattern = re.compile(re.escape(query), re.IGNORECASE)
+    hits: List[tuple] = []
 
-    try:
-        # Search core Laravel documentation
-        for v in search_versions:
-            version_path = docs_path / v
-            if not version_path.exists():
+    for candidate in search_versions:
+        index = get_index(
+            docs_path,
+            f"version:{candidate}",
+            lambda c=candidate: load_version_sections(docs_path, c),
+        )
+        # Literal fallback preserves exact-symbol lookup such as `queue:retry`,
+        # which tokenized scoring splits apart.
+        hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+
+    if include_external and external_dir and Path(external_dir).is_dir():
+        for service_dir in sorted(Path(external_dir).iterdir()):
+            if not service_dir.is_dir():
                 continue
-
-            for file, file_path in list_contained_markdown(version_path):
-                content = get_file_content_cached(str(file_path))
-                if not content.startswith("Error") and not content.startswith("File not found"):
-                    count = count_matches(pattern, content)
-                    if count:
-                        core_results_data.append({
-                            "file": f"{v}/{file}",
-                            "matches": count
-                        })
-
-        # Search external documentation if requested
-        if include_external and external_dir and external_dir.exists():
-            for service_dir in external_dir.iterdir():
-                if service_dir.is_dir():
-                    service_name = service_dir.name
-
-                    for file_path in service_dir.glob("*.md"):
-                        try:
-                            content = get_file_content_cached(str(file_path))
-                            if not content.startswith("Error") and not content.startswith("File not found"):
-                                count = count_matches(pattern, content)
-                                if count:
-                                    external_results_data.append({
-                                        "service": service_name,
-                                        "file": file_path.name,
-                                        "matches": count
-                                    })
-                        except Exception as e:
-                            logger.warning(f"Error searching {file_path}: {str(e)}")
-                            continue
-
-        # Format combined results
-        if not core_results_data and not external_results_data:
-            search_scope = f"version {version}" if version else f"versions {', '.join(search_versions)}"
-            result = format_error(f"No results found for '{query}'", {"scope": search_scope})
-        else:
-            result = format_search_results(
-                query,
-                core_results_data,
-                external_results_data if external_results_data else None
+            service = service_dir.name
+            index = get_index(
+                docs_path,
+                f"service:{service}",
+                lambda s=service: load_service_sections(external_dir, s),
             )
+            hits.extend(index.search(query, limit) or index.substring_search(query, limit))
 
-        # Cache the search result
-        with _cache_lock:
-            _search_result_cache[cache_key] = result
-            # Limit cache size
-            if len(_search_result_cache) > _SEARCH_CACHE_MAX_ENTRIES:
-                # Remove oldest entries
-                oldest_keys = list(_search_result_cache.keys())[:_SEARCH_CACHE_EVICT_COUNT]
-                for key in oldest_keys:
-                    del _search_result_cache[key]
+    # Scores from separate indexes are only approximately comparable, since IDF
+    # is per-corpus. These corpora are the same documentation at different
+    # versions, so they are close enough to rank against each other.
+    hits.sort(key=lambda pair: pair[1], reverse=True)
+    hits = hits[:limit]
 
-        return result
-    except Exception as e:
-        logger.error(f"Error searching documentation: {str(e)}")
-        return format_error(f"Error searching documentation: {str(e)}")
+    if not hits:
+        result = format_error(
+            f"No results found for '{query}'",
+            {"scope": ", ".join(search_versions)},
+        )
+    else:
+        result = toon_encode({
+            "query": query,
+            "scope": ", ".join(search_versions),
+            "results": [
+                {
+                    "file": f"{section.version}/{section.filename}",
+                    "anchor": section.anchor or "",
+                    "heading": section.heading,
+                    "score": round(score, 2),
+                    "snippet": extract_snippet(section.text, query),
+                }
+                for section, score in hits
+            ],
+        })
+
+    with _cache_lock:
+        _search_result_cache[cache_key] = result
+        if len(_search_result_cache) > _SEARCH_CACHE_MAX_ENTRIES:
+            for key in list(_search_result_cache.keys())[:_SEARCH_CACHE_EVICT_COUNT]:
+                del _search_result_cache[key]
+
+    return result
 
 
 def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: Optional[str] = None,

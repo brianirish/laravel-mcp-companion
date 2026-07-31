@@ -179,13 +179,19 @@ def extract_snippet(text: str, query: str, max_chars: int = 300) -> str:
     start = max(0, position - max_chars // 2)
     end = min(len(body), start + max_chars)
 
+    # Trim to line boundaries, but only when doing so leaves a usable snippet.
+    # Laravel formats paragraphs as single long lines, so the nearest newline is
+    # often the one just after the heading -- snapping to it would return the
+    # heading alone and tell the reader nothing.
+    minimum = max_chars // 2
+
     if start > 0:
         newline = body.find("\n", start)
-        if newline != -1 and newline < position:
+        if newline != -1 and newline < position and end - (newline + 1) >= minimum:
             start = newline + 1
     if end < len(body):
         newline = body.rfind("\n", start, end)
-        if newline != -1 and newline > position:
+        if newline != -1 and newline > position and newline - start >= minimum:
             end = newline
 
     snippet = body[start:end].strip()

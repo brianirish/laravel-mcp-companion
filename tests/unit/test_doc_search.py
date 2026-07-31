@@ -254,3 +254,24 @@ def test_load_service_sections_keys_by_service(tmp_path):
 
     assert sections
     assert all(s.version == "forge" for s in sections)
+
+
+def test_snippet_returns_body_text_not_just_the_heading():
+    """A snippet that stops at the heading tells the model nothing.
+
+    The line-boundary trim must not collapse the window when the matched term
+    sits in the heading itself.
+    """
+    # A single long paragraph, as Laravel's documentation actually formats them:
+    # the only newline before the window ends is the one after the heading.
+    section = (
+        "## Dealing With Failed Jobs\n\n"
+        "Sometimes your queued jobs will fail. Jobs that exceed their configured "
+        "attempts are inserted into the failed_jobs table. Retry them with the "
+        "queue:retry Artisan command, which pushes the job back onto its original "
+        "queue so a worker may attempt it again at the next opportunity.\n"
+    )
+    snippet = extract_snippet(section, "retry failed queue job", max_chars=300)
+    assert "failed_jobs" in snippet or "queue:retry" in snippet, (
+        f"snippet carried no body: {snippet!r}"
+    )
