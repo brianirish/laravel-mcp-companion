@@ -6,12 +6,17 @@ RUN apk add --no-cache build-base libffi-dev openssl-dev git
 # Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
-
-# Install Python dependencies including HTTP server requirements
+# Dependencies first, and on their own. Documentation syncs land daily and touch
+# only docs/, so copying the whole tree before this would invalidate the install
+# layer every single day -- every user pulling :latest would re-download every
+# dependency for a content-only change.
+COPY requirements.txt ./
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
+
+# Now the source and the documentation corpus. Only this layer changes on a
+# documentation sync.
+COPY . .
 
 # Default environment
 ENV PYTHONUNBUFFERED=1
