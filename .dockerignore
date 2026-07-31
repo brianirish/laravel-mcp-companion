@@ -1,0 +1,36 @@
+# Keep the build context to what the image actually needs. docs/ is deliberately
+# absent from this list -- the documentation corpus is the product.
+
+# Version control
+.git
+.gitignore
+.github
+
+# Local virtualenvs and caches
+.venv
+venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+coverage.xml
+htmlcov
+
+# Tests and development-only tooling
+tests
+requirements-dev.txt
+pytest.ini
+.python-version
+
+# CI/CD definitions
+.harness
+
+# Working notes that ship no runtime value
+docs/superpowers
+
+# Editor and OS noise
+.vscode
+.idea
+.DS_Store
