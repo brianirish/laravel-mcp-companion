@@ -201,6 +201,16 @@ def _read_versions_cache(cache_file: Path, max_age_seconds: float | None = None)
         if not (isinstance(versions, list) and len(versions) > 0):
             return None
 
+        # This list is the trust root for every version allowlist, and it is read
+        # from a file that ships in the image, is tracked in git, and sits in a
+        # directory users bind-mount and the server itself writes to. The API
+        # response is filtered to this shape already; the cache never was, so a
+        # single edited JSON value could smuggle "../.." past every check.
+        versions = [v for v in versions if isinstance(v, str) and re.fullmatch(r"\d+\.x", v)]
+        if not versions:
+            logger.warning("Versions cache contained no well-formed version strings")
+            return None
+
         if max_age_seconds is not None:
             updated_at = data.get("updated_at")
             if not updated_at:
@@ -1480,9 +1490,13 @@ class DocsUpdater:
         # Create version-specific directory. update() clears everything under
         # version_dir, so it must be a strict subdirectory of target_dir --
         # equality would wipe every version in the documentation root.
+        #
+        # Compare the parent rather than resolving version_dir itself: the name
+        # checks above already guarantee a single path component, and resolving
+        # through a symlink rejected legitimately-relocated version directories,
+        # which aborted server startup rather than just the update path.
         self.version_dir = target_dir / version
-        if (not is_within_directory(target_dir, self.version_dir)
-                or self.version_dir.resolve() == target_dir.resolve()):
+        if self.version_dir.parent.resolve() != target_dir.resolve():
             raise ValueError(f"Version directory escapes target directory: {version!r}")
         self.version_dir.mkdir(parents=True, exist_ok=True)
         

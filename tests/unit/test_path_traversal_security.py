@@ -289,3 +289,139 @@ class TestAllowlistArgumentParsing:
         args = self._parse(monkeypatch, [], {})
         assert args.cors_origin == []
         assert args.allowed_host == []
+
+
+class TestDocsInfoTraversal:
+    """`laravel_docs_info` is implemented inline rather than via an *_impl.
+
+    That is how it escaped the validation added to every other version-taking
+    tool: it read `<docs>/<version>/.metadata/sync_info.json` with `version`
+    unchecked, giving an arbitrary-directory read and existence oracle that was
+    reachable through the default search transform's call_tool proxy.
+    """
+
+    @pytest.mark.parametrize("bad_version", [
+        "../secretzone", "../secretzone/", "./../secretzone",
+        "12.x/../../secretzone", "12.x/./../../secretzone", "..", "/etc",
+    ])
+    @pytest.mark.asyncio
+    async def test_rejects_traversal_version(self, tmp_path, bad_version):
+        import json
+        from fastmcp import Client
+        from laravel_mcp_companion import create_mcp_server
+
+        docs = tmp_path / "docs"
+        (docs / "12.x" / ".metadata").mkdir(parents=True)
+        (docs / "12.x" / "blade.md").write_text("# Blade")
+        (docs / "12.x" / ".metadata" / "sync_info.json").write_text(
+            json.dumps({"version": "12.x", "sync_time": "2026-07-30T00:00:00Z"})
+        )
+
+        # A metadata file planted outside the documentation tree
+        outside = tmp_path / "secretzone" / ".metadata"
+        outside.mkdir(parents=True)
+        (outside / "sync_info.json").write_text(json.dumps({
+            "version": "x", "sync_time": "2026-07-01T00:00:00Z",
+            "commit_sha": "PROXY-CANARY", "commit_message": "PROXY-CANARY",
+        }))
+
+        server = create_mcp_server("T", docs, "12.x", transform_mode=None)
+        async with Client(server) as client:
+            result = await client.call_tool("laravel_docs_info", {"version": bad_version})
+            text = result.content[0].text if result.content else ""
+
+        assert "PROXY-CANARY" not in text, f"leaked via version={bad_version!r}"
+        assert "Invalid version" in text
+
+    @pytest.mark.asyncio
+    async def test_legitimate_version_still_works(self, tmp_path):
+        import json
+        from fastmcp import Client
+        from laravel_mcp_companion import create_mcp_server
+        from mcp_tools import SUPPORTED_VERSIONS
+
+        version = SUPPORTED_VERSIONS[-1]
+        docs = tmp_path / "docs"
+        (docs / version / ".metadata").mkdir(parents=True)
+        (docs / version / ".metadata" / "sync_info.json").write_text(
+            json.dumps({"version": version, "sync_time": "2026-07-30T00:00:00Z",
+                        "commit_sha": "abc1234"})
+        )
+
+        server = create_mcp_server("T", docs, version, transform_mode=None)
+        async with Client(server) as client:
+            result = await client.call_tool("laravel_docs_info", {"version": version})
+            text = result.content[0].text if result.content else ""
+
+        assert "abc1234" in text
+
+
+class TestVersionsCacheIsTrustworthy:
+    """SUPPORTED_VERSIONS is the trust root for every version allowlist.
+
+    It is read from a JSON file that ships in the image, is tracked in git, and
+    lives in a directory users bind-mount. The GitHub API response was filtered
+    to `\\d+\\.x`; the cache read was not, so one edited value disabled every check.
+    """
+
+    @pytest.mark.parametrize("poisoned", [
+        "../secretzone", "..", ".", "/etc", "12.x/../..", "", 42, None, {"a": 1},
+    ])
+    def test_malformed_cache_entries_are_discarded(self, tmp_path, poisoned):
+        import json
+        from docs_updater import get_supported_versions
+
+        cache = tmp_path / "versions.json"
+        cache.write_text(json.dumps({
+            "versions": ["12.x", poisoned],
+            "updated_at": "2099-01-01T00:00:00+00:00",
+        }))
+
+        versions = get_supported_versions(cache_file=cache)
+        assert poisoned not in versions
+        assert versions == ["12.x"]
+
+    def test_cache_of_only_bad_entries_falls_through(self, tmp_path):
+        """A wholly malformed cache must not become the allowlist."""
+        import json
+        from docs_updater import get_supported_versions
+
+        cache = tmp_path / "versions.json"
+        cache.write_text(json.dumps({
+            "versions": ["../etc", "."],
+            "updated_at": "2099-01-01T00:00:00+00:00",
+        }))
+
+        versions = get_supported_versions(cache_file=cache)
+        assert "../etc" not in versions and "." not in versions
+
+
+class TestSymlinkedVersionDirectory:
+    """Relocating a version directory via symlink is legitimate, not an attack."""
+
+    def test_symlinked_version_dir_is_accepted(self, tmp_path):
+        import os
+        from docs_updater import DocsUpdater
+
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        elsewhere = tmp_path / "elsewhere"
+        elsewhere.mkdir()
+        os.symlink(elsewhere, docs / "12.x")
+
+        updater = DocsUpdater(docs, "12.x")
+        assert updater.version_dir == docs / "12.x"
+
+    def test_server_starts_with_symlinked_version_dir(self, tmp_path):
+        """This previously aborted startup, not merely the update path."""
+        import os
+        from laravel_mcp_companion import create_mcp_server
+
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        elsewhere = tmp_path / "elsewhere"
+        elsewhere.mkdir()
+        (elsewhere / "blade.md").write_text("# Blade")
+        os.symlink(elsewhere, docs / "12.x")
+
+        assert create_mcp_server("T", docs, "12.x", transform_mode=None) is not None

@@ -1465,6 +1465,12 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         """
         logger.debug(f"laravel_docs_info function called (version: {version})")
 
+        # This tool is implemented inline rather than delegating to an *_impl in
+        # mcp_tools, which is how it escaped the validation added everywhere else.
+        version_error = validate_version_arg(version)
+        if version_error:
+            return version_error
+
         if version:
             metadata = get_laravel_docs_metadata(docs_path, version)
 
