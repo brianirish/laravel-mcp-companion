@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel LSP: A First-Party Language Server Announced at Laracon US 2026
+## Laravel AI SDK Adds Human-in-the-Loop Tool Approval
 
-[Read more](https://laravel-news.com/laravel-lsp-a-first-party-language-server-announced-at-laracon-us-2026)
+[Read more](https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Inertia DevTools Is Now on the Chrome Web Store
+## Blade Formatting in Laravel Pint
 
-[Read more](https://laravel-news.com/inertia-devtools-is-now-on-the-chrome-web-store)
+[Read more](https://laravel-news.com/blade-formatting-in-laravel-pint)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Watch Laracon US 2026 Live on YouTube
+## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
 
-[Read more](https://laravel-news.com/watch-laracon-us-2026-day-one-live-on-youtube)
+[Read more](https://laravel-news.com/pest-5)
 
 ---
 
@@ -42,15 +42,15 @@ Latest Laravel Release
 
 ---
 
-## Watch Laracon US 2026 Live on YouTube
+## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
 
-[Read more](https://laravel-news.com/watch-laracon-us-2026-day-one-live-on-youtube)
+[Read more](https://laravel-news.com/pest-5)
 
 ---
 
-## Heimdall: A Minimum Age Policy for Your Composer Dependencies
+## Queue-SQL: Run Mass Deletes and Updates Across Parallel Queue Jobs
 
-[Read more](https://laravel-news.com/heimdall-a-minimum-age-policy-for-your-composer-dependencies)
+[Read more](https://laravel-news.com/queue-sql-run-mass-deletes-and-updates-across-parallel-queue-jobs)
 
 ---
 

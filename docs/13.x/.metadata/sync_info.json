@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "946622229fa1d90052b7d51614a4a14a7156b9b0",
-  "commit_date": "2026-07-27T13:22:19Z",
-  "commit_message": "Added the $flags parameter to the method signature for Illuminate\\Http\\Client\\Response::json() (#11306)",
-  "commit_url": "https://github.com/laravel/docs/commit/946622229fa1d90052b7d51614a4a14a7156b9b0",
-  "sync_time": "2026-07-28T00:02:08Z"
+  "commit_sha": "ebeea7cfaf51d77b8101825f3508e1e5ab1a8ad9",
+  "commit_date": "2026-07-30T20:48:55Z",
+  "commit_message": "[13.x] Document Telescope CSP nonce support (#11311)\n\n* Document Telescope CSP nonce support\n\n* formatting\n\n* remove csp\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/ebeea7cfaf51d77b8101825f3508e1e5ab1a8ad9",
+  "sync_time": "2026-07-31T00:04:25Z"
 }
