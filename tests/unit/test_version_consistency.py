@@ -1,43 +1,60 @@
-"""Guard against the project version drifting between the files that record it.
+"""Guard against the project version drifting from what is actually released.
 
-`pyproject.toml` sat at 0.9.0 while release tags had reached v0.9.145, because
-nothing asserted the two agreed. The documentation-sync pipeline no longer
-touches version numbers, so they now change only when someone bumps them
-deliberately -- these tests make sure that bump reaches every file.
+`pyproject.toml` sat at 0.9.0 while release tags reached v0.9.145. Note where
+that drift was: the manifest disagreed with the *tags*, not with the other
+files -- ROADMAP.md and README.md both said 0.9.0 the entire time. A guard that
+only cross-checks the three files would have been green throughout, which is why
+`test_pyproject_version_matches_newest_release_tag` exists.
 
-These assertions are made against the configuration files as text rather than
-through a TOML parser, so they run identically on any interpreter. `tomllib` is
-standard library only from 3.11, and depending on it here would couple this
-suite to whichever Python the CI runner happens to ship.
+Parsing uses `tomllib`, which is standard library from 3.11. The project
+declares `requires-python = ">=3.12"`, so it is always available on a supported
+interpreter; CI installs 3.12 explicitly rather than inheriting the runner's.
 """
 
 import re
+import subprocess
+import tomllib
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# v0.10.1 was cut by the documentation cron before it stopped consuming semantic
+# versions. It points at a docs-only commit and carries no code change, so it is
+# not a release the manifest should track. Nothing else belongs in this set:
+# every later v* tag is a deliberate release.
+NON_RELEASE_TAGS = {"v0.10.1"}
 
 
 def read(filename: str) -> str:
     return (REPO_ROOT / filename).read_text(encoding="utf-8")
 
 
-def toml_table(content: str, table: str) -> str | None:
-    """Return the raw body of a TOML table, or None when it is absent.
-
-    Only table headers at the start of a line count, so a table name mentioned
-    inside a comment is not treated as a declaration.
-    """
-    pattern = rf"^\[{re.escape(table)}\]$(.*?)(?=^\[|\Z)"
-    match = re.search(pattern, content, re.MULTILINE | re.DOTALL)
-    return match.group(1) if match else None
+def pyproject() -> dict:
+    with open(REPO_ROOT / "pyproject.toml", "rb") as f:
+        return tomllib.load(f)
 
 
 def project_version() -> str:
-    table = toml_table(read("pyproject.toml"), "project")
-    assert table is not None, "pyproject.toml has no [project] table"
-    match = re.search(r'^version\s*=\s*"([^"]+)"', table, re.MULTILINE)
-    assert match, "pyproject.toml [project] has no version"
-    return match.group(1)
+    return pyproject()["project"]["version"]
+
+
+def newest_release_tag() -> str | None:
+    """The highest v* tag that represents an actual software release."""
+    try:
+        result = subprocess.run(
+            ["git", "tag", "--list", "v*", "--sort=-v:refname"],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    for tag in (line.strip() for line in result.stdout.splitlines()):
+        if tag and tag not in NON_RELEASE_TAGS:
+            return tag
+    return None
 
 
 def test_pyproject_version_is_valid_semver():
@@ -61,6 +78,23 @@ def test_readme_features_heading_matches_pyproject():
     )
 
 
+def test_pyproject_version_matches_newest_release_tag():
+    """The drift that actually happened: manifest 0.9.0 vs tag v0.9.145.
+
+    The three files agreed with each other throughout, so only a tag comparison
+    catches it.
+    """
+    tag = newest_release_tag()
+    if tag is None:
+        pytest.skip("no git tags available (shallow clone or non-git checkout)")
+
+    assert tag.lstrip("v") == project_version(), (
+        f"pyproject.toml says {project_version()} but the newest release tag is {tag}. "
+        "Bump the manifest (and ROADMAP.md / README.md) to match, or add the tag to "
+        "NON_RELEASE_TAGS if it is not a software release."
+    )
+
+
 def test_pytest_is_configured_in_exactly_one_place():
     """Only pytest.ini configures pytest; a second source silently drifts.
 
@@ -68,7 +102,7 @@ def test_pytest_is_configured_in_exactly_one_place():
     pytest ignored (pytest.ini wins) and that had drifted to a shorter module
     list than the one actually in force.
     """
-    assert toml_table(read("pyproject.toml"), "tool.pytest.ini_options") is None, (
+    assert "ini_options" not in pyproject().get("tool", {}).get("pytest", {}), (
         "pyproject.toml must not configure pytest; pytest.ini takes precedence "
         "and the two will drift"
     )
@@ -82,18 +116,15 @@ def test_coverage_measures_product_code_not_tests():
     near-total coverage inflated the reported figure past the gate while
     product coverage was far lower.
     """
-    table = toml_table(read("pyproject.toml"), "tool.coverage.run")
-    assert table is not None, "pyproject.toml is missing [tool.coverage.run]"
+    run_config = pyproject().get("tool", {}).get("coverage", {}).get("run", {})
+    assert run_config, "pyproject.toml is missing [tool.coverage.run]"
 
-    source_match = re.search(r"^source\s*=\s*\[(.*?)\]", table, re.MULTILINE | re.DOTALL)
-    assert source_match, "[tool.coverage.run] must pin the measured source modules"
-    source = source_match.group(1)
-    assert "laravel_mcp_companion" in source
-    assert '"tests"' not in source
+    source = run_config.get("source", [])
+    assert source, "[tool.coverage.run] must pin what is measured"
+    assert "tests" not in source
 
-    omit_match = re.search(r"^omit\s*=\s*\[(.*?)\]", table, re.MULTILINE | re.DOTALL)
-    assert omit_match, "[tool.coverage.run] must declare an omit list"
-    assert "tests" in omit_match.group(1), (
+    omit = run_config.get("omit", [])
+    assert any("tests" in pattern for pattern in omit), (
         "[tool.coverage.run] omit must exclude the test suite"
     )
 

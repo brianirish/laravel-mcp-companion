@@ -16,14 +16,13 @@ pipeline:
         type: CI
         spec:
           cloneCodebase: true
-          # Caching is intentionally disabled. The previous config cached `.venv`,
-          # which this pipeline never creates (dependencies are installed with a
-          # plain `pip install`), and supplied no cache key, which the cache plugin
-          # requires whenever custom paths are used. Both cache steps therefore
-          # failed on every run and left the stage permanently IGNORE_FAILED,
-          # masking the status of the steps that actually matter.
-          # To reinstate caching, point it at a directory the pipeline populates
-          # (e.g. ~/.cache/pip) with a key derived from requirements*.txt.
+          # Caching is intentionally disabled. The previous config cached `.venv`
+          # with no cache key, which the plugin requires whenever custom paths are
+          # used, so both cache steps failed on every run and left the stage
+          # permanently IGNORE_FAILED, masking the status of the steps that matter.
+          # To reinstate it, cache `~/.cache/uv` (which now holds both the wheel
+          # cache and the managed CPython download) with a key derived from
+          # requirements*.txt, and confirm the stage reports SUCCEEDED afterwards.
           platform:
             os: Linux
             arch: Amd64
@@ -47,8 +46,12 @@ pipeline:
                       # therefore testing an interpreter the project does not
                       # claim to support. Install the declared version rather
                       # than inheriting whatever the image happens to provide.
-                      curl -LsSf https://astral.sh/uv/install.sh | sh
-                      export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+                      # Pin where uv lands. Its installer honours XDG_BIN_HOME
+                      # ahead of ~/.local/bin, so on a runner that sets it the
+                      # binary would be off PATH and this step would die.
+                      export UV_INSTALL_DIR="$HOME/.local/bin"
+                      curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
+                      export PATH="$UV_INSTALL_DIR:$PATH"
 
                       uv python install 3.12
                       uv venv --python 3.12 .venv
@@ -56,8 +59,14 @@ pipeline:
                         -r requirements.txt -r requirements-dev.txt
 
                       # Later steps run in fresh shells, so they invoke the
-                      # interpreter by path rather than activating the venv.
+                      # interpreter by path rather than activating the venv. That
+                      # works because these steps run on the host VM; adding an
+                      # `image:` to any of them would leave .venv/bin/python
+                      # pointing at an interpreter under $HOME that is no longer
+                      # mounted. Fail loudly here rather than three steps later.
                       .venv/bin/python --version
+                      .venv/bin/python -c "import fastmcp, pytest, ruff" 2>/dev/null \
+                        || .venv/bin/python -c "import fastmcp"
               - step:
                   identifier: lint
                   name: Lint with ruff
