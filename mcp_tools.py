@@ -15,6 +15,7 @@ from typing import Dict, List, Optional
 import json
 import threading
 
+from doc_search import Section, chunk_markdown
 from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
 from toon_helpers import (
     toon_encode,
@@ -205,6 +206,41 @@ def list_contained_markdown(version_path: Path) -> List[tuple[str, Path]]:
                     f"Skipping documentation file outside its version directory: {entry.name}"
                 )
     return contained
+
+
+def load_version_sections(docs_path: Path, version: str) -> List["Section"]:
+    """Chunk every contained markdown file of a version into sections.
+
+    Enumeration goes through list_contained_markdown and reads through
+    get_file_content_cached, so containment and the refusal to follow symlinks
+    at open time both carry over unchanged rather than being reimplemented.
+    """
+    version_path = Path(docs_path) / version
+    if not version_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for name, path in list_contained_markdown(version_path):
+        content = get_file_content_cached(str(path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            continue
+        sections.extend(chunk_markdown(content, name, version))
+    return sections
+
+
+def load_service_sections(external_dir: Path, service: str) -> List["Section"]:
+    """Chunk an external service's documentation, keyed by service name."""
+    service_path = Path(external_dir) / service
+    if not service_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for name, path in list_contained_markdown(service_path):
+        content = get_file_content_cached(str(path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            continue
+        sections.extend(chunk_markdown(content, name, service))
+    return sections
 
 
 def validate_version(version: Optional[str]) -> Optional[str]:

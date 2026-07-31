@@ -200,3 +200,57 @@ def test_clear_caches_also_clears_indexes():
 
     clear_caches()
     assert resident_index_count() == 0
+
+
+def test_load_version_sections_reads_real_files(tmp_path):
+    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+
+    version = SUPPORTED_VERSIONS[-1]
+    docs = tmp_path / "docs"
+    (docs / version).mkdir(parents=True)
+    (docs / version / "queues.md").write_text(
+        "# Queues\n\n## Failed Jobs\n\nRetry them with queue:retry.\n"
+    )
+
+    sections = load_version_sections(docs, version)
+
+    assert any(s.heading == "Failed Jobs" for s in sections)
+    assert all(s.filename == "queues.md" for s in sections)
+
+
+def test_load_version_sections_skips_escaping_symlinks(tmp_path):
+    """Containment behaviour must match the read path."""
+    import os
+
+    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+
+    version = SUPPORTED_VERSIONS[-1]
+    docs = tmp_path / "docs"
+    (docs / version).mkdir(parents=True)
+    (docs / version / "real.md").write_text("## Real\n\ncontent\n")
+    outside = tmp_path / "outside.md"
+    outside.write_text("## Secret\n\nCANARY-9021\n")
+    os.symlink(outside, docs / version / "escape.md")
+
+    sections = load_version_sections(docs, version)
+
+    assert not any("CANARY-9021" in s.text for s in sections)
+
+
+def test_load_version_sections_of_missing_version_is_empty(tmp_path):
+    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+
+    assert load_version_sections(tmp_path, SUPPORTED_VERSIONS[-1]) == []
+
+
+def test_load_service_sections_keys_by_service(tmp_path):
+    from mcp_tools import load_service_sections
+
+    external = tmp_path / "external"
+    (external / "forge").mkdir(parents=True)
+    (external / "forge" / "intro.md").write_text("## Provisioning\n\nServer setup.\n")
+
+    sections = load_service_sections(external, "forge")
+
+    assert sections
+    assert all(s.version == "forge" for s in sections)
