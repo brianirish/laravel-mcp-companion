@@ -48,7 +48,7 @@ from mcp_tools import (
     search_laravel_learning_resources_impl,
     list_laravel_learning_resources_impl,
     list_laravel_categories_impl,
-    is_safe_path,
+    resolve_contained_path,
     validate_version as validate_version_arg,
     count_matches,
     clear_caches as clear_mcp_tools_caches,
@@ -771,6 +771,17 @@ def parse_arguments():
     if args.allowed_host is None:
         args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
 
+    # Allowed hosts are matched with fnmatch, so a pattern entry would match
+    # every Host header and silently disable the guard while still looking like
+    # a configured allowlist. Reject them the way wildcard CORS origins are.
+    wildcard_hosts = [h for h in args.allowed_host if any(c in h for c in "*?[")]
+    if wildcard_hosts:
+        parser.error(
+            f"wildcard patterns are not accepted in allowed hosts: {', '.join(wildcard_hosts)}. "
+            "List each hostname explicitly; a pattern would match every Host header "
+            "and disable DNS-rebinding protection."
+        )
+
     return args
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:
@@ -1348,23 +1359,25 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         
         file_path = Path(config['docs_path']) / version_inner / relative_path
         
-        # Security check - ensure we stay within version directory
+        # Security check - read the resolved path this returns, not file_path,
+        # so the file that was checked is the file that gets opened.
         version_path = Path(config['docs_path']) / version_inner
-        if not is_safe_path(version_path, file_path):
+        safe_path = resolve_contained_path(version_path, file_path)
+        if safe_path is None:
             logger.warning(f"Access denied: {path} (attempted directory traversal)")
             return f"Access denied: {path} (attempted directory traversal)"
-        
-        if not file_path.exists():
-            logger.warning(f"Documentation file not found: {file_path}")
+
+        if not safe_path.exists():
+            logger.warning(f"Documentation file not found: {safe_path}")
             return f"Documentation file not found: {path} (version: {version_inner})"
-        
+
         try:
-            content = get_file_content_cached(str(file_path))
+            content = get_file_content_cached(str(safe_path))
             if not content.startswith("Error") and not content.startswith("File not found"):
-                logger.debug(f"Successfully read file: {file_path} ({len(content)} bytes)")
+                logger.debug(f"Successfully read file: {safe_path} ({len(content)} bytes)")
             return content
         except Exception as e:
-            logger.error(f"Error reading file {file_path}: {str(e)}")
+            logger.error(f"Error reading file {safe_path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
     def read_external_laravel_doc(service: str, path: str) -> str:
@@ -1386,11 +1399,13 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
             
             file_path = service_dir / path
             
-            # Security check - ensure we stay within service directory
-            if not is_safe_path(service_dir, file_path):
+            # Security check - open the resolved path this returns, not
+            # file_path, so the check and the open see the same file.
+            safe_path = resolve_contained_path(service_dir, file_path)
+            if safe_path is None:
                 return f"Access denied: {service}/{path} (path traversal attempted)"
-            
-            if not file_path.exists():
+
+            if not safe_path.exists():
                 # List available files to help user
                 available_files = []
                 try:
@@ -1403,9 +1418,9 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
                 else:
                     return f"File not found: {service}/{path}. No documentation cached for {service}. Use update_external_laravel_docs(['{service}']) to fetch documentation."
             
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(safe_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-                logger.debug(f"Successfully read external file: {file_path} ({len(content)} bytes)")
+                logger.debug(f"Successfully read external file: {safe_path} ({len(content)} bytes)")
                 return content
         except Exception as e:
             logger.error(f"Error reading external file {service}/{path}: {str(e)}")

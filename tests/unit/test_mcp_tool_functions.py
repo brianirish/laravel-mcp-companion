@@ -104,28 +104,30 @@ class TestDocumentationTools:
         
         assert result == test_content
 
-    @patch('mcp_tools.get_file_content_cached')
-    @patch('mcp_tools.os.listdir')
-    def test_search_laravel_docs_success(self, mock_listdir, mock_get_content, test_docs_dir):
-        """Test searching Laravel documentation successfully returns TOON format."""
-        # Directory already exists from fixture
+    def test_search_laravel_docs_success(self, test_docs_dir):
+        """Test searching Laravel documentation successfully returns TOON format.
 
-        # Mock file listing
-        mock_listdir.return_value = ['routing.md', 'eloquent.md']
-
-        # Mock file content
-        mock_get_content.side_effect = [
-            "# Routing\n\nLaravel routing is awesome for web applications",
+        Uses real files rather than mocking the directory listing: enumeration
+        now applies a containment check, so a mocked listing no longer reflects
+        what the search actually reads.
+        """
+        version_dir = test_docs_dir / "12.x"
+        (version_dir / "routing.md").write_text(
+            "# Routing\n\nLaravel routing is awesome for web applications"
+        )
+        (version_dir / "eloquent.md").write_text(
             "# Eloquent\n\nEloquent ORM for database routing"
-        ]
+        )
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-            result = search_laravel_docs_impl(test_docs_dir, "routing", "12.x")
+            result = search_laravel_docs_impl(
+                test_docs_dir, "routing", "12.x", include_external=False
+            )
 
             # TOON format assertions
             assert "routing" in result
-            assert "12.x/routing.md" in result or "routing.md" in result
-            assert "12.x/eloquent.md" in result or "eloquent.md" in result
+            assert "routing.md" in result
+            assert "eloquent.md" in result
 
     def test_search_laravel_docs_empty_query(self, test_docs_dir):
         """Test searching with empty query."""
@@ -381,8 +383,8 @@ class TestMcpToolsEdgeCases:
         """Test list_laravel_docs handles exceptions gracefully."""
         from mcp_tools import list_laravel_docs_impl
 
-        with patch('mcp_tools.os.listdir') as mock_listdir:
-            mock_listdir.side_effect = OSError("Permission denied")
+        with patch('mcp_tools.os.scandir') as mock_scandir:
+            mock_scandir.side_effect = OSError("Permission denied")
 
             result = list_laravel_docs_impl(test_docs_dir, "12.x")
 
@@ -466,8 +468,8 @@ class TestMcpToolsEdgeCases:
         """Test search with context handles exceptions."""
         from mcp_tools import search_laravel_docs_with_context_impl
 
-        with patch('mcp_tools.os.listdir') as mock_listdir:
-            mock_listdir.side_effect = Exception("Search error")
+        with patch('mcp_tools.os.scandir') as mock_scandir:
+            mock_scandir.side_effect = Exception("Search error")
 
             with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
                 result = search_laravel_docs_with_context_impl(
