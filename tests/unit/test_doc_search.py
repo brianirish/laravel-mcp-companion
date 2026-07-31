@@ -130,3 +130,61 @@ def test_snippet_falls_back_to_the_start_when_no_term_matches():
 
 def test_snippet_of_short_text_returns_it_whole():
     assert extract_snippet("short body", "body", max_chars=300) == "short body"
+
+
+from pathlib import Path
+
+from doc_search import (
+    DocIndex,
+    MAX_RESIDENT_INDEXES,
+    clear_indexes,
+    get_index,
+    resident_index_count,
+)
+
+
+def _sections(version, *bodies):
+    out = []
+    for i, body in enumerate(bodies):
+        out.extend(chunk_markdown(f"## Heading {i}\n\n{body}\n", f"f{i}.md", version))
+    return out
+
+
+def test_docindex_returns_sections_ranked():
+    index = DocIndex(_sections("13.x", "failed jobs are retried", "blade templates"))
+    hits = index.search("retry failed jobs", top_k=2)
+    assert hits
+    assert "failed jobs" in hits[0][0].text
+
+
+def test_docindex_substring_search_finds_exact_symbols():
+    index = DocIndex(_sections("13.x", "run queue:retry to requeue", "unrelated"))
+    hits = index.substring_search("queue:retry", top_k=2)
+    assert hits
+    assert "queue:retry" in hits[0][0].text
+
+
+def test_get_index_builds_once_per_key():
+    clear_indexes()
+    calls = []
+
+    def loader():
+        calls.append(1)
+        return _sections("13.x", "queue workers")
+
+    get_index(Path("/unused"), "13.x", loader)
+    get_index(Path("/unused"), "13.x", loader)
+    assert len(calls) == 1
+
+
+def test_registry_evicts_beyond_the_cap():
+    clear_indexes()
+    for n in range(MAX_RESIDENT_INDEXES + 2):
+        get_index(Path("/unused"), f"v{n}", lambda: _sections("x", "content"))
+    assert resident_index_count() == MAX_RESIDENT_INDEXES
+
+
+def test_clear_indexes_empties_the_registry():
+    get_index(Path("/unused"), "13.x", lambda: _sections("13.x", "content"))
+    clear_indexes()
+    assert resident_index_count() == 0

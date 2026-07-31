@@ -7,8 +7,11 @@ MCP tool layer, and so mcp_tools does not grow further.
 
 import math
 import re
+import threading
+from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Optional
+from pathlib import Path
+from typing import Callable, Optional
 
 # Consumes the closing </a> so that "is anything after this anchor?" is answered
 # about the document, not about the tag's own second half.
@@ -191,3 +194,78 @@ def extract_snippet(text: str, query: str, max_chars: int = 300) -> str:
     if end < len(body):
         snippet = snippet + "..."
     return snippet
+
+
+MAX_RESIDENT_INDEXES = 2
+
+_registry: "OrderedDict[str, DocIndex]" = OrderedDict()
+_registry_lock = threading.Lock()
+
+
+class DocIndex:
+    """A BM25 index over the sections of one version or service."""
+
+    def __init__(self, sections: list[Section]) -> None:
+        self.sections = sections
+        self._index = BM25Index()
+        self._index.build([s.text for s in sections])
+
+    def search(self, query: str, top_k: int) -> list[tuple[Section, float]]:
+        return [
+            (self.sections[i], score) for i, score in self._index.query(query, top_k)
+        ]
+
+    def substring_search(self, query: str, top_k: int) -> list[tuple[Section, float]]:
+        """Literal fallback, preserving exact-symbol lookup such as `queue:retry`.
+
+        BM25 tokenizes on alphanumerics, so a punctuated symbol is split into
+        parts that may rank poorly. This is the one thing the previous substring
+        implementation did well, and it would otherwise be lost.
+        """
+        needle = query.lower()
+        hits = [
+            (section, float(section.text.lower().count(needle)))
+            for section in self.sections
+            if needle in section.text.lower()
+        ]
+        hits.sort(key=lambda pair: pair[1], reverse=True)
+        return hits[:top_k]
+
+
+def get_index(
+    docs_path: Path, key: str, loader: Callable[[], list[Section]]
+) -> DocIndex:
+    """Return the index for `key`, building it on first use.
+
+    Indexes cost roughly 13 MB each, so only MAX_RESIDENT_INDEXES are kept and
+    the least recently used is dropped. Rebuilding costs about 100 ms, which is
+    the right trade for a bounded footprint given search defaults to a single
+    version.
+    """
+    with _registry_lock:
+        existing = _registry.get(key)
+        if existing is not None:
+            _registry.move_to_end(key)
+            return existing
+
+    # Built outside the lock: loading and indexing is slow and must not block
+    # other lookups.
+    index = DocIndex(loader())
+
+    with _registry_lock:
+        _registry[key] = index
+        _registry.move_to_end(key)
+        while len(_registry) > MAX_RESIDENT_INDEXES:
+            _registry.popitem(last=False)
+    return index
+
+
+def clear_indexes() -> None:
+    """Drop every resident index. Called when documentation is updated."""
+    with _registry_lock:
+        _registry.clear()
+
+
+def resident_index_count() -> int:
+    with _registry_lock:
+        return len(_registry)
