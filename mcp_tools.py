@@ -535,6 +535,59 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
+def read_laravel_doc_section_impl(
+    docs_path: Path,
+    filename: str,
+    section: str,
+    version: Optional[str] = None,
+    runtime_version: Optional[str] = None,
+) -> str:
+    """Return one ## section of a documentation file.
+
+    `section` matches either the anchor or the heading text, case-insensitively.
+    Search output shows both, and the caller should not have to guess which one
+    is canonical.
+
+    This exists because whole-file reads are the dominant cost of answering a
+    question: queues.md alone is around 34,000 tokens, of which a typical answer
+    needs a small fraction.
+    """
+    version_error = validate_version(version)
+    if version_error:
+        return version_error
+
+    if not version:
+        version = runtime_version if runtime_version else DEFAULT_VERSION
+
+    if not filename.endswith('.md'):
+        filename = f"{filename}.md"
+
+    version_path = Path(docs_path) / version
+    safe_path = resolve_contained_path(version_path, version_path / filename)
+    if safe_path is None:
+        logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+        return f"Access denied: {filename} (attempted directory traversal)"
+
+    if not safe_path.exists():
+        return f"Documentation file not found: {filename} (version: {version})"
+
+    content = get_file_content_cached(str(safe_path))
+    if content.startswith("Error") or content.startswith("File not found"):
+        return content
+
+    wanted = section.strip().lower().lstrip('#')
+    sections = chunk_markdown(content, filename, version)
+
+    for candidate in sections:
+        if (candidate.anchor or "").lower() == wanted or candidate.heading.lower() == wanted:
+            return candidate.text.strip()
+
+    return format_error(
+        f"Section '{section}' not found in {filename}",
+        {"available_sections": [s.anchor or s.heading for s in sections]},
+    )
+
+
 def search_laravel_docs_impl(
     docs_path: Path,
     query: str,

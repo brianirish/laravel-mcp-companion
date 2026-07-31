@@ -70,3 +70,80 @@ def test_empty_query_is_rejected():
 
 def test_invalid_version_is_rejected():
     assert "Invalid version" in search_laravel_docs_impl(DOCS, "queue", version="..")
+
+
+def test_read_section_by_anchor(tmp_path):
+    from mcp_tools import read_laravel_doc_section_impl
+
+    docs = tmp_path / "docs"
+    (docs / VERSION).mkdir(parents=True)
+    (docs / VERSION / "queues.md").write_text(
+        '# Queues\n\n<a name="failed-jobs"></a>\n## Failed Jobs\n\n'
+        "Retry with queue:retry.\n\n## Other\n\nUnrelated.\n"
+    )
+
+    result = read_laravel_doc_section_impl(docs, "queues.md", "failed-jobs", VERSION)
+
+    assert "queue:retry" in result
+    assert "Unrelated" not in result
+
+
+def test_read_section_by_heading_case_insensitively(tmp_path):
+    from mcp_tools import read_laravel_doc_section_impl
+
+    docs = tmp_path / "docs"
+    (docs / VERSION).mkdir(parents=True)
+    (docs / VERSION / "queues.md").write_text("## Failed Jobs\n\nRetry it.\n")
+
+    result = read_laravel_doc_section_impl(docs, "queues.md", "failed jobs", VERSION)
+
+    assert "Retry it." in result
+
+
+def test_unknown_section_lists_available_ones(tmp_path):
+    from mcp_tools import read_laravel_doc_section_impl
+
+    docs = tmp_path / "docs"
+    (docs / VERSION).mkdir(parents=True)
+    (docs / VERSION / "queues.md").write_text(
+        '<a name="failed-jobs"></a>\n## Failed Jobs\n\nBody.\n'
+    )
+
+    result = read_laravel_doc_section_impl(docs, "queues.md", "nope", VERSION)
+
+    assert "failed-jobs" in result
+
+
+def test_read_section_rejects_traversal(tmp_path):
+    from mcp_tools import read_laravel_doc_section_impl
+
+    docs = tmp_path / "docs"
+    (docs / VERSION).mkdir(parents=True)
+    (tmp_path / "secret.md").write_text("## Secret\n\nCANARY-5150\n")
+
+    result = read_laravel_doc_section_impl(docs, "../../secret.md", "secret", VERSION)
+
+    assert "CANARY-5150" not in result
+
+
+def test_read_section_rejects_invalid_version(tmp_path):
+    from mcp_tools import read_laravel_doc_section_impl
+
+    result = read_laravel_doc_section_impl(tmp_path, "queues.md", "failed-jobs", "..")
+
+    assert "Invalid version" in result
+
+
+def test_read_section_costs_far_less_than_the_whole_file():
+    """The point of the exercise: a section instead of 34,000 tokens."""
+    from mcp_tools import read_laravel_doc_content_impl, read_laravel_doc_section_impl
+
+    whole = read_laravel_doc_content_impl(DOCS, "queues.md", VERSION)
+    section = read_laravel_doc_section_impl(
+        DOCS, "queues.md", "dealing-with-failed-jobs", VERSION
+    )
+
+    assert "Access denied" not in section
+    assert len(section) < len(whole) / 5, (
+        f"section {len(section)} vs whole {len(whole)} chars"
+    )
