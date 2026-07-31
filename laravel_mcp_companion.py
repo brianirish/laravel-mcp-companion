@@ -52,9 +52,9 @@ from mcp_tools import (
     validate_version as validate_version_arg,
     count_matches,
     clear_caches as clear_mcp_tools_caches,
-    describe_docs_freshness,
-    get_docs_snapshot_age,
-    docs_are_stale,
+    describe_documentation_date,
+    get_documentation_date,
+    copy_is_stale,
     DOCS_STALE_AFTER_DAYS
 )
 
@@ -1151,44 +1151,38 @@ def build_server_instructions(
 ) -> str:
     """Compose the instructions an MCP client injects into the model's context.
 
-    This is where the assistant learns how old the bundled documentation is.
-    Without it, a stale snapshot produces confidently wrong answers about recent
-    Laravel features, because nothing in the tool output says how old the corpus
-    is and the user has no reason to suspect it.
+    This is where the assistant learns what date the bundled documentation
+    describes. Without it, the model answers questions about features newer than
+    the corpus without knowing the corpus could not contain them, and the user
+    has no reason to suspect it.
 
-    The freshness reported is that of `runtime_version`, the version this server
+    The date reported is that of `runtime_version`, the version this server
     actually answers from. Reporting the newest version present would describe a
-    corpus the user is not reading -- an older pinned version can be months
+    corpus the user is not reading -- an older pinned version can be a year
     behind while another sits at today's date.
 
     The described workflow follows `transform_mode`, because the search and code
     transforms replace the individual tools with a small synthetic surface.
     Naming hidden tools would invite calls the client cannot route.
     """
-    freshness = describe_docs_freshness(docs_path, runtime_version)
+    documentation_date = describe_documentation_date(docs_path, runtime_version)
 
     if transform_mode == "search":
         workflow = """Tools are exposed through a search interface rather than listed \
 individually. Call search_tools with a natural-language description to find the right \
 tool, then invoke it through call_tool with its name and arguments. \
 search_laravel_docs is also available directly."""
-        refresh = ('call_tool with "update_laravel_docs" (or '
-                   '"update_external_laravel_docs" for the first-party services and '
-                   'package documentation)')
         info_tool = 'call_tool with "laravel_docs_info"'
     elif transform_mode == "code":
         workflow = """Tools are exposed through Code Mode. Use tags and search to \
 discover them, get_schema for their parameters, and execute to run Python that calls \
 them."""
-        refresh = "the update_laravel_docs tool (or update_external_laravel_docs)"
         info_tool = "the laravel_docs_info tool"
     else:
         workflow = """Typical flow: search_laravel_docs to locate relevant files, then \
 read_laravel_doc_content for the full text. For a natural-language request such as \
 "I need to upload files", find_laravel_docs_for_need maps it to the right pages. \
 get_laravel_package_recommendations suggests packages for a described use case."""
-        refresh = ("update_laravel_docs (or update_external_laravel_docs for the "
-                   "first-party services and package documentation)")
         info_tool = "laravel_docs_info"
 
     return f"""Laravel documentation for the whole ecosystem: core Laravel \
@@ -1200,10 +1194,10 @@ Envoyer), and community packages (Spatie, Livewire, Filament, Inertia).
 Documentation answers default to Laravel {runtime_version}; pass `version` to target \
 another, or `all_versions` to search every one.
 
-The Laravel {runtime_version} documentation is a local snapshot, last synced \
-{freshness}. If you are asked about a feature that may have landed after that date, \
-say so rather than answering from the snapshot, and offer to refresh it first using \
-{refresh}. {info_tool} reports the current snapshot date at any time."""
+This copy reflects Laravel's documentation as of {documentation_date}. If you are \
+asked about a feature that may have been added after that date, say so rather than \
+answering as if the documentation covered it. {info_tool} reports this date at any \
+time."""
 
 
 def validate_version(version: str) -> bool:
@@ -1492,20 +1486,20 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         tags={"docs", "write"},
         timeout=120.0
     )
-    def update_laravel_docs(version_param: Optional[str] = None, force: bool = False) -> str:
+    def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
-        
+
         Args:
-            version_param: Laravel version branch (e.g., "12.x")
+            version: Laravel version branch (e.g., "12.x")
             force: Force update even if already up to date
         """
-        logger.debug(f"update_laravel_docs function called (version: {version_param}, force: {force})")
+        logger.debug(f"update_laravel_docs function called (version: {version}, force: {force})")
 
         # Use provided version or default to the one specified at startup
-        doc_version = version_param or runtime_version
+        doc_version = version or runtime_version
 
-        version_error = validate_version_arg(version_param)
+        version_error = validate_version_arg(version)
         if version_error:
             return version_error
 
@@ -1564,22 +1558,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
                 )
 
-            snapshot, age_days = get_docs_snapshot_age(docs_path, version)
+            # No staleness note here. An old date means Laravel stopped changing
+            # this branch, which is neither a problem nor something a tool can fix.
+            documentation_date, _ = get_documentation_date(docs_path, version)
             info: Dict[str, Any] = {
                 "version": version,
+                "documentation_date": documentation_date or "unknown",
                 "last_updated": metadata.get('sync_time', 'unknown'),
-                "snapshot_date": snapshot or "unknown",
-                "snapshot_age_days": age_days if age_days is not None else "unknown",
                 "commit_sha": metadata.get('commit_sha', 'unknown'),
                 "commit_date": metadata.get('commit_date', 'unknown'),
                 "commit_message": metadata.get('commit_message', 'unknown'),
                 "github_url": metadata.get('commit_url', 'unknown')
             }
-            if docs_are_stale(docs_path, version, age_days=age_days):
-                info["note"] = (
-                    f"This snapshot is more than {DOCS_STALE_AFTER_DAYS} days old. "
-                    "Run update_laravel_docs() before relying on it for recent features."
-                )
             return toon_encode(info)
         else:
             # Show info for all available versions
@@ -1588,13 +1578,12 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             for v in SUPPORTED_VERSIONS:
                 metadata = get_laravel_docs_metadata(docs_path, v)
                 if "version" in metadata:
-                    _, v_age = get_docs_snapshot_age(docs_path, v)
+                    v_date, _ = get_documentation_date(docs_path, v)
                     versions_data.append({
                         "version": v,
+                        "documentation_date": v_date or "unknown",
                         "last_updated": metadata.get('sync_time', 'unknown'),
-                        "age_days": v_age if v_age is not None else "unknown",
                         "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
-                        "commit_date": metadata.get('commit_date', 'unknown'),
                         "available": True
                     })
                 else:
@@ -1603,21 +1592,23 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                         "available": False
                     })
 
-            # Across versions this reports the OLDEST snapshot. The per-version
-            # rows carry the detail; a headline quoting the freshest version
-            # would imply the whole corpus is current when most of it is not.
-            oldest_date, oldest_age = get_docs_snapshot_age(docs_path)
+            # The headline is the NEWEST change across versions. Laravel changes
+            # its current branch most days, so that date is a proxy for how old
+            # this copy is -- the only part the user can act on. Quoting the
+            # oldest instead reports an end-of-life branch that upstream simply
+            # stopped touching, and warns forever about nothing.
+            current_to, copy_age = get_documentation_date(docs_path)
             summary: Dict[str, Any] = {
-                "oldest_snapshot_date": oldest_date or "unknown",
-                "oldest_snapshot_age_days": oldest_age if oldest_age is not None else "unknown",
+                "documentation_current_to": current_to or "unknown",
+                "copy_age_days": copy_age if copy_age is not None else "unknown",
                 "default_version": runtime_version,
                 "versions": versions_data
             }
-            if docs_are_stale(docs_path, age_days=oldest_age):
+            if copy_is_stale(docs_path):
                 summary["note"] = (
-                    f"At least one version's documentation is more than {DOCS_STALE_AFTER_DAYS} "
-                    "days old. Check the per-version rows and run update_laravel_docs() for any "
-                    "version you intend to rely on."
+                    f"No version has changed in over {DOCS_STALE_AFTER_DAYS} days, which "
+                    "suggests this copy is behind. Pull a newer image to get current "
+                    "documentation."
                 )
             return toon_encode(summary)
     
