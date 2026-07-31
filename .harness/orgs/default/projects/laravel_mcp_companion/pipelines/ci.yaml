@@ -112,6 +112,33 @@ pipeline:
                         paths:
                           - results.xml
               - step:
+                  identifier: docker_build
+                  name: Build Docker image
+                  type: Run
+                  spec:
+                    shell: Bash
+                    command: |
+                      set -euo pipefail
+
+                      # Nothing built the image for the life of the project, so
+                      # the first real build of a Dockerfile change was the next
+                      # release -- where a mistake breaks the release rather than
+                      # a pull request. Build it here instead.
+                      #
+                      # Single-arch on purpose. This validates the Dockerfile;
+                      # the release pipeline does the multi-arch buildx run, and
+                      # emulating arm64 here would cost minutes for no extra
+                      # signal. No push either: publishing is the release
+                      # pipeline's job.
+                      docker build -t laravel-mcp-companion:ci .
+
+                      # A build proves the image assembles, not that it runs.
+                      # Starting it catches a broken entrypoint, a missing
+                      # runtime dependency, and a .dockerignore that swallowed
+                      # something the server needs.
+                      docker run --rm laravel-mcp-companion:ci --help > /dev/null
+                      echo "image builds and starts"
+              - step:
                   identifier: mcp_inspector_smoke_test
                   name: MCP Inspector smoke test
                   type: Run
