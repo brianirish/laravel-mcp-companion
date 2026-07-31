@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Everything we announced at Laracon US 2026
+
+Every Laravel framework and  Cloud announcement from Laracon US 2026, including Laravel LSP, Inertia DevTools, managed queues, and scale-to-zero.
+
+[Read more](https://blog.laravel.com/blog/category/community)
+
+---
+
 ## Deploy Next.js and Nuxt apps on Laravel Cloud
 
 Deploy your Next.js or Nuxt frontend alongside your Laravel app on Laravel Cloud: one platform, one deploy workflow, one bill.
@@ -25,14 +33,6 @@ You can now run Symfony apps on Laravel Cloud, managed Valkey caches and object 
 Run your Symfony app on Laravel Cloud. Deploy faster, cut infrastructure costs, and spend your time building features instead of managing hosting.
 
 [Read more](https://blog.laravel.com/blog/category/laravel-cloud)
-
----
-
-## How We Built Laravel Cloud’s Scale to Zero
-
-Learn how the Laravel Cloud team built sub-500 ms scale to zero using checkpoint/restore, and how spending limits enforce a hard monthly ceiling for your apps.
-
-[Read more](https://blog.laravel.com/blog/category/product)
 
 ---
 
