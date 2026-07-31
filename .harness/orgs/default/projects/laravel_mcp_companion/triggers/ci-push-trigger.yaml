@@ -1,0 +1,26 @@
+trigger:
+  name: ci-push-trigger
+  identifier: ci_push_trigger
+  enabled: true
+  encryptedWebhookSecretIdentifier: ""
+  description: Trigger CI on every push to any branch
+  tags: {}
+  orgIdentifier: default
+  stagesToExecute: []
+  projectIdentifier: laravel_mcp_companion
+  pipelineIdentifier: ci
+  source:
+    type: Webhook
+    spec:
+      type: Github
+      spec:
+        type: Push
+        spec:
+          connectorRef: Laravel_MCP_Companion
+          autoAbortPreviousExecutions: false
+          payloadConditions: []
+          headerConditions: []
+          actions: []
+  pipelineBranchName: <+trigger.branch>
+  inputSetRefs:
+    - ci_push_input_set
