@@ -1133,35 +1133,66 @@ def laravel_docs_info(version: Optional[str] = None) -> str:
     return "This function requires server context to execute"
 
 
-def build_server_instructions(docs_path: Path, runtime_version: str) -> str:
+def build_server_instructions(
+    docs_path: Path,
+    runtime_version: str,
+    transform_mode: Optional[str] = "search",
+) -> str:
     """Compose the instructions an MCP client injects into the model's context.
 
     This is where the assistant learns how old the bundled documentation is.
     Without it, a stale snapshot produces confidently wrong answers about recent
     Laravel features, because nothing in the tool output says how old the corpus
     is and the user has no reason to suspect it.
+
+    The freshness reported is that of `runtime_version`, the version this server
+    actually answers from. Reporting the newest version present would describe a
+    corpus the user is not reading -- an older pinned version can be months
+    behind while another sits at today's date.
+
+    The described workflow follows `transform_mode`, because the search and code
+    transforms replace the individual tools with a small synthetic surface.
+    Naming hidden tools would invite calls the client cannot route.
     """
-    freshness = describe_docs_freshness(docs_path)
+    freshness = describe_docs_freshness(docs_path, runtime_version)
 
-    instructions = f"""Laravel documentation for the whole ecosystem: core Laravel {', '.join(SUPPORTED_VERSIONS)}, \
-the first-party services (Forge, Vapor, Nova, Envoyer), and community packages \
-(Spatie, Livewire, Filament, Inertia).
-
-Typical flow: search_laravel_docs to locate relevant files, then \
+    if transform_mode == "search":
+        workflow = """Tools are exposed through a search interface rather than listed \
+individually. Call search_tools with a natural-language description to find the right \
+tool, then invoke it through call_tool with its name and arguments. \
+search_laravel_docs is also available directly."""
+        refresh = ('call_tool with "update_laravel_docs" (or '
+                   '"update_external_laravel_docs" for the first-party services and '
+                   'package documentation)')
+        info_tool = 'call_tool with "laravel_docs_info"'
+    elif transform_mode == "code":
+        workflow = """Tools are exposed through Code Mode. Use tags and search to \
+discover them, get_schema for their parameters, and execute to run Python that calls \
+them."""
+        refresh = "the update_laravel_docs tool (or update_external_laravel_docs)"
+        info_tool = "the laravel_docs_info tool"
+    else:
+        workflow = """Typical flow: search_laravel_docs to locate relevant files, then \
 read_laravel_doc_content for the full text. For a natural-language request such as \
 "I need to upload files", find_laravel_docs_for_need maps it to the right pages. \
-get_laravel_package_recommendations suggests packages for a described use case.
+get_laravel_package_recommendations suggests packages for a described use case."""
+        refresh = ("update_laravel_docs (or update_external_laravel_docs for the "
+                   "first-party services and package documentation)")
+        info_tool = "laravel_docs_info"
 
-Documentation defaults to Laravel {runtime_version}; pass `version` to target another, \
-or `all_versions` to search every one.
+    return f"""Laravel documentation for the whole ecosystem: core Laravel \
+{', '.join(SUPPORTED_VERSIONS)}, the first-party services (Forge, Vapor, Nova, \
+Envoyer), and community packages (Spatie, Livewire, Filament, Inertia).
 
-The documentation is a local snapshot, last synced {freshness}. If you are asked \
-about a feature that may have landed after that date, say so rather than answering \
-from the snapshot, and offer to run update_laravel_docs (or \
-update_external_laravel_docs for the first-party services and package docs) to \
-refresh it first. laravel_docs_info reports the current snapshot date at any time."""
+{workflow}
 
-    return instructions
+Documentation answers default to Laravel {runtime_version}; pass `version` to target \
+another, or `all_versions` to search every one.
+
+The Laravel {runtime_version} documentation is a local snapshot, last synced \
+{freshness}. If you are asked about a feature that may have landed after that date, \
+say so rather than answering from the snapshot, and offer to refresh it first using \
+{refresh}. {info_tool} reports the current snapshot date at any time."""
 
 
 def validate_version(version: str) -> bool:
@@ -1294,7 +1325,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     }
     
     # Create the MCP server
-    mcp: FastMCP = FastMCP(server_name, instructions=build_server_instructions(docs_path, runtime_version))
+    mcp: FastMCP = FastMCP(
+        server_name,
+        instructions=build_server_instructions(docs_path, runtime_version, transform_mode)
+    )
     
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
@@ -1526,7 +1560,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 "commit_message": metadata.get('commit_message', 'unknown'),
                 "github_url": metadata.get('commit_url', 'unknown')
             }
-            if docs_are_stale(docs_path, version):
+            if docs_are_stale(docs_path, version, age_days=age_days):
                 info["note"] = (
                     f"This snapshot is more than {DOCS_STALE_AFTER_DAYS} days old. "
                     "Run update_laravel_docs() before relying on it for recent features."
@@ -1539,9 +1573,11 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             for v in SUPPORTED_VERSIONS:
                 metadata = get_laravel_docs_metadata(docs_path, v)
                 if "version" in metadata:
+                    _, v_age = get_docs_snapshot_age(docs_path, v)
                     versions_data.append({
                         "version": v,
                         "last_updated": metadata.get('sync_time', 'unknown'),
+                        "age_days": v_age if v_age is not None else "unknown",
                         "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
                         "commit_date": metadata.get('commit_date', 'unknown'),
                         "available": True
@@ -1552,16 +1588,21 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                         "available": False
                     })
 
-            snapshot, age_days = get_docs_snapshot_age(docs_path)
+            # Across versions this reports the OLDEST snapshot. The per-version
+            # rows carry the detail; a headline quoting the freshest version
+            # would imply the whole corpus is current when most of it is not.
+            oldest_date, oldest_age = get_docs_snapshot_age(docs_path)
             summary: Dict[str, Any] = {
-                "snapshot_date": snapshot or "unknown",
-                "snapshot_age_days": age_days if age_days is not None else "unknown",
+                "oldest_snapshot_date": oldest_date or "unknown",
+                "oldest_snapshot_age_days": oldest_age if oldest_age is not None else "unknown",
+                "default_version": runtime_version,
                 "versions": versions_data
             }
-            if docs_are_stale(docs_path):
+            if docs_are_stale(docs_path, age_days=oldest_age):
                 summary["note"] = (
-                    f"This snapshot is more than {DOCS_STALE_AFTER_DAYS} days old. "
-                    "Run update_laravel_docs() before relying on it for recent features."
+                    f"At least one version's documentation is more than {DOCS_STALE_AFTER_DAYS} "
+                    "days old. Check the per-version rows and run update_laravel_docs() for any "
+                    "version you intend to rely on."
                 )
             return toon_encode(summary)
     
