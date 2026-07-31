@@ -771,6 +771,17 @@ def parse_arguments():
     if args.allowed_host is None:
         args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
 
+    # Allowed hosts are matched with fnmatch, so a pattern entry would match
+    # every Host header and silently disable the guard while still looking like
+    # a configured allowlist. Reject them the way wildcard CORS origins are.
+    wildcard_hosts = [h for h in args.allowed_host if any(c in h for c in "*?[")]
+    if wildcard_hosts:
+        parser.error(
+            f"wildcard patterns are not accepted in allowed hosts: {', '.join(wildcard_hosts)}. "
+            "List each hostname explicitly; a pattern would match every Host header "
+            "and disable DNS-rebinding protection."
+        )
+
     return args
 
 def setup_docs_path(user_path: Optional[str] = None) -> Path:

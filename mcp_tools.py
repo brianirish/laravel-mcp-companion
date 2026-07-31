@@ -129,6 +129,29 @@ def is_safe_path(base_path: Path, target_path: Path) -> bool:
         return False
 
 
+def list_contained_markdown(version_path: Path) -> List[str]:
+    """List .md filenames in version_path that actually resolve inside it.
+
+    Enumeration has to apply the same containment rule as reading. Without it a
+    symlink pointing out of the tree is listed and searched while
+    read_laravel_doc_content refuses to serve it -- which turns search into an
+    oracle over content the read path deliberately withholds.
+    """
+    # Errors are deliberately not swallowed. An unreadable documentation
+    # directory must surface as an error, not as "no files found" -- the callers
+    # already wrap this and turn exceptions into a message.
+    with os.scandir(version_path) as entries:
+        names = [e.name for e in entries if e.name.endswith('.md')]
+
+    contained = []
+    for name in names:
+        if is_safe_path(version_path, version_path / name):
+            contained.append(name)
+        else:
+            logger.warning(f"Skipping documentation file outside its version directory: {name}")
+    return contained
+
+
 def validate_version(version: Optional[str]) -> Optional[str]:
     """Validate a caller-supplied Laravel version against the supported allowlist.
 
@@ -183,8 +206,17 @@ def validate_subdirectory(base_dir: Path, name: str) -> bool:
     """
     if not name or '/' in name or '\\' in name or name in ('.', '..') or '\x00' in name:
         return False
+
     candidate = base_dir / name
-    return is_safe_path(base_dir, candidate) and candidate.is_dir()
+    # Compare the parent rather than resolving the candidate. The name checks
+    # above already guarantee a single path component, so this cannot traverse;
+    # resolving instead rejected directories the operator had deliberately
+    # relocated via symlink, which listing and search both accepted -- the same
+    # inconsistency that DocsUpdater had for version directories.
+    try:
+        return candidate.parent.resolve() == base_dir.resolve() and candidate.is_dir()
+    except (OSError, ValueError):
+        return False
 
 
 # Documentation is shipped as a snapshot, so it ages. Past this many days we
@@ -317,7 +349,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
                 )
 
             metadata = get_laravel_docs_metadata(docs_path, version)
-            md_files = sorted([f for f in os.listdir(version_path) if f.endswith('.md')])
+            md_files = sorted(list_contained_markdown(version_path))
 
             if not md_files:
                 return format_error(f"No documentation files found in version {version}")
@@ -336,9 +368,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
                 version_path = docs_path / v
                 if not version_path.is_dir():
                     continue
-                # Single scandir pass instead of two listdir calls plus a stat per file
-                with os.scandir(version_path) as entries:
-                    md_files = [e.name for e in entries if e.name.endswith('.md') and e.is_file()]
+                md_files = list_contained_markdown(version_path)
                 if md_files:
                     metadata = get_laravel_docs_metadata(docs_path, v)
                     versions_data.append({
@@ -454,18 +484,17 @@ def search_laravel_docs_impl(docs_path: Path, query: str, version: Optional[str]
             if not version_path.exists():
                 continue
 
-            for file in os.listdir(version_path):
-                if file.endswith('.md'):
-                    file_path = version_path / file
+            for file in list_contained_markdown(version_path):
+                file_path = version_path / file
 
-                    content = get_file_content_cached(str(file_path))
-                    if not content.startswith("Error") and not content.startswith("File not found"):
-                        count = count_matches(pattern, content)
-                        if count:
-                            core_results_data.append({
-                                "file": f"{v}/{file}",
-                                "matches": count
-                            })
+                content = get_file_content_cached(str(file_path))
+                if not content.startswith("Error") and not content.startswith("File not found"):
+                    count = count_matches(pattern, content)
+                    if count:
+                        core_results_data.append({
+                            "file": f"{v}/{file}",
+                            "matches": count
+                        })
 
         # Search external documentation if requested
         if include_external and external_dir and external_dir.exists():
@@ -551,33 +580,32 @@ def search_laravel_docs_with_context_impl(docs_path: Path, query: str, version: 
             if not version_path.exists():
                 continue
             
-            for file in os.listdir(version_path):
-                if file.endswith('.md'):
-                    file_path = version_path / file
-                    
-                    content = get_file_content_cached(str(file_path))
-                    if not content.startswith("Error") and not content.startswith("File not found"):
-                        matches = list(pattern.finditer(content))
-                        if matches:
-                            file_results = [f"\n### {v}/{file} ({len(matches)} matches):\n"]
-                            
-                            for i, match in enumerate(matches[:5]):  # Limit to 5 matches per file
-                                start = max(0, match.start() - context_length)
-                                end = min(len(content), match.end() + context_length)
-                                
-                                # Find line boundaries
-                                while start > 0 and content[start] != '\n':
-                                    start -= 1
-                                while end < len(content) and content[end] != '\n':
-                                    end += 1
-                                
-                                context = content[start:end].strip()
-                                # Highlight the match
-                                context = pattern.sub(lambda m: f"**{m.group()}**", context)
-                                
-                                file_results.append(f"Match {i+1}:\n```\n{context}\n```\n")
-                            
-                            results.extend(file_results)
+            for file in list_contained_markdown(version_path):
+                file_path = version_path / file
+
+                content = get_file_content_cached(str(file_path))
+                if not content.startswith("Error") and not content.startswith("File not found"):
+                    matches = list(pattern.finditer(content))
+                    if matches:
+                        file_results = [f"\n### {v}/{file} ({len(matches)} matches):\n"]
+
+                        for i, match in enumerate(matches[:5]):  # Limit to 5 matches per file
+                            start = max(0, match.start() - context_length)
+                            end = min(len(content), match.end() + context_length)
+
+                            # Find line boundaries
+                            while start > 0 and content[start] != '\n':
+                                start -= 1
+                            while end < len(content) and content[end] != '\n':
+                                end += 1
+
+                            context = content[start:end].strip()
+                            # Highlight the match
+                            context = pattern.sub(lambda m: f"**{m.group()}**", context)
+
+                            file_results.append(f"Match {i+1}:\n```\n{context}\n```\n")
+
+                        results.extend(file_results)
         
         # Search external documentation if requested
         if include_external and external_dir and external_dir.exists():
