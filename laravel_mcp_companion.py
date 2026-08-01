@@ -23,19 +23,25 @@ from mcp.types import Icon
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
+from fastmcp.tools.tool import ToolResult
+
 from toon_helpers import (
     toon_encode,
+    toon_result,
+    error_data,
     format_package_list,
     format_package_info,
     format_service_list,
     format_error
 )
+from tool_schemas import OUTPUT_SCHEMAS
 
 # Import standalone MCP tool implementations
 from mcp_tools import (
-    list_laravel_docs_impl,
+    list_laravel_docs_data,
     read_laravel_doc_content_impl,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
+    validate_version_data,
     read_laravel_doc_section_impl,
     get_doc_structure_impl,
     browse_docs_by_category_impl,
@@ -971,8 +977,8 @@ def search_by_use_case(use_case: str) -> List[Dict]:
     
     return ranked_packages
 
-def format_package_recommendation(package: Dict) -> str:
-    """Format a package recommendation as TOON."""
+def package_recommendation_data(package: Dict) -> Dict[str, Any]:
+    """Build the package recommendation payload, as data."""
     pkg_id = package.get('id', 'unknown')
 
     data: Dict[str, Any] = {
@@ -994,7 +1000,12 @@ def format_package_recommendation(package: Dict) -> str:
     if 'documentation_link' in package:
         data["documentation_link"] = package['documentation_link']
 
-    return format_package_info(data)
+    return data
+
+
+def format_package_recommendation(package: Dict) -> str:
+    """Format a package recommendation as TOON."""
+    return format_package_info(package_recommendation_data(package))
 
 
 # Standalone implementations for testing
@@ -1470,23 +1481,25 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_docs"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["list_laravel_docs"]
     )
-    def list_laravel_docs(version: Optional[str] = None) -> str:
+    def list_laravel_docs(version: Optional[str] = None) -> ToolResult:
         """List all available Laravel documentation files.
 
         Args:
             version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
         """
-        return list_laravel_docs_impl(docs_path, version, runtime_version=runtime_version)
-    
-    
+        return toon_result(list_laravel_docs_data(docs_path, version, runtime_version=runtime_version))
+
+
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_laravel_docs"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["search_laravel_docs"]
     )
-    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> str:
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> ToolResult:
         """Search through Laravel documentation for a specific term.
 
         Args:
@@ -1496,7 +1509,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             all_versions: Search every supported version instead of just the configured one
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions)
+        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],
@@ -1548,33 +1561,34 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["laravel_docs_info"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["laravel_docs_info"]
     )
-    def laravel_docs_info(version: Optional[str] = None) -> str:
+    def laravel_docs_info(version: Optional[str] = None) -> ToolResult:
         """Get information about the documentation version and status.
 
         Args:
             version: Specific Laravel version to get info for (e.g., "12.x"). If not provided, shows all versions.
 
         Returns:
-            TOON-encoded documentation metadata.
+            Documentation metadata as TOON text plus structured content.
         """
         logger.debug(f"laravel_docs_info function called (version: {version})")
 
         # This tool is implemented inline rather than delegating to an *_impl in
         # mcp_tools, which is how it escaped the validation added everywhere else.
-        version_error = validate_version_arg(version)
+        version_error = validate_version_data(version)
         if version_error:
-            return version_error
+            return toon_result(version_error)
 
         if version:
             metadata = get_laravel_docs_metadata(docs_path, version)
 
             if "version" not in metadata:
-                return format_error(
+                return toon_result(error_data(
                     f"No documentation metadata available for version {version}",
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
-                )
+                ))
 
             # No staleness note here. An old date means Laravel stopped changing
             # this branch, which is neither a problem nor something a tool can fix.
@@ -1588,7 +1602,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 "commit_message": metadata.get('commit_message', 'unknown'),
                 "github_url": metadata.get('commit_url', 'unknown')
             }
-            return toon_encode(info)
+            return toon_result(info)
         else:
             # Show info for all available versions
             versions_data: List[Dict[str, Any]] = []
@@ -1628,15 +1642,16 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                     "suggests this copy is behind. Pull a newer image to get current "
                     "documentation."
                 )
-            return toon_encode(summary)
+            return toon_result(summary)
     
     # Register package recommendation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"packages", "read"}
+        tags={"packages", "read"},
+        output_schema=OUTPUT_SCHEMAS["get_laravel_package_recommendations"]
     )
-    def get_laravel_package_recommendations(use_case: str) -> str:
+    def get_laravel_package_recommendations(use_case: str) -> ToolResult:
         """
         Get Laravel package recommendations based on a use case.
 
@@ -1644,7 +1659,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             use_case: Description of what the user wants to implement
 
         Returns:
-            TOON-encoded package recommendations.
+            Package recommendations as TOON text plus structured content.
         """
         logger.info(f"Searching for packages matching use case: {use_case}")
 
@@ -1652,7 +1667,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         packages = search_by_use_case(use_case)
 
         if not packages:
-            return format_error(f"No packages found matching: '{use_case}'")
+            return toon_result(error_data(f"No packages found matching: '{use_case}'"))
 
         # Build TOON-friendly package list (limit to top 3)
         packages_data: List[Dict[str, Any]] = []
@@ -1666,14 +1681,19 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 "documentation_link": package.get('documentation_link')
             })
 
-        return format_package_list(packages_data, f"Packages for: {use_case}")
-    
+        return toon_result({
+            "context": f"Packages for: {use_case}",
+            "count": len(packages_data),
+            "packages": packages_data
+        })
+
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_info"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"packages", "read"}
+        tags={"packages", "read"},
+        output_schema=OUTPUT_SCHEMAS["get_laravel_package_info"]
     )
-    def get_laravel_package_info(package_name: str) -> str:
+    def get_laravel_package_info(package_name: str) -> ToolResult:
         """
         Get detailed information about a specific Laravel package.
 
@@ -1681,19 +1701,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             package_name: The name of the package (e.g., 'laravel/cashier')
 
         Returns:
-            TOON-encoded package information.
+            Package information as TOON text plus structured content.
         """
         logger.info(f"Getting information for package: {package_name}")
 
         # Get the package information
         if package_name not in PACKAGE_CATALOG:
-            return format_error(f"Package '{package_name}' not found")
+            return toon_result(error_data(f"Package '{package_name}' not found"))
 
         package = PACKAGE_CATALOG[package_name].copy()
         package['id'] = package_name
 
-        # Format the package information as TOON
-        return format_package_recommendation(package)
+        return toon_result(package_recommendation_data(package))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_categories"],
