@@ -18,6 +18,7 @@ from typing import Dict, Optional, List, Any
 import threading
 from fastmcp import FastMCP
 from fastmcp.server.transforms.search import BM25SearchTransform
+from mcp.types import Icon
 
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
@@ -66,6 +67,15 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("laravel-mcp-companion")
+
+# The server's own version, reported at initialize and stamped into the
+# .well-known registry metadata. The Docker image runs this file directly with
+# no installed package metadata, so importlib.metadata cannot supply it; a
+# guard in tests/unit/test_version_consistency.py keeps it equal to
+# pyproject.toml.
+SERVER_VERSION = "0.11.0"
+
+PROJECT_URL = "https://github.com/brianirish/laravel-mcp-companion"
 
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
@@ -1300,6 +1310,19 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
+def _server_icon() -> "Icon":
+    """The repo icon as a self-contained data URI (SEP-973).
+
+    Embedded rather than linked so clients need no network fetch and stdio
+    servers have an icon at all.
+    """
+    import base64
+
+    svg = (Path(__file__).parent / "icon.svg").read_bytes()
+    encoded = base64.b64encode(svg).decode("ascii")
+    return Icon(src=f"data:image/svg+xml;base64,{encoded}", mimeType="image/svg+xml")
+
+
 def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
 
@@ -1324,6 +1347,9 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     # Create the MCP server
     mcp: FastMCP = FastMCP(
         server_name,
+        version=SERVER_VERSION,
+        website_url=PROJECT_URL,
+        icons=[_server_icon()],
         instructions=build_server_instructions(docs_path, runtime_version, transform_mode)
     )
     

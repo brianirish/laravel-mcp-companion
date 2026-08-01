@@ -7,6 +7,9 @@ the Model Context Protocol specification.
 import pytest
 import re
 
+from fastmcp import Client
+
+import laravel_mcp_companion
 from laravel_mcp_companion import create_mcp_server
 
 
@@ -14,6 +17,23 @@ from laravel_mcp_companion import create_mcp_server
 def mcp_server(temp_dir):
     """Create an MCP server instance for testing."""
     return create_mcp_server("TestServer", temp_dir, "12.x", transform_mode=None)
+
+
+@pytest.mark.protocol
+class TestServerIdentity:
+    """The server must identify itself at initialize (registry prerequisite)."""
+
+    async def test_initialize_reports_server_version(self, mcp_server):
+        async with Client(mcp_server) as client:
+            info = client.initialize_result.serverInfo
+            assert info.version == laravel_mcp_companion.SERVER_VERSION
+
+    async def test_server_declares_an_icon(self, mcp_server):
+        icons = mcp_server.icons
+        assert icons, "Server should declare an icon (SEP-973)"
+        assert str(icons[0].src).startswith("data:image/svg+xml;base64,"), (
+            "Icon must be a self-contained data URI, not a network fetch"
+        )
 
 
 @pytest.mark.protocol
