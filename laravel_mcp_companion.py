@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 from typing import Dict, Optional, List, Any
 import threading
+import anyio.to_thread
 from fastmcp import FastMCP
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
@@ -1515,11 +1516,16 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],
         annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         tags={"docs", "write"},
+        task=True,
         timeout=120.0
     )
-    def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
+    async def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
+
+        Task-capable (SEP-1686): task-aware clients get a handle to poll
+        instead of holding the connection open; everyone else runs it
+        synchronously as before.
 
         Args:
             version: Laravel version branch (e.g., "12.x")
@@ -1534,29 +1540,34 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         if version_error:
             return version_error
 
-        try:
-            updater = DocsUpdater(docs_path, doc_version)
+        def _run() -> str:
+            try:
+                updater = DocsUpdater(docs_path, doc_version)
 
-            # update() performs its own needs_update() check; calling it here too
-            # would spend an extra unauthenticated GitHub API request (60/hr limit).
-            updated = updater.update(force=force)
+                # update() performs its own needs_update() check; calling it here too
+                # would spend an extra unauthenticated GitHub API request (60/hr limit).
+                updated = updater.update(force=force)
 
-            if not updated:
-                return f"Documentation is already up to date (version: {doc_version})"
+                if not updated:
+                    return f"Documentation is already up to date (version: {doc_version})"
 
-            # Clear caches when documentation is updated
-            clear_file_cache()
+                # Clear caches when documentation is updated
+                clear_file_cache()
 
-            metadata = get_laravel_docs_metadata(docs_path, doc_version)
-            return (
-                f"Documentation updated successfully to {doc_version}\n"
-                f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
-                f"Date: {metadata.get('commit_date', 'unknown')}\n"
-                f"Message: {metadata.get('commit_message', 'unknown')}"
-            )
-        except Exception as e:
-            logger.error(f"Error updating documentation: {str(e)}")
-            return f"Error updating documentation: {str(e)}"
+                metadata = get_laravel_docs_metadata(docs_path, doc_version)
+                return (
+                    f"Documentation updated successfully to {doc_version}\n"
+                    f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
+                    f"Date: {metadata.get('commit_date', 'unknown')}\n"
+                    f"Message: {metadata.get('commit_message', 'unknown')}"
+                )
+            except Exception as e:
+                logger.error(f"Error updating documentation: {str(e)}")
+                return f"Error updating documentation: {str(e)}"
+
+        # The body is blocking urllib I/O; keep it off the event loop so a
+        # two-minute update cannot starve every other connected client.
+        return await anyio.to_thread.run_sync(_run)
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["laravel_docs_info"],
@@ -1892,55 +1903,63 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         description=TOOL_DESCRIPTIONS["update_external_laravel_docs"],
         annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         tags={"external", "write"},
+        task=True,
         timeout=300.0
     )
-    def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
+    async def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
         """
         Update documentation for external Laravel services.
-        
+
+        Task-capable (SEP-1686): this is the five-minute call, so task-aware
+        clients poll instead of blocking on it.
+
         Args:
             services: List of services to update (forge, vapor, envoyer, nova). If None, updates all.
             force: Force update even if cache is valid
-            
+
         Returns:
             Status of the update operation
         """
         logger.info(f"Updating external Laravel services documentation (services: {services}, force: {force})")
-        
-        try:
-            if services:
-                # Validate service names
-                available_services = multi_updater.external_fetcher.list_available_services()
-                invalid_services = [s for s in services if s not in available_services]
-                if invalid_services:
-                    return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
-                
-                results = multi_updater.update_external_docs(services=services, force=force)
-            else:
-                results = multi_updater.update_external_docs(force=force)
-            
-            # Clear caches if any services were updated successfully
-            successful = [service for service, success in results.items() if success]
-            failed = [service for service, success in results.items() if not success]
-            
-            if successful:
-                clear_file_cache()
 
-            response = []
-            response.append("External Laravel Services Documentation Update Results:")
-            response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
-            
-            if successful:
-                response.append(f"\nSuccessful: {', '.join(successful)}")
-            
-            if failed:
-                response.append(f"\nFailed: {', '.join(failed)}")
-                response.append("Note: Some services may require additional setup or may be temporarily unavailable.")
-            
-            return "\n".join(response)
-        except Exception as e:
-            logger.error(f"Error updating external documentation: {str(e)}")
-            return f"Error updating external documentation: {str(e)}"
+        def _run() -> str:
+            try:
+                if services:
+                    # Validate service names
+                    available_services = multi_updater.external_fetcher.list_available_services()
+                    invalid_services = [s for s in services if s not in available_services]
+                    if invalid_services:
+                        return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
+
+                    results = multi_updater.update_external_docs(services=services, force=force)
+                else:
+                    results = multi_updater.update_external_docs(force=force)
+
+                # Clear caches if any services were updated successfully
+                successful = [service for service, success in results.items() if success]
+                failed = [service for service, success in results.items() if not success]
+
+                if successful:
+                    clear_file_cache()
+
+                response = []
+                response.append("External Laravel Services Documentation Update Results:")
+                response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
+
+                if successful:
+                    response.append(f"\nSuccessful: {', '.join(successful)}")
+
+                if failed:
+                    response.append(f"\nFailed: {', '.join(failed)}")
+                    response.append("Note: Some services may require additional setup or may be temporarily unavailable.")
+
+                return "\n".join(response)
+            except Exception as e:
+                logger.error(f"Error updating external documentation: {str(e)}")
+                return f"Error updating external documentation: {str(e)}"
+
+        # Blocking urllib I/O with retries and sleeps; keep it off the event loop.
+        return await anyio.to_thread.run_sync(_run)
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_services"],
