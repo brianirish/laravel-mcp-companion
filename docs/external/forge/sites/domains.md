@@ -4,94 +4,34 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Sites
-Domains
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Forge domains](#forge-domains)
 - [Custom domains](#custom-domains)
-- [www. redirect types](#www-redirect-types)
-- [Wildcard subdomains](#wildcard-subdomains)
-- [Primary domains](#primary-domains)
-- [Protecting against unconfigured domains](#protecting-against-unconfigured-domains)
+  - [www. redirect types](#www-redirect-types)
+  - [Wildcard subdomains](#wildcard-subdomains)
+  - [Primary domains](#primary-domains)
+  - [Protecting against unconfigured domains](#protecting-against-unconfigured-domains)
 - [Certificates](#certificates)
-- [Let’s Encrypt](#let%E2%80%99s-encrypt)
-- [DNS-01 verification](#dns-01-verification)
-- [HTTP-01 verification](#http-01-verification)
-- [Custom certificates](#custom-certificates)
-- [Cloudflare “Edge” certificates](#cloudflare-%E2%80%9Cedge%E2%80%9D-certificates)
-- [Cloning certificates](#cloning-certificates)
+  - [Let’s Encrypt](#let%E2%80%99s-encrypt)
+  - [DNS-01 verification](#dns-01-verification)
+  - [HTTP-01 verification](#http-01-verification)
+  - [Custom certificates](#custom-certificates)
+  - [Cloudflare “Edge” certificates](#cloudflare-%E2%80%9Cedge%E2%80%9D-certificates)
+  - [Certificate Signing Requests (CSRs)](#certificate-signing-requests-csrs)
+  - [Generating and retrieving the CSR](#generating-and-retrieving-the-csr)
+  - [Installing the signed certificate](#installing-the-signed-certificate)
+  - [Cloning certificates](#cloning-certificates)
 - [Legacy sites (created prior to Oct 2025)](#legacy-sites-created-prior-to-oct-2025)
-- [Let’s Encrypt](#let%E2%80%99s-encrypt-2)
-- [Wildcard subdomain Let’s Encrypt certificates](#wildcard-subdomain-let%E2%80%99s-encrypt-certificates)
-- [Cloudflare API token](#cloudflare-api-token)
-- [Route53 user policy](#route53-user-policy)
+  - [Let’s Encrypt](#let%E2%80%99s-encrypt-2)
+  - [Wildcard subdomain Let’s Encrypt certificates](#wildcard-subdomain-let%E2%80%99s-encrypt-certificates)
+  - [Cloudflare API token](#cloudflare-api-token)
+  - [Route53 user policy](#route53-user-policy)
 Sites
 # Domains
-Copy page
+Copy pageCopy page
 Configure and manage domains and SSL certificates for your sites.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Domains let you manage how your site is reached on the web. All Forge sites are assigned a free `on-forge.com` domain for development. But, you can also configure your own custom domains for your sites.
 ## [​](#forge-domains) Forge domains
@@ -154,6 +94,14 @@ The option does give you full control but generally requires more manual mainten
 Cloudflare provides [free SSL certificates](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/) to all connected domains and all their first-level subdomains.
 These certificates are automatically enabled on all domains and subdomains that have Cloudflare’s proxy functionality enabled. However, if you have multiple nested subdomains (e.g., `staging.api.example.com`), this universal certificate will not cover those domains and may cause an `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` error.
 If your application requires multiple nested subdomains, we recommend you disable Cloudflare proxying and use a traditional SSL certificate for your Laravel Forge site.
+### [​](#certificate-signing-requests-csrs) Certificate Signing Requests (CSRs)
+Forge can generate a private key and Certificate Signing Request (CSR) directly on your server. You may then submit the CSR to the Certificate Authority (CA) of your choice to obtain a signed certificate. This is the right choice when your CA requires you to supply a CSR or when you need an organization-validation (OV) or extended-validation (EV) certificate that Let’s Encrypt does not offer.
+#### [​](#generating-and-retrieving-the-csr) Generating and retrieving the CSR
+To generate a CSR, open the Domains tab for your site and click **Add certificate > Certificate Signing Request**. You will be asked to provide information about your domain and organization. Once submitted, Forge generates an RSA private key and a `.csr` file on your server.
+Once the CSR is created, you can copy its contents by clicking the **three-dot button > View signing request** for the certificate. Submit this content to your CA to obtain your signed certificate.
+#### [​](#installing-the-signed-certificate) Installing the signed certificate
+After your CA issues the signed certificate, return to Forge and click the **three-dot button > Install certificate**. Paste the certificate your CA provided, including any intermediate certificates that are needed to form the full chain. No private key upload is required, as Forge already generated one during the CSR step. Forge will then install the certificate and activate HTTPS for the domain.
+CSR-based certificates are **not renewed automatically**. You are responsible for monitoring the certificate’s expiration date and repeating the process before it expires.
 ### [​](#cloning-certificates) Cloning certificates
 Forge allows you to clone an existing SSL certificate from another site to your current site. This feature lets you reuse certificates across multiple sites, including sites on different servers within your Forge account.
 When adding a new SSL certificate to a domain, you can select the “Clone certificate” option and choose from a searchable list of certificates installed on your other sites. The certificate and its private key will be copied to the new site.
@@ -185,5 +133,3 @@ Was this page helpful?
 YesNo
 [Managing Sites](/docs/sites/the-basics)[Deployments](/docs/sites/deployments)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

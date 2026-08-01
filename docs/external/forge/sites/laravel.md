@@ -4,89 +4,26 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Sites
-Laravel
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
-- [Requirements](#requirements)
+  - [Requirements](#requirements)
 - [Laravel Scheduler](#laravel-scheduler)
 - [Maintenance mode](#maintenance-mode)
-- [Maintenance mode “secret”](#maintenance-mode-%E2%80%9Csecret%E2%80%9D)
+  - [Maintenance mode “secret”](#maintenance-mode-%E2%80%9Csecret%E2%80%9D)
 - [Laravel Horizon](#laravel-horizon)
-- [Converting existing daemons](#converting-existing-daemons)
+  - [Converting existing daemons](#converting-existing-daemons)
 - [Laravel Octane](#laravel-octane)
-- [Converting existing daemons](#converting-existing-daemons-2)
+  - [Converting existing daemons](#converting-existing-daemons-2)
 - [Laravel Reverb](#laravel-reverb)
-- [SSL](#ssl)
-- [Converting existing daemons](#converting-existing-daemons-3)
+  - [SSL](#ssl)
+  - [Converting existing daemons](#converting-existing-daemons-3)
 - [Inertia server-side rendering (SSR)](#inertia-server-side-rendering-ssr)
-- [Converting existing daemons](#converting-existing-daemons-4)
+  - [Converting existing daemons](#converting-existing-daemons-4)
 Sites
 # Laravel
-Copy page
+Copy pageCopy page
 Laravel Forge provides first-class support for Laravel applications.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge provides first-class support for applications running [Laravel](https://laravel.com), allowing you to quickly toggle and configure:
 - Laravel’s Task Scheduler
@@ -146,8 +83,6 @@ If the site’s deploy script does not contain the `reverb:restart` command, Lar
 If an SSL certificate exists for your site which protects Reverb’s configured hostname, Laravel Forge will automatically install it when enabling Reverb, ensuring your Reverb server is accessible via secure WebSockets (`wss`).
 If Reverb is installed before a valid certificate is available, you may request a new certificate for Reverb’s configured hostname from your site’s “SSL” tab. Laravel Forge will automatically configure secure WebSockets for Reverb as soon as the certificate is activated. Forge will also pre-populate the “Domains” SSL form input with Reverb’s hostname when requesting a certificate.
 After activating SSL on a Reverb-enabled site, you should ensure the following environment variables are properly defined before redeploying your site:
-Copy
-Ask AI
 ```
 REVERB_PORT=443
 REVERB_SCHEME=https
@@ -170,5 +105,3 @@ Was this page helpful?
 YesNo
 [Isolation](/docs/sites/user-isolation)[Logs](/docs/sites/logs)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

@@ -4,87 +4,24 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Resources
-Database Backups
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating backup configurations](#creating-backup-configurations)
-- [Frequency options](#frequency-options)
-- [Backup retention](#backup-retention)
-- [Notifications for failed backups](#notifications-for-failed-backups)
+  - [Frequency options](#frequency-options)
+  - [Backup retention](#backup-retention)
+  - [Notifications for failed backups](#notifications-for-failed-backups)
 - [Managing backups](#managing-backups)
-- [Editing backups](#editing-backups)
-- [Deleting backup configurations](#deleting-backup-configurations)
-- [Restoring backups](#restoring-backups)
-- [Deleting backups](#deleting-backups)
-- [Backup output](#backup-output)
+  - [Editing backups](#editing-backups)
+  - [Deleting backup configurations](#deleting-backup-configurations)
+  - [Restoring backups](#restoring-backups)
+  - [Deleting backups](#deleting-backups)
+  - [Backup output](#backup-output)
 - [Team permissions](#team-permissions)
 Resources
 # Database Backups
-Copy page
+Copy pageCopy page
 Learn how to configure and manage automated database backups.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge supports automated database backups that can be scheduled directly from your server’s dashboard. You can choose to backup one or more databases at a specified frequency and also restore any of your recent backups. The backup script used by Forge is open source and can be [found on GitHub](https://github.com/laravel/forge-database-backups).
 Database backups are only available on the Business plan.
@@ -102,7 +39,7 @@ The **Custom** option allows you to provide a custom cron expression. You may wi
 ### [​](#backup-retention) Backup retention
 Laravel Forge will automatically prune old backups for you. For example, if you have configured a backup retention rate of “five”, only the last five backups will be stored within your storage provider.
 ### [​](#notifications-for-failed-backups) Notifications for failed backups
-You may provide an email address to be notified when a backup fails. If you need to notify multiple people, you should create a distribution list such as `[email protected]`.
+You may provide an email address to be notified when a backup fails. If you need to notify multiple people, you should create a distribution list such as `team@example.com`.
 Laravel Forge will also display failed backups within the “Backups” panel of the Forge server’s management dashboard.
 ## [​](#managing-backups) Managing backups
 ### [​](#editing-backups) Editing backups
@@ -125,7 +62,5 @@ The ability to manage database backups is split into two permissions.
 - `server:delete-backups`
 Was this page helpful?
 YesNo
-[Databases](/docs/resources/databases)[Caches](/docs/resources/caches)
+[Databases](/docs/resources/databases)[Managed Databases](/docs/resources/managed-databases)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

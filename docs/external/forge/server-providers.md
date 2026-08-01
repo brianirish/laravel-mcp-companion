@@ -4,86 +4,23 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Basics
-Server Providers
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Supported providers](#supported-providers)
 - [Managing server providers](#managing-server-providers)
-- [Connecting server providers](#connecting-server-providers)
-- [DigitalOcean](#digitalocean)
-- [AWS](#aws)
-- [AWS service limits](#aws-service-limits)
-- [Akamai](#akamai)
-- [Vultr API access](#vultr-api-access)
-- [Hetzner Cloud API access](#hetzner-cloud-api-access)
+  - [Connecting server providers](#connecting-server-providers)
+  - [DigitalOcean](#digitalocean)
+  - [AWS](#aws)
+  - [AWS service limits](#aws-service-limits)
+  - [Akamai](#akamai)
+  - [Vultr API access](#vultr-api-access)
+  - [Hetzner Cloud API access](#hetzner-cloud-api-access)
 - [Bring your own server](#bring-your-own-server)
 Basics
 # Server Providers
-Copy page
+Copy pageCopy page
 Learn about the server providers supported by Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 All servers provisioned on Laravel Forge are powered by an underlying server provider. The fastest way to get started is by using Laravel VPS as your server provider, which are Laravel managed servers. After subscribing to a Forge plan, you can immediately start provisioning Laravel VPS servers with zero additional configuration.
 Forge also allows you to link external server providers such as AWS or Hetzner so that you may create servers on those platforms. Server providers are configured and managed within the [organization’s](/docs/organizations) settings.
@@ -172,5 +109,3 @@ Was this page helpful?
 YesNo
 [Teams](/docs/teams)[Storage Providers](/docs/storage-providers)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.
