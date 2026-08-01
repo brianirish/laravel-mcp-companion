@@ -19,6 +19,8 @@ import threading
 import anyio.to_thread
 from fastmcp import Context, FastMCP
 from fastmcp.server.auth import TokenVerifier
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
@@ -1423,6 +1425,22 @@ def build_auth_provider(args) -> Optional["TokenVerifier"]:
     return StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None)
 
 
+def _registry_metadata() -> Dict[str, Any]:
+    """The repo's server.json with the running server's version stamped in.
+
+    The checked-in file carries the last released version; a deployment built
+    from a later commit should describe itself, not the file's snapshot.
+    """
+    data = json.loads((Path(__file__).parent / "server.json").read_text(encoding="utf-8"))
+    data["version"] = SERVER_VERSION
+    for package in data.get("packages", []):
+        package["version"] = SERVER_VERSION
+        identifier = package.get("identifier", "")
+        if ":" in identifier:
+            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:{SERVER_VERSION}"
+    return data
+
+
 def _server_icon() -> "Icon":
     """The repo icon as a self-contained data URI (SEP-973).
 
@@ -1469,6 +1487,13 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         instructions=build_server_instructions(docs_path, runtime_version, transform_mode)
     )
     
+    # Registry discovery endpoint (HTTP mode only; stdio never builds the app).
+    # Public by design even when the MCP endpoint requires auth: it is the
+    # same metadata the MCP Registry republishes to everyone.
+    @mcp.custom_route("/.well-known/mcp/server.json", methods=["GET"])
+    async def well_known_server_json(request: "Request") -> "JSONResponse":
+        return JSONResponse(_registry_metadata())
+
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
     
