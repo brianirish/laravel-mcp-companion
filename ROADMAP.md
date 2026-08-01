@@ -171,7 +171,8 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 - [x] Security audit and hardening *(v0.10.0, extended in v0.11.0)*
 - [x] Input validation improvements *(v0.10.0, completed in v0.11.0)*
 - [x] Dependency security scanning *(CodeQL and Dependabot)*
-- [ ] Authentication for the HTTP transport
+- [x] Authentication for the HTTP transport *(v0.12.0: OAuth 2.1 resource
+  server — JWKS or static tokens)*
 
 ### Quality Assurance
 - [ ] 80%+ coverage of product code, from 67% today

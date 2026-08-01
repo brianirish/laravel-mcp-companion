@@ -47,6 +47,10 @@
 
 ## Installation
 
+Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io/?search=laravel-mcp-companion)
+as `io.github.brianirish/laravel-mcp-companion` — clients with registry
+support can install it from there directly. Manual setup:
+
 ### Claude Desktop
 
 1. **Open Claude Desktop Settings**
