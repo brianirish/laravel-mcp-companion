@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Dict, Optional, List, Any
 import threading
 import anyio.to_thread
-from fastmcp import FastMCP
+from fastmcp import Context, FastMCP
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
@@ -67,6 +67,7 @@ from mcp_tools import (
 )
 
 # Import learning resources
+from learning_resources import LEARNING_PATHS
 
 # Configure logging
 logging.basicConfig(
@@ -2174,8 +2175,35 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"learning", "read"}
     )
-    def get_laravel_learning_path(path_name: str = "") -> str:
-        """Get a specific curated learning path."""
+    async def get_laravel_learning_path(ctx: Context, path_name: str = "") -> str:
+        """Get a specific curated learning path.
+
+        Called without a path, asks the client to pick one (elicitation).
+        Clients that decline, cancel, or cannot elicit get the listing —
+        exactly the pre-elicitation behavior.
+        """
+        if not path_name:
+            choices = {
+                key: {
+                    "title": (
+                        f"{path['name']} "
+                        f"({getattr(path['difficulty'], 'value', path['difficulty'])}, "
+                        f"~{path['estimated_hours']}h)"
+                    )
+                }
+                for key, path in LEARNING_PATHS.items()
+            }
+            try:
+                result = await ctx.elicit(
+                    "Which learning path would you like?", response_type=choices
+                )
+            except Exception:
+                # Client doesn't support elicitation; fall back to the listing.
+                return get_laravel_learning_path_impl("")
+            if result.action == "accept":
+                path_name = result.data
+            else:
+                return get_laravel_learning_path_impl("")
         return get_laravel_learning_path_impl(path_name)
 
     @mcp.tool(
