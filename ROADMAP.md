@@ -127,28 +127,39 @@ are the point of the project. Contains breaking changes; see the release notes.
 ---
 
 ## v0.12.0 - MCP Modernization
-**Target: Q1 2027**
+**Target: Q1 2027 — implemented ahead of schedule, ships as the next release**
 
 ### MCP 2025-11-25 Spec Compatibility
-- [ ] **Tasks primitive** for async documentation updates and background indexing
-- [ ] **Elicitation** for interactive learning path customization
-- [ ] **Structured tool outputs** for better response formatting
-- [ ] **OAuth 2.1** support for remote HTTP transport
+- [x] **Tasks primitive** for async documentation updates — both update tools
+  declare optional task support; sync clients are unaffected
+- [x] **Elicitation** for interactive learning path selection, with the old
+  listing as the fallback for clients without the capability
+- [x] **Structured tool outputs** alongside TOON text for the five tabular
+  tools, with real output schemas
+- [x] **OAuth 2.1** resource-server support for the HTTP transport (JWKS or
+  static tokens; issuer+audience mandatory)
 
 ### MCP Registry Publishing
-- [ ] Publish to official MCP Registry for discoverability
-- [ ] `.well-known` URL support for server identity
-- [ ] Self-publishing metadata and versioning
+- [x] Publish workflow for the official MCP Registry (GitHub OIDC, fires on
+  the next `v*` tag)
+- [x] `.well-known/mcp/server.json` endpoint for server identity in HTTP mode
+- [x] Self-publishing metadata (`server.json`, schema-validated) and
+  version-guarded
 
-### Documentation Improvements
-- [ ] Advanced search across all aggregated sources
-- [ ] Version-specific documentation filtering improvements
-- [ ] Package ecosystem documentation mapping
+The Documentation Improvements bullets originally sketched for this slot
+(advanced search, version filtering, ecosystem mapping) moved to v0.13.0:
+they are retrieval work, unrelated to the protocol modernization, and the
+retrieval overhaul in v0.11.0 already delivered the highest-value part.
 
 ---
 
 ## v0.13.0 - Production Readiness
 **Target: Q2 2027**
+
+### Documentation Improvements (moved from v0.12.0)
+- [ ] Advanced search across all aggregated sources
+- [ ] Version-specific documentation filtering improvements
+- [ ] Package ecosystem documentation mapping
 
 ### Reliability & Monitoring
 - [ ] Health monitoring and metrics endpoints

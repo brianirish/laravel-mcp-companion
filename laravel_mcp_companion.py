@@ -2311,7 +2311,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         exactly the pre-elicitation behavior.
         """
         if not path_name:
-            choices = {
+            choices: Dict[str, Dict[str, str]] = {
                 key: {
                     "title": (
                         f"{path['name']} "
@@ -2322,14 +2322,17 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 for key, path in LEARNING_PATHS.items()
             }
             try:
+                # mypy resolves the elicit overload's unbound TypeVar to None
+                # for the titled-enum dict form; the runtime accepts it.
                 result = await ctx.elicit(
-                    "Which learning path would you like?", response_type=choices
+                    "Which learning path would you like?",
+                    response_type=choices,  # type: ignore[arg-type]
                 )
             except Exception:
                 # Client doesn't support elicitation; fall back to the listing.
                 return get_laravel_learning_path_impl("")
             if result.action == "accept":
-                path_name = result.data
+                path_name = str(result.data)
             else:
                 return get_laravel_learning_path_impl("")
         return get_laravel_learning_path_impl(path_name)
