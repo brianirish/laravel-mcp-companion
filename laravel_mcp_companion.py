@@ -1434,11 +1434,11 @@ def _registry_metadata() -> Dict[str, Any]:
     data = json.loads((Path(__file__).parent / "server.json").read_text(encoding="utf-8"))
     data["version"] = SERVER_VERSION
     for package in data.get("packages", []):
-        package["version"] = SERVER_VERSION
         identifier = package.get("identifier", "")
         if ":" in identifier:
-            # Image tags carry the leading v (Harness tags images with the
-            # git tag verbatim), unlike the semver version fields.
+            # OCI packages have no separate version field (the registry
+            # rejects one); the tag keeps its leading v because Harness tags
+            # images with the git tag verbatim.
             package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:v{SERVER_VERSION}"
     return data
 

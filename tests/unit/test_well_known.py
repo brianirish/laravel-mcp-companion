@@ -27,7 +27,9 @@ async def test_well_known_serves_stamped_server_json(http_app):
         data = res.json()
         assert data["name"] == "io.github.brianirish/laravel-mcp-companion"
         assert data["version"] == laravel_mcp_companion.SERVER_VERSION
-        assert data["packages"][0]["version"] == laravel_mcp_companion.SERVER_VERSION
+        assert data["packages"][0]["identifier"].endswith(
+            f":v{laravel_mcp_companion.SERVER_VERSION}"
+        )
 
 
 async def test_well_known_is_readable_without_auth(test_docs_dir, monkeypatch):
