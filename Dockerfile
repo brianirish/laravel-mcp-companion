@@ -18,6 +18,10 @@ RUN pip install --upgrade pip && \
 # documentation sync.
 COPY . .
 
+# The MCP Registry validates OCI ownership through this label: it must match
+# the "name" in server.json or registry publishes are rejected.
+LABEL io.modelcontextprotocol.server.name="io.github.brianirish/laravel-mcp-companion"
+
 # Default environment
 ENV PYTHONUNBUFFERED=1
 

@@ -182,6 +182,22 @@ def test_server_version_constant_matches_pyproject():
     )
 
 
+def test_server_json_version_matches_pyproject():
+    """server.json is the registry's view of the release; it must not drift.
+
+    The publish workflow stamps the tag version in at release time, but the
+    checked-in copy is what the .well-known endpoint serves and what reviewers
+    read, so it tracks pyproject like everything else.
+    """
+    import json
+
+    data = json.loads((REPO_ROOT / "server.json").read_text(encoding="utf-8"))
+    assert data["version"] == project_version()
+    pkg = data["packages"][0]
+    assert pkg["version"] == project_version()
+    assert pkg["identifier"].endswith(f":{project_version()}")
+
+
 def test_package_json_is_gone():
     """package.json was vestigial npm metadata frozen at 0.8.0.
 
