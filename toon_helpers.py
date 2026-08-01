@@ -5,6 +5,9 @@ in TOON (Token-Oriented Object Notation) format for optimal token efficiency.
 """
 
 from typing import Any, Dict, List, Optional
+
+from fastmcp.tools.tool import ToolResult
+from mcp.types import TextContent
 from toon_format import encode
 
 
@@ -15,6 +18,28 @@ def toon_encode(data: Any) -> str:
     except Exception:
         # Fallback to string representation if encoding fails
         return str(data)
+
+
+def toon_result(data: Dict[str, Any]) -> ToolResult:
+    """Build a tool result carrying TOON text and structured content together.
+
+    The same dict feeds both: clients that read text get TOON (the token-cheap
+    serialization), clients that read structuredContent get the actual object.
+    Structured content must be a JSON object per the MCP spec, so lists need
+    wrapping before they get here.
+    """
+    return ToolResult(
+        content=[TextContent(type="text", text=toon_encode(data))],
+        structured_content=data,
+    )
+
+
+def error_data(message: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """The canonical error shape, as data."""
+    data: Dict[str, Any] = {"error": message}
+    if context:
+        data["context"] = context
+    return data
 
 
 def format_version_list(versions: List[Dict[str, Any]]) -> str:
@@ -85,10 +110,7 @@ def format_doc_structure(filename: str, headings: List[Dict[str, Any]]) -> str:
 
 def format_error(message: str, context: Optional[Dict[str, Any]] = None) -> str:
     """Format error messages consistently."""
-    data: Dict[str, Any] = {"error": message}
-    if context:
-        data["context"] = context
-    return toon_encode(data)
+    return toon_encode(error_data(message, context))
 
 
 def format_feature_verification(

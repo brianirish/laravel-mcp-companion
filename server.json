@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.brianirish/laravel-mcp-companion",
+  "title": "Laravel MCP Companion",
+  "description": "Laravel documentation aggregator: multi-version core docs, services, packages, learning paths.",
+  "version": "0.11.0",
+  "websiteUrl": "https://github.com/brianirish/laravel-mcp-companion",
+  "repository": {
+    "url": "https://github.com/brianirish/laravel-mcp-companion",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://ghcr.io",
+      "identifier": "ghcr.io/brianirish/laravel-mcp-companion:0.11.0",
+      "version": "0.11.0",
+      "runtimeHint": "docker",
+      "runtimeArguments": [
+        {
+          "type": "named",
+          "name": "--rm",
+          "description": "Remove the container when the session ends"
+        },
+        {
+          "type": "named",
+          "name": "-i",
+          "description": "Keep stdin open; the MCP transport is stdio"
+        }
+      ],
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -18,6 +18,47 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- The two documentation-update tools run as MCP *tasks* (SEP-1686,
+  experimental in spec 2025-11-25): task-aware clients submit and poll instead
+  of holding the connection open for up to five minutes. Sync clients keep the
+  old behavior — task support is declared "optional". Their blocking bodies
+  also moved off the event loop, fixing a live starvation bug where one update
+  froze every other connected HTTP client for its full duration.
+- `get_laravel_learning_path` called without a path now asks the client which
+  of the ten curated paths to fetch, via elicitation with titled options.
+  Decline, cancel, and clients without the capability get the old listing.
+- The five tabular tools (`search_laravel_docs`, `laravel_docs_info`,
+  `list_laravel_docs`, `get_laravel_package_recommendations`,
+  `get_laravel_package_info`) return `structuredContent` alongside their TOON
+  text and declare real output schemas, replacing FastMCP's auto-wrapped
+  `{"result": "<string>"}` shape. The search transform's `call_tool` proxy
+  forwards structured content, so both transform modes benefit.
+- OAuth 2.1 bearer-token validation for the HTTP transport, as a resource
+  server: `--auth-jwks-uri` / `--auth-issuer` / `--auth-audience` /
+  `--auth-required-scope` (env: `AUTH_JWKS_URI`, `AUTH_ISSUER`,
+  `AUTH_AUDIENCE`, `AUTH_REQUIRED_SCOPES`) against a real authorization
+  server, or `AUTH_STATIC_TOKENS` (env only) for development. Issuer and
+  audience are mandatory in JWKS mode; misconfiguration fails at startup.
+  Without configuration nothing changes.
+- MCP Registry metadata: `server.json` (validated against the 2025-12-11
+  registry schema), the `io.modelcontextprotocol.server.name` OCI label the
+  registry uses to verify image ownership, and a GitHub Actions workflow that
+  publishes to the registry on `v*` tags via OIDC. HTTP deployments serve the
+  metadata at `/.well-known/mcp/server.json` with the running version stamped
+  in.
+- The server identifies itself at initialize: version (guarded against
+  pyproject drift), website URL, and an embedded SVG icon (SEP-973).
+
+### Changed
+- The all-versions `list_laravel_docs` payload is wrapped as
+  `{count, versions}` instead of a bare list, because structured content must
+  be a JSON object. Single-version output is unchanged.
+
+### Removed
+- `package.json`, vestigial npm metadata frozen at 0.8.0 that nothing
+  consumed. Registry metadata lives in `server.json`.
+
 ## [0.11.0] - 2026-07-31
 
 ### Breaking

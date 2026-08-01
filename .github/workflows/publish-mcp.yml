@@ -1,0 +1,64 @@
+# Publishes the server to the official MCP Registry on version tags.
+#
+# This lives in GitHub Actions rather than Harness (the live CI) because
+# registry authentication uses GitHub Actions OIDC — that credential does not
+# exist anywhere else. Harness builds and pushes the Docker image on the same
+# tag; the wait step below covers the race between the two pipelines, since
+# the registry validates that the referenced image exists and carries the
+# io.modelcontextprotocol.server.name label.
+#
+# docs-YYYY-MM-DD tags are documentation syncs, not releases; "v*" never
+# matches them.
+
+name: Publish to MCP Registry
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC authentication to the registry
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Wait for the Docker image Harness builds on this tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          IMAGE="ghcr.io/brianirish/laravel-mcp-companion:${TAG}"
+          echo "Waiting for ${IMAGE}"
+          for attempt in $(seq 1 60); do
+            if docker manifest inspect "${IMAGE}" >/dev/null 2>&1; then
+              echo "Image found after ${attempt} checks"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::${IMAGE} never appeared; is the Harness release pipeline green?"
+          exit 1
+
+      - name: Stamp the tag version into server.json
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          jq --arg v "${TAG}" '
+            .version = $v
+            | .packages[0].version = $v
+            | .packages[0].identifier = (.packages[0].identifier | sub(":[^:]*$"; ":" + $v))
+          ' server.json > server.json.tmp
+          mv server.json.tmp server.json
+          cat server.json
+
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Authenticate to the MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish
+        run: ./mcp-publisher publish

@@ -167,6 +167,46 @@ def test_pyproject_version_tracks_the_newest_release_tag():
     )
 
 
+def test_server_version_constant_matches_pyproject():
+    """The running server reports its version at initialize; it must not drift.
+
+    There is no installed package metadata inside the Docker image (the source
+    is COPYed and run directly), so the version lives in a constant that this
+    guard chains to the same source of truth as everything else.
+    """
+    import laravel_mcp_companion as lmc
+
+    assert lmc.SERVER_VERSION == project_version(), (
+        f"SERVER_VERSION says {lmc.SERVER_VERSION} but pyproject.toml says "
+        f"{project_version()}"
+    )
+
+
+def test_server_json_version_matches_pyproject():
+    """server.json is the registry's view of the release; it must not drift.
+
+    The publish workflow stamps the tag version in at release time, but the
+    checked-in copy is what the .well-known endpoint serves and what reviewers
+    read, so it tracks pyproject like everything else.
+    """
+    import json
+
+    data = json.loads((REPO_ROOT / "server.json").read_text(encoding="utf-8"))
+    assert data["version"] == project_version()
+    pkg = data["packages"][0]
+    assert pkg["version"] == project_version()
+    assert pkg["identifier"].endswith(f":{project_version()}")
+
+
+def test_package_json_is_gone():
+    """package.json was vestigial npm metadata frozen at 0.8.0.
+
+    Nothing consumed it, no guard checked it, and it shipped a wrong version
+    number in the image for two years. Registry metadata lives in server.json.
+    """
+    assert not (REPO_ROOT / "package.json").exists()
+
+
 def test_pytest_is_configured_in_exactly_one_place():
     """Only pytest.ini configures pytest; a second source silently drifts.
 

@@ -279,8 +279,10 @@ class TestCachingWorkflows:
             # Key includes the result limit, which changes the response
             cache_key = "search:keyword:12.x:True:5"
             assert cache_key in _search_result_cache
+            # The cache stores result data (dicts), not encoded strings, so the
+            # same entry can feed both TOON text and structuredContent.
             cached_result = _search_result_cache[cache_key]
-            assert "test.md" in cached_result
+            assert any("test.md" in hit["file"] for hit in cached_result["results"])
 
     def test_cache_invalidation_workflow(self, test_docs_dir):
         """Test cache invalidation during documentation updates."""

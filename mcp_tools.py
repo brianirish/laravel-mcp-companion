@@ -11,7 +11,7 @@ import re
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import json
 import threading
 
@@ -19,6 +19,7 @@ from doc_search import Section, chunk_markdown
 from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
 from toon_helpers import (
     toon_encode,
+    error_data,
     format_version_list,
     format_category_docs,
     format_doc_structure,
@@ -62,7 +63,7 @@ _SEARCH_CACHE_MAX_ENTRIES = 100
 _SEARCH_CACHE_EVICT_COUNT = 20
 
 _file_content_cache: Dict[str, str] = {}
-_search_result_cache: Dict[str, str] = {}
+_search_result_cache: Dict[str, Dict[str, Any]] = {}
 _cache_lock = threading.Lock()
 
 
@@ -242,22 +243,28 @@ def load_service_sections(external_dir: Path, service: str) -> List["Section"]:
     return sections
 
 
-def validate_version(version: Optional[str]) -> Optional[str]:
+def validate_version_data(version: Optional[str]) -> Optional[Dict[str, Any]]:
     """Validate a caller-supplied Laravel version against the supported allowlist.
 
     Version strings are used to build filesystem paths, so anything outside the
     allowlist is rejected before it can be joined onto a base directory.
 
     Returns:
-        A TOON-encoded error string if the version is invalid, otherwise None.
+        An error dict if the version is invalid, otherwise None.
     """
     if version is not None and version not in SUPPORTED_VERSIONS:
         logger.warning(f"Rejected unsupported version parameter: {version!r}")
-        return format_error(
+        return error_data(
             f"Invalid version: {version}",
             {"supported_versions": SUPPORTED_VERSIONS}
         )
     return None
+
+
+def validate_version(version: Optional[str]) -> Optional[str]:
+    """String-returning form of validate_version_data for the TOON-only tools."""
+    error = validate_version_data(version)
+    return toon_encode(error) if error else None
 
 
 def resolve_search_versions(
@@ -416,19 +423,19 @@ def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
     return {}
 
 
-def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
-    """List all available Laravel documentation files.
+def list_laravel_docs_data(docs_path: Path, version: Optional[str] = None, runtime_version: Optional[str] = None) -> Dict[str, Any]:
+    """List all available Laravel documentation files, as data.
 
     Args:
         docs_path: Base path for documentation
         version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
 
     Returns:
-        TOON-encoded structured data with version metadata and file lists.
+        Dict with version metadata and file lists, or an error dict.
     """
-    logger.debug(f"list_laravel_docs_impl called (version: {version})")
+    logger.debug(f"list_laravel_docs_data called (version: {version})")
 
-    version_error = validate_version(version)
+    version_error = validate_version_data(version)
     if version_error:
         return version_error
 
@@ -437,7 +444,7 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
             # List docs for specific version
             version_path = docs_path / version
             if not version_path.exists():
-                return format_error(
+                return error_data(
                     f"No documentation found for version {version}",
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
                 )
@@ -446,15 +453,15 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
             md_files = sorted(name for name, _ in list_contained_markdown(version_path))
 
             if not md_files:
-                return format_error(f"No documentation files found in version {version}")
+                return error_data(f"No documentation files found in version {version}")
 
-            return toon_encode({
+            return {
                 "version": version,
                 "last_updated": metadata.get('sync_time', 'unknown'),
                 "commit": metadata.get('commit_sha', 'unknown')[:7] if metadata.get('commit_sha') else 'unknown',
                 "file_count": len(md_files),
                 "files": md_files
-            })
+            }
         else:
             # List all versions
             versions_data: List[Dict] = []
@@ -473,15 +480,29 @@ def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runti
                     })
 
             if not versions_data:
-                return format_error(
+                return error_data(
                     "No documentation files found",
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
                 )
 
-            return format_version_list(versions_data)
+            return {"count": len(versions_data), "versions": versions_data}
     except Exception as e:
         logger.error(f"Error listing documentation files: {str(e)}")
-        return format_error(f"Error listing documentation files: {str(e)}")
+        return error_data(f"Error listing documentation files: {str(e)}")
+
+
+def list_laravel_docs_impl(docs_path: Path, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
+    """TOON-encoded form of list_laravel_docs_data.
+
+    The bare all-versions list used to be encoded unwrapped; structured content
+    must be a JSON object, so both serializations now share the wrapped shape.
+    """
+    data = list_laravel_docs_data(docs_path, version, runtime_version=runtime_version)
+    if version and "files" in data:
+        return toon_encode(data)
+    if "versions" in data:
+        return format_version_list(data["versions"])
+    return toon_encode(data)
 
 
 def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
@@ -591,7 +612,7 @@ def read_laravel_doc_section_impl(
     )
 
 
-def search_laravel_docs_impl(
+def search_laravel_docs_data(
     docs_path: Path,
     query: str,
     version: Optional[str] = None,
@@ -600,8 +621,8 @@ def search_laravel_docs_impl(
     runtime_version: Optional[str] = None,
     all_versions: bool = False,
     limit: int = 5,
-) -> str:
-    """Search documentation, returning ranked sections with snippets.
+) -> Dict[str, Any]:
+    """Search documentation, returning ranked sections with snippets, as data.
 
     Ranked by BM25 over ## sections rather than by literal substring count, so a
     multi-word question matches at all and long files no longer outrank relevant
@@ -610,12 +631,12 @@ def search_laravel_docs_impl(
     """
     from doc_search import extract_snippet, get_index
 
-    version_error = validate_version(version)
+    version_error = validate_version_data(version)
     if version_error:
         return version_error
 
     if not query.strip():
-        return format_error("Search query cannot be empty")
+        return error_data("Search query cannot be empty")
 
     search_versions = resolve_search_versions(version, runtime_version, all_versions)
 
@@ -654,12 +675,12 @@ def search_laravel_docs_impl(
     hits = hits[:limit]
 
     if not hits:
-        result = format_error(
+        result = error_data(
             f"No results found for '{query}'",
             {"scope": ", ".join(search_versions)},
         )
     else:
-        result = toon_encode({
+        result = {
             "query": query,
             "scope": ", ".join(search_versions),
             "results": [
@@ -672,7 +693,7 @@ def search_laravel_docs_impl(
                 }
                 for section, score in hits
             ],
-        })
+        }
 
     with _cache_lock:
         _search_result_cache[cache_key] = result
@@ -681,6 +702,23 @@ def search_laravel_docs_impl(
                 del _search_result_cache[key]
 
     return result
+
+
+def search_laravel_docs_impl(
+    docs_path: Path,
+    query: str,
+    version: Optional[str] = None,
+    include_external: bool = True,
+    external_dir: Optional[Path] = None,
+    runtime_version: Optional[str] = None,
+    all_versions: bool = False,
+    limit: int = 5,
+) -> str:
+    """TOON-encoded form of search_laravel_docs_data."""
+    return toon_encode(search_laravel_docs_data(
+        docs_path, query, version, include_external, external_dir,
+        runtime_version=runtime_version, all_versions=all_versions, limit=limit,
+    ))
 
 
 def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:

@@ -107,6 +107,10 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--host HOST` | Interface to bind in HTTP mode (env: `HOST`) | `127.0.0.1` (`0.0.0.0` in Docker) |
 | `--cors-origin ORIGIN` | Browser origin allowed to call the HTTP transport, repeatable (env: `CORS_ORIGINS`) | none (CORS off) |
 | `--allowed-host HOST` | Additional `Host` header accepted in HTTP mode, repeatable (env: `ALLOWED_HOSTS`) | `localhost`, `127.0.0.1`, `::1` |
+| `--auth-jwks-uri URI` | JWKS endpoint enabling bearer-token auth in HTTP mode (env: `AUTH_JWKS_URI`) | none (auth off) |
+| `--auth-issuer ISSUER` | Required token issuer, with `--auth-jwks-uri` (env: `AUTH_ISSUER`) | none |
+| `--auth-audience AUD` | Required token audience, with `--auth-jwks-uri` (env: `AUTH_AUDIENCE`) | none |
+| `--auth-required-scope SCOPE` | Scope every token must carry, repeatable (env: `AUTH_REQUIRED_SCOPES`) | none |
 
 ### Keeping documentation current
 
@@ -168,7 +172,27 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --transform-m
 
 ### HTTP transport security
 
-**This server ships no authentication.** Anyone who can reach the HTTP port can call every tool, so treat network exposure as granting full access to the documentation tree.
+**Authentication is off by default.** Anyone who can reach the HTTP port can call every tool, so treat network exposure as granting full access to the documentation tree — or turn on bearer-token auth:
+
+```bash
+# Validate tokens issued by a real OAuth 2.1 authorization server
+python laravel_mcp_companion.py --transport http \
+  --auth-jwks-uri https://auth.example/.well-known/jwks.json \
+  --auth-issuer https://auth.example \
+  --auth-audience laravel-mcp-companion
+
+# Development only: fixed tokens from the environment (never a CLI flag,
+# so secrets stay out of process listings)
+AUTH_STATIC_TOKENS="my-token:my-client" python laravel_mcp_companion.py --transport http
+```
+
+The server is a *resource server*: it validates tokens, it never issues them.
+Issuer and audience are mandatory with `--auth-jwks-uri` — accepting any
+issuer's tokens, or tokens minted for another service, would be authentication
+theater. Unauthenticated requests get `401` with a `WWW-Authenticate` header
+(RFC 9728), and misconfiguration fails at startup rather than at request time.
+Auth applies to the HTTP transport only; stdio's access control is the process
+boundary.
 
 Defaults are conservative:
 
@@ -215,9 +239,20 @@ Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origi
 - **Cross-package compatibility** - Documentation for package combinations
 - **Unified search** - One search across all documentation sources
 
+### MCP 2025-11-25 capabilities (next release)
+- **Task-capable updates** - Documentation updates run as MCP tasks: submit,
+  poll, fetch the result, instead of holding the connection for minutes
+- **Interactive learning paths** - Ask for a learning path without naming one
+  and the server asks you which of the ten curated paths you want
+- **Structured output** - Tabular tools return `structuredContent` with real
+  schemas alongside their TOON text
+- **OAuth 2.1 resource server** - Optional bearer-token validation for the
+  HTTP transport (JWKS or static dev tokens)
+- **Registry-ready** - `server.json` metadata, `.well-known` discovery in
+  HTTP mode, and automated MCP Registry publishing on release tags
+
 ### Upcoming
-- **v0.12.0**: MCP 2025-11-25 spec support, Registry publishing
-- **v0.13.0**: Production hardening, monitoring, authentication
+- **v0.13.0**: Production hardening, monitoring, advanced search
 - **v1.0.0**: First stable release with LTS commitment
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).

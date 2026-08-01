@@ -16,25 +16,36 @@ import json
 from pathlib import Path
 from typing import Dict, Optional, List, Any
 import threading
-from fastmcp import FastMCP
+import anyio.to_thread
+from fastmcp import Context, FastMCP
+from fastmcp.server.auth import TokenVerifier
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from fastmcp.server.transforms.search import BM25SearchTransform
+from mcp.types import Icon
 
 # Import documentation updater
 from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
 from shutdown_handler import GracefulShutdown
+from fastmcp.tools.tool import ToolResult
+
 from toon_helpers import (
     toon_encode,
+    toon_result,
+    error_data,
     format_package_list,
     format_package_info,
     format_service_list,
     format_error
 )
+from tool_schemas import OUTPUT_SCHEMAS
 
 # Import standalone MCP tool implementations
 from mcp_tools import (
-    list_laravel_docs_impl,
+    list_laravel_docs_data,
     read_laravel_doc_content_impl,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
+    validate_version_data,
     read_laravel_doc_section_impl,
     get_doc_structure_impl,
     browse_docs_by_category_impl,
@@ -59,6 +70,7 @@ from mcp_tools import (
 )
 
 # Import learning resources
+from learning_resources import LEARNING_PATHS
 
 # Configure logging
 logging.basicConfig(
@@ -66,6 +78,15 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("laravel-mcp-companion")
+
+# The server's own version, reported at initialize and stamped into the
+# .well-known registry metadata. The Docker image runs this file directly with
+# no installed package metadata, so importlib.metadata cannot supply it; a
+# guard in tests/unit/test_version_consistency.py keeps it equal to
+# pyproject.toml.
+SERVER_VERSION = "0.11.0"
+
+PROJECT_URL = "https://github.com/brianirish/laravel-mcp-companion"
 
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
@@ -736,6 +757,36 @@ def parse_arguments():
              "other than localhost (env: ALLOWED_HOSTS, comma-separated)"
     )
     parser.add_argument(
+        "--auth-jwks-uri",
+        type=str,
+        default=os.environ.get("AUTH_JWKS_URI"),
+        metavar="URI",
+        help="JWKS endpoint of the OAuth authorization server; enables bearer-token "
+             "validation on the HTTP transport (env: AUTH_JWKS_URI)"
+    )
+    parser.add_argument(
+        "--auth-issuer",
+        type=str,
+        default=os.environ.get("AUTH_ISSUER"),
+        metavar="ISSUER",
+        help="Required token issuer, matched against the JWT 'iss' claim (env: AUTH_ISSUER)"
+    )
+    parser.add_argument(
+        "--auth-audience",
+        type=str,
+        default=os.environ.get("AUTH_AUDIENCE"),
+        metavar="AUDIENCE",
+        help="Required token audience, matched against the JWT 'aud' claim (env: AUTH_AUDIENCE)"
+    )
+    parser.add_argument(
+        "--auth-required-scope",
+        action="append",
+        default=None,
+        metavar="SCOPE",
+        help="OAuth scope every token must carry (repeatable). Replaces "
+             "AUTH_REQUIRED_SCOPES when given (env: AUTH_REQUIRED_SCOPES, comma-separated)"
+    )
+    parser.add_argument(
         "--transform-mode",
         type=str,
         default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
@@ -762,6 +813,8 @@ def parse_arguments():
         args.cors_origin = _split_env_list("CORS_ORIGINS") or []
     if args.allowed_host is None:
         args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
+    if args.auth_required_scope is None:
+        args.auth_required_scope = _split_env_list("AUTH_REQUIRED_SCOPES") or []
 
     # Allowed hosts are matched with fnmatch, so a pattern entry would match
     # every Host header and silently disable the guard while still looking like
@@ -961,8 +1014,8 @@ def search_by_use_case(use_case: str) -> List[Dict]:
     
     return ranked_packages
 
-def format_package_recommendation(package: Dict) -> str:
-    """Format a package recommendation as TOON."""
+def package_recommendation_data(package: Dict) -> Dict[str, Any]:
+    """Build the package recommendation payload, as data."""
     pkg_id = package.get('id', 'unknown')
 
     data: Dict[str, Any] = {
@@ -984,7 +1037,12 @@ def format_package_recommendation(package: Dict) -> str:
     if 'documentation_link' in package:
         data["documentation_link"] = package['documentation_link']
 
-    return format_package_info(data)
+    return data
+
+
+def format_package_recommendation(package: Dict) -> str:
+    """Format a package recommendation as TOON."""
+    return format_package_info(package_recommendation_data(package))
 
 
 # Standalone implementations for testing
@@ -1300,7 +1358,103 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
+def build_auth_provider(args) -> Optional["TokenVerifier"]:
+    """Build the OAuth 2.1 token verifier from CLI/env configuration.
+
+    The server is a resource server only: it validates bearer tokens issued
+    elsewhere and never issues its own. Two mutually exclusive modes:
+
+    - JWKS (production): --auth-jwks-uri + --auth-issuer + --auth-audience.
+      Issuer and audience are mandatory -- accepting any issuer's tokens, or
+      tokens minted for a different service, is authentication theater.
+    - Static tokens (dev/internal, env only): AUTH_STATIC_TOKENS as
+      "token:client_id[,token:client_id...]". Deliberately not a CLI flag so
+      secrets stay out of process listings.
+
+    Returns None when no auth is configured, or when the transport is stdio,
+    where the process boundary is the access control.
+    """
+    static_tokens = os.environ.get("AUTH_STATIC_TOKENS", "").strip()
+    jwks_configured = bool(args.auth_jwks_uri)
+
+    if not static_tokens and not jwks_configured:
+        return None
+
+    if args.transport != "http":
+        logger.warning(
+            "Auth is configured but the transport is stdio; ignoring it. "
+            "Bearer-token auth only applies to the HTTP transport."
+        )
+        return None
+
+    if static_tokens and jwks_configured:
+        logger.error("AUTH_STATIC_TOKENS and --auth-jwks-uri are mutually exclusive")
+        sys.exit(1)
+
+    if jwks_configured:
+        if not args.auth_issuer or not args.auth_audience:
+            logger.error(
+                "--auth-jwks-uri requires --auth-issuer and --auth-audience: "
+                "without them any issuer's tokens, or tokens minted for another "
+                "service, would be accepted"
+            )
+            sys.exit(1)
+        from fastmcp.server.auth.providers.jwt import JWTVerifier
+        logger.info(f"Bearer-token auth enabled (JWKS: {args.auth_jwks_uri})")
+        return JWTVerifier(
+            jwks_uri=args.auth_jwks_uri,
+            issuer=args.auth_issuer,
+            audience=args.auth_audience,
+            required_scopes=args.auth_required_scope or None,
+        )
+
+    tokens: Dict[str, Dict[str, Any]] = {}
+    for entry in static_tokens.split(","):
+        token, sep, client_id = entry.strip().partition(":")
+        if not sep or not token or not client_id:
+            logger.error(
+                "AUTH_STATIC_TOKENS must be 'token:client_id[,token:client_id...]'"
+            )
+            sys.exit(1)
+        tokens[token] = {"client_id": client_id, "scopes": args.auth_required_scope or []}
+    from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+    logger.warning(
+        "Static-token auth enabled; fine for development, use --auth-jwks-uri "
+        "with a real authorization server in production"
+    )
+    return StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None)
+
+
+def _registry_metadata() -> Dict[str, Any]:
+    """The repo's server.json with the running server's version stamped in.
+
+    The checked-in file carries the last released version; a deployment built
+    from a later commit should describe itself, not the file's snapshot.
+    """
+    data = json.loads((Path(__file__).parent / "server.json").read_text(encoding="utf-8"))
+    data["version"] = SERVER_VERSION
+    for package in data.get("packages", []):
+        package["version"] = SERVER_VERSION
+        identifier = package.get("identifier", "")
+        if ":" in identifier:
+            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:{SERVER_VERSION}"
+    return data
+
+
+def _server_icon() -> "Icon":
+    """The repo icon as a self-contained data URI (SEP-973).
+
+    Embedded rather than linked so clients need no network fetch and stdio
+    servers have an icon at all.
+    """
+    import base64
+
+    svg = (Path(__file__).parent / "icon.svg").read_bytes()
+    encoded = base64.b64encode(svg).decode("ascii")
+    return Icon(src=f"data:image/svg+xml;base64,{encoded}", mimeType="image/svg+xml")
+
+
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None) -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
 
     Args:
@@ -1310,6 +1464,8 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         transform_mode: "search" for BM25SearchTransform (default),
                        "code" for CodeMode transform,
                        None for no transforms
+        auth: Optional token verifier for the HTTP transport (see
+              build_auth_provider); None leaves the server unauthenticated
 
     Returns:
         Configured FastMCP server instance
@@ -1320,13 +1476,24 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         'docs_path': docs_path,
         'version': runtime_version
     }
-    
+
     # Create the MCP server
     mcp: FastMCP = FastMCP(
         server_name,
+        version=SERVER_VERSION,
+        website_url=PROJECT_URL,
+        icons=[_server_icon()],
+        auth=auth,
         instructions=build_server_instructions(docs_path, runtime_version, transform_mode)
     )
     
+    # Registry discovery endpoint (HTTP mode only; stdio never builds the app).
+    # Public by design even when the MCP endpoint requires auth: it is the
+    # same metadata the MCP Registry republishes to everyone.
+    @mcp.custom_route("/.well-known/mcp/server.json", methods=["GET"])
+    async def well_known_server_json(request: "Request") -> "JSONResponse":
+        return JSONResponse(_registry_metadata())
+
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
     
@@ -1444,23 +1611,25 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_docs"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["list_laravel_docs"]
     )
-    def list_laravel_docs(version: Optional[str] = None) -> str:
+    def list_laravel_docs(version: Optional[str] = None) -> ToolResult:
         """List all available Laravel documentation files.
 
         Args:
             version: Specific Laravel version to list (e.g., "12.x"). If not provided, lists all versions.
         """
-        return list_laravel_docs_impl(docs_path, version, runtime_version=runtime_version)
-    
-    
+        return toon_result(list_laravel_docs_data(docs_path, version, runtime_version=runtime_version))
+
+
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["search_laravel_docs"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["search_laravel_docs"]
     )
-    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> str:
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> ToolResult:
         """Search through Laravel documentation for a specific term.
 
         Args:
@@ -1470,17 +1639,22 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             all_versions: Search every supported version instead of just the configured one
         """
         external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_impl(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions)
+        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],
         annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         tags={"docs", "write"},
+        task=True,
         timeout=120.0
     )
-    def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
+    async def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
         """
         Update Laravel documentation from official GitHub repository.
+
+        Task-capable (SEP-1686): task-aware clients get a handle to poll
+        instead of holding the connection open; everyone else runs it
+        synchronously as before.
 
         Args:
             version: Laravel version branch (e.g., "12.x")
@@ -1495,60 +1669,66 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         if version_error:
             return version_error
 
-        try:
-            updater = DocsUpdater(docs_path, doc_version)
+        def _run() -> str:
+            try:
+                updater = DocsUpdater(docs_path, doc_version)
 
-            # update() performs its own needs_update() check; calling it here too
-            # would spend an extra unauthenticated GitHub API request (60/hr limit).
-            updated = updater.update(force=force)
+                # update() performs its own needs_update() check; calling it here too
+                # would spend an extra unauthenticated GitHub API request (60/hr limit).
+                updated = updater.update(force=force)
 
-            if not updated:
-                return f"Documentation is already up to date (version: {doc_version})"
+                if not updated:
+                    return f"Documentation is already up to date (version: {doc_version})"
 
-            # Clear caches when documentation is updated
-            clear_file_cache()
+                # Clear caches when documentation is updated
+                clear_file_cache()
 
-            metadata = get_laravel_docs_metadata(docs_path, doc_version)
-            return (
-                f"Documentation updated successfully to {doc_version}\n"
-                f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
-                f"Date: {metadata.get('commit_date', 'unknown')}\n"
-                f"Message: {metadata.get('commit_message', 'unknown')}"
-            )
-        except Exception as e:
-            logger.error(f"Error updating documentation: {str(e)}")
-            return f"Error updating documentation: {str(e)}"
+                metadata = get_laravel_docs_metadata(docs_path, doc_version)
+                return (
+                    f"Documentation updated successfully to {doc_version}\n"
+                    f"Commit: {metadata.get('commit_sha', 'unknown')[:7]}\n"
+                    f"Date: {metadata.get('commit_date', 'unknown')}\n"
+                    f"Message: {metadata.get('commit_message', 'unknown')}"
+                )
+            except Exception as e:
+                logger.error(f"Error updating documentation: {str(e)}")
+                return f"Error updating documentation: {str(e)}"
+
+        # The body is blocking urllib I/O; keep it off the event loop so a
+        # two-minute update cannot starve every other connected client.
+        return await anyio.to_thread.run_sync(_run)
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["laravel_docs_info"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"docs", "read"}
+        tags={"docs", "read"},
+        output_schema=OUTPUT_SCHEMAS["laravel_docs_info"]
     )
-    def laravel_docs_info(version: Optional[str] = None) -> str:
+    def laravel_docs_info(version: Optional[str] = None) -> ToolResult:
         """Get information about the documentation version and status.
 
         Args:
             version: Specific Laravel version to get info for (e.g., "12.x"). If not provided, shows all versions.
 
         Returns:
-            TOON-encoded documentation metadata.
+            Documentation metadata as TOON text plus structured content.
         """
         logger.debug(f"laravel_docs_info function called (version: {version})")
 
         # This tool is implemented inline rather than delegating to an *_impl in
         # mcp_tools, which is how it escaped the validation added everywhere else.
-        version_error = validate_version_arg(version)
+        version_error = validate_version_data(version)
         if version_error:
-            return version_error
+            return toon_result(version_error)
 
         if version:
             metadata = get_laravel_docs_metadata(docs_path, version)
 
             if "version" not in metadata:
-                return format_error(
+                return toon_result(error_data(
                     f"No documentation metadata available for version {version}",
                     {"suggestion": "Use update_laravel_docs() to fetch documentation"}
-                )
+                ))
 
             # No staleness note here. An old date means Laravel stopped changing
             # this branch, which is neither a problem nor something a tool can fix.
@@ -1562,7 +1742,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 "commit_message": metadata.get('commit_message', 'unknown'),
                 "github_url": metadata.get('commit_url', 'unknown')
             }
-            return toon_encode(info)
+            return toon_result(info)
         else:
             # Show info for all available versions
             versions_data: List[Dict[str, Any]] = []
@@ -1602,15 +1782,16 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                     "suggests this copy is behind. Pull a newer image to get current "
                     "documentation."
                 )
-            return toon_encode(summary)
+            return toon_result(summary)
     
     # Register package recommendation tools
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_recommendations"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"packages", "read"}
+        tags={"packages", "read"},
+        output_schema=OUTPUT_SCHEMAS["get_laravel_package_recommendations"]
     )
-    def get_laravel_package_recommendations(use_case: str) -> str:
+    def get_laravel_package_recommendations(use_case: str) -> ToolResult:
         """
         Get Laravel package recommendations based on a use case.
 
@@ -1618,7 +1799,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             use_case: Description of what the user wants to implement
 
         Returns:
-            TOON-encoded package recommendations.
+            Package recommendations as TOON text plus structured content.
         """
         logger.info(f"Searching for packages matching use case: {use_case}")
 
@@ -1626,7 +1807,7 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         packages = search_by_use_case(use_case)
 
         if not packages:
-            return format_error(f"No packages found matching: '{use_case}'")
+            return toon_result(error_data(f"No packages found matching: '{use_case}'"))
 
         # Build TOON-friendly package list (limit to top 3)
         packages_data: List[Dict[str, Any]] = []
@@ -1640,14 +1821,19 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
                 "documentation_link": package.get('documentation_link')
             })
 
-        return format_package_list(packages_data, f"Packages for: {use_case}")
-    
+        return toon_result({
+            "context": f"Packages for: {use_case}",
+            "count": len(packages_data),
+            "packages": packages_data
+        })
+
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_info"],
         annotations={"readOnlyHint": True, "idempotentHint": True},
-        tags={"packages", "read"}
+        tags={"packages", "read"},
+        output_schema=OUTPUT_SCHEMAS["get_laravel_package_info"]
     )
-    def get_laravel_package_info(package_name: str) -> str:
+    def get_laravel_package_info(package_name: str) -> ToolResult:
         """
         Get detailed information about a specific Laravel package.
 
@@ -1655,19 +1841,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
             package_name: The name of the package (e.g., 'laravel/cashier')
 
         Returns:
-            TOON-encoded package information.
+            Package information as TOON text plus structured content.
         """
         logger.info(f"Getting information for package: {package_name}")
 
         # Get the package information
         if package_name not in PACKAGE_CATALOG:
-            return format_error(f"Package '{package_name}' not found")
+            return toon_result(error_data(f"Package '{package_name}' not found"))
 
         package = PACKAGE_CATALOG[package_name].copy()
         package['id'] = package_name
 
-        # Format the package information as TOON
-        return format_package_recommendation(package)
+        return toon_result(package_recommendation_data(package))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["get_laravel_package_categories"],
@@ -1847,55 +2032,63 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         description=TOOL_DESCRIPTIONS["update_external_laravel_docs"],
         annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True},
         tags={"external", "write"},
+        task=True,
         timeout=300.0
     )
-    def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
+    async def update_external_laravel_docs(services: Optional[List[str]] = None, force: bool = False) -> str:
         """
         Update documentation for external Laravel services.
-        
+
+        Task-capable (SEP-1686): this is the five-minute call, so task-aware
+        clients poll instead of blocking on it.
+
         Args:
             services: List of services to update (forge, vapor, envoyer, nova). If None, updates all.
             force: Force update even if cache is valid
-            
+
         Returns:
             Status of the update operation
         """
         logger.info(f"Updating external Laravel services documentation (services: {services}, force: {force})")
-        
-        try:
-            if services:
-                # Validate service names
-                available_services = multi_updater.external_fetcher.list_available_services()
-                invalid_services = [s for s in services if s not in available_services]
-                if invalid_services:
-                    return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
-                
-                results = multi_updater.update_external_docs(services=services, force=force)
-            else:
-                results = multi_updater.update_external_docs(force=force)
-            
-            # Clear caches if any services were updated successfully
-            successful = [service for service, success in results.items() if success]
-            failed = [service for service, success in results.items() if not success]
-            
-            if successful:
-                clear_file_cache()
 
-            response = []
-            response.append("External Laravel Services Documentation Update Results:")
-            response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
-            
-            if successful:
-                response.append(f"\nSuccessful: {', '.join(successful)}")
-            
-            if failed:
-                response.append(f"\nFailed: {', '.join(failed)}")
-                response.append("Note: Some services may require additional setup or may be temporarily unavailable.")
-            
-            return "\n".join(response)
-        except Exception as e:
-            logger.error(f"Error updating external documentation: {str(e)}")
-            return f"Error updating external documentation: {str(e)}"
+        def _run() -> str:
+            try:
+                if services:
+                    # Validate service names
+                    available_services = multi_updater.external_fetcher.list_available_services()
+                    invalid_services = [s for s in services if s not in available_services]
+                    if invalid_services:
+                        return f"Invalid services: {', '.join(invalid_services)}. Available: {', '.join(available_services)}"
+
+                    results = multi_updater.update_external_docs(services=services, force=force)
+                else:
+                    results = multi_updater.update_external_docs(force=force)
+
+                # Clear caches if any services were updated successfully
+                successful = [service for service, success in results.items() if success]
+                failed = [service for service, success in results.items() if not success]
+
+                if successful:
+                    clear_file_cache()
+
+                response = []
+                response.append("External Laravel Services Documentation Update Results:")
+                response.append(f"Successfully updated: {len(successful)}/{len(results)} services")
+
+                if successful:
+                    response.append(f"\nSuccessful: {', '.join(successful)}")
+
+                if failed:
+                    response.append(f"\nFailed: {', '.join(failed)}")
+                    response.append("Note: Some services may require additional setup or may be temporarily unavailable.")
+
+                return "\n".join(response)
+            except Exception as e:
+                logger.error(f"Error updating external documentation: {str(e)}")
+                return f"Error updating external documentation: {str(e)}"
+
+        # Blocking urllib I/O with retries and sleeps; keep it off the event loop.
+        return await anyio.to_thread.run_sync(_run)
 
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["list_laravel_services"],
@@ -2110,8 +2303,38 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"learning", "read"}
     )
-    def get_laravel_learning_path(path_name: str = "") -> str:
-        """Get a specific curated learning path."""
+    async def get_laravel_learning_path(ctx: Context, path_name: str = "") -> str:
+        """Get a specific curated learning path.
+
+        Called without a path, asks the client to pick one (elicitation).
+        Clients that decline, cancel, or cannot elicit get the listing —
+        exactly the pre-elicitation behavior.
+        """
+        if not path_name:
+            choices: Dict[str, Dict[str, str]] = {
+                key: {
+                    "title": (
+                        f"{path['name']} "
+                        f"({getattr(path['difficulty'], 'value', path['difficulty'])}, "
+                        f"~{path['estimated_hours']}h)"
+                    )
+                }
+                for key, path in LEARNING_PATHS.items()
+            }
+            try:
+                # mypy resolves the elicit overload's unbound TypeVar to None
+                # for the titled-enum dict form; the runtime accepts it.
+                result = await ctx.elicit(
+                    "Which learning path would you like?",
+                    response_type=choices,  # type: ignore[arg-type]
+                )
+            except Exception:
+                # Client doesn't support elicitation; fall back to the listing.
+                return get_laravel_learning_path_impl("")
+            if result.action == "accept":
+                path_name = str(result.data)
+            else:
+                return get_laravel_learning_path_impl("")
         return get_laravel_learning_path_impl(path_name)
 
     @mcp.tool(
@@ -2297,7 +2520,8 @@ def main():
     # Create and configure the MCP server
     mcp = create_mcp_server(
         args.server_name, docs_path, args.version,
-        transform_mode=None if mode == "none" else mode
+        transform_mode=None if mode == "none" else mode,
+        auth=build_auth_provider(args)
     )
 
     # Log server startup
