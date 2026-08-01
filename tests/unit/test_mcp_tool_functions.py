@@ -8,7 +8,6 @@ from mcp_tools import (
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
     search_laravel_docs_impl,
-    search_laravel_docs_with_context_impl,
     get_doc_structure_impl,
     browse_docs_by_category_impl,
     verify_laravel_feature_impl,
@@ -146,36 +145,6 @@ class TestDocumentationTools:
             result = search_laravel_docs_impl(test_docs_dir, "nonexistent_term", "12.x")
             
             assert "No results found for 'nonexistent_term'" in result
-
-    def test_search_laravel_docs_with_context_success(self, test_docs_dir):
-        """Test searching with context snippets."""
-        test_content = """# Laravel Routing
-
-Laravel routing is simple and powerful. You can define routes in your web.php file.
-
-## Basic Routing
-
-The most basic Laravel routes accept a URI and a closure, providing a very simple and expressive method of defining routes.
-
-```php
-Route::get('/', function () {
-    return view('welcome');
-});
-```
-
-This is how routing works in Laravel applications."""
-        
-        # Directory already exists from fixture
-        
-        with patch('mcp_tools.os.listdir', return_value=['routing.md']), \
-             patch('mcp_tools.get_file_content_cached', return_value=test_content), \
-             patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-            
-            result = search_laravel_docs_with_context_impl(test_docs_dir, "routing", "12.x", context_length=100)
-            
-            assert "Search results for 'routing':" in result
-            assert "12.x/routing.md" in result
-            assert "**routing**" in result  # Highlighted match
 
     def test_get_doc_structure_success(self, test_docs_dir):
         """Test getting document structure returns TOON format."""
@@ -449,35 +418,6 @@ class TestMcpToolsEdgeCases:
                 # Should handle exception gracefully
                 # The actual implementation might return error or empty results
                 assert result is not None
-
-    def test_search_with_context_no_results(self, test_docs_dir):
-        """Test search with context returns appropriate message when no results."""
-        from mcp_tools import search_laravel_docs_with_context_impl
-
-        with patch('mcp_tools.os.listdir', return_value=['test.md']), \
-             patch('mcp_tools.get_file_content_cached', return_value="# Test\n\nNo match here"), \
-             patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-
-            result = search_laravel_docs_with_context_impl(
-                test_docs_dir, "nonexistent_query_xyz", "12.x"
-            )
-
-            assert "No results found" in result
-
-    def test_search_with_context_exception(self, test_docs_dir):
-        """Test search with context handles exceptions."""
-        from mcp_tools import search_laravel_docs_with_context_impl
-
-        with patch('mcp_tools.os.scandir') as mock_scandir:
-            mock_scandir.side_effect = Exception("Search error")
-
-            with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-                result = search_laravel_docs_with_context_impl(
-                    test_docs_dir, "test", "12.x"
-                )
-
-                assert "Error" in result
-
 
 class TestVersionComparisonTools:
     """Test version comparison and feature verification tools."""

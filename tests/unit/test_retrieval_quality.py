@@ -147,3 +147,28 @@ def test_read_section_costs_far_less_than_the_whole_file():
     assert len(section) < len(whole) / 5, (
         f"section {len(section)} vs whole {len(whole)} chars"
     )
+
+
+@pytest.mark.asyncio
+async def test_section_reader_is_exposed_and_context_search_retired(tmp_path):
+    from fastmcp import Client
+
+    from laravel_mcp_companion import create_mcp_server
+
+    docs = tmp_path / "docs"
+    (docs / VERSION).mkdir(parents=True)
+    (docs / VERSION / "queues.md").write_text(
+        '<a name="failed-jobs"></a>\n## Failed Jobs\n\nRetry with queue:retry.\n'
+    )
+
+    server = create_mcp_server("T", docs, VERSION, transform_mode=None)
+    async with Client(server) as client:
+        names = [t.name for t in await client.list_tools()]
+        assert "read_laravel_doc_section" in names
+        assert "search_laravel_docs_with_context" not in names
+
+        result = await client.call_tool(
+            "read_laravel_doc_section",
+            {"filename": "queues.md", "section": "failed-jobs", "version": VERSION},
+        )
+        assert "queue:retry" in result.content[0].text

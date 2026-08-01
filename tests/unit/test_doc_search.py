@@ -1,6 +1,19 @@
 """Tests for section chunking, BM25 indexing and retrieval."""
 
-from doc_search import Section, chunk_markdown
+from pathlib import Path
+
+from doc_search import (
+    BM25Index,
+    DocIndex,
+    MAX_RESIDENT_INDEXES,
+    Section,
+    chunk_markdown,
+    clear_indexes,
+    extract_snippet,
+    get_index,
+    resident_index_count,
+)
+
 
 SAMPLE = """# Queues
 
@@ -54,7 +67,6 @@ def test_chunk_records_provenance():
     assert isinstance(sections[0], Section)
 
 
-from doc_search import BM25Index
 
 CORPUS = [
     "queue jobs are processed by workers and can fail",
@@ -103,7 +115,6 @@ def test_index_releases_token_lists_after_build():
     assert not getattr(idx, "_doc_tokens", None)
 
 
-from doc_search import extract_snippet
 
 LONG = (
     "Preamble line that is not relevant at all.\n"
@@ -130,17 +141,6 @@ def test_snippet_falls_back_to_the_start_when_no_term_matches():
 
 def test_snippet_of_short_text_returns_it_whole():
     assert extract_snippet("short body", "body", max_chars=300) == "short body"
-
-
-from pathlib import Path
-
-from doc_search import (
-    DocIndex,
-    MAX_RESIDENT_INDEXES,
-    clear_indexes,
-    get_index,
-    resident_index_count,
-)
 
 
 def _sections(version, *bodies):

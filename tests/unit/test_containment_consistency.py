@@ -16,7 +16,6 @@ from mcp_tools import (
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
     search_laravel_docs_impl,
-    search_laravel_docs_with_context_impl,
 )
 
 # The term searched for. It is echoed back in "no results" messages, so it
@@ -66,8 +65,9 @@ def test_search_does_not_match_inside_the_escaping_symlink(docs_with_escaping_sy
     assert "routing.md" not in result, "match-counted a file that read refuses to serve"
 
 
-def test_context_search_does_not_leak_the_escaping_symlink(docs_with_escaping_symlink):
-    result = search_laravel_docs_with_context_impl(
+def test_search_snippets_do_not_leak_the_escaping_symlink(docs_with_escaping_symlink):
+    """Search now returns content in snippets, so a leak here is a direct one."""
+    result = search_laravel_docs_impl(
         docs_with_escaping_symlink, QUERY, version=VERSION, include_external=False
     )
 

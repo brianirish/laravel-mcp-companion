@@ -35,7 +35,7 @@ from mcp_tools import (
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
     search_laravel_docs_impl,
-    search_laravel_docs_with_context_impl,
+    read_laravel_doc_section_impl,
     get_doc_structure_impl,
     browse_docs_by_category_impl,
     verify_laravel_feature_impl,
@@ -1773,32 +1773,26 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         return read_laravel_doc_content_impl(docs_path, filename, version, runtime_version=runtime_version)
 
     @mcp.tool(
-        description="Search Laravel docs with context snippets",
+        description=(
+            "Read one section of a Laravel documentation file by the anchor or "
+            "heading returned by search_laravel_docs. Prefer this over "
+            "read_laravel_doc_content: a whole file can exceed 30,000 tokens, "
+            "while a section is typically a few hundred."
+        ),
         annotations={"readOnlyHint": True, "idempotentHint": True},
         tags={"docs", "read"}
     )
-    def search_laravel_docs_with_context(
-        query: str,
-        version: Optional[str] = None,
-        context_length: int = 200,
-        include_external: bool = True,
-        all_versions: bool = False
-    ) -> str:
-        """
-        Search through Laravel documentation with context snippets.
+    def read_laravel_doc_section(filename: str, section: str, version: Optional[str] = None) -> str:
+        """Read a single documentation section.
 
         Args:
-            query: Search term
-            version: Specific version, or None for the configured version
-            context_length: Characters of context to show (default: 200)
-            include_external: Whether to include external Laravel services documentation
-            all_versions: Search every supported version instead of just the configured one
-
-        Returns:
-            Search results with context snippets
+            filename: Documentation file, e.g. 'queues.md'
+            section: Anchor or heading, e.g. 'dealing-with-failed-jobs'
+            version: Laravel version. Defaults to the configured version.
         """
-        external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return search_laravel_docs_with_context_impl(docs_path, query, version, context_length, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions)
+        return read_laravel_doc_section_impl(
+            docs_path, filename, section, version, runtime_version=runtime_version
+        )
 
     @mcp.tool(
         description="Get the structure and sections of a documentation file",
