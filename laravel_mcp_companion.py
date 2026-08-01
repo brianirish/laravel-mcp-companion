@@ -18,6 +18,7 @@ from typing import Dict, Optional, List, Any
 import threading
 import anyio.to_thread
 from fastmcp import Context, FastMCP
+from fastmcp.server.auth import TokenVerifier
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
@@ -754,6 +755,36 @@ def parse_arguments():
              "other than localhost (env: ALLOWED_HOSTS, comma-separated)"
     )
     parser.add_argument(
+        "--auth-jwks-uri",
+        type=str,
+        default=os.environ.get("AUTH_JWKS_URI"),
+        metavar="URI",
+        help="JWKS endpoint of the OAuth authorization server; enables bearer-token "
+             "validation on the HTTP transport (env: AUTH_JWKS_URI)"
+    )
+    parser.add_argument(
+        "--auth-issuer",
+        type=str,
+        default=os.environ.get("AUTH_ISSUER"),
+        metavar="ISSUER",
+        help="Required token issuer, matched against the JWT 'iss' claim (env: AUTH_ISSUER)"
+    )
+    parser.add_argument(
+        "--auth-audience",
+        type=str,
+        default=os.environ.get("AUTH_AUDIENCE"),
+        metavar="AUDIENCE",
+        help="Required token audience, matched against the JWT 'aud' claim (env: AUTH_AUDIENCE)"
+    )
+    parser.add_argument(
+        "--auth-required-scope",
+        action="append",
+        default=None,
+        metavar="SCOPE",
+        help="OAuth scope every token must carry (repeatable). Replaces "
+             "AUTH_REQUIRED_SCOPES when given (env: AUTH_REQUIRED_SCOPES, comma-separated)"
+    )
+    parser.add_argument(
         "--transform-mode",
         type=str,
         default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
@@ -780,6 +811,8 @@ def parse_arguments():
         args.cors_origin = _split_env_list("CORS_ORIGINS") or []
     if args.allowed_host is None:
         args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
+    if args.auth_required_scope is None:
+        args.auth_required_scope = _split_env_list("AUTH_REQUIRED_SCOPES") or []
 
     # Allowed hosts are matched with fnmatch, so a pattern entry would match
     # every Host header and silently disable the guard while still looking like
@@ -1323,6 +1356,73 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
+def build_auth_provider(args) -> Optional["TokenVerifier"]:
+    """Build the OAuth 2.1 token verifier from CLI/env configuration.
+
+    The server is a resource server only: it validates bearer tokens issued
+    elsewhere and never issues its own. Two mutually exclusive modes:
+
+    - JWKS (production): --auth-jwks-uri + --auth-issuer + --auth-audience.
+      Issuer and audience are mandatory -- accepting any issuer's tokens, or
+      tokens minted for a different service, is authentication theater.
+    - Static tokens (dev/internal, env only): AUTH_STATIC_TOKENS as
+      "token:client_id[,token:client_id...]". Deliberately not a CLI flag so
+      secrets stay out of process listings.
+
+    Returns None when no auth is configured, or when the transport is stdio,
+    where the process boundary is the access control.
+    """
+    static_tokens = os.environ.get("AUTH_STATIC_TOKENS", "").strip()
+    jwks_configured = bool(args.auth_jwks_uri)
+
+    if not static_tokens and not jwks_configured:
+        return None
+
+    if args.transport != "http":
+        logger.warning(
+            "Auth is configured but the transport is stdio; ignoring it. "
+            "Bearer-token auth only applies to the HTTP transport."
+        )
+        return None
+
+    if static_tokens and jwks_configured:
+        logger.error("AUTH_STATIC_TOKENS and --auth-jwks-uri are mutually exclusive")
+        sys.exit(1)
+
+    if jwks_configured:
+        if not args.auth_issuer or not args.auth_audience:
+            logger.error(
+                "--auth-jwks-uri requires --auth-issuer and --auth-audience: "
+                "without them any issuer's tokens, or tokens minted for another "
+                "service, would be accepted"
+            )
+            sys.exit(1)
+        from fastmcp.server.auth.providers.jwt import JWTVerifier
+        logger.info(f"Bearer-token auth enabled (JWKS: {args.auth_jwks_uri})")
+        return JWTVerifier(
+            jwks_uri=args.auth_jwks_uri,
+            issuer=args.auth_issuer,
+            audience=args.auth_audience,
+            required_scopes=args.auth_required_scope or None,
+        )
+
+    tokens: Dict[str, Dict[str, Any]] = {}
+    for entry in static_tokens.split(","):
+        token, sep, client_id = entry.strip().partition(":")
+        if not sep or not token or not client_id:
+            logger.error(
+                "AUTH_STATIC_TOKENS must be 'token:client_id[,token:client_id...]'"
+            )
+            sys.exit(1)
+        tokens[token] = {"client_id": client_id, "scopes": args.auth_required_scope or []}
+    from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+    logger.warning(
+        "Static-token auth enabled; fine for development, use --auth-jwks-uri "
+        "with a real authorization server in production"
+    )
+    return StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None)
+
+
 def _server_icon() -> "Icon":
     """The repo icon as a self-contained data URI (SEP-973).
 
@@ -1336,7 +1436,7 @@ def _server_icon() -> "Icon":
     return Icon(src=f"data:image/svg+xml;base64,{encoded}", mimeType="image/svg+xml")
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search") -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None) -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
 
     Args:
@@ -1346,6 +1446,8 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         transform_mode: "search" for BM25SearchTransform (default),
                        "code" for CodeMode transform,
                        None for no transforms
+        auth: Optional token verifier for the HTTP transport (see
+              build_auth_provider); None leaves the server unauthenticated
 
     Returns:
         Configured FastMCP server instance
@@ -1356,13 +1458,14 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         'docs_path': docs_path,
         'version': runtime_version
     }
-    
+
     # Create the MCP server
     mcp: FastMCP = FastMCP(
         server_name,
         version=SERVER_VERSION,
         website_url=PROJECT_URL,
         icons=[_server_icon()],
+        auth=auth,
         instructions=build_server_instructions(docs_path, runtime_version, transform_mode)
     )
     
@@ -2389,7 +2492,8 @@ def main():
     # Create and configure the MCP server
     mcp = create_mcp_server(
         args.server_name, docs_path, args.version,
-        transform_mode=None if mode == "none" else mode
+        transform_mode=None if mode == "none" else mode,
+        auth=build_auth_provider(args)
     )
 
     # Log server startup
