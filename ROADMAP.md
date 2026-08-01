@@ -10,7 +10,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## Current Version: v0.11.0
+## Current Version: v0.12.0
 
 ### ✅ Completed Features
 - **Multi-version Laravel documentation** support (6.x through latest)
@@ -126,8 +126,8 @@ are the point of the project. Contains breaking changes; see the release notes.
 
 ---
 
-## v0.12.0 - MCP Modernization
-**Target: Q1 2027 — implemented ahead of schedule, ships as the next release**
+## ✅ v0.12.0 - MCP Modernization (COMPLETED)
+**Released: Q3 2026 — originally targeted Q1 2027**
 
 ### MCP 2025-11-25 Spec Compatibility
 - [x] **Tasks primitive** for async documentation updates — both update tools

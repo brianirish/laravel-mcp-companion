@@ -84,7 +84,7 @@ logger = logging.getLogger("laravel-mcp-companion")
 # no installed package metadata, so importlib.metadata cannot supply it; a
 # guard in tests/unit/test_version_consistency.py keeps it equal to
 # pyproject.toml.
-SERVER_VERSION = "0.11.0"
+SERVER_VERSION = "0.12.0"
 
 PROJECT_URL = "https://github.com/brianirish/laravel-mcp-companion"
 

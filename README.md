@@ -212,7 +212,7 @@ python laravel_mcp_companion.py --transport http \
 Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origin` get `403`. Passing `--allowed-host` or `--cors-origin` on the command line replaces the corresponding environment variable rather than adding to it. If you expose this beyond localhost, put an authenticating reverse proxy in front of it. Avoid `--transform-mode code` over HTTP entirely — `execute` is a code execution endpoint.
 
 
-## Features (v0.11.0)
+## Features (v0.12.0)
 
 ### Documentation Aggregation
 - **Multi-version Laravel docs** - All versions from 6.x to latest
@@ -239,7 +239,7 @@ Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origi
 - **Cross-package compatibility** - Documentation for package combinations
 - **Unified search** - One search across all documentation sources
 
-### MCP 2025-11-25 capabilities (next release)
+### MCP 2025-11-25 capabilities (new in v0.12.0)
 - **Task-capable updates** - Documentation updates run as MCP tasks: submit,
   poll, fetch the result, instead of holding the connection for minutes
 - **Interactive learning paths** - Ask for a learning path without naming one
