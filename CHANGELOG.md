@@ -26,12 +26,35 @@ docs-only commit and contains no code change.
   nothing at all; ranking by raw match count also placed `queues.md` 13th of 24
   for "queues", behind a file with a single match. An exact-symbol query such as
   `queue:retry` still works, via a substring fallback.
+- `update_laravel_docs` takes `version` rather than `version_param`. Every other
+  tool takes `version`, so an assistant following the server's own advice
+  guessed it and received a hard error; the name being broken is one that never
+  worked.
 
 ### Added
 - `read_laravel_doc_section` reads one section by anchor or heading, as returned
   by search. Answering "how do I retry a failed queue job" end to end now costs
   about 3,200 tokens against roughly 34,000 for the whole-file path — `queues.md`
   alone is 34,048 tokens, and a quarter of the files exceed 10,000.
+- The server now reports the date Laravel last changed the documentation it
+  serves. MCP server instructions carry that date for the version being served,
+  so an assistant asked about a feature added after it says so rather than
+  answering as if the documentation covered it. `laravel_docs_info` reports
+  `documentation_date` per version, and `documentation_current_to` /
+  `copy_age_days` for the copy as a whole.
+
+  This reads `commit_date` rather than the time of the last fetch. The two
+  diverge for a branch Laravel no longer changes: the fetch time recedes
+  forever, so five of eight shipped versions were being called stale while
+  byte-identical to upstream, with a warning no tool could clear. The staleness
+  warning now fires only when *no* version has changed in over 30 days, which
+  means the copy itself is behind rather than upstream being quiet, and it
+  advises pulling a newer image instead of running a tool that cannot help.
+- Tests asserting the project version matches the newest release tag, and stays
+  consistent across `pyproject.toml`, `ROADMAP.md`, and `README.md`. The tag
+  comparison is the one that matters: during the drift that motivated these
+  guards, all three files agreed with each other and only the tags disagreed.
+- Tests asserting pytest and coverage are each configured in exactly one place.
 
 ### Changed
 - Documentation syncs are tagged `docs-YYYY-MM-DD` instead of incrementing the
@@ -41,7 +64,6 @@ docs-only commit and contains no code change.
   enabled in one place, so a bare `pytest` and CI report the same figure. The
   previous CI invocation also measured the test suite, inflating the reported
   number well above actual product coverage.
-
 - CI installs Python 3.12 rather than inheriting the runner image's 3.10. The
   project declares `requires-python = ">=3.12"`, so the only pipeline that runs
   had never validated a supported interpreter. The daily documentation job now
@@ -52,18 +74,6 @@ docs-only commit and contains no code change.
 - Removed a Harness cache configuration that failed on every run — it supplied
   no cache key, which the plugin requires for custom paths — leaving the test
   stage permanently degraded and masking the status of the steps that matter.
-
-### Added
-- The server now reports how old its documentation snapshot is. MCP server
-  instructions carry the snapshot date for the version being served, so an
-  assistant asked about a feature newer than that snapshot says so and offers to
-  refresh rather than answering from stale pages. `laravel_docs_info` reports
-  `snapshot_date` and `snapshot_age_days`, and flags snapshots older than 30 days.
-- Tests asserting the project version matches the newest release tag, and stays
-  consistent across `pyproject.toml`, `ROADMAP.md`, and `README.md`. The tag
-  comparison is the one that matters: during the drift that motivated these
-  guards, all three files agreed with each other and only the tags disagreed.
-- Tests asserting pytest and coverage are each configured in exactly one place.
 
 ## [0.10.0] - 2026-07-30
 
