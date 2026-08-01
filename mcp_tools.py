@@ -309,14 +309,13 @@ def validate_subdirectory(base_dir: Path, name: str) -> bool:
         return False
 
 
-# Documentation is shipped as a snapshot, so it ages. Past this many days we
-# start saying so out loud rather than letting the assistant answer from a stale
-# corpus without realising it.
+# Laravel changes 13.x most days. When nothing has changed anywhere in this many
+# days, the copy itself is behind rather than upstream being quiet.
 DOCS_STALE_AFTER_DAYS = 30
 
 
-def parse_sync_time(value: object) -> Optional[datetime]:
-    """Parse a metadata sync_time into an aware UTC datetime, or None.
+def parse_timestamp(value: object) -> Optional[datetime]:
+    """Parse a metadata timestamp into an aware UTC datetime, or None.
 
     Total by design. Metadata lives in a mutable, network-populated directory
     that users can mount over, and this runs during server construction -- a
@@ -333,64 +332,69 @@ def parse_sync_time(value: object) -> Optional[datetime]:
     return parsed
 
 
-def get_docs_snapshot_age(docs_path: Path, version: Optional[str] = None) -> tuple[Optional[str], Optional[int]]:
-    """Return (sync_date, age_in_days) for the documentation snapshot.
+def get_documentation_date(
+    docs_path: Path, version: Optional[str] = None
+) -> tuple[Optional[str], Optional[int]]:
+    """Return (date, age_in_days) for when Laravel last changed the documentation.
 
-    For a specific version, reports that version. Across all versions, reports
-    the *oldest* one: the caller is asking whether the corpus can be trusted,
-    and the answer is governed by its stalest part. Reporting the newest would
-    describe a version the user may not be reading.
+    Reads `commit_date`, not `sync_time`. `sync_time` records when this project
+    last fetched a change, which for a branch that no longer changes recedes
+    forever -- reporting an end-of-life version as increasingly stale while it
+    is byte-identical to upstream.
 
-    Returns (None, None) when no metadata is readable, or when a timestamp is
-    in the future -- a clock skew we cannot interpret and must not present as
-    fresh.
+    For a specific version, that version's date. Across versions, the *newest*:
+    13.x changes near-daily, so the most recent change is a proxy for how old
+    this copy is, which is the only part a user can act on.
+
+    Returns (None, None) when no metadata is readable, or when the date is in
+    the future -- clock skew we cannot interpret and must not present as fresh.
     """
     # Callers reach this through server construction, where docs_path may still
     # be a plain string; joining one would raise rather than report "unknown".
     base = Path(docs_path)
     versions = [version] if version is not None else SUPPORTED_VERSIONS
-    oldest: Optional[datetime] = None
+    newest: Optional[datetime] = None
 
     for candidate in versions:
         metadata = get_laravel_docs_metadata(base, candidate)
         if not isinstance(metadata, dict):
             continue
-        synced = parse_sync_time(metadata.get("sync_time"))
-        if synced and (oldest is None or synced < oldest):
-            oldest = synced
+        changed = parse_timestamp(metadata.get("commit_date"))
+        if changed and (newest is None or changed > newest):
+            newest = changed
 
-    if oldest is None:
+    if newest is None:
         return None, None
 
-    age = (datetime.now(timezone.utc) - oldest).days
+    age = (datetime.now(timezone.utc) - newest).days
     if age < 0:
-        # Timestamp is in the future. Treating it as fresh would permanently
-        # disable the staleness warning under routine container clock skew.
-        logger.warning(f"Documentation sync_time is in the future: {oldest.isoformat()}")
+        logger.warning(f"Documentation commit_date is in the future: {newest.isoformat()}")
         return None, None
 
-    return oldest.strftime("%Y-%m-%d"), age
+    return newest.strftime("%Y-%m-%d"), age
 
 
-def describe_docs_freshness(docs_path: Path, version: Optional[str] = None) -> str:
-    """Human-readable snapshot age, for tool output and server instructions."""
-    snapshot, age = get_docs_snapshot_age(docs_path, version)
-    if snapshot is None:
-        return "unknown (no documentation synced yet)"
-    if age == 0:
-        return f"{snapshot} (today)"
-    return f"{snapshot} ({age} day{'s' if age != 1 else ''} ago)"
+def describe_documentation_date(docs_path: Path, version: Optional[str] = None) -> str:
+    """A bare date for the server instructions, or "unknown".
 
-
-def docs_are_stale(docs_path: Path, version: Optional[str] = None, age_days: Optional[int] = None) -> bool:
-    """Whether the snapshot is old enough to be worth mentioning.
-
-    Pass `age_days` when the caller has already computed it, to avoid re-reading
-    every version's metadata a second time.
+    Deliberately carries no age phrasing. Rendering "425 days ago" would
+    reintroduce exactly the alarm this reporting exists to remove, even though
+    the number is factual.
     """
-    if age_days is None:
-        _, age_days = get_docs_snapshot_age(docs_path, version)
-    return age_days is not None and age_days > DOCS_STALE_AFTER_DAYS
+    date, _ = get_documentation_date(docs_path, version)
+    return date or "unknown (no documentation synced yet)"
+
+
+def copy_is_stale(docs_path: Path) -> bool:
+    """Whether this copy of the documentation is behind, judged offline.
+
+    Takes no version argument: a single version's date being old means upstream
+    stopped changing, which is neither a problem nor actionable. What is
+    actionable is a stale *image*, which shows up as every version being old --
+    including the one that normally changes daily.
+    """
+    _, age = get_documentation_date(docs_path)
+    return age is not None and age > DOCS_STALE_AFTER_DAYS
 
 
 def get_laravel_docs_metadata(docs_path: Path, version: str) -> dict:
