@@ -4,37 +4,19 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Troubleshooting
-Servers
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Troubleshooting
-- [Servers](/docs/knowledge-base/servers)
-- [Sites](/docs/knowledge-base/sites)
-- [Networks](/docs/knowledge-base/networks)
-- [Cookbook](/docs/knowledge-base/scheduled-jobs)
-- [Source Control](/docs/knowledge-base/source-control)
-On this page
+## On this page
 - [AWS provisioned servers are disappearing](#aws-provisioned-servers-are-disappearing)
 - [DigitalOcean droplet limit exceeded](#digitalocean-droplet-limit-exceeded)
 - [Expanding server disk space](#expanding-server-disk-space)
-- [Checking current disk usage](#checking-current-disk-usage)
-- [Expanding the filesystem](#expanding-the-filesystem)
-- [Verifying the expansion](#verifying-the-expansion)
-- [Troubleshooting](#troubleshooting)
+  - [Checking current disk usage](#checking-current-disk-usage)
+  - [Expanding the filesystem](#expanding-the-filesystem)
+  - [Verifying the expansion](#verifying-the-expansion)
+  - [Troubleshooting](#troubleshooting)
 - [Operating system release upgrades](#operating-system-release-upgrades)
-- [Recommended approach](#recommended-approach)
+  - [Recommended approach](#recommended-approach)
 - [Restarting PHP FPM](#restarting-php-fpm)
 - [Resetting the Forge user sudo password](#resetting-the-forge-user-sudo-password)
-- [DigitalOcean](#digitalocean)
+  - [DigitalOcean](#digitalocean)
 - [Server disconnected](#server-disconnected)
 - [”Too many open files” error](#%E2%80%9Dtoo-many-open-files%E2%80%9D-error)
 - [Upgrading Composer](#upgrading-composer)
@@ -44,9 +26,9 @@ On this page
 - [Upgrading npm](#upgrading-npm)
 Troubleshooting
 # Servers
-Copy page
+Copy pageCopy page
 Common tasks and solutions for managing your Laravel Forge server.
-Copy page
+Copy pageCopy page
 ## [​](#aws-provisioned-servers-are-disappearing) AWS provisioned servers are disappearing
 To ensure Laravel Forge works correctly with AWS, please review [these requirements](/docs/server-providers#aws).
 ## [​](#digitalocean-droplet-limit-exceeded) DigitalOcean droplet limit exceeded
@@ -56,8 +38,6 @@ When you increase your server’s disk size through your VPS provider, the addit
 We strongly recommend creating a backup or snapshot of your server through your VPS provider before proceeding with disk expansion operations. While these commands are generally safe, disk operations carry inherent risks.
 #### [​](#checking-current-disk-usage) Checking current disk usage
 First, check your current disk usage to identify which partition needs expansion:
-Copy
-Ask AI
 ```
 df -h
 ```
@@ -66,14 +46,10 @@ This command will show you all mounted filesystems and their usage. Look for the
 Most Laravel Forge servers use standard partitions without LVM (Logical Volume Manager). If your system uses LVM, the disk expansion process is different and requires additional steps using the `pvresize` and `lvextend` commands.
 For standard, non-LVM systems, follow these steps:
 1. First, check your partition table:
-   Copy
-   Ask AI
    ```
    sudo fdisk -l
    ```
 2. If the partition needs to be expanded, use the `growpart` command:
-   Copy
-   Ask AI
    ```
    # Install growpart if it is not available...
    sudo apt-get update && sudo apt-get install -y cloud-guest-utils
@@ -82,8 +58,6 @@ For standard, non-LVM systems, follow these steps:
    sudo growpart /dev/vda1  # Replace with your actual device and partition number (e.g., /dev/sda1, /dev/xvda1)
    ```
 3. Resize the filesystem:
-   Copy
-   Ask AI
    ```
    # For ext4 filesystems...
    sudo resize2fs /dev/vda1  # Replace with your actual device (e.g., /dev/sda1, /dev/xvda1)
@@ -93,8 +67,6 @@ For standard, non-LVM systems, follow these steps:
    ```
 #### [​](#verifying-the-expansion) Verifying the expansion
 After completing the expansion, verify that the additional space is available:
-Copy
-Ask AI
 ```
 df -h
 ```
@@ -102,8 +74,6 @@ The filesystem should now show the increased capacity.
 #### [​](#troubleshooting) Troubleshooting
 **“No space left on device” Error**
 If you encounter an error like `mkdir: cannot create directory '/tmp/growpart.xxxx': No space left on device`, your root filesystem is completely full, preventing even basic commands from running. You will need to free up some temporary space first:
-Copy
-Ask AI
 ```
 # Clear apt cache...
 sudo apt-get clean
@@ -133,8 +103,6 @@ Instead of upgrading, we recommend provisioning a new server with your desired U
 For teams that prefer a fully managed solution, [Laravel Cloud](https://cloud.laravel.com) eliminates operating system concerns entirely. While Laravel Forge provides maximum control and flexibility over your infrastructure, Laravel Cloud’s fully-managed approach means you never need to think about server maintenance or OS versions.
 ## [​](#restarting-php-fpm) Restarting PHP FPM
 When configuring your server, Laravel Forge configures FPM so that it can be restarted without using your server’s “sudo” password. To do so, you should issue the following command. Of course, you should adjust the PHP version to match the version of PHP installed on your machine:
-Copy
-Ask AI
 ```
 touch /tmp/fpmlock 2>/dev/null || true
 ( flock -w 10 9 || exit 1
@@ -158,8 +126,6 @@ There are several reasons why your server may have a “disconnected” status. 
 - If you removed Port 22 from the server’s firewall rules, you will need to contact your server provider and ask them to restore the rule. Removing this rule prevents Laravel Forge from accessing your server via SSH.
 - Remove any private keys or other lines that do not contain a valid public key from the `/root/.ssh/authorized_keys` and `/home/forge/.ssh/authorized_keys` files.
 If you are still experiencing connectivity issues, you should also verify that the permissions and ownership of the following directories and files are correct:
-Copy
-Ask AI
 ```
 # Fixes the "root" user (run as root)
 
@@ -176,8 +142,6 @@ chmod 700 /home/forge/.ssh
 chmod 600 /home/forge/.ssh/authorized_keys
 ```
 If, after trying all of the above solutions, Laravel Forge is still unable to connect to your server but you can still SSH to the server, please run the following command as the `root` user and share the output with Forge support:
-Copy
-Ask AI
 ```
 grep 'sshd' /var/log/auth.log | tail -n 10
 ```
@@ -186,14 +150,10 @@ If Laravel Forge is not able to connect to your server, you will not be able to 
 If you are receiving an error stating that your server has “too many open files”, you likely need to increase the maximum amount of file descriptors that your operating system is configured to allow at a given time. This may be particularly true if your server will be handling a very large number of incoming web requests.
 First, ensure the maximum number of “open files” is correctly configured based on the size of your server. Usually, the maximum number of open files allowed by the operating system should be about 100 files for every 1MB of RAM. For example, if your server has 4GB memory, the maximum number of open files can safely be set to `409600`.
 You can determine how many files your operating system currently allows to be opened at once by running the `sysctl fs.file-max` command. You can configure the existing setting by adding or modifying the following line in `/etc/sysctl.conf`:
-Copy
-Ask AI
 ```
 fs.file-max = LIMIT_HERE
 ```
 While the instructions above set the maximum number of “open files” system-wide, you also need to specify these limits for each server user by editing the `/etc/security/limits.conf` file and adding the following lines:
-Copy
-Ask AI
 ```
 root soft nofile LIMIT_HERE
 root hard nofile LIMIT_HERE
@@ -201,41 +161,29 @@ forge soft nofile LIMIT_HERE
 forge hard nofile LIMIT_HERE
 ```
 Of course, if your server contains additional users due to the use of “site isolation”, those users also need to be added to the `/etc/security/limits.conf` file:
-Copy
-Ask AI
 ```
 isolated-user soft nofile LIMIT_HERE
 isolated-user hard nofile LIMIT_HERE
 ```
 Additionally, if the “too many open files” error was triggered by an Nginx process (very common on load balancers at scale), you will need to also add the `nginx` user to `/etc/security/limits.conf`:
-Copy
-Ask AI
 ```
 nginx soft nofile LIMIT_HERE
 nginx hard nofile LIMIT_HERE
 ```
 And, add the following directive to your server’s `/etc/nginx/nginx.conf` file:
-Copy
-Ask AI
 ```
 worker_rlimit_nofile LIMIT_HERE;
 ```
 You should restart the Nginx service once this directive has been added to your Nginx configuration file:
-Copy
-Ask AI
 ```
 service nginx restart
 ```
 ## [​](#upgrading-composer) Upgrading Composer
 The latest version of Composer is installed by Laravel Forge when a new server is provisioned. However, as your server ages, you may wish to upgrade the installed version of Composer. You may do so using the following command:
-Copy
-Ask AI
 ```
 composer self-update --2
 ```
 This will instruct Composer to update itself and specifically select version 2. If your application is not compatible with Composer 2, you can roll back to Composer 1 at any time:
-Copy
-Ask AI
 ```
 composer self-update --1
 ```
@@ -245,8 +193,6 @@ If you would like to install the latest Meilisearch binaries on your server, ple
 On most Laravel Forge servers, the Meilisearch binary is installed at `/usr/local/bin/meilisearch` and the database is stored at `/var/lib/meilisearch`.
 ## [​](#upgrading-nginx) Upgrading Nginx
 The latest version of Nginx is installed by Laravel Forge when a new server is provisioned. However, as your server ages, you may wish to upgrade the installed version of Nginx. You may do so using the following commands:
-Copy
-Ask AI
 ```
 sudo apt-get install -y --only-upgrade nginx
 sudo nginx -v
@@ -255,8 +201,6 @@ sudo service nginx restart
 You should upgrade the Nginx version on your server at your own risk. Upgrading the version of Nginx installed on your server may cause downtime or conflict with other installed software.
 ## [​](#upgrading-node-js) Upgrading Node.js
 The latest LTS version of Node.js is installed by Laravel Forge when it is provisioning a new server. However, as your server ages, you may wish to upgrade the version of Node.js:
-Copy
-Ask AI
 ```
 sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
@@ -268,8 +212,6 @@ sudo apt-get update --allow-releaseinfo-change && sudo apt-get install nodejs -y
 [Node.js version information](https://nodejs.org/en/about/previous-releases/)
 ## [​](#upgrading-npm) Upgrading npm
 The latest version of npm is installed by Laravel Forge when provisioning new servers. However, you may upgrade the installed version of npm using the following commands:
-Copy
-Ask AI
 ```
 sudo npm install npm@latest -g
 ```
@@ -277,5 +219,3 @@ Was this page helpful?
 YesNo
 [Sites](/docs/knowledge-base/sites)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

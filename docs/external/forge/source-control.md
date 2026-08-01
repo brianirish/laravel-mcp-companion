@@ -4,83 +4,20 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Basics
-Source Control
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Supported providers](#supported-providers)
 - [Managing source control providers](#managing-source-control-providers)
-- [Connecting to a source control provider](#connecting-to-a-source-control-provider)
-- [Removing source control providers](#removing-source-control-providers)
-- [Refreshing tokens](#refreshing-tokens)
-- [Updating source control access and permissions](#updating-source-control-access-and-permissions)
-- [Using custom Git providers](#using-custom-git-providers)
+  - [Connecting to a source control provider](#connecting-to-a-source-control-provider)
+  - [Removing source control providers](#removing-source-control-providers)
+  - [Refreshing tokens](#refreshing-tokens)
+  - [Updating source control access and permissions](#updating-source-control-access-and-permissions)
+  - [Using custom Git providers](#using-custom-git-providers)
 Basics
 # Source Control
-Copy page
+Copy pageCopy page
 Source control providers allow Laravel Forge to access your project’s codebase and easily deploy your applications.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Source control providers allow Laravel Forge to access your project’s codebase and easily deploy your applications. Forge supports most popular Git providers as well as custom / self-hosted options.
 Source control providers are configured and managed within the [organization’s](/docs/organizations) settings.
@@ -110,10 +47,8 @@ When you need access to different organizations or repositories, refreshing the 
 Following the complete OAuth authentication flow allows you to explicitly authorize access to your desired organizations and repositories with the appropriate permission scope.
 ### [​](#using-custom-git-providers) Using custom Git providers
 If your Git Provider is not a first-party provider, then you may use the **Custom** option when creating a new site on your server.
-First, choose the `Custom` option when creating your Git based site. Next, add the generated SSH key to your source control provider and provide the full repository path (`[email protected]:user/repository.git`).
+First, choose the `Custom` option when creating your Git based site. Next, add the generated SSH key to your source control provider and provide the full repository path (`git@provider.com:user/repository.git`).
 Was this page helpful?
 YesNo
 [Storage Providers](/docs/storage-providers)[SSH Keys](/docs/ssh)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

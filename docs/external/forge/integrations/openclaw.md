@@ -4,83 +4,20 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Integrations
-OpenClaw
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating an OpenClaw Server](#creating-an-openclaw-server)
 - [Server Requirements](#server-requirements)
 - [Configuring OpenClaw](#configuring-openclaw)
 - [Managing Your OpenClaw Server](#managing-your-openclaw-server)
-- [Resizing Your Server](#resizing-your-server)
-- [Backups](#backups)
+  - [Resizing Your Server](#resizing-your-server)
+  - [Backups](#backups)
 - [Deleting an OpenClaw Server](#deleting-an-openclaw-server)
 Integrations
 # OpenClaw
-Copy page
+Copy pageCopy page
 Deploy OpenClaw AI agent servers on Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 [OpenClaw](https://openclaw.ai) is an open-source AI agent platform that allows you to run AI assistants on your own infrastructure while integrating with popular messaging applications such as WhatsApp, Telegram, Discord, Slack, Microsoft Teams, Twitch, and Google Chat. By hosting OpenClaw on your own server, you maintain complete control over your data, API keys, and infrastructure.
 Laravel Forge makes it simple to provision and manage OpenClaw servers, allowing you to deploy your own private AI assistant in minutes.
@@ -105,5 +42,3 @@ Was this page helpful?
 YesNo
 [Aikido](/docs/integrations/aikido)[Support](/docs/support)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

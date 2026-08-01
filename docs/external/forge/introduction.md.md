@@ -1,0 +1,48 @@
+# Forge - Introduction.Md
+
+*Source: https://forge.laravel.com/docs/introduction.md*
+
+---
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://forge.laravel.com/docs/llms.txt
+> Use this file to discover all available pages before exploring further.
+# Welcome to Laravel Forge
+> A server management and application deployment service for your Laravel applications and beyond.
+Create your Laravel Forge account today
+Watch the free Laravel Forge series on Laracasts
+## What is Laravel Forge?
+Laravel Forge is a server management and application deployment service. Forge takes the pain and hassle out of deploying servers and can be used to launch your next website. Whether your app is built with a framework such as [Laravel](https://github.com/laravel/laravel), [Symfony](https://github.com/symfony/symfony), [Statamic](https://github.com/statamic/cms), [WordPress](https://github.com/WordPress/WordPress), or is a vanilla PHP application - Forge is the solution for you.
+We live and breathe PHP here at Laravel Forge, but Forge is also ready to handle other tech stacks too, such as Node.js.
+Laravel Forge can provision new servers for you in seconds. We also offer you the ability to provision [multiple server types](/docs/servers/types) (e.g., web servers, database servers, load balancers) with the option of having a variety of services configured for you to hit the ground running, including:
+* Nginx web server
+* [PHP](/docs/servers/php) (multiple version support)
+* [Database](/docs/resources/databases) (MySQL, Postgres, or MariaDB)
+* Logrotate
+* [Memcached](/docs/resources/caches)
+* [Redis](/docs/resources/caches)
+* Meilisearch
+* [OPcache](/docs/servers/php#opcache)
+* [UFW firewall](/docs/resources/network#firewalls)
+* [Automatic security updates](/docs/servers/security#automated-security-updates)
+* And much more!
+In addition, Laravel Forge can assist you in managing [scheduled jobs](/docs/resources/scheduler), [queue workers](/docs/sites/queues), [TLS/SSL certificates](/docs/sites/domains#certificates), and more. After your server has provisioned, you can manage and deploy your web applications using the Forge UI dashboard.
+## Laravel Forge IP addresses
+In order to provision and communicate with your servers, Laravel Forge requires SSH access to them. If you have set up your servers to restrict SSH access using IP allow lists, you must allow the following Forge IP addresses:
+* `159.203.150.232`
+* `159.203.150.216`
+* `45.55.124.124`
+* `165.227.248.218`
+You can also access the IP addresses via the following URL: [https://forge.laravel.com/ips-v4.txt](https://forge.laravel.com/ips-v4.txt). This is particularly useful if you intend on automating your network or firewall infrastructure.
+If you are restricting HTTP traffic, your server must also allow incoming and outgoing traffic from `forge.laravel.com`.
+The Laravel Forge IP addresses may change from time to time; however, we will always email you several weeks prior to an IP address change.
+#### Forge Terminal
+Laravel VPS customers benefit from an [integrated terminal](/docs/servers/laravel-vps#forge-terminal) within the Forge Control Panel. To ensure this is functional, you must allow the following IP:
+* `142.93.78.212`
+### Laravel Forge support jumpbox
+To enable the Laravel Forge Support team to provide more efficient technical assistance, you can optionally allow our support jumpbox IP address to access your server in your firewall settings:
+* `129.212.144.126`
+## Laravel Forge API
+Laravel Forge provides a powerful API that allows you to manage your servers programmatically, providing access to the vast majority of Forge features. To learn more about the Forge API, check out our [API documentation](https://forge.laravel.com/api-documentation).
+## Legal and compliance
+Our [Legal](https://laravel.com/legal) and [Trust Centers](https://trust.laravel.com/?product=forge) provide details on the terms, conditions, and privacy practices for using Laravel Forge.

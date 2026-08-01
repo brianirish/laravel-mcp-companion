@@ -4,70 +4,11 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Other
-Changelog
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
+- [June 30, 2026](#june-30-2026)
+- [May 31, 2026](#may-31-2026)
+- [April 29, 2026](#april-29-2026)
+- [March 31, 2026](#march-31-2026)
 - [February 20, 2026](#february-20-2026)
 - [February 13, 2026](#february-13-2026)
 - [February 6, 2026](#february-6-2026)
@@ -86,9 +27,115 @@ On this page
 - [October 7, 2025](#october-7-2025)
 Other
 # Changelog
-Copy page
+Copy pageCopy page
 New updates and improvements to Laravel Forge.
-Copy page
+Copy pageCopy page
+[​](#june-30-2026)
+June 30, 2026
+## [​](#managed-caches) Managed caches
+Valkey is now available as a fully managed cache option, provisioned directly from the dashboard.
+## [​](#object-storage) Object storage
+Forge now offers managed object storage. Create and manage buckets directly from the dashboard.
+Show Improvements (4)
+- **Redesigned email notifications**: Transactional emails across Forge, including provisioning, alerts, backup failures, recipe runs, certificate renewals, and billing notices, have been redesigned for clarity and consistency.
+- **List site certificates API**: Added an API endpoint for listing a site’s SSL certificates.
+- **Site search**: Added a search field to the site dropdown in the tab bar for quickly jumping between sites.
+- **Reverb environment sync**: Reverb environment variables are now updated automatically when HTTPS is enabled or disabled.
+Show Fixes (3)
+- Fixed deploy branch changes not updating the site’s git configuration.
+- Fixed deployment settings showing the wrong server SSH key fallback.
+- Fixed server heartbeat notifications being sent for deleted or unassigned organizations.
+[​](#may-31-2026)
+May 31, 2026
+## [​](#managed-mysql-8-4) Managed MySQL 8.4
+Managed database clusters can now be provisioned with MySQL 8.4. This adds MySQL alongside PostgreSQL as a fully managed option in Laravel VPS, with the same observability, automated backups, and read replicas.
+Show Improvements (6)
+- **Managed database alerts**: Added an interface for configuring and reviewing alerts on managed database clusters.
+- **Managed database user permissions**: Managed cluster users can now be limited to selected databases during creation.
+- **PHP 8.5 default**: Newly provisioned servers now use PHP 8.5 by default.
+- **DigitalOcean re-authentication**: DigitalOcean OAuth credentials can now be re-authenticated when the token expires.
+- **Horizon environment reloads**: Horizon is now automatically restarted when site environment variables change.
+- **Certificate cloning context**: The certificate clone selector now shows the source site ID and server name to make picking the right certificate easier.
+Show Fixes (8)
+- Resolved PHP provisioning failures by switching the package source to the maintained `ppa.setup-php.com` mirror and cleaning up stale `ondrej/nginx` PPA entries during each provisioning run.
+- Fixed Bitbucket deploy hooks failing to trigger deployments.
+- Resolved provisioner timeouts caused by Launchpad latency.
+- Fixed a site’s `project_type` not staying in sync when its type was changed.
+- Fixed overflow on the site overview page and improved the layout of the deployment cards.
+- Fixed an issue preventing the logrotate path from being updated when a site’s primary domain changed.
+- Resolved an issue preventing SSL certificates from taking effect until Nginx was manually reloaded after enabling or disabling them.
+- Fixed an issue preventing unique site names from being enforced on worker servers.
+[​](#april-29-2026)
+April 29, 2026
+## [​](#php-8-5) PHP 8.5
+PHP 8.5 is now generally available.
+Show Improvements (10)
+- **Multiple certificates per domain**: You can now install multiple SSL certificates on the same domain, with one certificate active at a time. This makes it easier to stage replacement certificates before switching over.
+- **Certificate renewal monitoring**: Customers are now alerted when SSL certificates fail to renew on time, helping prevent expired certificate downtime.
+- **Managed database team sharing**: Managed database clusters can now be shared with teams.
+- **Server API v2 endpoints**: Added `PUT /servers/{server}` for updating server attributes and `GET`/`PUT /servers/{server}/network` for viewing and syncing network peers.
+- **Deploy key API**: Added a deploy key creation endpoint to API v2.
+- **Background process API**: Added a `site_id` parameter to the Create Background Process endpoint.
+- **Load balancer keepalive**: Added support for the `keepalive` directive on load balancer configurations.
+- **Nginx reset to default**: Added a “Reset to Default” button to the Nginx configuration modal.
+- **Server metrics**: Server metrics are now fetched concurrently for faster page loads.
+- **Responsive UI**: Improved responsive layouts across the dashboard.
+Show Fixes (8)
+- Fixed incorrect copy on the certificate expiry display.
+- Fixed server heartbeat notifications being sent to all organization-owned channels.
+- Resolved recipe scripts ending with a heredoc delimiter failing to execute.
+- Resolved primary domain changes not handling custom root paths correctly.
+- Resolved the Laravel VPS built-in terminal halting when editing files with VIM.
+- Fixed an expired GPG key error during MySQL installation.
+- Fixed the PHP CLI not being updated when switching PHP versions.
+- Fixed backup display time issues.
+[​](#march-31-2026)
+March 31, 2026
+## [​](#managed-databases) Managed databases
+Laravel VPS now supports managed databases powered by PostgreSQL. Create, monitor, and manage database clusters
+directly from Forge with built-in observability, read replicas, and automated backups.
+Show Improvements (15)
+- **Ubuntu 26.04 compatibility**: Servers self-upgraded to Ubuntu 26.04 or newer are now properly recognized by Forge.
+- **Managed database validation**: Improved form validation and error handling for managed database clusters.
+- **Dashboard performance**: Improved performance across server, site, and organization overview pages.
+- **Load balancer API**: Added an API endpoint for creating sites on a load balancer.
+- **Backup API**: Added `database_ids` attribute to the backup API resource.
+- **Server API**: Added `slug` attribute to the API server resource.
+- **API rate limiting**: Added rate limiting for command API requests.
+- **Server deletion safety**: Servers are now only removed from Forge after being successfully removed from the provider.
+- **Backup configuration**: Databases cannot be removed from a backup configuration when it is the last one attached.
+- **Envoyer deployment indicator**: Sites deployed via Envoyer are now clearly labeled in the UI.
+- **Scheduled job cleanup**: Scheduled jobs are now automatically removed when their associated site is deleted.
+- **Role permissions visibility**: Mandatory permissions are now visible but non-removable when editing custom roles.
+- **SSL certificate logs**: SSL certificate failure logs are now exposed for easier debugging.
+- **Tooltip accessibility**: Replaced tooltips across the dashboard with accessible alternatives that include proper ARIA labels and keyboard support.
+- **Keyboard accessibility**: Notification center actions are now reachable via keyboard navigation.
+Show Fixes (25)
+- Fixed backup size always showing as zero.
+- Fixed managed database cluster permissions for team members.
+- Fixed metrics for DigitalOcean servers when data points are missing.
+- Fixed deleting managed database users and databases.
+- Fixed networking changes not reflecting in the UI.
+- Fixed duplicate warning icon on the server sidebar.
+- Fixed deleting servers from provider via API v1.
+- Fixed Nginx configuration for new Nuxt and Next.js sites.
+- Fixed backup scheduled time not being applied correctly.
+- Fixed responsive navbar layout and background processes card.
+- Fixed deployment retention period not being applied correctly.
+- Fixed git pull commands with arguments failing.
+- Fixed deployment failure notifications containing null output.
+- Fixed wildcard subdomain validation.
+- Resolved recipe execution hanging when using curl piped to bash.
+- Fixed zero-downtime deployments failing in certain conditions.
+- Fixed team invitation details being scoped to all organization users instead of the current invitation.
+- Resolved PM2 configuration fallback failing during deployment when provisioning had previously failed.
+- Fixed team members receiving notifications for servers outside their team.
+- Fixed deployments crashing for legacy sites without a type.
+- Fixed creating and updating custom roles.
+- Fixed server key permissions not being applied correctly.
+- Fixed npm credential scopes not being handled correctly during site creation.
+- Resolved a silent exception when repository access was lost.
+- Fixed GitLab nested repository names not being handled correctly.
 [​](#february-20-2026)
 February 20, 2026
 ## [​](#npm-private-packages) npm private packages
@@ -331,11 +378,10 @@ Show Improvements (9)
 - **Maintenance mode redirect path:** Added support for redirect paths when enabling maintenance mode on Laravel sites.
 - **Display more information about sites and servers:** Added PHP version and isolated username details to site and server list items when applicable.
 - **Better Statamic support:** Additional Laravel integrations have been enabled for sites using the Statamic project type.
-Show Fixes (8)
+Show Fixes (7)
 - Fixed the environment encryption key resetting.
 - Disabled deployments when a site does not have a deploy script.
 - Reinstated deploy keys for sites. You can find this in the site’s Deployments tab.
-- Disabled the PHP 8.5 option while support is unavailable.
 - Fixed issues in the Envoyer deployment hooks migration flow.
 - Fixed account deletion for users with organizations that do not have servers.
 - Fixed duplicate Nginx upstream errors in load balancers.
@@ -393,5 +439,3 @@ Was this page helpful?
 YesNo
 [Support](/docs/support)[Abuse](/docs/abuse)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

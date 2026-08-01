@@ -4,88 +4,23 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Integrations
-Envoyer
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating an Envoyer API token](#creating-an-envoyer-api-token)
 - [Linking your Envoyer account to Laravel Forge](#linking-your-envoyer-account-to-laravel-forge)
 - [Envoyer sites in Laravel Forge](#envoyer-sites-in-laravel-forge)
 - [Migrating existing sites to Forge](#migrating-existing-sites-to-forge)
-- [Requirements](#requirements)
+  - [Requirements](#requirements)
 Integrations
 # Envoyer
-Copy page
+Copy pageCopy page
 Zero-downtime deployments with Laravel Forge and Envoyer.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge now offers zero-downtime deployments for all new sites.
 While Laravel Forge now offers [zero-downtime deployments](/docs/sites/deployments), you may choose to use the first-party integration with [Envoyer](https://envoyer.io) to simultaneously deploy projects across multiple servers. Zero-downtime deployments ensure you avoid those brief milliseconds of downtime while the server updates your code.
 ## [​](#creating-an-envoyer-api-token) Creating an Envoyer API token
 To kick things off, you’ll need active subscriptions for both [Laravel Forge](https://forge.laravel.com/sign-up) and [Envoyer](https://envoyer.io/auth/register). Once you’re set up, navigate to your Envoyer dashboard and [create a new API token](https://envoyer.io/user/profile?name=Laravel%20Forge&scopes=projects:create,deployments:create,servers:create#/api). At a minimum, Laravel Forge requires the following scopes:
-Copy
-Ask AI
 ```
 deployments:create
 projects:create
@@ -116,5 +51,3 @@ Was this page helpful?
 YesNo
 [Packages](/docs/resources/packages)[Sentry](/docs/integrations/sentry)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

@@ -4,80 +4,17 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Resources
-Background Processes
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Configuring background processes](#configuring-background-processes)
-- [Creating Laravel queue workers](#creating-laravel-queue-workers)
-- [Manually restarting background processes](#manually-restarting-background-processes)
+  - [Creating Laravel queue workers](#creating-laravel-queue-workers)
+  - [Manually restarting background processes](#manually-restarting-background-processes)
 - [Log files](#log-files)
 Resources
 # Background Processes
-Copy page
+Copy pageCopy page
 Learn how to configure and manage background processes on your Laravel Forge server.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge uses [Supervisor](http://supervisord.org) to manage background processes, ensuring your long-running scripts stay active. This is particularly useful for maintaining daemons like [ReactPHP](http://reactphp.org/) applications. When a process stops unexpectedly, Supervisor automatically restarts it to maintain continuous operation.
 ## [​](#configuring-background-processes) Configuring background processes
@@ -118,5 +55,3 @@ Was this page helpful?
 YesNo
 [Caches](/docs/resources/caches)[Scheduler](/docs/resources/scheduler)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

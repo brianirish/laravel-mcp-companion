@@ -4,91 +4,28 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Sites
-Network
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Security rules](#security-rules)
-- [Managing security rules](#managing-security-rules)
-- [Creating security rules](#creating-security-rules)
-- [Editing security rules](#editing-security-rules)
-- [Deleting security rules](#deleting-security-rules)
-- [Credentials](#credentials)
-- [Customization](#customization)
+  - [Managing security rules](#managing-security-rules)
+  - [Creating security rules](#creating-security-rules)
+  - [Editing security rules](#editing-security-rules)
+  - [Deleting security rules](#deleting-security-rules)
+  - [Credentials](#credentials)
+  - [Customization](#customization)
 - [Redirect rules](#redirect-rules)
-- [Managing redirect rules](#managing-redirect-rules)
-- [Creating redirect rules](#creating-redirect-rules)
-- [Editing redirect rules](#editing-redirect-rules)
-- [Deleting redirect rules](#deleting-redirect-rules)
-- [Temporary vs. permanent redirects](#temporary-vs-permanent-redirects)
-- [Temporary redirects](#temporary-redirects)
-- [Permanent redirects](#permanent-redirects)
+  - [Managing redirect rules](#managing-redirect-rules)
+  - [Creating redirect rules](#creating-redirect-rules)
+  - [Editing redirect rules](#editing-redirect-rules)
+  - [Deleting redirect rules](#deleting-redirect-rules)
+  - [Temporary vs. permanent redirects](#temporary-vs-permanent-redirects)
+  - [Temporary redirects](#temporary-redirects)
+  - [Permanent redirects](#permanent-redirects)
 Sites
 # Network
-Copy page
+Copy pageCopy page
 Learn how Laravel Forge can manage your site’s redirect and security rules.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge can manage your site’s redirect and security rules.
 ## [​](#security-rules) Security rules
@@ -129,5 +66,3 @@ Was this page helpful?
 YesNo
 [Queues](/docs/sites/queues)[Isolation](/docs/sites/user-isolation)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.

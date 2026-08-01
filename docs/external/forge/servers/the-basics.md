@@ -4,88 +4,25 @@
 
 ---
 
-[Laravel Forge home page](https://forge.laravel.com)
-Search...
-⌘KAsk AI
-- [Get started](https://forge.laravel.com)
-- [Get started](https://forge.laravel.com)
-Search...
-Navigation
-Servers
-Creating and Managing Servers
-[Documentation](/docs/introduction)[Knowledge Base](/docs/knowledge-base/servers)[API Reference](/docs/api-reference/introduction)
-- [Blog](https://blog.laravel.com)
-- [Status](https://status.on-forge.com)
-##### Get Started
-- [Introduction](/docs/introduction)
-- [Laravel Forge CLI](/docs/cli)
-- [Laravel Forge SDK](/docs/sdk)
-##### Basics
-- [Organizations](/docs/organizations)
-- [Teams](/docs/teams)
-- [Server Providers](/docs/server-providers)
-- [Storage Providers](/docs/storage-providers)
-- [Source Control](/docs/source-control)
-- [SSH Keys](/docs/ssh)
-- [Recipes](/docs/recipes)
-- [API](/docs/api)
-##### Servers
-- [Managing Servers](/docs/servers/the-basics)
-- [Server Types](/docs/servers/types)
-- [Laravel VPS](/docs/servers/laravel-vps)
-- [PHP](/docs/servers/php)
-- [Load Balancing](/docs/servers/load-balancing)
-- [Nginx Templates](/docs/servers/nginx-templates)
-- [Security](/docs/servers/security)
-- [Monitoring](/docs/servers/monitoring)
-- [Real-Time Metrics](/docs/servers/real-time-metrics)
-##### Sites
-- [Managing Sites](/docs/sites/the-basics)
-- [Domains](/docs/sites/domains)
-- [Deployments](/docs/sites/deployments)
-- [Environment Variables](/docs/sites/environment-variables)
-- [Commands](/docs/sites/commands)
-- [Queues](/docs/sites/queues)
-- [Network](/docs/sites/network)
-- [Isolation](/docs/sites/user-isolation)
-- [Laravel](/docs/sites/laravel)
-- [Logs](/docs/sites/logs)
-##### Resources
-- [Databases](/docs/resources/databases)
-- [Database Backups](/docs/resources/database-backups)
-- [Caches](/docs/resources/caches)
-- [Background Processes](/docs/resources/background-processes)
-- [Scheduler](/docs/resources/scheduler)
-- [Network](/docs/resources/network)
-- [Packages](/docs/resources/packages)
-##### Integrations
-- [Envoyer](/docs/integrations/envoyer)
-- [Sentry](/docs/integrations/sentry)
-- [Aikido](/docs/integrations/aikido)
-- [OpenClaw](/docs/integrations/openclaw)
-##### Other
-- [Support](/docs/support)
-- [Changelog](/docs/changelog)
-- [Abuse](/docs/abuse)
-On this page
+## On this page
 - [Introduction](#introduction)
 - [Creating servers](#creating-servers)
-- [Laravel VPS](#laravel-vps)
+  - [Laravel VPS](#laravel-vps)
 - [Server settings](#server-settings)
-- [IP addresses](#ip-addresses)
-- [Resizing Laravel VPS servers](#resizing-laravel-vps-servers)
-- [Timezone](#timezone)
+  - [IP addresses](#ip-addresses)
+  - [Resizing Laravel VPS servers](#resizing-laravel-vps-servers)
+  - [Timezone](#timezone)
 - [Managing servers](#managing-servers)
-- [Archiving servers](#archiving-servers)
-- [Unarchiving servers](#unarchiving-servers)
-- [Transferring servers](#transferring-servers)
-- [Deleting servers](#deleting-servers)
-- [Preserving servers at the provider](#preserving-servers-at-the-provider)
+  - [Archiving servers](#archiving-servers)
+  - [Unarchiving servers](#unarchiving-servers)
+  - [Transferring servers](#transferring-servers)
+  - [Deleting servers](#deleting-servers)
+  - [Preserving servers at the provider](#preserving-servers-at-the-provider)
 Servers
 # Creating and Managing Servers
-Copy page
+Copy pageCopy page
 Learn how to create and manage your servers in Laravel Forge.
-Copy page
+Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge can provision new servers for you in seconds, allowing you to quickly deploy web applications built in PHP or other stacks. We also offer you the ability to provision multiple server types (e.g., web servers, database servers, load balancers) with the option of having a variety of services configured for you to hit the ground running.
 ## [​](#creating-servers) Creating servers
@@ -133,5 +70,3 @@ Was this page helpful?
 YesNo
 [API](/docs/api)[Server Types](/docs/servers/types)
 ⌘I
-Assistant
-Responses are generated using AI and may contain mistakes.
