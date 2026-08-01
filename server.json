@@ -13,7 +13,7 @@
     {
       "registryType": "oci",
       "registryBaseUrl": "https://ghcr.io",
-      "identifier": "ghcr.io/brianirish/laravel-mcp-companion:0.12.0",
+      "identifier": "ghcr.io/brianirish/laravel-mcp-companion:v0.12.0",
       "version": "0.12.0",
       "runtimeHint": "docker",
       "runtimeArguments": [

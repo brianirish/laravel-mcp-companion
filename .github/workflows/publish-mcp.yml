@@ -7,6 +7,14 @@
 # the registry validates that the referenced image exists and carries the
 # io.modelcontextprotocol.server.name label.
 #
+# Image tags carry the leading v: Harness tags images with the git tag
+# verbatim (ghcr.io/...:v0.12.0), while server.json's semver version fields
+# are bare (0.12.0). The first publish run failed by conflating the two.
+#
+# workflow_dispatch exists to re-publish an already-tagged release when this
+# workflow fails after the tag is up (as that first run did) — re-pushing a
+# release tag to re-trigger the push event is not an option.
+#
 # docs-YYYY-MM-DD tags are documentation syncs, not releases; "v*" never
 # matches them.
 
@@ -15,6 +23,12 @@ name: Publish to MCP Registry
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to publish (e.g. v0.12.0)"
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -27,9 +41,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Wait for the Docker image Harness builds on this tag
+      - name: Resolve the release tag
+        id: release
+        env:
+          DISPATCH_TAG: ${{ inputs.tag }}
         run: |
-          TAG="${GITHUB_REF#refs/tags/v}"
+          if [ -n "${DISPATCH_TAG}" ]; then
+            TAG="${DISPATCH_TAG}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          case "${TAG}" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "::error::'${TAG}' is not a vX.Y.Z release tag"; exit 1 ;;
+          esac
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+
+      - name: Wait for the Docker image Harness builds on this tag
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
           IMAGE="ghcr.io/brianirish/laravel-mcp-companion:${TAG}"
           echo "Waiting for ${IMAGE}"
           for attempt in $(seq 1 60); do
@@ -42,13 +73,15 @@ jobs:
           echo "::error::${IMAGE} never appeared; is the Harness release pipeline green?"
           exit 1
 
-      - name: Stamp the tag version into server.json
+      - name: Stamp the release into server.json
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
         run: |
-          TAG="${GITHUB_REF#refs/tags/v}"
-          jq --arg v "${TAG}" '
+          VERSION="${TAG#v}"
+          jq --arg v "${VERSION}" --arg t "${TAG}" '
             .version = $v
             | .packages[0].version = $v
-            | .packages[0].identifier = (.packages[0].identifier | sub(":[^:]*$"; ":" + $v))
+            | .packages[0].identifier = (.packages[0].identifier | sub(":[^:]*$"; ":" + $t))
           ' server.json > server.json.tmp
           mv server.json.tmp server.json
           cat server.json

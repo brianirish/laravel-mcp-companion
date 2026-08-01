@@ -1437,7 +1437,9 @@ def _registry_metadata() -> Dict[str, Any]:
         package["version"] = SERVER_VERSION
         identifier = package.get("identifier", "")
         if ":" in identifier:
-            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:{SERVER_VERSION}"
+            # Image tags carry the leading v (Harness tags images with the
+            # git tag verbatim), unlike the semver version fields.
+            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:v{SERVER_VERSION}"
     return data
 
 

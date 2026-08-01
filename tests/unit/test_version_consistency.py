@@ -195,7 +195,9 @@ def test_server_json_version_matches_pyproject():
     assert data["version"] == project_version()
     pkg = data["packages"][0]
     assert pkg["version"] == project_version()
-    assert pkg["identifier"].endswith(f":{project_version()}")
+    # The image tag carries the leading v: Harness tags images with the git
+    # tag verbatim, and the registry resolves this identifier against ghcr.
+    assert pkg["identifier"].endswith(f":v{project_version()}")
 
 
 def test_package_json_is_gone():
