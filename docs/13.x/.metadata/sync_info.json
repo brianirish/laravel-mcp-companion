@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "ebeea7cfaf51d77b8101825f3508e1e5ab1a8ad9",
-  "commit_date": "2026-07-30T20:48:55Z",
-  "commit_message": "[13.x] Document Telescope CSP nonce support (#11311)\n\n* Document Telescope CSP nonce support\n\n* formatting\n\n* remove csp\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/ebeea7cfaf51d77b8101825f3508e1e5ab1a8ad9",
-  "sync_time": "2026-07-31T00:04:25Z"
+  "commit_sha": "68f903aca708d7c9070f73127e64468132b1266b",
+  "commit_date": "2026-08-01T13:47:14Z",
+  "commit_message": "document new features",
+  "commit_url": "https://github.com/laravel/docs/commit/68f903aca708d7c9070f73127e64468132b1266b",
+  "sync_time": "2026-08-02T00:01:47Z"
 }

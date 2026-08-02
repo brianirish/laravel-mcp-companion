@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Blade Formatting in Laravel Pint
+## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
 
-[Read more](https://laravel-news.com/blade-formatting-in-laravel-pint)
+[Read more](https://laravel-news.com/pest-5)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
+## CPX: The Composer Package Executor for PHP
 
-[Read more](https://laravel-news.com/pest-5)
+[Read more](https://laravel-news.com/cpx-the-composer-package-executor-for-php)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
+## Intercept: Middleware Guardrails for Laravel AI Agents
 
-[Read more](https://laravel-news.com/pest-5)
+[Read more](https://laravel-news.com/intercept-middleware-guardrails-for-laravel-ai-agents)
 
 ---
 
