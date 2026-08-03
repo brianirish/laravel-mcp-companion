@@ -124,6 +124,18 @@ pipeline:
                     # gate is judged on the full suite above, not this subset.
                     command: .venv/bin/pytest -m e2e --no-cov -q
               - step:
+                  identifier: bench
+                  name: Latency benchmarks (informational)
+                  type: Run
+                  spec:
+                    shell: Sh
+                    # Report-only: prints p50/p95 against the v1.0.0 100ms
+                    # target and fails only if the benchmarks themselves
+                    # break, never on timing -- latency gates on shared
+                    # runners are flake factories. Uses the repo's real
+                    # docs/ corpus, present in every checkout.
+                    command: .venv/bin/pytest -m bench --no-cov -s -q
+              - step:
                   identifier: docker_build
                   name: Build Docker image
                   type: Run
