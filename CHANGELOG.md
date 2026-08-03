@@ -19,6 +19,13 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
+- Operational endpoints for the HTTP transport: `GET /healthz` (public
+  liveness/readiness JSON — `degraded` flags a stale corpus at 200, 503 is
+  reserved for no readable documentation) and `GET /metrics` (Prometheus
+  text: per-tool call counters, a latency histogram, request counts, uptime,
+  documentation age). Metrics require a bearer token whenever auth is
+  configured; collection runs through FastMCP middleware with no per-tool
+  code changes and no new dependencies.
 - End-to-end tests that spawn the real server over stdio and HTTP —
   initialize, search-to-section flows, `.well-known` discovery, Host
   rejection, and bearer auth, all through real transports (`pytest -m e2e`).
