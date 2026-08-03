@@ -163,8 +163,11 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 
 ### Reliability & Monitoring
 - [x] Health monitoring and metrics endpoints *(/healthz + Prometheus /metrics, HTTP mode)*
-- [ ] Rate limiting and quota management
-- [ ] Error recovery and graceful degradation improvements
+- [x] Rate limiting *(opt-in global token bucket via `--rate-limit`; quota
+  management deliberately out of scope — no per-client identity without auth)*
+- [x] Error recovery and graceful degradation *(accumulated and now pinned by
+  tests: partial update results, discovery fallback, fail-closed caches and
+  token verification, corrupt-corpus search resilience, staleness advice)*
 - [x] Performance optimization and caching improvements *(delivered in v0.10.0)*
 
 ### Security & Stability
@@ -177,7 +180,8 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 ### Quality Assurance
 - [x] 80%+ coverage of product code *(81% as of the v0.13.0 coverage push; gate ratcheted to 80)*
 - [x] Integration tests through a real MCP client *(e2e suite over stdio and HTTP; also a v1.0.0 criterion)*
-- [ ] Load testing and performance benchmarks
+- [x] Latency benchmarks *(report-only `pytest -m bench` against the real
+  corpus; warm search p95 ~4ms against the v1.0.0 100ms target)*
 - [ ] Documentation completeness audit
 
 ---

@@ -115,6 +115,8 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | `--auth-issuer ISSUER` | Required token issuer, with `--auth-jwks-uri` (env: `AUTH_ISSUER`) | none |
 | `--auth-audience AUD` | Required token audience, with `--auth-jwks-uri` (env: `AUTH_AUDIENCE`) | none |
 | `--auth-required-scope SCOPE` | Scope every token must carry, repeatable (env: `AUTH_REQUIRED_SCOPES`) | none |
+| `--rate-limit RPS` | Requests/second accepted across the whole server in HTTP mode (env: `RATE_LIMIT_RPS`) | none (no limiting) |
+| `--rate-limit-burst N` | Token-bucket burst capacity (env: `RATE_LIMIT_BURST`) | `max(10, 2×RPS)` |
 
 ### Keeping documentation current
 
@@ -214,6 +216,16 @@ python laravel_mcp_companion.py --transport http \
 ```
 
 Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origin` get `403`. Passing `--allowed-host` or `--cors-origin` on the command line replaces the corresponding environment variable rather than adding to it. If you expose this beyond localhost, put an authenticating reverse proxy in front of it. Avoid `--transform-mode code` over HTTP entirely — `execute` is a code execution endpoint.
+
+### Rate limiting (HTTP mode)
+
+Off by default. `--rate-limit 20` caps the server at 20 requests/second with a
+single **global** token bucket — a total throughput cap, not per-client
+fairness (without auth there is no reliable client identity to key on). The
+limit counts every MCP request including the initialize handshake, which is
+why the burst default stays at `max(10, 2×RPS)`; keep the burst comfortably
+above your clients' handshake size if you lower it. Throttled requests
+receive a clean MCP error and succeed again once the bucket refills.
 
 ### Operational endpoints (HTTP mode)
 
