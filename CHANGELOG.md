@@ -24,11 +24,21 @@ docs-only commit and contains no code change.
   rejection, and bearer auth, all through real transports (`pytest -m e2e`).
   Product coverage rose from 68% to 81% and the CI gate ratcheted to 80.
 
+### Security
+- CORS origins reject fnmatch patterns (`*`, `?`, `[`) at startup, the same
+  rule `ALLOWED_HOSTS` has enforced since v0.11.0 and for the same reason:
+  FastMCP's origin guard pattern-matches its allowlist, so
+  `https://*.example.com` admitted any matching `Origin` through the
+  DNS-rebinding protection while presenting as a scoped allowlist. Previously
+  only a bare `*` was rejected, and only when it was the sole entry.
+
 ### Fixed
 - The external-services documentation cache never validated after a real
   fetch: no fetch path stamped `cached_at`, so the cache aged from the epoch
   and every request refetched. GitHub-archive fetches additionally wrote no
   `success_rate`, reading back as zero quality — same permanent invalidation.
+- An explicit `--port 0` now binds an ephemeral port instead of being
+  silently rewritten to 8081.
 
 ## [0.12.0] - 2026-07-31
 

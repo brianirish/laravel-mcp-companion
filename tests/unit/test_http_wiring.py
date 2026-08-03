@@ -48,6 +48,30 @@ class TestBuildHttpApp:
         with pytest.raises(SystemExit):
             build_http_app(make_args(cors_origin=["*"]), mcp_server)
 
+    @pytest.mark.parametrize("origin", [
+        "https://*.example.com", "https://app.example.com:?", "https://[a-z].example.com",
+    ])
+    def test_pattern_cors_origins_are_rejected(self, mcp_server, origin):
+        """FastMCP fnmatches allowed_origins: a pattern entry would let any
+        matching Origin through the DNS-rebinding guard while presenting as a
+        scoped allowlist — same failure mode the ALLOWED_HOSTS check closes."""
+        with pytest.raises(SystemExit):
+            build_http_app(make_args(cors_origin=[origin]), mcp_server)
+
+    def test_pattern_mixed_with_valid_origin_still_exits(self, mcp_server):
+        """A bad entry fails the whole config loudly instead of being
+        silently dropped: half-applied security config is worse than none."""
+        with pytest.raises(SystemExit):
+            build_http_app(
+                make_args(cors_origin=["https://app.example.com", "https://*.example.com"]),
+                mcp_server,
+            )
+
+    def test_explicit_port_zero_is_preserved(self, mcp_server):
+        """--port 0 means an ephemeral bind; only an omitted port defaults."""
+        _, _, port = build_http_app(make_args(port=0), mcp_server)
+        assert port == 0
+
     async def test_no_cors_headers_without_origins(self, mcp_server):
         app, _, _ = build_http_app(make_args(), mcp_server)
         async with client_for(app) as client:

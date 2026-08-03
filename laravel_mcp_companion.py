@@ -2487,17 +2487,27 @@ def build_http_app(args, mcp: FastMCP):
     """
     from starlette.middleware.cors import CORSMiddleware
 
-    # Use PORT from environment or args, default to 8081.
+    # Use PORT from environment or args, default to 8081. An explicit
+    # --port 0 stays 0 (ephemeral bind); only an omitted port defaults.
     # Bind loopback by default: this server ships no authentication unless
     # auth flags are configured, so every tool is exposed to anyone who can
     # reach the socket.
-    port = args.port if args.port else 8081
+    port = args.port if args.port is not None else 8081
     host = args.host or "127.0.0.1"
     is_loopback = host in ("127.0.0.1", "::1", "localhost")
 
-    cors_origins = [o for o in (args.cors_origin or []) if o != "*"]
-    if args.cors_origin and not cors_origins:
-        logger.error("Wildcard CORS origins are not supported; pass explicit origins")
+    # FastMCP's origin guard matches allowed_origins with fnmatch, the same
+    # way it matches allowed hosts: "https://*.example.com" in this list lets
+    # any matching Origin through the DNS-rebinding protection while
+    # presenting as a scoped allowlist. Reject every pattern entry loudly,
+    # exactly like the ALLOWED_HOSTS check in parse_arguments.
+    cors_origins = args.cors_origin or []
+    pattern_origins = [o for o in cors_origins if any(c in o for c in "*?[")]
+    if pattern_origins:
+        logger.error(
+            f"wildcard patterns are not accepted in CORS origins: {', '.join(pattern_origins)}. "
+            "Pass explicit origins."
+        )
         sys.exit(1)
 
     if not is_loopback:

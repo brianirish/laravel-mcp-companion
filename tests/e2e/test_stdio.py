@@ -55,6 +55,10 @@ class TestStdioRawSurface:
 
 
 class TestStdioDefaultSurface:
+    """Pins representative tools on each surface, not the exact set: the raw
+    surface grows with the product, and an exact count here would break every
+    time a tool lands without catching anything the subset checks miss."""
+
     async def test_search_transform_is_the_default(self, e2e_docs):
         async with stdio_client(e2e_docs) as client:
             tools = {t.name for t in await client.list_tools()}

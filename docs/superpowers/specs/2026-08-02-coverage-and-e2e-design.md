@@ -120,7 +120,9 @@ prepared temp docs tree:
 - HTTP: server on an ephemeral port — same flow over streamable HTTP, plus
   `/.well-known/mcp/server.json`, plus one auth case (401 without token,
   200 with `AUTH_STATIC_TOKENS` token).
-- One `--transform-mode none` stdio case pinning the 26-tool surface.
+- One `--transform-mode none` stdio case pinning representative tools of the
+  raw surface (subset assertion by design: the surface grows with the product,
+  and an exact count would break on every tool addition without adding signal).
 
 Budget: ~10–15 tests, each with a hard timeout so a wedged subprocess fails
 fast. These validate transports and packaging (the ENTRYPOINT path Docker

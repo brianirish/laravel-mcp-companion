@@ -3,5 +3,6 @@ mypy
 pytest
 pytest-cov
 pytest-asyncio
+pytest-timeout
 black
 inline-snapshot

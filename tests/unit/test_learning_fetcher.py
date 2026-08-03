@@ -153,9 +153,13 @@ class TestExtractors:
         assert set(articles[0]) >= {"title", "url"}
 
     def test_news_articles_extracted(self, fetcher):
+        from urllib.parse import urlparse
+
         articles = fetcher._extract_news_articles(load_fixture("news_index.html"))
         assert articles
-        assert articles[0]["url"].startswith("https://laravel-news.com")
+        parsed = urlparse(articles[0]["url"])
+        assert parsed.scheme == "https"
+        assert parsed.hostname == "laravel-news.com"
 
     @pytest.mark.parametrize("method", [
         "_extract_blog_articles", "_extract_news_articles", "_extract_laracasts_topics",
