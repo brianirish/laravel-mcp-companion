@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel AI SDK Adds Human-in-the-Loop Tool Approval
+## Intervention Image
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval)
+[Read more](https://laravel-news.com/intervention-image)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
+## Laravel AI SDK Adds Human-in-the-Loop Tool Approval
 
-[Read more](https://laravel-news.com/pest-5)
+[Read more](https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval)
 
 ---
 
