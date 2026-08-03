@@ -18,6 +18,18 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- End-to-end tests that spawn the real server over stdio and HTTP —
+  initialize, search-to-section flows, `.well-known` discovery, Host
+  rejection, and bearer auth, all through real transports (`pytest -m e2e`).
+  Product coverage rose from 68% to 81% and the CI gate ratcheted to 80.
+
+### Fixed
+- The external-services documentation cache never validated after a real
+  fetch: no fetch path stamped `cached_at`, so the cache aged from the epoch
+  and every request refetched. GitHub-archive fetches additionally wrote no
+  `success_rate`, reading back as zero quality — same permanent invalidation.
+
 ## [0.12.0] - 2026-07-31
 
 ### Added

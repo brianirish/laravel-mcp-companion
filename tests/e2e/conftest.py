@@ -82,7 +82,7 @@ def http_server(e2e_docs):
         deadline = time.monotonic() + 20
         while time.monotonic() < deadline:
             if proc.poll() is not None:
-                stderr = proc.stderr.read().decode(errors="replace")[-2000:]
+                stderr = proc.stderr.read().decode(errors="replace")[-2000:] if proc.stderr else ""
                 raise RuntimeError(f"server exited early:\n{stderr}")
             try:
                 with socket.create_connection(("127.0.0.1", port), timeout=0.2):

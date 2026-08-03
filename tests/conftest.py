@@ -29,7 +29,7 @@ def load_fixture(name: str) -> str:
     return (FIXTURES / name).read_text(encoding="utf-8")
 
 
-def urlopen_returning(payload: bytes, url_map: Dict[str, bytes] = None):
+def urlopen_returning(payload: bytes, url_map: "Dict[str, bytes] | None" = None):
     """A context-manager mock suitable for docs_updater.urllib.request.urlopen.
 
     With `url_map`, the response body is chosen by the first key found as a
