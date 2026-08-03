@@ -87,7 +87,15 @@ class TestHealthz:
         async with client_for(app_for(server)) as client:
             res = await client.get("/healthz")
             assert res.status_code == 503
-            assert res.json()["status"] == "unhealthy"
+            data = res.json()
+            assert data["status"] == "unhealthy"
+            # numeric-or-null contract: monitors parse this as a number
+            assert data["docs"]["copy_age_days"] is None
+
+    async def test_copy_age_days_is_numeric_when_known(self, mcp_server):
+        async with client_for(app_for(mcp_server)) as client:
+            data = (await client.get("/healthz")).json()
+            assert isinstance(data["docs"]["copy_age_days"], (int, float))
 
     async def test_healthz_public_even_with_auth(self, authed_server):
         async with client_for(app_for(authed_server)) as client:
@@ -122,6 +130,31 @@ class TestMetricsEndpoint:
             )
             assert good.status_code == 200
             assert "laravel_mcp_info" in good.text
+
+    async def test_verifier_outage_fails_closed_not_500(self, test_docs_dir, monkeypatch):
+        """A JWKS fetch failure raises out of JWTVerifier (network errors
+        aren't in its catch list), and FastMCP's auth middleware eagerly
+        verifies ANY request carrying an Authorization header — every route,
+        custom ones included — so an unhandled raise is an app-wide 500.
+        harden_verifier fails closed instead: token-bearing requests get 401
+        during the outage, and the public routes keep answering."""
+        monkeypatch.setenv("AUTH_STATIC_TOKENS", "sekrit:client-a")
+        provider = build_auth_provider(make_args())
+
+        async def explode(token):
+            raise ValueError("JWKS failed to fetch")
+
+        monkeypatch.setattr(provider, "verify_token", explode)
+        laravel_mcp_companion.harden_verifier(provider)
+        server = create_mcp_server(
+            "TestServer", test_docs_dir, "12.x", transform_mode=None, auth=provider
+        )
+        async with client_for(app_for(server)) as client:
+            res = await client.get("/metrics", headers={"authorization": "Bearer sekrit"})
+            assert res.status_code == 401  # failed closed, not 500
+
+            health = await client.get("/healthz")
+            assert health.status_code == 200  # public routes unaffected
 
     async def test_tool_calls_flow_into_metrics(self, mcp_server):
         from fastmcp import Client

@@ -1362,6 +1362,29 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
     return sorted(matches, key=lambda x: x['score'], reverse=True)
 
 
+def harden_verifier(verifier: "TokenVerifier") -> "TokenVerifier":
+    """Make verify_token fail closed instead of raising.
+
+    FastMCP's auth middleware eagerly verifies any request that carries an
+    Authorization header — on every route, custom ones included — and an
+    exception from the verifier (a JWKS fetch failing, say) becomes an
+    app-wide 500, taking /healthz and /.well-known down with it. Catching
+    here turns an outage into 401s for token-bearing requests while every
+    public route keeps answering.
+    """
+    inner = verifier.verify_token
+
+    async def resilient(token: str):
+        try:
+            return await inner(token)
+        except Exception as e:
+            logger.error(f"Token verification failed closed: {e}")
+            return None
+
+    verifier.verify_token = resilient  # type: ignore[method-assign]
+    return verifier
+
+
 def build_auth_provider(args) -> Optional["TokenVerifier"]:
     """Build the OAuth 2.1 token verifier from CLI/env configuration.
 
@@ -1405,12 +1428,12 @@ def build_auth_provider(args) -> Optional["TokenVerifier"]:
             sys.exit(1)
         from fastmcp.server.auth.providers.jwt import JWTVerifier
         logger.info(f"Bearer-token auth enabled (JWKS: {args.auth_jwks_uri})")
-        return JWTVerifier(
+        return harden_verifier(JWTVerifier(
             jwks_uri=args.auth_jwks_uri,
             issuer=args.auth_issuer,
             audience=args.auth_audience,
             required_scopes=args.auth_required_scope or None,
-        )
+        ))
 
     tokens: Dict[str, Dict[str, Any]] = {}
     for entry in static_tokens.split(","):
@@ -1426,7 +1449,7 @@ def build_auth_provider(args) -> Optional["TokenVerifier"]:
         "Static-token auth enabled; fine for development, use --auth-jwks-uri "
         "with a real authorization server in production"
     )
-    return StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None)
+    return harden_verifier(StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None))
 
 
 def _registry_metadata() -> Dict[str, Any]:
@@ -1535,7 +1558,8 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
             "docs": {
                 "versions_available": versions_available,
                 "documentation_current_to": current_to or "unknown",
-                "copy_age_days": age if age is not None else "unknown",
+                # Numeric or null, never a string: monitors parse this field.
+                "copy_age_days": age,
                 "stale": stale,
             },
         }, code
@@ -1555,6 +1579,10 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
         if auth is not None:
             header = request.headers.get("authorization", "")
             token = header[7:] if header.lower().startswith("bearer ") else ""
+            # verify_token is hardened at construction (see harden_verifier):
+            # a verifier-side outage returns None rather than raising, so it
+            # reads as 401 here — same as FastMCP's own middleware, which
+            # verifies first on any request carrying an Authorization header.
             if not token or await auth.verify_token(token) is None:
                 return Response(
                     "unauthorized\n", status_code=401,
