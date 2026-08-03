@@ -3,7 +3,6 @@ list/status commands of main() (docs_updater.py:3683-3880)."""
 
 from unittest.mock import Mock, patch
 
-import pytest
 
 import docs_updater
 from docs_updater import handle_update_command, update_version

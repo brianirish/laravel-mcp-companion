@@ -10,7 +10,6 @@ import argparse
 import httpx
 import pytest
 
-import laravel_mcp_companion
 from laravel_mcp_companion import build_auth_provider, build_http_app, create_mcp_server, parse_arguments
 
 
