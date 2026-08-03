@@ -33,6 +33,18 @@ class TestBuildRateLimiter:
         with pytest.raises(SystemExit):
             build_rate_limiter(make_args(rate_limit=rps))
 
+    @pytest.mark.parametrize("rps", [float("nan"), float("inf")])
+    def test_nonfinite_rps_exits_cleanly(self, rps):
+        """nan/inf pass a <=0 check (neither compares below zero) and float()
+        parses both from env, so a config typo must die loudly here rather
+        than as a math.ceil traceback or an infinite bucket."""
+        with pytest.raises(SystemExit):
+            build_rate_limiter(make_args(rate_limit=rps))
+
+    def test_nonfinite_rps_with_explicit_burst_still_exits(self):
+        with pytest.raises(SystemExit):
+            build_rate_limiter(make_args(rate_limit=float("inf"), rate_limit_burst=10))
+
     def test_burst_below_one_exits(self):
         with pytest.raises(SystemExit):
             build_rate_limiter(make_args(rate_limit=5.0, rate_limit_burst=0))
@@ -85,3 +97,13 @@ class TestRateLimitArgs:
         monkeypatch.setenv("RATE_LIMIT_RPS", "lots")
         with pytest.raises(SystemExit):
             parse_arguments()
+
+    @pytest.mark.parametrize("value", ["inf", "nan", "-inf"])
+    def test_nonfinite_env_value_rejected_at_build(self, monkeypatch, value):
+        """float() happily parses these strings; the builder must not."""
+        monkeypatch.setattr("sys.argv", ["prog"])
+        monkeypatch.setenv("TRANSPORT", "http")
+        monkeypatch.setenv("RATE_LIMIT_RPS", value)
+        args = parse_arguments()
+        with pytest.raises(SystemExit):
+            build_rate_limiter(args)

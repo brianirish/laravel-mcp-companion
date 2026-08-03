@@ -19,7 +19,9 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
-- Opt-in rate limiting for the HTTP transport: `--rate-limit RPS` /
+- Opt-in rate limiting for the HTTP transport's MCP surface (operational
+  endpoints stay unlimited — throttling health checks marks healthy
+  instances down): `--rate-limit RPS` /
   `RATE_LIMIT_RPS` with a burst knob defaulting to `max(10, 2×RPS)` — the
   limiter counts the MCP handshake against the bucket, so small bursts
   self-throttle. One global token bucket, documented as a throughput cap

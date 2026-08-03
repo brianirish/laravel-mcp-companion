@@ -799,8 +799,8 @@ def parse_arguments():
         type=float,
         default=None,
         metavar="RPS",
-        help="Requests per second accepted across the whole server in HTTP mode; "
-             "unset means no limiting (env: RATE_LIMIT_RPS)"
+        help="MCP requests per second accepted in HTTP mode (operational endpoints "
+             "like /healthz are never limited); unset means no limiting (env: RATE_LIMIT_RPS)"
     )
     parser.add_argument(
         "--rate-limit-burst",
@@ -1415,8 +1415,11 @@ def build_rate_limiter(args) -> Optional["RateLimitingMiddleware"]:
         )
         return None
 
-    if args.rate_limit <= 0:
-        logger.error(f"--rate-limit must be positive, got {args.rate_limit}")
+    # nan/inf pass a <=0 comparison and float() parses both from env, so a
+    # finiteness check is what stands between a config typo and either an
+    # uncontrolled math.ceil traceback or a bucket with infinite capacity.
+    if not math.isfinite(args.rate_limit) or args.rate_limit <= 0:
+        logger.error(f"--rate-limit must be a positive finite number, got {args.rate_limit}")
         sys.exit(1)
 
     burst = args.rate_limit_burst
