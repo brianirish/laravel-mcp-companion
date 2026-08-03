@@ -112,6 +112,18 @@ pipeline:
                         paths:
                           - results.xml
               - step:
+                  identifier: e2e_test
+                  name: End-to-end tests (real transports)
+                  type: Run
+                  spec:
+                    shell: Sh
+                    # Spawns the real server as a subprocess over stdio and
+                    # streamable HTTP (the Docker ENTRYPOINT path). Separate
+                    # step and --no-cov on purpose: a wedged subprocess fails
+                    # here without masking the unit suite, and the coverage
+                    # gate is judged on the full suite above, not this subset.
+                    command: .venv/bin/pytest -m e2e --no-cov -q
+              - step:
                   identifier: docker_build
                   name: Build Docker image
                   type: Run
