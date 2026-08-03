@@ -7,6 +7,7 @@ It allows AI assistants and other tools to access and search Laravel documentati
 recommend appropriate Laravel packages for specific use cases.
 """
 
+import math
 import os
 import sys
 import logging
@@ -14,7 +15,10 @@ import re
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, Optional, List, Any
+from typing import Dict, Optional, List, Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
 import threading
 import anyio.to_thread
 from fastmcp import Context, FastMCP
@@ -791,6 +795,22 @@ def parse_arguments():
              "AUTH_REQUIRED_SCOPES when given (env: AUTH_REQUIRED_SCOPES, comma-separated)"
     )
     parser.add_argument(
+        "--rate-limit",
+        type=float,
+        default=None,
+        metavar="RPS",
+        help="Requests per second accepted across the whole server in HTTP mode; "
+             "unset means no limiting (env: RATE_LIMIT_RPS)"
+    )
+    parser.add_argument(
+        "--rate-limit-burst",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Token-bucket burst capacity; defaults to max(10, 2*RPS) so the MCP "
+             "handshake never self-throttles (env: RATE_LIMIT_BURST)"
+    )
+    parser.add_argument(
         "--transform-mode",
         type=str,
         default=os.environ.get("TRANSFORM_MODE", "").lower() or None,
@@ -819,6 +839,18 @@ def parse_arguments():
         args.allowed_host = _split_env_list("ALLOWED_HOSTS") or []
     if args.auth_required_scope is None:
         args.auth_required_scope = _split_env_list("AUTH_REQUIRED_SCOPES") or []
+
+    # argparse type= does not run on defaults, so env fallbacks parse here.
+    if args.rate_limit is None and os.environ.get("RATE_LIMIT_RPS"):
+        try:
+            args.rate_limit = float(os.environ["RATE_LIMIT_RPS"])
+        except ValueError:
+            parser.error(f"invalid RATE_LIMIT_RPS: {os.environ['RATE_LIMIT_RPS']!r}")
+    if args.rate_limit_burst is None and os.environ.get("RATE_LIMIT_BURST"):
+        try:
+            args.rate_limit_burst = int(os.environ["RATE_LIMIT_BURST"])
+        except ValueError:
+            parser.error(f"invalid RATE_LIMIT_BURST: {os.environ['RATE_LIMIT_BURST']!r}")
 
     # Allowed hosts are matched with fnmatch, so a pattern entry would match
     # every Host header and silently disable the guard while still looking like
@@ -1360,6 +1392,46 @@ def fuzzy_search(query: str, text: str, threshold: float = 0.6) -> List[Dict]:
                 })
     
     return sorted(matches, key=lambda x: x['score'], reverse=True)
+
+
+def build_rate_limiter(args) -> Optional["RateLimitingMiddleware"]:
+    """Build the opt-in token-bucket limiter from CLI/env configuration.
+
+    One global bucket for the whole server — a total-throughput cap, not
+    per-client fairness; without auth there is no reliable client identity
+    to key on. The limiter counts every MCP request including the initialize
+    handshake, so the burst default stays comfortably above handshake size.
+
+    Returns None when unset, or when the transport is stdio, where a single
+    local client throttling itself serves nobody.
+    """
+    if args.rate_limit is None:
+        return None
+
+    if args.transport != "http":
+        logger.warning(
+            "A rate limit is configured but the transport is stdio; ignoring it. "
+            "Rate limiting only applies to the HTTP transport."
+        )
+        return None
+
+    if args.rate_limit <= 0:
+        logger.error(f"--rate-limit must be positive, got {args.rate_limit}")
+        sys.exit(1)
+
+    burst = args.rate_limit_burst
+    if burst is None:
+        burst = max(10, math.ceil(2 * args.rate_limit))
+    elif burst < 1:
+        logger.error(f"--rate-limit-burst must be at least 1, got {burst}")
+        sys.exit(1)
+
+    from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
+    logger.info(f"Rate limiting enabled: {args.rate_limit} req/s, burst {burst}")
+    return RateLimitingMiddleware(
+        max_requests_per_second=args.rate_limit,
+        burst_capacity=burst,
+    )
 
 
 def harden_verifier(verifier: "TokenVerifier") -> "TokenVerifier":
