@@ -1555,7 +1555,7 @@ def _server_icon() -> "Icon":
     return Icon(src=f"data:image/svg+xml;base64,{encoded}", mimeType="image/svg+xml")
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None) -> FastMCP:
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None, rate_limiter: Optional["RateLimitingMiddleware"] = None) -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
 
     Args:
@@ -1597,7 +1597,11 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
 
     # Metrics collection is always on (negligible overhead: one lock and a
     # clock read per call) so the HTTP endpoints never lie about "since when".
+    # Registered before the rate limiter so throttled requests still count —
+    # the ordering contract is pinned by test, not assumed from upstream docs.
     mcp.add_middleware(MetricsMiddleware())
+    if rate_limiter is not None:
+        mcp.add_middleware(rate_limiter)
     start_time = time.monotonic()
     metrics_registry.set_info(SERVER_VERSION)
     metrics_registry.set_gauge_callable(
@@ -2756,7 +2760,8 @@ def main():
     mcp = create_mcp_server(
         args.server_name, docs_path, args.version,
         transform_mode=None if mode == "none" else mode,
-        auth=build_auth_provider(args)
+        auth=build_auth_provider(args),
+        rate_limiter=build_rate_limiter(args)
     )
 
     # Log server startup
