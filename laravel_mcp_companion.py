@@ -2479,6 +2479,59 @@ def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> 
         raise ValueError(f"Unknown transform_mode: {transform_mode!r}. Use 'search', 'code', or None.")
 
 
+def build_http_app(args, mcp: FastMCP):
+    """Assemble the HTTP app: host/origin guard, CORS, bind address.
+
+    Extracted from main() so the assembled result is testable in-process;
+    binding the socket stays in main(). Returns (app, host, port).
+    """
+    from starlette.middleware.cors import CORSMiddleware
+
+    # Use PORT from environment or args, default to 8081.
+    # Bind loopback by default: this server ships no authentication unless
+    # auth flags are configured, so every tool is exposed to anyone who can
+    # reach the socket.
+    port = args.port if args.port else 8081
+    host = args.host or "127.0.0.1"
+    is_loopback = host in ("127.0.0.1", "::1", "localhost")
+
+    cors_origins = [o for o in (args.cors_origin or []) if o != "*"]
+    if args.cors_origin and not cors_origins:
+        logger.error("Wildcard CORS origins are not supported; pass explicit origins")
+        sys.exit(1)
+
+    if not is_loopback:
+        logger.warning(
+            f"Binding {host} exposes the MCP server to the network. "
+            "Restrict access at the network layer and set --allowed-host."
+        )
+
+    # Enable FastMCP's Host/Origin guard (off by default upstream). Strict
+    # mode is required off-loopback, where the 'auto' heuristic disengages.
+    app = mcp.http_app(
+        host_origin_protection="auto" if is_loopback else True,
+        allowed_hosts=args.allowed_host or None,
+        allowed_origins=cors_origins or None,
+    )
+
+    # Browser clients need CORS; everything else does not. Only add the
+    # middleware when explicit origins are configured, and never reflect
+    # arbitrary origins with credentials attached.
+    if cors_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=cors_origins,
+            allow_credentials=False,
+            allow_methods=["GET", "POST", "OPTIONS"],
+            allow_headers=["content-type", "mcp-session-id", "mcp-protocol-version", "authorization"],
+            expose_headers=["mcp-session-id", "mcp-protocol-version"],
+            max_age=86400,
+        )
+        logger.info(f"CORS enabled for: {', '.join(cors_origins)}")
+
+    return app, host, port
+
+
 def main():
     """Main entry point for the Laravel MCP Companion."""
     args = parse_arguments()
@@ -2560,49 +2613,8 @@ def main():
             # HTTP mode for web-based deployments
             logger.info("Starting in HTTP mode...")
             import uvicorn
-            from starlette.middleware.cors import CORSMiddleware
 
-            # Use PORT from environment or args, default to 8081.
-            # Bind loopback by default: this server ships no authentication, so
-            # every tool is exposed to anyone who can reach the socket.
-            port = args.port if args.port else 8081
-            host = args.host or "127.0.0.1"
-            is_loopback = host in ("127.0.0.1", "::1", "localhost")
-
-            cors_origins = [o for o in (args.cors_origin or []) if o != "*"]
-            if args.cors_origin and not cors_origins:
-                logger.error("Wildcard CORS origins are not supported; pass explicit origins")
-                sys.exit(1)
-
-            if not is_loopback:
-                logger.warning(
-                    f"Binding {host} exposes an unauthenticated MCP server to the network. "
-                    "Restrict access at the network layer and set --allowed-host."
-                )
-
-            # Enable FastMCP's Host/Origin guard (off by default upstream). Strict
-            # mode is required off-loopback, where the 'auto' heuristic disengages.
-            app = mcp.http_app(
-                host_origin_protection="auto" if is_loopback else True,
-                allowed_hosts=args.allowed_host or None,
-                allowed_origins=cors_origins or None,
-            )
-
-            # Browser clients need CORS; everything else does not. Only add the
-            # middleware when explicit origins are configured, and never reflect
-            # arbitrary origins with credentials attached.
-            if cors_origins:
-                app.add_middleware(
-                    CORSMiddleware,
-                    allow_origins=cors_origins,
-                    allow_credentials=False,
-                    allow_methods=["GET", "POST", "OPTIONS"],
-                    allow_headers=["content-type", "mcp-session-id", "mcp-protocol-version", "authorization"],
-                    expose_headers=["mcp-session-id", "mcp-protocol-version"],
-                    max_age=86400,
-                )
-                logger.info(f"CORS enabled for: {', '.join(cors_origins)}")
-
+            app, host, port = build_http_app(args, mcp)
             logger.info(f"Listening on {host}:{port}")
 
             uvicorn.run(app, host=host, port=port, log_level="info")
