@@ -20,7 +20,11 @@ import anyio.to_thread
 from fastmcp import Context, FastMCP
 from fastmcp.server.auth import TokenVerifier
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
+
+import time
+
+from metrics import MetricsMiddleware, registry as metrics_registry, render_prometheus
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
@@ -1495,6 +1499,72 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     @mcp.custom_route("/.well-known/mcp/server.json", methods=["GET"])
     async def well_known_server_json(request: "Request") -> "JSONResponse":
         return JSONResponse(_registry_metadata())
+
+    # Metrics collection is always on (negligible overhead: one lock and a
+    # clock read per call) so the HTTP endpoints never lie about "since when".
+    mcp.add_middleware(MetricsMiddleware())
+    start_time = time.monotonic()
+    metrics_registry.set_info(SERVER_VERSION)
+    metrics_registry.set_gauge_callable(
+        "laravel_mcp_uptime_seconds",
+        lambda: round(time.monotonic() - start_time, 3),
+    )
+
+    def _docs_age_days() -> Optional[float]:
+        _, age = get_documentation_date(docs_path)
+        return float(age) if age is not None else None
+
+    metrics_registry.set_gauge_callable("laravel_mcp_docs_copy_age_days", _docs_age_days)
+
+    def _health_payload() -> tuple[Dict[str, Any], int]:
+        versions_available = sum(
+            1 for v in SUPPORTED_VERSIONS if (docs_path / v).is_dir() and any((docs_path / v).glob("*.md"))
+        )
+        current_to, age = get_documentation_date(docs_path)
+        stale = copy_is_stale(docs_path)
+        if versions_available == 0:
+            status, code = "unhealthy", 503
+        elif stale:
+            status, code = "degraded", 200
+        else:
+            status, code = "ok", 200
+        return {
+            "status": status,
+            "version": SERVER_VERSION,
+            "uptime_seconds": round(time.monotonic() - start_time, 3),
+            "docs": {
+                "versions_available": versions_available,
+                "documentation_current_to": current_to or "unknown",
+                "copy_age_days": age if age is not None else "unknown",
+                "stale": stale,
+            },
+        }, code
+
+    # Always public: load balancers cannot do OAuth. "degraded" (stale corpus)
+    # still serves traffic; 503 is reserved for "no documentation readable".
+    @mcp.custom_route("/healthz", methods=["GET"])
+    async def healthz(request: "Request") -> "JSONResponse":
+        payload, code = _health_payload()
+        return JSONResponse(payload, status_code=code)
+
+    # Custom routes bypass FastMCP's auth middleware (the .well-known route
+    # relies on that), so this route enforces its own check with the same
+    # TokenVerifier the MCP endpoint uses — token semantics cannot drift.
+    @mcp.custom_route("/metrics", methods=["GET"])
+    async def metrics_endpoint(request: "Request") -> "Response":
+        if auth is not None:
+            header = request.headers.get("authorization", "")
+            token = header[7:] if header.lower().startswith("bearer ") else ""
+            if not token or await auth.verify_token(token) is None:
+                return Response(
+                    "unauthorized\n", status_code=401,
+                    headers={"WWW-Authenticate": "Bearer"},
+                    media_type="text/plain",
+                )
+        return Response(
+            render_prometheus(metrics_registry),
+            media_type="text/plain; version=0.0.4; charset=utf-8",
+        )
 
     # Initialize multi-source documentation updater
     multi_updater = MultiSourceDocsUpdater(docs_path, runtime_version)
