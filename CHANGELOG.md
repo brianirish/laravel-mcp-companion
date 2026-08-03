@@ -19,6 +19,19 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
+- Opt-in rate limiting for the HTTP transport's MCP surface (operational
+  endpoints stay unlimited — throttling health checks marks healthy
+  instances down): `--rate-limit RPS` /
+  `RATE_LIMIT_RPS` with a burst knob defaulting to `max(10, 2×RPS)` — the
+  limiter counts the MCP handshake against the bucket, so small bursts
+  self-throttle. One global token bucket, documented as a throughput cap
+  rather than per-client fairness. Off unless configured.
+- Report-only latency benchmarks (`pytest -m bench`) against the real
+  corpus, printing p50/p95 per operation against the v1.0.0 sub-100ms
+  target. First measurements: warm search p95 ~4ms, section reads ~1.4ms.
+- Tests pinning graceful-degradation behavior that previously rested on
+  luck: search surviving hostile bytes in a corpus file, and throttled
+  clients recovering cleanly when the bucket refills.
 - Operational endpoints for the HTTP transport: `GET /healthz` (public
   liveness/readiness JSON — `degraded` flags a stale corpus at 200, 503 is
   reserved for no readable documentation) and `GET /metrics` (Prometheus
