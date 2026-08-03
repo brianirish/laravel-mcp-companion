@@ -1,0 +1,103 @@
+{
+  "name": "12.x",
+  "commit": {
+    "sha": "5b8c610735c8af96a3bda4e37a820b27dc40aee9",
+    "node_id": "C_kwDOAHMn39oAKDViOGM2MTA3MzVjOGFmOTZhM2JkYTRlMzdhODIwYjI3ZGM0MGFlZTk",
+    "commit": {
+      "author": {
+        "name": "Greg Mayes",
+        "email": "gregmayes@gmail.com",
+        "date": "2026-07-27T13:21:37Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-07-27T13:21:37Z"
+      },
+      "message": "Added the $flags parameter to the method signature for Illuminate\\Http\\Client\\Response::json() (#11305)",
+      "tree": {
+        "sha": "acdc63021d73383a2a0d8208247c3d003783f738",
+        "url": "https://api.github.com/repos/laravel/docs/git/trees/acdc63021d73383a2a0d8208247c3d003783f738"
+      },
+      "url": "https://api.github.com/repos/laravel/docs/git/commits/5b8c610735c8af96a3bda4e37a820b27dc40aee9",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqZ1thCRC1aQ7uu5UhlAAAMCUQAKRA51hYEEnX9DHxxeXmYfhy\nuFx5liAbWCxiOasR1w+F+4zU+lgqNb/wJvC929IY22aqvmHGX04PY9xAt7YKvCT+\n64vOCESIQ3lNm8Tb/mRNAxZSfKRDoKzyd56ZYdOYojnluxu10A+auExQecyQpXWB\nmNpNXNr5BSCeuZGXIoAf1EPQ6HMO1jNHSRUeBX68a4DpO3h0lpAHEWI2kzppinOJ\nu0h3AmT+fUZtHxS6M95lm/+vR+2Uv/VdtcjKG/dGDyaGJs/4lRVPKAIKH2jQASwL\nlatU1urTQNoSB20eOjto7/tPXmjBWvHxbY4wg10dbuPBC+MXL7lN5RsQfJ1K/Auh\ntenIFHyq1MEanUYTdDw480KAWTrk8yFVD35rhyT9M6BKgSIz3vXBVaTnLezddjkK\nKSfb00GiX/ZBB6f6sIO2f2QmREfgl+shEBO0EgTVaawQptzLdXx2LntZ7d+tuS+c\nt76gS6ylA5OpjxaZBKHRfFRhNNQrhBNwhUY0t9rOV94zifFXkXIrnqi7oubNhP0P\nURtPtwEvTW8iOdCY2KxOZHedg1yVtO+KQq4RZRJma8Qa8U8qRk7icWD98foWhLV6\n/TtIdvv09AWcHV9esx28ngnQGJoF+uhjT3a5aFF/Dhn450ynIaORblCaEFTJKTSZ\ndTupdOvnBk7ObZfSpFeL\n=A54m\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree acdc63021d73383a2a0d8208247c3d003783f738\nparent f2dc517a1f936f5a5655576ea20942b48feb913b\nauthor Greg Mayes <gregmayes@gmail.com> 1785158497 +0100\ncommitter GitHub <noreply@github.com> 1785158497 -0400\n\nAdded the $flags parameter to the method signature for Illuminate\\Http\\Client\\Response::json() (#11305)",
+        "verified_at": "2026-07-27T13:21:38Z"
+      }
+    },
+    "url": "https://api.github.com/repos/laravel/docs/commits/5b8c610735c8af96a3bda4e37a820b27dc40aee9",
+    "html_url": "https://github.com/laravel/docs/commit/5b8c610735c8af96a3bda4e37a820b27dc40aee9",
+    "comments_url": "https://api.github.com/repos/laravel/docs/commits/5b8c610735c8af96a3bda4e37a820b27dc40aee9/comments",
+    "author": {
+      "login": "GregMayes",
+      "id": 13118406,
+      "node_id": "MDQ6VXNlcjEzMTE4NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13118406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/GregMayes",
+      "html_url": "https://github.com/GregMayes",
+      "followers_url": "https://api.github.com/users/GregMayes/followers",
+      "following_url": "https://api.github.com/users/GregMayes/following{/other_user}",
+      "gists_url": "https://api.github.com/users/GregMayes/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/GregMayes/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/GregMayes/subscriptions",
+      "organizations_url": "https://api.github.com/users/GregMayes/orgs",
+      "repos_url": "https://api.github.com/users/GregMayes/repos",
+      "events_url": "https://api.github.com/users/GregMayes/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/GregMayes/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f2dc517a1f936f5a5655576ea20942b48feb913b",
+        "url": "https://api.github.com/repos/laravel/docs/commits/f2dc517a1f936f5a5655576ea20942b48feb913b",
+        "html_url": "https://github.com/laravel/docs/commit/f2dc517a1f936f5a5655576ea20942b48feb913b"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/laravel/docs/branches/12.x",
+    "html": "https://github.com/laravel/docs/tree/12.x"
+  },
+  "protected": true,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [
+
+      ],
+      "checks": [
+
+      ]
+    }
+  },
+  "protection_url": "https://api.github.com/repos/laravel/docs/branches/12.x/protection"
+}

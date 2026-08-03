@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="csrf-token" content=""/>
+
+    <title>Laravel News: Tutorials, Packages &amp; Framework News</title>
+    
+    
+    <meta
+        name="description"
+        content="Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework."
+    />
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Laravel News: Tutorials, Packages &amp; Framework News"/>
+    <meta
+        property="og:image"
+        content="https://picperf.io/https://laravel-news.com/images/laravelnews-og.png"
+    />
+    <meta
+        property="og:description"
+        content="Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework."
+    />
+    <meta property="og:url" content="https://laravel-news.com"/>
+    <meta property="og:site_name" content="Laravel News"/>
+    <meta property="og:locale" content="en_US"/>
+
+    
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@laravelnews"/>
+    <meta name="twitter:title" content="Laravel News: Tutorials, Packages &amp; Framework News"/>
+    <meta
+        property="twitter:image"
+        content="https://picperf.io/https://laravel-news.com/images/laravelnews-og.png"
+    />
+    <meta
+        name="twitter:description"
+        content="Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework."
+    />
+    
+    <link href="https://laravel-news.com" rel="canonical"/>
+    <link href="https://laravel-news.com/" rel="home"/>
+
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="Laravel News &raquo; Feed"
+        href="https://feed.laravel-news.com/"
+    />
+    <link
+        rel="alternate"
+        title="Laravel News Feed"
+        type="application/json"
+        href="https://laravel-news.com/feed/json"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+    <link rel="manifest" href="/site.webmanifest"/>
+    <meta name="p:domain_verify" content="10fb40c4dd5b036ab42f1d935c6400b6"/>
+    <meta name="facebook-domain-verification" content="smr6d95hfkmrn505mfkv7dzalj68g2"/>
+    <meta property="fb:admins" content="100007722642618"/>
+    <meta property="fb:app_id" content="440569919467159"/>
+
+    
+    <link rel="preconnect" href="https://use.typekit.net"/>
+    <link rel="preconnect" href="https://fonts.bunny.net"/>
+    <link href="https://fonts.bunny.net/css?family=jetbrains-mono:400,400i" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.typekit.net/rgt0rac.css">
+
+    
+    <script src="https://cdn.usefathom.com/script.js" data-site="BYASFNCM" defer></script>
+
+    <meta property="fb:admins" content="100007722642618"/>
+    <meta property="fb:app_id" content="440569919467159"/>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LE9GHTERHJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-LE9GHTERHJ');
+    </script>
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer ></script>
+
+    <link rel="preload" as="style" href="https://laravel-news.com/build/assets/app-Bstnyw7C.css" /><link rel="modulepreload" as="script" href="https://laravel-news.com/build/assets/app-DabUvjKq.js" /><link rel="stylesheet" href="https://laravel-news.com/build/assets/app-Bstnyw7C.css" data-navigate-track="reload" /><script type="module" src="https://laravel-news.com/build/assets/app-DabUvjKq.js" data-navigate-track="reload"></script>
+    
+    <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}[wire\:cloak] {display: none !important;}dialog#livewire-error::backdrop {background-color: rgba(0, 0, 0, .6);}</style>
+    </head>
+
+<body class="relative antialised min-h-screen bg-white font-sans text-black">
+
+    
+<div x-persist="header">
+<header
+    x-data="{
+        mobileMenuIsOpen: false,
+        searchModalIsOpen: false,
+        init() {
+            document.addEventListener('livewire:navigating', () => {
+                this.mobileMenuIsOpen = false;
+                this.searchModalIsOpen = false;
+            });
+        },
+    }"
+    class="absolute inset-x-0 z-10"
+>
+    <div
+        class="shadow-card z-50 flex items-center justify-center bg-red-600 px-3 py-3 text-center text-sm text-white">
+        <div id="top-ad" x-init="$ajax('/api/ad/top')">&nbsp;</div>
+    </div>
+    <div
+        class="mt-5 mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-6 md:gap-8 md:py-10"
+    >
+        <div class="xl:gap-18 flex items-center gap-16">
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 hover:-translate-y-1 hover:opacity-70 focus-visible:ring-offset-2" href="/"
+    >
+    <img
+    class="lg:h-18 lg:w-18 h-12 w-12 sm:h-16 sm:w-16"
+    width="87"
+    height="86"
+    src="https://picperf.io/https://laravel-news.com/images/logo.svg"
+    alt="Laravel News"
+/>
+                <span class="sr-only">Laravel News</span>
+</a>
+            <div class="hidden items-center gap-4 sm:flex md:gap-8">
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/blog"
+    >
+    Blog
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/category/tutorials"
+    >
+    Tutorials
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/category/packages"
+    >
+    Packages
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 !hidden p-1 font-bold hover:text-gray-600 md:!inline-flex" href="/newsletter"
+    >
+    Newsletter
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 !hidden p-1 font-bold hover:text-gray-600 md:!inline-flex" href="/podcasts"
+    >
+    Podcasts
+</a>
+            </div>
+        </div>
+        <div class="xl:gap-18 flex items-center gap-16">
+            <div class="hidden items-center gap-4 md:gap-8 lg:flex">
+                
+                
+                
+                
+                
+                
+                
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/partners"
+            wire:navigate.hover
+    >
+    Partners
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/links"
+            wire:navigate.hover
+    >
+    Links
+</a>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/login"
+            wire:navigate.hover
+    >
+    Your Account
+</a>
+            </div>
+            <div class="-mr-1 flex items-center gap-2">
+                <button
+                    class="inline-flex rounded-sm p-1 leading-none text-black transition duration-300 hover:text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 focus-visible:ring-offset-4 focus-visible:ring-offset-white"
+                    @click.prevent="searchModalIsOpen = true"
+                >
+                    <img
+                        src="https://picperf.io/https://laravel-news.com/images/icons/search.svg"
+                        class="h-6 w-6"
+                        width="24"
+                        height="24"
+                        alt="Search"
+                    />
+                    <span class="sr-only">Search</span>
+                </button>
+                <button
+                    class="inline-flex rounded-sm p-1 leading-none text-black transition duration-300 hover:text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 focus-visible:ring-offset-4 focus-visible:ring-offset-white lg:hidden"
+                    @click.prevent="mobileMenuIsOpen = true"
+                >
+                    <img src="https://picperf.io/https://laravel-news.com/images/icons/menu.svg" class="h-6 w-6" width="24" height="24" alt="Menu"/>
+                    <span class="sr-only">Menu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <template x-teleport="body">
+    <div
+        x-dialog
+        x-model="mobileMenuIsOpen"
+        x-cloak
+        class="fixed inset-0 z-50 overflow-hidden lg:hidden"
+    >
+        
+        <div x-dialog:overlay x-transition.opacity class="fixed inset-0 bg-black/50"></div>
+
+        
+        <div class="fixed inset-y-0 right-0 w-full max-w-lg">
+            <div
+                x-dialog:panel
+                x-transition:enter="transition duration-300 ease-out"
+                x-transition:enter-start="translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transition duration-300 ease-in"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                class="h-full w-full"
+            >
+                <div
+                    class="flex h-full flex-col justify-between overflow-y-auto bg-white shadow-card"
+                >
+                    <div class="p-6 md:p-10">
+                        <div class="flex items-center justify-between">
+                            
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 hover:-translate-y-1 hover:opacity-70 focus-visible:ring-offset-2" href="/"
+            wire:navigate.hover
+    >
+    <img
+    class="h-12 w-12 sm:h-16 sm:w-16"
+    width="87"
+    height="86"
+    src="https://picperf.io/https://laravel-news.com/images/logo.svg"
+    alt="Laravel News"
+/>
+                                <h2 x-dialog:title class="sr-only">Laravel News</h2>
+</a>
+
+                            
+                            <button
+                                type="button"
+                                @click="$dialog.close()"
+                                class="rounded-sm p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 focus-visible:ring-offset-4"
+                            >
+                                <span class="sr-only">Close menu</span>
+
+                                <img
+                                    src="https://picperf.io/https://laravel-news.com/images/icons/close.svg"
+                                    class="h-6 w-6"
+                                    width="24"
+                                    height="24"
+                                    alt="Close menu"
+                                />
+                            </button>
+                        </div>
+                        <div class="-mx-1 mt-12 flex flex-col gap-4">
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/blog"
+            wire:navigate.hover
+    >
+    Blog
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/category/tutorials"
+            wire:navigate.hover
+    >
+    Tutorials
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/category/packages"
+            wire:navigate.hover
+    >
+    Packages
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/podcasts"
+    >
+    Podcasts
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/newsletter"
+            wire:navigate.hover
+    >
+    Newsletter
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/links"
+            wire:navigate.hover
+    >
+    Community Links
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/partners"
+            wire:navigate.hover
+    >
+    Partners
+</a>
+                            <div class="px-1 py-3">
+                                <hr class="border-gray-600/30"/>
+                            </div>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/login"
+            wire:navigate.hover
+    >
+    Your Account
+</a>
+                            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 hover:text-gray-600" href="/partnerships"
+            wire:navigate.hover
+    >
+    Advertising
+</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+    <template x-teleport="body">
+    <div
+        x-data="{
+            initialized: false,
+            init() {
+                $watch('searchModalIsOpen', (value) => {
+                    if (! this.initialized) {
+                        search.start();
+
+                        this.initialized = true;
+                    }
+
+                    if (value) {
+                        setTimeout(() => {
+                            this.$el.querySelector('input').focus();
+                        }, 100);
+                    }
+                });
+            },
+        }"
+        x-dialog
+        x-model="searchModalIsOpen"
+        x-cloak
+        class="fixed inset-0 z-10"
+        @keydown.slash.meta.window="searchModalIsOpen = !searchModalIsOpen"
+        @keydown.k.meta.window="searchModalIsOpen = !searchModalIsOpen"
+        @keydown.escape.window="searchModalIsOpen = false"
+    >
+        <div
+            x-dialog:overlay
+            x-transition.opacity
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm"
+        ></div>
+
+        <div class="relative flex min-h-screen items-center justify-center p-4">
+            <div
+                x-dialog:panel
+                x-transition.opacity.duration.400ms
+                class="relative h-[88vh] w-full max-w-3xl overflow-y-auto rounded-lg border border-gray-100 bg-white shadow-card"
+            >
+                <div class="p-6 lg:p-12">
+                    <div class="flex items-center justify-between gap-4">
+                        <h2 x-dialog:title class="text-2xl font-bold">Search Articles
+                            
+                        </h2>
+                        <button
+                            type="button"
+                            @click="$dialog.close()"
+                            class="rounded-sm p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 focus-visible:ring-offset-4"
+                        >
+                            <span class="sr-only">Close search</span>
+
+                            <img
+                                src="https://picperf.io/https://laravel-news.com/images/icons/close.svg"
+                                class="h-6 w-6"
+                                width="24"
+                                height="24"
+                                alt="Close search"
+                            />
+                        </button>
+                    </div>
+
+                    <div class="ais-InstantSearch mt-10">
+                        <div id="searchbox"></div>
+                        <div id="hits"></div>
+                        <div class="mt-1 border-gray-200 border-t">
+                            <p class="mt-4">
+                                Or try
+                                <a href="/search"
+                                   class="focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 font-bold text-red-600 hover:text-red-700">
+                                    paginated search →
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</header>
+</div>
+
+<div>
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://laravel-news.com#organization",
+    "name": "Laravel News",
+    "description": "Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework.",
+    "url": "https://laravel-news.com",
+    "logo": {
+        "@type": "ImageObject",
+        "url": "https://laravel-news.com/android-chrome-512x512.png"
+    },
+    "sameAs": [
+        "https://twitter.com/laravelnews",
+        "https://www.facebook.com/laravelnews",
+        "https://www.linkedin.com/company/laravel-news",
+        "https://www.youtube.com/@laravelnews",
+        "https://instagram.com/laravelnews"
+    ]
+}
+</script>
+        <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://laravel-news.com#website",
+    "name": "Laravel News",
+    "description": "Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework.",
+    "url": "https://laravel-news.com",
+    "publisher": {
+        "@id": "https://laravel-news.com#organization"
+    },
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://laravel-news.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+    
+    <link rel="preload" fetchpriority="high" as="image" href="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/cpx-2.0-featured.png"/>
+
+    <div class="h-[160px] sm:h-[148px] md:h-[180px]"></div>
+
+    <main data-broadsheet-home>
+        <header class="mx-auto w-full max-w-7xl px-6 pt-8">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-black pb-3 text-[11px] font-bold uppercase tracking-[0.15em]">
+                <span>Sunday, August 2, 2026</span>
+                <span class="hidden text-gray-500 sm:inline">Independent Laravel news since 2012</span>
+                <a href="/newsletter" class="text-red-700 hover:text-red-900">Get the daily edition</a>
+            </div>
+            <div class="border-b-4 border-double border-black py-7 text-center">
+                <p class="text-xs font-bold uppercase tracking-[0.35em] text-red-700">Laravel, as it happens.</p>
+                <h1 class="mt-2 text-5xl font-black tracking-[-0.055em] sm:text-7xl">Laravel News</h1>
+                <p class="mt-2 text-sm text-gray-500">Framework · Ecosystem · Community</p>
+            </div>
+        </header>
+
+        <section data-top-stories class="mx-auto w-full max-w-7xl px-6">
+            <div class="grid border-b border-gray-200 lg:grid-cols-[1fr_2.15fr_1fr]">
+                <aside class="order-2 border-b border-gray-300 py-8 lg:order-1 lg:border-b-0 lg:border-r lg:pr-6">
+                    <p class="border-b-2 border-black pb-2 text-xs font-black uppercase tracking-[0.16em]">Also in the news</p>
+
+                                            <article class="border-b border-gray-300 py-6">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-700">Trending</p>
+                            <h2 class="mt-2 text-xl font-black leading-tight">
+                                <a href="https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb" class="hover:text-red-700">Building a Live Match Scoreboard With Laravel Reverb</a>
+                            </h2>
+                            <p class="mt-3 text-sm leading-6 text-gray-600">A practical tutorial on using Laravel Reverb to push live score, clock, and timeline updates to a football/soccer match...</p>
+                        </article>
+                    
+                                            <article data-latest-laravel-release class="border-b border-gray-300 py-5">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-700">Latest Laravel Release</p>
+                            <h3 class="mt-2 font-bold leading-snug">
+                                <a href="https://laravel-news.com/laravel-13-23-0" class="hover:text-red-700">Monthly Log Driver in Laravel 13.23</a>
+                            </h3>
+                        </article>
+                    
+                                            <article class="border-b border-gray-300 py-5">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-gray-500">Latest News</p>
+                            <h3 class="mt-2 font-bold leading-snug">
+                                <a href="https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval" class="hover:text-red-700">Laravel AI SDK Adds Human-in-the-Loop Tool Approval</a>
+                            </h3>
+                        </article>
+                    
+                                            <article class="border-b border-gray-300 py-5 last:border-0">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-gray-500">Laravel Tutorials</p>
+                            <h3 class="mt-2 font-bold leading-snug">
+                                <a href="https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops" class="hover:text-red-700">Building and Deploying a Laravel App With Claude Code on Zerops</a>
+                            </h3>
+                        </article>
+                                    </aside>
+
+                <article data-primary-story class="order-1 border-b border-gray-300 py-8 lg:order-2 lg:border-b-0 lg:px-8">
+                    <p class="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-red-700">News</p>
+                    <h2 class="mx-auto mt-3 max-w-3xl text-center text-4xl font-black leading-[1.02] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+                        <a href="https://laravel-news.com/cpx-the-composer-package-executor-for-php" class="hover:text-red-700">CPX: The Composer Package Executor for PHP</a>
+                    </h2>
+                    <p class="mx-auto mt-5 max-w-2xl text-center text-base leading-7 text-gray-600">cpx 2.0 is a full rewrite of the Composer package executor. It runs a command from any Composer package without adding it to your project, prefers the binaries your project already pins, and returns JSON when an AI agent is driving it.</p>
+                    <a href="https://laravel-news.com/cpx-the-composer-package-executor-for-php" class="mt-7 block overflow-hidden bg-gray-100">
+                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/cpx-2.0-featured.png" alt="CPX: The Composer Package Executor for PHP" width="1600" height="900" class="aspect-[16/9] w-full object-cover"/>
+                    </a>
+                    <p class="mt-2 border-b border-gray-300 pb-3 text-right text-[10px] uppercase tracking-wider text-gray-400">Today’s lead story</p>
+                </article>
+
+                <aside class="order-3 py-8 lg:border-l lg:pl-6">
+                    <p class="border-b-2 border-black pb-2 text-xs font-black uppercase tracking-[0.16em]">Sponsored Spotlight</p>
+
+                                            <article class="border-b border-gray-300 py-6">
+                            <a href="https://laravel-news.com/pinion-ui-restyle-an-entire-laravel-app-by-changing-two-html-attributes" class="block overflow-hidden bg-gray-100" rel="sponsored">
+                                <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/eyecatch-2200x1100-2.png" alt="Pinion UI: Restyle an Entire Laravel App by Changing Two HTML Attributes" width="1200" height="600" class="aspect-[2/1] w-full object-cover"/>
+                            </a>
+                            <h2 class="mt-3 text-xl font-black leading-tight">
+                                <a href="https://laravel-news.com/pinion-ui-restyle-an-entire-laravel-app-by-changing-two-html-attributes" class="hover:text-red-700" rel="sponsored">Pinion UI: Restyle an Entire Laravel App by Changing Two HTML Attributes</a>
+                            </h2>
+                        </article>
+                    
+                    <div data-top-community-links class="py-6">
+                        <a href="https://laravel-news.com/links" class="text-[10px] font-bold uppercase tracking-[0.16em] text-gray-500 transition hover:text-red-700">
+                            Community Links
+                        </a>
+                        <div class="divide-y divide-gray-200">
+            <a
+            href="https://laravel-news.com/link/18522"
+            class="group py-4 block"
+        >
+            <span class="block font-medium leading-snug transition group-hover:text-red-600"> Debug Inertia Like a Pro With Inertia DevTools</span>
+            <span class="block shrink-0 text-xs text-gray-400 mt-2">youtu.be</span>
+        </a>
+            <a
+            href="https://laravel-news.com/link/18518"
+            class="group py-4 block"
+        >
+            <span class="block font-medium leading-snug transition group-hover:text-red-600">Laravel at Scale: Performance Tactics for High-Traffic SaaS</span>
+            <span class="block shrink-0 text-xs text-gray-400 mt-2">saasykit.com</span>
+        </a>
+            <a
+            href="https://laravel-news.com/link/18501"
+            class="group py-4 block"
+        >
+            <span class="block font-medium leading-snug transition group-hover:text-red-600">How we use migrations during early product development</span>
+            <span class="block shrink-0 text-xs text-gray-400 mt-2">masteringlaravel.io</span>
+        </a>
+    </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section data-partner-logo-marquee class="relative bg-white" aria-labelledby="partner-logo-marquee-heading">
+        <div class="mx-auto w-full max-w-7xl px-6">
+            <div class="flex flex-col border-y border-gray-200 sm:flex-row">
+                <div class="flex shrink-0 items-center border-b border-gray-200 py-5 pr-8 sm:w-64 sm:border-b-0 sm:border-r">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-red-700">Community backed</p>
+                        <h2 id="partner-logo-marquee-heading" class="mt-1 text-sm font-black uppercase tracking-[0.12em]">
+                            Partners who support Laravel News
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="partner-logo-marquee__viewport min-w-0 flex-1 overflow-hidden" tabindex="0">
+                    <div class="partner-logo-marquee__track flex w-max motion-reduce:animate-none">
+                                                    <div class="flex shrink-0" >
+                                                                    <a
+                                        href="https://larajobs.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/larajobs-logo.png"
+                                            alt="LaraJobs logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://go.laravel.news/cloud/home"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/laravelcloud.png"
+                                            alt="Laravel Cloud logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://serpapi.com/?utm_source=laravelnews"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/serpapi.png"
+                                            alt="SerpApi logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://nocompromises.io/?ref=ln-partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pupg7U0q2pkgSDtgtsNLXsMQGkDWCPRfsB8OZSv9.svg"
+                                            alt="No Compromises logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://jb.gg/otlar0"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/phpstorm-logo.png"
+                                            alt="PhpStorm logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://pushsilver.com/?utm_source=laravelnews&amp;utm_medium=cpc&amp;utm_campaign=partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pushsilver-logo.png"
+                                            alt="Pushsilver logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://acquaintsoft.com/hire-laravel-developers"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/acquaint.png"
+                                            alt="Acquaint Softtech logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="http://kirschbaumdevelopment.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/kirschbaum-new.png"
+                                            alt="Kirschbaum logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://laravelshift.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/laravel-shift-logo.svg"
+                                            alt="Shift logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://harpoonapp.com/?utm_source=laravel-news&amp;utm_medium=banner&amp;utm_campaign=title-partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/harpoon-logo-laravel-news-title-partnership.png"
+                                            alt="Harpoon: Next generation time tracking and invoicing logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://saasykit.com/?utm_campaign=laravel&amp;utm_source=laravelnews"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                                                            >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/qMZ85wCJw4QwTO8pF4Mo2UOUz94WgASnQRKCWB3e.png"
+                                            alt="SaaSykit: Laravel SaaS Starter Kit logo"
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                            </div>
+                                                    <div class="flex shrink-0"  aria-hidden="true" >
+                                                                    <a
+                                        href="https://larajobs.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/larajobs-logo.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://go.laravel.news/cloud/home"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/laravelcloud.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://serpapi.com/?utm_source=laravelnews"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/serpapi.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://nocompromises.io/?ref=ln-partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pupg7U0q2pkgSDtgtsNLXsMQGkDWCPRfsB8OZSv9.svg"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://jb.gg/otlar0"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/phpstorm-logo.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://pushsilver.com/?utm_source=laravelnews&amp;utm_medium=cpc&amp;utm_campaign=partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pushsilver-logo.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://acquaintsoft.com/hire-laravel-developers"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/acquaint.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="http://kirschbaumdevelopment.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/kirschbaum-new.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://laravelshift.com/"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/laravel-shift-logo.svg"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://harpoonapp.com/?utm_source=laravel-news&amp;utm_medium=banner&amp;utm_campaign=title-partner"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/harpoon-logo-laravel-news-title-partnership.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                                    <a
+                                        href="https://saasykit.com/?utm_campaign=laravel&amp;utm_source=laravelnews"
+                                        target="_blank"
+                                        rel="sponsored noopener"
+                                        class="group flex h-28 w-56 shrink-0 items-center justify-center border-r border-gray-200 px-9 sm:w-64"
+                                         tabindex="-1"                                     >
+                                        <img
+                                            src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/qMZ85wCJw4QwTO8pF4Mo2UOUz94WgASnQRKCWB3e.png"
+                                            alt=""
+                                            class="max-h-11 max-w-full object-contain grayscale transition duration-200 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </a>
+                                                            </div>
+                                            </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <section data-ecosystem-stories class="mx-auto w-full max-w-7xl px-6">
+            <div class="flex items-center gap-4 border-b-2 border-black py-6">
+                <h2 class="text-xl font-black uppercase tracking-tight">Across the ecosystem</h2>
+                <span class="h-px flex-1 bg-gray-300"></span>
+                <a href="https://laravel-news.com/blog" class="text-xs font-bold text-red-700">View all &rarr;</a>
+            </div>
+
+            <div class="grid divide-y divide-gray-300 pb-10 md:grid-cols-3 md:divide-x md:divide-y-0">
+                                    <article data-ecosystem-story class="py-7 md:px-7 md:first:pl-0 md:last:pr-0">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-700">Laravel Packages</p>
+                        <h3 class="mt-2 text-2xl font-black leading-tight">
+                            <a href="https://laravel-news.com/intercept-middleware-guardrails-for-laravel-ai-agents" class="hover:text-red-700">Intercept: Middleware Guardrails for Laravel AI Agents</a>
+                        </h3>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">Intercept is a set of drop-in middleware for the Laravel AI SDK that filters prompts for injection attempts and PII before they re...</p>
+                    </article>
+                                    <article data-ecosystem-story class="py-7 md:px-7 md:first:pl-0 md:last:pr-0">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-700">Laravel Packages</p>
+                        <h3 class="mt-2 text-2xl font-black leading-tight">
+                            <a href="https://laravel-news.com/queue-sql-run-mass-deletes-and-updates-across-parallel-queue-jobs" class="hover:text-red-700">Queue-SQL: Run Mass Deletes and Updates Across Parallel Queue Jobs</a>
+                        </h3>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">Queue-SQL is a Laravel package that turns mass updates, deletes, and inserts into batches of parallel queued jobs.</p>
+                    </article>
+                                    <article data-ecosystem-story class="py-7 md:px-7 md:first:pl-0 md:last:pr-0">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-red-700">Laravel Tutorials</p>
+                        <h3 class="mt-2 text-2xl font-black leading-tight">
+                            <a href="https://laravel-news.com/ship-ai-with-laravel-i-tricked-my-own-ai-into-leaking-everything" class="hover:text-red-700">Ship AI with Laravel: I Tricked My Own AI Into Leaking Everything</a>
+                        </h3>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">First I socially engineer our own support agent into leaking its full system prompt and another customer&#039;s data. Then we lock it d...</p>
+                    </article>
+                            </div>
+        </section>
+
+        <section data-youtube-videos>
+    <div class="mx-auto w-full max-w-7xl px-6 py-8">
+        <div class="flex items-center justify-between gap-6 border-t-4 border-double border-black border-b-2 pb-5 pt-8">
+            <h2 class="text-xl font-black tracking-tight">Watch Laravel News Videos</h2>
+            <a
+                href="https://www.youtube.com/@laravelnews/videos"
+                class="shrink-0 text-xs font-bold text-red-700 hover:text-red-900"
+                rel="noopener"
+                target="_blank"
+            >
+                Watch all &rarr;
+            </a>
+        </div>
+
+        <div class="grid border-l border-gray-300 sm:grid-cols-2 lg:grid-cols-3">
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play What To Actually Do About Your Dependency Tree"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/OaZosKkw8qQ/maxresdefault.jpg"
+                                alt="What To Actually Do About Your Dependency Tree video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/OaZosKkw8qQ/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/OaZosKkw8qQ?autoplay=1&playsinline=1&rel=0"
+                                title="What To Actually Do About Your Dependency Tree"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=OaZosKkw8qQ"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">What To Actually Do About Your Dependency Tree</span>
+                    </a>
+                </article>
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play Every Composer Release Breaks Someone&#039;s 13-Step Workflow"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/WfYtCue2_kI/maxresdefault.jpg"
+                                alt="Every Composer Release Breaks Someone&#039;s 13-Step Workflow video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/WfYtCue2_kI/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/WfYtCue2_kI?autoplay=1&playsinline=1&rel=0"
+                                title="Every Composer Release Breaks Someone&#039;s 13-Step Workflow"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=WfYtCue2_kI"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">Every Composer Release Breaks Someone&#039;s 13-Step Workflow</span>
+                    </a>
+                </article>
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play The Part of Running Composer Nobody Sees"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/Rgc9ava26_0/maxresdefault.jpg"
+                                alt="The Part of Running Composer Nobody Sees video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/Rgc9ava26_0/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/Rgc9ava26_0?autoplay=1&playsinline=1&rel=0"
+                                title="The Part of Running Composer Nobody Sees"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=Rgc9ava26_0"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">The Part of Running Composer Nobody Sees</span>
+                    </a>
+                </article>
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play Meg Seegmiller"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/FE-ta8AuwaM/maxresdefault.jpg"
+                                alt="Meg Seegmiller video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/FE-ta8AuwaM/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/FE-ta8AuwaM?autoplay=1&playsinline=1&rel=0"
+                                title="Meg Seegmiller"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=FE-ta8AuwaM"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">Meg Seegmiller</span>
+                    </a>
+                </article>
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play Lance Pioch"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/lgrD-jhXitE/maxresdefault.jpg"
+                                alt="Lance Pioch video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/lgrD-jhXitE/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/lgrD-jhXitE?autoplay=1&playsinline=1&rel=0"
+                                title="Lance Pioch"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=lgrD-jhXitE"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">Lance Pioch</span>
+                    </a>
+                </article>
+                            <article
+                    x-data="{ playing: false }"
+                    class="border-b border-r border-gray-300 bg-white p-5"
+                >
+                    <div
+                        class="relative overflow-hidden bg-gray-950"
+                        style="aspect-ratio: 16 / 9"
+                    >
+                        <button
+                            x-show="! playing"
+                            type="button"
+                            class="group absolute inset-0 block h-full w-full"
+                            aria-label="Play Scenes from Laracon Day 2"
+                            x-on:click="playing = true"
+                        >
+                            <img
+                                src="https://i.ytimg.com/vi/z_ad6enbR24/maxresdefault.jpg"
+                                alt="Scenes from Laracon Day 2 video thumbnail"
+                                width="1280"
+                                height="720"
+                                class="h-full w-full object-cover transition duration-300 group-hover:opacity-90"
+                                loading="lazy"
+                                x-on:error="$el.src = 'https://i.ytimg.com/vi/z_ad6enbR24/hqdefault.jpg'"
+                            />
+                            <span class="absolute inset-0 flex items-center justify-center">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-red-700 shadow-lg transition group-hover:bg-red-800">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-1 h-5 w-5">
+                                        <path fill="#ffffff" d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </button>
+
+                        <template x-if="playing">
+                            <iframe
+                                class="absolute inset-0 h-full w-full"
+                                src="https://www.youtube.com/embed/z_ad6enbR24?autoplay=1&playsinline=1&rel=0"
+                                title="Scenes from Laracon Day 2"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </template>
+                    </div>
+
+                    <a
+                        href="https://www.youtube.com/watch?v=z_ad6enbR24"
+                        class="group block"
+                        rel="noopener"
+                        target="_blank"
+                    >
+                        <span class="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-red-700">Video</span>
+                        <span class="mt-1 block text-lg font-black leading-tight group-hover:text-red-700">Scenes from Laracon Day 2</span>
+                    </a>
+                </article>
+                    </div>
+    </div>
+</section>
+
+        <section>
+            <div class="mx-auto w-full max-w-7xl px-6">
+                <div class="grid gap-8 border-t-4 border-double border-black py-10 lg:grid-cols-[1.5fr_1fr]">
+                    <div>
+                        <p class="border-b-2 border-black pb-3 text-xs font-black uppercase tracking-[0.16em]">Partners</p>
+                        <div class="mt-3 divide-y divide-gray-300">
+                                                            <a data-home-partner href="https://masteringlaravel.io/codereview?ref=ln" rel="sponsored" class="group grid grid-cols-[72px_1fr] items-center gap-4 py-4">
+                                    <span class="flex h-12 items-center justify-center bg-gray-50 p-2">
+                                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/featured_images/Ok3afaKC8OnTyjZr3hcSJk9L3AtjhoqzZL1JVn4B.png" alt="masteringlaravel" class="max-h-8 max-w-full object-contain"/>
+                                    </span>
+                                    <span>
+                                        <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-red-700">masteringlaravel</span>
+                                        <span class="mt-1 block font-bold leading-tight group-hover:text-red-700">Get expert guidance in a few days with a Laravel code review</span>
+                                    </span>
+                                </a>
+                                                            <a data-home-partner href="https://acquaintsoft.com/hire-laravel-developers" rel="sponsored" class="group grid grid-cols-[72px_1fr] items-center gap-4 py-4">
+                                    <span class="flex h-12 items-center justify-center bg-gray-50 p-2">
+                                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/01KGFPA7KNFQ2XJZ5S44H603PF.png" alt="acquaintsoft" class="max-h-8 max-w-full object-contain"/>
+                                    </span>
+                                    <span>
+                                        <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-red-700">acquaintsoft</span>
+                                        <span class="mt-1 block font-bold leading-tight group-hover:text-red-700">Outsource to Acquaint Softtech, Sr. Laravel developers with AI expertise - $3000/Month</span>
+                                    </span>
+                                </a>
+                                                            <a data-home-partner href="https://serpapi.com/?utm_source=laravelnews" rel="sponsored" class="group grid grid-cols-[72px_1fr] items-center gap-4 py-4">
+                                    <span class="flex h-12 items-center justify-center bg-gray-50 p-2">
+                                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/01KJ5XRKA14H55349H1ZRR90CT.png" alt="serpapi" class="max-h-8 max-w-full object-contain"/>
+                                    </span>
+                                    <span>
+                                        <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-red-700">serpapi</span>
+                                        <span class="mt-1 block font-bold leading-tight group-hover:text-red-700">The Web Search API for Your LLM and AI Applications​</span>
+                                    </span>
+                                </a>
+                                                            <a data-home-partner href="https://jb.gg/aysiyl" rel="sponsored" class="group grid grid-cols-[72px_1fr] items-center gap-4 py-4">
+                                    <span class="flex h-12 items-center justify-center bg-gray-50 p-2">
+                                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/01KEFKS9VG33ZJE9M5M9KRWS3B.png" alt="jetbrains" class="max-h-8 max-w-full object-contain"/>
+                                    </span>
+                                    <span>
+                                        <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-red-700">jetbrains</span>
+                                        <span class="mt-1 block font-bold leading-tight group-hover:text-red-700">The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.</span>
+                                    </span>
+                                </a>
+                                                            <a data-home-partner href="https://go.laravel.news/cloud/home" rel="sponsored" class="group grid grid-cols-[72px_1fr] items-center gap-4 py-4">
+                                    <span class="flex h-12 items-center justify-center bg-gray-50 p-2">
+                                        <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/laravel-cloud-featured-new.png" alt="laravelcloud" class="max-h-8 max-w-full object-contain"/>
+                                    </span>
+                                    <span>
+                                        <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-red-700">laravelcloud</span>
+                                        <span class="mt-1 block font-bold leading-tight group-hover:text-red-700">Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.</span>
+                                    </span>
+                                </a>
+                                                    </div>
+                    </div>
+                    <div class="lg:border-l lg:border-gray-300 lg:pl-8">
+                        <p class="border-b-2 border-black pb-3 text-xs font-black uppercase tracking-[0.16em]">Laravel Jobs</p>
+                        <div class="mt-3 divide-y divide-gray-300">
+                                                            <a data-home-job href="https://larajobs.com/job/3904?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">Full-Stack Developer (Laravel + Inertia/Vue)</span>
+                                    <span class="shrink-0 text-xs text-gray-500">Greenwood Capital</span>
+                                </a>
+                                                            <a data-home-job href="https://larajobs.com/job/3905?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">Senior Laravel Engineer</span>
+                                    <span class="shrink-0 text-xs text-gray-500">HelpBnk</span>
+                                </a>
+                                                            <a data-home-job href="https://larajobs.com/job/3906?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">SaaS Application Developer</span>
+                                    <span class="shrink-0 text-xs text-gray-500">SecureIT Swiss AG</span>
+                                </a>
+                                                            <a data-home-job href="https://larajobs.com/job/3907?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">Senior Software Engineer </span>
+                                    <span class="shrink-0 text-xs text-gray-500">Greater Good Health</span>
+                                </a>
+                                                            <a data-home-job href="https://larajobs.com/job/3908?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">Senior Software Engineer, Trust &amp; Safety</span>
+                                    <span class="shrink-0 text-xs text-gray-500">Givebutter</span>
+                                </a>
+                                                            <a data-home-job href="https://larajobs.com/job/3909?utm_source=laravelnews&amp;utm_medium=referral" rel="nofollow" class="group flex items-start justify-between gap-5 py-4">
+                                    <span class="font-bold leading-tight group-hover:text-red-700">PHP Engineer</span>
+                                    <span class="shrink-0 text-xs text-gray-500">MailerLite</span>
+                                </a>
+                                                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="pb-16 sm:pb-24">
+        <div class="mx-auto w-full max-w-7xl px-6">
+            <div class="mb-10 flex items-end justify-between gap-6 border-b-2 border-black pb-6 border-t-4 border-double pt-8">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-red-600">Worth your attention</p>
+                    <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Featured this week</h2>
+                </div>
+            </div>
+            <div class="grid gap-10 lg:grid-cols-2">
+                                    <div class="group relative" preload="preload" data-featured-week-card="data-featured-week-card">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/Intercept-LN.png"
+                alt="Intercept: Middleware Guardrails for Laravel AI Agents image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+                    <div class="mt-6 flex items-center gap-3">
+                                    <span
+        class="inline-flex rounded-full px-4 py-2 text-xs font-bold leading-4 border border-red-600 text-red-600"
+    >
+        Laravel Packages
+    </span>
+                
+                
+                            </div>
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Intercept: Middleware Guardrails for Laravel AI Agents
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/intercept-middleware-guardrails-for-laravel-ai-agents" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                                                    <div class="group relative" preload="preload" data-featured-week-card="data-featured-week-card">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/featured_images/Ok3afaKC8OnTyjZr3hcSJk9L3AtjhoqzZL1JVn4B.png"
+                alt="Get expert guidance in a few days with a Laravel code review image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+                    <div class="mt-6 flex items-center gap-3">
+                
+                                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 inline-flex !rounded-full px-4 py-2 text-xs font-bold leading-4 hover:opacity-80 focus-visible:ring-offset-1 border border-red-600 text-red-600" href="/partnerships"
+            wire:navigate.hover
+    >
+    Partner
+</a>
+                
+                            </div>
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Get expert guidance in a few days with a Laravel code review
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://masteringlaravel.io/codereview?ref=ln" onclick="fathom.trackEvent(&#039;masteringlaravel|homepage|click&#039;, {_value: 100});"
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            </div>
+        </div>
+    </section>
+
+<section class="pb-20">
+    <div class="mx-auto w-full max-w-2xl px-6 lg:max-w-7xl">
+        <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b-2 border-black pb-6 border-t-4 border-double pt-8">
+            <h2 class="text-3xl font-bold sm:text-4xl lg:text-[40px]">The latest</h2>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 font-bold text-red-600 hover:text-red-700" href="/blog"
+            wire:navigate.hover
+    >
+    View all &rarr;
+</a>
+        </div>
+        <div class="mt-12 grid gap-x-8 gap-y-12 lg:grid-cols-3">
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/cpx-2.0-featured.png"
+                alt="CPX: The Composer Package Executor for PHP image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            CPX: The Composer Package Executor for PHP
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/cpx-the-composer-package-executor-for-php" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/Laravel-AI-Featured-LN.png"
+                alt="Laravel AI SDK Adds Human-in-the-Loop Tool Approval image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Laravel AI SDK Adds Human-in-the-Loop Tool Approval
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/pest-5-featured.png"
+                alt="Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Pest 5 Released With Test Impact Analysis, Agent Verification, and Evals
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/pest-5" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/Queue-SQL-LN.png"
+                alt="Queue-SQL: Run Mass Deletes and Updates Across Parallel Queue Jobs image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Queue-SQL: Run Mass Deletes and Updates Across Parallel Queue Jobs
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/queue-sql-run-mass-deletes-and-updates-across-parallel-queue-jobs" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/laravel-pint-featured.png"
+                alt="Blade Formatting in Laravel Pint image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Blade Formatting in Laravel Pint
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/blade-formatting-in-laravel-pint" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                            <div class="group relative">
+            <div
+            class="aspect-[2/1] w-full rounded-lg bg-gray-100 shadow-card transition group-hover:opacity-80"
+        >
+            <img
+                src="https://picperf.io/https://laravelnews.s3.amazonaws.com/featured-images/inertiajs-devtools-featured.png"
+                alt="Inertia DevTools Is Now on the Chrome Web Store image"
+                width="1200"
+                height="600"
+                class="h-full w-full rounded-lg object-cover"
+                loading="lazy"
+            />
+        </div>
+
+        
+        <h3 class="mt-4 text-xl font-bold transition group-hover:text-red-600 sm:text-2xl">
+            Inertia DevTools Is Now on the Chrome Web Store
+        </h3>
+
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 absolute inset-0 !block h-full w-full !rounded-lg" href="https://laravel-news.com/inertia-devtools-is-now-on-the-chrome-web-store" onclick=""
+    >
+    <span class="sr-only">Read article</span>
+</a>
+</div>
+                    </div>
+    </div>
+</section>
+
+
+
+<section class="bg-gradient-to-r from-gray-100 to-white py-14 sm:py-13">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+                <h2 class="text-3xl font-bold sm:text-4xl lg:text-[40px]">
+                    <a href="/partners" class="hover:text-red-600">Partners</a>
+                </h2>
+                <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 font-bold text-red-600 hover:text-red-700" href="/partners"
+            wire:navigate.hover
+    >
+    View all &rarr;
+</a>
+            </div>
+                <div
+            class="mt-12 grid gap-8 md:mt-16 md:grid-cols-2 lg:grid-cols-4">
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://acquaintsoft.com/hire-laravel-developers">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/acquaint.png"
+                             alt="Acquaint Softtech logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://pushsilver.com/?utm_source=laravelnews&amp;utm_medium=cpc&amp;utm_campaign=partner">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pushsilver-logo.png"
+                             alt="Pushsilver logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://jb.gg/otlar0">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/phpstorm-logo.png"
+                             alt="PhpStorm logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://nocompromises.io/?ref=ln-partner">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/pupg7U0q2pkgSDtgtsNLXsMQGkDWCPRfsB8OZSv9.svg"
+                             alt="No Compromises logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://saasykit.com/?utm_campaign=laravel&amp;utm_source=laravelnews">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/qMZ85wCJw4QwTO8pF4Mo2UOUz94WgASnQRKCWB3e.png"
+                             alt="SaaSykit: Laravel SaaS Starter Kit logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://harpoonapp.com/?utm_source=laravel-news&amp;utm_medium=banner&amp;utm_campaign=title-partner">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/harpoon-logo-laravel-news-title-partnership.png"
+                             alt="Harpoon: Next generation time tracking and invoicing logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://laravelshift.com/">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/laravel-shift-logo.svg"
+                             alt="Shift logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="http://kirschbaumdevelopment.com/">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/kirschbaum-new.png"
+                             alt="Kirschbaum logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://typesense.org/?utm_source=laravelnews">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/9mrgWcq3vOdQX8JZMfVoJk1C9czjQaFkME8rXUzD.png"
+                             alt="Typesense Search logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://developer.vonage.com/en/blog/essential-laravel-tooling-for-2026?cmp=dsp-api-api-gbl-laravel-prosp-dev">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/vonage(1).png"
+                             alt="Vonage logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://www.honeybadger.io/for/laravel/?utm_source=laravelnews&amp;utm_medium=partner&amp;utm_content=logo">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/ywSNgIsgJxqDrqoGIik8huIsaLmykoctKGT9jQ1c.png"
+                             alt="Honeybadger logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://certificates.dev/laravel?friend=LARAVEL">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/XaP7NB3K3ml9rUA8ckJrz6uoCCRO2sdncYXD5uR3.png"
+                             alt="The Certification of Competence for Laravel logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://loadforge.com/?utm_source=laravelnews">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/hHb9DSt4rlWjiRB1UbwD69Mm7dwzwnlr0NIpO2Z6.png"
+                             alt="LoadForge logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://blastup.com/">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/1TYASGiILzePsq8T2k1vO5y1zmrX2bwKASe9Ykd9.jpg"
+                             alt="Blastup logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://celebian.com">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/B9rIIsOjbIhm4u40yxEUSMVF7eCPJ6XisqanU9Qk.png"
+                             alt="Celebian logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://securinglaravel.com/">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/L6HspFVVePlnEOvODrwyZLd7HvDOispPhJiph143.png"
+                             alt="Securing Laravel logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://www.luckymedia.dev/laravel-development-agency?utm_campaign=sponsor&amp;utm_source=laravelnews&amp;utm_medium=web">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/OdrDKurHLQnmj2zRVtckusn2tKNKSggWARoe6nZ4.png"
+                             alt="Lucky Media logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://www.curotec.com/lp/laravel-news/?utm_source=laravelnews&amp;utm_medium=sponsored&amp;utm_campaign=laravelnews_sponsorship&amp;utm_content=partner_section">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/logos/curotec2.png"
+                             alt="Curotec logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://statamic.com/?utm_source=laravel-news&amp;utm_medium=partner-page&amp;utm_campaign=partner">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/statamic-logo.png"
+                             alt="Statamic logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                            <div
+                    class="group relative bg-white rounded-lg shadow-card border border-gray-100 p-8 w-full shrink-0 lg:p-12">
+                    <a href="https://tighten.com/?utm_source=laravelnews&amp;utm_medium=Banner&amp;utm_campaign=laravelnewspartners&amp;utm_content=Title%20Partner&amp;ref=laravelnewspartners">
+                        <img class="h-10 object-contain object-left-top transition group-hover:opacity-80"
+                             src="https://picperf.io/https://laravelnews.s3.amazonaws.com/partners/tighten-partner.png"
+                             alt="Tighten logo"
+                             loading="lazy"
+                             height="40"
+                             width="300px">
+                    </a>
+                </div>
+                    </div>
+        
+    </div>
+</section>
+    </main>
+</div>
+
+<div x-persist="footer">
+<footer class="relative overflow-hidden py-24 sm:py-32">
+    
+    <svg
+        class="absolute bottom-0 right-0"
+        width="603"
+        height="419"
+        viewBox="0 0 603 419"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g opacity=".2" filter="url(#filter0_f_4_553)">
+            <circle cx="462" cy="462" r="258" fill="#F9332B"/>
+        </g>
+        <defs>
+            <filter
+                id="filter0_f_4_553"
+                x="0"
+                y="0"
+                width="924"
+                height="924"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB"
+            >
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="102" result="effect1_foregroundBlur_4_553"/>
+            </filter>
+        </defs>
+    </svg>
+    <div
+        class="relative mx-auto flex w-full max-w-2xl flex-col items-start justify-between gap-x-16 gap-y-12 px-6 lg:max-w-7xl lg:flex-row"
+    >
+        <div class="lg:w-1/2">
+            <h2 class="text-2xl font-bold lg:text-[28px]">Subscribe to our newsletter</h2>
+            <div class="relative mt-10">
+                <img
+    class="absolute -top-10 right-48 z-10"
+    x-data="{
+        initializeAnimation: false,
+        init() {
+            setTimeout(() => {
+                this.initializeAnimation = true;
+            }, 1500);
+        },
+    }"
+    :class="initializeAnimation ? 'animate-cube' : ''"
+    src="https://picperf.io/https://laravel-news.com/images/cube.svg"
+    width="47"
+    height="53"
+    alt="Cube"
+/>
+                <div
+                    class="relative overflow-hidden rounded-lg border border-gray-100 bg-white p-8 shadow-card"
+                >
+                    <span class="absolute inset-y-0 left-0 w-1 bg-red-600"></span>
+                    <div id="newsletter-signup-footer">
+        <form x-target="newsletter-signup-footer" method="POST" action="https://laravel-news.com/newsletter-signup">
+        <input type="hidden" name="location" value="footer">
+        <div class="flex w-full flex-wrap items-stretch gap-4">
+            <label class="relative flex min-w-[240px] flex-1 items-center bg-white">
+                <span class="sr-only">Email</span>
+                <img
+                    src="https://picperf.io/https://laravel-news.com/images/icons/newsletter.svg"
+                    alt="Newsletter icon"
+                    width="24"
+                    height="24"
+                    class="pointer-events-none absolute left-3 top-3"
+                />
+                <input
+                    name="email"
+                    type="email"
+                    class="w-full rounded-lg border-gray-100 bg-transparent px-12 py-3 text-gray-600 placeholder-gray-600/50 transition focus:border-gray-100 focus:bg-gray-100/40 focus:outline-none focus:ring-2 focus:ring-red-600/80 focus:ring-offset-2"
+                    placeholder="Email"
+                />
+            </label>
+            <button
+    type="submit" class="inline-flex items-center justify-center leading-none bg-red-600 border border-transparent rounded-lg font-bold text-base text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 focus-visible:ring-offset-2 disabled:bg-red-600/50 disabled:cursor-not-allowed transition ease-in-out duration-300 px-6 py-4"
+>
+    Join free
+</button>
+        </div>
+            </form>
+    </div>
+                </div>
+            </div>
+            <div class="mt-10 flex flex-wrap items-center gap-8">
+                <p class="font-bold">and follow us on</p>
+                <div class="flex flex-wrap items-center gap-2 sm:flex-nowrap">
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://www.facebook.com/laravelnews" target="_blank"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/facebook.svg"
+                            alt="Facebook"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Facebook</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://instagram.com/laravelnews"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/instagram.svg"
+                            alt="Instagram"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Instagram</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://twitter.com/laravelnews"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/x.svg"
+                            alt="X"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">X</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://www.linkedin.com/company/laravel-news"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/linkedin.svg"
+                            alt="Linkedin"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Linkedin</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://t.me/laravelnews"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/telegram.svg"
+                            alt="Telegram"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Telegram</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://www.youtube.com/@laravelnews"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/youtube.svg"
+                            alt="Youtube"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Youtube</span>
+</a>
+                    <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 h-12 w-12 items-center justify-center !rounded-lg border border-gray-100 bg-white !shadow-sm hover:opacity-60" href="https://www.threads.net/@laravelnews"
+    >
+    <img
+                            loading="lazy"
+                            src="https://picperf.io/https://laravel-news.com/images/threads.svg"
+                            alt="Threads"
+                            width="24"
+                            height="24"
+                            class="h-6 w-6 object-contain"
+                            rel="nofollow"
+                        />
+                        <span class="sr-only">Threads</span>
+</a>
+                </div>
+            </div>
+        </div>
+        <div class="grid w-full max-w-sm gap-x-12 gap-y-4 sm:grid-cols-2">
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/newsletter"
+    >
+    Laravel Newsletter
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/links"
+    >
+    Laravel Links
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/category/packages"
+    >
+    Laravel Packages
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/category/tutorials"
+    >
+    Laravel Tutorials
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/events"
+    >
+    Laravel Events
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="https://laravel-news.com/popular-laravel-packages"
+    >
+    Popular Packages
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/tag/releases"
+    >
+    Laravel Releases
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="https://laravel-news.com/archive"
+    >
+    Article Archive
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/partners"
+    >
+    Partners
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/partnerships"
+    >
+    Advertising
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="https://larajobs.com"
+    >
+    Laravel Jobs
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="https://shop.laravelnews.com/"
+    >
+    LN Swag
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/contact"
+    >
+    Contact Us
+</a>
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 p-1 font-bold hover:text-gray-600" href="/login"
+    >
+    Your account
+</a>
+        </div>
+    </div>
+    <div
+        class="relative mx-auto mt-20 flex w-full max-w-2xl flex-wrap justify-between gap-x-16 gap-y-12 px-6 lg:max-w-7xl"
+    >
+        <p class="text-sm text-gray-600">
+            &copy; 2012 - 2026 Laravel News
+            <br/>
+            A division of dotdev inc.
+        </p>
+        <p class="text-sm text-gray-600">
+            <a
+    class="inline-flex rounded-sm transition duration-300 leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/80 text-black hover:text-red-600" href="/about"
+            wire:navigate.hover
+    >
+    Colophon / About
+</a>
+        </p>
+    </div>
+</footer>
+</div>
+
+<script  data-navigate-once="true">window.livewireScriptConfig = {"csrf":null,"uri":"\/livewire\/update","progressBar":"","nonce":""};</script>
+
+<script src="https://laravel-news.com/a/script.js" defer>
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "036ae43092b6429fbf4c640fd73dc0e2"}'></script><!-- End Cloudflare Web Analytics -->
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a251fcf19d3a964a',t:'MTc4NTcyNTE0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

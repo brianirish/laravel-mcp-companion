@@ -869,7 +869,13 @@ class ExternalDocsFetcher:
     def save_cache_metadata(self, service: str, metadata: Dict) -> None:
         """Save cache metadata for a service."""
         metadata_path = self.get_cache_metadata_path(service)
-        
+
+        # is_cache_valid ages the cache from this field. No fetch path stamped
+        # it, so every cache read back as epoch-old and cache_duration was
+        # decorative: each request refetched. setdefault keeps deliberate
+        # back-dating (tests, manual invalidation) working.
+        metadata.setdefault("cached_at", time.time())
+
         try:
             with open(metadata_path, 'w') as f:
                 json.dump(metadata, f, indent=2)
@@ -1119,12 +1125,15 @@ class ExternalDocsFetcher:
                     else:
                         shutil.copy2(item, target_dir / item.name)
                 
-                # Save metadata
+                # Save metadata. success_rate matters: is_cache_valid treats a
+                # missing rate as 0.0 quality, which invalidated every
+                # archive-fetched cache.
                 metadata = {
                     "service": service,
                     "repo": repo,
                     "branch": branch,
-                    "fetch_method": "github_archive"
+                    "fetch_method": "github_archive",
+                    "success_rate": 1.0
                 }
                 self.save_cache_metadata(service, metadata)
                 

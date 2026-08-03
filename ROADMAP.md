@@ -23,7 +23,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 - **Documentation currency reporting** so the assistant knows what date its corpus covers
 - **Future-proof version detection** via GitHub API
 - **Automated daily documentation updates** with auto-discovery metrics
-- **Test suite** at 67% coverage of product code (branch coverage, tests excluded)
+- **Test suite** at 81% coverage of product code (branch coverage, tests excluded), with end-to-end tests over real stdio and HTTP transports
 
 ---
 
@@ -175,7 +175,8 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
   server — JWKS or static tokens)*
 
 ### Quality Assurance
-- [ ] 80%+ coverage of product code, from 67% today
+- [x] 80%+ coverage of product code *(81% as of the v0.13.0 coverage push; gate ratcheted to 80)*
+- [x] Integration tests through a real MCP client *(e2e suite over stdio and HTTP; also a v1.0.0 criterion)*
 - [ ] Load testing and performance benchmarks
 - [ ] Documentation completeness audit
 

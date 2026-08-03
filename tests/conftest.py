@@ -21,6 +21,42 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "external: marks tests that interact with external services")
 
 
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def load_fixture(name: str) -> str:
+    """Read a recorded fixture payload as text."""
+    return (FIXTURES / name).read_text(encoding="utf-8")
+
+
+def urlopen_returning(payload: bytes, url_map: "Dict[str, bytes] | None" = None):
+    """A context-manager mock suitable for docs_updater.urllib.request.urlopen.
+
+    With `url_map`, the response body is chosen by the first key found as a
+    substring of the requested URL (Request objects and plain strings both
+    work); unmatched URLs raise, so a test fails loudly rather than serving
+    the wrong page. Without it, every request gets `payload`.
+    """
+    def _fake_urlopen(request, *args, **kwargs):
+        url = request.full_url if hasattr(request, "full_url") else str(request)
+        body = payload
+        if url_map is not None:
+            for needle, mapped in url_map.items():
+                if needle in url:
+                    body = mapped
+                    break
+            else:
+                raise AssertionError(f"urlopen_returning: no fixture mapped for {url}")
+        response = MagicMock()
+        response.read.return_value = body
+        cm = MagicMock()
+        cm.__enter__.return_value = response
+        cm.__exit__.return_value = False
+        return cm
+
+    return _fake_urlopen
+
+
 @pytest.fixture
 def temp_dir() -> Generator[Path, None, None]:
     """Create a temporary directory for test files."""
