@@ -162,7 +162,7 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 - [ ] Package ecosystem documentation mapping
 
 ### Reliability & Monitoring
-- [ ] Health monitoring and metrics endpoints
+- [x] Health monitoring and metrics endpoints *(/healthz + Prometheus /metrics, HTTP mode)*
 - [ ] Rate limiting and quota management
 - [ ] Error recovery and graceful degradation improvements
 - [x] Performance optimization and caching improvements *(delivered in v0.10.0)*

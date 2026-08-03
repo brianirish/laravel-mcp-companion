@@ -215,6 +215,17 @@ python laravel_mcp_companion.py --transport http \
 
 Requests with an unrecognized `Host` get `421`; requests from an unlisted `Origin` get `403`. Passing `--allowed-host` or `--cors-origin` on the command line replaces the corresponding environment variable rather than adding to it. If you expose this beyond localhost, put an authenticating reverse proxy in front of it. Avoid `--transform-mode code` over HTTP entirely — `execute` is a code execution endpoint.
 
+### Operational endpoints (HTTP mode)
+
+- **`GET /healthz`** — liveness/readiness JSON, always public (load balancers
+  can't do OAuth). `ok` and `degraded` both return 200 — degraded means the
+  documentation copy is stale and a newer image should be pulled; 503 means no
+  documentation is readable and traffic should not be routed here.
+- **`GET /metrics`** — Prometheus text format: per-tool call counters, a
+  latency histogram, request counts, uptime, and documentation age. Public on
+  unauthenticated deployments; requires a valid bearer token whenever auth is
+  configured.
+
 
 ## Features (v0.12.0)
 

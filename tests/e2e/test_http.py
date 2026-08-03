@@ -46,6 +46,29 @@ class TestHttpTransport:
             )
             assert res.status_code == 421
 
+    async def test_health_and_metrics_operational(self, http_server):
+        base = http_server("--transform-mode", "none")
+        async with httpx.AsyncClient() as plain:
+            health = await plain.get(f"{base}/healthz")
+            assert health.status_code == 200
+            body = health.json()
+            assert body["status"] in ("ok", "degraded")
+            assert body["version"] == laravel_mcp_companion.SERVER_VERSION
+            assert body["docs"]["versions_available"] >= 1
+
+        # Generate one tool call, then confirm it shows up in the scrape.
+        async with Client(StreamableHttpTransport(f"{base}/mcp/")) as client:
+            await client.call_tool("laravel_docs_info", {"version": "12.x"})
+
+        async with httpx.AsyncClient() as plain:
+            scrape = await plain.get(f"{base}/metrics")
+            assert scrape.status_code == 200
+            assert (
+                'laravel_mcp_tool_calls_total{status="ok",tool="laravel_docs_info"} 1'
+                in scrape.text
+            )
+            assert "laravel_mcp_uptime_seconds" in scrape.text
+
     async def test_auth_enforced_end_to_end(self, http_server):
         base = http_server(env_extra={"AUTH_STATIC_TOKENS": "e2e-token:e2e-client"})
         async with httpx.AsyncClient() as bare:
