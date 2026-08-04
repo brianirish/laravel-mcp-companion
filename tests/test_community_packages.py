@@ -316,6 +316,45 @@ More content"""
         assert meta["success_rate"] == 1.0
         assert meta["source_type"] == "llms_index"
 
+    def test_inertia_refresh_prunes_pages_dropped_from_the_index(self, fetcher, monkeypatch):
+        """A page the index no longer lists must not stay searchable after a
+        complete refresh — unified search indexes this directory recursively."""
+        from tests.conftest import load_fixture, urlopen_returning
+
+        stale = fetcher.get_package_cache_path("inertia") / "removed-upstream.md"
+        stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
+
+        monkeypatch.setattr(
+            "docs_updater.urllib.request.urlopen",
+            urlopen_returning(b"", url_map={
+                "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
+                ".md": load_fixture("inertia_routing.md").encode(),
+            }),
+        )
+        assert fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"]) is True
+        assert not stale.exists()
+        assert (fetcher.get_package_cache_path("inertia") / "routing.md").exists()
+
+    def test_inertia_partial_fetch_does_not_prune(self, fetcher, monkeypatch):
+        """Failing to replace docs is no excuse to delete them."""
+        from tests.conftest import load_fixture, urlopen_returning
+
+        stale = fetcher.get_package_cache_path("inertia") / "removed-upstream.md"
+        stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
+
+        real = urlopen_returning(b"", url_map={
+            "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
+            "routing.md": load_fixture("inertia_routing.md").encode(),
+        })
+
+        def flaky(request, *a, **k):
+            # Index and routing succeed; every other page 404s.
+            return real(request)
+
+        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"])
+        assert stale.exists()
+
     def test_fetch_inertia_docs_empty_index_fails(self, fetcher, monkeypatch):
         from tests.conftest import urlopen_returning
 

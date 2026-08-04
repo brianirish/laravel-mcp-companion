@@ -63,7 +63,7 @@ class TestSearchLatency:
             # Cold: first search pays the BM25 index build.
             started = time.perf_counter()
             first = await client.call_tool(
-                "search_laravel_docs", {"query": QUERIES[0], "include_external": False}
+                "search_laravel_docs", {"query": QUERIES[0]}
             )
             cold_ms = (time.perf_counter() - started) * 1000
             assert first.structured_content.get("results"), "cold search returned nothing"
@@ -74,7 +74,7 @@ class TestSearchLatency:
                 query = QUERIES[i % len(QUERIES)]
                 started = time.perf_counter()
                 result = await client.call_tool(
-                    "search_laravel_docs", {"query": query, "include_external": False}
+                    "search_laravel_docs", {"query": query}
                 )
                 samples.append((time.perf_counter() - started) * 1000)
                 assert result.structured_content is not None
@@ -85,7 +85,7 @@ class TestReadLatency:
     async def test_section_read(self, corpus_server):
         async with Client(corpus_server) as client:
             hit = (await client.call_tool(
-                "search_laravel_docs", {"query": "queue retry failed jobs", "include_external": False}
+                "search_laravel_docs", {"query": "queue retry failed jobs"}
             )).structured_content["results"][0]
             filename = hit["file"].split("/", 1)[1]
             section = hit["anchor"] or hit["heading"]

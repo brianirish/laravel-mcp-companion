@@ -42,7 +42,7 @@
 - **Community package documentation** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
 - **Package integration guides** - Installation and setup for 22 curated packages
 - **Cross-package compatibility** - Learn which packages work well together
-- **Unified search** across core Laravel docs, services, and packages
+- **Unified search** across core Laravel docs, services, packages, and learning resources
 - **Daily updates** - Automatically syncs with latest documentation
 
 ## Installation

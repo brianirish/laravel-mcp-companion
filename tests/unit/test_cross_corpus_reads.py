@@ -105,6 +105,39 @@ class TestSearchReadFlowContract:
 
 
 class TestPackageResource:
+    async def test_package_key_traversal_denied(self, corpus):
+        """'..' as the package key made packages/.. (the docs root) the
+        containment root — the same hole resolve_corpus_file closes, left
+        open in the resource handler. laravel-package://../12.x/routing.md
+        must not serve core files through the package scheme."""
+        from fastmcp import Client
+        from laravel_mcp_companion import create_mcp_server
+
+        server = create_mcp_server("TestServer", corpus, "12.x", transform_mode=None)
+        async with Client(server) as client:
+            content = await client.read_resource("laravel-package://../12.x/routing.md")
+            text = content[0].text
+            assert "Core routing words" not in text
+            assert "not found" in text.lower() or "denied" in text.lower()
+
+    async def test_symlinked_ecosystem_not_indexed_or_served(self, corpus, temp_dir):
+        """A symlinked ecosystem dir must be invisible to BOTH search and
+        read — indexing what reading refuses is the search-as-oracle
+        asymmetry the v0.11 containment work eliminated."""
+        import os
+
+        outside = temp_dir.parent / "outside-tree"
+        outside.mkdir(exist_ok=True)
+        (outside / "secret.md").write_text(
+            "# Secret\n\n## Planted\n\nOUTSIDE-CONTENT that must never index.\n"
+        )
+        os.symlink(outside, corpus / "packages" / "linked")
+
+        from mcp_tools import load_package_sections
+
+        sections = load_package_sections(corpus / "packages")
+        assert all(s.version != "linked" for s in sections)
+        assert all("OUTSIDE-CONTENT" not in s.text for s in sections)
     async def test_package_resource_readable(self, corpus):
         from fastmcp import Client
         from laravel_mcp_companion import create_mcp_server

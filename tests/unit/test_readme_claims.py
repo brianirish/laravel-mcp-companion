@@ -37,6 +37,22 @@ def test_search_description_matches_the_actual_contract():
     assert "sources" in description
 
 
+def test_readme_search_copy_matches_the_actual_contract():
+    """The README's search claims regress independently of the tool
+    description — both surfaces are guarded."""
+    text = readme()
+    assert "match counts" not in text
+    assert "source label" in text or "`sources`" in text, (
+        "README no longer documents the unified-search source labeling/filter"
+    )
+    unified = re.search(r"\*\*Unified search\*\*[^*]*", text)
+    assert unified, "README lost its Unified search bullet"
+    for corpus in ("core", "services", "package", "learning"):
+        assert corpus in unified.group(0).lower(), (
+            f"Unified search bullet no longer names the {corpus} corpus"
+        )
+
+
 @pytest.mark.skipif(
     not (REPO_ROOT / "docs" / "packages").is_dir(), reason="shipped corpus absent"
 )

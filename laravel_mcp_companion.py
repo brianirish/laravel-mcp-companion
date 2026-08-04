@@ -1761,6 +1761,15 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     def read_package_doc(package: str, path: str) -> str:
         """Read a fetched community-package documentation file."""
         packages_dir = Path(docs_path) / "packages"
+        # The package key becomes the containment root: ".." here would make
+        # packages/.. (the docs root) the root and serve core files through
+        # this scheme — the same rule resolve_corpus_file enforces.
+        if (
+            not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9._-]*", package)
+            or package in (".", "..")
+            or resolve_contained_path(packages_dir, packages_dir / package) is None
+        ):
+            return f"Package '{package}' not found."
         package_dir = packages_dir / package
         if not package_dir.is_dir():
             available = sorted(

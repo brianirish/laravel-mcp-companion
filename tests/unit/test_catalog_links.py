@@ -1,17 +1,20 @@
 """Every documentation_link in the package catalog must resolve.
 
-All ~50 links pointed at paths that never existed (laravel://packages/
-cashier.md, laravel://authentication/sanctum.md). This guard resolves each
-through the real read implementations against the real corpus so they cannot
-rot silently again.
+19 of the 22 catalog links pointed at paths that never existed
+(laravel://packages/cashier.md, laravel://authentication/sanctum.md). This
+guard resolves each link through the server's real resource handlers — the
+same path production URIs take — so a resolver change that breaks them
+breaks here too.
 """
 
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 
-from laravel_mcp_companion import PACKAGE_CATALOG
-from mcp_tools import read_laravel_doc_content_impl, resolve_contained_path
+from fastmcp import Client
+
+from laravel_mcp_companion import PACKAGE_CATALOG, create_mcp_server
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
 
@@ -21,47 +24,41 @@ LINKED = {
     if info.get("documentation_link")
 }
 
+RESOURCE_SCHEMES = ("laravel://", "laravel-package://", "laravel-external://")
+
 pytestmark = pytest.mark.skipif(
     not (REPO_DOCS / "12.x").is_dir(), reason="real corpus absent"
 )
 
 
-def resolve_link(link: str) -> str:
-    if link.startswith("laravel://"):
-        return read_laravel_doc_content_impl(
-            REPO_DOCS, link[len("laravel://"):], runtime_version="12.x"
-        )
-    if link.startswith(("laravel-package://", "laravel-external://")):
-        scheme, _, rest = link.partition("://")
-        family = "packages" if scheme == "laravel-package" else "external"
-        key, _, path = rest.partition("/")
-        if not path.endswith(".md"):
-            path = f"{path}.md"
-        root = REPO_DOCS / family / key
-        if not root.is_dir():
-            return f"not found: no fetched corpus '{key}'"
-        safe = resolve_contained_path(root, root / path)
-        if safe is None or not safe.exists():
-            return f"not found: {rest}"
-        return safe.read_text(encoding="utf-8")
-    if link.startswith("https://"):
-        # External sites can't be resolved offline; the guard only holds the
-        # shape. Prefer fetched docs where they exist.
-        return "https-link " + "x" * 200
-    return f"not found: unsupported scheme in {link}"
+@pytest.fixture(scope="module")
+def link_guard_server():
+    # Server construction is cheap; a fresh in-memory Client per test avoids
+    # sharing one across event loops, which deadlocks under function-scoped
+    # asyncio.
+    return create_mcp_server("LinkGuard", REPO_DOCS, "12.x", transform_mode=None)
 
 
 @pytest.mark.parametrize("pkg_id", sorted(LINKED))
-def test_documentation_link_resolves(pkg_id):
+async def test_documentation_link_resolves(pkg_id, link_guard_server):
     link = LINKED[pkg_id]
-    content = resolve_link(link)
+
+    if link.startswith("https://"):
+        # External sites can't be resolved offline; hold the shape instead:
+        # a real scheme AND a real host ("https://" and "https:///x" fail).
+        parsed = urlparse(link)
+        assert parsed.scheme == "https" and parsed.netloc, f"{pkg_id}: malformed {link}"
+        return
+
+    assert link.startswith(RESOURCE_SCHEMES), f"{pkg_id}: unsupported scheme {link}"
+    async with Client(link_guard_server) as client:
+        content = (await client.read_resource(link))[0].text
     assert "not found" not in content.lower(), f"{pkg_id}: dead link {link}"
-    assert "access denied" not in content.lower()
+    assert "access denied" not in content.lower(), f"{pkg_id}: {link}"
     assert len(content) > 200, f"{pkg_id}: {link} resolved to a stub"
 
 
 def test_most_packages_keep_documentation_links():
     """Deleting links is not a fix. The catalog held 22 linked entries when
-    this guard landed (the README's "50+" was itself a false claim — see the
-    claims audit); a drop means links were removed instead of repaired."""
+    this guard landed; a drop means links were removed instead of repaired."""
     assert len(LINKED) >= 20, f"only {len(LINKED)} linked entries remain"

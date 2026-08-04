@@ -102,7 +102,7 @@ class TestCacheManagement:
                 
                 # First 20 should be removed
                 for i in range(20):
-                    cache_key = f"search:query{i}:11.x:True:5"
+                    cache_key = f"search:query{i}:11.x:core,services,packages,learning:5"
                     assert cache_key not in _search_result_cache
     
     def test_concurrent_cache_access(self):

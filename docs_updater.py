@@ -2122,6 +2122,17 @@ class CommunityPackageFetcher:
             except Exception as e:
                 logger.warning(f"Error fetching Inertia page {url}: {str(e)}")
 
+        if fetched == len(page_urls):
+            # A complete fetch is the only safe moment to prune: pages the
+            # index no longer lists would otherwise stay searchable forever.
+            # A partial fetch keeps everything, stale included, rather than
+            # deleting docs we failed to replace.
+            expected = {url.rsplit("/", 1)[-1] for url in page_urls}
+            for stale in package_dir.glob("*.md"):
+                if stale.name not in expected:
+                    logger.info(f"Pruning Inertia page no longer in the index: {stale.name}")
+                    stale.unlink()
+
         if fetched > 0:
             metadata = {
                 "package": "inertia",
@@ -3509,9 +3520,9 @@ class LearningResourceFetcher:
 
         topics: List[Dict] = []
         for entry in entries:
-            if not isinstance(entry, dict) or not entry.get("name"):
+            if not isinstance(entry, dict) or not entry.get("name") or not entry.get("path"):
                 continue
-            path = str(entry.get("path", ""))
+            path = str(entry["path"])
             topic: Dict[str, Any] = {
                 "name": entry["name"],
                 "url": path if path.startswith("http") else f"https://laracasts.com{path}",

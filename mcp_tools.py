@@ -266,6 +266,35 @@ def _iter_contained_markdown_recursive(root: Path, prefix: str = "") -> List[tup
     return results
 
 
+def _load_family_sections(family_dir: Path) -> List["Section"]:
+    """Chunk every ecosystem subdirectory of a corpus family into sections.
+
+    Subdirectories are enumerated with the same containment rules the read
+    path applies: symlinked or escaping directories are skipped, because
+    indexing what reading refuses turns search into an oracle over withheld
+    content — the asymmetry the v0.11 containment work eliminated.
+    """
+    if not family_dir.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    with os.scandir(family_dir) as entries:
+        subdirs = sorted(
+            entry.name for entry in entries
+            if entry.is_dir(follow_symlinks=False) and not entry.name.startswith(".")
+        )
+    for name in subdirs:
+        sub = family_dir / name
+        if resolve_contained_path(family_dir, sub) is None:
+            continue
+        for rel_name, path in _iter_contained_markdown_recursive(sub):
+            content = get_file_content_cached(str(path))
+            if content.startswith("Error") or content.startswith("File not found"):
+                continue
+            sections.extend(chunk_markdown(content, rel_name, name))
+    return sections
+
+
 def load_package_sections(packages_dir: Path) -> List["Section"]:
     """Chunk every fetched package ecosystem into one section list.
 
@@ -275,34 +304,12 @@ def load_package_sections(packages_dir: Path) -> List["Section"]:
     flat. Enumeration and reads reuse the contained/cached helpers, so
     containment and symlink refusal carry over unchanged.
     """
-    packages_path = Path(packages_dir)
-    if not packages_path.is_dir():
-        return []
-
-    sections: List["Section"] = []
-    for sub in sorted(p for p in packages_path.iterdir() if p.is_dir()):
-        for name, path in _iter_contained_markdown_recursive(sub):
-            content = get_file_content_cached(str(path))
-            if content.startswith("Error") or content.startswith("File not found"):
-                continue
-            sections.extend(chunk_markdown(content, name, sub.name))
-    return sections
+    return _load_family_sections(Path(packages_dir))
 
 
 def load_learning_sections(learning_dir: Path) -> List["Section"]:
     """Chunk every learning-resource source into one section list."""
-    learning_path = Path(learning_dir)
-    if not learning_path.is_dir():
-        return []
-
-    sections: List["Section"] = []
-    for sub in sorted(p for p in learning_path.iterdir() if p.is_dir()):
-        for name, path in _iter_contained_markdown_recursive(sub):
-            content = get_file_content_cached(str(path))
-            if content.startswith("Error") or content.startswith("File not found"):
-                continue
-            sections.extend(chunk_markdown(content, name, sub.name))
-    return sections
+    return _load_family_sections(Path(learning_dir))
 
 
 # The sources a search can fan out over. "core" is the versioned Laravel
