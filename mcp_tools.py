@@ -310,6 +310,29 @@ def load_learning_sections(learning_dir: Path) -> List["Section"]:
 # version/all_versions scope core only.
 VALID_SEARCH_SOURCES = ("core", "services", "packages", "learning")
 
+# Where each non-core corpus family lives under the docs root.
+_CORPUS_FAMILY_DIRS = ("external", "packages", "learning_resources")
+
+
+def resolve_corpus_file(docs_path: Path, filename: str) -> Optional[tuple[Path, str]]:
+    """Resolve a corpus-prefixed filename to (corpus_root, relative_path).
+
+    Search hits name files as "<corpus-key>/<path>" — "forge/servers/php.md",
+    "spatie/laravel-permission/roles.md", "laravel-blog/index.md". When the
+    first path segment names an existing service, package ecosystem, or
+    learning source directory, the file belongs to that corpus and version
+    logic does not apply. Returns None for anything else so core resolution
+    proceeds unchanged.
+    """
+    first, sep, rest = filename.partition("/")
+    if not sep or not rest or not first:
+        return None
+    for family in _CORPUS_FAMILY_DIRS:
+        root = Path(docs_path) / family / first
+        if root.is_dir():
+            return root, rest
+    return None
+
 
 def validate_version_data(version: Optional[str]) -> Optional[Dict[str, Any]]:
     """Validate a caller-supplied Laravel version against the supported allowlist.
@@ -583,6 +606,21 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
     """
     logger.debug(f"read_laravel_doc_content_impl called with filename: {filename}, version: {version}, runtime_version: {runtime_version}")
 
+    # Corpus-prefixed files (service/package/learning hits from search) are
+    # not Laravel-versioned; resolve them against their corpus root with the
+    # same containment rules and skip version validation entirely.
+    corpus = resolve_corpus_file(docs_path, filename)
+    if corpus is not None:
+        corpus_root, relative = corpus
+        target = corpus_root / (relative if relative.endswith('.md') else f"{relative}.md")
+        safe_path = resolve_contained_path(corpus_root, target)
+        if safe_path is None:
+            logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+            return f"Access denied: {filename} (attempted directory traversal)"
+        if not safe_path.exists():
+            return f"Documentation file not found: {filename}"
+        return get_file_content_cached(str(safe_path))
+
     version_error = validate_version(version)
     if version_error:
         return version_error
@@ -627,6 +665,18 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
+def _section_matches(candidate: "Section", wanted: str) -> bool:
+    """Anchor, heading, or slugified heading — service and package docs carry
+    no explicit anchors, so a slug-shaped request must still find its
+    heading."""
+    heading = candidate.heading.lower()
+    return (
+        (candidate.anchor or "").lower() == wanted
+        or heading == wanted
+        or heading.replace(" ", "-") == wanted
+    )
+
+
 def read_laravel_doc_section_impl(
     docs_path: Path,
     filename: str,
@@ -643,7 +693,38 @@ def read_laravel_doc_section_impl(
     This exists because whole-file reads are the dominant cost of answering a
     question: queues.md alone is around 34,000 tokens, of which a typical answer
     needs a small fraction.
+
+    Accepts every filename shape search produces: bare core files
+    ("queues.md"), version-prefixed core files ("12.x/queues.md"), and
+    corpus-prefixed files from services, packages, and learning sources
+    ("forge/servers/php.md") — the latter resolve against their corpus root
+    and ignore the version argument, since they are not Laravel-versioned.
     """
+    if not filename.endswith('.md'):
+        filename = f"{filename}.md"
+
+    corpus = resolve_corpus_file(docs_path, filename)
+    if corpus is not None:
+        corpus_root, relative = corpus
+        safe_path = resolve_contained_path(corpus_root, corpus_root / relative)
+        if safe_path is None:
+            logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+            return f"Access denied: {filename} (attempted directory traversal)"
+        if not safe_path.exists():
+            return f"Documentation file not found: {filename}"
+        content = get_file_content_cached(str(safe_path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            return content
+        wanted = section.strip().lower().lstrip('#')
+        sections = chunk_markdown(content, filename, corpus_root.name)
+        for candidate in sections:
+            if _section_matches(candidate, wanted):
+                return candidate.text.strip()
+        return format_error(
+            f"Section '{section}' not found in {filename}",
+            {"available_sections": [s.anchor or s.heading for s in sections]},
+        )
+
     version_error = validate_version(version)
     if version_error:
         return version_error
@@ -651,8 +732,11 @@ def read_laravel_doc_section_impl(
     if not version:
         version = runtime_version if runtime_version else DEFAULT_VERSION
 
-    if not filename.endswith('.md'):
-        filename = f"{filename}.md"
+    # A version-prefixed core path ("12.x/queues.md") names its version
+    # inline, exactly as search emits core hits.
+    prefix, sep, rest = filename.partition("/")
+    if sep and prefix in SUPPORTED_VERSIONS:
+        version, filename = prefix, rest
 
     version_path = Path(docs_path) / version
     safe_path = resolve_contained_path(version_path, version_path / filename)
@@ -671,7 +755,7 @@ def read_laravel_doc_section_impl(
     sections = chunk_markdown(content, filename, version)
 
     for candidate in sections:
-        if (candidate.anchor or "").lower() == wanted or candidate.heading.lower() == wanted:
+        if _section_matches(candidate, wanted):
             return candidate.text.strip()
 
     return format_error(

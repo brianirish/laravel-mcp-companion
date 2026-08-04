@@ -1758,11 +1758,33 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
             logger.error(f"Error reading external file {service}/{path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
+    def read_package_doc(package: str, path: str) -> str:
+        """Read a fetched community-package documentation file."""
+        packages_dir = Path(docs_path) / "packages"
+        package_dir = packages_dir / package
+        if not package_dir.is_dir():
+            available = sorted(
+                p.name for p in packages_dir.iterdir() if p.is_dir()
+            ) if packages_dir.is_dir() else []
+            return f"Package '{package}' not found. Available: {', '.join(available) or 'none fetched'}"
+
+        if not path.endswith('.md'):
+            path = f"{path}.md"
+
+        safe_path = resolve_contained_path(package_dir, package_dir / path)
+        if safe_path is None:
+            return f"Access denied: {package}/{path} (path traversal attempted)"
+        if not safe_path.exists():
+            return f"File not found: {package}/{path}"
+        return get_file_content_cached(str(safe_path))
+
     # Register resources using functional approach (decorator as function)
     mcp.resource("laravel://{path*}")(read_laravel_doc)
     mcp.resource("laravel-external://{service}/{path*}")(read_external_laravel_doc)
+    mcp.resource("laravel-package://{package}/{path*}")(read_package_doc)
     logger.debug("Registered resource template: laravel://{path*}")
     logger.debug("Registered resource template: laravel-external://{service}/{path*}")
+    logger.debug("Registered resource template: laravel-package://{package}/{path*}")
     
     
     # Configure all tools
