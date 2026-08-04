@@ -10,7 +10,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## Current Version: v0.12.0
+## Current Version: v0.13.0
 
 ### ✅ Completed Features
 - **Multi-version Laravel documentation** support (6.x through latest)
@@ -153,8 +153,8 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 
 ---
 
-## v0.13.0 - Production Readiness
-**Target: Q2 2027**
+## ✅ v0.13.0 - Production Readiness (COMPLETED)
+**Released: Q3 2026 — originally targeted Q2 2027**
 
 ### Documentation Improvements (moved from v0.12.0)
 - [x] Advanced search across all aggregated sources *(unified fan-out with

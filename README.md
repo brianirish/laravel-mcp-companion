@@ -243,7 +243,7 @@ and succeed again once the bucket refills.
   configured.
 
 
-## Features (v0.12.0)
+## Features (v0.13.0)
 
 ### Documentation Aggregation
 - **Multi-version Laravel docs** - All versions from 6.x to latest

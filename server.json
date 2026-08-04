@@ -3,7 +3,7 @@
   "name": "io.github.brianirish/laravel-mcp-companion",
   "title": "Laravel MCP Companion",
   "description": "Laravel documentation aggregator: multi-version core docs, services, packages, learning paths.",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "websiteUrl": "https://github.com/brianirish/laravel-mcp-companion",
   "repository": {
     "url": "https://github.com/brianirish/laravel-mcp-companion",
@@ -12,7 +12,7 @@
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "ghcr.io/brianirish/laravel-mcp-companion:v0.12.0",
+      "identifier": "ghcr.io/brianirish/laravel-mcp-companion:v0.13.0",
       "runtimeHint": "docker",
       "runtimeArguments": [
         {
