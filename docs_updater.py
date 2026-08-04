@@ -3434,13 +3434,21 @@ class LearningResourceFetcher:
         return articles
 
     def _extract_laracasts_topics(self, html_content: str) -> List[Dict]:
-        """Extract topic metadata from Laracasts topics page."""
-        topics = []
+        """Extract topic metadata from the Laracasts topics page.
+
+        The page became an SPA in 2026: topics live in an embedded JSON blob
+        as a "topics":[{name, slug, path, series_count}, ...] array rather
+        than DOM links. The JSON path is tried first; the legacy DOM
+        extraction stays as a fallback for older page shapes.
+        """
+        topics = self._extract_laracasts_topics_json(html_content)
+        if topics:
+            return topics
         try:
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(html_content, 'html.parser')
 
-            # Look for topic cards/links
+            # Legacy shape: topic cards/links in the DOM
             topic_elements = soup.find_all('a', href=re.compile(r'/topics/'))
 
             seen_topics: set = set()
@@ -3472,6 +3480,45 @@ class LearningResourceFetcher:
         except Exception as e:
             logger.warning(f"Error extracting Laracasts topics: {str(e)}")
 
+        return topics
+
+    def _extract_laracasts_topics_json(self, html_content: str) -> List[Dict]:
+        """Parse the SPA payload's "topics" array out of the page source."""
+        marker = '"topics":['
+        start = html_content.find(marker)
+        if start == -1:
+            return []
+        # Walk to the matching close bracket; entries are flat objects, so a
+        # simple depth count over brackets suffices.
+        i = start + len(marker) - 1
+        depth = 0
+        for j in range(i, min(len(html_content), i + 200_000)):
+            if html_content[j] == '[':
+                depth += 1
+            elif html_content[j] == ']':
+                depth -= 1
+                if depth == 0:
+                    break
+        else:
+            return []
+
+        try:
+            entries = json.loads(html_content[i:j + 1])
+        except (json.JSONDecodeError, ValueError):
+            return []
+
+        topics: List[Dict] = []
+        for entry in entries:
+            if not isinstance(entry, dict) or not entry.get("name"):
+                continue
+            path = str(entry.get("path", ""))
+            topic: Dict[str, Any] = {
+                "name": entry["name"],
+                "url": path if path.startswith("http") else f"https://laracasts.com{path}",
+            }
+            if entry.get("series_count"):
+                topic["series_count"] = entry["series_count"]
+            topics.append(topic)
         return topics
 
     def _fetch_and_process_html(self, url: str, source: str, section: str) -> Optional[str]:
