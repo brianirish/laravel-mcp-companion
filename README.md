@@ -261,14 +261,16 @@ and succeed again once the bucket refills.
 ### Search & Navigation
 - **Ranked section search** - Ask in plain language ("how do I retry a failed
   queue job") and get the relevant *sections* ranked by relevance, each with a
-  snippet and an anchor
+  snippet, an anchor, and a source label
 - **Section-level reads** - Fetch just the section you need. A whole
   documentation file can exceed 30,000 tokens; a section is typically a few
   hundred, so answers leave room for your actual code
 - **Use case mapping** - Describe what you need, get relevant packages
 - **Package integration guides** - Installation and setup for 22 curated packages
 - **Cross-package compatibility** - Documentation for package combinations
-- **Unified search** - One search across all documentation sources
+- **Unified search** - One search across every corpus: core versions,
+  services, fetched package docs, and learning resources, with a `sources`
+  filter to narrow it
 
 ### MCP 2025-11-25 capabilities (new in v0.12.0)
 - **Task-capable updates** - Documentation updates run as MCP tasks: submit,

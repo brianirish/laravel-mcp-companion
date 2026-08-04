@@ -33,6 +33,9 @@ QUERIES = [
     "sanctum api tokens",
     "blade components",
     "queue:retry",
+    # Cross-corpus: exercises the unified fan-out over packages/services too.
+    "spatie permission roles",
+    "livewire wire:model",
 ]
 
 
