@@ -327,9 +327,16 @@ def resolve_corpus_file(docs_path: Path, filename: str) -> Optional[tuple[Path, 
     first, sep, rest = filename.partition("/")
     if not sep or not rest or not first:
         return None
+    # The corpus key becomes a path component: ".." here would make the whole
+    # docs tree a readable root ("../12.x-backup/leak" resolved under
+    # external/..). Only plain directory names qualify, and the constructed
+    # root must itself stay inside its family directory.
+    if not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9._-]*", first) or first in (".", ".."):
+        return None
     for family in _CORPUS_FAMILY_DIRS:
-        root = Path(docs_path) / family / first
-        if root.is_dir():
+        family_root = Path(docs_path) / family
+        root = family_root / first
+        if root.is_dir() and resolve_contained_path(family_root, root) is not None:
             return root, rest
     return None
 

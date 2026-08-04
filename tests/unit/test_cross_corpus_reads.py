@@ -72,6 +72,12 @@ class TestCorpusPrefixedReads:
     @pytest.mark.parametrize("filename", [
         "forge/../../12.x/routing.md",
         "spatie/../../../etc/passwd",
+        # ".." as the corpus key would make external/.. (= the docs root) a
+        # readable corpus — the regression the traversal suite caught.
+        "../12.x/routing.md",
+        "../12.x-backup/leak.md",
+        "./forge/servers/php.md",
+        ".metadata/sync_info.json.md",
     ])
     def test_traversal_from_corpus_roots_denied(self, corpus, filename):
         content = read_laravel_doc_content_impl(corpus, filename)
