@@ -1808,17 +1808,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         tags={"docs", "read"},
         output_schema=OUTPUT_SCHEMAS["search_laravel_docs"]
     )
-    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> ToolResult:
-        """Search through Laravel documentation for a specific term.
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False, sources: Optional[List[str]] = None) -> ToolResult:
+        """Search all aggregated documentation: core Laravel, services, packages, learning resources.
 
         Args:
             query: Search term to look for
-            version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
-            include_external: Whether to include external Laravel services documentation in search
-            all_versions: Search every supported version instead of just the configured one
+            version: Laravel version for the core docs (e.g., "12.x"). Defaults to the configured version. Packages, services, and learning docs are not Laravel-versioned.
+            include_external: Legacy core-only switch; False limits the search to core docs. Superseded by an explicit `sources`.
+            all_versions: Search every supported core version instead of just the configured one
+            sources: Restrict the corpus: any of "core", "services", "packages", "learning". Default searches all of them; each hit is labeled with its source.
         """
-        external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions))
+        external_dir = multi_updater.external_fetcher.external_dir
+        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions, sources=sources))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],

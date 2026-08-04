@@ -36,6 +36,10 @@ OUTPUT_SCHEMAS: Dict[str, Dict[str, Any]] = {
                     "heading": {"type": "string"},
                     "score": {"type": "number"},
                     "snippet": {"type": "string"},
+                    "source": {
+                        "type": "string",
+                        "description": "Corpus the hit came from: core, service:<name>, package:<name>, or learning:<name>",
+                    },
                 },
             },
         },

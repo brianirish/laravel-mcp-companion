@@ -235,12 +235,80 @@ def load_service_sections(external_dir: Path, service: str) -> List["Section"]:
         return []
 
     sections: List["Section"] = []
-    for name, path in list_contained_markdown(service_path):
+    for name, path in _iter_contained_markdown_recursive(service_path):
         content = get_file_content_cached(str(path))
         if content.startswith("Error") or content.startswith("File not found"):
             continue
         sections.extend(chunk_markdown(content, name, service))
     return sections
+
+
+def _iter_contained_markdown_recursive(root: Path, prefix: str = "") -> List[tuple[str, Path]]:
+    """(relative_name, readable_path) for markdown under root, at any depth.
+
+    list_contained_markdown is deliberately single-level for the flat core
+    corpus, but services and packages nest (121 of 147 service files and all
+    of Spatie's live in subdirectories — invisible to search until this
+    existed). Files at each level go through list_contained_markdown so the
+    containment and symlink rules apply unchanged; symlinked directories are
+    never followed, and dot-directories (.metadata and friends) are skipped.
+    """
+    results = [(f"{prefix}{name}", path) for name, path in list_contained_markdown(root)]
+    with os.scandir(root) as entries:
+        subdirs = sorted(
+            entry.name for entry in entries
+            if entry.is_dir(follow_symlinks=False) and not entry.name.startswith(".")
+        )
+    for name in subdirs:
+        results.extend(
+            _iter_contained_markdown_recursive(Path(root) / name, f"{prefix}{name}/")
+        )
+    return results
+
+
+def load_package_sections(packages_dir: Path) -> List["Section"]:
+    """Chunk every fetched package ecosystem into one section list.
+
+    One index for the whole packages corpus rather than one per ecosystem:
+    sections carry their ecosystem subdirectory as the corpus key, so hits
+    read back as "<ecosystem>/<file>" while the resident-index count stays
+    flat. Enumeration and reads reuse the contained/cached helpers, so
+    containment and symlink refusal carry over unchanged.
+    """
+    packages_path = Path(packages_dir)
+    if not packages_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for sub in sorted(p for p in packages_path.iterdir() if p.is_dir()):
+        for name, path in _iter_contained_markdown_recursive(sub):
+            content = get_file_content_cached(str(path))
+            if content.startswith("Error") or content.startswith("File not found"):
+                continue
+            sections.extend(chunk_markdown(content, name, sub.name))
+    return sections
+
+
+def load_learning_sections(learning_dir: Path) -> List["Section"]:
+    """Chunk every learning-resource source into one section list."""
+    learning_path = Path(learning_dir)
+    if not learning_path.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    for sub in sorted(p for p in learning_path.iterdir() if p.is_dir()):
+        for name, path in _iter_contained_markdown_recursive(sub):
+            content = get_file_content_cached(str(path))
+            if content.startswith("Error") or content.startswith("File not found"):
+                continue
+            sections.extend(chunk_markdown(content, name, sub.name))
+    return sections
+
+
+# The sources a search can fan out over. "core" is the versioned Laravel
+# documentation; the other three are not Laravel-versioned, which is why
+# version/all_versions scope core only.
+VALID_SEARCH_SOURCES = ("core", "services", "packages", "learning")
 
 
 def validate_version_data(version: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -621,6 +689,7 @@ def search_laravel_docs_data(
     runtime_version: Optional[str] = None,
     all_versions: bool = False,
     limit: int = 5,
+    sources: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Search documentation, returning ranked sections with snippets, as data.
 
@@ -628,6 +697,11 @@ def search_laravel_docs_data(
     multi-word question matches at all and long files no longer outrank relevant
     ones. Each hit carries an anchor so the full section can be fetched with
     read_laravel_doc_section instead of reading the whole file.
+
+    Fans out over every aggregated corpus by default — core versions, external
+    services, fetched package ecosystems, learning resources — with `sources`
+    narrowing the set. `include_external=False` is the historical core-only
+    switch and is superseded by an explicit `sources`.
     """
     from doc_search import extract_snippet, get_index
 
@@ -638,26 +712,45 @@ def search_laravel_docs_data(
     if not query.strip():
         return error_data("Search query cannot be empty")
 
+    if sources is not None:
+        invalid = [s for s in sources if s not in VALID_SEARCH_SOURCES]
+        if invalid:
+            return error_data(
+                f"Invalid sources: {', '.join(invalid)}",
+                {"valid_sources": list(VALID_SEARCH_SOURCES)},
+            )
+        effective_sources = list(dict.fromkeys(sources))
+    elif not include_external:
+        effective_sources = ["core"]
+    else:
+        effective_sources = list(VALID_SEARCH_SOURCES)
+
     search_versions = resolve_search_versions(version, runtime_version, all_versions)
 
-    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}:{limit}"
+    cache_key = (
+        f"search:{query}:{','.join(search_versions)}:{','.join(effective_sources)}:{limit}"
+    )
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
             return _search_result_cache[cache_key]
 
+    # (section, score, family) — the family names how the hit's corpus key in
+    # section.version becomes a user-facing source label.
     hits: List[tuple] = []
 
-    for candidate in search_versions:
-        def load_version(c: str = candidate) -> List[Section]:
-            return load_version_sections(docs_path, c)
+    if "core" in effective_sources:
+        for candidate in search_versions:
+            def load_version(c: str = candidate) -> List[Section]:
+                return load_version_sections(docs_path, c)
 
-        index = get_index(docs_path, f"version:{candidate}", load_version)
-        # Literal fallback preserves exact-symbol lookup such as `queue:retry`,
-        # which tokenized scoring splits apart.
-        hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+            index = get_index(docs_path, f"version:{candidate}", load_version)
+            # Literal fallback preserves exact-symbol lookup such as
+            # `queue:retry`, which tokenized scoring splits apart.
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "core") for s, score in found)
 
-    if include_external and external_dir and Path(external_dir).is_dir():
+    if "services" in effective_sources and external_dir and Path(external_dir).is_dir():
         for service_dir in sorted(Path(external_dir).iterdir()):
             if not service_dir.is_dir():
                 continue
@@ -666,18 +759,33 @@ def search_laravel_docs_data(
                 return load_service_sections(external_dir, name)
 
             index = get_index(docs_path, f"service:{service}", load_service)
-            hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "service") for s, score in found)
+
+    if "packages" in effective_sources:
+        packages_dir = Path(docs_path) / "packages"
+        if packages_dir.is_dir():
+            index = get_index(docs_path, "packages", lambda: load_package_sections(packages_dir))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "package") for s, score in found)
+
+    if "learning" in effective_sources:
+        learning_dir = Path(docs_path) / "learning_resources"
+        if learning_dir.is_dir():
+            index = get_index(docs_path, "learning", lambda: load_learning_sections(learning_dir))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "learning") for s, score in found)
 
     # Scores from separate indexes are only approximately comparable, since IDF
-    # is per-corpus. These corpora are the same documentation at different
-    # versions, so they are close enough to rank against each other.
-    hits.sort(key=lambda pair: pair[1], reverse=True)
+    # is per-corpus. Close enough to rank against each other; the quality tests
+    # hold the line on core queries still surfacing core docs first.
+    hits.sort(key=lambda triple: triple[1], reverse=True)
     hits = hits[:limit]
 
     if not hits:
         result = error_data(
             f"No results found for '{query}'",
-            {"scope": ", ".join(search_versions)},
+            {"scope": ", ".join(search_versions), "sources": effective_sources},
         )
     else:
         result = {
@@ -690,8 +798,9 @@ def search_laravel_docs_data(
                     "heading": section.heading,
                     "score": round(score, 2),
                     "snippet": extract_snippet(section.text, query),
+                    "source": "core" if family == "core" else f"{family}:{section.version}",
                 }
-                for section, score in hits
+                for section, score, family in hits
             ],
         }
 
