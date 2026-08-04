@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Intervention Image
+## Inertia DevTools Is Now on the Chrome Web Store
 
-[Read more](https://laravel-news.com/intervention-image)
+[Read more](https://laravel-news.com/inertia-devtools-is-now-on-the-chrome-web-store)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel AI SDK Adds Human-in-the-Loop Tool Approval
+## PhpStorm 2026.2 Released
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-adds-human-in-the-loop-tool-approval)
+[Read more](https://laravel-news.com/phpstorm-20262-released)
 
 ---
 
@@ -30,21 +30,21 @@ Latest Laravel Release
 
 ---
 
-## CPX: The Composer Package Executor for PHP
+## Laravel Doctor: Diagnose Your App With One Artisan Command
 
-[Read more](https://laravel-news.com/cpx-the-composer-package-executor-for-php)
-
----
-
-## Pinion UI: Restyle an Entire Laravel App by Changing Two HTML Attributes
-
-[Read more](https://laravel-news.com/pinion-ui-restyle-an-entire-laravel-app-by-changing-two-html-attributes)
+[Read more](https://laravel-news.com/laravel-doctor-first-party-diagnostics-for-your-application)
 
 ---
 
-## Intercept: Middleware Guardrails for Laravel AI Agents
+## The Web Search API for Your LLM and AI Applications​
 
-[Read more](https://laravel-news.com/intercept-middleware-guardrails-for-laravel-ai-agents)
+[Read more](https://serpapi.com/?utm_source=laravelnews)
+
+---
+
+## Laravel Doctor: Diagnose Your App With One Artisan Command
+
+[Read more](https://laravel-news.com/laravel-doctor-first-party-diagnostics-for-your-application)
 
 ---
 
