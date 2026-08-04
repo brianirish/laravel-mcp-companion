@@ -251,8 +251,10 @@ and succeed again once the bucket refills.
 - **Community package docs** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
 - **Daily updates** - Automatic sync with latest documentation
 
-### Learning & Discovery (New in v0.9.0)
-- **Learning paths** - Structured sequences for any Laravel topic
+### Learning & Discovery
+- **Learning paths** - Structured sequences for any Laravel topic, offered
+  interactively: ask without naming one and the server asks which of the ten
+  curated paths you want
 - **Difficulty levels** - Filter by beginner, intermediate, or advanced
 - **15 categories** - Browse by authentication, database, testing, etc.
 - **"I need X" finder** - Natural language documentation discovery
@@ -272,21 +274,36 @@ and succeed again once the bucket refills.
   services, fetched package docs, and learning resources, with a `sources`
   filter to narrow it
 
-### MCP 2025-11-25 capabilities (new in v0.12.0)
+### MCP 2025-11-25 capabilities
 - **Task-capable updates** - Documentation updates run as MCP tasks: submit,
   poll, fetch the result, instead of holding the connection for minutes
-- **Interactive learning paths** - Ask for a learning path without naming one
-  and the server asks you which of the ten curated paths you want
 - **Structured output** - Tabular tools return `structuredContent` with real
   schemas alongside their TOON text
-- **OAuth 2.1 resource server** - Optional bearer-token validation for the
-  HTTP transport (JWKS or static dev tokens)
-- **Registry-ready** - `server.json` metadata, `.well-known` discovery in
-  HTTP mode, and automated MCP Registry publishing on release tags
+- **Elicitation** - Interactive choices where they help, with plain listings
+  as the fallback for clients without the capability
+- **Registry listed** - Installable from the [official MCP Registry](https://registry.modelcontextprotocol.io/?search=laravel-mcp-companion),
+  with `server.json` metadata, `.well-known` discovery in HTTP mode, and
+  automated publishing on release tags
+
+### Production Operations (HTTP mode)
+- **Health & metrics** - `GET /healthz` for load balancers and a Prometheus
+  `GET /metrics` with per-tool counters, latency histogram, and docs age
+- **OAuth 2.1 resource server** - Optional bearer-token validation (JWKS or
+  static dev tokens); misconfiguration fails at startup, outages fail closed
+- **Rate limiting** - Opt-in token bucket over the MCP surface with a
+  handshake-aware burst default
+- **Hardened by default** - Loopback bind, Host/Origin validation, no
+  wildcard CORS, path containment enforced identically for search, listing,
+  and reads
+
+### Quality
+- **81% product coverage** with an 80% CI gate, end-to-end tests over real
+  stdio and HTTP transports, and report-only latency benchmarks — warm
+  search p95 is a few milliseconds against the 100ms v1.0.0 target
 
 ### Upcoming
-- **v0.13.0**: Production hardening, monitoring, advanced search
-- **v1.0.0**: First stable release with LTS commitment
+- **v1.0.0**: First stable release — API freeze, breaking-change policy,
+  and an LTS commitment
 
 For detailed roadmap information, see [ROADMAP.md](ROADMAP.md).
 
