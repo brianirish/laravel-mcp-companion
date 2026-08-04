@@ -18,7 +18,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 - **Community Package Documentation**: Spatie, Livewire, Inertia.js, Filament integration (42,000+ lines)
 - **Learning Resource Infrastructure**: Difficulty classification, 15 semantic categories
 - **8 New MCP Tools**: Learning paths, "I need X" finder, category browsing, difficulty filtering
-- **Package recommendation system** with 50+ curated packages
+- **Package recommendation system** with 22 curated packages
 - **Ranked section search** with BM25 relevance, snippets, and section-level reads
 - **Documentation currency reporting** so the assistant knows what date its corpus covers
 - **Future-proof version detection** via GitHub API

@@ -456,12 +456,12 @@ When to use:
 - Accessing code examples from docs
 - Understanding concepts in depth""",
 
-    "search_laravel_docs": """Searches for specific terms across all Laravel documentation files. Returns file names and match counts.
+    "search_laravel_docs": """Searches every aggregated corpus at once: core Laravel docs, service docs (Forge, Vapor, Envoyer, Nova), fetched package docs (Spatie, Livewire, Inertia, Filament, ...), and learning resources. Returns ranked sections with snippets, anchors, and a source label; read the winning section with read_laravel_doc_section.
 
 When to use:
-- Finding which files mention a specific feature
-- Quick lookup of where topics are discussed
-- Discovering related documentation files""",
+- Any question about Laravel or its ecosystem, in plain language
+- Narrow with sources=["core"] (or services/packages/learning) when the corpus is known
+- Exact symbols like queue:retry also work via a literal fallback""",
 
     "get_doc_structure": """Extracts the table of contents and structure from a documentation file. Shows headers and brief content previews.
 

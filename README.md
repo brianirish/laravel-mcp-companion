@@ -40,7 +40,7 @@
 - **15 semantic categories** - Browse documentation by topic area
 - **Auto-discovery Laravel services** - Forge, Vapor, Envoyer, Nova (117+ sections)
 - **Community package documentation** - 42,000+ lines from Spatie, Livewire, Inertia, Filament
-- **Package integration guides** - Installation and setup for 50+ curated packages
+- **Package integration guides** - Installation and setup for 22 curated packages
 - **Cross-package compatibility** - Learn which packages work well together
 - **Unified search** across core Laravel docs, services, and packages
 - **Daily updates** - Automatically syncs with latest documentation
@@ -266,7 +266,7 @@ and succeed again once the bucket refills.
   documentation file can exceed 30,000 tokens; a section is typically a few
   hundred, so answers leave room for your actual code
 - **Use case mapping** - Describe what you need, get relevant packages
-- **Package integration guides** - Installation and setup for 50+ packages
+- **Package integration guides** - Installation and setup for 22 curated packages
 - **Cross-package compatibility** - Documentation for package combinations
 - **Unified search** - One search across all documentation sources
 
