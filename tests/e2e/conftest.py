@@ -41,6 +41,15 @@ def build_docs_tree(root: Path) -> Path:
             "commit_message": "e2e fixture",
             "sync_time": "2026-08-01T00:00:00Z",
         }))
+
+    # A nested service file, exercising both the unified fan-out and the
+    # recursive enumeration that most service docs depend on.
+    daemons = docs / "external" / "forge" / "servers"
+    daemons.mkdir(parents=True)
+    (daemons / "daemons.md").write_text(
+        "# Daemons\n\n## Supervisor Daemons\n\nForge manages supervisor daemon "
+        "processes that keep workers alive across restarts.\n"
+    )
     return docs
 
 

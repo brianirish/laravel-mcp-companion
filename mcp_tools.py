@@ -235,12 +235,117 @@ def load_service_sections(external_dir: Path, service: str) -> List["Section"]:
         return []
 
     sections: List["Section"] = []
-    for name, path in list_contained_markdown(service_path):
+    for name, path in _iter_contained_markdown_recursive(service_path):
         content = get_file_content_cached(str(path))
         if content.startswith("Error") or content.startswith("File not found"):
             continue
         sections.extend(chunk_markdown(content, name, service))
     return sections
+
+
+def _iter_contained_markdown_recursive(root: Path, prefix: str = "") -> List[tuple[str, Path]]:
+    """(relative_name, readable_path) for markdown under root, at any depth.
+
+    list_contained_markdown is deliberately single-level for the flat core
+    corpus, but services and packages nest (121 of 147 service files and all
+    of Spatie's live in subdirectories — invisible to search until this
+    existed). Files at each level go through list_contained_markdown so the
+    containment and symlink rules apply unchanged; symlinked directories are
+    never followed, and dot-directories (.metadata and friends) are skipped.
+    """
+    results = [(f"{prefix}{name}", path) for name, path in list_contained_markdown(root)]
+    with os.scandir(root) as entries:
+        subdirs = sorted(
+            entry.name for entry in entries
+            if entry.is_dir(follow_symlinks=False) and not entry.name.startswith(".")
+        )
+    for name in subdirs:
+        results.extend(
+            _iter_contained_markdown_recursive(Path(root) / name, f"{prefix}{name}/")
+        )
+    return results
+
+
+def _load_family_sections(family_dir: Path) -> List["Section"]:
+    """Chunk every ecosystem subdirectory of a corpus family into sections.
+
+    Subdirectories are enumerated with the same containment rules the read
+    path applies: symlinked or escaping directories are skipped, because
+    indexing what reading refuses turns search into an oracle over withheld
+    content — the asymmetry the v0.11 containment work eliminated.
+    """
+    if not family_dir.is_dir():
+        return []
+
+    sections: List["Section"] = []
+    with os.scandir(family_dir) as entries:
+        subdirs = sorted(
+            entry.name for entry in entries
+            if entry.is_dir(follow_symlinks=False) and not entry.name.startswith(".")
+        )
+    for name in subdirs:
+        sub = family_dir / name
+        if resolve_contained_path(family_dir, sub) is None:
+            continue
+        for rel_name, path in _iter_contained_markdown_recursive(sub):
+            content = get_file_content_cached(str(path))
+            if content.startswith("Error") or content.startswith("File not found"):
+                continue
+            sections.extend(chunk_markdown(content, rel_name, name))
+    return sections
+
+
+def load_package_sections(packages_dir: Path) -> List["Section"]:
+    """Chunk every fetched package ecosystem into one section list.
+
+    One index for the whole packages corpus rather than one per ecosystem:
+    sections carry their ecosystem subdirectory as the corpus key, so hits
+    read back as "<ecosystem>/<file>" while the resident-index count stays
+    flat. Enumeration and reads reuse the contained/cached helpers, so
+    containment and symlink refusal carry over unchanged.
+    """
+    return _load_family_sections(Path(packages_dir))
+
+
+def load_learning_sections(learning_dir: Path) -> List["Section"]:
+    """Chunk every learning-resource source into one section list."""
+    return _load_family_sections(Path(learning_dir))
+
+
+# The sources a search can fan out over. "core" is the versioned Laravel
+# documentation; the other three are not Laravel-versioned, which is why
+# version/all_versions scope core only.
+VALID_SEARCH_SOURCES = ("core", "services", "packages", "learning")
+
+# Where each non-core corpus family lives under the docs root.
+_CORPUS_FAMILY_DIRS = ("external", "packages", "learning_resources")
+
+
+def resolve_corpus_file(docs_path: Path, filename: str) -> Optional[tuple[Path, str]]:
+    """Resolve a corpus-prefixed filename to (corpus_root, relative_path).
+
+    Search hits name files as "<corpus-key>/<path>" — "forge/servers/php.md",
+    "spatie/laravel-permission/roles.md", "laravel-blog/index.md". When the
+    first path segment names an existing service, package ecosystem, or
+    learning source directory, the file belongs to that corpus and version
+    logic does not apply. Returns None for anything else so core resolution
+    proceeds unchanged.
+    """
+    first, sep, rest = filename.partition("/")
+    if not sep or not rest or not first:
+        return None
+    # The corpus key becomes a path component: ".." here would make the whole
+    # docs tree a readable root ("../12.x-backup/leak" resolved under
+    # external/..). Only plain directory names qualify, and the constructed
+    # root must itself stay inside its family directory.
+    if not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9._-]*", first) or first in (".", ".."):
+        return None
+    for family in _CORPUS_FAMILY_DIRS:
+        family_root = Path(docs_path) / family
+        root = family_root / first
+        if root.is_dir() and resolve_contained_path(family_root, root) is not None:
+            return root, rest
+    return None
 
 
 def validate_version_data(version: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -515,6 +620,21 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
     """
     logger.debug(f"read_laravel_doc_content_impl called with filename: {filename}, version: {version}, runtime_version: {runtime_version}")
 
+    # Corpus-prefixed files (service/package/learning hits from search) are
+    # not Laravel-versioned; resolve them against their corpus root with the
+    # same containment rules and skip version validation entirely.
+    corpus = resolve_corpus_file(docs_path, filename)
+    if corpus is not None:
+        corpus_root, relative = corpus
+        target = corpus_root / (relative if relative.endswith('.md') else f"{relative}.md")
+        safe_path = resolve_contained_path(corpus_root, target)
+        if safe_path is None:
+            logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+            return f"Access denied: {filename} (attempted directory traversal)"
+        if not safe_path.exists():
+            return f"Documentation file not found: {filename}"
+        return get_file_content_cached(str(safe_path))
+
     version_error = validate_version(version)
     if version_error:
         return version_error
@@ -559,6 +679,18 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         return f"Error reading file: {str(e)}"
 
 
+def _section_matches(candidate: "Section", wanted: str) -> bool:
+    """Anchor, heading, or slugified heading — service and package docs carry
+    no explicit anchors, so a slug-shaped request must still find its
+    heading."""
+    heading = candidate.heading.lower()
+    return (
+        (candidate.anchor or "").lower() == wanted
+        or heading == wanted
+        or heading.replace(" ", "-") == wanted
+    )
+
+
 def read_laravel_doc_section_impl(
     docs_path: Path,
     filename: str,
@@ -575,7 +707,38 @@ def read_laravel_doc_section_impl(
     This exists because whole-file reads are the dominant cost of answering a
     question: queues.md alone is around 34,000 tokens, of which a typical answer
     needs a small fraction.
+
+    Accepts every filename shape search produces: bare core files
+    ("queues.md"), version-prefixed core files ("12.x/queues.md"), and
+    corpus-prefixed files from services, packages, and learning sources
+    ("forge/servers/php.md") — the latter resolve against their corpus root
+    and ignore the version argument, since they are not Laravel-versioned.
     """
+    if not filename.endswith('.md'):
+        filename = f"{filename}.md"
+
+    corpus = resolve_corpus_file(docs_path, filename)
+    if corpus is not None:
+        corpus_root, relative = corpus
+        safe_path = resolve_contained_path(corpus_root, corpus_root / relative)
+        if safe_path is None:
+            logger.warning(f"Access denied: {filename} (attempted directory traversal)")
+            return f"Access denied: {filename} (attempted directory traversal)"
+        if not safe_path.exists():
+            return f"Documentation file not found: {filename}"
+        content = get_file_content_cached(str(safe_path))
+        if content.startswith("Error") or content.startswith("File not found"):
+            return content
+        wanted = section.strip().lower().lstrip('#')
+        sections = chunk_markdown(content, filename, corpus_root.name)
+        for candidate in sections:
+            if _section_matches(candidate, wanted):
+                return candidate.text.strip()
+        return format_error(
+            f"Section '{section}' not found in {filename}",
+            {"available_sections": [s.anchor or s.heading for s in sections]},
+        )
+
     version_error = validate_version(version)
     if version_error:
         return version_error
@@ -583,8 +746,11 @@ def read_laravel_doc_section_impl(
     if not version:
         version = runtime_version if runtime_version else DEFAULT_VERSION
 
-    if not filename.endswith('.md'):
-        filename = f"{filename}.md"
+    # A version-prefixed core path ("12.x/queues.md") names its version
+    # inline, exactly as search emits core hits.
+    prefix, sep, rest = filename.partition("/")
+    if sep and prefix in SUPPORTED_VERSIONS:
+        version, filename = prefix, rest
 
     version_path = Path(docs_path) / version
     safe_path = resolve_contained_path(version_path, version_path / filename)
@@ -603,7 +769,7 @@ def read_laravel_doc_section_impl(
     sections = chunk_markdown(content, filename, version)
 
     for candidate in sections:
-        if (candidate.anchor or "").lower() == wanted or candidate.heading.lower() == wanted:
+        if _section_matches(candidate, wanted):
             return candidate.text.strip()
 
     return format_error(
@@ -621,6 +787,7 @@ def search_laravel_docs_data(
     runtime_version: Optional[str] = None,
     all_versions: bool = False,
     limit: int = 5,
+    sources: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Search documentation, returning ranked sections with snippets, as data.
 
@@ -628,6 +795,11 @@ def search_laravel_docs_data(
     multi-word question matches at all and long files no longer outrank relevant
     ones. Each hit carries an anchor so the full section can be fetched with
     read_laravel_doc_section instead of reading the whole file.
+
+    Fans out over every aggregated corpus by default — core versions, external
+    services, fetched package ecosystems, learning resources — with `sources`
+    narrowing the set. `include_external=False` is the historical core-only
+    switch and is superseded by an explicit `sources`.
     """
     from doc_search import extract_snippet, get_index
 
@@ -638,26 +810,45 @@ def search_laravel_docs_data(
     if not query.strip():
         return error_data("Search query cannot be empty")
 
+    if sources is not None:
+        invalid = [s for s in sources if s not in VALID_SEARCH_SOURCES]
+        if invalid:
+            return error_data(
+                f"Invalid sources: {', '.join(invalid)}",
+                {"valid_sources": list(VALID_SEARCH_SOURCES)},
+            )
+        effective_sources = list(dict.fromkeys(sources))
+    elif not include_external:
+        effective_sources = ["core"]
+    else:
+        effective_sources = list(VALID_SEARCH_SOURCES)
+
     search_versions = resolve_search_versions(version, runtime_version, all_versions)
 
-    cache_key = f"search:{query}:{','.join(search_versions)}:{include_external}:{limit}"
+    cache_key = (
+        f"search:{query}:{','.join(search_versions)}:{','.join(effective_sources)}:{limit}"
+    )
     with _cache_lock:
         if cache_key in _search_result_cache:
             logger.debug(f"Returning cached search results for: {query}")
             return _search_result_cache[cache_key]
 
+    # (section, score, family) — the family names how the hit's corpus key in
+    # section.version becomes a user-facing source label.
     hits: List[tuple] = []
 
-    for candidate in search_versions:
-        def load_version(c: str = candidate) -> List[Section]:
-            return load_version_sections(docs_path, c)
+    if "core" in effective_sources:
+        for candidate in search_versions:
+            def load_version(c: str = candidate) -> List[Section]:
+                return load_version_sections(docs_path, c)
 
-        index = get_index(docs_path, f"version:{candidate}", load_version)
-        # Literal fallback preserves exact-symbol lookup such as `queue:retry`,
-        # which tokenized scoring splits apart.
-        hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+            index = get_index(docs_path, f"version:{candidate}", load_version)
+            # Literal fallback preserves exact-symbol lookup such as
+            # `queue:retry`, which tokenized scoring splits apart.
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "core") for s, score in found)
 
-    if include_external and external_dir and Path(external_dir).is_dir():
+    if "services" in effective_sources and external_dir and Path(external_dir).is_dir():
         for service_dir in sorted(Path(external_dir).iterdir()):
             if not service_dir.is_dir():
                 continue
@@ -666,18 +857,33 @@ def search_laravel_docs_data(
                 return load_service_sections(external_dir, name)
 
             index = get_index(docs_path, f"service:{service}", load_service)
-            hits.extend(index.search(query, limit) or index.substring_search(query, limit))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "service") for s, score in found)
+
+    if "packages" in effective_sources:
+        packages_dir = Path(docs_path) / "packages"
+        if packages_dir.is_dir():
+            index = get_index(docs_path, "packages", lambda: load_package_sections(packages_dir))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "package") for s, score in found)
+
+    if "learning" in effective_sources:
+        learning_dir = Path(docs_path) / "learning_resources"
+        if learning_dir.is_dir():
+            index = get_index(docs_path, "learning", lambda: load_learning_sections(learning_dir))
+            found = index.search(query, limit) or index.substring_search(query, limit)
+            hits.extend((s, score, "learning") for s, score in found)
 
     # Scores from separate indexes are only approximately comparable, since IDF
-    # is per-corpus. These corpora are the same documentation at different
-    # versions, so they are close enough to rank against each other.
-    hits.sort(key=lambda pair: pair[1], reverse=True)
+    # is per-corpus. Close enough to rank against each other; the quality tests
+    # hold the line on core queries still surfacing core docs first.
+    hits.sort(key=lambda triple: triple[1], reverse=True)
     hits = hits[:limit]
 
     if not hits:
         result = error_data(
             f"No results found for '{query}'",
-            {"scope": ", ".join(search_versions)},
+            {"scope": ", ".join(search_versions), "sources": effective_sources},
         )
     else:
         result = {
@@ -690,8 +896,9 @@ def search_laravel_docs_data(
                     "heading": section.heading,
                     "score": round(score, 2),
                     "snippet": extract_snippet(section.text, query),
+                    "source": "core" if family == "core" else f"{family}:{section.version}",
                 }
-                for section, score in hits
+                for section, score, family in hits
             ],
         }
 

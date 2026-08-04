@@ -286,65 +286,93 @@ More content"""
         result = fetcher._clean_jsx_text(jsx_text)
         assert result == "Multiple spaces and newlines"
     
-    @patch('urllib.request.urlopen')
-    def test_fetch_inertia_docs_github(self, mock_urlopen, fetcher):
-        """Test fetching Inertia docs from GitHub repository."""
-        # Mock GitHub response with JSX content
-        mock_response = MagicMock()
-        mock_response.read.return_value = b'''
-        import { H1, P } from '@/Components'
-        
-        export default function() {
-            return (
-                <>
-                    <H1>Test Page</H1>
-                    <P>This is test content from GitHub.</P>
-                </>
-            )
-        }
-        '''
-        mock_response.__enter__.return_value = mock_response
-        mock_urlopen.return_value = mock_response
-        
-        # Mock the configuration for Inertia
-        config = {
-            "repo": "inertiajs/inertiajs.com",
-            "branch": "master", 
-            "docs_path": "resources/js/Pages",
-            "name": "Inertia.js",
-            "sections": ["test-page"]
-        }
-        
-        result = fetcher._fetch_inertia_docs(config)
-        
-        assert result is True
-        # Check that file was created
-        file_path = fetcher.get_package_cache_path("inertia") / "test-page.md"
-        assert file_path.exists()
-        
-        # Check file content
-        content = file_path.read_text()
-        assert "# Inertia - Test Page" in content
-        assert "Source: https://inertiajs.com/test-page" in content
-        assert "# Test Page" in content
-        assert "This is test content from GitHub." in content
-    
+    def test_fetch_inertia_docs_from_llms_index(self, fetcher, monkeypatch):
+        """The fetcher discovers pages from llms.txt and saves clean markdown.
+
+        Recorded fixtures from 2026-08: the old JSX repo is gone upstream and
+        the site serves .md endpoints with a banner blockquote to strip.
+        """
+        from tests.conftest import load_fixture, urlopen_returning
+
+        monkeypatch.setattr(
+            "docs_updater.urllib.request.urlopen",
+            urlopen_returning(b"", url_map={
+                "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
+                ".md": load_fixture("inertia_routing.md").encode(),
+            }),
+        )
+        config = fetcher.community_packages["inertia"]
+        assert fetcher._fetch_inertia_docs(config) is True
+
+        routing = fetcher.get_package_cache_path("inertia") / "routing.md"
+        assert routing.exists()
+        content = routing.read_text()
+        assert content.startswith("Source: https://inertiajs.com/docs/")
+        assert "# Routing" in content
+        assert "Documentation Index" not in content  # banner stripped
+
+        import json as json_mod
+        meta = json_mod.loads(fetcher.get_cache_metadata_path("inertia").read_text())
+        assert meta["success_rate"] == 1.0
+        assert meta["source_type"] == "llms_index"
+
+    def test_inertia_refresh_prunes_pages_dropped_from_the_index(self, fetcher, monkeypatch):
+        """A page the index no longer lists must not stay searchable after a
+        complete refresh — unified search indexes this directory recursively."""
+        from tests.conftest import load_fixture, urlopen_returning
+
+        stale = fetcher.get_package_cache_path("inertia") / "removed-upstream.md"
+        stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
+
+        monkeypatch.setattr(
+            "docs_updater.urllib.request.urlopen",
+            urlopen_returning(b"", url_map={
+                "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
+                ".md": load_fixture("inertia_routing.md").encode(),
+            }),
+        )
+        assert fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"]) is True
+        assert not stale.exists()
+        assert (fetcher.get_package_cache_path("inertia") / "routing.md").exists()
+
+    def test_inertia_partial_fetch_does_not_prune(self, fetcher, monkeypatch):
+        """Failing to replace docs is no excuse to delete them."""
+        from tests.conftest import load_fixture, urlopen_returning
+
+        stale = fetcher.get_package_cache_path("inertia") / "removed-upstream.md"
+        stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
+
+        real = urlopen_returning(b"", url_map={
+            "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
+            "routing.md": load_fixture("inertia_routing.md").encode(),
+        })
+
+        def flaky(request, *a, **k):
+            # Index and routing succeed; every other page 404s.
+            return real(request)
+
+        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"])
+        assert stale.exists()
+
+    def test_fetch_inertia_docs_empty_index_fails(self, fetcher, monkeypatch):
+        from tests.conftest import urlopen_returning
+
+        monkeypatch.setattr(
+            "docs_updater.urllib.request.urlopen",
+            urlopen_returning(b"# No links here at all\n"),
+        )
+        config = fetcher.community_packages["inertia"]
+        assert fetcher._fetch_inertia_docs(config) is False
+
     def test_inertia_configuration_structure(self, fetcher):
-        """Test Inertia configuration structure."""
+        """The config carries the llms index, not the deleted JSX repo."""
         inertia_config = fetcher.community_packages["inertia"]
-        
+
         assert inertia_config["name"] == "Inertia.js"
-        assert inertia_config["type"] == DocumentationSourceType.GITHUB_REPO
-        assert inertia_config["repo"] == "inertiajs/inertiajs.com"
-        assert inertia_config["branch"] == "master"
-        assert inertia_config["docs_path"] == "resources/js/Pages"
-        assert "sections" in inertia_config
-        
-        # Check that problematic sections are removed
-        sections = inertia_config["sections"]
-        assert "installation" not in sections  # Should be removed (404)
-        assert "server-side-setup" in sections  # Should exist
-        assert "client-side-setup" in sections  # Should exist
+        assert inertia_config["type"] == DocumentationSourceType.DIRECT_URL
+        assert inertia_config["llms_index"].startswith("https://inertiajs.com/")
+        assert "repo" not in inertia_config
     
     def test_livewire_configuration_fixed(self, fetcher):
         """Test that Livewire configuration has been fixed to remove 404 sections."""

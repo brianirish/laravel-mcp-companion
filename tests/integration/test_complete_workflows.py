@@ -277,7 +277,8 @@ class TestCachingWorkflows:
             # Second search with same query - should use cache
             # We can verify by checking the cache directly
             # Key includes the result limit, which changes the response
-            cache_key = "search:keyword:12.x:True:5"
+            # Cache keys carry the effective sources since unified search
+            cache_key = "search:keyword:12.x:core,services,packages,learning:5"
             assert cache_key in _search_result_cache
             # The cache stores result data (dicts), not encoded strings, so the
             # same entry can feed both TOON text and structuredContent.

@@ -19,6 +19,31 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
+- Unified search: `search_laravel_docs` now fans out over every aggregated
+  corpus — core versions, service docs, fetched package docs, learning
+  resources — with a `sources` filter and a per-hit `source` label.
+  `include_external=False` keeps its historical core-only meaning; `version`
+  scopes core only, since nothing else is Laravel-versioned.
+- `laravel-package://{package}/{path}` resource scheme for fetched package
+  documentation, mirroring `laravel-external://`.
+- The Inertia fetcher discovers pages from the site's `llms.txt` markdown
+  index — the configured JSX source repo was deleted upstream, so every
+  daily sync had been silently failing that ecosystem. The Laracasts topic
+  extractor now parses the page's SPA payload, which had been yielding zero
+  topics.
+
+### Fixed
+- Search had never seen most of the corpus it advertised: enumeration was
+  single-level, hiding 121 of 147 service files and every Spatie file in
+  nested directories, and packages/learning resources were not indexed at
+  all. The search→read flow was also broken for service hits since v0.11.0;
+  corpus-prefixed files now resolve uniformly with the same containment
+  rules.
+- 19 of the 22 package-catalog documentation links pointed at paths that
+  never existed; all now resolve and are guard-tested. The README's "50+
+  curated packages" claim is corrected to the actual 22 and tied to the
+  catalog by a test, and the search tool description no longer advertises
+  the substring contract removed in v0.11.0.
 - Opt-in rate limiting for the HTTP transport's MCP surface (operational
   endpoints stay unlimited — throttling health checks marks healthy
   instances down): `--rate-limit RPS` /

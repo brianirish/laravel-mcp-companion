@@ -102,7 +102,7 @@ class TestCacheManagement:
                 
                 # First 20 should be removed
                 for i in range(20):
-                    cache_key = f"search:query{i}:11.x:True:5"
+                    cache_key = f"search:query{i}:11.x:core,services,packages,learning:5"
                     assert cache_key not in _search_result_cache
     
     def test_concurrent_cache_access(self):
@@ -261,11 +261,11 @@ class TestCacheManagement:
             default_scope = ','.join(resolve_search_versions(None))
             all_scope = ','.join(resolve_search_versions(None, all_versions=True))
 
-            assert "search:test:11.x:True:5" in _search_result_cache
-            assert "search:test:11.x:False:5" in _search_result_cache
-            assert f"search:test:{default_scope}:True:5" in _search_result_cache
+            assert "search:test:11.x:core,services,packages,learning:5" in _search_result_cache
+            assert "search:test:11.x:core:5" in _search_result_cache
+            assert f"search:test:{default_scope}:core,services,packages,learning:5" in _search_result_cache
             # Scoped and all-versions searches must not share a cache entry
-            assert f"search:test:{all_scope}:True:5" in _search_result_cache
+            assert f"search:test:{all_scope}:core,services,packages,learning:5" in _search_result_cache
             assert default_scope != all_scope
     
     def test_clear_caches_function(self):

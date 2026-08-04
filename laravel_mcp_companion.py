@@ -118,7 +118,7 @@ PACKAGE_CATALOG = {
             "Handling webhooks from payment providers"
         ],
         "installation": "composer require laravel/cashier",
-        "documentation_link": "laravel://packages/cashier.md",
+        "documentation_link": "laravel://billing.md",
         "related_packages": ["laravel/cashier-paddle"]
     },
     "laravel/sanctum": {
@@ -132,7 +132,7 @@ PACKAGE_CATALOG = {
             "Creating a secure API"
         ],
         "installation": "composer require laravel/sanctum",
-        "documentation_link": "laravel://authentication/sanctum.md",
+        "documentation_link": "laravel://sanctum.md",
         "related_packages": ["laravel/breeze", "laravel/jetstream", "laravel/fortify"]
     },
     "laravel/scout": {
@@ -146,7 +146,7 @@ PACKAGE_CATALOG = {
             "Creating custom search solutions"
         ],
         "installation": "composer require laravel/scout",
-        "documentation_link": "laravel://packages/scout.md"
+        "documentation_link": "laravel://scout.md"
     },
     "laravel/passport": {
         "name": "Laravel Passport",
@@ -159,7 +159,7 @@ PACKAGE_CATALOG = {
             "Supporting password grant tokens"
         ],
         "installation": "composer require laravel/passport",
-        "documentation_link": "laravel://authentication/passport.md",
+        "documentation_link": "laravel://passport.md",
         "related_packages": ["laravel/socialite"]
     },
     "laravel/breeze": {
@@ -172,7 +172,7 @@ PACKAGE_CATALOG = {
             "Creating a starting point for authentication with Tailwind CSS"
         ],
         "installation": "composer require laravel/breeze --dev",
-        "documentation_link": "laravel://starter-kits/breeze.md",
+        "documentation_link": "laravel://starter-kits.md",
         "related_packages": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"]
     },
     "livewire/livewire": {
@@ -186,7 +186,7 @@ PACKAGE_CATALOG = {
             "Adding interactive elements to Blade templates"
         ],
         "installation": "composer require livewire/livewire",
-        "documentation_link": "laravel://livewire.md",
+        "documentation_link": "laravel-package://livewire/quickstart.md",
         "related_packages": ["laravel/breeze", "laravel/jetstream"]
     },
     "laravel/fortify": {
@@ -200,7 +200,7 @@ PACKAGE_CATALOG = {
             "Setting up email verification"
         ],
         "installation": "composer require laravel/fortify",
-        "documentation_link": "laravel://authentication/fortify.md",
+        "documentation_link": "laravel://fortify.md",
         "related_packages": ["laravel/breeze", "laravel/jetstream", "laravel/sanctum"]
     },
     "spatie/laravel-permission": {
@@ -214,7 +214,7 @@ PACKAGE_CATALOG = {
             "Creating a permission-based authorization system"
         ],
         "installation": "composer require spatie/laravel-permission",
-        "documentation_link": "https://spatie.be/docs/laravel-permission"
+        "documentation_link": "laravel-package://spatie/laravel-permission/introduction.md"
     },
     "inertiajs/inertia-laravel": {
         "name": "Inertia.js for Laravel",
@@ -227,7 +227,7 @@ PACKAGE_CATALOG = {
             "Developing reactive interfaces with Laravel controllers"
         ],
         "installation": "composer require inertiajs/inertia-laravel",
-        "documentation_link": "laravel://inertia.md",
+        "documentation_link": "laravel-package://inertia/how-it-works.md",
         "related_packages": ["laravel/breeze", "laravel/jetstream"]
     },
     "laravel/horizon": {
@@ -269,7 +269,7 @@ PACKAGE_CATALOG = {
             "Setting up profile management"
         ],
         "installation": "composer require laravel/jetstream",
-        "documentation_link": "laravel://starter-kits/jetstream.md",
+        "documentation_link": "laravel://starter-kits.md",
         "related_packages": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"]
     },
     "laravel/octane": {
@@ -310,7 +310,7 @@ PACKAGE_CATALOG = {
             "Handling file storage across different disks"
         ],
         "installation": "composer require spatie/laravel-medialibrary",
-        "documentation_link": "https://spatie.be/docs/laravel-medialibrary"
+        "documentation_link": "laravel-package://spatie/laravel-medialibrary/introduction.md"
     },
     "laravel/excel": {
         "name": "Laravel Excel (Maatwebsite)",
@@ -336,7 +336,7 @@ PACKAGE_CATALOG = {
             "Monitoring memory usage"
         ],
         "installation": "composer require barryvdh/laravel-debugbar --dev",
-        "documentation_link": "https://github.com/barryvdh/laravel-debugbar"
+        "documentation_link": "laravel-package://debugbar/installation.md"
     },
     "laravel/cashier-paddle": {
         "name": "Laravel Cashier Paddle",
@@ -349,7 +349,7 @@ PACKAGE_CATALOG = {
             "Processing one-time purchases"
         ],
         "installation": "composer require laravel/cashier-paddle",
-        "documentation_link": "laravel://billing.md#paddle-billing"
+        "documentation_link": "laravel://cashier-paddle.md"
     },
     "laravel/forge": {
         "name": "Laravel Forge",
@@ -456,12 +456,12 @@ When to use:
 - Accessing code examples from docs
 - Understanding concepts in depth""",
 
-    "search_laravel_docs": """Searches for specific terms across all Laravel documentation files. Returns file names and match counts.
+    "search_laravel_docs": """Searches every aggregated corpus at once: core Laravel docs, service docs (Forge, Vapor, Envoyer, Nova), fetched package docs (Spatie, Livewire, Inertia, Filament, ...), and learning resources. Returns ranked sections with snippets, anchors, and a source label; read the winning section with read_laravel_doc_section.
 
 When to use:
-- Finding which files mention a specific feature
-- Quick lookup of where topics are discussed
-- Discovering related documentation files""",
+- Any question about Laravel or its ecosystem, in plain language
+- Narrow with sources=["core"] (or services/packages/learning) when the corpus is known
+- Exact symbols like queue:retry also work via a literal fallback""",
 
     "get_doc_structure": """Extracts the table of contents and structure from a documentation file. Shows headers and brief content previews.
 
@@ -1758,11 +1758,42 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
             logger.error(f"Error reading external file {service}/{path}: {str(e)}")
             return f"Error reading file: {str(e)}"
     
+    def read_package_doc(package: str, path: str) -> str:
+        """Read a fetched community-package documentation file."""
+        packages_dir = Path(docs_path) / "packages"
+        # The package key becomes the containment root: ".." here would make
+        # packages/.. (the docs root) the root and serve core files through
+        # this scheme — the same rule resolve_corpus_file enforces.
+        if (
+            not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9._-]*", package)
+            or package in (".", "..")
+            or resolve_contained_path(packages_dir, packages_dir / package) is None
+        ):
+            return f"Package '{package}' not found."
+        package_dir = packages_dir / package
+        if not package_dir.is_dir():
+            available = sorted(
+                p.name for p in packages_dir.iterdir() if p.is_dir()
+            ) if packages_dir.is_dir() else []
+            return f"Package '{package}' not found. Available: {', '.join(available) or 'none fetched'}"
+
+        if not path.endswith('.md'):
+            path = f"{path}.md"
+
+        safe_path = resolve_contained_path(package_dir, package_dir / path)
+        if safe_path is None:
+            return f"Access denied: {package}/{path} (path traversal attempted)"
+        if not safe_path.exists():
+            return f"File not found: {package}/{path}"
+        return get_file_content_cached(str(safe_path))
+
     # Register resources using functional approach (decorator as function)
     mcp.resource("laravel://{path*}")(read_laravel_doc)
     mcp.resource("laravel-external://{service}/{path*}")(read_external_laravel_doc)
+    mcp.resource("laravel-package://{package}/{path*}")(read_package_doc)
     logger.debug("Registered resource template: laravel://{path*}")
     logger.debug("Registered resource template: laravel-external://{service}/{path*}")
+    logger.debug("Registered resource template: laravel-package://{package}/{path*}")
     
     
     # Configure all tools
@@ -1808,17 +1839,18 @@ def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, mu
         tags={"docs", "read"},
         output_schema=OUTPUT_SCHEMAS["search_laravel_docs"]
     )
-    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False) -> ToolResult:
-        """Search through Laravel documentation for a specific term.
+    def search_laravel_docs(query: str, version: Optional[str] = None, include_external: bool = True, all_versions: bool = False, sources: Optional[List[str]] = None) -> ToolResult:
+        """Search all aggregated documentation: core Laravel, services, packages, learning resources.
 
         Args:
             query: Search term to look for
-            version: Specific Laravel version to search (e.g., "12.x"). Defaults to the configured version.
-            include_external: Whether to include external Laravel services documentation in search
-            all_versions: Search every supported version instead of just the configured one
+            version: Laravel version for the core docs (e.g., "12.x"). Defaults to the configured version. Packages, services, and learning docs are not Laravel-versioned.
+            include_external: Legacy core-only switch; False limits the search to core docs. Superseded by an explicit `sources`.
+            all_versions: Search every supported core version instead of just the configured one
+            sources: Restrict the corpus: any of "core", "services", "packages", "learning". Default searches all of them; each hit is labeled with its source.
         """
-        external_dir = multi_updater.external_fetcher.external_dir if include_external else None
-        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions))
+        external_dir = multi_updater.external_fetcher.external_dir
+        return toon_result(search_laravel_docs_data(docs_path, query, version, include_external, external_dir, runtime_version=runtime_version, all_versions=all_versions, sources=sources))
     
     @mcp.tool(
         description=TOOL_DESCRIPTIONS["update_laravel_docs"],

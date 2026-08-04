@@ -18,7 +18,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 - **Community Package Documentation**: Spatie, Livewire, Inertia.js, Filament integration (42,000+ lines)
 - **Learning Resource Infrastructure**: Difficulty classification, 15 semantic categories
 - **8 New MCP Tools**: Learning paths, "I need X" finder, category browsing, difficulty filtering
-- **Package recommendation system** with 50+ curated packages
+- **Package recommendation system** with 22 curated packages
 - **Ranked section search** with BM25 relevance, snippets, and section-level reads
 - **Documentation currency reporting** so the assistant knows what date its corpus covers
 - **Future-proof version detection** via GitHub API
@@ -157,9 +157,13 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 **Target: Q2 2027**
 
 ### Documentation Improvements (moved from v0.12.0)
-- [ ] Advanced search across all aggregated sources
-- [ ] Version-specific documentation filtering improvements
-- [ ] Package ecosystem documentation mapping
+- [x] Advanced search across all aggregated sources *(unified fan-out with
+  source labels and a `sources` filter; recursive enumeration surfaced the
+  121 nested service files and all Spatie docs search had never seen)*
+- [x] Version-specific documentation filtering improvements *(version scopes
+  core only, stated honestly; non-core corpora are not Laravel-versioned)*
+- [x] Package ecosystem documentation mapping *(all 22 catalog links resolve
+  and are guard-tested; laravel-package:// resource scheme added)*
 
 ### Reliability & Monitoring
 - [x] Health monitoring and metrics endpoints *(/healthz + Prometheus /metrics, HTTP mode)*
@@ -182,7 +186,8 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 - [x] Integration tests through a real MCP client *(e2e suite over stdio and HTTP; also a v1.0.0 criterion)*
 - [x] Latency benchmarks *(report-only `pytest -m bench` against the real
   corpus; warm search p95 ~4ms against the v1.0.0 100ms target)*
-- [ ] Documentation completeness audit
+- [x] Documentation completeness audit *(claims-vs-reality sweep; notes in
+  docs/superpowers/specs/2026-08-03-claims-audit-notes.md)*
 
 ---
 

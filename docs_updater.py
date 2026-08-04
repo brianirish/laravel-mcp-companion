@@ -1837,19 +1837,11 @@ class CommunityPackageFetcher:
             },
             "inertia": {
                 "name": "Inertia.js",
-                "type": DocumentationSourceType.GITHUB_REPO,
-                "repo": "inertiajs/inertiajs.com",
-                "branch": "master",
-                "docs_path": "resources/js/Pages",
-                "sections": [
-                    "how-it-works", "who-is-it-for", "the-protocol",
-                    "server-side-setup", "client-side-setup", "pages", "responses", 
-                    "redirects", "routing", "title-and-meta", "links", "manual-visits", 
-                    "forms", "file-uploads", "validation", "shared-data", "partial-reloads", 
-                    "scroll-management", "authentication", "authorization", "csrf-protection",
-                    "error-handling", "asset-versioning", "progress-indicators",
-                    "remembering-state", "server-side-rendering", "testing"
-                ]
+                "type": DocumentationSourceType.DIRECT_URL,
+                # The old JSX source repo (inertiajs/inertiajs.com) was deleted
+                # upstream; the site publishes markdown endpoints indexed by
+                # llms.txt, and the fetcher discovers pages from that index.
+                "llms_index": "https://inertiajs.com/docs/llms.txt",
             },
             "filament": {
                 "name": "Filament",
@@ -2076,78 +2068,90 @@ class CommunityPackageFetcher:
         return False
     
     def _fetch_inertia_docs(self, config: Dict) -> bool:
-        """Fetch Inertia.js documentation from GitHub repository."""
-        repo = config["repo"]
-        branch = config["branch"]
-        docs_path = config["docs_path"]
-        sections = config.get("sections", [])
+        """Fetch Inertia.js documentation from its llms.txt markdown index.
+
+        The old source repo of JSX pages (inertiajs/inertiajs.com) was deleted
+        upstream; the site now publishes clean markdown at .md endpoints with
+        an llms.txt index. Every page listed there is fetched verbatim, minus
+        the documentation-index banner blockquote each page starts with.
+        Filenames keep the URL's final segment ("routing.md"), which is
+        collision-free in the current index and keeps existing catalog links
+        stable.
+        """
+        index_url = config["llms_index"]
         package_dir = self.get_package_cache_path("inertia")
-        
-        fetched_sections = 0
-        for section in sections:
+
+        try:
+            request = urllib.request.Request(index_url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
+                index_text = response.read().decode('utf-8')
+        except Exception as e:
+            logger.error(f"Error fetching Inertia docs index: {str(e)}")
+            return False
+
+        # Only URLs on the site's own docs path qualify: the index is remote
+        # input, and following arbitrary URLs from it would let a compromised
+        # page turn the fetcher into a generic downloader.
+        page_urls = re.findall(
+            r"\((https://inertiajs\.com/docs/[A-Za-z0-9/._-]+\.md)\)", index_text
+        )
+        if not page_urls:
+            logger.warning("Inertia llms.txt index yielded no documentation URLs")
+            return False
+
+        fetched = 0
+        for url in page_urls:
+            filename = url.rsplit("/", 1)[-1]
             try:
-                # Map section names to JSX file names
-                jsx_filename = f"{section}.jsx"
-                github_url = f"https://raw.githubusercontent.com/{repo}/{branch}/{docs_path}/{jsx_filename}"
-                
-                logger.debug(f"Fetching {section} from {github_url}")
-                
-                request = urllib.request.Request(
-                    github_url,
-                    headers={"User-Agent": "Laravel-MCP-Companion/1.0"}
-                )
-                
+                request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
                 with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    jsx_content = response.read().decode('utf-8')
-                
-                # Extract content from JSX file and convert to markdown
-                markdown_content = self._process_jsx_to_markdown(jsx_content, section)
-                
-                if markdown_content:
-                    file_path = package_dir / f"{section}.md"
-                    file_path.parent.mkdir(parents=True, exist_ok=True)
-                    
-                    with open(file_path, 'w', encoding='utf-8') as f:
-                        f.write(f"# Inertia - {section.replace('-', ' ').title()}\n\n")
-                        f.write(f"Source: https://inertiajs.com/{section}\n\n")
-                        f.write(markdown_content)
-                    
-                    fetched_sections += 1
-                    logger.debug(f"Successfully processed {section}")
-                else:
-                    logger.warning(f"No content extracted from {section}")
-                    
-            except urllib.error.HTTPError as e:
-                if e.code == 404:
-                    logger.warning(f"Inertia section {section} not found (404)")
-                else:
-                    logger.warning(f"HTTP error fetching Inertia section {section}: {e}")
+                    page = response.read().decode('utf-8')
+
+                # Strip the leading "> ..." documentation-index banner.
+                lines = page.splitlines()
+                while lines and (lines[0].startswith(">") or not lines[0].strip()):
+                    lines.pop(0)
+                content = "\n".join(lines).strip()
+                if len(content) < 100:
+                    logger.warning(f"Inertia page {filename} too thin, skipping")
+                    continue
+
+                with open(package_dir / filename, 'w', encoding='utf-8') as f:
+                    f.write(f"Source: {url}\n\n{content}\n")
+                fetched += 1
             except Exception as e:
-                logger.warning(f"Error fetching Inertia section {section}: {str(e)}")
-        
-        if fetched_sections > 0:
-            # Update cache metadata
+                logger.warning(f"Error fetching Inertia page {url}: {str(e)}")
+
+        if fetched == len(page_urls):
+            # A complete fetch is the only safe moment to prune: pages the
+            # index no longer lists would otherwise stay searchable forever.
+            # A partial fetch keeps everything, stale included, rather than
+            # deleting docs we failed to replace.
+            expected = {url.rsplit("/", 1)[-1] for url in page_urls}
+            for stale in package_dir.glob("*.md"):
+                if stale.name not in expected:
+                    logger.info(f"Pruning Inertia page no longer in the index: {stale.name}")
+                    stale.unlink()
+
+        if fetched > 0:
             metadata = {
                 "package": "inertia",
                 "name": config['name'],
-                "sections_count": fetched_sections,
-                "source_type": "github_repo",
-                "repo": repo,
-                "branch": branch,
-                "docs_path": docs_path
+                "sections_count": fetched,
+                "total_sections": len(page_urls),
+                "success_rate": fetched / len(page_urls),
+                "source_type": "llms_index",
+                "index_url": index_url,
             }
-            
             metadata_path = self.get_cache_metadata_path("inertia")
             metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            
             with open(metadata_path, 'w') as f:
                 json.dump(metadata, f, indent=2)
-            
-            logger.info(f"Successfully fetched {fetched_sections} sections for Inertia.js from GitHub")
+            logger.info(f"Successfully fetched {fetched}/{len(page_urls)} Inertia.js pages")
             return True
-        
+
         return False
-    
+
     def _process_jsx_to_markdown(self, jsx_content: str, section: str) -> Optional[str]:
         """
         Process JSX content and extract documentation text to markdown.
@@ -3441,13 +3445,21 @@ class LearningResourceFetcher:
         return articles
 
     def _extract_laracasts_topics(self, html_content: str) -> List[Dict]:
-        """Extract topic metadata from Laracasts topics page."""
-        topics = []
+        """Extract topic metadata from the Laracasts topics page.
+
+        The page became an SPA in 2026: topics live in an embedded JSON blob
+        as a "topics":[{name, slug, path, series_count}, ...] array rather
+        than DOM links. The JSON path is tried first; the legacy DOM
+        extraction stays as a fallback for older page shapes.
+        """
+        topics = self._extract_laracasts_topics_json(html_content)
+        if topics:
+            return topics
         try:
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(html_content, 'html.parser')
 
-            # Look for topic cards/links
+            # Legacy shape: topic cards/links in the DOM
             topic_elements = soup.find_all('a', href=re.compile(r'/topics/'))
 
             seen_topics: set = set()
@@ -3479,6 +3491,45 @@ class LearningResourceFetcher:
         except Exception as e:
             logger.warning(f"Error extracting Laracasts topics: {str(e)}")
 
+        return topics
+
+    def _extract_laracasts_topics_json(self, html_content: str) -> List[Dict]:
+        """Parse the SPA payload's "topics" array out of the page source."""
+        marker = '"topics":['
+        start = html_content.find(marker)
+        if start == -1:
+            return []
+        # Walk to the matching close bracket; entries are flat objects, so a
+        # simple depth count over brackets suffices.
+        i = start + len(marker) - 1
+        depth = 0
+        for j in range(i, min(len(html_content), i + 200_000)):
+            if html_content[j] == '[':
+                depth += 1
+            elif html_content[j] == ']':
+                depth -= 1
+                if depth == 0:
+                    break
+        else:
+            return []
+
+        try:
+            entries = json.loads(html_content[i:j + 1])
+        except (json.JSONDecodeError, ValueError):
+            return []
+
+        topics: List[Dict] = []
+        for entry in entries:
+            if not isinstance(entry, dict) or not entry.get("name") or not entry.get("path"):
+                continue
+            path = str(entry["path"])
+            topic: Dict[str, Any] = {
+                "name": entry["name"],
+                "url": path if path.startswith("http") else f"https://laracasts.com{path}",
+            }
+            if entry.get("series_count"):
+                topic["series_count"] = entry["series_count"]
+            topics.append(topic)
         return topics
 
     def _fetch_and_process_html(self, url: str, source: str, section: str) -> Optional[str]:

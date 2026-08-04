@@ -44,6 +44,26 @@ class TestStdioRawSurface:
             )
             assert "Route" in section.content[0].text
 
+    async def test_cross_source_search_and_read(self, e2e_docs):
+        """Unified search returns labeled hits from a non-core corpus and the
+        hit reads back through the same tools — over the real transport."""
+        async with stdio_client(e2e_docs, "--transform-mode", "none") as client:
+            search = await client.call_tool(
+                "search_laravel_docs",
+                {"query": "supervisor daemon", "sources": ["services"]},
+            )
+            results = search.structured_content.get("results", [])
+            assert results, search.structured_content
+            top = results[0]
+            assert top["source"].startswith("service:")
+
+            section = await client.call_tool(
+                "read_laravel_doc_section",
+                {"filename": top["file"], "section": top["anchor"] or top["heading"]},
+            )
+            assert not section.is_error
+            assert "not found" not in section.content[0].text.lower()
+
     async def test_structured_content_and_resource_read(self, e2e_docs):
         async with stdio_client(e2e_docs, "--transform-mode", "none") as client:
             info = await client.call_tool("laravel_docs_info", {"version": "12.x"})

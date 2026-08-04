@@ -125,18 +125,29 @@ class TestBlogAndNewsIndexes:
         assert index.startswith("# Laravel News - Recent Articles")
         assert "[Read more](https://laravel-news.com" in index
 
-    def test_laracasts_extraction_finds_nothing_on_current_page(self, fetcher, monkeypatch):
-        """Pins real drift: the live topics page no longer matches the
-        extractor's selectors, so the fetch degrades to False and writes
-        nothing. If this test starts failing with True, the site (or the
-        extractor) changed — update the fixture and these assertions."""
+    def test_laracasts_topics_extracted_from_spa_payload(self, fetcher, monkeypatch):
+        """The 2026 page is an SPA: topics live in an embedded JSON array.
+        (This test previously pinned the drift — extraction finding nothing —
+        until the extractor learned the JSON shape.)"""
         monkeypatch.setattr(
             "docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("laracasts_index.html").encode()),
         )
         config = fetcher.learning_sources["laracasts-index"]
-        assert fetcher._fetch_laracasts_metadata(config) is False
-        assert not (fetcher.get_source_cache_path("laracasts-index") / "topics.md").exists()
+        assert fetcher._fetch_laracasts_metadata(config) is True
+
+        topics_md = (fetcher.get_source_cache_path("laracasts-index") / "topics.md").read_text()
+        assert "# Laracasts - Topic Index" in topics_md
+        assert "## Laravel" in topics_md
+        assert "series available" in topics_md
+        assert "https://laracasts.com/series?topics[]=laravel" in topics_md
+
+    def test_laracasts_json_extractor_shapes(self, fetcher):
+        topics = fetcher._extract_laracasts_topics(load_fixture("laracasts_index.html"))
+        assert len(topics) >= 10
+        laravel = next(t for t in topics if t["name"] == "Laravel")
+        assert laravel["series_count"] > 0
+        assert laravel["url"].startswith("https://laracasts.com/")
 
     def test_blog_index_returns_false_on_unrecognized_page(self, fetcher, monkeypatch):
         monkeypatch.setattr(

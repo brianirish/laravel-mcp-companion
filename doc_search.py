@@ -202,7 +202,7 @@ def extract_snippet(text: str, query: str, max_chars: int = 300) -> str:
     return snippet
 
 
-MAX_RESIDENT_INDEXES = 2
+MAX_RESIDENT_INDEXES = 8
 
 _registry: "OrderedDict[str, DocIndex]" = OrderedDict()
 _registry_lock = threading.Lock()
