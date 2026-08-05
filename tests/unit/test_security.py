@@ -125,7 +125,9 @@ class TestVersionParsing:
 
     def test_get_version_from_path_no_version(self):
         """Test version extraction when no version is specified."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its DEFAULT_VERSION lookup resolves in mcp_tools.
+        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
             test_cases = [
                 ("blade.md", "12.x", "blade.md"),
                 ("frontend/vite.md", "12.x", "frontend/vite.md"),
@@ -139,8 +141,10 @@ class TestVersionParsing:
 
     def test_get_version_from_path_invalid_versions(self):
         """Test version extraction with invalid version formats."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'), \
-             patch('laravel_mcp_companion.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its globals resolve in mcp_tools.
+        with patch('mcp_tools.DEFAULT_VERSION', '12.x'), \
+             patch('mcp_tools.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
             
             # These should fall back to default version
             test_cases = [
@@ -156,7 +160,9 @@ class TestVersionParsing:
 
     def test_get_version_from_path_empty_input(self):
         """Test version extraction with empty or invalid input."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its DEFAULT_VERSION lookup resolves in mcp_tools.
+        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
             test_cases = [
                 ("", "12.x", ""),
                 ("/", "12.x", "/"),  # Path("/").parts is empty, so it returns "/" 
@@ -313,7 +319,7 @@ class TestErrorHandling:
             "12.x/" + "a" * 1000,  # Very long filename
         ]
         
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
             for test_input in edge_cases:
                 try:
                     version, relative = get_version_from_path(test_input)

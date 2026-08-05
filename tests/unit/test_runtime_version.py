@@ -228,19 +228,28 @@ class TestNewVersionSimulation:
             assert "routing" in str(result).lower()
 
     def test_validate_version_accepts_future(self):
-        """validate_version recognizes the new version."""
-        with patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
+        """validate_version recognizes the new version.
+
+        validate_version is an identity alias for mcp_tools.validate_version,
+        which checks against mcp_tools.SUPPORTED_VERSIONS and returns None
+        (not True) for a supported version.
+        """
+        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
             from laravel_mcp_companion import validate_version
-            assert validate_version(self.FUTURE_VERSION) is True
+            assert validate_version(self.FUTURE_VERSION) is None
 
     def test_main_uses_future_default(self):
         """Main function wires through the new default version."""
+        # setup_server_environment's version check now runs through
+        # mcp_tools.validate_version, which checks mcp_tools.SUPPORTED_VERSIONS
+        # -- that must be patched too, or the future version is rejected.
         with patch('laravel_mcp_companion.GracefulShutdown'), \
              patch('laravel_mcp_companion.MultiSourceDocsUpdater') as mock_updater_class, \
              patch('laravel_mcp_companion.FastMCP') as mock_fastmcp_class, \
              patch('laravel_mcp_companion.setup_docs_path') as mock_setup_docs, \
              patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
              patch('laravel_mcp_companion.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
              patch.object(sys, 'argv', ['laravel-mcp-companion']):
             mock_setup_docs.return_value = "/tmp/test"
             mock_mcp = MagicMock()

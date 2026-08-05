@@ -170,18 +170,21 @@ class TestFileOperations:
 
     def test_clear_file_cache(self, temp_dir):
         """Test cache clearing functionality."""
+        import mcp_tools
+
         test_file = temp_dir / "test.md"
         test_content = "# Test Content"
         test_file.write_text(test_content)
-        
-        # Populate cache
+
+        # Populate cache. The cache now lives solely in mcp_tools; this module
+        # only re-exports the function and delegates clearing to it.
         get_file_content_cached(str(test_file))
-        assert len(laravel_mcp_companion._file_content_cache) > 0
-        
+        assert len(mcp_tools._file_content_cache) > 0
+
         # Clear cache
         clear_file_cache()
-        assert len(laravel_mcp_companion._file_content_cache) == 0
-        assert len(laravel_mcp_companion._search_result_cache) == 0
+        assert len(mcp_tools._file_content_cache) == 0
+        assert len(mcp_tools._search_result_cache) == 0
 
 
 class TestUtilityFunctions:

@@ -12,20 +12,25 @@ from laravel_mcp_companion import (
 
 
 class TestValidateVersion:
-    """Test version validation function."""
-    
+    """Test version validation function.
+
+    validate_version is an identity alias for mcp_tools.validate_version: it
+    returns None for a supported version and a truthy (toon-encoded) error
+    string otherwise -- not a bool.
+    """
+
     def test_validate_valid_version(self):
         """Test validation of valid version."""
-        assert validate_version("12.x") is True
-        assert validate_version("11.x") is True
-        assert validate_version("10.x") is True
-    
+        assert validate_version("12.x") is None
+        assert validate_version("11.x") is None
+        assert validate_version("10.x") is None
+
     def test_validate_invalid_version(self):
         """Test validation of invalid version."""
-        assert validate_version("5.x") is False
-        assert validate_version("99.x") is False
-        assert validate_version("invalid") is False
-        assert validate_version("") is False
+        assert validate_version("5.x") is not None
+        assert validate_version("99.x") is not None
+        assert validate_version("invalid") is not None
+        assert validate_version("") is not None
 
 
 class TestSetupServerEnvironment:

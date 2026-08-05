@@ -19,7 +19,6 @@ from typing import Dict, Optional, List, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
-import threading
 import anyio.to_thread
 from fastmcp import Context, FastMCP
 from fastmcp.server.auth import TokenVerifier
@@ -74,7 +73,10 @@ from mcp_tools import (
     describe_documentation_date,
     get_documentation_date,
     copy_is_stale,
-    DOCS_STALE_AFTER_DAYS
+    DOCS_STALE_AFTER_DAYS,
+    get_file_content_cached,
+    get_version_from_path,
+    get_laravel_docs_metadata
 )
 
 # Import learning resources
@@ -98,11 +100,6 @@ PROJECT_URL = "https://github.com/brianirish/laravel-mcp-companion"
 
 # Get supported versions
 SUPPORTED_VERSIONS = get_cached_supported_versions()
-
-# Global caches for performance optimization
-_file_content_cache: Dict[str, str] = {}
-_search_result_cache: Dict[str, str] = {}
-_cache_lock = threading.Lock()
 
 # Define the Laravel package catalog
 # Updated PACKAGE_CATALOG with more Laravel packages
@@ -878,62 +875,8 @@ def setup_docs_path(user_path: Optional[str] = None) -> Path:
     
     return docs_path
 
-def get_file_content_cached(file_path: str) -> str:
-    """
-    Get file content, keyed on path and modification time.
-
-    Args:
-        file_path: Absolute path to the file
-
-    Returns:
-        File content as string
-    """
-    try:
-        path_obj = Path(file_path)
-        if not path_obj.exists():
-            return f"File not found: {file_path}"
-
-        # Check file modification time for cache invalidation
-        mtime = path_obj.stat().st_mtime
-        cache_key = f"{file_path}:{mtime}"
-
-        with _cache_lock:
-            if cache_key in _file_content_cache:
-                return _file_content_cache[cache_key]
-
-        # Read file content
-        with open(path_obj, 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        # Cache the content
-        with _cache_lock:
-            # Clear stale entries for this file (previous mtimes)
-            keys_to_remove = [k for k in _file_content_cache.keys() if k.startswith(f"{file_path}:")]
-            for key in keys_to_remove:
-                del _file_content_cache[key]
-
-            # Add new cache entry
-            _file_content_cache[cache_key] = content
-
-            # Limit cache size
-            if len(_file_content_cache) > 200:
-                # Remove oldest entries
-                oldest_keys = list(_file_content_cache.keys())[:50]
-                for key in oldest_keys:
-                    del _file_content_cache[key]
-
-        return content
-    except Exception as e:
-        logger.error(f"Error reading file {file_path}: {str(e)}")
-        return f"Error reading file: {str(e)}"
-
 def clear_file_cache():
     """Clear every documentation cache, in this module and in mcp_tools."""
-    with _cache_lock:
-        _file_content_cache.clear()
-        _search_result_cache.clear()
-    # The tool implementations keep their own caches; stale entries there would
-    # otherwise survive a docs update until the process restarts.
     clear_mcp_tools_caches()
 
 def update_documentation(docs_path: Path, version: str, force: bool = False) -> bool:
@@ -945,59 +888,6 @@ def update_documentation(docs_path: Path, version: str, force: bool = False) -> 
     except Exception as e:
         logger.error(f"Failed to update documentation: {str(e)}")
         return False
-
-def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> tuple[str, str]:
-    """Extract version and relative path from a documentation path.
-    
-    Args:
-        path: Path like "12.x/blade.md" or "blade.md"
-        runtime_version: Runtime default version (from --version flag)
-        
-    Returns:
-        (version, relative_path): Tuple of version and path within that version
-    """
-    path_parts = Path(path).parts
-    
-    # Check if first part is a version
-    if path_parts and path_parts[0] in SUPPORTED_VERSIONS:
-        version = path_parts[0]
-        relative_path = str(Path(*path_parts[1:]))
-        return version, relative_path
-    
-    # Default to runtime version or latest version if no version specified
-    default_version = runtime_version if runtime_version else DEFAULT_VERSION
-    return default_version, path
-
-def get_laravel_docs_metadata(docs_path: Path, version: Optional[str] = None) -> Dict:
-    """Get documentation metadata if available."""
-    if version:
-        # Check new location first
-        metadata_file = docs_path / version / ".metadata" / "sync_info.json"
-        if not metadata_file.exists():
-            # Fall back to test location
-            metadata_file = docs_path / version / ".metadata.json"
-    else:
-        # Try to find any version metadata
-        for v in SUPPORTED_VERSIONS:
-            metadata_file = docs_path / v / ".metadata" / "sync_info.json"
-            if metadata_file.exists():
-                break
-            # Also check test location
-            metadata_file = docs_path / v / ".metadata.json"
-            if metadata_file.exists():
-                break
-        else:
-            return {"status": "unknown", "message": "No metadata available"}
-    
-    if not metadata_file.exists():
-        return {"status": "unknown", "message": "No metadata available"}
-    
-    try:
-        with open(metadata_file, 'r') as f:
-            return json.load(f)
-    except Exception as e:
-        logger.warning(f"Error reading metadata file: {str(e)}")
-        return {"status": "error", "message": f"Error reading metadata: {str(e)}"}
 
 def search_by_use_case(use_case: str) -> List[Dict]:
     """
@@ -1274,16 +1164,10 @@ answering as if the documentation covered it. {info_tool} reports this date at a
 time."""
 
 
-def validate_version(version: str) -> bool:
-    """Validate that the version is supported.
-    
-    Args:
-        version: Version string to validate
-        
-    Returns:
-        True if version is supported, False otherwise
-    """
-    return version in SUPPORTED_VERSIONS
+# Kept as an identity alias: tests import `validate_version` from this module,
+# and the single implementation now lives in mcp_tools (imported above as
+# validate_version_arg). This name resolves to that same function.
+validate_version = validate_version_arg
 
 
 def setup_server_environment(args: argparse.Namespace) -> Path:
@@ -1302,8 +1186,10 @@ def setup_server_environment(args: argparse.Namespace) -> Path:
     docs_path = setup_docs_path(args.docs_path)
     logger.info(f"Using docs path: {docs_path}")
 
-    # Validate version
-    if not validate_version(args.version):
+    # Validate version. validate_version_arg returns a truthy (toon-encoded)
+    # error string when invalid, None when valid -- the inverse polarity of
+    # the bool the old local implementation returned.
+    if validate_version_arg(args.version):
         logger.error(f"Unsupported version: {args.version}. Supported versions: {', '.join(SUPPORTED_VERSIONS)}")
         sys.exit(1)
 
@@ -1738,10 +1624,9 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
                 else:
                     return f"File not found: {service}/{path}. No documentation cached for {service}. Use update_external_laravel_docs(['{service}']) to fetch documentation."
             
-            with open(safe_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-                logger.debug(f"Successfully read external file: {safe_path} ({len(content)} bytes)")
-                return content
+            content = get_file_content_cached(str(safe_path))
+            logger.debug(f"Successfully read external file: {safe_path} ({len(content)} bytes)")
+            return content
         except Exception as e:
             logger.error(f"Error reading external file {service}/{path}: {str(e)}")
             return f"Error reading file: {str(e)}"
