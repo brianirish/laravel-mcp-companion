@@ -1448,13 +1448,6 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     Returns:
         Configured FastMCP server instance
     """
-    # Store configuration globally for resource handlers
-    global _server_config
-    _server_config = {
-        'docs_path': docs_path,
-        'version': runtime_version
-    }
-
     # Create the MCP server
     mcp: FastMCP = FastMCP(
         server_name,
@@ -1553,21 +1546,20 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     # Define resource handler functions
     def read_laravel_doc(path: str) -> str:
         """Read a specific Laravel documentation file."""
-        config = _server_config
         logger.debug(f"read_laravel_doc function called with path: {path}")
-        
+
         # Extract version and relative path, using runtime version as default
-        version_inner, relative_path = get_version_from_path(path, config.get('version'))
-        
+        version_inner, relative_path = get_version_from_path(path, runtime_version)
+
         # Make sure the path ends with .md
         if not relative_path.endswith('.md'):
             relative_path = f"{relative_path}.md"
-        
-        file_path = Path(config['docs_path']) / version_inner / relative_path
-        
+
+        file_path = Path(docs_path) / version_inner / relative_path
+
         # Security check - read the resolved path this returns, not file_path,
         # so the file that was checked is the file that gets opened.
-        version_path = Path(config['docs_path']) / version_inner
+        version_path = Path(docs_path) / version_inner
         safe_path = resolve_contained_path(version_path, file_path)
         if safe_path is None:
             logger.warning(f"Access denied: {path} (attempted directory traversal)")
@@ -1676,9 +1668,6 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     apply_transforms(mcp, transform_mode)
 
     return mcp
-
-# Global configuration storage
-_server_config: Dict[str, Any] = {}
 
 
 def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, multi_updater: MultiSourceDocsUpdater) -> None:
