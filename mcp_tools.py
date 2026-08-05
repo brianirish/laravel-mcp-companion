@@ -17,6 +17,7 @@ import threading
 
 from doc_search import Section, chunk_markdown
 from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
+from path_security import no_follow_opener, resolve_contained_path, is_safe_path as is_safe_path
 from toon_helpers import (
     toon_encode,
     error_data,
@@ -67,19 +68,6 @@ _search_result_cache: Dict[str, Dict[str, Any]] = {}
 _cache_lock = threading.Lock()
 
 
-def _no_follow_opener(path, flags):
-    """open() opener that refuses to follow a symlink in the final component.
-
-    Passed to open() rather than calling os.open directly so that the read still
-    goes through the normal open(), which keeps the behaviour observable to
-    callers and testable in the usual way.
-
-    O_NOFOLLOW is POSIX. Where it is unavailable this degrades to an ordinary
-    open rather than refusing to read anything.
-    """
-    return os.open(path, flags | getattr(os, "O_NOFOLLOW", 0))
-
-
 def get_file_content_cached(file_path: str) -> str:
     """Get file content with caching.
 
@@ -98,7 +86,7 @@ def get_file_content_cached(file_path: str) -> str:
             return _file_content_cache[file_path]
 
     try:
-        with open(file_path, 'r', encoding='utf-8', opener=_no_follow_opener) as f:
+        with open(file_path, 'r', encoding='utf-8', opener=no_follow_opener) as f:
             content = f.read()
 
         # Cache the content
@@ -137,37 +125,6 @@ def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> t
         # No version specified, use runtime version or default
         default_version = runtime_version if runtime_version else DEFAULT_VERSION
         return default_version, path
-
-
-def resolve_contained_path(base_path: Path, target_path: Path) -> Optional[Path]:
-    """Resolve target_path, returning it only if it lands inside base_path.
-
-    Callers must read the path this returns, not the one they passed in.
-    Validating one path and then opening another leaves a window in which a
-    symlink can be swapped between the check and the open, so the file that was
-    approved and the file that gets read need not be the same one.
-
-    Uses is_relative_to() on fully resolved paths. A plain string prefix check
-    is not sufficient: it treats "/docs/12.x-backup" as living under "/docs/12.x".
-
-    Returns None if the path escapes, or if either path cannot be resolved --
-    any error denies access.
-    """
-    try:
-        base = Path(base_path).resolve()
-        resolved = Path(target_path).resolve()
-    except Exception:
-        return None
-    return resolved if resolved.is_relative_to(base) else None
-
-
-def is_safe_path(base_path: Path, target_path: Path) -> bool:
-    """Whether target_path resolves to a location inside base_path.
-
-    Prefer resolve_contained_path when the caller goes on to read the file, so
-    that the path checked is the path opened.
-    """
-    return resolve_contained_path(base_path, target_path) is not None
 
 
 def list_contained_markdown(version_path: Path) -> List[tuple[str, Path]]:

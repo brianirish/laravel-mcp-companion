@@ -25,6 +25,8 @@ from enum import Enum
 import random
 import html
 
+from path_security import is_within_directory
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -163,17 +165,6 @@ def is_safe_section_name(name: str) -> bool:
     if any(part in ('', '.', '..') for part in name.split('/')):
         return False
     return _SAFE_PATH_SEGMENT.fullmatch(name) is not None
-
-
-def is_within_directory(base_dir: Path, target: Path) -> bool:
-    """Check that target resolves to a location inside base_dir.
-
-    Fails closed: any error resolving either path denies the write.
-    """
-    try:
-        return target.resolve().is_relative_to(base_dir.resolve())
-    except Exception:
-        return False
 
 
 def fetch_llms_index_docs(
