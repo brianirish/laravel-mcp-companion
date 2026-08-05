@@ -930,23 +930,6 @@ def search_laravel_docs_data(
     return result
 
 
-def search_laravel_docs_impl(
-    docs_path: Path,
-    query: str,
-    version: Optional[str] = None,
-    include_external: bool = True,
-    external_dir: Optional[Path] = None,
-    runtime_version: Optional[str] = None,
-    all_versions: bool = False,
-    limit: int = 5,
-) -> str:
-    """TOON-encoded form of search_laravel_docs_data."""
-    return toon_encode(search_laravel_docs_data(
-        docs_path, query, version, include_external, external_dir,
-        runtime_version=runtime_version, all_versions=all_versions, limit=limit,
-    ))
-
-
 def get_doc_structure_impl(docs_path: Path, filename: str, version: Optional[str] = None, runtime_version: Optional[str] = None) -> str:
     """Get the structure (headings) of a documentation file.
 

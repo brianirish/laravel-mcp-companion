@@ -9,7 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from mcp_tools import SUPPORTED_VERSIONS, search_laravel_docs_impl
+from mcp_tools import SUPPORTED_VERSIONS, search_laravel_docs_data
+from toon_helpers import toon_encode
 
 VERSION = SUPPORTED_VERSIONS[-1]
 DOCS = Path("docs")
@@ -27,49 +28,52 @@ QUESTIONS = [
 
 @pytest.mark.parametrize("question", QUESTIONS)
 def test_realistic_questions_return_results(question):
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         DOCS, question, version=VERSION, include_external=False
     )
-    assert "No results" not in result, f"{question!r} returned nothing"
+    assert "No results" not in str(result), f"{question!r} returned nothing"
 
 
 def test_ranking_prefers_the_relevant_file():
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         DOCS, "queue jobs and workers", version=VERSION, include_external=False
     )
-    assert "queues.md" in result
-    first = [ln for ln in result.splitlines() if ".md" in ln][0]
-    assert "queues.md" in first, f"top hit was {first!r}"
+    assert any("queues.md" in r["file"] for r in result["results"])
+    first = result["results"][0]
+    assert "queues.md" in first["file"], f"top hit was {first!r}"
 
 
 def test_search_output_stays_within_budget():
     """A search response must not drift back toward whole-file cost."""
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         DOCS, "retry failed queue job", version=VERSION, include_external=False
     )
-    assert len(result) < 4800, f"{len(result)} chars exceeds the ~1,200 token budget"
+    encoded = toon_encode(result)
+    assert len(encoded) < 4800, f"{len(encoded)} chars exceeds the ~1,200 token budget"
 
 
 def test_results_carry_an_anchor_for_drill_down():
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         DOCS, "retry failed queue job", version=VERSION, include_external=False
     )
-    assert "anchor" in result
+    assert all("anchor" in r for r in result["results"])
 
 
 def test_exact_symbol_lookup_falls_back_to_substring():
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         DOCS, "queue:retry", version=VERSION, include_external=False
     )
-    assert "No results" not in result
+    assert "No results" not in str(result)
 
 
 def test_empty_query_is_rejected():
-    assert "cannot be empty" in search_laravel_docs_impl(DOCS, "   ", version=VERSION)
+    result = search_laravel_docs_data(DOCS, "   ", version=VERSION)
+    assert "cannot be empty" in str(result)
 
 
 def test_invalid_version_is_rejected():
-    assert "Invalid version" in search_laravel_docs_impl(DOCS, "queue", version="..")
+    result = search_laravel_docs_data(DOCS, "queue", version="..")
+    assert "Invalid version" in str(result)
 
 
 def test_read_section_by_anchor(tmp_path):

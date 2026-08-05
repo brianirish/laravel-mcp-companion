@@ -16,7 +16,7 @@ from mcp_tools import (
     list_laravel_docs_impl,
     verify_laravel_feature_impl,
     browse_docs_by_category_impl,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
     list_laravel_learning_resources_impl,
     search_laravel_learning_resources_impl,
 )
@@ -76,11 +76,12 @@ class TestVersionArgumentTraversal:
         assert "Invalid version" in result
 
     def test_search_rejects_traversal_version(self, docs_tree):
-        result = search_laravel_docs_impl(
+        result = search_laravel_docs_data(
             docs_tree, "TOPSECRET", version="..", include_external=False
         )
-        assert SECRET not in result
-        assert "Invalid version" in result
+        serialized = str(result)
+        assert SECRET not in serialized
+        assert "Invalid version" in serialized
 
     def test_legitimate_version_still_works(self, docs_tree):
         result = read_laravel_doc_content_impl(docs_tree, "blade.md", version="12.x")

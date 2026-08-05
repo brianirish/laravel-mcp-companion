@@ -47,23 +47,6 @@ def format_version_list(versions: List[Dict[str, Any]]) -> str:
     return toon_encode(versions)
 
 
-def format_search_results(
-    query: str,
-    core_results: List[Dict[str, Any]],
-    external_results: Optional[List[Dict[str, Any]]] = None
-) -> str:
-    """Format search results for search_laravel_docs."""
-    data = {
-        "query": query,
-        "core_results": core_results,
-        "core_count": len(core_results),
-    }
-    if external_results:
-        data["external_results"] = external_results
-        data["external_count"] = len(external_results)
-    return toon_encode(data)
-
-
 def format_package_list(packages: List[Dict[str, Any]], context: str) -> str:
     """Format package recommendations list."""
     return toon_encode({
@@ -239,24 +222,3 @@ def format_difficulty_content(
         "count": total_count,
         "docs": docs
     })
-
-
-def format_learning_resource_search(
-    query: str,
-    core_results: List[Dict[str, Any]],
-    learning_results: Optional[List[Dict[str, Any]]] = None,
-    external_results: Optional[List[Dict[str, Any]]] = None
-) -> str:
-    """Format search results that include learning resources."""
-    data: Dict[str, Any] = {
-        "query": query,
-        "core_results": core_results,
-        "core_count": len(core_results),
-    }
-    if learning_results:
-        data["learning_results"] = learning_results
-        data["learning_count"] = len(learning_results)
-    if external_results:
-        data["external_results"] = external_results
-        data["external_count"] = len(external_results)
-    return toon_encode(data)

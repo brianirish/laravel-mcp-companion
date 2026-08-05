@@ -131,8 +131,8 @@ class TestErrorResponses:
 
     def test_empty_search_query_handled(self, mcp_server, temp_dir):
         """Empty search queries should be handled gracefully."""
-        from mcp_tools import search_laravel_docs_impl
-        result = search_laravel_docs_impl(temp_dir, "", None, False, None, runtime_version="12.x")
+        from mcp_tools import search_laravel_docs_data
+        result = search_laravel_docs_data(temp_dir, "", None, False, None, runtime_version="12.x")
         # Should return error or empty results, not crash
         assert result is not None
 

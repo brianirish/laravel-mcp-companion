@@ -1218,18 +1218,6 @@ def get_features_for_laravel_package(package: str) -> str:
     })
 
 
-def update_laravel_docs(version: Optional[str] = None, force: bool = False) -> str:
-    """Update Laravel documentation (for testing)."""
-    # This is a stub for testing - the real implementation needs access to docs_path
-    return "This function requires server context to execute"
-
-
-def laravel_docs_info(version: Optional[str] = None) -> str:
-    """Get Laravel documentation info (for testing)."""
-    # This is a stub for testing - the real implementation needs access to docs_path
-    return "This function requires server context to execute"
-
-
 def build_server_instructions(
     docs_path: Path,
     runtime_version: str,

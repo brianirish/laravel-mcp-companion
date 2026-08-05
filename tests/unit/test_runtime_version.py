@@ -9,7 +9,7 @@ from mcp_tools import (
     read_laravel_doc_content_impl,
     browse_docs_by_category_impl,
     list_laravel_docs_impl,
-    search_laravel_docs_impl
+    search_laravel_docs_data
 )
 
 class TestRuntimeVersion:
@@ -106,17 +106,17 @@ class TestRuntimeVersion:
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', ['10.x', '11.x', '12.x']):
             # Without version or runtime_version, searches all versions
-            result = search_laravel_docs_impl(test_docs_dir, "search")
-            assert "search" in result.lower()
+            result = search_laravel_docs_data(test_docs_dir, "search")
+            assert "search" in str(result).lower()
 
             # With runtime_version but no version, still searches all
             # (runtime_version doesn't affect search scope, only default serving)
-            result = search_laravel_docs_impl(test_docs_dir, "search", runtime_version="10.x")
-            assert "search" in result.lower()
+            result = search_laravel_docs_data(test_docs_dir, "search", runtime_version="10.x")
+            assert "search" in str(result).lower()
 
             # With specific version, only searches that version
-            result = search_laravel_docs_impl(test_docs_dir, "search", version="10.x", runtime_version="11.x")
-            assert "search" in result.lower()
+            result = search_laravel_docs_data(test_docs_dir, "search", version="10.x", runtime_version="11.x")
+            assert "search" in str(result).lower()
 
 
 class TestVersionArgumentIntegration:
@@ -224,8 +224,8 @@ class TestNewVersionSimulation:
              patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION), \
              patch('mcp_tools.os.listdir', return_value=['routing.md']), \
              patch('mcp_tools.get_file_content_cached', return_value="New routing features"):
-            result = search_laravel_docs_impl(test_docs_dir, "routing")
-            assert "routing" in result.lower()
+            result = search_laravel_docs_data(test_docs_dir, "routing")
+            assert "routing" in str(result).lower()
 
     def test_validate_version_accepts_future(self):
         """validate_version recognizes the new version."""

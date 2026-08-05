@@ -56,57 +56,6 @@ class TestFormatVersionList:
         assert "installation.md" in result
 
 
-class TestFormatSearchResults:
-    """Test the format_search_results function."""
-
-    def test_format_search_results_core_only(self):
-        """Test formatting search results with core results only."""
-        query = "authentication"
-        core_results = [
-            {"file": "12.x/authentication.md", "matches": 5},
-            {"file": "12.x/sanctum.md", "matches": 3}
-        ]
-
-        result = toon_helpers.format_search_results(query, core_results)
-
-        assert "authentication" in result
-        assert "sanctum.md" in result
-        assert "5" in result or "matches" in result
-
-    def test_format_search_results_with_external(self):
-        """Test formatting search results including external results."""
-        query = "deployment"
-        core_results = [
-            {"file": "12.x/deployment.md", "matches": 2}
-        ]
-        external_results = [
-            {"service": "forge", "file": "deployment.md", "matches": 8},
-            {"service": "vapor", "file": "environments.md", "matches": 3}
-        ]
-
-        result = toon_helpers.format_search_results(query, core_results, external_results)
-
-        # Should include all data
-        assert "deployment" in result
-        assert "forge" in result
-        assert "vapor" in result
-        # Should include external count info
-        assert "external" in result.lower() or "2" in result  # external count = 2
-
-    def test_format_search_results_empty_external(self):
-        """Test that empty external results list is treated as None."""
-        query = "test"
-        core_results = [{"file": "test.md", "matches": 1}]
-
-        # When external_results is None, the external data shouldn't be included
-        result_without = toon_helpers.format_search_results(query, core_results, None)
-        result_with_empty = toon_helpers.format_search_results(query, core_results, [])
-
-        # Empty list should behave similarly to None (external_results is falsy)
-        assert "test.md" in result_without
-        assert "test.md" in result_with_empty
-
-
 class TestFormatPackageList:
     """Test the format_package_list function."""
 

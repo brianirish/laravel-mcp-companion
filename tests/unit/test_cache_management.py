@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch, mock_open
 from mcp_tools import (
     get_file_content_cached,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
     clear_caches,
     _FILE_CACHE_MAX_ENTRIES,
     _FILE_CACHE_EVICT_COUNT,
@@ -87,15 +87,15 @@ class TestCacheManagement:
                 
                 # Fill search cache with 100 entries
                 for i in range(100):
-                    result = search_laravel_docs_impl(Path("/fake/docs"), f"query{i}", version="11.x")
-                    assert "No results found" in result
-                
+                    result = search_laravel_docs_data(Path("/fake/docs"), f"query{i}", version="11.x")
+                    assert "No results found" in str(result)
+
                 # Check cache size
                 from mcp_tools import _search_result_cache
                 assert len(_search_result_cache) == 100
-                
+
                 # Add one more - should trigger cleanup
-                search_laravel_docs_impl(Path("/fake/docs"), "query100", version="11.x")
+                search_laravel_docs_data(Path("/fake/docs"), "query100", version="11.x")
                 
                 # Should have 81 entries now
                 assert len(_search_result_cache) == 81
@@ -251,10 +251,10 @@ class TestCacheManagement:
             mock_metadata.return_value = {}
 
             # Test different parameter combinations
-            search_laravel_docs_impl(Path("/fake/docs"), "test", version="11.x", include_external=True)
-            search_laravel_docs_impl(Path("/fake/docs"), "test", version="11.x", include_external=False)
-            search_laravel_docs_impl(Path("/fake/docs"), "test", version=None, include_external=True)
-            search_laravel_docs_impl(Path("/fake/docs"), "test", version=None, include_external=True, all_versions=True)
+            search_laravel_docs_data(Path("/fake/docs"), "test", version="11.x", include_external=True)
+            search_laravel_docs_data(Path("/fake/docs"), "test", version="11.x", include_external=False)
+            search_laravel_docs_data(Path("/fake/docs"), "test", version=None, include_external=True)
+            search_laravel_docs_data(Path("/fake/docs"), "test", version=None, include_external=True, all_versions=True)
 
             from mcp_tools import _search_result_cache
 
@@ -276,7 +276,7 @@ class TestCacheManagement:
             
             with patch('mcp_tools.get_laravel_docs_metadata') as mock_metadata:
                 mock_metadata.return_value = {}
-                search_laravel_docs_impl(Path("/fake/docs"), "test")
+                search_laravel_docs_data(Path("/fake/docs"), "test")
             
             from mcp_tools import _file_content_cache, _search_result_cache
             assert len(_file_content_cache) > 0

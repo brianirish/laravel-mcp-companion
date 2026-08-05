@@ -7,7 +7,7 @@ import laravel_mcp_companion
 from mcp_tools import (
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
     get_doc_structure_impl,
     browse_docs_by_category_impl,
     verify_laravel_feature_impl,
@@ -119,32 +119,33 @@ class TestDocumentationTools:
         )
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-            result = search_laravel_docs_impl(
+            result = search_laravel_docs_data(
                 test_docs_dir, "routing", "12.x", include_external=False
             )
 
-            # TOON format assertions
-            assert "routing" in result
-            assert "routing.md" in result
-            assert "eloquent.md" in result
+            # Data assertions
+            serialized = str(result)
+            assert "routing" in serialized
+            assert "routing.md" in serialized
+            assert "eloquent.md" in serialized
 
     def test_search_laravel_docs_empty_query(self, test_docs_dir):
         """Test searching with empty query."""
-        result = search_laravel_docs_impl(test_docs_dir, "", "12.x")
-        
-        assert "Search query cannot be empty" in result
+        result = search_laravel_docs_data(test_docs_dir, "", "12.x")
+
+        assert result["error"] == "Search query cannot be empty"
 
     def test_search_laravel_docs_no_results(self, test_docs_dir):
         """Test searching with no matches."""
         # Directory already exists from fixture
-        
+
         with patch('mcp_tools.os.listdir', return_value=['routing.md']), \
              patch('mcp_tools.get_file_content_cached', return_value="# Routing\n\nBasic routing info"), \
              patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-            
-            result = search_laravel_docs_impl(test_docs_dir, "nonexistent_term", "12.x")
-            
-            assert "No results found for 'nonexistent_term'" in result
+
+            result = search_laravel_docs_data(test_docs_dir, "nonexistent_term", "12.x")
+
+            assert result["error"] == "No results found for 'nonexistent_term'"
 
     def test_get_doc_structure_success(self, test_docs_dir):
         """Test getting document structure returns TOON format."""
@@ -406,14 +407,14 @@ class TestMcpToolsEdgeCases:
 
     def test_search_laravel_docs_exception_handling(self, test_docs_dir):
         """Test search_laravel_docs handles exceptions gracefully."""
-        from mcp_tools import search_laravel_docs_impl
+        from mcp_tools import search_laravel_docs_data
 
         with patch('mcp_tools.os.listdir') as mock_listdir:
             mock_listdir.side_effect = Exception("Unexpected error")
 
             # Need to patch SUPPORTED_VERSIONS to include 12.x
             with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
-                result = search_laravel_docs_impl(test_docs_dir, "test", "12.x")
+                result = search_laravel_docs_data(test_docs_dir, "test", "12.x")
 
                 # Should handle exception gracefully
                 # The actual implementation might return error or empty results

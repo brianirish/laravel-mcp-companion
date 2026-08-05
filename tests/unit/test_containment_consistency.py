@@ -15,7 +15,7 @@ from mcp_tools import (
     SUPPORTED_VERSIONS,
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
-    search_laravel_docs_impl,
+    search_laravel_docs_data,
 )
 
 # The term searched for. It is echoed back in "no results" messages, so it
@@ -58,30 +58,32 @@ def test_list_does_not_advertise_the_escaping_symlink(docs_with_escaping_symlink
 
 
 def test_search_does_not_match_inside_the_escaping_symlink(docs_with_escaping_symlink):
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         docs_with_escaping_symlink, QUERY, version=VERSION, include_external=False
     )
 
-    assert "routing.md" not in result, "match-counted a file that read refuses to serve"
+    serialized = str(result)
+    assert "routing.md" not in serialized, "match-counted a file that read refuses to serve"
 
 
 def test_search_snippets_do_not_leak_the_escaping_symlink(docs_with_escaping_symlink):
     """Search now returns content in snippets, so a leak here is a direct one."""
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         docs_with_escaping_symlink, QUERY, version=VERSION, include_external=False
     )
 
-    assert PAYLOAD not in result, "leaked content that read refuses to serve"
-    assert "routing.md" not in result
+    serialized = str(result)
+    assert PAYLOAD not in serialized, "leaked content that read refuses to serve"
+    assert "routing.md" not in serialized
 
 
 def test_legitimate_search_still_works(docs_with_escaping_symlink):
     """The containment filter must not break ordinary searching."""
-    result = search_laravel_docs_impl(
+    result = search_laravel_docs_data(
         docs_with_escaping_symlink, "Legitimate", version=VERSION, include_external=False
     )
 
-    assert "blade.md" in result
+    assert any("blade.md" in r["file"] for r in result["results"])
 
 
 class TestAllowedHostWildcard:

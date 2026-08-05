@@ -16,7 +16,7 @@ class TestDocumentationWorkflows:
         # Import standalone implementations
         from mcp_tools import (
             list_laravel_docs_impl,
-            search_laravel_docs_impl,
+            search_laravel_docs_data,
             read_laravel_doc_content_impl
         )
         
@@ -50,10 +50,11 @@ class TestDocumentationWorkflows:
                 with patch('mcp_tools.os.listdir', return_value=['routing.md']), \
                      patch('mcp_tools.get_file_content_cached', return_value="# Routing\n\nLaravel routing documentation."):
                     
-                    search_result = search_laravel_docs_impl(test_docs_dir, "routing", "12.x")
-                    # TOON format: query and file paths
-                    assert "routing" in search_result
-                    assert "routing.md" in search_result
+                    search_result = search_laravel_docs_data(test_docs_dir, "routing", "12.x")
+                    # Data: query and file paths
+                    serialized = str(search_result)
+                    assert "routing" in serialized
+                    assert "routing.md" in serialized
                 
                 # Step 4: Read specific documentation
                 (test_docs_dir / "12.x" / "routing.md").write_text("# Routing\n\nDetailed routing info")
@@ -255,21 +256,21 @@ class TestCachingWorkflows:
 
     def test_search_result_caching(self, test_docs_dir):
         """Test search result caching."""
-        from mcp_tools import search_laravel_docs_impl, clear_caches, _search_result_cache
-        
+        from mcp_tools import search_laravel_docs_data, clear_caches, _search_result_cache
+
         # Clear caches first
         clear_caches()
-        
+
         # Create test files
         version_dir = test_docs_dir / "12.x"
         version_dir.mkdir(exist_ok=True)
         (version_dir / "test.md").write_text("test content with keyword")
-        
+
         with patch('mcp_tools.os.listdir', return_value=['test.md']):
             # First search - should cache result
-            result1 = search_laravel_docs_impl(test_docs_dir, "keyword", "12.x")
-            # TOON format: query field present
-            assert "keyword" in result1
+            result1 = search_laravel_docs_data(test_docs_dir, "keyword", "12.x")
+            # Data: query field present
+            assert "keyword" in str(result1)
             
             # Verify search cache is populated
             assert len(_search_result_cache) > 0
@@ -343,16 +344,16 @@ class TestSecurityWorkflows:
 
     def test_input_validation_workflow(self, test_docs_dir):
         """Test input validation across different functions."""
-        from mcp_tools import search_laravel_docs_impl
-        
+        from mcp_tools import search_laravel_docs_data
+
         # Test search input validation
         # Empty search should be rejected
-        result = search_laravel_docs_impl(test_docs_dir, "", "12.x")
-        assert "Search query cannot be empty" in result
-        
-        # Whitespace-only search should be rejected  
-        result = search_laravel_docs_impl(test_docs_dir, "   ", "12.x")
-        assert "Search query cannot be empty" in result
+        result = search_laravel_docs_data(test_docs_dir, "", "12.x")
+        assert result["error"] == "Search query cannot be empty"
+
+        # Whitespace-only search should be rejected
+        result = search_laravel_docs_data(test_docs_dir, "   ", "12.x")
+        assert result["error"] == "Search query cannot be empty"
         
         # Package name validation
         from laravel_mcp_companion import get_laravel_package_info
@@ -391,41 +392,41 @@ class TestPerformanceWorkflows:
         assert len(result) > 1000  # Should contain substantial content
         
         # Search should also work with large files
-        from mcp_tools import search_laravel_docs_impl
+        from mcp_tools import search_laravel_docs_data
         with patch('mcp_tools.os.listdir', return_value=['large.md']):
-            search_result = search_laravel_docs_impl(test_docs_dir, "Large", "12.x")
-            assert "12.x/large.md" in search_result
+            search_result = search_laravel_docs_data(test_docs_dir, "Large", "12.x")
+            assert "12.x/large.md" in str(search_result)
 
     def test_multiple_version_handling(self, test_docs_dir):
         """Test performance with multiple Laravel versions."""
-        from mcp_tools import search_laravel_docs_impl
-        
+        from mcp_tools import search_laravel_docs_data
+
         # Create multiple version directories with files
         versions = ["10.x", "11.x", "12.x"]
-        
+
         for version in versions:
             version_dir = test_docs_dir / version
             version_dir.mkdir(parents=True, exist_ok=True)
-            
+
             # Create several files per version
             for i in range(5):
                 test_file = version_dir / f"file_{i}.md"
                 test_file.write_text(f"# File {i} for {version}\n\nContent for version {version}")
-        
+
         # Search across all versions should be reasonably fast
         import time
         start_time = time.time()
-        
+
         with patch('mcp_tools.SUPPORTED_VERSIONS', versions), \
              patch('mcp_tools.os.listdir', return_value=[f'file_{i}.md' for i in range(5)]):
-            result = search_laravel_docs_impl(test_docs_dir, "File", version=None)  # Search all versions
-                
+            result = search_laravel_docs_data(test_docs_dir, "File", version=None)  # Search all versions
+
             end_time = time.time()
-            
+
             # Should complete in reasonable time (< 1 second for this test)
             assert end_time - start_time < 1.0
-            # TOON format: query field present
-            assert "File" in result
+            # Data: query field present
+            assert "File" in str(result)
 
     def test_concurrent_access_simulation(self, test_docs_dir):
         """Test behavior under simulated concurrent access."""

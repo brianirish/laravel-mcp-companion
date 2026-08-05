@@ -175,14 +175,14 @@ class TestInputValidation:
     def test_search_query_validation(self):
         """Test search query validation and sanitization."""
         # Import the standalone implementation
-        from mcp_tools import search_laravel_docs_impl
-        
+        from mcp_tools import search_laravel_docs_data
+
         # Empty queries should be rejected
-        result = search_laravel_docs_impl(Path("/tmp"), "")
-        assert "Search query cannot be empty" in result
-        
-        result = search_laravel_docs_impl(Path("/tmp"), "   ")  # Whitespace only
-        assert "Search query cannot be empty" in result
+        result = search_laravel_docs_data(Path("/tmp"), "")
+        assert "Search query cannot be empty" in str(result)
+
+        result = search_laravel_docs_data(Path("/tmp"), "   ")  # Whitespace only
+        assert "Search query cannot be empty" in str(result)
 
     def test_file_path_validation_in_resource_handlers(self, temp_dir):
         """Test file path validation in resource handlers."""

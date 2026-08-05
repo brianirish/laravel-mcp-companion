@@ -422,22 +422,3 @@ class TestTOONFormatters:
         assert "beginner" in result
         assert "installation" in result
 
-    def test_format_learning_resource_search(self):
-        """Test formatting learning resource search results."""
-        from toon_helpers import format_learning_resource_search
-        result = format_learning_resource_search(
-            "test",
-            [{"file": "core.md"}],
-            [{"file": "learning.md"}],
-            [{"file": "external.md"}]
-        )
-        assert "test" in result
-        assert "core" in result
-        assert "learning" in result
-
-    def test_format_learning_resource_search_core_only(self):
-        """Test formatting learning resource search with core results only."""
-        from toon_helpers import format_learning_resource_search
-        result = format_learning_resource_search("test", [{"file": "core.md"}])
-        assert "test" in result
-        assert "core" in result
