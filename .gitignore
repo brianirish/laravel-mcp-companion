@@ -48,6 +48,10 @@ logs/
 coverage.xml
 htmlcov/
 
+# Scratch fixture dirs used by some local test runs; never ship or track
+test_data/
+test_docs/
+
 CLAUDE.md
 
 # Claude Code

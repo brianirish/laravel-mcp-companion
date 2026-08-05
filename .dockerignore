@@ -34,3 +34,17 @@ docs/superpowers
 .vscode
 .idea
 .DS_Store
+
+# Scratch fixture dirs used by some local test runs; never ship or track
+test_data/
+test_docs/
+
+# Caches and repo metadata that shouldn't bake into the image
+.channels_cache_v2.json
+.users_cache.json
+uv.lock
+CHANGELOG.md
+ROADMAP.md
+CONTRIBUTING.md
+test_docker_args.sh
+CLAUDE.md
