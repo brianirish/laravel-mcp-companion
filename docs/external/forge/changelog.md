@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+- [July 31, 2026](#july-31-2026)
 - [June 30, 2026](#june-30-2026)
 - [May 31, 2026](#may-31-2026)
 - [April 29, 2026](#april-29-2026)
@@ -30,6 +31,34 @@ Other
 Copy pageCopy page
 New updates and improvements to Laravel Forge.
 Copy pageCopy page
+[​](#july-31-2026)
+July 31, 2026
+## [​](#log-viewers) Log viewers
+Server and site log viewers now support search, a full-screen view, loading older entries as you scroll, and live tailing.
+Show Improvements (9)
+- **Notification preferences**: You can now choose which email notifications you receive, with per-notification control and an option to turn off all email notifications.
+- **API rate limits**: Rate limit usage is now visible in the dashboard, along with guidance on requesting an increase.
+- **Graceful PHP-FPM reloads**: The server PHP service endpoint now supports a graceful reload action.
+- **Command exit codes**: The site command API resource now includes the command’s exit code and details.
+- **Zero downtime releases via API**: The number of retained releases can now be updated through the API.
+- **Backups for all databases**: Database backups can now include every database on the server.
+- **Password confirmation for role changes**: Changing a role now requires password confirmation.
+- **Copyable confirmation text**: Confirmation dialogs that ask you to type a resource name now let you copy it.
+- **Deployment alerts clear automatically**: Deployment failure alerts are cleared after a successful deployment.
+Show Fixes (13)
+- Fixed GitHub deployments failing to trigger.
+- Fixed incomplete deployments caused by purging old releases.
+- Fixed a 500 error when creating a site on a load balancer.
+- Fixed the Nginx Logrotate configuration.
+- Fixed backups being pruned when retention periods conflicted.
+- Fixed the managed database backup time selector always showing 5:30 AM.
+- Fixed the API not enforcing the correct domain redirect rules.
+- Fixed the sites list showing the wrong PHP version.
+- Fixed the command palette becoming stale when switching sites.
+- Fixed disabled dropdown items still being clickable.
+- Fixed plan downgrades not being applied.
+- Fixed repository names not being formatted correctly when a full URL was entered.
+- Fixed the account SSH key form not showing a user selector.
 [​](#june-30-2026)
 June 30, 2026
 ## [​](#managed-caches) Managed caches
