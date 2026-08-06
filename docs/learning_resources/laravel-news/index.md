@@ -4,17 +4,17 @@ Source: https://laravel-news.com
 
 ---
 
-## Inertia DevTools Is Now on the Chrome Web Store
+## Image Dominant Color and HEIC Support in Laravel 13.24
 
-[Read more](https://laravel-news.com/inertia-devtools-is-now-on-the-chrome-web-store)
+[Read more](https://laravel-news.com/laravel-13-24-0)
 
 ---
 
-## Monthly Log Driver in Laravel 13.23
+## Image Dominant Color and HEIC Support in Laravel 13.24
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-23-0)
+[Read more](https://laravel-news.com/laravel-13-24-0)
 
 ---
 
@@ -30,27 +30,27 @@ Latest Laravel Release
 
 ---
 
-## Laravel Doctor: Diagnose Your App With One Artisan Command
+## Official Laravel Zed Extension: LSP for PHP & Blade
 
-[Read more](https://laravel-news.com/laravel-doctor-first-party-diagnostics-for-your-application)
-
----
-
-## The Web Search API for Your LLM and AI Applications​
-
-[Read more](https://serpapi.com/?utm_source=laravelnews)
+[Read more](https://laravel-news.com/laravel-zed-extension)
 
 ---
 
-## Laravel Doctor: Diagnose Your App With One Artisan Command
+## Outsource to Acquaint Softtech, Sr. Laravel developers with AI expertise - $3000/Month
 
-[Read more](https://laravel-news.com/laravel-doctor-first-party-diagnostics-for-your-application)
+[Read more](https://acquaintsoft.com/hire-laravel-developers)
 
 ---
 
-## Queue-SQL: Run Mass Deletes and Updates Across Parallel Queue Jobs
+## Official Laravel Zed Extension: LSP for PHP & Blade
 
-[Read more](https://laravel-news.com/queue-sql-run-mass-deletes-and-updates-across-parallel-queue-jobs)
+[Read more](https://laravel-news.com/laravel-zed-extension)
+
+---
+
+## Laravel Head: Manage Meta Tags, Open Graph, and JSON-LD
+
+[Read more](https://laravel-news.com/laravel-head-package)
 
 ---
 
