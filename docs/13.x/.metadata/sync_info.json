@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "8042e4ce5c44b0ad51476cb1fb915af086047edb",
-  "commit_date": "2026-08-06T00:00:01Z",
-  "commit_message": "Cross joins give combinations, not permutations (#11321)\n\nA very small gripe. The cross join/cartesian product gives you _combinations_, not permutations. If it gave you permutations then it would give you `[1, 'a']` and `['a', 1]` as separate things.",
-  "commit_url": "https://github.com/laravel/docs/commit/8042e4ce5c44b0ad51476cb1fb915af086047edb",
-  "sync_time": "2026-08-06T00:02:55Z"
+  "commit_sha": "9c5a062c14069bab9054b558829e282f9593a065",
+  "commit_date": "2026-08-06T17:21:48Z",
+  "commit_message": "Document AI SDK v0.10.3 features (#11322)\n\n* Document AI SDK v0.10.3 features\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/9c5a062c14069bab9054b558829e282f9593a065",
+  "sync_time": "2026-08-07T00:02:17Z"
 }
