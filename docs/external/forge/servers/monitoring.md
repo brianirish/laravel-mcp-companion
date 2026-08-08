@@ -31,5 +31,5 @@ To delete a server monitor, navigate to the server’s dashboard and click the �
 The CPU Load and Used Memory metric data will be collected every minute. The Disk Space metric will be collected hourly.
 Was this page helpful?
 YesNo
-[Security](/docs/servers/security)[Real-Time Metrics](/docs/servers/real-time-metrics)
+[Security](/forge/docs/servers/security)[Real-Time Metrics](/forge/docs/servers/real-time-metrics)
 ⌘I

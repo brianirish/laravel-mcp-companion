@@ -23,7 +23,7 @@ Copy pageCopy page
 Learn how to manage databases on your Laravel Forge server.
 Copy pageCopy page
 ## [​](#introduction) Introduction
-When provisioning a new Laravel Forge server that requires a database, you can choose between installing an [app server](/docs/servers/types#app-servers) or a dedicated [database server](/docs/servers/types#database-servers). The Forge dashboard provides comprehensive tools for managing databases, users, and permissions across your infrastructure.
+When provisioning a new Laravel Forge server that requires a database, you can choose between installing an [app server](/forge/docs/servers/types#app-servers) or a dedicated [database server](/forge/docs/servers/types#database-servers). The Forge dashboard provides comprehensive tools for managing databases, users, and permissions across your infrastructure.
 ## [​](#creating-servers-with-databases) Creating servers with databases
 During server creation, you can select from several supported database servers:
 - MySQL (8.0, 8.4, 9.x)
@@ -45,8 +45,8 @@ For example, when configuring [TablePlus](https://tableplus.com):
 Some clients like TablePlus support connection URLs for simplified setup. Laravel Forge automatically generates these URLs for you, though you’ll need to enter your password manually since it’s not included in the URL for security purposes.
 Forge also provides a convenient button to launch your preferred database client directly.
 ## [​](#connecting-to-external-databases) Connecting to external databases
-You can connect your application to a database hosted on another Laravel Forge server using [Laravel Forge’s server network feature](/docs/resources/network#server-network).
-When both servers [meet the network requirements](/docs/resources/network#server-network), follow these steps:
+You can connect your application to a database hosted on another Laravel Forge server using [Laravel Forge’s server network feature](/forge/docs/resources/network#server-network).
+When both servers [meet the network requirements](/forge/docs/resources/network#server-network), follow these steps:
 1. **Configure server network access:**
 - Navigate to your application server’s “Network” settings
 - Enable the connection to your database server under the “Server Network” section
@@ -69,5 +69,5 @@ The database panel allows you to create additional users by specifying the usern
 Laravel Forge doesn’t provide automatic database server upgrades. If you need to upgrade your database software, you’ll need to handle this process manually.
 Was this page helpful?
 YesNo
-[Logs](/docs/sites/logs)[Database Backups](/docs/resources/database-backups)
+[Logs](/forge/docs/sites/logs)[Database Backups](/forge/docs/resources/database-backups)
 ⌘I

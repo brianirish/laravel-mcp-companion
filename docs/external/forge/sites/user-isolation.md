@@ -24,8 +24,8 @@ sudo -S service php8.5-fpm reload
 ```
 If you need further sudo access, you should log in as the `forge` user and switch to the `root` user using the `sudo su` or the `sudo -i` command.
 ## [​](#connecting-via-sftp) Connecting via SFTP
-You can connect to your server via SFTP as the isolated user. We recommend using an SFTP client such as [Transmit](https://panic.com/transmit/) or [Filezilla](https://filezilla-project.org/). However, before getting started, you should first [upload your SSH key to the server](/docs/ssh) for the isolated user.
+You can connect to your server via SFTP as the isolated user. We recommend using an SFTP client such as [Transmit](https://panic.com/transmit/) or [Filezilla](https://filezilla-project.org/). However, before getting started, you should first [upload your SSH key to the server](/forge/docs/ssh) for the isolated user.
 Was this page helpful?
 YesNo
-[Network](/docs/sites/network)[Laravel](/docs/sites/laravel)
+[Network](/forge/docs/sites/network)[Laravel](/forge/docs/sites/laravel)
 ⌘I

@@ -70,15 +70,15 @@ Worker servers are intended to function as dedicated PHP queue workers for your 
 - Supervisor
 ### [​](#meilisearch-servers) Meilisearch Servers
 Meilisearch servers install [Meilisearch](https://meilisearch.com) to provide a blazingly fast search service to your application. They are intended to be connected to another server, and communicate via a [private network](./../resources/network#server-network).
-A Meilisearch server will only display and manage one [Site](/docs/sites/the-basics). You cannot create or delete other sites on this server. When connecting to the Meilisearch server from a web or application server, you should connect to it via its private IP address.
+A Meilisearch server will only display and manage one [Site](/forge/docs/sites/the-basics). You cannot create or delete other sites on this server. When connecting to the Meilisearch server from a web or application server, you should connect to it via its private IP address.
 ### [​](#load-balancers) Load Balancers
 Load balancers are meant to distribute incoming web traffic across your servers. To do so, load balancers use Nginx as a “reverse proxy” to evenly distribute the incoming traffic. Therefore, load balancers are only provisioned with Nginx.
-Once provisioned you may [configure your load balancer](/docs/servers/load-balancing) to meet your needs.
+Once provisioned you may [configure your load balancer](/forge/docs/servers/load-balancing) to meet your needs.
 ### [​](#openclaw-servers) OpenClaw Servers
 OpenClaw servers provide a minimal environment for running [OpenClaw](https://openclaw.ai) AI agents. These servers only install Homebrew and OpenClaw, and after provisioning, you are dropped straight into the shell to begin configuration.
-OpenClaw servers are only available on [Laravel VPS](/docs/servers/laravel-vps).
-For more information on configuring and managing OpenClaw servers, see the [OpenClaw integration](/docs/integrations/openclaw) documentation.
+OpenClaw servers are only available on [Laravel VPS](/forge/docs/servers/laravel-vps).
+For more information on configuring and managing OpenClaw servers, see the [OpenClaw integration](/forge/docs/integrations/openclaw) documentation.
 Was this page helpful?
 YesNo
-[Managing Servers](/docs/servers/the-basics)[Laravel VPS](/docs/servers/laravel-vps)
+[Managing Servers](/forge/docs/servers/the-basics)[Laravel VPS](/forge/docs/servers/laravel-vps)
 ⌘I

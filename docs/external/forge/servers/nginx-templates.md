@@ -49,5 +49,5 @@ When using these variables, you should ensure that they exactly match the syntax
 The ability to manage Nginx Templates is determined by the `site:manage-nginx` permission. This permission is also used to restrict the ability to edit an existing site’s Nginx configuration file.
 Was this page helpful?
 YesNo
-[Load Balancing](/docs/servers/load-balancing)[Security](/docs/servers/security)
+[Load Balancing](/forge/docs/servers/load-balancing)[Security](/forge/docs/servers/security)
 ⌘I

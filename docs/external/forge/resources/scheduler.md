@@ -25,7 +25,7 @@ Copy pageCopy page
 Laravel Forge enables you to configure scheduled jobs that run commands at specified intervals on either a server or site level. You can choose from predefined frequencies or create custom Cron schedules tailored to your specific needs.
 If your scheduled job fails to run, verify that the command path is correct and accessible.
 ### [​](#laravel-application-scheduling) Laravel application scheduling
-For Laravel applications using the built-in [scheduler feature](https://laravel.com/docs/scheduling), you can use the [Laravel integration](/docs/sites/laravel#laravel-scheduler) to quickly configure the scheduled job.
+For Laravel applications using the built-in [scheduler feature](https://laravel.com/docs/scheduling), you can use the [Laravel integration](/forge/docs/sites/laravel#laravel-scheduler) to quickly configure the scheduled job.
 ### [​](#default-scheduled-jobs) Default scheduled jobs
 Laravel Forge automatically configures essential maintenance jobs during server provisioning:
 - **Update Composer:** Runs `composer self-update` nightly to keep Composer current
@@ -53,5 +53,5 @@ This monitoring system is particularly valuable for critical maintenance tasks, 
 Applications running Laravel can use the `pingBefore` and `thenPing` methods to automatically send heartbeats when using the Laravel scheduler. [Read the Laravel documentation](https://laravel.com/docs/scheduling#pinging-urls).
 Was this page helpful?
 YesNo
-[Background Processes](/docs/resources/background-processes)[Network](/docs/resources/network)
+[Background Processes](/forge/docs/resources/background-processes)[Network](/forge/docs/resources/network)
 ⌘I
