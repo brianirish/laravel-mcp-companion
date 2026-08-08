@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Image Dominant Color and HEIC Support in Laravel 13.24
+## Building Transaction-Safe Multi-Document Operations in Laravel
 
-[Read more](https://laravel-news.com/laravel-13-24-0)
+[Read more](https://laravel-news.com/building-transaction-safe-multi-document-operations-in-laravel)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## PhpStorm 2026.2 Released
+## Reject Unexpected Array Keys with Laravel Validation
 
-[Read more](https://laravel-news.com/phpstorm-20262-released)
+[Read more](https://laravel-news.com/laravel-array-keys-validation-rule)
 
 ---
 
@@ -30,27 +30,27 @@ Latest Laravel Release
 
 ---
 
-## Official Laravel Zed Extension: LSP for PHP & Blade
+## Validate and Convert HEIC Images in Laravel
 
-[Read more](https://laravel-news.com/laravel-zed-extension)
-
----
-
-## Outsource to Acquaint Softtech, Sr. Laravel developers with AI expertise - $3000/Month
-
-[Read more](https://acquaintsoft.com/hire-laravel-developers)
+[Read more](https://laravel-news.com/laravel-heic-image-uploads)
 
 ---
 
-## Official Laravel Zed Extension: LSP for PHP & Blade
+## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
 
-[Read more](https://laravel-news.com/laravel-zed-extension)
+[Read more](https://go.laravel.news/cloud/home)
 
 ---
 
-## Laravel Head: Manage Meta Tags, Open Graph, and JSON-LD
+## Laravel News Is the Live Stream Partner for Laracon EU 2026
 
-[Read more](https://laravel-news.com/laravel-head-package)
+[Read more](https://laravel-news.com/laravel-news-is-the-live-stream-partner-for-laracon-eu-2026)
+
+---
+
+## Saga Lara Flow: Durable Workflows and Compensating Transactions on Laravel Queues
+
+[Read more](https://laravel-news.com/saga-lara-flow)
 
 ---
 

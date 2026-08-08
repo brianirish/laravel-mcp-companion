@@ -23,19 +23,19 @@ Watch the free Laravel Forge series on Laracasts
 ## [​](#what-is-laravel-forge) What is Laravel Forge?
 Laravel Forge is a server management and application deployment service. Forge takes the pain and hassle out of deploying servers and can be used to launch your next website. Whether your app is built with a framework such as [Laravel](https://github.com/laravel/laravel), [Symfony](https://github.com/symfony/symfony), [Statamic](https://github.com/statamic/cms), [WordPress](https://github.com/WordPress/WordPress), or is a vanilla PHP application - Forge is the solution for you.
 We live and breathe PHP here at Laravel Forge, but Forge is also ready to handle other tech stacks too, such as Node.js.
-Laravel Forge can provision new servers for you in seconds. We also offer you the ability to provision [multiple server types](/docs/servers/types) (e.g., web servers, database servers, load balancers) with the option of having a variety of services configured for you to hit the ground running, including:
+Laravel Forge can provision new servers for you in seconds. We also offer you the ability to provision [multiple server types](/forge/docs/servers/types) (e.g., web servers, database servers, load balancers) with the option of having a variety of services configured for you to hit the ground running, including:
 - Nginx web server
-- [PHP](/docs/servers/php) (multiple version support)
-- [Database](/docs/resources/databases) (MySQL, Postgres, or MariaDB)
+- [PHP](/forge/docs/servers/php) (multiple version support)
+- [Database](/forge/docs/resources/databases) (MySQL, Postgres, or MariaDB)
 - Logrotate
-- [Memcached](/docs/resources/caches)
-- [Redis](/docs/resources/caches)
+- [Memcached](/forge/docs/resources/caches)
+- [Redis](/forge/docs/resources/caches)
 - Meilisearch
-- [OPcache](/docs/servers/php#opcache)
-- [UFW firewall](/docs/resources/network#firewalls)
-- [Automatic security updates](/docs/servers/security#automated-security-updates)
+- [OPcache](/forge/docs/servers/php#opcache)
+- [UFW firewall](/forge/docs/resources/network#firewalls)
+- [Automatic security updates](/forge/docs/servers/security#automated-security-updates)
 - And much more!
-In addition, Laravel Forge can assist you in managing [scheduled jobs](/docs/resources/scheduler), [queue workers](/docs/sites/queues), [TLS/SSL certificates](/docs/sites/domains#certificates), and more. After your server has provisioned, you can manage and deploy your web applications using the Forge UI dashboard.
+In addition, Laravel Forge can assist you in managing [scheduled jobs](/forge/docs/resources/scheduler), [queue workers](/forge/docs/sites/queues), [TLS/SSL certificates](/forge/docs/sites/domains#certificates), and more. After your server has provisioned, you can manage and deploy your web applications using the Forge UI dashboard.
 ## [​](#laravel-forge-ip-addresses) Laravel Forge IP addresses
 In order to provision and communicate with your servers, Laravel Forge requires SSH access to them. If you have set up your servers to restrict SSH access using IP allow lists, you must allow the following Forge IP addresses:
 - `159.203.150.232`
@@ -46,7 +46,7 @@ You can also access the IP addresses via the following URL: <https://forge.larav
 If you are restricting HTTP traffic, your server must also allow incoming and outgoing traffic from `forge.laravel.com`.
 The Laravel Forge IP addresses may change from time to time; however, we will always email you several weeks prior to an IP address change.
 #### [​](#forge-terminal) Forge Terminal
-Laravel VPS customers benefit from an [integrated terminal](/docs/servers/laravel-vps#forge-terminal) within the Forge Control Panel. To ensure this is functional, you must allow the following IP:
+Laravel VPS customers benefit from an [integrated terminal](/forge/docs/servers/laravel-vps#forge-terminal) within the Forge Control Panel. To ensure this is functional, you must allow the following IP:
 - `142.93.78.212`
 ### [​](#laravel-forge-support-jumpbox) Laravel Forge support jumpbox
 To enable the Laravel Forge Support team to provide more efficient technical assistance, you can optionally allow our support jumpbox IP address to access your server in your firewall settings:
@@ -57,5 +57,5 @@ Laravel Forge provides a powerful API that allows you to manage your servers pro
 Our [Legal](https://laravel.com/legal) and [Trust Centers](https://trust.laravel.com/?product=forge) provide details on the terms, conditions, and privacy practices for using Laravel Forge.
 Was this page helpful?
 YesNo
-[Laravel Forge CLI](/docs/cli)
+[Laravel Forge CLI](/forge/docs/cli)
 ⌘I

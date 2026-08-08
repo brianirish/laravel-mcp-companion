@@ -24,7 +24,7 @@ Copy pageCopy page
 Learn how to manage PHP versions on your Laravel Forge server.
 Copy pageCopy page
 ## [​](#introduction) Introduction
-Laravel Forge makes it easy to install and configure multiple versions of PHP on your server. Each installed PHP version runs its own FPM process. In addition, you may [update the PHP version used by specific sites at any time](/docs/sites/the-basics#php-version).
+Laravel Forge makes it easy to install and configure multiple versions of PHP on your server. Each installed PHP version runs its own FPM process. In addition, you may [update the PHP version used by specific sites at any time](/forge/docs/sites/the-basics#php-version).
 Laravel Forge is only aware of PHP installations that are managed through the Forge dashboard and not manually installed on the server.
 ## [​](#managing-php-versions) Managing PHP versions
 When provisioning a server, you must decide which version of PHP you want to install by default. The `php` binary on your server will point to the installed version selected at the time of its creation.
@@ -57,7 +57,7 @@ You may configure the maximum execution time through the PHP tab of the server m
 - `request_terminate_timeout` in the PHP-FPM `www.conf` (for each installed PHP version).
 - `fastcgi_read_timeout` in your Nginx configuration.
 ### [​](#opcache) OPcache
-Optimizing the PHP OPcache for production will configure OPcache to store your compiled PHP code in memory to greatly improve performance. If you choose to optimize OPcache for production, you should verify that your deployment script [reloads the PHP-FPM service](/docs/knowledge-base/servers#restarting-php-fpm) at the end of each deployment unless you’re using zero-downtime deployments.
+Optimizing the PHP OPcache for production will configure OPcache to store your compiled PHP code in memory to greatly improve performance. If you choose to optimize OPcache for production, you should verify that your deployment script [reloads the PHP-FPM service](/forge/docs/knowledge-base/servers#restarting-php-fpm) at the end of each deployment unless you’re using zero-downtime deployments.
 OPcache is enabled by default for all newly created servers.
 ### [​](#editing-php-and-fpm-configuration-settings) Editing PHP and FPM configuration settings
 You can customize the `php.ini` and FPM settings for individual PHP versions. To edit these settings, navigate to the server’s dashboard and click the “PHP” tab. Locate the version of PHP you want to configure, open the dropdown menu next to that version, and select either:
@@ -69,5 +69,5 @@ PHP “beta” and “release candidate” releases are often available on Larav
 Once that PHP version becomes stable, you will need to fully uninstall and re-install the PHP version.
 Was this page helpful?
 YesNo
-[Laravel VPS](/docs/servers/laravel-vps)[Load Balancing](/docs/servers/load-balancing)
+[Laravel VPS](/forge/docs/servers/laravel-vps)[Load Balancing](/forge/docs/servers/load-balancing)
 ⌘I

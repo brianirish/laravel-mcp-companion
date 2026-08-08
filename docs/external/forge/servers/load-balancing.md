@@ -21,7 +21,7 @@ Copy pageCopy page
 ## [​](#introduction) Introduction
 Load balancers are used to distribute web traffic amongst two or more servers and are often used for websites which receive high volumes of traffic.
 ## [​](#creating-load-balanced-sites) Creating load balanced sites
-Load balanced sites can only be created on [load balancer servers](/docs/servers/types#load-balancers).
+Load balanced sites can only be created on [load balancer servers](/forge/docs/servers/types#load-balancers).
 To create a new load balanced site, navigate to the server’s dashboard, and click New site. Next, provide the name of the site, the balancing method and add the servers you want to balance the traffic to.
 The selected servers must have a site with a matching domain, otherwise traffic will not be routed correctly. Forge domains (`on-forge.com`) are not available for load balancers.
 ## [​](#load-balancer-methods) Load balancer methods
@@ -39,9 +39,9 @@ Individual servers can be marked as a **backup**. Backup servers will receive no
 ### [​](#pausing-traffic) Pausing traffic
 You may pause traffic to a specific server being managed by the balancer. While paused, the selected server will no longer serve incoming traffic. You may unpause the server at any time.
 ## [​](#ssl) SSL
-Typically, SSL certificates are installed on the individual application servers. However, when using load balancing, the certificate should be configured on the load balancer itself. You should consult the [SSL documentation](/docs/sites/domains#certificates) for more information on managing SSL certificates for your servers, including load balancers.
+Typically, SSL certificates are installed on the individual application servers. However, when using load balancing, the certificate should be configured on the load balancer itself. You should consult the [SSL documentation](/forge/docs/sites/domains#certificates) for more information on managing SSL certificates for your servers, including load balancers.
 When using SSL on a load balancer, you will likely need to configure the “trusted proxies” for your application. For Laravel applications, consult the [trusted proxies documentation](https://laravel.com/docs/requests#configuring-trusted-proxies).
 Was this page helpful?
 YesNo
-[PHP](/docs/servers/php)[Nginx Templates](/docs/servers/nginx-templates)
+[PHP](/forge/docs/servers/php)[Nginx Templates](/forge/docs/servers/nginx-templates)
 ⌘I

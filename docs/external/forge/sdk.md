@@ -57,7 +57,7 @@ You may create an instance of the SDK by passing an API token generated from [Fo
 $forge = new Laravel\Forge\Forge($token);
 ```
 ### [​](#the-organization-slug) The Organization Slug
-Starting in v4.0, every resource endpoint is scoped to an [organization](/docs/organizations). Before making most calls, you must determine the slug of the organization you want to interact with by listing the authenticated user’s organizations:
+Starting in v4.0, every resource endpoint is scoped to an [organization](/forge/docs/organizations). Before making most calls, you must determine the slug of the organization you want to interact with by listing the authenticated user’s organizations:
 ```
 $organizations = $forge->organizations();
 
@@ -324,5 +324,5 @@ The SDK throws dedicated exception classes that you may catch to handle specific
 If you are looking for application performance monitoring for the Laravel applications you deploy with Forge, take a look at [Laravel Nightwatch](https://nightwatch.laravel.com). If you prefer fully managed Laravel hosting, consider [Laravel Cloud](https://cloud.laravel.com).
 Was this page helpful?
 YesNo
-[Laravel Forge CLI](/docs/cli)[Organizations](/docs/organizations)
+[Laravel Forge CLI](/forge/docs/cli)[Organizations](/forge/docs/organizations)
 ⌘I

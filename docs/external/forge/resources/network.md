@@ -52,9 +52,9 @@ Laravel Forge automatically configures essential firewall rules during server pr
 - **HTTP:** Port 80 access from any IP address
 - **HTTPS:** Port 443 access from any IP address
 While port 22 remains open for SSH connections, only SSH key-based authentication is accepted, preventing brute force attacks. **Never delete the SSH rule—doing so will break Forge’s ability to connect to and manage your server.**
-Mail ports (25, 465, 587) are blocked by default on Laravel VPS servers to prevent abuse. If you need to send email from your server, use an HTTP / API based service like [Resend](https://resend.com), or contact [Laravel Forge support](/docs/support) to request these ports be unblocked.
+Mail ports (25, 465, 587) are blocked by default on Laravel VPS servers to prevent abuse. If you need to send email from your server, use an HTTP / API based service like [Resend](https://resend.com), or contact [Laravel Forge support](/forge/docs/support) to request these ports be unblocked.
 ### [​](#health-check-service-ip-addresses) Health check service IP addresses
-If you have enabled [deployment health checks](/docs/sites/deployments#deployment-health-checks) for your sites, you should ensure that the following IP addresses are allowed through your HTTP and HTTPS firewall rules. Health check requests are made from these addresses to verify your application is accessible after deployments. These IPs will **not make** SSH connections to the server.
+If you have enabled [deployment health checks](/forge/docs/sites/deployments#deployment-health-checks) for your sites, you should ensure that the following IP addresses are allowed through your HTTP and HTTPS firewall rules. Health check requests are made from these addresses to verify your application is accessible after deployments. These IPs will **not make** SSH connections to the server.
 - 209.38.170.132
 - 206.189.255.228
 - 139.59.222.70
@@ -67,5 +67,5 @@ If you accidentally delete the SSH firewall rule (typically port 22), Forge lose
 This will re-establish Forge’s connection capability to your server.
 Was this page helpful?
 YesNo
-[Scheduler](/docs/resources/scheduler)[Packages](/docs/resources/packages)
+[Scheduler](/forge/docs/resources/scheduler)[Packages](/forge/docs/resources/packages)
 ⌘I

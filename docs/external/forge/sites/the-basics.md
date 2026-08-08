@@ -52,9 +52,9 @@ If you need more control over how your site is created, you can open the “Adva
 This allows you to:
 - **Customize the web directory** used by your site – this defaults to `/public` for the majority of site types.
 - **Choose the PHP version** used by your site – this defaults to the server’s default PHP version.
-- **Configure [website isolation](/docs/sites/user-isolation)** – configures a dedicated PHP-FPM process for the site.
+- **Configure [website isolation](/forge/docs/sites/user-isolation)** – configures a dedicated PHP-FPM process for the site.
 - Enable or disable **push to deploy** – this is enabled by default and will automatically deploy your site when you push to the configured Git branch.
-- Enable or disable [**zero downtime deployments**](/docs/sites/deployments#zero-downtime-deployments) – this is enabled by default for new sites and can only be configured during site creation.
+- Enable or disable [**zero downtime deployments**](/forge/docs/sites/deployments#zero-downtime-deployments) – this is enabled by default for new sites and can only be configured during site creation.
 Laravel Forge provides a set of sensible defaults for these settings based on the type of site you’re creating, but you can customize them as needed.
 ## [​](#pre-configured-applications) Pre-configured applications
 Laravel Forge makes it incredibly easy to install popular applications such as Statamic, WordPress, and phpMyAdmin. These applications are pre-configured with sensible defaults so you can get started quickly.
@@ -68,7 +68,7 @@ When creating a new WordPress site, Laravel Forge will automatically install the
 You will need to choose an existing database for WordPress to use, or create a new one, to proceed.
 If you plan to use a custom domain with your WordPress site, you should configure your custom domain in Forge before you install WordPress, as WordPress will use the domain you provide during installation to generate URLs for your site.
 Once WordPress has been installed, you can visit your site using the provided Forge domain and complete the WordPress installation from your browser.
-You should continue installing WordPress as soon as Laravel Forge has installed it for you, so that it’s made secure with your username and password.You could also choose to create a new [“security rule”](/docs/sites/network#security-rules) before you install WordPress so that your installation is password protected.
+You should continue installing WordPress as soon as Laravel Forge has installed it for you, so that it’s made secure with your username and password.You could also choose to create a new [“security rule”](/forge/docs/sites/network#security-rules) before you install WordPress so that your installation is password protected.
 #### [​](#customizing-wp-config-php) Customizing `wp-config.php`
 If you need to customize your site’s `wp-config.php` file, you can do so from the “WordPress” tab in your site’s settings. You can use this to add authentication keys, define constants like `DISALLOW_FILE_EDIT`, or modify the database table prefix.
 Editing some variables such as `$table_prefix` will invoke the WordPress installer and you will need to reinstall your WordPress site after making this change. The following variables will trigger the WordPress installer if they are changed:
@@ -90,12 +90,12 @@ You will need to choose an existing database, or create a new one, to proceed. T
 Once Laravel Forge has installed phpMyAdmin, you can visit your site using the provided Forge domain and log in using any of your database username and password combinations.
 Some very small server sizes, such as `t2.nano` on AWS, do not have enough resources to run an application like phpMyAdmin.
 ## [​](#php-versions) PHP versions
-If your server has [multiple versions of PHP](/docs/servers/php) installed, you can switch the version used by your site at any time by using the site’s “Settings” tab in the Laravel Forge dashboard.
+If your server has [multiple versions of PHP](/forge/docs/servers/php) installed, you can switch the version used by your site at any time by using the site’s “Settings” tab in the Laravel Forge dashboard.
 When switching the version used by your site, you should ensure that your server has any additional PHP extensions / modules installed for that version.Failure to install additional modules may make your site unresponsive.
 Laravel Forge will automatically update your site’s Nginx configuration files to use the correct PHP-FPM socket and reload the required services for you.
 ## [​](#team-permissions) Team permissions
 You may grant a team member authority to create and delete sites by granting the `site:create` and `site:delete` permissions.
 Was this page helpful?
 YesNo
-[Real-Time Metrics](/docs/servers/real-time-metrics)[Domains](/docs/sites/domains)
+[Real-Time Metrics](/forge/docs/servers/real-time-metrics)[Domains](/forge/docs/sites/domains)
 ⌘I

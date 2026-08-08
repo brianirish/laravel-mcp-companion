@@ -42,7 +42,7 @@ Copy pageCopy page
 ## [​](#introduction) Introduction
 Laravel Forge makes it easy to deploy your applications on demand, whether that be manually, automatically when pushing new code to your source control provider, or via a webhook from your CI platform of choice.
 You can see a list of your site’s deployments by navigating to the “Deployments” tab within your site’s management dashboard. Laravel Forge provides a paginated list of your site’s deployments, including what was deployed, when it was deployed, how long it took to be deployed, and also the output of your deploy script.
-Deployments are limited to 10 minutes. If a deployment takes longer, it will fail automatically. If your site is integrated with [Envoyer](/docs/integrations/envoyer), Envoyer’s deployment limits apply instead.
+Deployments are limited to 10 minutes. If a deployment takes longer, it will fail automatically. If your site is integrated with [Envoyer](/forge/docs/integrations/envoyer), Envoyer’s deployment limits apply instead.
 ## [​](#deployment-strategies) Deployment strategies
 Laravel Forge supports two deployment strategies, letting you choose the one that best fits your workflow.
 ### [​](#zero-downtime-deployments) Zero-downtime deployments
@@ -82,9 +82,9 @@ This strategy *can* be faster than zero-downtime deployments, but it does come w
 ## [​](#push-to-deploy) Push to deploy
 Laravel Forge’s “Push to deploy” feature allows you to easily deploy your projects when you push new code to your source control provider.
 When code is pushed to your site’s configured branch, Laravel Forge will automatically trigger a new deployment and run your site’s deployment script.
-Push to deploy is **enabled by default for new sites** created with GitHub, GitLab, or Bitbucket. If you wish to disable this feature, you may do so by toggling the “Push to deploy” toggle inside of the [“Advanced settings” modal](/docs/sites/the-basics#advanced-settings).
+Push to deploy is **enabled by default for new sites** created with GitHub, GitLab, or Bitbucket. If you wish to disable this feature, you may do so by toggling the “Push to deploy” toggle inside of the [“Advanced settings” modal](/forge/docs/sites/the-basics#advanced-settings).
 To enable push to deploy for existing sites, you may do so by enabling the “Push to deploy” toggle on the “Deployments” tab of your site’s settings.
-For sites using a [custom source control provider](/docs/source-control#using-custom-git-providers) you will need to manually set up a [“Deployment hook”](/docs/sites/deployments#deploying-from-ci) to have your code deployed when you push to your source provider.
+For sites using a [custom source control provider](/forge/docs/source-control#using-custom-git-providers) you will need to manually set up a [“Deployment hook”](/forge/docs/sites/deployments#deploying-from-ci) to have your code deployed when you push to your source provider.
 ## [​](#deploy-script) Deploy script
 When a deployment is triggered, Laravel Forge will execute the commands defined in your site’s deploy script.
 At a minimum, your deploy script should contain the commands needed to update your site’s codebase (such as a `git pull` or `$CREATE_RELEASE()` macro), install any dependencies (such as `composer install` or `npm ci`), and perform any other tasks needed to get your application up and running (such as `php artisan migrate --force`).
@@ -135,14 +135,14 @@ echo "${APP_NAME} is deploying..."
 Sites use the `$FORGE_PHP` environment variable when invoking PHP commands in the deployment script. This variable will always point to the configured PHP version for the site. If you need to use a specific version of PHP, you must use the `phpx.x` command where `x.x` reflects on the version required (e.g., `php8.5`).
 During a deployment, Forge also configures the `php` binary to be the PHP version configured on your site. This ensures that `composer` and `npm` scripts which invoke PHP will use the site’s PHP version.
 ### [​](#restarting-background-processes) Restarting background processes
-When deploying applications that use [background processes](/docs/resources/background-processes) such as daemons, you may need to restart the process to ensure it picks up your code changes. You can do this by adding the restart command to your deployment script:
+When deploying applications that use [background processes](/forge/docs/resources/background-processes) such as daemons, you may need to restart the process to ensure it picks up your code changes. You can do this by adding the restart command to your deployment script:
 ```
 # Restart your daemon (replace 12345 with your daemon's ID)...
 sudo supervisorctl restart daemon-12345:*
 ```
 If your site is using zero-downtime deployments, you should place the restart command after the `$ACTIVATE_RELEASE()` macro to ensure the new code is activated before the process is restarted.
 ## [​](#deploying-from-ci) Deploying from CI
-If you wish to trigger deployments from CI, or from a source control provider that is not currently supported by Laravel Forge, you may do so by using “deployment hooks” or the [Forge CLI](/docs/cli).
+If you wish to trigger deployments from CI, or from a source control provider that is not currently supported by Laravel Forge, you may do so by using “deployment hooks” or the [Forge CLI](/forge/docs/cli).
 ### [​](#deployment-hooks) Deployment hooks
 Deployment hooks are special webhooks that Laravel Forge provides for each site. You may trigger a deployment by making a `GET` or `POST` request to the deployment trigger URI provided.
 To find your site’s deployment hook URI, navigate to the “Deployments” tab of your site’s settings. You will find a “Deploy hook” section with the URI that you can quickly copy to your clipboard.
@@ -162,7 +162,7 @@ Laravel Forge will detect the following “reserved” query parameters and use 
 In addition to the reserved parameters, you may also pass custom parameters that will be injected into your deployment script.
 For example, if you pass the query parameter `&env=staging` to the deployment hook URL, Laravel Forge will inject a `FORGE_VAR_ENV` variable into your deployment script that will evaluate to `"staging"`.
 ### [​](#forge-cli) Forge CLI
-If you need to have access to the deployment output or execute additional deployment actions such as restarting services, you should use the [Forge CLI](/docs/cli).
+If you need to have access to the deployment output or execute additional deployment actions such as restarting services, you should use the [Forge CLI](/forge/docs/cli).
 Once you have installed and configured the Forge CLI on your CI platform, you may execute the `forge deploy` command.
 To authenticate with Laravel Forge from your CI platform, you will need to add a `FORGE_API_TOKEN` environment variable to your CI build environment.You may generate an API token from your Laravel Forge [API settings dashboard](https://forge.laravel.com/profile/api). Your CI platform will also require SSH access to your server.
 #### [​](#github-actions-example) GitHub Actions example
@@ -254,5 +254,5 @@ Laravel Forge can also send an HTTP POST request to arbitrary URLs after each de
 ```
 Was this page helpful?
 YesNo
-[Domains](/docs/sites/domains)[Environment Variables](/docs/sites/environment-variables)
+[Domains](/forge/docs/sites/domains)[Environment Variables](/forge/docs/sites/environment-variables)
 ⌘I
