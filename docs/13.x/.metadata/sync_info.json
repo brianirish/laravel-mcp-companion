@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "9c5a062c14069bab9054b558829e282f9593a065",
-  "commit_date": "2026-08-06T17:21:48Z",
-  "commit_message": "Document AI SDK v0.10.3 features (#11322)\n\n* Document AI SDK v0.10.3 features\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/9c5a062c14069bab9054b558829e282f9593a065",
-  "sync_time": "2026-08-07T00:02:17Z"
+  "commit_sha": "aa041e5fa5519d3bb6b0f1b00c60cc04636e21c9",
+  "commit_date": "2026-08-09T21:05:34Z",
+  "commit_message": "[13.x] Add `withoutCookies` method to Responses (#11324)\n\n* add `withoutCookies` method to responses.md\n\n* Update responses.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/aa041e5fa5519d3bb6b0f1b00c60cc04636e21c9",
+  "sync_time": "2026-08-10T00:02:52Z"
 }
