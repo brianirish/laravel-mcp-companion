@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Building Transaction-Safe Multi-Document Operations in Laravel
+## The once() Memoization Helper is Coming to Laravel 11
 
-[Read more](https://laravel-news.com/building-transaction-safe-multi-document-operations-in-laravel)
+[Read more](https://laravel-news.com/once-helper)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Reject Unexpected Array Keys with Laravel Validation
+## Validate and Convert HEIC Images in Laravel
 
-[Read more](https://laravel-news.com/laravel-array-keys-validation-rule)
+[Read more](https://laravel-news.com/laravel-heic-image-uploads)
 
 ---
 
@@ -30,21 +30,21 @@ Latest Laravel Release
 
 ---
 
-## Validate and Convert HEIC Images in Laravel
+## Laravel Boost Project Rules: Teach Agents Your Conventions
 
-[Read more](https://laravel-news.com/laravel-heic-image-uploads)
-
----
-
-## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
-
-[Read more](https://go.laravel.news/cloud/home)
+[Read more](https://laravel-news.com/laravel-boost-project-rules)
 
 ---
 
-## Laravel News Is the Live Stream Partner for Laracon EU 2026
+## Hands-on help for Laravel teams with No Compromises
 
-[Read more](https://laravel-news.com/laravel-news-is-the-live-stream-partner-for-laracon-eu-2026)
+[Read more](https://nocompromises.io/?ref=ln-partner)
+
+---
+
+## Laravel Boost Project Rules: Teach Agents Your Conventions
+
+[Read more](https://laravel-news.com/laravel-boost-project-rules)
 
 ---
 
