@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## The once() Memoization Helper is Coming to Laravel 11
+## Laravel Truss: Live Interactive Database ER Diagrams
 
-[Read more](https://laravel-news.com/once-helper)
+[Read more](https://laravel-news.com/laravel-truss-database-er-diagrams)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Boost Project Rules: Teach Agents Your Conventions
+## Laravel artisan dev: Run Server, Queue, Logs, and Vite
 
-[Read more](https://laravel-news.com/laravel-boost-project-rules)
+[Read more](https://laravel-news.com/artisan-dev-command)
 
 ---
 
@@ -42,15 +42,15 @@ Latest Laravel Release
 
 ---
 
-## Laravel Boost Project Rules: Teach Agents Your Conventions
+## Laravel artisan dev: Run Server, Queue, Logs, and Vite
 
-[Read more](https://laravel-news.com/laravel-boost-project-rules)
+[Read more](https://laravel-news.com/artisan-dev-command)
 
 ---
 
-## Saga Lara Flow: Durable Workflows and Compensating Transactions on Laravel Queues
+## Laravel Truss: Live Interactive Database ER Diagrams
 
-[Read more](https://laravel-news.com/saga-lara-flow)
+[Read more](https://laravel-news.com/laravel-truss-database-er-diagrams)
 
 ---
 

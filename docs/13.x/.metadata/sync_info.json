@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "aa041e5fa5519d3bb6b0f1b00c60cc04636e21c9",
-  "commit_date": "2026-08-09T21:05:34Z",
-  "commit_message": "[13.x] Add `withoutCookies` method to Responses (#11324)\n\n* add `withoutCookies` method to responses.md\n\n* Update responses.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/aa041e5fa5519d3bb6b0f1b00c60cc04636e21c9",
-  "sync_time": "2026-08-10T00:02:52Z"
+  "commit_sha": "5e0a0edf75ca5f9ec60a27cece58fa9997958335",
+  "commit_date": "2026-08-10T13:09:09Z",
+  "commit_message": "Adjust FastCGI buffer settings in deployment.md (#11325)\n\n* Adjust FastCGI buffer settings in deployment.md\n\nWithout this configs it throw 502 error on page refresh due to large headers.\n\n* Update deployment.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/5e0a0edf75ca5f9ec60a27cece58fa9997958335",
+  "sync_time": "2026-08-11T00:04:27Z"
 }

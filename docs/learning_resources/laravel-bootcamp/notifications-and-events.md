@@ -5,6 +5,7 @@ Source: https://bootcamp.laravel.com/blade/notifications-and-events
 ---
 
 Kickstart your journey with two mini video courses
+==================================================
 Bite-sized lessons. Real-world projects. All in one place.
 Getting Started with Laravel
 13 lessons
