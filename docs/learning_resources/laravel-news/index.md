@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel Truss: Live Interactive Database ER Diagrams
+## Laravel Terminal UI for the artisan dev Command
 
-[Read more](https://laravel-news.com/laravel-truss-database-er-diagrams)
+[Read more](https://laravel-news.com/artisan-dev-terminal-ui)
 
 ---
 
-## Image Dominant Color and HEIC Support in Laravel 13.24
+## Pause All Queues and a New artisan dev UI in Laravel 13.25
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-24-0)
+[Read more](https://laravel-news.com/laravel-13-25-0)
 
 ---
 
-## Validate and Convert HEIC Images in Laravel
+## Mock PHP Classes in Tests With the Double Library
 
-[Read more](https://laravel-news.com/laravel-heic-image-uploads)
+[Read more](https://laravel-news.com/double-php-testing-library)
 
 ---
 
@@ -36,9 +36,9 @@ Latest Laravel Release
 
 ---
 
-## Hands-on help for Laravel teams with No Compromises
+## Laravel monitoring that doesn't bill you by your traffic
 
-[Read more](https://nocompromises.io/?ref=ln-partner)
+[Read more](https://laravel-news.com/nightowl)
 
 ---
 
@@ -48,9 +48,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Truss: Live Interactive Database ER Diagrams
+## Laravel Discount: Coupon Codes, Usage Limits, and Stacking
 
-[Read more](https://laravel-news.com/laravel-truss-database-er-diagrams)
+[Read more](https://laravel-news.com/laravel-discount)
 
 ---
 
