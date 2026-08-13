@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "080853d694311a6d78ae0b33995f74abf9f355e5",
-  "commit_date": "2026-08-11T19:00:33Z",
-  "commit_message": "[13.x] Document session serialization configuration (#11329)\n\n* Add session serialization configuration details\n\nAdded section on session serialization configuration changes.\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/080853d694311a6d78ae0b33995f74abf9f355e5",
-  "sync_time": "2026-08-12T00:02:12Z"
+  "commit_sha": "4030a84b979f7420788dda14df439dd4d66d765d",
+  "commit_date": "2026-08-12T13:57:53Z",
+  "commit_message": "[13.x] Fix: casting an image to a string returns a data URI, not bytes (#11331)",
+  "commit_url": "https://github.com/laravel/docs/commit/4030a84b979f7420788dda14df439dd4d66d765d",
+  "sync_time": "2026-08-13T00:02:16Z"
 }
