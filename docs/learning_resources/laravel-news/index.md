@@ -24,9 +24,9 @@ Latest Laravel Release
 
 ---
 
-## Building a Live Match Scoreboard With Laravel Reverb
+## Pause All Laravel Queues During a Deploy
 
-[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
+[Read more](https://laravel-news.com/laravel-pause-all-queues)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## A Practical Guide to Laravel's First-Party Image Processing
+## Building and Deploying a Laravel App With Claude Code on Zerops
 
-[Read more](https://laravel-news.com/a-practical-guide-to-laravels-first-party-image-processing)
+[Read more](https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops)
 
 ---
 
