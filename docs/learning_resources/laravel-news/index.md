@@ -24,9 +24,9 @@ Latest Laravel Release
 
 ---
 
-## Pause All Laravel Queues During a Deploy
+## Laravel Image Responses: Serve Resized Images From Routes
 
-[Read more](https://laravel-news.com/laravel-pause-all-queues)
+[Read more](https://laravel-news.com/laravel-image-responses)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Building and Deploying a Laravel App With Claude Code on Zerops
+## Building a Live Match Scoreboard With Laravel Reverb
 
-[Read more](https://laravel-news.com/building-and-deploying-a-laravel-app-with-claude-code-on-zerops)
+[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
 
 ---
 
