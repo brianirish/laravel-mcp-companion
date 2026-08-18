@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "4030a84b979f7420788dda14df439dd4d66d765d",
-  "commit_date": "2026-08-12T13:57:53Z",
-  "commit_message": "[13.x] Fix: casting an image to a string returns a data URI, not bytes (#11331)",
-  "commit_url": "https://github.com/laravel/docs/commit/4030a84b979f7420788dda14df439dd4d66d765d",
-  "sync_time": "2026-08-13T00:02:16Z"
+  "commit_sha": "b2300431921ec68c8ba31bbef248bff1511e8eff",
+  "commit_date": "2026-08-17T21:53:42Z",
+  "commit_message": "Add missing table of contents entries (#11335)\n\nFour pages have level 3 sections that never made it into their table of\ncontents, while every other section on those same pages is listed.\n\nAdds the eight missing entries.",
+  "commit_url": "https://github.com/laravel/docs/commit/b2300431921ec68c8ba31bbef248bff1511e8eff",
+  "sync_time": "2026-08-18T00:02:16Z"
 }
