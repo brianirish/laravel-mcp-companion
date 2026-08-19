@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "b2300431921ec68c8ba31bbef248bff1511e8eff",
-  "commit_date": "2026-08-17T21:53:42Z",
-  "commit_message": "Add missing table of contents entries (#11335)\n\nFour pages have level 3 sections that never made it into their table of\ncontents, while every other section on those same pages is listed.\n\nAdds the eight missing entries.",
-  "commit_url": "https://github.com/laravel/docs/commit/b2300431921ec68c8ba31bbef248bff1511e8eff",
-  "sync_time": "2026-08-18T00:02:16Z"
+  "commit_sha": "57ae1e7dbd4bda3bae24ce93e527f1807ae49a43",
+  "commit_date": "2026-08-18T12:35:49Z",
+  "commit_message": "document new features",
+  "commit_url": "https://github.com/laravel/docs/commit/57ae1e7dbd4bda3bae24ce93e527f1807ae49a43",
+  "sync_time": "2026-08-19T00:02:06Z"
 }

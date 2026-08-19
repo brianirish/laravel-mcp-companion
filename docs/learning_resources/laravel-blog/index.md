@@ -4,17 +4,17 @@ Source: https://blog.laravel.com
 
 ---
 
-## Managed Queues: Autoscaling Queue Workers on Laravel Cloud
+## Object storage migrations with Laravel's read-through filesystem
 
-Laravel Cloud’s managed queues autoscale workers on queue pressure, surface failed jobs in a built-in dashboard, and scale to zero when idle.
+Migrate from S3 to R2 without downtime using Laravel 13's read-through filesystem driver. New writes land on the destination, legacy reads promote on access.
 
 [Read more](https://blog.laravel.com/blog/category/engineering)
 
 ---
 
-## Everything we announced at Laracon US 2026
+## We built laracon.us/photos. We’re not developers.
 
-Every Laravel framework and  Cloud announcement from Laracon US 2026, including Laravel LSP, Inertia DevTools, managed queues, and scale-to-zero.
+We had hundreds of Laracon photos and no good way to share them. So two field marketers built laracon.us/photos with Claude, Laravel, and Laravel Cloud.
 
 [Read more](https://blog.laravel.com/blog/category/community)
 
