@@ -4,12 +4,6 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel Terminal UI for the artisan dev Command
-
-[Read more](https://laravel-news.com/artisan-dev-terminal-ui)
-
----
-
 ## Pause All Queues and a New artisan dev UI in Laravel 13.25
 
 Latest Laravel Release
@@ -18,9 +12,9 @@ Latest Laravel Release
 
 ---
 
-## Mock PHP Classes in Tests With the Double Library
+## Let's Encrypt HTTPS on an IP Address With FrankenPHP
 
-[Read more](https://laravel-news.com/double-php-testing-library)
+[Read more](https://laravel-news.com/frankenphp-https-ip-address)
 
 ---
 
@@ -30,33 +24,33 @@ Latest Laravel Release
 
 ---
 
-## Laravel artisan dev: Run Server, Queue, Logs, and Vite
+## Laravel Lock: Distributed Locks for Models and Routes
 
-[Read more](https://laravel-news.com/artisan-dev-command)
-
----
-
-## Laravel monitoring that doesn't bill you by your traffic
-
-[Read more](https://laravel-news.com/nightowl)
+[Read more](https://laravel-news.com/laravel-lock)
 
 ---
 
-## Laravel artisan dev: Run Server, Queue, Logs, and Vite
+## Lerd: A Free, Open Source Herd Alternative for Linux and macOS
 
-[Read more](https://laravel-news.com/artisan-dev-command)
-
----
-
-## Laravel Discount: Coupon Codes, Usage Limits, and Stacking
-
-[Read more](https://laravel-news.com/laravel-discount)
+[Read more](https://laravel-news.com/lerd)
 
 ---
 
-## Building a Live Match Scoreboard With Laravel Reverb
+## Laravel Lock: Distributed Locks for Models and Routes
 
-[Read more](https://laravel-news.com/building-a-live-match-scoreboard-with-laravel-reverb)
+[Read more](https://laravel-news.com/laravel-lock)
+
+---
+
+## Laravel Chores: Resumable Data Operations and Cleanups
+
+[Read more](https://laravel-news.com/laravel-chores)
+
+---
+
+## Laravel Terminal UI for the artisan dev Command
+
+[Read more](https://laravel-news.com/artisan-dev-terminal-ui)
 
 ---
 
