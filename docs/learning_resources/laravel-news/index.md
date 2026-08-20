@@ -4,17 +4,17 @@ Source: https://laravel-news.com
 
 ---
 
-## Pause All Queues and a New artisan dev UI in Laravel 13.25
+## Read-Through Disks and Debounced Listeners in Laravel 13.26
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-25-0)
+[Read more](https://laravel-news.com/laravel-13-26-0)
 
 ---
 
-## Let's Encrypt HTTPS on an IP Address With FrankenPHP
+## Laravel Read-Through Filesystem: Lazy Storage Migration
 
-[Read more](https://laravel-news.com/frankenphp-https-ip-address)
+[Read more](https://laravel-news.com/laravel-read-through-filesystem)
 
 ---
 
