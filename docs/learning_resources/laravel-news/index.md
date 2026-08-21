@@ -12,9 +12,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Read-Through Filesystem: Lazy Storage Migration
+## Statamic Mailables Viewer Previews Laravel Emails in the Control Panel
 
-[Read more](https://laravel-news.com/laravel-read-through-filesystem)
+[Read more](https://laravel-news.com/statamic-mailables-viewer)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Chores: Resumable Data Operations and Cleanups
+## Laravel Tackle: Run an AI Coding Agent in Your Laravel App
 
-[Read more](https://laravel-news.com/laravel-chores)
+[Read more](https://laravel-news.com/laravel-tackle)
 
 ---
 
