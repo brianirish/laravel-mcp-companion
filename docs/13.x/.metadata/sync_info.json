@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "57ae1e7dbd4bda3bae24ce93e527f1807ae49a43",
-  "commit_date": "2026-08-18T12:35:49Z",
-  "commit_message": "document new features",
-  "commit_url": "https://github.com/laravel/docs/commit/57ae1e7dbd4bda3bae24ce93e527f1807ae49a43",
-  "sync_time": "2026-08-19T00:02:06Z"
+  "commit_sha": "501e8cf7f5e69e26b3c64d1a0656cacef2b4d413",
+  "commit_date": "2026-08-20T12:35:15Z",
+  "commit_message": "Document AI SDK v0.11.0 features (#11338)\n\n* Document AI SDK v0.11.0 features\n\n* formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/501e8cf7f5e69e26b3c64d1a0656cacef2b4d413",
+  "sync_time": "2026-08-21T00:05:07Z"
 }
