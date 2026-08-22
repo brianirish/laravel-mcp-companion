@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "501e8cf7f5e69e26b3c64d1a0656cacef2b4d413",
-  "commit_date": "2026-08-20T12:35:15Z",
-  "commit_message": "Document AI SDK v0.11.0 features (#11338)\n\n* Document AI SDK v0.11.0 features\n\n* formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/501e8cf7f5e69e26b3c64d1a0656cacef2b4d413",
-  "sync_time": "2026-08-21T00:05:07Z"
+  "commit_sha": "8939b76399f8f72cc76ffb494479a275abf5de23",
+  "commit_date": "2026-08-21T10:00:18Z",
+  "commit_message": "[13.x] Mention faking DNS lookups in the email rule docs (#11343)\n\nThe `Validator::fakeDnsLookups` method is only documented under the\n`active_url` rule, so developers with flaky `email:dns` tests are\nunlikely to find it. This adds a short pointer within the `email` rule\nsection that links back to the existing explanation.",
+  "commit_url": "https://github.com/laravel/docs/commit/8939b76399f8f72cc76ffb494479a275abf5de23",
+  "sync_time": "2026-08-22T00:02:09Z"
 }
