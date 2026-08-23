@@ -4,6 +4,12 @@ Source: https://laravel-news.com
 
 ---
 
+## Agent Run Observability in Laravel AI SDK 0.11
+
+[Read more](https://laravel-news.com/laravel-ai-sdk-0-11)
+
+---
+
 ## Read-Through Disks and Debounced Listeners in Laravel 13.26
 
 Latest Laravel Release
@@ -12,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Statamic Mailables Viewer Previews Laravel Emails in the Control Panel
+## Debounced Queued Event Listeners in Laravel
 
-[Read more](https://laravel-news.com/statamic-mailables-viewer)
+[Read more](https://laravel-news.com/laravel-debounced-queued-listeners)
 
 ---
 
