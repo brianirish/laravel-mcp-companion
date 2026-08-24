@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Agent Run Observability in Laravel AI SDK 0.11
+## Read-Through Disks and Debounced Listeners in Laravel 13.26
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-0-11)
+[Read more](https://laravel-news.com/laravel-13-26-0)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Debounced Queued Event Listeners in Laravel
+## Agent Run Observability in Laravel AI SDK 0.11
 
-[Read more](https://laravel-news.com/laravel-debounced-queued-listeners)
+[Read more](https://laravel-news.com/laravel-ai-sdk-0-11)
 
 ---
 
