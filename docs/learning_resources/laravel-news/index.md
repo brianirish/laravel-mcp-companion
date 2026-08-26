@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Read-Through Disks and Debounced Listeners in Laravel 13.26
+## Adding Autocomplete to Your Laravel Applications
 
-[Read more](https://laravel-news.com/laravel-13-26-0)
+[Read more](https://laravel-news.com/adding-autocomplete-to-your-laravel-applications)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Agent Run Observability in Laravel AI SDK 0.11
+## Laravel AI: Trace Agent Runs With Lifecycle Events
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-0-11)
+[Read more](https://laravel-news.com/laravel-ai-agent-run-events)
 
 ---
 
@@ -30,27 +30,27 @@ Latest Laravel Release
 
 ---
 
-## Laravel Lock: Distributed Locks for Models and Routes
+## Laravel Tackle: Run an AI Coding Agent in Your Laravel App
 
-[Read more](https://laravel-news.com/laravel-lock)
-
----
-
-## Lerd: A Free, Open Source Herd Alternative for Linux and macOS
-
-[Read more](https://laravel-news.com/lerd)
+[Read more](https://laravel-news.com/laravel-tackle)
 
 ---
 
-## Laravel Lock: Distributed Locks for Models and Routes
+## A simple form builder that stays out of your way
 
-[Read more](https://laravel-news.com/laravel-lock)
+[Read more](https://laravel-news.com/deftform)
 
 ---
 
 ## Laravel Tackle: Run an AI Coding Agent in Your Laravel App
 
 [Read more](https://laravel-news.com/laravel-tackle)
+
+---
+
+## Laravel Auditor Audits Your App With Your Own AI Agent
+
+[Read more](https://laravel-news.com/laravel-auditor)
 
 ---
 
