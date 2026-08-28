@@ -39,4 +39,3 @@ npm run watch
 Was this page helpful?
 YesNo
 [CSS / JavaScript](/docs/v5/customization/frontend)[Localization](/docs/v5/customization/localization)
-⌘I

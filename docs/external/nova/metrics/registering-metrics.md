@@ -293,4 +293,3 @@ public function cards(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Defining Metrics](/docs/v5/metrics/defining-metrics)[Dashboards](/docs/v5/customization/dashboards)
-⌘I

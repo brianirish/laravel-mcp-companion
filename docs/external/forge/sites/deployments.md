@@ -255,4 +255,3 @@ Laravel Forge can also send an HTTP POST request to arbitrary URLs after each de
 Was this page helpful?
 YesNo
 [Domains](/forge/docs/sites/domains)[Repository Access](/forge/docs/sites/repository-access)
-⌘I

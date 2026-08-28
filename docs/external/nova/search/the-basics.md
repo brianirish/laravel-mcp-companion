@@ -163,4 +163,3 @@ public static function searchableColumns()
 Was this page helpful?
 YesNo
 [Authorization](/docs/v5/resources/authorization)[Global Search](/docs/v5/search/global-search)
-⌘I

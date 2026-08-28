@@ -252,4 +252,3 @@ The `nova:install` NPM command installs the mixins used by Nova’s built-in fie
 Was this page helpful?
 YesNo
 [Cards](/docs/v5/customization/cards)[Filters](/docs/v5/customization/filters)
-⌘I

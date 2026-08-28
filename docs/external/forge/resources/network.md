@@ -68,4 +68,3 @@ This will re-establish Forge’s connection capability to your server.
 Was this page helpful?
 YesNo
 [Scheduler](/forge/docs/resources/scheduler)[Packages](/forge/docs/resources/packages)
-⌘I

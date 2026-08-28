@@ -81,4 +81,3 @@ For more information on configuring and managing OpenClaw servers, see the [Open
 Was this page helpful?
 YesNo
 [Managing Servers](/forge/docs/servers/the-basics)[Laravel VPS](/forge/docs/servers/laravel-vps)
-⌘I

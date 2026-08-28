@@ -70,4 +70,3 @@ Laravel Forge doesn’t provide automatic database server upgrades. If you need 
 Was this page helpful?
 YesNo
 [Logs](/forge/docs/sites/logs)[Database Backups](/forge/docs/resources/database-backups)
-⌘I

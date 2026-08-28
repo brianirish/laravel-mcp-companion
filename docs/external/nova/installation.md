@@ -393,4 +393,3 @@ Our [Terms of Service](https://nova.laravel.com/terms) and [Privacy Policy](htt
 Was this page helpful?
 YesNo
 [Release Notes](/docs/v5/releases)
-⌘I

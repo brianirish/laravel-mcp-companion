@@ -439,4 +439,3 @@ Since the `acceptedTypes` method only performs client-side validation, you shoul
 Was this page helpful?
 YesNo
 [Date Fields](/docs/v5/resources/date-fields)[Repeater Fields](/docs/v5/resources/repeater-fields)
-⌘I

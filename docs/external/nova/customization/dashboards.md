@@ -217,4 +217,3 @@ protected function dashboards(): array
 Was this page helpful?
 YesNo
 [Registering Metrics](/docs/v5/metrics/registering-metrics)[Menus](/docs/v5/customization/menus)
-⌘I

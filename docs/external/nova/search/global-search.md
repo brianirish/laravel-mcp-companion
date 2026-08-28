@@ -143,4 +143,3 @@ public function boot(): void
 Was this page helpful?
 YesNo
 [The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)
-⌘I

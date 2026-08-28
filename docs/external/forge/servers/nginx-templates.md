@@ -50,4 +50,3 @@ The ability to manage Nginx Templates is determined by the `site:manage-nginx` p
 Was this page helpful?
 YesNo
 [Load Balancing](/forge/docs/servers/load-balancing)[Security](/forge/docs/servers/security)
-⌘I

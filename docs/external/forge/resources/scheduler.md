@@ -54,4 +54,3 @@ Applications running Laravel can use the `pingBefore` and `thenPing` methods to 
 Was this page helpful?
 YesNo
 [Background Processes](/forge/docs/resources/background-processes)[Network](/forge/docs/resources/network)
-⌘I

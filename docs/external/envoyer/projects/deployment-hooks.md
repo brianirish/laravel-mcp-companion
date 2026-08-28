@@ -54,4 +54,3 @@ Variables can be written with or without a space inside of the curly braces. For
 Was this page helpful?
 YesNo
 [Servers](/projects/servers)[Heartbeats](/projects/heartbeats)
-⌘I

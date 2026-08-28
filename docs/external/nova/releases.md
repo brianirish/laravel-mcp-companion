@@ -118,4 +118,3 @@ Further reading is available on the [Authorization](./resources/authorization#us
 Was this page helpful?
 YesNo
 [Installation](/docs/v5/installation)[Upgrade Guide](/docs/v5/upgrade)
-⌘I

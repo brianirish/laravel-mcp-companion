@@ -223,4 +223,3 @@ public function filters(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Scout Integration](/docs/v5/search/scout-integration)[Registering Filters](/docs/v5/filters/registering-filters)
-⌘I

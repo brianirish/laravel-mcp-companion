@@ -133,4 +133,3 @@ php artisan nova:stubs --force
 Was this page helpful?
 YesNo
 [Release Notes](/docs/v5/releases)[The Basics](/docs/v5/resources/the-basics)
-⌘I

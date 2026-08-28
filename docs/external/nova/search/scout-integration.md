@@ -76,4 +76,3 @@ class User extends Resource
 Was this page helpful?
 YesNo
 [Global Search](/docs/v5/search/global-search)[Defining Filters](/docs/v5/filters/defining-filters)
-⌘I

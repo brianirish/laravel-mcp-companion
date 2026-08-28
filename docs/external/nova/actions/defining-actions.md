@@ -535,4 +535,3 @@ public function actions(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Registering Lenses](/docs/v5/lenses/registering-lenses)[Registering Actions](/docs/v5/actions/registering-actions)
-⌘I

@@ -98,4 +98,3 @@ You may grant a team member authority to create and delete sites by granting the
 Was this page helpful?
 YesNo
 [Real-Time Metrics](/forge/docs/servers/real-time-metrics)[Domains](/forge/docs/sites/domains)
-⌘I

@@ -108,4 +108,3 @@ public function boot(): void
 Was this page helpful?
 YesNo
 [Menus](/docs/v5/customization/menus)[Authentication](/docs/v5/customization/authentication)
-⌘I

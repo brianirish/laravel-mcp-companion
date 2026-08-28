@@ -271,4 +271,3 @@ public static function perPageOptions()
 Was this page helpful?
 YesNo
 [Registering Filters](/docs/v5/filters/registering-filters)[Registering Lenses](/docs/v5/lenses/registering-lenses)
-⌘I

@@ -32,4 +32,3 @@ The CPU Load and Used Memory metric data will be collected every minute. The Dis
 Was this page helpful?
 YesNo
 [Security](/forge/docs/servers/security)[Real-Time Metrics](/forge/docs/servers/real-time-metrics)
-⌘I

@@ -325,4 +325,3 @@ If you are looking for application performance monitoring for the Laravel applic
 Was this page helpful?
 YesNo
 [Laravel Forge CLI](/forge/docs/cli)[Organizations](/forge/docs/organizations)
-⌘I

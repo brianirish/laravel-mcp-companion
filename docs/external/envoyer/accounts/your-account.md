@@ -33,4 +33,3 @@ Deleting your account will cancel your subscription and delete all of your accou
 Was this page helpful?
 YesNo
 [Source Control](/accounts/source-control)[Management](/projects/management)
-⌘I

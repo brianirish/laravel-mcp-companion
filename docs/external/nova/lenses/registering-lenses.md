@@ -97,4 +97,3 @@ public function lenses(NovaRequest $request): array
 Was this page helpful?
 YesNo
 [Defining Lenses](/docs/v5/lenses/defining-lenses)[Defining Actions](/docs/v5/actions/defining-actions)
-⌘I
