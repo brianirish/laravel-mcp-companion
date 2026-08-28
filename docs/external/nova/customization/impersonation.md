@@ -111,4 +111,3 @@ public function boot(): void
 Was this page helpful?
 YesNo
 [Authentication](/docs/v5/customization/authentication)[Tools](/docs/v5/customization/tools)
-⌘I

@@ -44,4 +44,3 @@ When using SSL on a load balancer, you will likely need to configure the “trus
 Was this page helpful?
 YesNo
 [PHP](/forge/docs/servers/php)[Nginx Templates](/forge/docs/servers/nginx-templates)
-⌘I

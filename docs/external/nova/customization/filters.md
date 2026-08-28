@@ -127,4 +127,3 @@ npm run watch
 Was this page helpful?
 YesNo
 [Fields](/docs/v5/customization/fields)[CSS / JavaScript](/docs/v5/customization/frontend)
-⌘I

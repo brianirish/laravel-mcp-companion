@@ -19,4 +19,3 @@ Only project owners are able to manage project collaborators.
 Was this page helpful?
 YesNo
 [Notifications](/projects/notifications)
-⌘I

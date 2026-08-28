@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## Adding Autocomplete to Your Laravel Applications
+## whereBinary(): Case-Sensitive MySQL Queries in Laravel
 
-[Read more](https://laravel-news.com/adding-autocomplete-to-your-laravel-applications)
+[Read more](https://laravel-news.com/laravel-where-binary)
 
 ---
 
-## Read-Through Disks and Debounced Listeners in Laravel 13.26
+## Query Binding Masking and whereBinary() in Laravel 13.27
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-26-0)
+[Read more](https://laravel-news.com/laravel-13-27-0)
 
 ---
 
-## Laravel AI: Trace Agent Runs With Lifecycle Events
+## State of Laravel 2026 Survey Is Now Open
 
-[Read more](https://laravel-news.com/laravel-ai-agent-run-events)
+[Read more](https://laravel-news.com/state-of-laravel-2026-survey)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Tackle: Run an AI Coding Agent in Your Laravel App
+## Compile PHP to Native Binaries with TypePHP
 
-[Read more](https://laravel-news.com/laravel-tackle)
+[Read more](https://laravel-news.com/typephp-compile-php-native-binaries)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Tackle: Run an AI Coding Agent in Your Laravel App
+## whereBinary(): Case-Sensitive MySQL Queries in Laravel
 
-[Read more](https://laravel-news.com/laravel-tackle)
+[Read more](https://laravel-news.com/laravel-where-binary)
 
 ---
 

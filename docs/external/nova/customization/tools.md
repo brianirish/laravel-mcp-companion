@@ -160,4 +160,3 @@ Vue page components contained by your tool have access to all of the components 
 Was this page helpful?
 YesNo
 [Impersonation](/docs/v5/customization/impersonation)[Resource Tools](/docs/v5/customization/resource-tools)
-⌘I

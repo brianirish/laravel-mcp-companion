@@ -22,4 +22,3 @@ After you have selected a channel, you will be asked to provide a name for the c
 Was this page helpful?
 YesNo
 [Heartbeats](/projects/heartbeats)[Collaborators](/projects/collaborators)
-⌘I

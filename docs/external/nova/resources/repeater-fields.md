@@ -254,4 +254,3 @@ The `Markdown` and `Trix` fields support being used for text, but do not current
 Was this page helpful?
 YesNo
 [File Fields](/docs/v5/resources/file-fields)[Field Panels](/docs/v5/resources/panels)
-⌘I

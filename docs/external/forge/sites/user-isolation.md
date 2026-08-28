@@ -28,4 +28,3 @@ You can connect to your server via SFTP as the isolated user. We recommend using
 Was this page helpful?
 YesNo
 [Network](/forge/docs/sites/network)[Laravel](/forge/docs/sites/laravel)
-⌘I

@@ -221,4 +221,3 @@ forge database:shell my-database-name --user=my-user
 Was this page helpful?
 YesNo
 [Introduction](/forge/docs/introduction)[Laravel Forge SDK](/forge/docs/sdk)
-⌘I

@@ -179,4 +179,3 @@ npm run watch
 Was this page helpful?
 YesNo
 [Tools](/docs/v5/customization/tools)[Cards](/docs/v5/customization/cards)
-⌘I

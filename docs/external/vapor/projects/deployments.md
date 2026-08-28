@@ -342,4 +342,3 @@ If you plan to use Docker based runtimes to run your Vapor application, you must
 Was this page helpful?
 YesNo
 [Environments](/projects/environments)[Development](/projects/development)
-⌘I

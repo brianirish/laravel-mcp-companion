@@ -194,4 +194,3 @@ For applications that require Laravel Horizon’s powerful queue monitoring and 
 Was this page helpful?
 YesNo
 [Migrate to Cloud](/resources/migrate-to-cloud)[Storage](/resources/storage)
-⌘I

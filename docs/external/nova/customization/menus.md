@@ -459,4 +459,3 @@ MenuItem::link('Cashier', '/cashier')
 Was this page helpful?
 YesNo
 [Dashboards](/docs/v5/customization/dashboards)[Notifications](/docs/v5/customization/notifications)
-⌘I

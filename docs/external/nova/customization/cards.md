@@ -164,4 +164,3 @@ npm run watch
 Was this page helpful?
 YesNo
 [Resource Tools](/docs/v5/customization/resource-tools)[Fields](/docs/v5/customization/fields)
-⌘I

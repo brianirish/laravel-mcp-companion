@@ -418,4 +418,3 @@ Our [Terms of Service](https://vapor.laravel.com/terms) and [Privacy Policy](ht
 Was this page helpful?
 YesNo
 [The Basics](/projects/the-basics)
-⌘I

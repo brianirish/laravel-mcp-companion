@@ -420,4 +420,3 @@ public static function scoutQuery(
 Was this page helpful?
 YesNo
 [Validation](/docs/v5/resources/validation)[The Basics](/docs/v5/search/the-basics)
-⌘I

@@ -39,4 +39,3 @@ You may delete a project using the Vapor UI or the `project:delete` CLI command.
 Was this page helpful?
 YesNo
 [Introduction](/introduction)[Environments](/projects/environments)
-⌘I

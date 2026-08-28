@@ -104,4 +104,3 @@ If your server is already configured with a daemon that runs Inertia SSR, Larave
 Was this page helpful?
 YesNo
 [Isolation](/forge/docs/sites/user-isolation)[Logs](/forge/docs/sites/logs)
-⌘I

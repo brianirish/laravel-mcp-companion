@@ -32,4 +32,3 @@ $schedule->command('foo')->thenPing('http://beats.envoyer.io/heartbeat-id');
 Was this page helpful?
 YesNo
 [Deployment Hooks](/projects/deployment-hooks)[Notifications](/projects/notifications)
-⌘I

@@ -197,4 +197,3 @@ Finally, to secure the Nova page from being used by unverified users, you can ad
 Was this page helpful?
 YesNo
 [Notifications](/docs/v5/customization/notifications)[Impersonation](/docs/v5/customization/impersonation)
-⌘I

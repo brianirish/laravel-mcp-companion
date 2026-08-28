@@ -70,4 +70,3 @@ Once that PHP version becomes stable, you will need to fully uninstall and re-in
 Was this page helpful?
 YesNo
 [Laravel VPS](/forge/docs/servers/laravel-vps)[Load Balancing](/forge/docs/servers/load-balancing)
-⌘I

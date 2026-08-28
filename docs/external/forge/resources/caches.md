@@ -40,4 +40,3 @@ For example, when connecting via [TablePlus](https://tableplus.com/):
 Was this page helpful?
 YesNo
 [Object Storage](/forge/docs/resources/object-storage)[Background Processes](/forge/docs/resources/background-processes)
-⌘I

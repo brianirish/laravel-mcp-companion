@@ -76,4 +76,3 @@ vapor cache:delete my-application-cache
 Was this page helpful?
 YesNo
 [Databases](/resources/databases)[Logs](/resources/logs)
-⌘I

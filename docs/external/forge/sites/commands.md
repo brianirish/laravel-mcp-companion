@@ -37,4 +37,3 @@ While [recipes](/forge/docs/recipes) also allow you to run arbitrary Bash script
 Was this page helpful?
 YesNo
 [Environment Variables](/forge/docs/sites/environment-variables)[Queues](/forge/docs/sites/queues)
-⌘I

@@ -586,4 +586,3 @@ vapor env:delete testing
 Was this page helpful?
 YesNo
 [The Basics](/projects/the-basics)[Deployments](/projects/deployments)
-⌘I

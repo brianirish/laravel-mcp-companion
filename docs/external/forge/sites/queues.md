@@ -40,4 +40,3 @@ You may grant a team member authority to create and manage queue workers by gran
 Was this page helpful?
 YesNo
 [Commands](/forge/docs/sites/commands)[Network](/forge/docs/sites/network)
-⌘I
