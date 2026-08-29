@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## whereBinary(): Case-Sensitive MySQL Queries in Laravel
+## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
 
-[Read more](https://laravel-news.com/laravel-where-binary)
+[Read more](https://laravel-news.com/laravel-refresh-for-update)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## State of Laravel 2026 Survey Is Now Open
+## Mask Query Bindings in Laravel Exception Messages
 
-[Read more](https://laravel-news.com/state-of-laravel-2026-survey)
+[Read more](https://laravel-news.com/laravel-mask-query-bindings)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Compile PHP to Native Binaries with TypePHP
+## Laravel Starter Kits Now Ship with Vite+
 
-[Read more](https://laravel-news.com/typephp-compile-php-native-binaries)
+[Read more](https://laravel-news.com/laravel-starter-kits-vite-plus)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## whereBinary(): Case-Sensitive MySQL Queries in Laravel
+## Compile PHP to Native Binaries with TypePHP
 
-[Read more](https://laravel-news.com/laravel-where-binary)
+[Read more](https://laravel-news.com/typephp-compile-php-native-binaries)
 
 ---
 
