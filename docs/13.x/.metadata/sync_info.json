@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "6bc0513ccb86a82de3975156ff395bfccec88213",
-  "commit_date": "2026-08-27T14:52:35Z",
-  "commit_message": "Require contributor-written pull request descriptions (#11347)",
-  "commit_url": "https://github.com/laravel/docs/commit/6bc0513ccb86a82de3975156ff395bfccec88213",
-  "sync_time": "2026-08-28T00:02:51Z"
+  "commit_sha": "7c2d03a80ebf884e7f1c0e73cbf7c149b63e4280",
+  "commit_date": "2026-08-28T14:29:18Z",
+  "commit_message": "Update queues.md (#11348)",
+  "commit_url": "https://github.com/laravel/docs/commit/7c2d03a80ebf884e7f1c0e73cbf7c149b63e4280",
+  "sync_time": "2026-08-29T00:04:30Z"
 }
