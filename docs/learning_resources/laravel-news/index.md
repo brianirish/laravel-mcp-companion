@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
+## PHPSandbox - Build, Prototype, and share PHP apps in seconds
 
-[Read more](https://laravel-news.com/laravel-refresh-for-update)
+[Read more](https://laravel-news.com/phpsandbox)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Mask Query Bindings in Laravel Exception Messages
+## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
 
-[Read more](https://laravel-news.com/laravel-mask-query-bindings)
+[Read more](https://laravel-news.com/laravel-refresh-for-update)
 
 ---
 
