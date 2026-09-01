@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "7c2d03a80ebf884e7f1c0e73cbf7c149b63e4280",
-  "commit_date": "2026-08-28T14:29:18Z",
-  "commit_message": "Update queues.md (#11348)",
-  "commit_url": "https://github.com/laravel/docs/commit/7c2d03a80ebf884e7f1c0e73cbf7c149b63e4280",
-  "sync_time": "2026-08-29T00:04:30Z"
+  "commit_sha": "147b82e4939f9d061353aef30a787fae9118ce22",
+  "commit_date": "2026-08-31T13:48:11Z",
+  "commit_message": "Fix invalid validation rule(prohibited_with) and array method call in ai-sdk documentation example (#11350)",
+  "commit_url": "https://github.com/laravel/docs/commit/147b82e4939f9d061353aef30a787fae9118ce22",
+  "sync_time": "2026-09-01T00:02:19Z"
 }
