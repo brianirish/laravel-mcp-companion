@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "147b82e4939f9d061353aef30a787fae9118ce22",
-  "commit_date": "2026-08-31T13:48:11Z",
-  "commit_message": "Fix invalid validation rule(prohibited_with) and array method call in ai-sdk documentation example (#11350)",
-  "commit_url": "https://github.com/laravel/docs/commit/147b82e4939f9d061353aef30a787fae9118ce22",
-  "sync_time": "2026-09-01T00:02:19Z"
+  "commit_sha": "8760508f20115194438f6cae7adb20a0a4b83051",
+  "commit_date": "2026-09-01T16:34:30Z",
+  "commit_message": "[13.x] Fix two out-of-sync table of contents labels (#11353)\n\nTwo table of contents labels did not match the heading and anchor they link to.\n\n- eloquent.md: the entry read \"Chunk Using Lazy Collections\" while the section heading, its anchor, and two in-page links all read \"Chunking Using Lazy Collections\".\n- passport.md: the entry read \"Creating a Device Code Grant Client\" while the section heading and anchor read \"Creating a Device Authorization Grant Client\", matching the parent \"Device Authorization Grant\" entry.\n\nOnly the label text changed. The anchors are untouched, so no links break.",
+  "commit_url": "https://github.com/laravel/docs/commit/8760508f20115194438f6cae7adb20a0a4b83051",
+  "sync_time": "2026-09-02T00:02:42Z"
 }

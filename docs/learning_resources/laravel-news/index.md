@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## PHPSandbox - Build, Prototype, and share PHP apps in seconds
+## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
 
-[Read more](https://laravel-news.com/phpsandbox)
+[Read more](https://laravel-news.com/laravel-refresh-for-update)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
+## Cancel In-Flight Form Submissions in Inertia.js v3.7
 
-[Read more](https://laravel-news.com/laravel-refresh-for-update)
+[Read more](https://laravel-news.com/inertia-3-7-0)
 
 ---
 
@@ -30,33 +30,33 @@ Latest Laravel Release
 
 ---
 
-## Laravel Starter Kits Now Ship with Vite+
+## Compoships: Eloquent Relationships on Multiple Columns
 
-[Read more](https://laravel-news.com/laravel-starter-kits-vite-plus)
-
----
-
-## A simple form builder that stays out of your way
-
-[Read more](https://laravel-news.com/deftform)
+[Read more](https://laravel-news.com/compoships)
 
 ---
 
-## Compile PHP to Native Binaries with TypePHP
+## Hands-on help for Laravel teams with No Compromises
 
-[Read more](https://laravel-news.com/typephp-compile-php-native-binaries)
+[Read more](https://nocompromises.io/?ref=ln-partner)
 
 ---
 
-## Laravel Auditor Audits Your App With Your Own AI Agent
+## MKSine: A Filament CMS with Plugins, Themes, and Blocks
 
-[Read more](https://laravel-news.com/laravel-auditor)
+[Read more](https://laravel-news.com/mksine-filament-cms)
 
 ---
 
 ## Laravel Terminal UI for the artisan dev Command
 
 [Read more](https://laravel-news.com/artisan-dev-terminal-ui)
+
+---
+
+## Laravel Auditor Audits Your App With Your Own AI Agent
+
+[Read more](https://laravel-news.com/laravel-auditor)
 
 ---
 
