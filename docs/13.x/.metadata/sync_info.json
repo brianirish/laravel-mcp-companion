@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "8760508f20115194438f6cae7adb20a0a4b83051",
-  "commit_date": "2026-09-01T16:34:30Z",
-  "commit_message": "[13.x] Fix two out-of-sync table of contents labels (#11353)\n\nTwo table of contents labels did not match the heading and anchor they link to.\n\n- eloquent.md: the entry read \"Chunk Using Lazy Collections\" while the section heading, its anchor, and two in-page links all read \"Chunking Using Lazy Collections\".\n- passport.md: the entry read \"Creating a Device Code Grant Client\" while the section heading and anchor read \"Creating a Device Authorization Grant Client\", matching the parent \"Device Authorization Grant\" entry.\n\nOnly the label text changed. The anchors are untouched, so no links break.",
-  "commit_url": "https://github.com/laravel/docs/commit/8760508f20115194438f6cae7adb20a0a4b83051",
-  "sync_time": "2026-09-02T00:02:42Z"
+  "commit_sha": "ccefc99cd9f671ef3c60b2e1b3ee3188df8fadf2",
+  "commit_date": "2026-09-02T13:35:31Z",
+  "commit_message": "Document prompt caching, tool argument validation, and embedding cache keys (#11354)\n\n* Document prompt caching, tool argument validation, and embedding cache keys\n\n* formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/ccefc99cd9f671ef3c60b2e1b3ee3188df8fadf2",
+  "sync_time": "2026-09-03T00:02:04Z"
 }
