@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Semantic memory or just Markdown?
+
+Why Laravel Boost project rules use a generated Markdown index after we deleted semantic search.
+
+[Read more](https://blog.laravel.com/blog/category/engineering)
+
+---
+
 ## Extracting AI rules from an existing codebase
 
 How Laravel Boost uses an agent skill to find existing project conventions and record the useful ones as scoped rules.
@@ -20,11 +28,11 @@ Migrate from S3 to R2 without downtime using Laravel 13's read-through filesyste
 
 ---
 
-## We built laracon.us/photos. We’re not developers.
+## Laravel August Product Updates
 
-We had hundreds of Laracon photos and no good way to share them. So two field marketers built laracon.us/photos with Claude, Laravel, and Laravel Cloud.
+Here's everything that shipped in August.
 
-[Read more](https://blog.laravel.com/blog/category/community)
+[Read more](https://blog.laravel.com/blog/category/releases)
 
 ---
 

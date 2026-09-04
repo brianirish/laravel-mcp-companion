@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Pessimistic Locking in Laravel Eloquent with refreshForUpdate()
+## Laravel queue:work Now Prints Why the Worker Stopped
 
-[Read more](https://laravel-news.com/laravel-refresh-for-update)
+[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Cancel In-Flight Form Submissions in Inertia.js v3.7
+## The Laracon Archive
 
-[Read more](https://laravel-news.com/inertia-3-7-0)
+[Read more](https://laravel-news.com/laracon-archive)
 
 ---
 
@@ -30,33 +30,33 @@ Latest Laravel Release
 
 ---
 
-## Compoships: Eloquent Relationships on Multiple Columns
+## Group Adjacent Collection Items in Laravel with chunkBy()
 
-[Read more](https://laravel-news.com/compoships)
-
----
-
-## Hands-on help for Laravel teams with No Compromises
-
-[Read more](https://nocompromises.io/?ref=ln-partner)
+[Read more](https://laravel-news.com/laravel-collection-chunk-by)
 
 ---
 
-## MKSine: A Filament CMS with Plugins, Themes, and Blocks
+## The Web Search API for Your LLM and AI Applications​
 
-[Read more](https://laravel-news.com/mksine-filament-cms)
+[Read more](https://serpapi.com/?utm_source=laravelnews)
+
+---
+
+## Laravel queue:work Now Prints Why the Worker Stopped
+
+[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
+
+---
+
+## Forte: Parse and Rewrite Laravel Blade Templates
+
+[Read more](https://laravel-news.com/forte-blade-parser)
 
 ---
 
 ## Laravel Terminal UI for the artisan dev Command
 
 [Read more](https://laravel-news.com/artisan-dev-terminal-ui)
-
----
-
-## Laravel Auditor Audits Your App With Your Own AI Agent
-
-[Read more](https://laravel-news.com/laravel-auditor)
 
 ---
 

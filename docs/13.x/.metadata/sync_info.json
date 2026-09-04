@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "ccefc99cd9f671ef3c60b2e1b3ee3188df8fadf2",
-  "commit_date": "2026-09-02T13:35:31Z",
-  "commit_message": "Document prompt caching, tool argument validation, and embedding cache keys (#11354)\n\n* Document prompt caching, tool argument validation, and embedding cache keys\n\n* formatting\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/ccefc99cd9f671ef3c60b2e1b3ee3188df8fadf2",
-  "sync_time": "2026-09-03T00:02:04Z"
+  "commit_sha": "2914ba0b06c6be40c2f1f992555853f6266707d6",
+  "commit_date": "2026-09-03T14:58:42Z",
+  "commit_message": "update guidelines",
+  "commit_url": "https://github.com/laravel/docs/commit/2914ba0b06c6be40c2f1f992555853f6266707d6",
+  "sync_time": "2026-09-04T00:02:23Z"
 }
