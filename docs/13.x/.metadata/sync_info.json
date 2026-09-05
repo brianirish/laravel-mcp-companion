@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "2914ba0b06c6be40c2f1f992555853f6266707d6",
-  "commit_date": "2026-09-03T14:58:42Z",
-  "commit_message": "update guidelines",
-  "commit_url": "https://github.com/laravel/docs/commit/2914ba0b06c6be40c2f1f992555853f6266707d6",
-  "sync_time": "2026-09-04T00:02:23Z"
+  "commit_sha": "89e91b5cff48e1b9b1a7921300653eb1ceb7bfcb",
+  "commit_date": "2026-09-04T14:33:51Z",
+  "commit_message": "docs: remove stale contribution guide link (#11355)",
+  "commit_url": "https://github.com/laravel/docs/commit/89e91b5cff48e1b9b1a7921300653eb1ceb7bfcb",
+  "sync_time": "2026-09-05T00:01:53Z"
 }
