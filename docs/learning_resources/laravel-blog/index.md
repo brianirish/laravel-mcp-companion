@@ -28,7 +28,7 @@ Migrate from S3 to R2 without downtime using Laravel 13's read-through filesyste
 
 ---
 
-## Laravel August Product Updates
+## Laravel August product updates
 
 Here's everything that shipped in August.
 

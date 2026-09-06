@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel queue:work Now Prints Why the Worker Stopped
+## JSON Unicode Cast Type Added in Laravel 12.3
 
-[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
+[Read more](https://laravel-news.com/laravel-12-3-0)
 
 ---
 
@@ -24,15 +24,15 @@ Latest Laravel Release
 
 ---
 
-## Laravel Image Responses: Serve Resized Images From Routes
+## Exclude Vendor and Default Commands in `php artisan dev`
 
-[Read more](https://laravel-news.com/laravel-image-responses)
+[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
 
 ---
 
-## Group Adjacent Collection Items in Laravel with chunkBy()
+## Taylor disabled GitHub Issues on most Laravel open-source packages.
 
-[Read more](https://laravel-news.com/laravel-collection-chunk-by)
+[Read more](https://laravel-news.com/taylor-disabled-github-issues)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel queue:work Now Prints Why the Worker Stopped
+## Exclude Vendor and Default Commands in `php artisan dev`
 
-[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
+[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Terminal UI for the artisan dev Command
+## Laravel queue:work Now Prints Why the Worker Stopped
 
-[Read more](https://laravel-news.com/artisan-dev-terminal-ui)
+[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
 
 ---
 
