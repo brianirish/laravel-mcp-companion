@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## JSON Unicode Cast Type Added in Laravel 12.3
+## Laravel Auto CRUD
 
-[Read more](https://laravel-news.com/laravel-12-3-0)
+[Read more](https://laravel-news.com/laravel-auto-crud)
 
 ---
 
@@ -18,33 +18,33 @@ Latest Laravel Release
 
 ---
 
-## The Laracon Archive
-
-[Read more](https://laravel-news.com/laracon-archive)
-
----
-
-## Exclude Vendor and Default Commands in `php artisan dev`
-
-[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
-
----
-
 ## Taylor disabled GitHub Issues on most Laravel open-source packages.
 
 [Read more](https://laravel-news.com/taylor-disabled-github-issues)
 
 ---
 
-## The Web Search API for Your LLM and AI Applications​
-
-[Read more](https://serpapi.com/?utm_source=laravelnews)
-
----
-
 ## Exclude Vendor and Default Commands in `php artisan dev`
 
 [Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
+
+---
+
+## Laravel Rulebook: Business Rules That Change by Date
+
+[Read more](https://laravel-news.com/laravel-rulebook)
+
+---
+
+## Hands-on help for Laravel teams with No Compromises
+
+[Read more](https://nocompromises.io/?ref=ln-partner)
+
+---
+
+## Taylor disabled GitHub Issues on most Laravel open-source packages.
+
+[Read more](https://laravel-news.com/taylor-disabled-github-issues)
 
 ---
 
