@@ -1324,6 +1324,9 @@ test('orders can be shipped', function () {
     // Assert a mailable was sent twice...
     Mail::assertSentTimes(OrderShipped::class, 2);
 
+    // Assert that a mailable was sent exactly once...
+    Mail::assertSentOnce(OrderShipped::class);
+
     // Assert 3 total mailables were sent...
     Mail::assertSentCount(3);
 });
@@ -1367,6 +1370,9 @@ class ExampleTest extends TestCase
         // Assert a mailable was sent twice...
         Mail::assertSentTimes(OrderShipped::class, 2);
 
+        // Assert that a mailable was sent exactly once...
+        Mail::assertSentOnce(OrderShipped::class);
+
         // Assert 3 total mailables were sent...
         Mail::assertSentCount(3);
     }
@@ -1377,6 +1383,7 @@ If you are queueing mailables for delivery in the background, you should use the
 
 ```php
 Mail::assertQueued(OrderShipped::class);
+Mail::assertQueuedOnce(OrderShipped::class);
 Mail::assertNotQueued(OrderShipped::class);
 Mail::assertNothingQueued();
 Mail::assertQueuedCount(3);
