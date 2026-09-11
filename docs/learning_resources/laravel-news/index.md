@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## Guzzle 7 Released
+## Bifrost Turns One With AI Builds and New Workflows
 
-[Read more](https://laravel-news.com/guzzle-7-released)
+[Read more](https://laravel-news.com/bifrost-first-anniversary)
 
 ---
 
-## Query Binding Masking and whereBinary() in Laravel 13.27
+## Queue totalSize() and JobInterrupted Event in Laravel 13.31
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-27-0)
+[Read more](https://laravel-news.com/laravel-13-31-0)
 
 ---
 
-## Taylor disabled GitHub Issues on most Laravel open-source packages.
+## Artisan Debugging Commands in Laravel Telescope 5.24.0
 
-[Read more](https://laravel-news.com/taylor-disabled-github-issues)
+[Read more](https://laravel-news.com/laravel-telescope-5-24-0)
 
 ---
 
@@ -30,15 +30,21 @@ Latest Laravel Release
 
 ---
 
-## Laravel Rulebook: Business Rules That Change by Date
+## Preview Blade Templates in macOS Finder with Quick Blade
 
-[Read more](https://laravel-news.com/laravel-rulebook)
+[Read more](https://laravel-news.com/quick-blade)
 
 ---
 
-## The Web Search API for Your LLM and AI Applications​
+## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
 
-[Read more](https://serpapi.com/?utm_source=laravelnews)
+[Read more](https://jb.gg/aysiyl)
+
+---
+
+## Artisan Debugging Commands in Laravel Telescope 5.24.0
+
+[Read more](https://laravel-news.com/laravel-telescope-5-24-0)
 
 ---
 
@@ -51,12 +57,6 @@ Latest Laravel Release
 ## Laravel queue:work Now Prints Why the Worker Stopped
 
 [Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
-
----
-
-## Forte: Parse and Rewrite Laravel Blade Templates
-
-[Read more](https://laravel-news.com/forte-blade-parser)
 
 ---
 
