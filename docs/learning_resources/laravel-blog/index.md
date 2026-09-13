@@ -28,11 +28,3 @@ How Laravel Boost uses an agent skill to find existing project conventions and r
 
 ---
 
-## Laravel August product updates
-
-Here's everything that shipped in August.
-
-[Read more](https://blog.laravel.com/blog/category/releases)
-
----
-
