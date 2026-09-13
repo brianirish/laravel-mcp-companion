@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Bifrost Turns One With AI Builds and New Workflows
+## Laravel Image Responses: Serve Resized Images From Routes
 
-[Read more](https://laravel-news.com/bifrost-first-anniversary)
+[Read more](https://laravel-news.com/laravel-image-responses)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Artisan Debugging Commands in Laravel Telescope 5.24.0
+## Bifrost Turns One With AI Builds and New Workflows
 
-[Read more](https://laravel-news.com/laravel-telescope-5-24-0)
+[Read more](https://laravel-news.com/bifrost-first-anniversary)
 
 ---
 
@@ -30,15 +30,15 @@ Latest Laravel Release
 
 ---
 
-## Preview Blade Templates in macOS Finder with Quick Blade
+## PayZephyr: One Payment API for Stripe, Paystack, and PayPal
 
-[Read more](https://laravel-news.com/quick-blade)
+[Read more](https://laravel-news.com/payzephyr)
 
 ---
 
-## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
+## Outsource to Acquaint Softtech, Sr. Laravel developers with AI expertise - $3000/Month
 
-[Read more](https://jb.gg/aysiyl)
+[Read more](https://acquaintsoft.com/hire-laravel-developers)
 
 ---
 
@@ -48,9 +48,9 @@ Latest Laravel Release
 
 ---
 
-## Find Unexpected Test Inputs with Fuzz for Pest
+## Preview Blade Templates in macOS Finder with Quick Blade
 
-[Read more](https://laravel-news.com/pest-fuzz)
+[Read more](https://laravel-news.com/quick-blade)
 
 ---
 
