@@ -1,8 +1,8 @@
 {
   "source": "laravel-blog",
   "name": "Laravel Blog",
-  "article_count": 3,
+  "article_count": 4,
   "success_rate": 1.0,
   "difficulty": "mixed",
-  "cached_at": 1789257867.6550097
+  "cached_at": 1789430741.6708357
 }

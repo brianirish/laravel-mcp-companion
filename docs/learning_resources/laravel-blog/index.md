@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## A better way to build MCP servers with Laravel
+
+Every MCP tool loads on every request. Laravel MCP 1.0 fixes that with searchable tool catalogs: the same payload for 10 or 100 tools.
+
+[Read more](https://blog.laravel.com/blog/category/engineering)
+
+---
+
 ## Why I think we should write our own PR descriptions
 
 Agents can write your PR descriptions, but they shouldn't. Here's why writing them yourself makes you a better engineer and a better teammate.
