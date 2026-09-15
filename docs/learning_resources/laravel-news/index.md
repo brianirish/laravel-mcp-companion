@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel Image Responses: Serve Resized Images From Routes
+## PostgreSQL Monitoring and Schema Linting for Laravel with Vacuum
 
-[Read more](https://laravel-news.com/laravel-image-responses)
+[Read more](https://laravel-news.com/vacuum-laravel-postgresql-monitoring)
 
 ---
 
@@ -30,33 +30,33 @@ Latest Laravel Release
 
 ---
 
-## PayZephyr: One Payment API for Stripe, Paystack, and PayPal
+## Building EasyReply: How We Used Laravel to Unify Customer Support
 
-[Read more](https://laravel-news.com/payzephyr)
-
----
-
-## Outsource to Acquaint Softtech, Sr. Laravel developers with AI expertise - $3000/Month
-
-[Read more](https://acquaintsoft.com/hire-laravel-developers)
+[Read more](https://laravel-news.com/easyreply-laravel-shared-inbox)
 
 ---
 
-## Artisan Debugging Commands in Laravel Telescope 5.24.0
+## Hands-on help for Laravel teams with No Compromises
 
-[Read more](https://laravel-news.com/laravel-telescope-5-24-0)
+[Read more](https://nocompromises.io/?ref=ln-partner)
 
 ---
 
-## Preview Blade Templates in macOS Finder with Quick Blade
+## PostgreSQL Monitoring and Schema Linting for Laravel with Vacuum
 
-[Read more](https://laravel-news.com/quick-blade)
+[Read more](https://laravel-news.com/vacuum-laravel-postgresql-monitoring)
 
 ---
 
 ## Laravel queue:work Now Prints Why the Worker Stopped
 
 [Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
+
+---
+
+## PayZephyr: One Payment API for Stripe, Paystack, and PayPal
+
+[Read more](https://laravel-news.com/payzephyr)
 
 ---
 
