@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "e232d85d9300a354f6a62c24975173d5aed84ec9",
-  "commit_date": "2026-09-14T14:39:49Z",
-  "commit_message": "Merge pull request #11333 from pushpak1300/document-laravel-mcp-1.0\n\nDocument Laravel MCP 1.0",
-  "commit_url": "https://github.com/laravel/docs/commit/e232d85d9300a354f6a62c24975173d5aed84ec9",
-  "sync_time": "2026-09-15T00:04:08Z"
+  "commit_sha": "e7797baf2a199e0f9b5ef769a39d9ada72471a7d",
+  "commit_date": "2026-09-15T15:02:01Z",
+  "commit_message": "update wording",
+  "commit_url": "https://github.com/laravel/docs/commit/e7797baf2a199e0f9b5ef769a39d9ada72471a7d",
+  "sync_time": "2026-09-16T00:01:58Z"
 }
