@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## PostgreSQL Monitoring and Schema Linting for Laravel with Vacuum
+## Laravel MCP 1.0 Is Released
 
-[Read more](https://laravel-news.com/vacuum-laravel-postgresql-monitoring)
+[Read more](https://laravel-news.com/laravel-mcp-1-0)
 
 ---
 
-## Queue totalSize() and JobInterrupted Event in Laravel 13.31
+## Mercure Broadcasting in Laravel 13.32
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-31-0)
+[Read more](https://laravel-news.com/laravel-13-32-0)
 
 ---
 
-## Bifrost Turns One With AI Builds and New Workflows
+## Laravel Vet: Review Composer Code Before It Installs
 
-[Read more](https://laravel-news.com/bifrost-first-anniversary)
+[Read more](https://laravel-news.com/laravel-vet)
 
 ---
 
@@ -30,33 +30,33 @@ Latest Laravel Release
 
 ---
 
+## What's New in PHP 8.6
+
+[Read more](https://laravel-news.com/php-8-6)
+
+---
+
 ## Building EasyReply: How We Used Laravel to Unify Customer Support
 
 [Read more](https://laravel-news.com/easyreply-laravel-shared-inbox)
 
 ---
 
-## Hands-on help for Laravel teams with No Compromises
+## Laravel MCP 1.0 Is Released
 
-[Read more](https://nocompromises.io/?ref=ln-partner)
+[Read more](https://laravel-news.com/laravel-mcp-1-0)
 
 ---
 
-## PostgreSQL Monitoring and Schema Linting for Laravel with Vacuum
+## Super Stack: Laravel Starter Kit With Filament and NativePHP
 
-[Read more](https://laravel-news.com/vacuum-laravel-postgresql-monitoring)
+[Read more](https://laravel-news.com/nativephp-super-stack)
 
 ---
 
 ## Laravel queue:work Now Prints Why the Worker Stopped
 
 [Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
-
----
-
-## PayZephyr: One Payment API for Stripe, Paystack, and PayPal
-
-[Read more](https://laravel-news.com/payzephyr)
 
 ---
 
