@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "b94b890362111c44de223e09502c610a9d9f20d8",
-  "commit_date": "2026-09-16T15:20:10Z",
-  "commit_message": "Fix syntax errors in documentation code examples (#11364)",
-  "commit_url": "https://github.com/laravel/docs/commit/b94b890362111c44de223e09502c610a9d9f20d8",
-  "sync_time": "2026-09-17T00:02:11Z"
+  "commit_sha": "a54c517d9fb3c0c17cedb7169f42f5da232b68a8",
+  "commit_date": "2026-09-17T18:55:32Z",
+  "commit_message": "Add example and cross-references to queue routing (#11366)\n\n* Document queue routing by contract\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>\n\n* Streamline example\n\n---------\n\nCo-authored-by: Claude Sonnet 5 <noreply@anthropic.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/a54c517d9fb3c0c17cedb7169f42f5da232b68a8",
+  "sync_time": "2026-09-18T00:02:02Z"
 }
