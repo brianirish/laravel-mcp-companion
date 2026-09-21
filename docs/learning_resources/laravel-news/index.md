@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Fresh Package: Laravel Package Skeleton with Testbench, CI, and Boost Integration
+## Laravel MCP 1.0 Is Released
 
-[Read more](https://laravel-news.com/fresh-package-laravel-package-skeleton)
+[Read more](https://laravel-news.com/laravel-mcp-1-0)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Scalpel Scans for Filesystem Intrusion Evidence
+## What's New in PHP 8.6
 
-[Read more](https://laravel-news.com/laravel-scalpel)
+[Read more](https://laravel-news.com/php-8-6)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Inertia DevTools Now Available for Firefox
+## Laravel MCP 1.0 Is Released
 
-[Read more](https://laravel-news.com/inertia-devtools-firefox)
+[Read more](https://laravel-news.com/laravel-mcp-1-0)
 
 ---
 

@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "eea8b121cba77e6f5f62405a9334b1d075eb5c3a",
-  "commit_date": "2026-09-18T14:30:43Z",
-  "commit_message": "Document vector indexes (#11368)\n\n* Document vector indexes\n\n* Address review feedback\n\n* Update vector column dimensions in migrations.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/eea8b121cba77e6f5f62405a9334b1d075eb5c3a",
-  "sync_time": "2026-09-19T00:04:40Z"
+  "commit_sha": "7d1e82b9330a75ac740c905c80f44945cd29213b",
+  "commit_date": "2026-09-20T13:22:15Z",
+  "commit_message": "[13.x] Restore vector() heading and anchor (#11371)",
+  "commit_url": "https://github.com/laravel/docs/commit/7d1e82b9330a75ac740c905c80f44945cd29213b",
+  "sync_time": "2026-09-21T00:03:59Z"
 }
