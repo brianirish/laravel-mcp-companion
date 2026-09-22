@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel MCP 1.0 Is Released
+## What's New in PHP 8.6
 
-[Read more](https://laravel-news.com/laravel-mcp-1-0)
+[Read more](https://laravel-news.com/php-8-6)
 
 ---
 
@@ -30,27 +30,27 @@ Latest Laravel Release
 
 ---
 
+## What We Know About Laravel 14
+
+[Read more](https://laravel-news.com/laravel-14)
+
+---
+
+## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
+
+[Read more](https://jb.gg/aysiyl)
+
+---
+
 ## What's New in PHP 8.6
 
 [Read more](https://laravel-news.com/php-8-6)
 
 ---
 
-## Building EasyReply: How We Used Laravel to Unify Customer Support
+## Difflock: Lint Laravel Migrations and Diff Your Schema
 
-[Read more](https://laravel-news.com/easyreply-laravel-shared-inbox)
-
----
-
-## Laravel MCP 1.0 Is Released
-
-[Read more](https://laravel-news.com/laravel-mcp-1-0)
-
----
-
-## Fresh Package: Laravel Package Skeleton with Testbench, CI, and Boost Integration
-
-[Read more](https://laravel-news.com/fresh-package-laravel-package-skeleton)
+[Read more](https://laravel-news.com/difflock-migration-linter)
 
 ---
 
