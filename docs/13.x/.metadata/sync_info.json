@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "7d1e82b9330a75ac740c905c80f44945cd29213b",
-  "commit_date": "2026-09-20T13:22:15Z",
-  "commit_message": "[13.x] Restore vector() heading and anchor (#11371)",
-  "commit_url": "https://github.com/laravel/docs/commit/7d1e82b9330a75ac740c905c80f44945cd29213b",
-  "sync_time": "2026-09-21T00:03:59Z"
+  "commit_sha": "9d4d158ed052bf5f82d05d6909f43bb3ee63b893",
+  "commit_date": "2026-09-22T14:11:34Z",
+  "commit_message": "document new features",
+  "commit_url": "https://github.com/laravel/docs/commit/9d4d158ed052bf5f82d05d6909f43bb3ee63b893",
+  "sync_time": "2026-09-23T00:02:13Z"
 }
