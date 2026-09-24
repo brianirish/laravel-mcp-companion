@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## What's New in PHP 8.6
+## Laravel AI SDK 1.0 Adds Classification and Tool Approvals
 
-[Read more](https://laravel-news.com/php-8-6)
+[Read more](https://laravel-news.com/laravel-ai-sdk-1-0)
 
 ---
 
-## Mercure Broadcasting in Laravel 13.32
+## Tagged Memoized Cache and Model Refreshes in Laravel 13.33
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-32-0)
+[Read more](https://laravel-news.com/laravel-13-33-0)
 
 ---
 
-## Inertia DevTools Now Available for Firefox
+## Laravel Live Denmark 2026 Talks Are Now on YouTube
 
-[Read more](https://laravel-news.com/inertia-devtools-firefox)
+[Read more](https://laravel-news.com/laravel-live-denmark-2026-talks)
 
 ---
 
@@ -36,21 +36,21 @@ Latest Laravel Release
 
 ---
 
-## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
+## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
 
-[Read more](https://jb.gg/aysiyl)
-
----
-
-## What's New in PHP 8.6
-
-[Read more](https://laravel-news.com/php-8-6)
+[Read more](https://go.laravel.news/cloud/home)
 
 ---
 
-## Difflock: Lint Laravel Migrations and Diff Your Schema
+## Laravel AI SDK 1.0 Adds Classification and Tool Approvals
 
-[Read more](https://laravel-news.com/difflock-migration-linter)
+[Read more](https://laravel-news.com/laravel-ai-sdk-1-0)
+
+---
+
+## Health for Laravel: Kubernetes Probes and Prometheus Metrics
+
+[Read more](https://laravel-news.com/laravel-health-kubernetes-prometheus)
 
 ---
 
