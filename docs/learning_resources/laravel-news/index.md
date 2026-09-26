@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel AI SDK 1.0 Adds Classification and Tool Approvals
+## Decide with Jev: Laravel AI That Answers with a Probability
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-1-0)
+[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
 
 ---
 
@@ -18,33 +18,33 @@ Latest Laravel Release
 
 ---
 
-## Laravel Live Denmark 2026 Talks Are Now on YouTube
-
-[Read more](https://laravel-news.com/laravel-live-denmark-2026-talks)
-
----
-
-## Exclude Vendor and Default Commands in `php artisan dev`
-
-[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
-
----
-
-## What We Know About Laravel 14
-
-[Read more](https://laravel-news.com/laravel-14)
-
----
-
-## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
-
-[Read more](https://go.laravel.news/cloud/home)
-
----
-
 ## Laravel AI SDK 1.0 Adds Classification and Tool Approvals
 
 [Read more](https://laravel-news.com/laravel-ai-sdk-1-0)
+
+---
+
+## Memoize Tagged Cache Reads in Laravel
+
+[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
+
+---
+
+## JetBrains Air: Run AI Coding Agents in JetBrains IDEs
+
+[Read more](https://laravel-news.com/jetbrains-air)
+
+---
+
+## The Web Search API for Your LLM and AI Applications​
+
+[Read more](https://serpapi.com/?utm_source=laravelnews)
+
+---
+
+## Eloquent Refreshes: Load Generated Columns After Save
+
+[Read more](https://laravel-news.com/eloquent-refreshes-attribute)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel queue:work Now Prints Why the Worker Stopped
+## Exclude Vendor and Default Commands in `php artisan dev`
 
-[Read more](https://laravel-news.com/laravel-queue-worker-stop-reasons)
+[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
 
 ---
 
