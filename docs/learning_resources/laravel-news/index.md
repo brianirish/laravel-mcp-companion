@@ -18,27 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel AI SDK 1.0 Adds Classification and Tool Approvals
-
-[Read more](https://laravel-news.com/laravel-ai-sdk-1-0)
-
----
-
-## Memoize Tagged Cache Reads in Laravel
-
-[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
-
----
-
 ## JetBrains Air: Run AI Coding Agents in JetBrains IDEs
 
 [Read more](https://laravel-news.com/jetbrains-air)
-
----
-
-## The Web Search API for Your LLM and AI Applications​
-
-[Read more](https://serpapi.com/?utm_source=laravelnews)
 
 ---
 
@@ -48,15 +30,33 @@ Latest Laravel Release
 
 ---
 
+## Memoize Tagged Cache Reads in Laravel
+
+[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
+
+---
+
+## Hands-on help for Laravel teams with No Compromises
+
+[Read more](https://nocompromises.io/?ref=ln-partner)
+
+---
+
+## JetBrains Air: Run AI Coding Agents in JetBrains IDEs
+
+[Read more](https://laravel-news.com/jetbrains-air)
+
+---
+
 ## Health for Laravel: Kubernetes Probes and Prometheus Metrics
 
 [Read more](https://laravel-news.com/laravel-health-kubernetes-prometheus)
 
 ---
 
-## Exclude Vendor and Default Commands in `php artisan dev`
+## Group Adjacent Collection Items in Laravel with chunkBy()
 
-[Read more](https://laravel-news.com/artisan-dev-exclude-vendor-commands)
+[Read more](https://laravel-news.com/laravel-collection-chunk-by)
 
 ---
 
