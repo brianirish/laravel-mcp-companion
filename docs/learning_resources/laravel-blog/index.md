@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Preview environments and scale to zero: Better together
+
+Give every pull request its own preview environment on Laravel Cloud. Share a link, test the full stack, and let idle previews scale to zero.
+
+[Read more](https://blog.laravel.com/blog/category/releases)
+
+---
+
 ## Introducing Laravel AI SDK v1.0
 
 Laravel AI SDK v1.0 is here: one Laravel-native API for every provider, with conversation storage, streaming chat, agents, tool approvals, and Jev classification.

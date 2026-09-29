@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Decide with Jev: Laravel AI That Answers with a Probability
+## What We Know About Laravel 14
 
-[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
+[Read more](https://laravel-news.com/laravel-14)
 
 ---
 
@@ -24,27 +24,27 @@ Latest Laravel Release
 
 ---
 
-## Eloquent Refreshes: Load Generated Columns After Save
+## Decide with Jev: Laravel AI That Answers with a Probability
 
-[Read more](https://laravel-news.com/eloquent-refreshes-attribute)
-
----
-
-## Memoize Tagged Cache Reads in Laravel
-
-[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
+[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
 
 ---
 
-## Hands-on help for Laravel teams with No Compromises
+## Tashil: Laravel Subscription Plans and Feature Usage Limits
 
-[Read more](https://nocompromises.io/?ref=ln-partner)
+[Read more](https://laravel-news.com/tashil-laravel-subscriptions)
 
 ---
 
-## JetBrains Air: Run AI Coding Agents in JetBrains IDEs
+## Unlearn.dev goes free for a weekend, October 10 and 11
 
-[Read more](https://laravel-news.com/jetbrains-air)
+[Read more](https://laravel-news.com/unlearndev-goes-free-for-a-weekend-october-10-and-11)
+
+---
+
+## Unlearn.dev goes free for a weekend, October 10 and 11
+
+[Read more](https://laravel-news.com/unlearndev-goes-free-for-a-weekend-october-10-and-11)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Group Adjacent Collection Items in Laravel with chunkBy()
+## Eloquent Refreshes: Load Generated Columns After Save
 
-[Read more](https://laravel-news.com/laravel-collection-chunk-by)
+[Read more](https://laravel-news.com/eloquent-refreshes-attribute)
 
 ---
 
