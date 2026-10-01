@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## What We Know About Laravel 14
+## Laravel AI SDK and Laravel MCP Security Fixes: Update Now
 
-[Read more](https://laravel-news.com/laravel-14)
+[Read more](https://laravel-news.com/laravel-ai-mcp-security-advisories)
 
 ---
 
-## Tagged Memoized Cache and Model Refreshes in Laravel 13.33
+## Count Worker Crashes as Job Exceptions in Laravel 13.34
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-33-0)
+[Read more](https://laravel-news.com/laravel-13-34-0)
 
 ---
 
-## JetBrains Air: Run AI Coding Agents in JetBrains IDEs
+## Laravel Release Cycle: Versions, Support Policy, and Dates
 
-[Read more](https://laravel-news.com/jetbrains-air)
+[Read more](https://laravel-news.com/laravel-releases)
 
 ---
 
@@ -30,15 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Tashil: Laravel Subscription Plans and Feature Usage Limits
+## Mailbox for Laravel: Preview and Test Rendered Email
 
-[Read more](https://laravel-news.com/tashil-laravel-subscriptions)
-
----
-
-## Unlearn.dev goes free for a weekend, October 10 and 11
-
-[Read more](https://laravel-news.com/unlearndev-goes-free-for-a-weekend-october-10-and-11)
+[Read more](https://laravel-news.com/mailbox-for-laravel)
 
 ---
 
@@ -48,9 +42,15 @@ Latest Laravel Release
 
 ---
 
-## Health for Laravel: Kubernetes Probes and Prometheus Metrics
+## Laravel AI SDK and Laravel MCP Security Fixes: Update Now
 
-[Read more](https://laravel-news.com/laravel-health-kubernetes-prometheus)
+[Read more](https://laravel-news.com/laravel-ai-mcp-security-advisories)
+
+---
+
+## Elastic Bridge: Eloquent-Style Queries for Elasticsearch and OpenSearch
+
+[Read more](https://laravel-news.com/elastic-bridge)
 
 ---
 
