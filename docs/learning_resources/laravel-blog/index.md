@@ -4,6 +4,14 @@ Source: https://blog.laravel.com
 
 ---
 
+## Migrating Pinkary from Laravel Forge to Laravel Cloud: An engineering playbook
+
+Pinkary's move from Laravel Forge to Laravel Cloud exposed SQLite and MySQL differences, query assumptions, and local-storage coupling. Here is the code-backed migration playbook.
+
+[Read more](https://blog.laravel.com/blog/category/community)
+
+---
+
 ## Preview environments and scale to zero: Better together
 
 Give every pull request its own preview environment on Laravel Cloud. Share a link, test the full stack, and let idle previews scale to zero.
