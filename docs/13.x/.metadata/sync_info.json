@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "ef6922afd7345a5b30f3f8fd9da230b7c7229fa2",
-  "commit_date": "2026-09-30T21:43:02Z",
-  "commit_message": "Fix docs that don't match framework behavior (#11387)",
-  "commit_url": "https://github.com/laravel/docs/commit/ef6922afd7345a5b30f3f8fd9da230b7c7229fa2",
-  "sync_time": "2026-10-01T00:01:43Z"
+  "commit_sha": "9c2295fc4b3c0f87d5fe3192a76075c85d9071d7",
+  "commit_date": "2026-10-01T17:48:45Z",
+  "commit_message": "Update outdated validation messages, global middleware list and error pages (#11392)",
+  "commit_url": "https://github.com/laravel/docs/commit/9c2295fc4b3c0f87d5fe3192a76075c85d9071d7",
+  "sync_time": "2026-10-02T00:01:50Z"
 }
