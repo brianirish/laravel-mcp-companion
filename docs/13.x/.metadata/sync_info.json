@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "9c2295fc4b3c0f87d5fe3192a76075c85d9071d7",
-  "commit_date": "2026-10-01T17:48:45Z",
-  "commit_message": "Update outdated validation messages, global middleware list and error pages (#11392)",
-  "commit_url": "https://github.com/laravel/docs/commit/9c2295fc4b3c0f87d5fe3192a76075c85d9071d7",
-  "sync_time": "2026-10-02T00:01:50Z"
+  "commit_sha": "156fc7fde114548640e13c39aa79b991291c3f91",
+  "commit_date": "2026-10-02T19:32:38Z",
+  "commit_message": "Use real GitHub MCP server values in MCP client examples (#11395)",
+  "commit_url": "https://github.com/laravel/docs/commit/156fc7fde114548640e13c39aa79b991291c3f91",
+  "sync_time": "2026-10-03T00:02:05Z"
 }

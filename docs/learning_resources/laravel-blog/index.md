@@ -12,6 +12,14 @@ Pinkary's move from Laravel Forge to Laravel Cloud exposed SQLite and MySQL diff
 
 ---
 
+## Laravel September product updates
+
+Laravel Cloud added isolated preview environments and request metrics. The framework added per-tenant AI keys and semantic search. See what's new in September.
+
+[Read more](https://blog.laravel.com/blog/category/releases)
+
+---
+
 ## Preview environments and scale to zero: Better together
 
 Give every pull request its own preview environment on Laravel Cloud. Share a link, test the full stack, and let idle previews scale to zero.
@@ -25,14 +33,6 @@ Give every pull request its own preview environment on Laravel Cloud. Share a li
 Laravel AI SDK v1.0 is here: one Laravel-native API for every provider, with conversation storage, streaming chat, agents, tool approvals, and Jev classification.
 
 [Read more](https://blog.laravel.com/blog/category/releases)
-
----
-
-## A better way to build MCP servers with Laravel
-
-Every MCP tool loads on every request. Laravel MCP 1.0 fixes that with searchable tool catalogs: the same payload for 10 or 100 tools.
-
-[Read more](https://blog.laravel.com/blog/category/engineering)
 
 ---
 
