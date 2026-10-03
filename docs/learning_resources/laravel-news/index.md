@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel AI SDK and Laravel MCP Security Fixes: Update Now
+## Postcodes for Laravel: GB Postcode Lookup and Geography Data
 
-[Read more](https://laravel-news.com/laravel-ai-mcp-security-advisories)
+[Read more](https://laravel-news.com/postcodes-for-laravel)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Laravel Release Cycle: Versions, Support Policy, and Dates
+## WhenMounted and BigInt Props in Inertia.js v3.8
 
-[Read more](https://laravel-news.com/laravel-releases)
+[Read more](https://laravel-news.com/inertia-3-8-0)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## Mailbox for Laravel: Preview and Test Rendered Email
+## Laravel 14 Adds a defaults() Method to Eloquent Models
 
-[Read more](https://laravel-news.com/mailbox-for-laravel)
+[Read more](https://laravel-news.com/laravel-model-defaults)
 
 ---
 
@@ -42,15 +42,15 @@ Latest Laravel Release
 
 ---
 
-## Laravel AI SDK and Laravel MCP Security Fixes: Update Now
+## Mailbox for Laravel: Preview and Test Rendered Email
 
-[Read more](https://laravel-news.com/laravel-ai-mcp-security-advisories)
+[Read more](https://laravel-news.com/mailbox-for-laravel)
 
 ---
 
-## Elastic Bridge: Eloquent-Style Queries for Elasticsearch and OpenSearch
+## Postcodes for Laravel: GB Postcode Lookup and Geography Data
 
-[Read more](https://laravel-news.com/elastic-bridge)
+[Read more](https://laravel-news.com/postcodes-for-laravel)
 
 ---
 
