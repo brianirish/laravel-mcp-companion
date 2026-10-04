@@ -42,12 +42,6 @@ Latest Laravel Release
 
 ---
 
-## Mailbox for Laravel: Preview and Test Rendered Email
-
-[Read more](https://laravel-news.com/mailbox-for-laravel)
-
----
-
 ## Postcodes for Laravel: GB Postcode Lookup and Geography Data
 
 [Read more](https://laravel-news.com/postcodes-for-laravel)
@@ -57,6 +51,12 @@ Latest Laravel Release
 ## Eloquent Refreshes: Load Generated Columns After Save
 
 [Read more](https://laravel-news.com/eloquent-refreshes-attribute)
+
+---
+
+## Mailbox for Laravel: Preview and Test Rendered Email
+
+[Read more](https://laravel-news.com/mailbox-for-laravel)
 
 ---
 
