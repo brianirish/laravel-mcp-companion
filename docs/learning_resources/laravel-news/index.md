@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Postcodes for Laravel: GB Postcode Lookup and Geography Data
+## Laravel 14 Adds a defaults() Method to Eloquent Models
 
-[Read more](https://laravel-news.com/postcodes-for-laravel)
+[Read more](https://laravel-news.com/laravel-model-defaults)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## WhenMounted and BigInt Props in Inertia.js v3.8
+## Securing Filament plugins with Plumb
 
-[Read more](https://laravel-news.com/inertia-3-8-0)
+[Read more](https://laravel-news.com/securing-filament-plugins-with-plumb)
 
 ---
 
@@ -30,15 +30,21 @@ Latest Laravel Release
 
 ---
 
-## Laravel 14 Adds a defaults() Method to Eloquent Models
+## LayaPHP: Self-Hosted Text Classification for PHP and Laravel
 
-[Read more](https://laravel-news.com/laravel-model-defaults)
+[Read more](https://laravel-news.com/laya-php-self-hosted-classification)
 
 ---
 
-## Unlearn.dev goes free for a weekend, October 10 and 11
+## The Web Search API for Your LLM and AI Applications​
 
-[Read more](https://laravel-news.com/unlearndev-goes-free-for-a-weekend-october-10-and-11)
+[Read more](https://serpapi.com/?utm_source=laravelnews)
+
+---
+
+## Laravel 14 Adds a defaults() Method to Eloquent Models
+
+[Read more](https://laravel-news.com/laravel-model-defaults)
 
 ---
 
@@ -51,12 +57,6 @@ Latest Laravel Release
 ## Eloquent Refreshes: Load Generated Columns After Save
 
 [Read more](https://laravel-news.com/eloquent-refreshes-attribute)
-
----
-
-## Mailbox for Laravel: Preview and Test Rendered Email
-
-[Read more](https://laravel-news.com/mailbox-for-laravel)
 
 ---
 
