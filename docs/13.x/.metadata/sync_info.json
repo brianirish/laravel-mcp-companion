@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "156fc7fde114548640e13c39aa79b991291c3f91",
-  "commit_date": "2026-10-02T19:32:38Z",
-  "commit_message": "Use real GitHub MCP server values in MCP client examples (#11395)",
-  "commit_url": "https://github.com/laravel/docs/commit/156fc7fde114548640e13c39aa79b991291c3f91",
-  "sync_time": "2026-10-03T00:02:05Z"
+  "commit_sha": "226b0649c77e1d6fe739a20e1da654e94ccc718f",
+  "commit_date": "2026-10-06T18:11:16Z",
+  "commit_message": "document new features",
+  "commit_url": "https://github.com/laravel/docs/commit/226b0649c77e1d6fe739a20e1da654e94ccc718f",
+  "sync_time": "2026-10-07T00:01:38Z"
 }
