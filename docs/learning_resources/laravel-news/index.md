@@ -4,29 +4,29 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel 14 Adds a defaults() Method to Eloquent Models
+## Route::query() and Model defaults() in Laravel 13.35
 
-[Read more](https://laravel-news.com/laravel-model-defaults)
+[Read more](https://laravel-news.com/laravel-13-35-0)
 
 ---
 
-## Count Worker Crashes as Job Exceptions in Laravel 13.34
+## Route::query() and Model defaults() in Laravel 13.35
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-34-0)
+[Read more](https://laravel-news.com/laravel-13-35-0)
 
 ---
 
-## Securing Filament plugins with Plumb
+## Laravel AI SDK 1.1 Adds Agent Skills and Cohere Chat
 
-[Read more](https://laravel-news.com/securing-filament-plugins-with-plumb)
+[Read more](https://laravel-news.com/laravel-ai-sdk-1-1)
 
 ---
 
-## Decide with Jev: Laravel AI That Answers with a Probability
+## Decide with Jev: Three Questions in One Request with the Laravel AI SDK
 
-[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
+[Read more](https://laravel-news.com/decide-with-jev-three-questions-in-one-request-with-the-laravel-ai-sdk)
 
 ---
 
@@ -36,27 +36,27 @@ Latest Laravel Release
 
 ---
 
-## The Web Search API for Your LLM and AI Applications​
+## VMPal: Give Your AI Agent a Whole Computer
 
-[Read more](https://serpapi.com/?utm_source=laravelnews)
-
----
-
-## Laravel 14 Adds a defaults() Method to Eloquent Models
-
-[Read more](https://laravel-news.com/laravel-model-defaults)
+[Read more](https://laravel-news.com/vmpal-ai-agent-virtual-machine)
 
 ---
 
-## Postcodes for Laravel: GB Postcode Lookup and Geography Data
+## Route::query() and Model defaults() in Laravel 13.35
 
-[Read more](https://laravel-news.com/postcodes-for-laravel)
+[Read more](https://laravel-news.com/laravel-13-35-0)
 
 ---
 
-## Eloquent Refreshes: Load Generated Columns After Save
+## Synapse: A Dev Dashboard for Laravel AI SDK Agents
 
-[Read more](https://laravel-news.com/eloquent-refreshes-attribute)
+[Read more](https://laravel-news.com/synapse-laravel-ai-agents)
+
+---
+
+## Memoize Tagged Cache Reads in Laravel
+
+[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
 
 ---
 
