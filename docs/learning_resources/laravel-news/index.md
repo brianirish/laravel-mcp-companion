@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Route::query() and Model defaults() in Laravel 13.35
+## Laravel Fake Assertions Now Accept Property Arrays
 
-[Read more](https://laravel-news.com/laravel-13-35-0)
+[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Route::query() and Model defaults() in Laravel 13.35
+## Laravel Fake Assertions Now Accept Property Arrays
 
-[Read more](https://laravel-news.com/laravel-13-35-0)
+[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
 
 ---
 
