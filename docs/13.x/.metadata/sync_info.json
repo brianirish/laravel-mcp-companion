@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "463df6b54ed4bf437e59104b56561e5c4f64fff6",
-  "commit_date": "2026-10-08T21:52:56Z",
-  "commit_message": "Document OpenAI image classification, Groq and Azure tools, and MoveFile (#11401)\n\n* Document OpenAI image classification, Groq and Azure tools, and MoveFile\n\n* Remove Claude sampling note and OpenAI image format details",
-  "commit_url": "https://github.com/laravel/docs/commit/463df6b54ed4bf437e59104b56561e5c4f64fff6",
-  "sync_time": "2026-10-09T00:01:52Z"
+  "commit_sha": "d9b95fe9c89ff029ebb626c4b32406ffe431c217",
+  "commit_date": "2026-10-09T16:11:59Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/d9b95fe9c89ff029ebb626c4b32406ffe431c217",
+  "sync_time": "2026-10-10T00:01:39Z"
 }
