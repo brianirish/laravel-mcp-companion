@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Laravel Fake Assertions Now Accept Property Arrays
+## LayaPHP: Self-Hosted Text Classification for PHP and Laravel
 
-[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
+[Read more](https://laravel-news.com/laya-php-self-hosted-classification)
 
 ---
 
@@ -24,15 +24,15 @@ Latest Laravel Release
 
 ---
 
-## Decide with Jev: Three Questions in One Request with the Laravel AI SDK
+## Laravel Fake Assertions Now Accept Property Arrays
 
-[Read more](https://laravel-news.com/decide-with-jev-three-questions-in-one-request-with-the-laravel-ai-sdk)
+[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
 
 ---
 
-## LayaPHP: Self-Hosted Text Classification for PHP and Laravel
+## Running Laravel's Scheduler on Multiple Servers
 
-[Read more](https://laravel-news.com/laya-php-self-hosted-classification)
+[Read more](https://laravel-news.com/laravel-scheduler-multiple-servers)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Memoize Tagged Cache Reads in Laravel
+## Decide with Jev: Laravel AI That Answers with a Probability
 
-[Read more](https://laravel-news.com/laravel-tagged-memoized-cache)
+[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
 
 ---
 
