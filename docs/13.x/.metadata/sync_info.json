@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "d9b95fe9c89ff029ebb626c4b32406ffe431c217",
-  "commit_date": "2026-10-09T16:11:59Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/d9b95fe9c89ff029ebb626c4b32406ffe431c217",
-  "sync_time": "2026-10-10T00:01:39Z"
+  "commit_sha": "fc17c0a8c2554ca9bb2dbaa974110862a843b0e8",
+  "commit_date": "2026-10-11T20:48:13Z",
+  "commit_message": "[13.x] Sync AI SDK provider support lists with the provider classes (#11405)\n\nAssisted-by: Claude Code",
+  "commit_url": "https://github.com/laravel/docs/commit/fc17c0a8c2554ca9bb2dbaa974110862a843b0e8",
+  "sync_time": "2026-10-12T00:02:35Z"
 }
