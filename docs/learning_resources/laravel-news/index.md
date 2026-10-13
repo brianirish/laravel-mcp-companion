@@ -24,27 +24,27 @@ Latest Laravel Release
 
 ---
 
-## Laravel Fake Assertions Now Accept Property Arrays
-
-[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
-
----
-
 ## Running Laravel's Scheduler on Multiple Servers
 
 [Read more](https://laravel-news.com/laravel-scheduler-multiple-servers)
 
 ---
 
-## VMPal: Give Your AI Agent a Whole Computer
+## BashBox: A Sandboxed Bash Interpreter for AI Agents in PHP
 
-[Read more](https://laravel-news.com/vmpal-ai-agent-virtual-machine)
+[Read more](https://laravel-news.com/bashbox-sandboxed-bash-php)
 
 ---
 
-## Laravel Fake Assertions Now Accept Property Arrays
+## Look What You Helped Me Build
 
-[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
+[Read more](https://laravel-news.com/puzzleparty)
+
+---
+
+## Look What You Helped Me Build
+
+[Read more](https://laravel-news.com/puzzleparty)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Decide with Jev: Laravel AI That Answers with a Probability
+## Decide with Jev: Three Questions in One Request with the Laravel AI SDK
 
-[Read more](https://laravel-news.com/decide-with-jev-laravel-ai-that-answers-with-a-probability)
+[Read more](https://laravel-news.com/decide-with-jev-three-questions-in-one-request-with-the-laravel-ai-sdk)
 
 ---
 
