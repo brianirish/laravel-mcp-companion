@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "d8eb65fb70aefcbff581ddf07fea4e7432cd610a",
-  "commit_date": "2026-10-12T13:24:46Z",
-  "commit_message": "[13.x] Update Boost docs for discovery default and removed Gemini CLI agent (#11404)\n\nAssisted-by: Claude Code",
-  "commit_url": "https://github.com/laravel/docs/commit/d8eb65fb70aefcbff581ddf07fea4e7432cd610a",
-  "sync_time": "2026-10-13T00:02:00Z"
+  "commit_sha": "73e61270287e4aaa1cecd77cd66aa6ef4f499828",
+  "commit_date": "2026-10-13T13:29:49Z",
+  "commit_message": "wip",
+  "commit_url": "https://github.com/laravel/docs/commit/73e61270287e4aaa1cecd77cd66aa6ef4f499828",
+  "sync_time": "2026-10-14T00:01:46Z"
 }
