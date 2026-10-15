@@ -4,23 +4,23 @@ Source: https://laravel-news.com
 
 ---
 
-## LayaPHP: Self-Hosted Text Classification for PHP and Laravel
+## Rule Builders for Every Validation Rule in Laravel 13.36
 
-[Read more](https://laravel-news.com/laya-php-self-hosted-classification)
+[Read more](https://laravel-news.com/laravel-13-36-0)
 
 ---
 
-## Route::query() and Model defaults() in Laravel 13.35
+## Rule Builders for Every Validation Rule in Laravel 13.36
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-35-0)
+[Read more](https://laravel-news.com/laravel-13-36-0)
 
 ---
 
-## Laravel AI SDK 1.1 Adds Agent Skills and Cohere Chat
+## Pause Polling in Background Tabs in Inertia.js v3.9
 
-[Read more](https://laravel-news.com/laravel-ai-sdk-1-1)
+[Read more](https://laravel-news.com/inertia-3-9-0)
 
 ---
 
@@ -30,27 +30,27 @@ Latest Laravel Release
 
 ---
 
+## PHP News: A New Site for PHP Releases, RFCs, and Packages
+
+[Read more](https://laravel-news.com/php-news)
+
+---
+
+## Look What You Helped Me Build
+
+[Read more](https://laravel-news.com/puzzleparty)
+
+---
+
+## Rule Builders for Every Validation Rule in Laravel 13.36
+
+[Read more](https://laravel-news.com/laravel-13-36-0)
+
+---
+
 ## BashBox: A Sandboxed Bash Interpreter for AI Agents in PHP
 
 [Read more](https://laravel-news.com/bashbox-sandboxed-bash-php)
-
----
-
-## Look What You Helped Me Build
-
-[Read more](https://laravel-news.com/puzzleparty)
-
----
-
-## Look What You Helped Me Build
-
-[Read more](https://laravel-news.com/puzzleparty)
-
----
-
-## Synapse: A Dev Dashboard for Laravel AI SDK Agents
-
-[Read more](https://laravel-news.com/synapse-laravel-ai-agents)
 
 ---
 

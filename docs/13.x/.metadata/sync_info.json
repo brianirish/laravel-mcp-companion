@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "73e61270287e4aaa1cecd77cd66aa6ef4f499828",
-  "commit_date": "2026-10-13T13:29:49Z",
-  "commit_message": "wip",
-  "commit_url": "https://github.com/laravel/docs/commit/73e61270287e4aaa1cecd77cd66aa6ef4f499828",
-  "sync_time": "2026-10-14T00:01:46Z"
+  "commit_sha": "6bb0a3be3c623f7964c8277625a07b6df7f1de2e",
+  "commit_date": "2026-10-14T14:14:33Z",
+  "commit_message": "[13.x] Document @stack render order limitation (#11409)\n\n* Document @stack render order limitation\n\nClarify usage of @stack directive in Blade documentation.\n\n* Update blade.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/6bb0a3be3c623f7964c8277625a07b6df7f1de2e",
+  "sync_time": "2026-10-15T00:02:21Z"
 }
