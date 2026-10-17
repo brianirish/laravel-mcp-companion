@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Rule Builders for Every Validation Rule in Laravel 13.36
+## Laravel URL AI Transformer: Extract Structured Data From URLs
 
-[Read more](https://laravel-news.com/laravel-13-36-0)
+[Read more](https://laravel-news.com/laravel-url-ai-transformer)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Pause Polling in Background Tabs in Inertia.js v3.9
+## PHP News: A New Site for PHP Releases, RFCs, and Packages
 
-[Read more](https://laravel-news.com/inertia-3-9-0)
+[Read more](https://laravel-news.com/php-news)
 
 ---
 
@@ -30,9 +30,9 @@ Latest Laravel Release
 
 ---
 
-## PHP News: A New Site for PHP Releases, RFCs, and Packages
+## Fluent Rule Builders for All Laravel Validation Rules
 
-[Read more](https://laravel-news.com/php-news)
+[Read more](https://laravel-news.com/laravel-validation-rule-builders)
 
 ---
 
@@ -42,21 +42,21 @@ Latest Laravel Release
 
 ---
 
-## Rule Builders for Every Validation Rule in Laravel 13.36
+## Laravel URL AI Transformer: Extract Structured Data From URLs
 
-[Read more](https://laravel-news.com/laravel-13-36-0)
-
----
-
-## BashBox: A Sandboxed Bash Interpreter for AI Agents in PHP
-
-[Read more](https://laravel-news.com/bashbox-sandboxed-bash-php)
+[Read more](https://laravel-news.com/laravel-url-ai-transformer)
 
 ---
 
 ## Decide with Jev: Three Questions in One Request with the Laravel AI SDK
 
 [Read more](https://laravel-news.com/decide-with-jev-three-questions-in-one-request-with-the-laravel-ai-sdk)
+
+---
+
+## BashBox: A Sandboxed Bash Interpreter for AI Agents in PHP
+
+[Read more](https://laravel-news.com/bashbox-sandboxed-bash-php)
 
 ---
 
