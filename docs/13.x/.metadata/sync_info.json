@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "6bb0a3be3c623f7964c8277625a07b6df7f1de2e",
-  "commit_date": "2026-10-14T14:14:33Z",
-  "commit_message": "[13.x] Document @stack render order limitation (#11409)\n\n* Document @stack render order limitation\n\nClarify usage of @stack directive in Blade documentation.\n\n* Update blade.md\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/6bb0a3be3c623f7964c8277625a07b6df7f1de2e",
-  "sync_time": "2026-10-15T00:02:21Z"
+  "commit_sha": "12080c72699b99ec6573f7e79ff4834d9001b6bc",
+  "commit_date": "2026-10-16T19:06:35Z",
+  "commit_message": "Add warning to Signed URLs about overriding query parameters (#11413)",
+  "commit_url": "https://github.com/laravel/docs/commit/12080c72699b99ec6573f7e79ff4834d9001b6bc",
+  "sync_time": "2026-10-17T00:02:02Z"
 }
