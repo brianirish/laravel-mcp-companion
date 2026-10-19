@@ -18,21 +18,21 @@ Latest Laravel Release
 
 ---
 
-## PHP News: A New Site for PHP Releases, RFCs, and Packages
+## Pause Polling in Background Tabs in Inertia.js v3.9
 
-[Read more](https://laravel-news.com/php-news)
-
----
-
-## Running Laravel's Scheduler on Multiple Servers
-
-[Read more](https://laravel-news.com/laravel-scheduler-multiple-servers)
+[Read more](https://laravel-news.com/inertia-3-9-0)
 
 ---
 
 ## Fluent Rule Builders for All Laravel Validation Rules
 
 [Read more](https://laravel-news.com/laravel-validation-rule-builders)
+
+---
+
+## PHP News: A New Site for PHP Releases, RFCs, and Packages
+
+[Read more](https://laravel-news.com/php-news)
 
 ---
 
@@ -48,9 +48,9 @@ Latest Laravel Release
 
 ---
 
-## Decide with Jev: Three Questions in One Request with the Laravel AI SDK
+## Laravel Fake Assertions Now Accept Property Arrays
 
-[Read more](https://laravel-news.com/decide-with-jev-three-questions-in-one-request-with-the-laravel-ai-sdk)
+[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
 
 ---
 
