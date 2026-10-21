@@ -9,8 +9,12 @@
 > Use this file to discover all available pages before exploring further.
 # Installation
 > Learn how to install Laravel Nova into your Laravel application.
-Purchase a license for Laravel Nova
-Watch the free Nova series on Laracasts
+> **[Purchase Nova](https://nova.laravel.com)**
+>
+> Purchase a license for Laravel Nova
+> **[Learn More](https://laracasts.com/series/laravel-nova-mastery-2023-edition)**
+>
+> Watch the free Nova series on Laracasts
 ## Requirements
 Laravel Nova has a few minimum requirements you should be aware of before installing:
 * Composer 2
@@ -82,7 +86,9 @@ That's it! Next, you may navigate to your application's `/nova` path in your bro
 ## Registering a Nova License Key and Production URL
 Nova requires a license key and a production URL to be used in production environments. Nova will check your license key and the current host against the values from the license details found in your Nova account.
 You can generate license keys and register the production URL for your project inside the license's page on your Nova account at [https://nova.laravel.com/licenses](https://nova.laravel.com/licenses):
-You can register a wildcard subdomain for your production URL for use in multi-tenant scenarios (e.g. `*.laravel.com`).
+> [!NOTE]
+>
+> You can register a wildcard subdomain for your production URL for use in multi-tenant scenarios (e.g. `*.laravel.com`).
 You can register your license key by setting the `NOVA_LICENSE_KEY` variable to `.env` file or `license_key` option in your `config/nova.php` configuration file:
 ```ini .env theme={null}
 NOVA_LICENSE_KEY=
@@ -145,7 +151,9 @@ To customize the logo used at the top left of the Nova interface, you may specif
 // ...
 ],
 ```
-You may need to adjust the size and width of your SVG logo by modifying its width in the SVG file itself.
+> [!NOTE]
+>
+> You may need to adjust the size and width of your SVG logo by modifying its width in the SVG file itself.
 #### Brand Color
 To customize the color used as the "primary" color within the Nova interface, you may specify a value for the `brand.colors` configuration item within your application's `config/nova.php` configuration file. This color will be used as the primary button color as well as the color of various emphasized items throughout the Nova interface. This configuration value should be a valid RGB, RGBA, or HSL string value:
 ```php config/nova.php theme={null}

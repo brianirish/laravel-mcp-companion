@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "12080c72699b99ec6573f7e79ff4834d9001b6bc",
-  "commit_date": "2026-10-16T19:06:35Z",
-  "commit_message": "Add warning to Signed URLs about overriding query parameters (#11413)",
-  "commit_url": "https://github.com/laravel/docs/commit/12080c72699b99ec6573f7e79ff4834d9001b6bc",
-  "sync_time": "2026-10-17T00:02:02Z"
+  "commit_sha": "eef1c3e0d0dfc9bc36882fb2819344f8aa879339",
+  "commit_date": "2026-10-20T13:27:31Z",
+  "commit_message": "[13.x] Document rate limiting MCP OAuth routes (#11416)\n\n* Document rate limiting MCP OAuth routes\n\nAmp-Thread-ID: https://ampcode.com/threads/T-cdeeffa4-8943-49dd-8d94-5a7796895f8a\n\n* Update mcp.md\n\n* Update mcp.md\n\n---------\n\nCo-authored-by: Amp <amp@ampcode.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/eef1c3e0d0dfc9bc36882fb2819344f8aa879339",
+  "sync_time": "2026-10-21T00:06:25Z"
 }
