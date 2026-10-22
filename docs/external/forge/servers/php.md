@@ -30,10 +30,10 @@ Laravel Forge is only aware of PHP installations that are managed through the Fo
 When provisioning a server, you must decide which version of PHP you want to install by default. The `php` binary on your server will point to the installed version selected at the time of its creation.
 Once the server has been created, Laravel Forge makes it easy to install additional versions alongside the default version.
 ### [​](#installing-php-versions) Installing PHP versions
-To install a PHP version, navigate to the server’s dashboard and click the PHP tab. Then, click the Install version button, select the version to install and decide whether you want it to become the CLI default. Click Install to begin the installation process.
+To install a PHP version, navigate to the server’s dashboard and click the Runtime tab, then click PHP. Click the Install version button, select the version to install and decide whether you want it to become the CLI default. Click Install to begin the installation process.
 When you install a new version of PHP onto your server, Laravel Forge will create and configure the PHP-FPM process for that version. This means that your server will be running multiple versions of PHP at once.
 ### [​](#uninstalling-php-versions) Uninstalling PHP versions
-To uninstall a PHP version, navigate to the server’s dashboard and click the PHP tab. Locate the version of PHP you want to remove, open the dropdown menu and click Uninstall PHP X.X and confirm the removal.
+To uninstall a PHP version, navigate to the server’s dashboard and click the Runtime tab, then click PHP. Locate the version of PHP you want to remove, open the dropdown menu and click Uninstall PHP X.X and confirm the removal.
 PHP versions may be removed so long as:
 - There are other versions installed
 - The version you wish to uninstall is not the server’s default version for new sites
@@ -45,14 +45,14 @@ When an additional version of PHP has been installed, you may reference it on th
 The “default” PHP version is the version of PHP that will be used by default when creating a new site on the server.
 When selecting a new version of PHP as your server’s “default” version, the PHP versions used by existing sites **will not be updated**.
 ### [​](#patching-php-versions) Patching PHP versions
-To patch a PHP version, navigate to the server’s dashboard and click the PHP tab. Identify the version of PHP you want to patch, open the dropdown menu and click Update.
+To patch a PHP version, navigate to the server’s dashboard and click the Runtime tab, then click PHP. Identify the version of PHP you want to patch, open the dropdown menu and click Update.
 Typically, patch updates should not cause any breaking changes to your server, although a few seconds of downtime is possible. We recommend that you exercise caution when patching PHP.
 ## [​](#common-php-configuration-settings) Common PHP configuration settings
 Changing the following settings will apply the changes to all versions of PHP installed on the server.
 ### [​](#max-file-upload-size) Max file upload size
-You may configure the maximum file upload size through the PHP tab of the server management dashboard. This value should be provided in megabytes. For reference, `1024MB` is `1GB`.
+You may configure the maximum file upload size by clicking the Runtime tab, then PHP of the server management dashboard. This value should be provided in megabytes. For reference, `1024MB` is `1GB`.
 ### [​](#max-execution-time) Max execution time
-You may configure the maximum execution time through the PHP tab of the server management dashboard. This value should be provided in seconds. Forge applies this value across your server by updating the following configurations:
+You may configure the maximum execution time through the by clicking the Runtime tab, then PHP of the server management dashboard. This value should be provided in seconds. Forge applies this value across your server by updating the following configurations:
 - `max_execution_time` in `php.ini`.
 - `request_terminate_timeout` in the PHP-FPM `www.conf` (for each installed PHP version).
 - `fastcgi_read_timeout` in your Nginx configuration.
