@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "eef1c3e0d0dfc9bc36882fb2819344f8aa879339",
-  "commit_date": "2026-10-20T13:27:31Z",
-  "commit_message": "[13.x] Document rate limiting MCP OAuth routes (#11416)\n\n* Document rate limiting MCP OAuth routes\n\nAmp-Thread-ID: https://ampcode.com/threads/T-cdeeffa4-8943-49dd-8d94-5a7796895f8a\n\n* Update mcp.md\n\n* Update mcp.md\n\n---------\n\nCo-authored-by: Amp <amp@ampcode.com>\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/eef1c3e0d0dfc9bc36882fb2819344f8aa879339",
-  "sync_time": "2026-10-21T00:06:25Z"
+  "commit_sha": "832e6c2662442548341119f170a3d4d59990c594",
+  "commit_date": "2026-10-21T16:59:48Z",
+  "commit_message": "docs: cast SFTP port environment variable to integer (#11418)",
+  "commit_url": "https://github.com/laravel/docs/commit/832e6c2662442548341119f170a3d4d59990c594",
+  "sync_time": "2026-10-22T00:01:39Z"
 }
