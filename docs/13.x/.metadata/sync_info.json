@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "832e6c2662442548341119f170a3d4d59990c594",
-  "commit_date": "2026-10-21T16:59:48Z",
-  "commit_message": "docs: cast SFTP port environment variable to integer (#11418)",
-  "commit_url": "https://github.com/laravel/docs/commit/832e6c2662442548341119f170a3d4d59990c594",
-  "sync_time": "2026-10-22T00:01:39Z"
+  "commit_sha": "36fa00db57f97d0a5a89c40be7f50ff8b1133327",
+  "commit_date": "2026-10-22T21:32:50Z",
+  "commit_message": "Note that FrankenPHP's bundled PHP must be updated via the binary (#11420)",
+  "commit_url": "https://github.com/laravel/docs/commit/36fa00db57f97d0a5a89c40be7f50ff8b1133327",
+  "sync_time": "2026-10-23T00:01:43Z"
 }

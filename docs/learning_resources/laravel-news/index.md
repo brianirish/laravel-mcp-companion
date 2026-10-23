@@ -4,35 +4,35 @@ Source: https://laravel-news.com
 
 ---
 
-## Run Large PlanetScale Queries in Laravel With DB::olap()
+## Screenshot: Capture Images and PDFs with PHP and Laravel
 
-[Read more](https://laravel-news.com/laravel-planetscale-olap)
+[Read more](https://laravel-news.com/screenshot)
 
 ---
 
-## Rule Builders for Every Validation Rule in Laravel 13.36
+## Prevent Stale Database Reads in Laravel 13.38
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-36-0)
+[Read more](https://laravel-news.com/laravel-13-38-0)
 
 ---
 
-## PHP News: A New Site for PHP Releases, RFCs, and Packages
+## Critical PHP Security Release Coming Tomorrow (October 21)
 
-[Read more](https://laravel-news.com/php-news)
-
----
-
-## Fluent Rule Builders for All Laravel Validation Rules
-
-[Read more](https://laravel-news.com/laravel-validation-rule-builders)
+[Read more](https://laravel-news.com/php-critical-security-release)
 
 ---
 
-## Critical Token Guard Auth Bypass Fixed in Laravel 13.29 and 12.68
+## Reset Sticky Database Connections Between Laravel Queue Jobs
 
-[Read more](https://laravel-news.com/laravel-token-guard-auth-bypass)
+[Read more](https://laravel-news.com/laravel-queue-sticky-database-connections)
+
+---
+
+## PHP Security Releases Fix Two Critical RCE Vulnerabilities
+
+[Read more](https://laravel-news.com/php-critical-rce-security-releases)
 
 ---
 
@@ -42,21 +42,21 @@ Latest Laravel Release
 
 ---
 
-## Run Large PlanetScale Queries in Laravel With DB::olap()
+## Critical PHP Security Release Coming Tomorrow (October 21)
 
-[Read more](https://laravel-news.com/laravel-planetscale-olap)
-
----
-
-## Laravel URL AI Transformer: Extract Structured Data From URLs
-
-[Read more](https://laravel-news.com/laravel-url-ai-transformer)
+[Read more](https://laravel-news.com/php-critical-security-release)
 
 ---
 
-## Laravel Fake Assertions Now Accept Property Arrays
+## Screenshot: Capture Images and PDFs with PHP and Laravel
 
-[Read more](https://laravel-news.com/laravel-fake-assertion-property-arrays)
+[Read more](https://laravel-news.com/screenshot)
+
+---
+
+## Fluent Rule Builders for All Laravel Validation Rules
+
+[Read more](https://laravel-news.com/laravel-validation-rule-builders)
 
 ---
 

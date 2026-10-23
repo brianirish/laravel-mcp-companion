@@ -4,19 +4,20 @@ Source: https://blog.laravel.com
 
 ---
 
+## PHP critical vulnerability response updates
+
+On 10/21 two critical security vulnerabilities were disclosed and patched in PHP.
+These are extremely serious vulnerabilities affecting every PHP application on the web. Action may be required, read below.
+
+[Read more](https://blog.laravel.com/blog/category/releases)
+
+---
+
 ## Migrating Pinkary from Laravel Forge to Laravel Cloud: An engineering playbook
 
 Pinkary's move from Laravel Forge to Laravel Cloud exposed SQLite and MySQL differences, query assumptions, and local-storage coupling. Here is the code-backed migration playbook.
 
 [Read more](https://blog.laravel.com/blog/category/community)
-
----
-
-## Laravel September product updates
-
-Laravel Cloud added isolated preview environments and request metrics. The framework added per-tenant AI keys and semantic search. See what's new in September.
-
-[Read more](https://blog.laravel.com/blog/category/releases)
 
 ---
 
