@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Policies](#policies)
   - [Undefined Policy Methods](#undefined-policy-methods)
   - [Hiding Entire Resources](#hiding-entire-resources)
@@ -399,7 +400,7 @@ public static function relatableTeams(
 }
 ```
 ## [​](#scout-filtering) Scout Filtering
-If your application is leveraging the power of Laravel Scout for [search](./../search/scout-integration), you may also customize the `Laravel\Scout\Builder` query instance before it is sent to your search provider. To accomplish this, override the `scoutQuery` method on your resource class:
+If your application is leveraging the power of Laravel Scout for [search](/docs/v5/search/scout-integration), you may also customize the `Laravel\Scout\Builder` query instance before it is sent to your search provider. To accomplish this, override the `scoutQuery` method on your resource class:
 app/Nova/Post.php
 ```
 use Laravel\Nova\Http\Requests\NovaRequest;

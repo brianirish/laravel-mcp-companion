@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating servers with databases](#creating-servers-with-databases)
   - [Installing databases later](#installing-databases-later)

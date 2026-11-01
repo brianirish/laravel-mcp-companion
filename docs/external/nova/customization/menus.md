@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Customizing the Main Menu](#customizing-the-main-menu)
   - [Customizing the User Menu](#customizing-the-user-menu)
@@ -33,7 +34,7 @@ Nova menus provide a convenient way to customize the main and user menus.
 ## [​](#overview) Overview
 By default, Nova’s main left-side navigation menu displays all of your application’s dashboards, resources, and any custom tools you have registered.
 When rendering the main menu, Nova will order your dashboards according to the order in which they are returned by the `dashboards` method within your application’s `App\Providers\NovaServiceProvider` class.
-Nova will also automatically group your resources under the default “Resources” menu section according to the [`group` property defined in the `Resource` class](./../resources/the-basics#grouping-resources). In addition, any custom tools you have registered will be listed in the order they are defined within your application’s `NovaServiceProvider`.
+Nova will also automatically group your resources under the default “Resources” menu section according to the [`group` property defined in the `Resource` class](/docs/v5/resources/the-basics#grouping-resources). In addition, any custom tools you have registered will be listed in the order they are defined within your application’s `NovaServiceProvider`.
 ### [​](#customizing-the-main-menu) Customizing the Main Menu
 While Nova’s default main menu is sufficient for most applications, there are times you may wish to completely customize the menu based on your own preferences. For that reason, Nova allows you to define your own main menu via the `Nova::mainMenu` method. Typically, this method should be invoked within the `boot` method of your application’s `App\Providers\NovaServiceProvider` class:
 app/Providers/NovaServiceProvider.php
@@ -364,7 +365,7 @@ use Laravel\Nova\Menu\MenuItem;
 MenuItem::lens(User::class, MostValuableUsers::class)
 ```
 ### [​](#dashboard-menu-items) Dashboard Menu Items
-You may also create a link to any of your [custom Nova dashboards](./dashboards) by calling the `dashboard` factory method:
+You may also create a link to any of your [custom Nova dashboards](/docs/v5/customization/dashboards) by calling the `dashboard` factory method:
 ```
 use App\Nova\Dashboards\Main;
 use Laravel\Nova\Menu\MenuItem;

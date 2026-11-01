@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Select Filters](#select-filters)
 - [Boolean Filters](#boolean-filters)
 - [Date Filters](#date-filters)
@@ -15,7 +16,7 @@ Filters
 # Defining Filters
 Nova filters are simple classes that allow you to scope your Nova index queries with custom conditions.
 Nova filters are simple classes that allow you to scope your Nova index queries with custom conditions.
-Before creating your own filters, you may want to check out [filterable fields](./../resources/fields#filterable-fields). Filterable fields can solve the filtering needs of most Nova installations without the need to write custom code.
+Before creating your own filters, you may want to check out [filterable fields](/docs/v5/resources/fields#filterable-fields). Filterable fields can solve the filtering needs of most Nova installations without the need to write custom code.
 ## [​](#select-filters) Select Filters
 The most common type of Nova filter is the “select” filter, which allows the user to select a filter option from a drop-down selection menu:
 You may generate a select filter using the `nova:filter` Artisan command. By default, Nova will place newly generated filters in the `app/Nova/Filters` directory:

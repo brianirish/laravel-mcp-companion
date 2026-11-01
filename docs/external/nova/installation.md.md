@@ -9,10 +9,10 @@
 > Use this file to discover all available pages before exploring further.
 # Installation
 > Learn how to install Laravel Nova into your Laravel application.
-> **[Purchase Nova](https://nova.laravel.com)**
+> [card] [Purchase Nova](https://nova.laravel.com)
 >
 > Purchase a license for Laravel Nova
-> **[Learn More](https://laracasts.com/series/laravel-nova-mastery-2023-edition)**
+> [card] [Learn More](https://laracasts.com/series/laravel-nova-mastery-2023-edition)
 >
 > Watch the free Nova series on Laracasts
 ## Requirements

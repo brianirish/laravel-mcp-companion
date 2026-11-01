@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Authorization](#authorization)
 Lenses
 # Registering Lenses

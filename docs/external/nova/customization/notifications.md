@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Sending Notifications](#sending-notifications)
   - [Opening Remote Action URLs in New Tabs](#opening-remote-action-urls-in-new-tabs)

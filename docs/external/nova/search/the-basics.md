@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Searchable Columns](#searchable-columns)
 - [Full-Text Indexes](#full-text-indexes)
 - [Searching Relationships](#searching-relationships)

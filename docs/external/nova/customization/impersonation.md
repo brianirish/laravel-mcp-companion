@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Enabling Impersonation](#enabling-impersonation)
   - [Customizing Impersonation Authorization](#customizing-impersonation-authorization)

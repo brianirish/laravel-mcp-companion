@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Updating Your Profile Information](#updating-your-profile-information)
 - [Securing Your Account With Two-Factor Authentication](#securing-your-account-with-two-factor-authentication)
 - [Billing](#billing)

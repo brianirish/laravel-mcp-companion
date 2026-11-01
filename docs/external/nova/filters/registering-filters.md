@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Searchable Select Filters](#searchable-select-filters)
 Filters
 # Registering Filters

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating Caches](#creating-caches)
 - [Using Caches](#using-caches)
@@ -17,7 +18,7 @@ Resources
 # Caches
 Using caches with Laravel Vapor.
 ## [​](#introduction) Introduction
-Vapor allows you to easily create and manage scalable Redis clusters directly from the Vapor UI or using the Vapor CLI. AWS requires all cache clusters to be private, meaning Vapor will place any application that uses them in a network with a [NAT Gateway](./networks#nat-gateways).
+Vapor allows you to easily create and manage scalable Redis clusters directly from the Vapor UI or using the Vapor CLI. AWS requires all cache clusters to be private, meaning Vapor will place any application that uses them in a network with a [NAT Gateway](/resources/networks#nat-gateways).
 If you are primarily using a cache for Laravel’s task scheduler and atomic locks, you may find that using a [DynamoDB cache](#dynamodb-caches) is a cost-efficient alternative to using Redis clusters. In addition, DynamoDB caches do not require Vapor to attach a NAT Gateway to your application’s network.If no Redis cache is attached to the environment, the DynamoDB cache will automatically be set as the default cache driver.
 ## [​](#creating-caches) Creating Caches
 You may create caches using the Vapor UI or using the `cache` CLI command. When using the CLI command, the command will prompt you for more details about the cache such as its desired performance class:
@@ -39,7 +40,7 @@ environments:
             - 'php artisan migrate --force'
 ```
 ### [​](#connecting-to-caches-locally) Connecting To Caches Locally
-To connect to your cache cluster from your local machine, you can use a Vapor [jumpbox](./networks#jumpboxes) in combination with the `cache:tunnel` CLI command. Jumpboxes are small, SSH-accessible servers placed within your private network.
+To connect to your cache cluster from your local machine, you can use a Vapor [jumpbox](/resources/networks#jumpboxes) in combination with the `cache:tunnel` CLI command. Jumpboxes are small, SSH-accessible servers placed within your private network.
 After creating a jumpbox in your cache’s network, you can use the `cache:tunnel` command:
 ```
 vapor cache:tunnel my-application-cache

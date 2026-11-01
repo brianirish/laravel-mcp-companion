@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Value Metrics](#value-metrics)
   - [Value Query Types](#value-query-types)
   - [Average](#average)

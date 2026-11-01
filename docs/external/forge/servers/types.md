@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Server Types](#server-types)
   - [App Servers](#app-servers)
@@ -51,17 +52,17 @@ Application servers are designed to include everything you need to deploy a typi
 - Supervisor
 Application servers are the most typical type of server provisioned on Laravel Forge. If you’re unsure which server type you need, most likely you should provision an application server. As you need to scale your application, you may look at provisioning dedicated servers for services such as your database or caching, but starting with an App server is recommended.
 ### [​](#web-servers) Web Servers
-Web servers contain the web server software you need to deploy a typical Laravel / PHP application, but they do not contain a database or cache. Therefore, these servers are meant to be [networked to](./../resources/network) other dedicated database and cache servers. Web servers are provisioned with the following software:
+Web servers contain the web server software you need to deploy a typical Laravel / PHP application, but they do not contain a database or cache. Therefore, these servers are meant to be [networked to](/forge/docs/resources/network) other dedicated database and cache servers. Web servers are provisioned with the following software:
 - PHP
 - Nginx
 - Node.js
 - Supervisor
 ### [​](#database-servers) Database Servers
-Database servers are intended to function as dedicated MySQL / Postgres / MariaDB servers for your application. These servers are meant to be accessed by a dedicated application or web server via Laravel Forge’s [network management features](./../resources/network). Database servers are provisioned with the following software, based on your selections during the server’s creation:
+Database servers are intended to function as dedicated MySQL / Postgres / MariaDB servers for your application. These servers are meant to be accessed by a dedicated application or web server via Laravel Forge’s [network management features](/forge/docs/resources/network). Database servers are provisioned with the following software, based on your selections during the server’s creation:
 - MySQL, MariaDB, or PostgreSQL
 Laravel VPS does not support installing MariaDB.
 ### [​](#cache-servers) Cache Servers
-Cache servers are intended to function as dedicated Redis / Memcached servers for your application. These servers are meant to be accessed by a dedicated application or web server via Laravel Forge’s [network management features](./../resources/network). Cache servers are provisioned with the following software:
+Cache servers are intended to function as dedicated Redis / Memcached servers for your application. These servers are meant to be accessed by a dedicated application or web server via Laravel Forge’s [network management features](/forge/docs/resources/network). Cache servers are provisioned with the following software:
 - Redis
 - Memcached
 ### [​](#worker-servers) Worker Servers
@@ -69,7 +70,7 @@ Worker servers are intended to function as dedicated PHP queue workers for your 
 - PHP
 - Supervisor
 ### [​](#meilisearch-servers) Meilisearch Servers
-Meilisearch servers install [Meilisearch](https://meilisearch.com) to provide a blazingly fast search service to your application. They are intended to be connected to another server, and communicate via a [private network](./../resources/network#server-network).
+Meilisearch servers install [Meilisearch](https://meilisearch.com) to provide a blazingly fast search service to your application. They are intended to be connected to another server, and communicate via a [private network](/forge/docs/resources/network#server-network).
 A Meilisearch server will only display and manage one [Site](/forge/docs/sites/the-basics). You cannot create or delete other sites on this server. When connecting to the Meilisearch server from a web or application server, you should connect to it via its private IP address.
 ### [​](#load-balancers) Load Balancers
 Load balancers are meant to distribute incoming web traffic across your servers. To do so, load balancers use Nginx as a “reverse proxy” to evenly distribute the incoming traffic. Therefore, load balancers are only provisioned with Nginx.

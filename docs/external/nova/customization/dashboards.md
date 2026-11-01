@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Default Dashboard](#default-dashboard)
 - [Defining Dashboards](#defining-dashboards)
@@ -18,7 +19,7 @@ Digging Deeper
 # Dashboards
 Nova dashboards provide a convenient way to build information overview pages that contain a variety of metrics and cards.
 ## [​](#overview) Overview
-Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](./../metrics/defining-metrics) and [cards](../customization/cards).
+Nova dashboards provide a convenient way to build information overview pages that contain a variety of [metrics](/docs/v5/metrics/defining-metrics) and [cards](/docs/v5/customization/cards).
 ### [​](#default-dashboard) Default Dashboard
 Nova ships with a default `App\Nova\Dashboards\Main` dashboard class containing a `cards` method. You can customize which cards are present on the default dashboard via this method:
 app/Nova/Dashboards/Main.php
@@ -43,7 +44,7 @@ class Main extends Dashboard
     }
 }
 ```
-More information regarding dashboard metrics can be found [within our documentation on metrics](../metrics/registering-metrics#dashboard-metrics).
+More information regarding dashboard metrics can be found [within our documentation on metrics](/docs/v5/metrics/registering-metrics#dashboard-metrics).
 ## [​](#defining-dashboards) Defining Dashboards
 Custom dashboards may be generated using the `nova:dashboard` Artisan command. By default, all new dashboards will be placed in the `app/Nova/Dashboards` directory:
 ```
@@ -144,7 +145,7 @@ public function menu(Request $request)
     });
 }
 ```
-Please refer to the documentation on [menu customization](./menus) for more information.
+Please refer to the documentation on [menu customization](/docs/v5/customization/menus) for more information.
 ### [​](#refreshing-dashboard-metrics) Refreshing Dashboard Metrics
 Occasionally, you may wish to refresh all the metrics’ values inside your dashboard. You may do this by enabling the refresh button by using the `showRefreshButton` method on the dashboard instance:
 app/Providers/NovaServiceProvider.php

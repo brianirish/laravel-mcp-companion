@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Detail Metrics](#detail-metrics)
   - [Dashboard Metrics](#dashboard-metrics)
@@ -210,7 +211,7 @@ public function cards(NovaRequest $request): array
 }
 ```
 ## [​](#metric-help-text-/-tooltips) Metric Help Text / Tooltips
-Sometimes a metric needs to offer the user more context about how the value is calculated or other details related to the metric’s value. To provide this context, Nova allows you to define a help text “tooltip”, which can be registered similarly to [Field Help Text](./../resources/fields#field-help-text):
+Sometimes a metric needs to offer the user more context about how the value is calculated or other details related to the metric’s value. To provide this context, Nova allows you to define a help text “tooltip”, which can be registered similarly to [Field Help Text](/docs/v5/resources/fields#field-help-text):
 To enable the tooltip, invoke the `help` method while registering your metric. The `help` method receives the help text as its only argument:
 app/Nova/~Resource.php
 ```

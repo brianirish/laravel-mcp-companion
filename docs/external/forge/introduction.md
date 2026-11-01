@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [What is Laravel Forge?](#what-is-laravel-forge)
 - [Laravel Forge IP addresses](#laravel-forge-ip-addresses)
   - [Forge Terminal](#forge-terminal)

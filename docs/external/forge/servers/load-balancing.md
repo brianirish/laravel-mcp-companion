@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating load balanced sites](#creating-load-balanced-sites)
 - [Load balancer methods](#load-balancer-methods)

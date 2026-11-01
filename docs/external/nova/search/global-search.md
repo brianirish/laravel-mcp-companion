@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Title / Subtitle Attributes](#title-%2F-subtitle-attributes)
   - [Subtitles](#subtitles)
 - [Customization](#customization)
@@ -53,7 +54,7 @@ class Team extends Resource
     }
 }
 ```
-You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](./../resources/fields#avatar-field) field to the resource.
+You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](/docs/v5/resources/fields#avatar-field) field to the resource.
 ### [​](#subtitles) Subtitles
 You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:
 To define a resource’s subtitle, you should override the `subtitle` method of the resource:
@@ -69,7 +70,7 @@ public function subtitle()
     return "Author: {$this->user->name}";
 }
 ```
-If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource’s [eager load array](./../resources/the-basics#eager-loadings).
+If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource’s [eager load array](/docs/v5/resources/the-basics#eager-loadings).
 ## [​](#customization) Customization
 ### [​](#limiting-global-search-results) Limiting Global Search Results
 You can limit the number of results that are returned via global search for a given resource by overriding the `globalSearchResults` property on the resource:
@@ -97,7 +98,7 @@ public function boot(): void
 }
 ```
 ### [​](#custom-avatars-/-covers) Custom Avatars / Covers
-If you are building a [custom field](./../customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
+If you are building a [custom field](/docs/v5/customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
 app/Nova/Team.php
 ```
 namespace App\Nova;

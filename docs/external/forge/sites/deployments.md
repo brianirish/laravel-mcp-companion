@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Deployment strategies](#deployment-strategies)
   - [Zero-downtime deployments](#zero-downtime-deployments)

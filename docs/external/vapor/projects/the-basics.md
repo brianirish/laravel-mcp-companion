@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Creating Projects](#creating-projects)
   - [Projects & Teams](#projects-%26-teams)
 - [Project Settings](#project-settings)

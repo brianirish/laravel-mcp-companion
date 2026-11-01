@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Defining Resources](#defining-resources)
 - [Registering Resources](#registering-resources)
@@ -127,7 +128,7 @@ public function menu(Request $request)
     });
 }
 ```
-Please refer to the documentation on [menu customization](./../customization/menus) for more information.
+Please refer to the documentation on [menu customization](/docs/v5/customization/menus) for more information.
 ## [​](#grouping-resources) Grouping Resources
 If you would like to separate resources into different sidebar groups, you may override the `group` property of your resource class:
 app/Nova/Post.php
@@ -196,7 +197,7 @@ public static function clickAction()
 ```
 Choosing the `select` option will select the resource row’s checkbox. The `ignore` option instructs Nova to ignore click events altogether.
 ## [​](#eager-loading) Eager Loading
-If you routinely need to access a resource’s relationships within your fields, [resource title](./../search/global-search#title-subtitle-attributes), or [resource subtitle](./../search/global-search#title-subtitle-attributes), it may be a good idea to add the relationship to the `with` property of your resource. This property instructs Nova to always eager load the listed relationships when retrieving the resource.
+If you routinely need to access a resource’s relationships within your fields, [resource title](/docs/v5/search/global-search#title-subtitle-attributes), or [resource subtitle](/docs/v5/search/global-search#title-subtitle-attributes), it may be a good idea to add the relationship to the `with` property of your resource. This property instructs Nova to always eager load the listed relationships when retrieving the resource.
 For example, if you access a `Post` resource’s `user` relationship within the `Post` resource’s `subtitle` method, you should add the `user` relationship to the `Post` resource’s `with` property:
 app/Nova/Post.php
 ```
@@ -544,7 +545,7 @@ public static function perPageViaRelationshipOptions()
 ```
 ## [​](#csv-export) CSV Export
 Occasionally you may need to export a group of resource records as a CSV file so that you can interact with the data in a spreadsheet application or import the data into another system. Thankfully, Nova includes built-in support for exporting resource data.
-To get started, add the `Laravel\Nova\Actions\ExportAsCsv` [action](./../actions/registering-actions) to your Nova resource:
+To get started, add the `Laravel\Nova\Actions\ExportAsCsv` [action](/docs/v5/actions/registering-actions) to your Nova resource:
 app/Nova/User.php
 ```
 use Laravel\Nova\Actions\ExportAsCsv;

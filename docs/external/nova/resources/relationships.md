@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [HasOne](#hasone)
   - [HasOneOfMany](#hasoneofmany)
 - [HasMany](#hasmany)
@@ -185,7 +186,7 @@ public function title()
 }
 ```
 #### [​](#disable-ordering-by-title) Disable Ordering by Title
-By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAssociatables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](./authorization#relatable-filtering):
+By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAssociatables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](/docs/v5/resources/authorization#relatable-filtering):
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -307,7 +308,7 @@ BelongsToMany::make('Users')
 
 #### [​](#pivot-actions) Pivot Actions
 
-Typically, [Nova actions](./../actions/defining-actions) operate on a resource. However, you may also attach actions to `belongsToMany` fields so that they can operate on pivot / intermediate table records. To accomplish this, you may chain the `actions` method onto your field’s definition:
+Typically, [Nova actions](/docs/v5/actions/defining-actions) operate on a resource. However, you may also attach actions to `belongsToMany` fields so that they can operate on pivot / intermediate table records. To accomplish this, you may chain the `actions` method onto your field’s definition:
 
 ```
 use App\Nova\Actions\MarkAsActive;
@@ -321,7 +322,7 @@ BelongsToMany::make('Roles')
 
 Once the action has been attached to the field, you will be able to select the action and execute it from the relationship index on the parent resource’s detail page.
 
-To learn more about Nova actions, check out the complete [action documentation](./../actions/defining-actions).
+To learn more about Nova actions, check out the complete [action documentation](/docs/v5/actions/defining-actions).
 
 #### [​](#title-attributes-2) Title Attributes
 
@@ -356,7 +357,7 @@ public function title()
 
 #### [​](#disabling-ordering-by-title) Disabling Ordering by Title
 
-By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAttachables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](./authorization#relatable-filtering):
+By default, associatable resources will be sorted by their title when listed in a select dropdown. Using the `dontReorderAttachables` method, you can disable this behavior so that the resources as sorted based on the ordering specified by the [relatable query](/docs/v5/resources/authorization#relatable-filtering):
 
 ```
 use Laravel\Nova\Fields\BelongsToMany;
@@ -642,7 +643,7 @@ BelongsTo::make('User')
         return true;
     }),
 ```
-You may also instruct the relation field to display the [resource’s subtitle](./../search/global-search) by invoking the `withSubtitles` method when defining the field:
+You may also instruct the relation field to display the [resource’s subtitle](/docs/v5/search/global-search) by invoking the `withSubtitles` method when defining the field:
 ```
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -735,7 +736,7 @@ use Laravel\Nova\Fields\BelongsTo;
 BelongsTo::make('User')
     ->hideCreateRelationButton(),
 ```
-The inline relation creation process will respect any [authorization policies](./authorization) you have defined.
+The inline relation creation process will respect any [authorization policies](/docs/v5/resources/authorization) you have defined.
 ### [​](#inline-creation-modal-size) Inline Creation Modal Size
 You may adjust the size of the modal using the `modalSize` method:
 ```

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Rules](#rules)
   - [Attaching Rules](#attaching-rules)
   - [Creation Rules](#creation-rules)

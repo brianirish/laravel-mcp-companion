@@ -4,59 +4,59 @@ Source: https://laravel-news.com
 
 ---
 
-## Screenshot: Capture Images and PDFs with PHP and Laravel
+## Sloppy: Static Analysis for AI-Written PHP
 
-[Read more](https://laravel-news.com/screenshot)
+[Read more](https://laravel-news.com/sloppy)
 
 ---
 
-## Prevent Stale Database Reads in Laravel 13.38
+## Scheduled Session Garbage Collection in Laravel 13.39
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-38-0)
+[Read more](https://laravel-news.com/laravel-13-39-0)
 
 ---
 
-## Critical PHP Security Release Coming Tomorrow (October 21)
+## Deferred Schema Loading in Filament v5.8
 
-[Read more](https://laravel-news.com/php-critical-security-release)
+[Read more](https://laravel-news.com/filament-5-8-0)
+
+---
+
+## Delete Expired Sessions in Laravel With a Scheduled Command
+
+[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
+
+---
+
+## Pollora: Run WordPress Inside a Laravel Application
+
+[Read more](https://laravel-news.com/pollora-wordpress-laravel)
+
+---
+
+## Mastering Laravel Testing: A Video Course on Laravel Tests
+
+[Read more](https://laravel-news.com/mastering-laravel-testing-course)
+
+---
+
+## Delete Expired Sessions in Laravel With a Scheduled Command
+
+[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
+
+---
+
+## Sloppy: Static Analysis for AI-Written PHP
+
+[Read more](https://laravel-news.com/sloppy)
 
 ---
 
 ## Reset Sticky Database Connections Between Laravel Queue Jobs
 
 [Read more](https://laravel-news.com/laravel-queue-sticky-database-connections)
-
----
-
-## PHP Security Releases Fix Two Critical RCE Vulnerabilities
-
-[Read more](https://laravel-news.com/php-critical-rce-security-releases)
-
----
-
-## The Web Search API for Your LLM and AI Applications​
-
-[Read more](https://serpapi.com/?utm_source=laravelnews)
-
----
-
-## Critical PHP Security Release Coming Tomorrow (October 21)
-
-[Read more](https://laravel-news.com/php-critical-security-release)
-
----
-
-## Screenshot: Capture Images and PDFs with PHP and Laravel
-
-[Read more](https://laravel-news.com/screenshot)
-
----
-
-## Fluent Rule Builders for All Laravel Validation Rules
-
-[Read more](https://laravel-news.com/laravel-validation-rule-builders)
 
 ---
 

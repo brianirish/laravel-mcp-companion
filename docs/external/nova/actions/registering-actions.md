@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Authorization](#authorization)
   - [Resource Specific Authorization](#resource-specific-authorization)
   - [Authorization via Resource Policy](#authorization-via-resource-policy)

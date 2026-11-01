@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating Databases](#creating-databases)
   - [The Default Database](#the-default-database)
