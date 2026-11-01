@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating sites](#creating-sites)
   - [Source control provider](#source-control-provider)

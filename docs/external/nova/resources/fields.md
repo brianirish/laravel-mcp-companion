@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Defining Fields](#defining-fields)
   - [Field Column Conventions](#field-column-conventions)
 - [Showing / Hiding Fields](#showing-%2F-hiding-fields)
@@ -196,7 +197,7 @@ Text::make('Name')->hideFromIndex(function (NovaRequest $request, $resource) {
 }),
 ```
 ### [​](#showing-fields-when-peeking) Showing Fields When Peeking
-You may allow a field to be visible [when peeking at the resource](./relationships#peeking-at-belongsto-relationships) by invoking the `showWhenPeeking` method when defining the field:
+You may allow a field to be visible [when peeking at the resource](/docs/v5/resources/relationships#peeking-at-belongsto-relationships) by invoking the `showWhenPeeking` method when defining the field:
 ```
 use Laravel\Nova\Fields\Text;
 
@@ -327,7 +328,7 @@ use Laravel\Nova\Fields\Text;
 Text::make('Name', 'name_column')->sortable(),
 ```
 ## [​](#field-types) Field Types
-This portion of the documentation only discusses non-relationship fields. To learn more about relationship fields, [check out their documentation](./relationships).
+This portion of the documentation only discusses non-relationship fields. To learn more about relationship fields, [check out their documentation](/docs/v5/resources/relationships).
 Nova ships with a variety of field types. So, let’s explore all of the available types and their options:
 - [Audio](#audio-field)
 - [Avatar](#avatar-field)
@@ -394,7 +395,7 @@ Audio::make('Theme Song')->preload('auto'),
 
 Audio::make('Theme Song')->preload(Audio::PRELOAD_METADATA),
 ```
-To learn more about defining file fields and handling uploads, check out the comprehensive [file field documentation](./file-fields).
+To learn more about defining file fields and handling uploads, check out the comprehensive [file field documentation](/docs/v5/resources/file-fields).
 ### [​](#avatar-field) Avatar Field
 The `Avatar` field extends the [Image field](#image-field) and accepts the same options and configuration:
 ```
@@ -699,7 +700,7 @@ use Laravel\Nova\Fields\Currency;
 Currency::make('Price')->locale('fr'),
 ```
 ### [​](#date-field) Date Field
-The `Date` field may be used to store a date value (without time). For more information about dates and timezones within Nova, check out the additional [date / timezone documentation](./date-fields):
+The `Date` field may be used to store a date value (without time). For more information about dates and timezones within Nova, check out the additional [date / timezone documentation](/docs/v5/resources/date-fields):
 ```
 use Laravel\Nova\Fields\Date;
 
@@ -708,7 +709,7 @@ use Laravel\Nova\Fields\Date;
 Date::make('Birthday'),
 ```
 ### [​](#datetime-field) DateTime Field
-The `DateTime` field may be used to store a date-time value. For more information about dates and timezones within Nova, check out the additional [date / timezone documentation](./date-fields):
+The `DateTime` field may be used to store a date-time value. For more information about dates and timezones within Nova, check out the additional [date / timezone documentation](/docs/v5/resources/date-fields):
 ```
 use Laravel\Nova\Fields\DateTime;
 
@@ -728,7 +729,7 @@ Email::make(),
 Email::make('Customer Email', 'customer_email'),
 ```
 ### [​](#file-field) File Field
-To learn more about defining file fields and handling uploads, please refer to the comprehensive [file field documentation](./file-fields).
+To learn more about defining file fields and handling uploads, please refer to the comprehensive [file field documentation](/docs/v5/resources/file-fields).
 ```
 use Laravel\Nova\Fields\File;
 
@@ -835,7 +836,7 @@ use Laravel\Nova\Fields\Image;
 Image::make('Photo')->disableDownload(),
 ```
 You may use the `squared` method to display the image’s thumbnail with squared edges. Additionally, you may use the `rounded` method to display its thumbnails with fully-rounded edges.
-To learn more about defining file fields and handling uploads, check out the comprehensive [file field documentation](./file-fields).
+To learn more about defining file fields and handling uploads, check out the comprehensive [file field documentation](/docs/v5/resources/file-fields).
 ### [​](#keyvalue-field) KeyValue Field
 The `KeyValue` field provides a convenient interface to edit flat, key-value data stored inside `JSON` column types. For example, you might store profile information inside a [JSON column type](https://laravel.com/docs/eloquent-mutators#array-and-json-casting) named `meta`:
 ```
@@ -1228,7 +1229,7 @@ Sparkline::make('Post Views')->data(function () {
 }),
 ```
 #### [​](#using-trend-metrics) Using Trend Metrics
-If the data needed by your `Sparkline` field requires complicated database queries to compute, you may wish to encapsulate the data retrieval within a [trend metric](./../metrics/defining-metrics) which can then be provided to the `Sparkline` field:
+If the data needed by your `Sparkline` field requires complicated database queries to compute, you may wish to encapsulate the data retrieval within a [trend metric](/docs/v5/metrics/defining-metrics) which can then be provided to the `Sparkline` field:
 ```
 use App\Nova\Metrics\PostViewsOverTime;
 use Laravel\Nova\Fields\Sparkline;
@@ -1426,10 +1427,6 @@ use Laravel\Nova\Fields\Text;
 
 // ...
 
-Text::make('Twitter Profile', function () {
-    $username = $this->twitterUsername;
-
-    return "<a href='https://twitter.com/{$username}'>@{$username}</a>";
-}
+Text::make('Twitter Prof
 
 *[Content truncated for length]*

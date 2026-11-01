@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Customizing Scout Searches](#customizing-scout-searches)
   - [Limiting Scout Search Results](#limiting-scout-search-results)
 - [Disabling Scout Search](#disabling-scout-search)

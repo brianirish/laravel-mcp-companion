@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Defining Tools](#defining-tools)
 - [Registering Tools](#registering-tools)
@@ -75,13 +76,13 @@ The tool’s service provider is also located within the `src` directory of the 
 ### [​](#routing) Routing
 Often, you will need to define Laravel routes that are called by your tool. When Nova generates your tool, it creates `routes/inertia.php` and `routes/api.php` route files.
 The `routes/inertia.php` file is tasked with rendering your tool via [Inertia](https://legacy.inertiajs.com), while the `routes/api.php` file may be used to define any routes that your Inertia based tool will be making requests to in order to gather additional data or perform additional tasks.
-All routes within the `routes/api.php` file are automatically defined inside a route group by your tool’s `ToolServiceProvider`. The route group specifies that all “API routes”, which will typically be invoked from the client via [Nova.request](./frontend#nova-requests), should receive a `/nova-vendor/tool-name` URL prefix, where `tool-name` is the “kebab-case” name of your tool.
+All routes within the `routes/api.php` file are automatically defined inside a route group by your tool’s `ToolServiceProvider`. The route group specifies that all “API routes”, which will typically be invoked from the client via [Nova.request](/docs/v5/customization/frontend#nova-requests), should receive a `/nova-vendor/tool-name` URL prefix, where `tool-name` is the “kebab-case” name of your tool.
 Similarly, routes within the `routes/inertia.php` file are also placed within a route group that prefixes all of the routes within the file with the name of your tool.
 You are free to modify this route group definition, but you should ensure your Nova tool will easily co-exist with other Nova packages.
 #### [​](#routing-authorization) Routing Authorization
 Your Nova tool is generated with an `Authorize` middleware. You should not typically need to modify this middleware, as it automatically determines whether the authenticated user can “see” the tool before it processes any requests to routes within your tool’s route group; however, you are free to modify this middleware if needed.
 ### [​](#navigation) Navigation
-Your Nova tool class contains a `menu` method. This method should return a [custom menu](./menus) that renders your tool’s left-side navigation links. You are free to customize this method as needed:
+Your Nova tool class contains a `menu` method. This method should return a [custom menu](/docs/v5/customization/menus) that renders your tool’s left-side navigation links. You are free to customize this method as needed:
 nova-components/PriceTracker/src/PriceTracker.php
 ```
 use Illuminate\Http\Request;
@@ -102,12 +103,12 @@ public function menu(Request $request)
         ->icon('server');
 }
 ```
-If you have [customized Nova’s main sidebar menu](./menus#customizing-the-main-menu), a link to your tool will not automatically display in Nova’s sidebar. You will need to manually define your tool’s menu inside your custom `Nova::mainMenu` callback.
+If you have [customized Nova’s main sidebar menu](/docs/v5/customization/menus#customizing-the-main-menu), a link to your tool will not automatically display in Nova’s sidebar. You will need to manually define your tool’s menu inside your custom `Nova::mainMenu` callback.
 #### [​](#sidebar-icons) Sidebar Icons
 Nova utilizes the free [Heroicons](https://heroicons.com/) icon set by [Steve Schoger](https://twitter.com/steveschoger). Therefore, you may simply specify the name of one of these icons when providing the icon name to the `icon` method.
 ## [​](#assets) Assets
 When Nova generates your tool, `resources/js` and `resources/css` directories are generated for you. These directories contain your tool’s JavaScript and CSS. The primary files of interest in these directories are: `resources/js/components/Tool.vue` and `resources/css/tool.css`.
-The `Tool.vue` file is a single-file Vue component that contains your tool’s front-end. From this file, you are free to build your tool however you want. Your tool can make HTTP requests using Axios via [Nova.request](./frontend#nova-requests).
+The `Tool.vue` file is a single-file Vue component that contains your tool’s front-end. From this file, you are free to build your tool however you want. Your tool can make HTTP requests using Axios via [Nova.request](/docs/v5/customization/frontend#nova-requests).
 ### [​](#registering-assets) Registering Assets
 Your Nova tool class contains a `boot` method. This method is executed when the tool is registered and available. By default, this method registers your tool’s compiled assets so that they will be available to the Nova front-end:
 nova-components/PriceTracker/src/ToolServiceProvider.php

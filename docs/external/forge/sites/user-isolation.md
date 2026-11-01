@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Sudo access](#sudo-access)
 - [Connecting via SFTP](#connecting-via-sftp)

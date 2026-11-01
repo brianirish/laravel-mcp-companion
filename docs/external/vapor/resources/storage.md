@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Attaching Storage](#attaching-storage)
 - [Mounting A Persistent File System](#mounting-a-persistent-file-system)
@@ -36,7 +37,7 @@ environments:
             - 'php artisan migrate --force'
 ```
 ## [​](#mounting-a-persistent-file-system) Mounting A Persistent File System
-To mount a file system on your Lambda, you need to [attach a network to your environment](./networks#attaching-a-network-to-an-environment) and then create a new elastic file system (EFS) using the AWS console. In the EFS dashboard, you should click the “Create file system” button and choose the VPC created by your Vapor network. Once the file system is created, click on its name to access the configuration screen and then click on “Access Points”. Create an access point and specify `1001` for the user and group of both the “POSIX user” and “Root directory creation permissions” settings. For the “Root directory path” configuration option, you should assign a unique name such as `/{project_name}_{environment_name}`.
+To mount a file system on your Lambda, you need to [attach a network to your environment](/resources/networks#attaching-a-network-to-an-environment) and then create a new elastic file system (EFS) using the AWS console. In the EFS dashboard, you should click the “Create file system” button and choose the VPC created by your Vapor network. Once the file system is created, click on its name to access the configuration screen and then click on “Access Points”. Create an access point and specify `1001` for the user and group of both the “POSIX user” and “Root directory creation permissions” settings. For the “Root directory path” configuration option, you should assign a unique name such as `/{project_name}_{environment_name}`.
 After creating the disk, you should navigate to the AWS Lambda dashboard. Once in the Lambda dashboard, locate each of the three Lambda functions (the primary function, the “cli” function, and the “queue” function) for your project environment and attach the file system you just created. You may attach the file system by viewing the Lambda function’s detail page and clicking the “Add file system” button. You should mount the file system to `/mnt/local`.
 Once mounted, you can store and retrieve files to the `/mnt/local` disk path. This path will be shared and accessible by all three of the Lambda functions.
 ## [​](#file-uploads) File Uploads

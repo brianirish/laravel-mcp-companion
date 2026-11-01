@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Query Helpers](#query-helpers)
 - [Lens Polling](#lens-polling)
@@ -182,7 +183,7 @@ app/Nova/Lenses/MostValuableUsers.php
 public static $showPollingToggle = true;
 ```
 ## [​](#lens-filters) Lens Filters
-Each Nova lens also contains a `filters` method. This method allows you to attach any of your existing [filters](./../filters/defining-filters) to the lens:
+Each Nova lens also contains a `filters` method. This method allows you to attach any of your existing [filters](/docs/v5/filters/defining-filters) to the lens:
 app/Nova/Lenses/MostValuableUsers.php
 ```
 use App\Nova\Filters\UserType;
@@ -203,7 +204,7 @@ public function filters(NovaRequest $request): array
 }
 ```
 ## [​](#lens-actions) Lens Actions
-Each Nova lens also contains an `actions` method. This method allows you to attach any of your existing [actions](./../actions/defining-actions) to the lens:
+Each Nova lens also contains an `actions` method. This method allows you to attach any of your existing [actions](/docs/v5/actions/defining-actions) to the lens:
 app/Nova/Lenses/MostValuableUsers.php
 ```
 use App\Nova\Actions\Export;
@@ -226,7 +227,7 @@ public function actions(NovaRequest $request): array
 ```
 By default, lenses will inherit the actions of their associated resource. However, you may override the `actions` method on the lens to define a custom set of actions that should be available to the lens.
 ## [​](#lens-metrics) Lens Metrics
-Each Nova lens also contains a `cards` method. This method allows you to attach any of your existing [metrics](./../metrics/defining-metrics) to the lens:
+Each Nova lens also contains a `cards` method. This method allows you to attach any of your existing [metrics](/docs/v5/metrics/defining-metrics) to the lens:
 ```
 use App\Nova\Metrics\NewUsers;
 use Laravel\Nova\Http\Requests\NovaRequest;

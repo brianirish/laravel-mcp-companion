@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Defining the Field](#defining-the-field)
   - [Disabling File Downloads](#disabling-file-downloads)
@@ -110,7 +111,7 @@ Image::make('Profile Photo')
     ->indexWidth(60)
     ->detailWidth(150),
 ```
-You may also use the `maxWidth`, `indexWidth`, and `detailWidth` methods on the [Avatar](#avatars) and [Gravatar](./fields#gravatar-field) fields.
+You may also use the `maxWidth`, `indexWidth`, and `detailWidth` methods on the [Avatar](#avatars) and [Gravatar](/docs/v5/resources/fields#gravatar-field) fields.
 ## [​](#avatars) Avatars
 The `Avatar` field behaves exactly like the `File` field; however, instead of only displaying the path to the file within the Nova dashboard, an `Avatar` field will show a thumbnail preview of the underlying file. All of the configuration and customization options of the `Avatar` field mirror that of the `File` field:
 ```
@@ -213,7 +214,7 @@ File::make('Attachment')
         return sha1($request->attachment->getClientOriginalName());
     }),
 ```
-Second argument `$requestAttribute` contains the exact payload path to the File field in the request. Most convenient for use within [Repeater](./repeater-fields#overview).
+Second argument `$requestAttribute` contains the exact payload path to the File field in the request. Most convenient for use within [Repeater](/docs/v5/resources/repeater-fields#overview).
 #### [​](#customizing-the-entire-storage-process) Customizing the Entire Storage Process
 However, if you would like to take **total** control over the file storage logic of a field, you may use the `store` method. The `store` method accepts a callable which receives the incoming HTTP request and the model instance associated with the request:
 ```

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Managing templates](#managing-templates)
   - [Create template](#create-template)

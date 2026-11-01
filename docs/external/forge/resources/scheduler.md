@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Scheduled jobs](#scheduled-jobs)
   - [Laravel application scheduling](#laravel-application-scheduling)
   - [Default scheduled jobs](#default-scheduled-jobs)

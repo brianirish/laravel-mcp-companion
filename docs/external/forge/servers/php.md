@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Managing PHP versions](#managing-php-versions)
   - [Installing PHP versions](#installing-php-versions)

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Using Nova as Your Application’s Default Login](#using-nova-as-your-application%E2%80%99s-default-login)
 - [Using Custom Authentication Routes](#using-custom-authentication-routes)
 - [Enabling Passkey Authentication](#enabling-passkey-authentication)

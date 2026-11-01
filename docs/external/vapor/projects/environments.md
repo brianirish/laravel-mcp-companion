@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating Environments](#creating-environments)
 - [Opening Environments](#opening-environments)

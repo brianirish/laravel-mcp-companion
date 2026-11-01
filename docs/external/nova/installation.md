@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Requirements](#requirements)
 - [Browser Support](#browser-support)
 - [Installing Nova via Composer](#installing-nova-via-composer)

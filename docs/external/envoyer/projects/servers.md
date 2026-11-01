@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Server Configuration](#server-configuration)
   - [Configuring Multiple PHP Versions](#configuring-multiple-php-versions)

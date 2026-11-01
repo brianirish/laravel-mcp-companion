@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Creating New Localization Files](#creating-new-localization-files)
 - [User Locale Overrides](#user-locale-overrides)

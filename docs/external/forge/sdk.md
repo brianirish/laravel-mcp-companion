@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Upgrading From v3.x](#upgrading-from-v3-x)

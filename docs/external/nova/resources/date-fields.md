@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Options](#options)
 - [Steps](#steps)
 - [Minimum and Maximum Values](#minimum-and-maximum-values)

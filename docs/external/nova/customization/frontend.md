@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Nova Requests](#nova-requests)
 - [Manual Navigation](#manual-navigation)
 - [Event Bus](#event-bus)
@@ -113,7 +114,7 @@ Once the variable has been provided to Nova via the `provideToScript` method, yo
 const driver = Nova.config('mail_driver');
 ```
 ### [​](#localizations) Localizations
-Localization strings can be passed to the frontend via your `NovaServiceProvider`. To learn more, please consult the [full custom localization documentation](./localization#frontend).
+Localization strings can be passed to the frontend via your `NovaServiceProvider`. To learn more, please consult the [full custom localization documentation](/docs/v5/customization/localization#frontend).
 ### [​](#using-nova-mixins) Using Nova Mixins
 Custom Nova tools, resource tools, cards, and other custom packages that are being developed within a `nova-components` directory of a Laravel application can utilize `laravel-nova` mixins by importing `nova.mix.js` Mix Extension from the Nova Devtool installation that is located within your root application’s `vendor` directory. This extension should be placed in your package’s `webpack.mix.js`:
 webpack.mix.js

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Running commands](#running-commands)
   - [Command history](#command-history)

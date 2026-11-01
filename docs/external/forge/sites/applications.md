@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
   - [Requirements](#requirements)
 - [Laravel Scheduler](#laravel-scheduler)

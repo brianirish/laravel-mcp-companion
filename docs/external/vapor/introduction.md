@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [What Is Vapor?](#what-is-vapor)
 - [Requirements](#requirements)
 - [Account Creation](#account-creation)

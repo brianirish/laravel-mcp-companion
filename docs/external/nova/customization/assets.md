@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Defining Assets](#defining-assets)
 - [Registering Assets](#registering-assets)

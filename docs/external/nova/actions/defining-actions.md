@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
   - [Action Titles](#action-titles)
   - [Destructive Actions](#destructive-actions)
@@ -98,7 +99,7 @@ You may designate an action as destructive or dangerous by defining an action cl
 When a destructive action is added to a resource that has an associated authorization policy, the policy’s `delete` method must return `true` in order for the action to run.
 ### [​](#action-callbacks) Action Callbacks
 The `Action::then` method should not be utilized if your action is queued. To achieve similar functionality when using queued actions, you should leverage Nova’s [action batching callbacks](#job-batching).
-When running an action against multiple resources, you may wish to execute some code after the action has completed executing against all of the resources. For example, you may wish to generate a report detailing all of the changes for the selected resources. To accomplish this, you may invoke the `then` method when [registering your action](./registering-actions).
+When running an action against multiple resources, you may wish to execute some code after the action has completed executing against all of the resources. For example, you may wish to generate a report detailing all of the changes for the selected resources. To accomplish this, you may invoke the `then` method when [registering your action](/docs/v5/actions/registering-actions).
 The `then` methods accepts a closure which will be invoked when the action has finished executing against all of the selected resources. The closure will receive a flattened Laravel [collection](https://laravel.com/docs/collections) containing the values that were returned by the action.
 For example, note that the following action’s `handle` method returns the `$models` it receives:
 app/Nova/Actions/EmailAccountProfile.php
@@ -146,7 +147,7 @@ public function actions(NovaRequest $request): array
 }
 ```
 ## [​](#action-fields) Action Fields
-Sometimes you may wish to gather additional information from the user before dispatching an action. For this reason, Nova allows you to attach most of Nova’s supported [fields](./../resources/fields) directly to an action. When the action is initiated, Nova will prompt the user to provide input for the fields:
+Sometimes you may wish to gather additional information from the user before dispatching an action. For this reason, Nova allows you to attach most of Nova’s supported [fields](/docs/v5/resources/fields) directly to an action. When the action is initiated, Nova will prompt the user to provide input for the fields:
 To add a field to an action, add the field to the array of fields returned by the action’s `fields` method:
 app/Nova/Actions/EmailAccountProfile.php
 ```
@@ -295,7 +296,7 @@ Nova.$on('invoice-generated', ({ model }) => {
 ### [​](#custom-modal-responses) Custom Modal Responses
 In addition to the customization options provided before and during an action’s execution, Nova also supports the ability to present a custom modal response to the user. This allows you to provide additional context or follow-up actions to the user, customized to your use-case.
 For example, let’s imagine you have defined an action named `GenerateApiToken`, which creates unique tokens for use with a REST API. Using a custom action response modal, you could show the user running the action a modal allowing them to copy the newly-generated API token to their clipboard.
-Using the `nova:asset` Artisan command, you may [generate a custom asset](./../customization/assets) and register the custom modal with Nova’s Vue instance:
+Using the `nova:asset` Artisan command, you may [generate a custom asset](/docs/v5/customization/assets) and register the custom modal with Nova’s Vue instance:
 ```
 import ApiTokenCopier from "./components/ApiTokenCopier";
 

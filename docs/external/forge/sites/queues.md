@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Creating a queue worker](#creating-a-queue-worker)
 - [Laravel Horizon](#laravel-horizon)

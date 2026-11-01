@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Connecting to Redis and Memcached](#connecting-to-redis-and-memcached)
 - [Managing cache services](#managing-cache-services)

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Defining Filters](#defining-filters)
 - [Registering Filters](#registering-filters)

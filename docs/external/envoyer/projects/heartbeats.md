@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Heartbeat URLs](#heartbeat-urls)
   - [Calling Manually](#calling-manually)

@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Introduction](#introduction)
 - [Managing server monitors](#managing-server-monitors)
   - [Creating monitors](#creating-monitors)

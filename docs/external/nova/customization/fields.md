@@ -5,6 +5,7 @@
 ---
 
 ## On this page
+Back to top
 - [Overview](#overview)
 - [Defining Fields](#defining-fields)
 - [Registering Fields](#registering-fields)
@@ -147,7 +148,7 @@ fill(formData) {
 }
 ```
 #### [​](#dependent-form-field) Dependent Form Field
-By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](./../resources/fields#dependent-fields), you should replace `FormField` with `DependentFormField`:
+By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](/docs/v5/resources/fields#dependent-fields), you should replace `FormField` with `DependentFormField`:
 nova-components/ColorPicker/resources/js/components/FormField.js
 ```
 -import { FormField, HandlesValidationErrors } from 'laravel-nova'
@@ -248,7 +249,7 @@ In addition, you may run the NPM `watch` command to auto-compile your assets whe
 ```
 npm run watch
 ```
-The `nova:install` NPM command installs the mixins used by Nova’s built-in fields for use in your field. Please refer to the [Nova mixins](./frontend#using-nova-mixins) documentation for more information.
+The `nova:install` NPM command installs the mixins used by Nova’s built-in fields for use in your field. Please refer to the [Nova mixins](/docs/v5/customization/frontend#using-nova-mixins) documentation for more information.
 Was this page helpful?
 YesNo
 [Cards](/docs/v5/customization/cards)[Filters](/docs/v5/customization/filters)
