@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Sloppy: Static Analysis for AI-Written PHP
+## Pollora: Run WordPress Inside a Laravel Application
 
-[Read more](https://laravel-news.com/sloppy)
+[Read more](https://laravel-news.com/pollora-wordpress-laravel)
 
 ---
 
@@ -24,9 +24,27 @@ Latest Laravel Release
 
 ---
 
-## Delete Expired Sessions in Laravel With a Scheduled Command
+## Decide with Jev: Tie Every AI Check to the Exact Draft
 
-[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
+[Read more](https://laravel-news.com/decide-with-jev-tie-every-ai-check-to-the-exact-draft)
+
+---
+
+## PIE 1.5 Changes PHP Extension Installs in CI
+
+[Read more](https://laravel-news.com/pie-1-5)
+
+---
+
+## Email Sending and Testing for Laravel in One Account
+
+[Read more](https://laravel-news.com/maileroo-laravel-email-testing)
+
+---
+
+## Email Sending and Testing for Laravel in One Account
+
+[Read more](https://laravel-news.com/maileroo-laravel-email-testing)
 
 ---
 
@@ -36,27 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Mastering Laravel Testing: A Video Course on Laravel Tests
+## Decide with Jev: Turn AI Answers into Decisions with PHP Rules
 
-[Read more](https://laravel-news.com/mastering-laravel-testing-course)
-
----
-
-## Delete Expired Sessions in Laravel With a Scheduled Command
-
-[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
-
----
-
-## Sloppy: Static Analysis for AI-Written PHP
-
-[Read more](https://laravel-news.com/sloppy)
-
----
-
-## Reset Sticky Database Connections Between Laravel Queue Jobs
-
-[Read more](https://laravel-news.com/laravel-queue-sticky-database-connections)
+[Read more](https://laravel-news.com/decide-with-jev-turn-ai-answers-into-decisions-with-php-rules)
 
 ---
 
