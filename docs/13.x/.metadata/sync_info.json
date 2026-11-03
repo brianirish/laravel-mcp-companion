@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "960eedf0911155ad16326ade49c0ea5d18eda0b8",
-  "commit_date": "2026-10-27T13:28:25Z",
-  "commit_message": "Return 404 responses for .php files in nginx config (#11425)",
-  "commit_url": "https://github.com/laravel/docs/commit/960eedf0911155ad16326ade49c0ea5d18eda0b8",
-  "sync_time": "2026-11-01T00:02:58Z"
+  "commit_sha": "625d1dfb61018e6bc50cc7ab67fca89ae018dfa2",
+  "commit_date": "2026-11-02T15:17:57Z",
+  "commit_message": "Document Redis key prefixes for multiple instances on one server (#11428)",
+  "commit_url": "https://github.com/laravel/docs/commit/625d1dfb61018e6bc50cc7ab67fca89ae018dfa2",
+  "sync_time": "2026-11-03T00:02:26Z"
 }
