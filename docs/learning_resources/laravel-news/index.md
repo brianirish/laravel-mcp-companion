@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Pollora: Run WordPress Inside a Laravel Application
+## Cooldown Dependency Policy now in Composer 2.11
 
-[Read more](https://laravel-news.com/pollora-wordpress-laravel)
+[Read more](https://laravel-news.com/composer-2-11)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Deferred Schema Loading in Filament v5.8
+## PIE 1.5 Changes PHP Extension Installs in CI
 
-[Read more](https://laravel-news.com/filament-5-8-0)
+[Read more](https://laravel-news.com/pie-1-5)
 
 ---
 
@@ -30,21 +30,21 @@ Latest Laravel Release
 
 ---
 
-## PIE 1.5 Changes PHP Extension Installs in CI
+## Live Props for Real-Time Updates in Inertia.js v3.11
 
-[Read more](https://laravel-news.com/pie-1-5)
-
----
-
-## Email Sending and Testing for Laravel in One Account
-
-[Read more](https://laravel-news.com/maileroo-laravel-email-testing)
+[Read more](https://laravel-news.com/inertia-3-11-0)
 
 ---
 
 ## Email Sending and Testing for Laravel in One Account
 
 [Read more](https://laravel-news.com/maileroo-laravel-email-testing)
+
+---
+
+## Cooldown Dependency Policy now in Composer 2.11
+
+[Read more](https://laravel-news.com/composer-2-11)
 
 ---
 
