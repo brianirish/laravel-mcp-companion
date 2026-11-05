@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "091001642ea6991a0790d5e6f1677355aec0bda7",
-  "commit_date": "2026-11-03T14:28:05Z",
-  "commit_message": "Clarify Mailtrap Email Sandbox documentation (#11431)\n\n* Clarify Mailtrap Email Sandbox documentation\n\n* Limit Sandbox documentation changes to name and link",
-  "commit_url": "https://github.com/laravel/docs/commit/091001642ea6991a0790d5e6f1677355aec0bda7",
-  "sync_time": "2026-11-04T00:07:13Z"
+  "commit_sha": "10add0d2dade04cacfab436dcc3a8df7ca004e74",
+  "commit_date": "2026-11-04T19:46:57Z",
+  "commit_message": "document in order of (#11435)",
+  "commit_url": "https://github.com/laravel/docs/commit/10add0d2dade04cacfab436dcc3a8df7ca004e74",
+  "sync_time": "2026-11-05T00:04:15Z"
 }
