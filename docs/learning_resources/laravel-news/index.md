@@ -4,29 +4,17 @@ Source: https://laravel-news.com
 
 ---
 
-## Cooldown Dependency Policy now in Composer 2.11
+## Flock: A Free, Native Herd Alternative for Laravel
 
-[Read more](https://laravel-news.com/composer-2-11)
+[Read more](https://laravel-news.com/flock-laravel-local-development)
 
 ---
 
-## Scheduled Session Garbage Collection in Laravel 13.39
+## Slow Job Alerts and Replica Commit IDs in Laravel 13.40
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-39-0)
-
----
-
-## PIE 1.5 Changes PHP Extension Installs in CI
-
-[Read more](https://laravel-news.com/pie-1-5)
-
----
-
-## Decide with Jev: Tie Every AI Check to the Exact Draft
-
-[Read more](https://laravel-news.com/decide-with-jev-tie-every-ai-check-to-the-exact-draft)
+[Read more](https://laravel-news.com/laravel-13-40-0)
 
 ---
 
@@ -36,27 +24,39 @@ Latest Laravel Release
 
 ---
 
+## Strict Request Input Casting in Laravel
+
+[Read more](https://laravel-news.com/laravel-strict-request-input)
+
+---
+
+## Laravel Herd 2: Coding Agents, Workspaces, and Cloud Deploys
+
+[Read more](https://laravel-news.com/laravel-herd-2)
+
+---
+
 ## Email Sending and Testing for Laravel in One Account
 
 [Read more](https://laravel-news.com/maileroo-laravel-email-testing)
 
 ---
 
-## Cooldown Dependency Policy now in Composer 2.11
+## Flock: A Free, Native Herd Alternative for Laravel
 
-[Read more](https://laravel-news.com/composer-2-11)
-
----
-
-## Pollora: Run WordPress Inside a Laravel Application
-
-[Read more](https://laravel-news.com/pollora-wordpress-laravel)
+[Read more](https://laravel-news.com/flock-laravel-local-development)
 
 ---
 
-## Decide with Jev: Turn AI Answers into Decisions with PHP Rules
+## Prevent Duplicate File Uploads With Laravel Storage Dedupler
 
-[Read more](https://laravel-news.com/decide-with-jev-turn-ai-answers-into-decisions-with-php-rules)
+[Read more](https://laravel-news.com/laravel-storage-dedupler)
+
+---
+
+## Delete Expired Sessions in Laravel With a Scheduled Command
+
+[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
 
 ---
 

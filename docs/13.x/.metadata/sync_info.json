@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "10add0d2dade04cacfab436dcc3a8df7ca004e74",
-  "commit_date": "2026-11-04T19:46:57Z",
-  "commit_message": "document in order of (#11435)",
-  "commit_url": "https://github.com/laravel/docs/commit/10add0d2dade04cacfab436dcc3a8df7ca004e74",
-  "sync_time": "2026-11-05T00:04:15Z"
+  "commit_sha": "11016f178d74b194d8aad3717a2e9cf5e08e45be",
+  "commit_date": "2026-11-05T21:39:50Z",
+  "commit_message": "Update fortify.md (#11438)\n\nThis change clarifies that Fortify automatically applies the throttle middleware to its login route when a custom login rate limiter is configured through fortify.limiters.login.\r\n\r\nWithout this clarification, developers may assume they need to manually attach the throttle middleware to the login route.\r\n\r\nNo code changes are required. This is a documentation-only improvement.",
+  "commit_url": "https://github.com/laravel/docs/commit/11016f178d74b194d8aad3717a2e9cf5e08e45be",
+  "sync_time": "2026-11-06T00:02:39Z"
 }
