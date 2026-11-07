@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "11016f178d74b194d8aad3717a2e9cf5e08e45be",
-  "commit_date": "2026-11-05T21:39:50Z",
-  "commit_message": "Update fortify.md (#11438)\n\nThis change clarifies that Fortify automatically applies the throttle middleware to its login route when a custom login rate limiter is configured through fortify.limiters.login.\r\n\r\nWithout this clarification, developers may assume they need to manually attach the throttle middleware to the login route.\r\n\r\nNo code changes are required. This is a documentation-only improvement.",
-  "commit_url": "https://github.com/laravel/docs/commit/11016f178d74b194d8aad3717a2e9cf5e08e45be",
-  "sync_time": "2026-11-06T00:02:39Z"
+  "commit_sha": "f7a20c401a30827991659174d48d958f92517a9e",
+  "commit_date": "2026-11-06T14:05:05Z",
+  "commit_message": "[13.x] Document AI stream broadcast event names (#11439)\n\n* Document the names AI stream events are broadcast under\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/f7a20c401a30827991659174d48d958f92517a9e",
+  "sync_time": "2026-11-07T00:02:45Z"
 }
