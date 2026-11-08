@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## Flock: A Free, Native Herd Alternative for Laravel
+## PhpStorm 2026.3 Adds an Agent Workspace and PHP 8.6 Support
 
-[Read more](https://laravel-news.com/flock-laravel-local-development)
+[Read more](https://laravel-news.com/phpstorm-2026-3)
 
 ---
 
@@ -18,15 +18,15 @@ Latest Laravel Release
 
 ---
 
-## Live Props for Real-Time Updates in Inertia.js v3.11
+## Flock: A Free, Native Herd Alternative for Laravel
 
-[Read more](https://laravel-news.com/inertia-3-11-0)
+[Read more](https://laravel-news.com/flock-laravel-local-development)
 
 ---
 
-## Strict Request Input Casting in Laravel
+## Insert Middleware Before or After Existing Laravel Middleware
 
-[Read more](https://laravel-news.com/laravel-strict-request-input)
+[Read more](https://laravel-news.com/laravel-middleware-insert-before-after)
 
 ---
 
@@ -42,9 +42,9 @@ Latest Laravel Release
 
 ---
 
-## Flock: A Free, Native Herd Alternative for Laravel
+## Strict Request Input Casting in Laravel
 
-[Read more](https://laravel-news.com/flock-laravel-local-development)
+[Read more](https://laravel-news.com/laravel-strict-request-input)
 
 ---
 
@@ -54,9 +54,9 @@ Latest Laravel Release
 
 ---
 
-## Delete Expired Sessions in Laravel With a Scheduled Command
+## Decide with Jev: Tie Every AI Check to the Exact Draft
 
-[Read more](https://laravel-news.com/laravel-delete-expired-sessions)
+[Read more](https://laravel-news.com/decide-with-jev-tie-every-ai-check-to-the-exact-draft)
 
 ---
 
