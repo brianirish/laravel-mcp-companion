@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "f7a20c401a30827991659174d48d958f92517a9e",
-  "commit_date": "2026-11-06T14:05:05Z",
-  "commit_message": "[13.x] Document AI stream broadcast event names (#11439)\n\n* Document the names AI stream events are broadcast under\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/f7a20c401a30827991659174d48d958f92517a9e",
-  "sync_time": "2026-11-07T00:02:45Z"
+  "commit_sha": "59da4453c4a39816246a7450c93aef1f645abf66",
+  "commit_date": "2026-11-08T14:40:36Z",
+  "commit_message": "[13.x] Document ulid() alongside uuid() request input (#11443)",
+  "commit_url": "https://github.com/laravel/docs/commit/59da4453c4a39816246a7450c93aef1f645abf66",
+  "sync_time": "2026-11-09T00:02:45Z"
 }
