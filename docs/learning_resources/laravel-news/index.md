@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## PhpStorm 2026.3 Adds an Agent Workspace and PHP 8.6 Support
+## Flock: A Free, Native Herd Alternative for Laravel
 
-[Read more](https://laravel-news.com/phpstorm-2026-3)
+[Read more](https://laravel-news.com/flock-laravel-local-development)
 
 ---
 
@@ -18,9 +18,9 @@ Latest Laravel Release
 
 ---
 
-## Flock: A Free, Native Herd Alternative for Laravel
+## PhpStorm 2026.3 Adds an Agent Workspace and PHP 8.6 Support
 
-[Read more](https://laravel-news.com/flock-laravel-local-development)
+[Read more](https://laravel-news.com/phpstorm-2026-3)
 
 ---
 
@@ -30,21 +30,21 @@ Latest Laravel Release
 
 ---
 
-## Laravel Herd 2: Coding Agents, Workspaces, and Cloud Deploys
+## Real-Time Inertia Props With Laravel Reverb
 
-[Read more](https://laravel-news.com/laravel-herd-2)
-
----
-
-## Email Sending and Testing for Laravel in One Account
-
-[Read more](https://laravel-news.com/maileroo-laravel-email-testing)
+[Read more](https://laravel-news.com/inertia-live-props-laravel-reverb)
 
 ---
 
-## Strict Request Input Casting in Laravel
+## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
 
-[Read more](https://laravel-news.com/laravel-strict-request-input)
+[Read more](https://go.laravel.news/cloud/home)
+
+---
+
+## Flock: A Free, Native Herd Alternative for Laravel
+
+[Read more](https://laravel-news.com/flock-laravel-local-development)
 
 ---
 

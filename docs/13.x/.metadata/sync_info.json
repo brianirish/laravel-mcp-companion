@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "59da4453c4a39816246a7450c93aef1f645abf66",
-  "commit_date": "2026-11-08T14:40:36Z",
-  "commit_message": "[13.x] Document ulid() alongside uuid() request input (#11443)",
-  "commit_url": "https://github.com/laravel/docs/commit/59da4453c4a39816246a7450c93aef1f645abf66",
-  "sync_time": "2026-11-09T00:02:45Z"
+  "commit_sha": "f3c3ee84420004d2a780947f66ff6d107d109fbc",
+  "commit_date": "2026-11-09T20:50:55Z",
+  "commit_message": "Link MCP security best practices in MCP docs (#11421)\n\nAmp-Thread-ID: https://ampcode.com/threads/T-01a163ec-afab-741e-a359-4faf0eccdb4a\n\nCo-authored-by: Amp <amp@ampcode.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/f3c3ee84420004d2a780947f66ff6d107d109fbc",
+  "sync_time": "2026-11-10T00:02:29Z"
 }
