@@ -17,7 +17,7 @@ diff against and to rebuild from.
 
 | Trigger | Pipeline | Fires on |
 |---------|----------|----------|
-| `ci-push-trigger.yaml` | `ci` | Every push, any branch |
+| `ci-push-trigger.yaml` | `ci` | Branch pushes, matching `^refs/heads/.*`; tag pushes are skipped |
 | `release-tag-trigger.yaml` | `release` | Tag pushes matching `^refs/tags/(v\|docs-).*` |
 
 ## Not yet mirrored
