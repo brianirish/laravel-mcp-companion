@@ -35,6 +35,15 @@ docs-only commit and contains no code change.
   Page paths, and so `laravel-external://` URIs, are unchanged for pages that
   still exist. Saved pages now open with a `Source:` line rather than a
   generated `# Service - Section` heading.
+- Unified search ranks a core hit as if it scored 5% higher, so the
+  framework's own page wins a near-tie against a package or service page. With
+  Filament's larger docs, "how do I retry a failed queue job" otherwise led
+  with a Filament import-job page (30.04) over "Dealing With Failed Jobs"
+  (29.52). A non-core hit with a real lead still ranks first, and reported
+  scores are unchanged.
+- The nightly sync refetches every source on every run. The fetchers' 24-hour
+  cache lined up with the 24-hour schedule, so sources were skipped on
+  alternate nights.
 - CI no longer runs on tag pushes, which re-tested the commit `main` had just
   tested and spent build credits doing it.
 - **Filament docs track the current major automatically.** They are discovered

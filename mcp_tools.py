@@ -778,6 +778,29 @@ def read_laravel_doc_section_impl(
     )
 
 
+# How far a non-core hit must lead a core hit to rank above it.
+CORE_NEAR_TIE_MARGIN = 0.05
+
+
+def rank_hits(hits: List[tuple]) -> List[tuple]:
+    """Order (section, score, family) hits from every corpus into one ranking.
+
+    Scores from separate indexes are only approximately comparable, since IDF
+    is per-corpus: a term that is rare in one corpus scores higher there than
+    the same term does in a corpus where it is common. Raw score is close
+    enough to rank on, except at the top, where a package page can edge out
+    the framework's own page on a general Laravel question by a fraction of a
+    point. So a core hit is ranked as if it scored CORE_NEAR_TIE_MARGIN
+    higher. A non-core hit with a real lead still wins; the scores reported to
+    the caller are the ones computed.
+    """
+    def rank_score(hit: tuple) -> float:
+        _section, score, family = hit
+        return score * (1 + CORE_NEAR_TIE_MARGIN) if family == "core" else score
+
+    return sorted(hits, key=rank_score, reverse=True)
+
+
 def search_laravel_docs_data(
     docs_path: Path,
     query: str,
@@ -874,11 +897,7 @@ def search_laravel_docs_data(
             found = index.search(query, limit) or index.substring_search(query, limit)
             hits.extend((s, score, "learning") for s, score in found)
 
-    # Scores from separate indexes are only approximately comparable, since IDF
-    # is per-corpus. Close enough to rank against each other; the quality tests
-    # hold the line on core queries still surfacing core docs first.
-    hits.sort(key=lambda triple: triple[1], reverse=True)
-    hits = hits[:limit]
+    hits = rank_hits(hits)[:limit]
 
     if not hits:
         result = error_data(

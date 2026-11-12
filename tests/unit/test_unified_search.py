@@ -144,3 +144,30 @@ class TestRealCorpusQuality:
         )
         assert result["results"][0]["source"] == "core"
         assert "queues.md" in result["results"][0]["file"]
+
+
+class TestCorePreferredOnNearTies:
+    """Scores from separate indexes are only roughly comparable, since each
+    corpus has its own IDF. When Filament's docs grew from 62 pages to 164, a
+    page about import jobs outscored the framework's own "Dealing With Failed
+    Jobs" by 30.04 to 29.52 for "how do I retry a failed queue job". A lead
+    that small is noise; the framework's docs win it."""
+
+    def _order(self, hits):
+        from mcp_tools import rank_hits
+        return [family for _section, _score, family in rank_hits(hits)]
+
+    def test_core_wins_a_near_tie_against_a_package(self):
+        assert self._order([("a", 30.04, "package"), ("b", 29.52, "core")]) == ["core", "package"]
+
+    def test_a_clear_lead_is_not_overturned(self):
+        assert self._order([("a", 36.0, "package"), ("b", 29.52, "core")]) == ["package", "core"]
+
+    def test_non_core_sources_are_ordered_by_score_among_themselves(self):
+        assert self._order([("a", 20.0, "service"), ("b", 25.0, "package"), ("c", 22.0, "learning")]) == [
+            "package", "learning", "service",
+        ]
+
+    def test_reported_scores_are_left_as_computed(self):
+        from mcp_tools import rank_hits
+        assert [score for _s, score, _f in rank_hits([("a", 30.04, "package"), ("b", 29.52, "core")])] == [29.52, 30.04]
