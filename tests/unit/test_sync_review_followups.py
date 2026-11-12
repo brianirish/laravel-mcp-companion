@@ -182,3 +182,35 @@ class TestLearnCourseDiscoveryFailures:
             fetcher.fetch_learning_source("laravel-bootcamp", force=True)
 
         assert not stale.exists()
+
+
+class TestImageStrippingKeepsParagraphBreaks:
+    """remove_image_references skipped every blank line, not only the lines an
+    image had occupied. On HTML-scraped pages that went unnoticed; on pages
+    fetched as markdown (Inertia, Filament) it joined every paragraph to the
+    next and ran headings and lists into the text around them."""
+
+    def test_blank_lines_between_paragraphs_survive(self):
+        text = "# Routing\n\nFirst paragraph.\n\nSecond paragraph.\n\n- one\n- two\n"
+
+        assert docs_updater.remove_image_references(text) == text
+
+    def test_a_line_that_held_only_an_image_is_removed(self):
+        text = "Before.\n\n![Screenshot](https://example.test/shot.png)\n\nAfter."
+
+        assert docs_updater.remove_image_references(text) == "Before.\n\n\nAfter."
+
+    def test_an_image_inside_a_sentence_is_removed_and_the_sentence_kept(self):
+        text = "See ![icon](https://example.test/i.png) the toolbar."
+
+        assert docs_updater.remove_image_references(text) == "See  the toolbar."
+
+    def test_a_bullet_that_held_only_an_image_is_removed(self):
+        text = "- ![a](https://example.test/a.png)\n- real item"
+
+        assert docs_updater.remove_image_references(text) == "- real item"
+
+    def test_images_inside_code_blocks_are_left_alone(self):
+        text = "```md\n![alt](path.png)\n\n```"
+
+        assert docs_updater.remove_image_references(text) == text

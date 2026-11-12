@@ -43,6 +43,8 @@ docs-only commit and contains no code change.
 - `docs_updater.py --all-versions` exits 0 when every version is already up to
   date. It exited 1 whenever any version had nothing to update, which the docs
   pipeline read as a failed framework update.
+- Stripping image references no longer removes every blank line. Pages fetched
+  as markdown (Inertia, Filament) were saved with their paragraphs run together.
 - Spatie, Livewire and Debugbar record how many pages they wanted as well as
   how many they fetched, so the sync report can flag a mostly failed fetch.
 - A Laravel Learn course whose page fails to load no longer has its saved

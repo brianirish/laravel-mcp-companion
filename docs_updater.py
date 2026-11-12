@@ -109,10 +109,12 @@ def remove_image_references(content: str) -> str:
             # Remove image references from the line
             cleaned = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', line)
 
-            # Skip lines that became empty or just bullet/whitespace after removal
+            # Skip a line only when removing an image is what emptied it (or
+            # left a bare bullet). A line that was blank to begin with is a
+            # paragraph break: dropping those joined every paragraph of a
+            # markdown page to the next.
             stripped_cleaned = cleaned.strip()
-            if not stripped_cleaned or stripped_cleaned in ('*', '-', '+'):
-                # Line had only image(s), skip it
+            if cleaned != line and (not stripped_cleaned or stripped_cleaned in ('*', '-', '+')):
                 continue
 
             # Line has other content, keep the cleaned version
