@@ -1,18 +1,19 @@
-# Filament - Tables/Grouping
+Source: https://filamentphp.com/docs/5.x/tables/grouping.md
 
-Source: https://filamentphp.com/docs/3.x/tables/grouping
+# Grouping rows
 
-#Overview
----------
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/grouping.md
+
+## Introduction
 
 You may allow users to group table rows together using a common attribute. This is useful for displaying lots of data in a more organized way.
 
-Groups can be set up using the name of the attribute to group by (e.g. `'status'`), or a `Group` object which allows you to customize the behavior of that grouping (e.g. `Group::make('status')->collapsible()`).
+Groups can be set up using the name of the attribute to group by (e.g. ` 'status' `), or a ` Group ` object which allows you to customize the behavior of that grouping (e.g. ` Group::make('status')->collapsible() `).
 
-#Grouping rows by default
--------------------------
+## Grouping rows by default
 
-You may want to always group posts by a specific attribute. To do this, pass the group to the `defaultGroup()` method:
+You may want to always group posts by a specific attribute. To do this, pass the group to the ` defaultGroup() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -22,14 +23,27 @@ public function table(Table $table): Table
     return $table
         ->defaultGroup('status');
 }
-
 ```
-![Table with grouping](/docs/3.x/images/light/tables/grouping.jpg) ![Table with grouping](/docs/3.x/images/dark/tables/grouping.jpg)
 
-#Allowing users to choose between groupings
--------------------------------------------
 
-You may also allow users to pick between different groupings, by passing them in an array to the `groups()` method:
+
+### Setting the default grouping direction
+
+By default, groups are ordered in ascending order. To use descending order by default, pass the ` direction ` argument to the ` defaultGroup() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->defaultGroup('status', direction: 'desc');
+}
+```
+
+## Allowing users to choose between groupings
+
+You may also allow users to pick between different groupings, by passing them in an array to the ` groups() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -42,9 +56,11 @@ public function table(Table $table): Table
             'category',
         ]);
 }
-
 ```
-You can use both `groups()` and `defaultGroup()` together to allow users to choose between different groupings, but have a default grouping set:
+
+
+
+You can use both ` groups() ` and ` defaultGroup() ` together to allow users to choose between different groupings, but have a default grouping set:
 
 ```php
 use Filament\Tables\Table;
@@ -58,12 +74,11 @@ public function table(Table $table): Table
         ])
         ->defaultGroup('status');
 }
-
 ```
-#Grouping by a relationship attribute
--------------------------------------
 
-You can also group by a relationship attribute using dot-syntax. For example, if you have an `author` relationship which has a `name` attribute, you can use `author.name` as the name of the attribute:
+## Grouping by a relationship attribute
+
+You can also group by a relationship attribute using dot-syntax. For example, if you have an ` author ` relationship which has a ` name ` attribute, you can use ` author.name ` as the name of the attribute:
 
 ```php
 use Filament\Tables\Table;
@@ -75,12 +90,11 @@ public function table(Table $table): Table
             'author.name',
         ]);
 }
-
 ```
-#Setting a grouping label
--------------------------
 
-By default, the label of the grouping will be generated based on the attribute. You may customize it with a `Group` object, using the `label()` method:
+## Setting a grouping label
+
+By default, the label of the grouping will be generated based on the attribute. You may customize it with a ` Group ` object, using the ` label() ` method:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -94,12 +108,11 @@ public function table(Table $table): Table
                 ->label('Author name'),
         ]);
 }
-
 ```
-#Setting a group title
-----------------------
 
-By default, the title of a group will be the value of the attribute. You may customize it by returning a new title from the `getTitleFromRecordUsing()` method of a `Group` object:
+## Setting a group title
+
+By default, the title of a group will be the value of the attribute. You may customize it by returning a new title from the ` getTitleFromRecordUsing() ` method of a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -113,11 +126,11 @@ public function table(Table $table): Table
                 ->getTitleFromRecordUsing(fn (Post $record): string => ucfirst($record->status->getLabel())),
         ]);
 }
-
 ```
-### #Disabling the title label prefix
 
-By default, the title is prefixed with the label of the group. To disable this prefix, utilize the `titlePrefixedWithLabel(false)` method:
+### Disabling the title label prefix
+
+By default, the title is prefixed with the label of the group. To disable this prefix, utilize the ` titlePrefixedWithLabel(false) ` method:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -131,12 +144,11 @@ public function table(Table $table): Table
                 ->titlePrefixedWithLabel(false),
         ]);
 }
-
 ```
-#Setting a group description
-----------------------------
 
-You may also set a description for a group, which will be displayed underneath the group title. To do this, use the `getDescriptionFromRecordUsing()` method on a `Group` object:
+## Setting a group description
+
+You may also set a description for a group, which will be displayed underneath the group title. To do this, use the ` getDescriptionFromRecordUsing() ` method on a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -150,14 +162,13 @@ public function table(Table $table): Table
                 ->getDescriptionFromRecordUsing(fn (Post $record): string => $record->status->getDescription()),
         ]);
 }
-
 ```
-![Table with group descriptions](/docs/3.x/images/light/tables/grouping-descriptions.jpg) ![Table with group descriptions](/docs/3.x/images/dark/tables/grouping-descriptions.jpg)
 
-#Setting a group key
---------------------
 
-By default, the key of a group will be the value of the attribute. It is used internally as a raw identifier of that group, instead of the title. You may customize it by returning a new key from the `getKeyFromRecordUsing()` method of a `Group` object:
+
+## Setting a group key
+
+By default, the key of a group will be the value of the attribute. It is used internally as a raw identifier of that group, instead of the [title](https://filamentphp.com/docs/5.x/tables/grouping.md#setting-a-group-title). You may customize it by returning a new key from the ` getKeyFromRecordUsing() ` method of a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -171,12 +182,11 @@ public function table(Table $table): Table
                 ->getKeyFromRecordUsing(fn (Post $record): string => $record->status->value),
         ]);
 }
-
 ```
-#Date groups
-------------
 
-When using a date-time column as a group, you may want to group by the date only, and ignore the time. To do this, use the `date()` method on a `Group` object:
+## Date groups
+
+When using a date-time column as a group, you may want to group by the date only, and ignore the time. To do this, use the ` date() ` method on a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -190,12 +200,13 @@ public function table(Table $table): Table
                 ->date(),
         ]);
 }
-
 ```
-#Collapsible groups
--------------------
 
-You can allow rows inside a group to be collapsed underneath their group title. To enable this, use a `Group` object with the `collapsible()` method:
+
+
+## Collapsible groups
+
+You can allow rows inside a group to be collapsed underneath their group title. To enable this, use a ` Group ` object with the ` collapsible() ` method:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -209,16 +220,38 @@ public function table(Table $table): Table
                 ->collapsible(),
         ]);
 }
-
 ```
-#Summarising groups
--------------------
 
-You can use summaries with groups to display a summary of the records inside a group. This works automatically if you choose to add a summariser to a column in a grouped table.
 
-### #Hiding the grouped rows and showing the summary only
 
-You may hide the rows inside groups and just show the summary of each group using the `groupsOnly()` method. This is very useful in many reporting scenarios.
+### Collapsing groups by default
+
+By default, groups with the ` collapsible() ` method are expanded when the table loads.
+
+If you want all groups to be collapsed by default when the table loads, use ` $table->collapsedGroupsByDefault() `:
+
+```php
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->groups([
+            Group::make('author.name')
+                ->collapsible(),
+        ])
+        ->collapsedGroupsByDefault();
+}
+```
+
+## Summarising groups
+
+You can use [summaries](https://filamentphp.com/docs/5.x/tables/summaries.md) with groups to display a summary of the records inside a group. This works automatically if you choose to add a summariser to a column in a grouped table.
+
+### Hiding the grouped rows and showing the summary only
+
+You may hide the rows inside groups and just show the summary of each group using the ` groupsOnly() ` method. This is very useful in many reporting scenarios.
 
 ```php
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -237,12 +270,13 @@ public function table(Table $table): Table
         ->defaultGroup('category')
         ->groupsOnly();
 }
-
 ```
-#Customizing the Eloquent query ordering behavior
--------------------------------------------------
 
-Some features require the table to be able to order an Eloquent query according to a group. You can customize how we do this using the `orderQueryUsing()` method on a `Group` object:
+
+
+## Customizing the Eloquent query ordering behavior
+
+Some features require the table to be able to order an Eloquent query according to a group. You can customize how we do this using the ` orderQueryUsing() ` method on a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -257,12 +291,11 @@ public function table(Table $table): Table
                 ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('status', $direction)),
         ]);
 }
-
 ```
-#Customizing the Eloquent query scoping behavior
-------------------------------------------------
 
-Some features require the table to be able to scope an Eloquent query according to a group. You can customize how we do this using the `scopeQueryByKeyUsing()` method on a `Group` object:
+## Customizing the Eloquent query scoping behavior
+
+Some features require the table to be able to scope an Eloquent query according to a group. You can customize how we do this using the ` scopeQueryByKeyUsing() ` method on a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -276,12 +309,11 @@ public function table(Table $table): Table
                 ->scopeQueryByKeyUsing(fn (Builder $query, string $key) => $query->where('status', $key)),
         ]);
 }
-
 ```
-#Customizing the Eloquent query grouping behavior
--------------------------------------------------
 
-Some features require the table to be able to group an Eloquent query according to a group. You can customize how we do this using the `groupQueryUsing()` method on a `Group` object:
+## Customizing the Eloquent query grouping behavior
+
+Some features require the table to be able to group an Eloquent query according to a group. You can customize how we do this using the ` groupQueryUsing() ` method on a ` Group ` object:
 
 ```php
 use Filament\Tables\Grouping\Group;
@@ -295,15 +327,14 @@ public function table(Table $table): Table
                 ->groupQueryUsing(fn (Builder $query) => $query->groupBy('status')),
         ]);
 }
-
 ```
-#Customizing the groups dropdown trigger action
------------------------------------------------
 
-To customize the groups dropdown trigger button, you may use the `groupRecordsTriggerAction()` method, passing a closure that returns an action. All methods that are available to customize action trigger buttons can be used:
+## Customizing the groups dropdown trigger action
+
+To customize the groups dropdown trigger button, you may use the ` groupRecordsTriggerAction() ` method, passing a closure that returns an action. All methods that are available to [customize action trigger buttons](https://filamentphp.com/docs/5.x/actions/overview.md) can be used:
 
 ```php
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Tables\Table;
 
 public function table(Table $table): Table
@@ -318,12 +349,11 @@ public function table(Table $table): Table
                 ->label('Group records'),
         );
 }
-
 ```
-#Using the grouping settings dropdown on desktop
-------------------------------------------------
 
-By default, the grouping settings dropdown will only be shown on mobile devices. On desktop devices, the grouping settings are in the header of the table. You can enable the dropdown on desktop devices too by using the `groupingSettingsInDropdownOnDesktop()` method:
+## Using the grouping settings dropdown on desktop
+
+By default, the grouping settings dropdown will only be shown on mobile devices. On desktop devices, the grouping settings are in the header of the table. You can enable the dropdown on desktop devices too by using the ` groupingSettingsInDropdownOnDesktop() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -336,12 +366,11 @@ public function table(Table $table): Table
         ])
         ->groupingSettingsInDropdownOnDesktop();
 }
-
 ```
-#Hiding the grouping settings
------------------------------
 
-You can hide the grouping settings interface using the `groupingSettingsHidden()` method:
+## Hiding the grouping settings
+
+You can hide the grouping settings interface using the ` groupingSettingsHidden() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -352,11 +381,11 @@ public function table(Table $table): Table
 		->defaultGroup('status')
         ->groupingSettingsHidden();
 }
-
 ```
-### #Hiding the grouping direction setting only
 
-You can hide the grouping direction select interface using the `groupingDirectionSettingHidden()` method:
+### Hiding the grouping direction setting only
+
+You can hide the grouping direction select interface using the ` groupingDirectionSettingHidden() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -367,8 +396,22 @@ public function table(Table $table): Table
 		->defaultGroup('status')
         ->groupingDirectionSettingHidden();
 }
-
 ```
-Edit on GitHub
 
-Still need help? Join our Discord community or open a GitHub discussion
+## Persisting the grouping in the user's session
+
+To persist the grouping in the user's session, use the ` persistGroupInSession() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->groups([
+            'status',
+            'category',
+        ])
+        ->persistGroupInSession();
+}
+```

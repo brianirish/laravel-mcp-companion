@@ -1,44 +1,52 @@
-# Forge - Sites/Environment-Variables
+Source: https://laravel.com/forge/docs/sites/environment-variables.md
 
-*Source: https://forge.laravel.com/docs/sites/environment-variables*
-
----
-
-## On this page
-- [Introduction](#introduction)
-- [Modifying environment variables](#modifying-environment-variables)
-- [Encrypted environment files](#encrypted-environment-files)
-- [Laravel integrations](#laravel-integrations)
-Sites
 # Environment Variables
-Copy pageCopy page
-Learn how to manage environment variables for your sites.
-Copy pageCopy page
-## [​](#introduction) Introduction
+
+> Learn how to manage environment variables for your sites.
+
+## Introduction
+
 Laravel Forge makes it easy to manage environment variables for your sites.
-If your project contains a `.env` file, you can easily create and edit environment variables from the “Environment” tab of your site’s settings.
-If Laravel Forge detects a `.env.example` file in your project, it will automatically copy this and replace some of the settings to match your server’s database settings during site creation.An empty `.env.example` file could result in an empty environment file on the first deployment of your site.
-## [​](#modifying-environment-variables) Modifying environment variables
-To modify your site’s environment variables, navigate to your site’s “Settings” panel and click on the “Environment” sidebar item.
-When you modify environment variables through Forge, the changes are written directly to the `.env` file within your application. If you’re using [zero-downtime deployments](/docs/sites/deployments#zero-downtime-deployments), this file will be symlinked into the current release directory, ensuring your environment configuration is consistent across deployments.
+
+If your project contains a `.env` file, you can easily create and edit environment variables from the "Environment" tab of your site's settings.
+
+> [!TIP]
+>
+> If Laravel Forge detects a `.env.example` file in your project, it will automatically copy this and replace some of the settings to match your server's database settings during site creation.
+>
+> An empty `.env.example` file could result in an empty environment file on the first deployment of your site.
+
+## Modifying environment variables
+
+To modify your site's environment variables, navigate to your site's "Settings" panel and click on the "Environment" sidebar item.
+
+When you modify environment variables through Forge, the changes are written directly to the `.env` file within your application. If you're using [zero-downtime deployments](https://forge.laravel.com/docs/sites/deployments.md#zero-downtime-deployments), this file will be symlinked into the current release directory, ensuring your environment configuration is consistent across deployments.
+
 After modifying your environment variables, you can optionally choose to automatically run:
-- **php artisan config:cache** - Caches your configuration files for improved performance.
-- **php artisan queue:restart** - Gracefully restarts your queue workers to pick up the new environment values.
+
+* **php artisan config:cache** - Caches your configuration files for improved performance.
+* **php artisan queue:restart** - Gracefully restarts your queue workers to pick up the new environment values.
+
 These options help ensure your application immediately reflects the updated environment configuration without requiring manual intervention.
-## [​](#encrypted-environment-files) Encrypted environment files
-Laravel Forge provides support for Laravel’s [encrypted environment files](https://laravel.com/docs/configuration#encrypting-environment-files) without requiring you to include your encryption key within your deployment script.
-To leverage this feature, add your encryption key to the “Encrypted environment files” section of your site’s “Environment” tab.
+
+## Encrypted environment files
+
+Laravel Forge provides support for Laravel's [encrypted environment files](https://laravel.com/docs/configuration#encrypting-environment-files) without requiring you to include your encryption key within your deployment script.
+
+To leverage this feature, add your encryption key to the "Encrypted environment files" section of your site's "Environment" tab.
+
 Once added, Laravel Forge will inject the value into the `LARAVEL_ENV_ENCRYPTION_KEY` environment variable during deployments, allowing you to add the `env:decrypt` Artisan command to your deployment script without needing to specify the `--key` option manually.
-```
+
+```bash theme={null}
 php artisan env:decrypt --force
 ```
-## [​](#laravel-integrations) Laravel integrations
+
+## Laravel integrations
+
 The following Laravel-specific features are only available to sites using the Laravel or Statamic project type:
-- **php artisan config:cache** - Automatically cache configuration files after updating environment variables.
-- **php artisan queue:restart** - Automatically restart queue workers after updating environment variables.
-- **Encrypted environment files** - Support for Laravel’s encrypted environment files feature.
+
+* **php artisan config:cache** - Automatically cache configuration files after updating environment variables.
+* **php artisan queue:restart** - Automatically restart queue workers after updating environment variables.
+* **Encrypted environment files** - Support for Laravel's encrypted environment files feature.
+
 If your site is using a different project type, these features will not be available.
-Was this page helpful?
-YesNo
-[Deployments](/docs/sites/deployments)[Commands](/docs/sites/commands)
-⌘I

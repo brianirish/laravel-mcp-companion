@@ -1,41 +1,42 @@
-# Forge - Api-Reference/Introduction
+Source: https://laravel.com/forge/docs/api-reference/introduction.md
 
-*Source: https://forge.laravel.com/docs/api-reference/introduction*
-
----
-
-## On this page
-- [Base URL](#base-url)
-- [Authentication](#authentication)
-- [Headers](#headers)
-- [Errors](#errors)
-Introduction
 # Introduction
-Copy pageCopy page
-Introduction to the Laravel Forge API.
-Copy pageCopy page
-This documentation is for the new Laravel Forge API. For the legacy API, please refer to the [legacy API documentation](https://forge.laravel.com/api-documentation).
+
+> Introduction to the Laravel Forge API.
+
 The Laravel Forge API allows you to programmatically interact with your Laravel Forge account and manage your organizations, servers, sites, and other resources.
-## [​](#base-url) Base URL
+
+## Base URL
+
 The base URL for the Laravel Forge API is:
+
 ```
 https://forge.laravel.com/api
 ```
-## [​](#authentication) Authentication
+
+## Authentication
+
 The Laravel Forge API uses token-based authentication. You can generate an API token from your [Laravel Forge account settings](https://forge.laravel.com/profile/api). Once you have your token, include it in the `Authorization` header of your API requests as follows:
-```
+
+```http theme={null}
 Authorization: Bearer YOUR_API_TOKEN
 ```
-## [​](#headers) Headers
+
+## Headers
+
 All API requests must include the following headers:
-```
+
+```http theme={null}
 Accept: application/json
 Content-Type: application/json
 ```
-## [​](#errors) Errors
+
+## Errors
+
 The Laravel Forge API uses standard HTTP status codes to indicate the success or failure of an API request. Common status codes include:
+
 | Status Code | Description |
-| --- | --- |
+| -: | :- |
 | `200` | Success |
 | `201` | Created |
 | `204` | No content |
@@ -47,7 +48,3 @@ The Laravel Forge API uses standard HTTP status codes to indicate the success or
 | `429` | Too many requests |
 | `500` | Internal server error |
 | `503` | Forge is offline for maintenance. |
-Was this page helpful?
-YesNo
-[Pagination](/docs/api-reference/pagination)
-⌘I

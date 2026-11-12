@@ -1,24 +1,19 @@
-# Nova - Search/Scout-Integration
+Source: https://nova.laravel.com/docs/v5/search/scout-integration.md
 
-*Source: https://nova.laravel.com/docs/v5/search/scout-integration*
-
----
-
-## On this page
-Back to top
-- [Customizing Scout Searches](#customizing-scout-searches)
-  - [Limiting Scout Search Results](#limiting-scout-search-results)
-- [Disabling Scout Search](#disabling-scout-search)
-Search
 # Scout Integration
-Integrate Laravel Scout with your Nova resources.
-By default, Nova searches your resources using the resource’s database columns.
+
+> Integrate Laravel Scout with your Nova resources.
+
+By default, Nova searches your resources using the resource's database columns.
 However, this can become inefficient and lacks support for robust fuzzy matching capabilities provided by dedicated search engines.
+
 For this reason, Nova integrates seamlessly with [Laravel Scout](https://laravel.com/docs/scout). When the `Laravel\Scout\Searchable` trait is attached to a model associated with a Nova resource, Nova will automatically begin using Scout when performing searches against that resource. There is no other configuration required.
-## [​](#customizing-scout-searches) Customizing Scout Searches
+
+## Customizing Scout Searches
+
 If you would like to call methods on the `Laravel\Scout\Builder` instance before it executes your search query against your search engine, you may override the `scoutQuery` method on your resource:
-app/Nova/User.php
-```
+
+```php app/Nova/User.php theme={null}
 namespace App\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -37,10 +32,12 @@ class User extends Resource
     }
 }
 ```
-### [​](#limiting-scout-search-results) Limiting Scout Search Results
+
+### Limiting Scout Search Results
+
 You can customize the amount of search results returned from your Scout search engine by defining the `scoutSearchResults` property on the resource class that is associated with the Scout searchable model:
-app/Nova/User.php
-```
+
+```php app/Nova/User.php theme={null}
 namespace App\Nova;
 
 class User extends Resource 
@@ -55,10 +52,12 @@ class User extends Resource
     public static $scoutSearchResults = 200;
 }
 ```
-## [​](#disabling-scout-search) Disabling Scout Search
+
+## Disabling Scout Search
+
 You may disable Scout search support for a specific resource by defining a `usesScout` method on the resource class. When Scout search support is disabled, simple database queries will be used to search against the given resource, even if the associated resource model includes the Scout `Searchable` trait:
-app/Nova/User.php
-```
+
+```php app/Nova/User.php theme={null}
 namespace App\Nova;
 
 class User extends Resource 
@@ -74,6 +73,3 @@ class User extends Resource
     }
 }
 ```
-Was this page helpful?
-YesNo
-[Global Search](/docs/v5/search/global-search)[Defining Filters](/docs/v5/filters/defining-filters)

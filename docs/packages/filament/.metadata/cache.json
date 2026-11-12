@@ -1,8 +1,11 @@
 {
-  "cache_time": 1753841306.2006116,
   "package": "filament",
   "name": "Filament",
-  "version": "3.x",
-  "sections_count": 62,
-  "base_url": "https://filamentphp.com/docs"
+  "sections_count": 164,
+  "total_sections": 164,
+  "success_rate": 1.0,
+  "source_type": "llms_index",
+  "index_url": "https://filamentphp.com/docs/llms.txt",
+  "version": "5.x",
+  "cached_at": 1794484402.0281804
 }

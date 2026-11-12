@@ -1,61 +1,100 @@
-# Inertia - Pages
-
-Source: https://inertiajs.com/pages
+Source: https://inertiajs.com/docs/v3/the-basics/pages.md
 
 # Pages
 
-## Creating pages
-
-# Welcome
-
-## Creating layouts
-
-## Persistent layouts
-
-## Default layouts
-
-When building applications using Inertia, each page in your application typically has its own controller / route and a corresponding JavaScript component. This allows you to retrieve just the data necessary for that page - no API required.
+When building applications using Inertia, each page in your application typically has its own controller or route and a corresponding JavaScript component. This allows you to retrieve just the data necessary for that page - no API required.
 
 In addition, all of the data needed for the page can be retrieved before the page is ever rendered by the browser, eliminating the need for displaying "loading" states when users visit your application.
 
+## Creating Pages
+
 Inertia pages are simply JavaScript components. If you have ever written a Vue, React, or Svelte component, you will feel right at home. As you can see in the example below, pages receive data from your application's controllers as props.
 
-Hello , welcome to your first Inertia app!
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import Layout from "./Layout";
+import { Head } from "@inertiajs/vue3";
 
-Given the page above, you can render the page by returning an Inertia response from a controller or route. In this example, let's assume this page is stored at resources/js/Pages/User/Show.vue resources/js/Pages/User/Show.jsx resources/js/Pages/User/Show.svelte within a Laravel application.
+defineProps({ user: Object });
+</script>
 
-If you attempt to render a page that does not exist, the response will typically be a blank screen. To prevent this, you may set the inertia.ensure_pages_exist configuration option to true. The Laravel adapter will then throw an Inertia\ComponentNotFoundException when a page cannot be found.
+<template>
+  <Layout>
+    <Head title="Welcome" />
+    <h1>Welcome</h1>
+    <p>Hello {{ user.name }}, welcome to your first Inertia app!</p>
+  </Layout>
+</template>
+```
 
-While not required, for most projects it makes sense to create a site layout that all of your pages can extend. You may have noticed in our page example above that we're wrapping the page content within a component. Here's an example of such a component:
+```jsx React icon="react" theme={null}
+import Layout from "./Layout";
+import { Head } from "@inertiajs/react";
 
-As you can see, there is nothing Inertia specific within this template. This is just a typical Vue React Svelte component.
+export default function Welcome({ user }) {
+  return (
+    <Layout>
+      <Head title="Welcome" />
+      <h1>Welcome</h1>
+      <p>Hello {user.name}, welcome to your first Inertia app!</p>
+    </Layout>
+  );
+}
+```
 
-While it's simple to implement layouts as children of page components, it forces the layout instance to be destroyed and recreated between visits. This means you cannot have persistent layout state when navigating between pages.
+```svelte Svelte icon="s" theme={null}
+<script>
+    import Layout from './Layout.svelte'
 
-For example, maybe you have an audio player on a podcast website that you want to continue playing as users navigate the site. Or, maybe you simply want to maintain the scroll position in your sidebar navigation between page visits. In these situations, the solution is to leverage Inertia's persistent layouts.
+    let { user } = $props()
+</script>
 
-You can also create more complex layout arrangements using nested layouts.
+<svelte:head>
+    <title>Welcome</title>
+</svelte:head>
 
-If you're using Vue 3.3+, you can alternatively use defineOptions to define a layout within . Older versions of Vue can use the defineOptions plugin:
+<Layout>
+    <h1>Welcome</h1>
+    <p>Hello {user.name}, welcome to your first Inertia app!</p>
+</Layout>
+```
 
-If you're using persistent layouts, you may find it convenient to define the default page layout in the resolve() callback of your application's main JavaScript file.
-
-This will automatically set the page layout to Layout if a layout has not already been set for that page.
-
-You can even go a step further and conditionally set the default page layout based on the page name , which is available to the resolve() callback. For example, maybe you don't want the default layout to be applied to your public pages.
-
+Given the page above, you can render the page by returning an [Inertia
+response](https://inertiajs.com/docs/v3/the-basics/responses.md) from a controller or route. In this
+example, let's assume this page is stored at&#x20;
 `resources/js/Pages/User/Show.vue`
 `resources/js/Pages/User/Show.jsx`
-`resources/js/Pages/User/Show.svelte`
-`inertia.ensure_pages_exist`
-`true`
-`Inertia\ComponentNotFoundException`
-`Layout`
-`name`
-`resolve()`
-[Home](/)
-[About](/about)
-[Contact](/contact)
-[Inertia response](/responses)
-[defineOptions](https://vuejs.org/api/sfc-script-setup.html#defineoptions)
-[defineOptions plugin](https://vue-macros.sxzz.moe/macros/define-options.html)
+`resources/js/Pages/User/Show.svelte`within a
+Laravel application.
+
+```php theme={null}
+use Inertia\Inertia;
+
+class UserController extends Controller
+{
+    public function show(User $user)
+    {
+        return Inertia::render('User/Show', [
+            'user' => $user
+        ]);
+    }
+}
+```
+
+If you attempt to render a page that does not exist, the response will typically be a blank screen. To prevent this, you may set the `inertia.ensure_pages_exist` configuration option to `true`. The Laravel adapter will then throw an `Inertia\ComponentNotFoundException` when a page cannot be found.
+
+## Transforming Component Names
+
+Sometimes you may wish to transform component names. This may be done on the client side using the [`pages.transform`](https://inertiajs.com/docs/v3/installation/client-side-setup#pages-shorthand) option, or on the server using the `Inertia::transformComponentUsing()` method. The transformed name is sent to the browser and used for `ensure_pages_exist` checks.
+
+```php theme={null}
+use Inertia\Inertia;
+
+Inertia::transformComponentUsing(function (string $name): string {
+    return "{$name}/Page";
+});
+```
+
+## Layouts
+
+Most applications share common UI elements across pages. Inertia provides persistent layouts that survive page navigations, along with layout props for passing dynamic data between pages and their layouts. Visit the [layouts documentation](https://inertiajs.com/docs/v3/the-basics/layouts.md) to learn more.

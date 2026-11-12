@@ -1,54 +1,74 @@
-# Forge - Source-Control
+Source: https://laravel.com/forge/docs/source-control.md
 
-*Source: https://forge.laravel.com/docs/source-control*
-
----
-
-## On this page
-- [Introduction](#introduction)
-- [Supported providers](#supported-providers)
-- [Managing source control providers](#managing-source-control-providers)
-  - [Connecting to a source control provider](#connecting-to-a-source-control-provider)
-  - [Removing source control providers](#removing-source-control-providers)
-  - [Refreshing tokens](#refreshing-tokens)
-  - [Updating source control access and permissions](#updating-source-control-access-and-permissions)
-  - [Using custom Git providers](#using-custom-git-providers)
-Basics
 # Source Control
-Copy pageCopy page
-Source control providers allow Laravel Forge to access your project’s codebase and easily deploy your applications.
-Copy pageCopy page
-## [​](#introduction) Introduction
-Source control providers allow Laravel Forge to access your project’s codebase and easily deploy your applications. Forge supports most popular Git providers as well as custom / self-hosted options.
-Source control providers are configured and managed within the [organization’s](/docs/organizations) settings.
-## [​](#supported-providers) Supported providers
+
+> Source control providers allow Laravel Forge to access your project's codebase and easily deploy your applications.
+
+## Introduction
+
+Source control providers allow Laravel Forge to access your project's codebase and easily deploy your applications. Forge supports most popular Git providers as well as custom / self-hosted options.
+
+Source control providers are configured and managed within the [organization's](https://forge.laravel.com/docs/organizations.md) settings. Each account you authenticate is stored as an independent **connection**, and a single organization may hold many connections at once, including multiple connections for the same provider.
+
+## Supported providers
+
 Laravel Forge supports the following source control providers:
-- [GitHub](https://github.com/)
-- [GitLab](https://about.gitlab.com/) (hosted and self-hosted)
-- [Bitbucket](https://bitbucket.org/)
-- Custom Git Repositories
-## [​](#managing-source-control-providers) Managing source control providers
-### [​](#connecting-to-a-source-control-provider) Connecting to a source control provider
-To connect a source control provider, navigate to the organization’s settings. Then, on the “Source control” page, click “Add provider”. Select the provider you wish to connect to and authenticate your chosen account.
-You may only configure one account from each provider at a time. If you need to connect a different account from the same provider, you must first remove the existing connection.
-When you connect a source control provider via OAuth, the API token grants Forge access to all repositories accessible by your authenticated account. If a server is compromised, an attacker could potentially use this token to discover and access other repositories. For enhanced security, consider using [deploy keys](/docs/ssh#deploy-keys) instead, which limit access to only specific repositories.
-### [​](#removing-source-control-providers) Removing source control providers
-To unlink a source control provider, navigate to the organization’s settings. Then, on the “Source control” page, click the dropdown menu on the provider and click “Delete”.
-Source control providers cannot be unlinked if an active site is using that provider.
-### [​](#refreshing-tokens) Refreshing tokens
-To refresh a source control provider token, navigate to the organization’s settings. Then, on the “Source control” page, click the dropdown menu on the provider and click “Refresh token”.
-### [​](#updating-source-control-access-and-permissions) Updating source control access and permissions
-To update your source control provider connection for accessing different organizations, repositories, or modifying token permissions:
-1. Navigate to your source control provider’s settings
-2. Locate and uninstall the Laravel Forge application
-3. Return to Laravel Forge
-4. Click the **Refresh Token** button to initiate a new OAuth authentication flow
-When you need access to different organizations or repositories, refreshing the token may not grant the necessary permissions.
-Following the complete OAuth authentication flow allows you to explicitly authorize access to your desired organizations and repositories with the appropriate permission scope.
-### [​](#using-custom-git-providers) Using custom Git providers
+
+* [GitHub](https://github.com/)
+* [GitLab](https://about.gitlab.com/) (hosted and self-hosted)
+* [Bitbucket](https://bitbucket.org/)
+* Custom Git Repositories
+
+## Managing source control providers
+
+### Connecting to a source control provider
+
+To connect a source control provider, navigate to the organization's settings. Then, on the "Source control" page, click "Add provider". Select the provider you wish to connect to and authenticate your chosen account.
+
+You may connect the same provider more than once. For example, you can add a personal GitHub account alongside a work account, or connect GitLab accounts with access to different groups. Each authenticated account becomes its own connection and is managed independently. When you keep several connections for the same provider, use the "Rename" action to give each one a memorable label so you can tell them apart when creating a site.
+
+> [!WARNING]
+>
+> When you connect a source control provider via OAuth, the API token grants Forge access to all repositories accessible by your authenticated account. If a server is compromised, an attacker could potentially use this token to discover and access other repositories. For enhanced security, consider using [deploy keys](https://forge.laravel.com/docs/ssh.md#deploy-keys) instead, which limit access to only specific repositories.
+
+### Managing a connection
+
+Each connection has a dropdown menu on the "Source control" page. The available actions depend on the provider, and may include:
+
+* **View sites**: list the sites that are currently deploying from this connection.
+* **Verify connection**: confirm the connection's token is still valid and can reach your repositories.
+* **Reconnect**: re-run the OAuth flow to refresh the token or grant access to additional organizations and repositories.
+* **Manage GitHub access**: open GitHub to adjust which repositories the Forge application can access.
+* **Rename**: give the connection a custom label. This is especially useful when you have several connections for the same provider.
+* **Edit**: update connection settings (available for connection types such as self-hosted GitLab).
+* **Copy ID**: copy the connection's ID.
+* **Delete**: remove the connection.
+
+### Removing a connection
+
+To unlink a connection, navigate to the organization's settings. Then, on the "Source control" page, click the dropdown menu on the connection and click "Delete".
+
+> [!WARNING]
+>
+> A connection cannot be deleted while an active site is using it. Move or delete the affected sites first, or switch them to a different connection.
+
+### Reconnecting and updating access
+
+To refresh a connection's token, or to grant Forge access to different organizations, repositories, or permission scopes, use the **Reconnect** action on the connection's dropdown menu. This re-runs the full OAuth authentication flow so you can explicitly authorize the access you need.
+
+If reconnecting does not surface the organizations or repositories you expect, the underlying provider authorization may need to be reset first:
+
+1. Navigate to your source control provider's settings.
+2. Locate and uninstall (or revoke access for) the Laravel Forge application.
+3. Return to Laravel Forge.
+4. Click **Reconnect** to initiate a fresh OAuth authentication flow, then authorize the desired organizations and repositories.
+
+### Using custom Git providers
+
 If your Git Provider is not a first-party provider, then you may use the **Custom** option when creating a new site on your server.
+
 First, choose the `Custom` option when creating your Git based site. Next, add the generated SSH key to your source control provider and provide the full repository path (`git@provider.com:user/repository.git`).
-Was this page helpful?
-YesNo
-[Storage Providers](/docs/storage-providers)[SSH Keys](/docs/ssh)
-⌘I
+
+> [!NOTE]
+>
+> Custom Git sites cannot use [push to deploy](https://forge.laravel.com/docs/sites/deployments.md#push-to-deploy), because Forge cannot register a deployment webhook on an arbitrary Git host. If your repository is hosted on a first-party provider you later connect, you can switch the site over from its **Git** settings to enable push to deploy and the other provider-aware features.

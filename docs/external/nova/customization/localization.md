@@ -1,38 +1,30 @@
-# Nova - Customization/Localization
+Source: https://nova.laravel.com/docs/v5/customization/localization.md
 
-*Source: https://nova.laravel.com/docs/v5/customization/localization*
-
----
-
-## On this page
-Back to top
-- [Overview](#overview)
-- [Creating New Localization Files](#creating-new-localization-files)
-- [User Locale Overrides](#user-locale-overrides)
-- [Resources](#resources)
-- [Fields](#fields)
-- [Relationships](#relationships)
-- [Filters](#filters)
-- [Lenses](#lenses)
-- [Actions](#actions)
-- [Metrics](#metrics)
-- [Frontend](#frontend)
-Digging Deeper
 # Localization
-Learn how to localize your Nova application.
-### [​](#overview) Overview
-Nova may be fully localized using Laravel’s [localization services](https://laravel.com/docs/localization). After running the `nova:install` command during installation. Your application will contain a `lang/vendor/nova` translation directory.
+
+> Learn how to localize your Nova application.
+
+### Overview
+
+Nova may be fully localized using Laravel's [localization services](https://laravel.com/docs/localization). After running the `nova:install` command during installation. Your application will contain a `lang/vendor/nova` translation directory.
+
 Within this directory, you may customize the `en.json` file or create a new JSON translation file for your language. In addition, the `en` directory contains a few additional validation translation lines that are utilized by Nova.
-#### [​](#creating-new-localization-files) Creating New Localization Files
+
+#### Creating New Localization Files
+
 To quickly create a new translation file for your language, you may execute the `nova:translate` Artisan command. This command will simply copy the default `en.json` translation file, allowing you to begin translating the strings into your own language:
-```
+
+```shell theme={null}
 php artisan nova:translate es
 ```
-#### [​](#user-locale-overrides) User Locale Overrides
+
+#### User Locale Overrides
+
 Laravel Nova frontend libraries, including the browser, Numbro.js, Luxon, and other libraries will utilize the locale value available via `app()->getLocale()` by default. However, if your application is only using ISO 639-1 language codes (`en`), you may wish to consider migrating your languages to IETF language tags (`en-US`, `en-GB`) for wider support across the various frontend libraries used by Nova.
-To map your existing locales to IETF language tags, you may use the `Nova::userLocale` method. Typically, you should invoke this method in the `boot` method of your application’s `NovaServiceProvider`:
-app/Providers/NovaServiceProvider.php
-```
+
+To map your existing locales to IETF language tags, you may use the `Nova::userLocale` method. Typically, you should invoke this method in the `boot` method of your application's `NovaServiceProvider`:
+
+```php app/Providers/NovaServiceProvider.php theme={null}
 /**
  * Boot any application services.
  */
@@ -49,10 +41,12 @@ public function boot(): void
     });
 }
 ```
-### [​](#resources) Resources
+
+### Resources
+
 Resource names may be localized by overriding the `label` and `singularLabel` methods on the resource class:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php theme={null}
 /**
  * Get the displayable label of the resource.
  *
@@ -73,9 +67,10 @@ public static function singularLabel()
     return __('Post');
 }
 ```
-To customize labels for the resource’s create and update buttons, you may override the `createButtonLabel` and `updateButtonLabel` methods on the resource:
-app/Nova/~Resource.php
-```
+
+To customize labels for the resource's create and update buttons, you may override the `createButtonLabel` and `updateButtonLabel` methods on the resource:
+
+```php app/Nova/~Resource.php theme={null}
 /**
  * Get the text for the create resource button.
  *
@@ -96,18 +91,24 @@ public static function updateButtonLabel()
     return __('Save Changes');
 }
 ```
-### [​](#fields) Fields
+
+### Fields
+
 Field names may be localized when you attach the field to your resource. The first argument to all fields is its display name, which you may customize. For example, you might localize the title of an email address field like so:
-```
+
+```php theme={null}
 use Laravel\Nova\Fields\Text;
 
 // ...
 
 Text::make(__('Email Address'), 'email_address'),
 ```
-### [​](#relationships) Relationships
+
+### Relationships
+
 Relationship field names may be customized by localizing the first argument passed to their field definition. The second and third arguments to Nova relationship fields are the relationship method name and the related Nova resource, respectively:
-```
+
+```php theme={null}
 use App\Nova\Post;
 use Laravel\Nova\Fields\HasMany;
 
@@ -115,9 +116,10 @@ use Laravel\Nova\Fields\HasMany;
 
 HasMany::make(__('Posts'), 'posts', Post::class),
 ```
+
 In addition, you should also override the `label` and `singularLabel` methods on the related resource:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php theme={null}
 /**
  * Get the displayable label of the resource.
  *
@@ -138,10 +140,12 @@ public static function singularLabel()
     return __('Post');
 }
 ```
-### [​](#filters) Filters
+
+### Filters
+
 Filter names may be localized by overriding the `name` method on the filter class:
-app/Nova/Filters/~Filter.php
-```
+
+```php app/Nova/Filters/~Filter.php theme={null}
 /**
  * Get the displayable name of the filter.
  *
@@ -152,10 +156,12 @@ public function name()
     return __('Admin Users');
 }
 ```
-### [​](#lenses) Lenses
+
+### Lenses
+
 Lens names may be localized by overriding the `name` method on the lens class:
-app/Nova/Lenses/~Lens.php
-```
+
+```php app/Nova/Lenses/~Lens.php theme={null}
 /**
  * Get the displayable name of the lens.
  *
@@ -166,10 +172,12 @@ public function name()
     return __('Most Valuable Users');
 }
 ```
-### [​](#actions) Actions
+
+### Actions
+
 Action names may be localized by overriding the `name` method on the action class:
-app/Nova/Actions/~Action.php
-```
+
+```php app/Nova/Actions/~Action.php theme={null}
 /**
  * Get the displayable name of the action.
  *
@@ -180,10 +188,12 @@ public function name()
     return __('Email Account Profile');
 }
 ```
-### [​](#metrics) Metrics
+
+### Metrics
+
 Metric names may be localized by overriding the `name` method on the metric class:
-app/Nova/Metrics/~Metric.php
-```
+
+```php app/Nova/Metrics/~Metric.php theme={null}
 /**
  * Get the displayable name of the metric.
  *
@@ -194,10 +204,12 @@ public function name()
     return __('Total Users');
 }
 ```
-### [​](#frontend) Frontend
+
+### Frontend
+
 To propagate your localizations to the frontend, you should call the `Nova::translations` method within your `NovaServiceProvider`:
-app/Providers/NovaServiceProvider.php
-```
+
+```php app/Providers/NovaServiceProvider.php {9} theme={null}
 /**
  * Boot any application services.
  */
@@ -210,9 +222,10 @@ public function boot(): void
     });
 }
 ```
+
 You may also pass an array of key / value pairs representing each localization:
-app/Providers/NovaServiceProvider.php
-```
+
+```php app/Providers/NovaServiceProvider.php {9-11} theme={null}
 /**
  * Boot any application services.
  */
@@ -227,10 +240,10 @@ public function boot(): void
     });
 }
 ```
+
 As in Laravel, you may use the `__` helper within your custom Vue components to access these translations. To accomplish this, add the following mixins to your Inertia page component or Vue component:
-Option API
-Composition API
-```
+
+```jsx Option API {6,9} theme={null}
 <template>
   <h2>{{ __('Total Users') }}</h2>
 </template>
@@ -245,7 +258,8 @@ export default {
 }
 </script>
 ```
-```
+
+```jsx Composition API {6,8} theme={null}
 <template>
   <h2>{{ __('Total Users') }}</h2>
 </template>
@@ -258,6 +272,3 @@ const { __ } = useLocalization()
 // ...
 </script>
 ```
-Was this page helpful?
-YesNo
-[Assets](/docs/v5/customization/assets)[Stubs](/docs/v5/customization/stubs)

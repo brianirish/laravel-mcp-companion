@@ -2,91 +2,16 @@
 
 Source: https://livewire.laravel.com/docs/teleport
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 Teleport
 ========
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Livewire allows you to *teleport* part of your template to another part of the DOM on the page entirely.
 
@@ -94,7 +19,7 @@ This is useful for things like nested dialogs. When nesting one dialog inside of
 
 This functionality is powered by Alpine's `x-teleport` directive.
 
-#Basic usage
+Basic usage¶
 ------------
 
 To *teleport* a portion of your template to another part of the DOM, you can wrap it in Livewire's `@teleport` directive.
@@ -102,7 +27,6 @@ To *teleport* a portion of your template to another part of the DOM, you can wra
 Below is an example of using `@teleport` to render a modal dialog's contents at the end of the `<body>` element on the page:
 
 ```php
-
 <div>
 
 <!-- Modal -->
@@ -124,8 +48,9 @@ Modal contents...
 </div>
 
 </div>
-
 ```
+info
+
 The `@teleport` selector can be any string you would normally pass into something like `document.querySelector()`.
 
 You can learn more about `document.querySelector()` by consulting its MDN documentation.
@@ -133,7 +58,6 @@ You can learn more about `document.querySelector()` by consulting its MDN docume
 Now, when the above Livewire template is rendered on the page, the *contents* portion of the modal will be rendered at the end of `<body>`:
 
 ```php
-
 <body>
 
 <!-- ... -->
@@ -145,7 +69,6 @@ Modal contents...
 </div>
 
 </body>
-
 ```
 You must teleport outside the component
 
@@ -155,14 +78,16 @@ Teleporting only works with a single root element
 
 Make sure you only include a single root element inside your `@teleport` statement.
 
-On this page
+Ecosystem sponsor
 
-* Basic usage
 
-![Flux Ad](/images/flux_ad.jpg)
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
 
-Pro UI Components
+Return to
 
-Flux · The official Livewire component library
+File Downloads
 
-Built by the folks behind Livewire and Alpine.
+Continue to
+
+wire:bind

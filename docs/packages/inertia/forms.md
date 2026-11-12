@@ -1,152 +1,2332 @@
-# Inertia - Forms
-
-Source: https://inertiajs.com/forms
+Source: https://inertiajs.com/docs/v3/the-basics/forms.md
 
 # Forms
 
-## Submitting forms
+Inertia provides two primary ways to build forms: the `<Form>` component and the `useForm` helper. Both integrate with your server-side framework's validation and handle form submissions without full page reloads.
 
-## Server-side validation
+## Form Component
 
-## Form helper
+Inertia provides a `<Form>` component that behaves much like a classic HTML form, but uses Inertia under the hood to avoid full page reloads. This is the simplest way to get started with forms in Inertia.
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { Form } from "@inertiajs/vue3";
+</script>
+
+<template>
+  <Form action="/users" method="post">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { Form } from "@inertiajs/react";
+
+export default () => (
+  <Form action="/users" method="post">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+  </Form>
+);
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+    import { Form } from '@inertiajs/svelte'
+</script>
+
+<Form action="/users" method="post">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+</Form>
+```
+
+Just like a traditional HTML form, there is no need to attach&#x20;
+a `v-model`
+an `onChange` handler
+a `bind:` to your input fields, just give
+each input a `name` attribute&#x20;
+and a `defaultValue` (if applicable) and the
+`Form` component will handle the data submission for you.
+
+The component also supports nested data structures, file uploads, and dotted key notation.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/reports" method="post">
+    <input type="text" name="name" />
+    <textarea name="report[description]"></textarea>
+    <input type="text" name="report[tags][]" />
+    <input type="file" name="documents" multiple />
+    <button type="submit">Create Report</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/reports" method="post">
+  <input type="text" name="name" />
+  <textarea name="report[description]"></textarea>
+  <input type="text" name="report[tags][]" />
+  <input type="file" name="documents" multiple />
+  <button type="submit">Create Report</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/reports" method="post">
+    <input type="text" name="name" />
+    <textarea name="report[description]"></textarea>
+    <input type="text" name="report[tags][]" />
+    <input type="file" name="documents" multiple />
+    <button type="submit">Create Report</button>
+</Form>
+```
+
+You can pass a `transform` prop to modify the form data before submission. This is useful for injecting additional fields or transforming existing data, although hidden inputs work too.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form
+    action="/posts"
+    method="post"
+    :transform="(data) => ({ ...data, user_id: 123 })"
+  >
+    <input type="text" name="title" />
+    <button type="submit">Create Post</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form
+  action="/posts"
+  method="post"
+  transform={(data) => ({ ...data, user_id: 123 })}
+>
+  <input type="text" name="title" />
+  <button type="submit">Create Post</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form
+    action="/posts"
+    method="post"
+    transform={data => ({ ...data, user_id: 123 })}
+>
+    <input type="text" name="title" />
+    <button type="submit">Create Post</button>
+</Form>
+```
 
 ### Wayfinder
 
-## File uploads
+When using [Wayfinder](https://github.com/laravel/wayfinder), you can pass the resulting object directly to the `action` prop. The Form component will infer the HTTP method and URL from the Wayfinder object.
 
-## XHR / fetch submissions
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { Form } from "@inertiajs/vue3";
+import { store } from "App/Http/Controllers/UserController";
+</script>
 
-While it's possible to make classic HTML form submissions with Inertia, it's not recommended since they cause full-page reloads. Instead, it's better to intercept form submissions and then make the request using Inertia.
+<template>
+  <Form :action="store()">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+  </Form>
+</template>
+```
 
-As you may have noticed in the example above, when using Inertia, you don't typically need to inspect form responses client-side like you would when making XHR / fetch requests manually.
+```jsx React icon="react" theme={null}
+import { Form } from "@inertiajs/react";
+import { store } from "App/Http/Controllers/UserController";
 
-Instead, your server-side route / controller typically issues a redirect response. And, Of course, there is nothing stopping you from redirecting the user right back to the page they were previously on. Using this approach, handling Inertia form submissions feels very similar to handling classic HTML form submissions.
+export default () => (
+  <Form action={store()}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+  </Form>
+);
+```
 
-Handling server-side validation errors in Inertia works a little different than handling errors from manual XHR / fetch requests. When making XHR / fetch requests, you typically inspect the response for a 422 status code and manually update the form's error state.
+```svelte Svelte icon="s" theme={null}
+<script>
+    import { Form } from '@inertiajs/svelte'
+    import { store } from 'App/Http/Controllers/UserController'
+</script>
 
-However, when using Inertia, a 422 response is never returned by your server. Instead, as we saw in the example above, your routes / controllers will typically return a redirect response - much like a classic, full-page form submission.
+<Form action={store()}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Create User</button>
+</Form>
+```
 
-For a full discussion on handling and displaying validation errors with Inertia, please consult the validation documentation.
+### Default Values
 
-Since working with forms is so common, Inertia includes a form helper designed to help reduce the amount of boilerplate code needed for handling typical form submissions.
+You can set default values for form inputs using standard HTML attributes. Use&#x20;
+`defaultValue`
+`defaultValue`
+`value` for text inputs and textareas, and&#x20;
+`defaultChecked`
+`defaultChecked`
+`checked` for checkboxes and radios.
 
-To submit the form, you may use the get, post, put, patch and delete methods.
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/users" method="post">
+    <input type="text" name="name" defaultValue="John Doe" />
 
-The submit methods support all of the typical visit options, such as preserveState, preserveScroll, and event callbacks, which can be helpful for performing tasks on successful form submissions. For example, you might use the onSuccess callback to reset inputs to their original state.
+    <select name="country">
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="uk" selected>United Kingdom</option>
+    </select>
 
-If you need to modify the form data before it's sent to the server, you can do so via the transform() method.
+    <input type="checkbox" name="subscribe" value="yes" defaultChecked />
 
-You can use the processing property to track if a form is currently being submitted. This can be helpful for preventing double form submissions by disabling the submit button.
+    <button type="submit">Submit</button>
+  </Form>
+</template>
+```
 
-If your form is uploading files, the current progress event is available via the progress property, allowing you to easily display the upload progress.
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  <input type="text" name="name" defaultValue="John Doe" />
 
-To determine if a form has any errors, you may use the hasErrors property. To clear form errors, use the clearErrors() method.
+  <select name="country" defaultValue="uk">
+    <option value="us">United States</option>
+    <option value="ca">Canada</option>
+    <option value="uk">United Kingdom</option>
+  </select>
 
-If you're using client-side input validation libraries or do client-side validation manually, you can set your own errors on the form using the setErrors() method.
+  <input type="checkbox" name="subscribe" value="yes" defaultChecked />
 
-When a form has been successfully submitted, the wasSuccessful property will be true. In addition to this, forms have a recentlySuccessful property, which will be set to true for two seconds after a successful form submission. This property can be utilized to show temporary success messages.
+  <button type="submit">Submit</button>
+</Form>
+```
 
-To reset the form's values back to their default values, you can use the reset() method.
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    <input type="text" name="name" value="John Doe" />
 
-Sometimes, you may want to restore your form fields to their default values and clear any validation errors at the same time. Instead of calling reset() and clearErrors() separately, you can use the resetAndClearErrors() method, which combines both actions into a single call.
+    <select name="country" value="uk">
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+        <option value="uk">United Kingdom</option>
+    </select>
 
-If your form's default values become outdated, you can use the defaults() method to update them. Then, the form will be reset to the correct values the next time the reset() method is invoked.
+    <input type="checkbox" name="subscribe" value="yes" checked />
 
-To determine if a form has any changes, you may use the isDirty property.
+    <button type="submit">Submit</button>
+</Form>
+```
 
-To cancel a form submission, use the cancel() method.
+### Checkbox Inputs
 
-To instruct Inertia to store a form's data and errors in history state, you can provide a unique form key as the first argument when instantiating your form.
+When working with checkboxes, you may want to add an explicit `value` attribute such as `value="1"`. Without a value attribute, checked checkboxes will submit as `"on"`, which some server-side validation rules may not recognize as a proper boolean value.
 
-When using Wayfinder in conjunction with the form helper, you can simply pass the resulting object directly to the form.submit method. The form helper will infer the HTTP method and URL from the Wayfinder object:
+### Slot Props
 
-When making requests or form submissions that include files, Inertia will automatically convert the request data into a FormData object.
+The `<Form>` component exposes reactive state and helper methods through its default slot, giving you access to form processing state, errors, and utility functions.
 
-For a more thorough discussion of file uploads, please consult the file uploads documentation.
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form
+    action="/users"
+    method="post"
+    #default="{
+      errors,
+      hasErrors,
+      processing,
+      progress,
+      wasSuccessful,
+      recentlySuccessful,
+      setError,
+      clearErrors,
+      resetAndClearErrors,
+      defaults,
+      isDirty,
+      reset,
+      submit,
+      cancel,
+    }"
+  >
+    <input type="text" name="name" />
 
-Using Inertia to submit forms works great for the vast majority of situations; however, in the event that you need more control over the form submission, you're free to make plain XHR or fetch requests instead using the library of your choice.
+    <div v-if="errors.name">
+      {{ errors.name }}
+    </div>
 
-If there are form validation errors, they are available via the errors property. When building Laravel powered Inertia applications, form errors will automatically be populated when your application throws instances of ValidationException, such as when using .
+    <button type="submit" :disabled="processing">
+      {{ processing ? "Creating..." : "Create User" }}
+    </button>
 
-`422`
-`get`
-`post`
-`put`
-`patch`
-`delete`
-`preserveState`
-`preserveScroll`
-`onSuccess`
-`transform()`
-`processing`
-`progress`
-`errors`
-`ValidationException`
-`hasErrors`
-`clearErrors()`
-`setErrors()`
-`wasSuccessful`
-`true`
-`recentlySuccessful`
-`reset()`
-`resetAndClearErrors()`
-`defaults()`
-`isDirty`
-`cancel()`
-`form.submit`
-`FormData`
-`fetch`
-[request using Inertia](/manual-visits)
-[redirect](/redirects)
-[validation](/validation)
-[visit options](/manual-visits)
-[validation documentation](/validation)
-[history state](/remembering-state)
-[Wayfinder](https://github.com/laravel/wayfinder)
-[file uploads documentation](/file-uploads)
-s not recommended since they cause
-        full-page reloads. Instead, it
+    <div v-if="wasSuccessful">User created successfully!</div>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+    {({
+        errors,
+        hasErrors,
+        processing,
+        progress,
+        wasSuccessful,
+        recentlySuccessful,
+        setError,
+        clearErrors,
+        resetAndClearErrors,
+        defaults,
+        isDirty,
+        reset,
+        submit,
+        cancel,
+    }) => (
+        <>
+            <input type="text" name="name" />
+
+            {errors.name && <div>{errors.name}</div>}
+
+            <button type="submit" disabled={processing}>
+                {processing ? 'Creating...' : 'Create User'}
+            </button>
+
+            {wasSuccessful && <div>User created successfully!</div>}
+        </>
+    )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({
+        errors,
+        hasErrors,
+        processing,
+        progress,
+        wasSuccessful,
+        recentlySuccessful,
+        setError,
+        clearErrors,
+        resetAndClearErrors,
+        defaults,
+        isDirty,
+        reset,
+        submit,
+        cancel,
+    })}
+        <input type="text" name="name" />
+
+        {#if errors.name}
+            <div>{errors.name}</div>
+        {/if}
+
+        <button type="submit" disabled={processing}>
+            {processing ? 'Creating...' : 'Create User'}
+        </button>
+
+        {#if wasSuccessful}
+            <div>User created successfully!</div>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+The `defaults` method allows you to update the form's default values to match the current field values. When called, subsequent `reset()` calls will restore fields to these new defaults, and the `isDirty` property will track changes from these updated defaults. Unlike `useForm`, this method accepts no arguments and always uses all current form values.
+
+The `errors` object uses dotted notation for nested fields, allowing you to display validation messages for complex form structures.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" #default="{ errors }">
+    <input type="text" name="user.name" />
+    <div v-if="errors['user.name']">{{ errors['user.name'] }}</div>
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+    {({ errors }) => (
+        <>
+            <input type="text" name="user.name" />
+            {errors['user.name'] && <div>{errors['user.name']}</div>}
+        </>
+    )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ errors })}
+        <input type="text" name="user.name" />
+        {#if errors['user.name']}
+            <div>{errors['user.name']}</div>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+### Props and Options
+
+In addition to `action` and `method`, the `<Form>` component accepts several props. Many of them are identical to the options available in Inertia's [visit options](https://inertiajs.com/docs/v3/the-basics/manual-visits.md).
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form
+    action="/profile"
+    method="put"
+    error-bag="profile"
+    query-string-array-format="indices"
+    :headers="{ 'X-Custom-Header': 'value' }"
+    :show-progress="false"
+    :transform="(data) => ({ ...data, timestamp: Date.now() })"
+    :optimistic="(props, data) => ({ ...props })"
+    :invalidate-cache-tags="['users', 'dashboard']"
+    disable-while-processing
+    cancel-on-unmount
+    :options="{
+      preserveScroll: true,
+      preserveState: true,
+      preserveUrl: true,
+      replace: true,
+      only: ['users', 'flash'],
+      except: ['secret'],
+      reset: ['page'],
+    }"
+  >
+    <input type="text" name="name" />
+    <button type="submit">Update</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form
+  action="/profile"
+  method="put"
+  errorBag="profile"
+  queryStringArrayFormat="indices"
+  headers={{ "X-Custom-Header": "value" }}
+  showProgress={false}
+  transform={(data) => ({ ...data, timestamp: Date.now() })}
+  optimistic={(props, data) => ({ ...props })}
+  invalidateCacheTags={["users", "dashboard"]}
+  disableWhileProcessing
+  cancelOnUnmount
+  options={{
+    preserveScroll: true,
+    preserveState: true,
+    preserveUrl: true,
+    replace: true,
+    only: ["users", "flash"],
+    except: ["secret"],
+    reset: ["page"],
+  }}
+>
+  <input type="text" name="name" />
+  <button type="submit">Update</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form
+    action="/profile"
+    method="put"
+    errorBag="profile"
+    queryStringArrayFormat="indices"
+    headers={{ 'X-Custom-Header': 'value' }}
+    showProgress={false}
+    transform={data => ({ ...data, timestamp: Date.now() })}
+    optimistic={(props, data) => ({ ...props })}
+    invalidateCacheTags={['users', 'dashboard']}
+    disableWhileProcessing
+    cancelOnUnmount
+    options={{
+        preserveScroll: true,
+        preserveState: true,
+        preserveUrl: true,
+        replace: true,
+        only: ['users', 'flash'],
+        except: ['secret'],
+        reset: ['page'],
+    }}
+>
+    <input type="text" name="name" />
+    <button type="submit">Update</button>
+</Form>
+```
+
+Some props are intentionally grouped under `options` instead of being top-level to avoid confusion. For example, `only`, `except`, and `reset` relate to *partial reloads*, not *partial submissions*. The general rule: top-level props are for the form submission itself, while `options` control how Inertia handles the subsequent visit.
+
+When setting the `disableWhileProcessing`
+`disableWhileProcessing`
+`disable-while-processing` prop, the `Form`
+component will add the `inert` attribute to the HTML `form` tag while the form
+is processing to prevent user interaction.
+
+To style the form while it's processing, you can target the inert form in the following ways.
+
+```jsx Tailwind 4 theme={null}
+<Form
+  action="/profile"
+  method="put"
+  disableWhileProcessing
+  className="inert:opacity-50 inert:pointer-events-none"
+>
+  {/* Your form fields here */}
+</Form>
+```
+
+```css CSS theme={null}
+form[inert] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+```
+
+### Events
+
+The `<Form>` component emits all the standard visit [events](https://inertiajs.com/docs/v3/advanced/events.md) for form submissions.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form
+    action="/users"
+    method="post"
+    @before="handleBefore"
+    @start="handleStart"
+    @progress="handleProgress"
+    @success="handleSuccess"
+    @error="handleError"
+    @finish="handleFinish"
+    @cancel="handleCancel"
+    @cancelToken="handleCancelToken"
+  >
+    <input type="text" name="name" />
+    <button type="submit">Create User</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form
+  action="/users"
+  method="post"
+  onCancelToken={handleCancelToken}
+  onBefore={handleBefore}
+  onStart={handleStart}
+  onProgress={handleProgress}
+  onCancel={handleCancel}
+  onSuccess={handleSuccess}
+  onError={handleError}
+  onFinish={handleFinish}
+>
+  <input type="text" name="name" />
+  <button type="submit">Create User</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form
+    action="/users"
+    method="post"
+    onCancelToken={handleCancelToken}
+    onBefore={handleBefore}
+    onStart={handleStart}
+    onProgress={handleProgress}
+    onCancel={handleCancel}
+    onSuccess={handleSuccess}
+    onError={handleError}
+    onFinish={handleFinish}
+>
+    <input type="text" name="name" />
+    <button type="submit">Create User</button>
+</Form>
+```
+
+### Resetting the Form
+
+The `Form` component provides several attributes that allow you to reset the form after a submission.
+
+`resetOnSuccess` may be used to reset the form after a successful submission.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <!-- Reset the entire form on success -->
+  <Form action="/users" method="post" resetOnSuccess>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+  </Form>
+
+  <!-- Reset specific fields on success -->
+  <Form action="/users" method="post" :resetOnSuccess="['name']">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+// Reset the entire form on success
+<Form action="/users" method="post" resetOnSuccess>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+
+// Reset specific fields on success
+<Form action="/users" method="post" resetOnSuccess={['name']}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<!-- Reset the entire form on success -->
+<Form action="/users" method="post" resetOnSuccess>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+
+<!-- Reset specific fields on success -->
+<Form action="/users" method="post" resetOnSuccess={['name']}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+`resetOnError` may be used to reset the form after errors.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <!-- Reset the entire form on success -->
+  <Form action="/users" method="post" resetOnError>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+  </Form>
+
+  <!-- Reset specific fields on success -->
+  <Form action="/users" method="post" :resetOnError="['name']">
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+// Reset the entire form on success
+<Form action="/users" method="post" resetOnError>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+
+// Reset specific fields on success
+<Form action="/users" method="post" resetOnError={['name']}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<!-- Reset the entire form on success -->
+<Form action="/users" method="post" resetOnError>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+
+<!-- Reset specific fields on success -->
+<Form action="/users" method="post" resetOnError={['name']}>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+### Setting New Default Values
+
+The `Form` component provides the `setDefaultsOnSuccess` attribute to set the current form values as the new defaults after a successful submission.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/users" method="post" setDefaultsOnSuccess>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post" setDefaultsOnSuccess>
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <button type="submit">Submit</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post" setDefaultsOnSuccess>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+### Canceling Form Submissions
+
+v3.7.0+
+
+The `cancel` method aborts an in-flight submission. It's available through the [slot props](#slot-props), the [component ref](#programmatic-access), and the [form context](#form-context).
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/users" method="post" #default="{ processing, cancel }">
+    <input type="text" name="name" />
+
+    <button v-if="processing" type="button" @click="cancel">Cancel</button>
+    <button v-else type="submit">Submit</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  {({ processing, cancel }) => (
+    <>
+      <input type="text" name="name" />
+
+      {processing ? (
+        <button type="button" onClick={cancel}>Cancel</button>
+      ) : (
+        <button type="submit">Submit</button>
+      )}
+    </>
+  )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ processing, cancel })}
+        <input type="text" name="name" />
+
+        {#if processing}
+            <button type="button" onclick={cancel}>Cancel</button>
+        {:else}
+            <button type="submit">Submit</button>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+Submissions continue running when the form that started them is removed from the page. Navigating away cancels the submission, but closing a modal that contains the form does not, so an abandoned upload still completes. You may use the `cancelOnUnmount` attribute to cancel an in-flight submission as soon as the form unmounts.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/avatar" method="post" cancel-on-unmount>
+    <input type="file" name="avatar" />
+    <button type="submit">Upload</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/avatar" method="post" cancelOnUnmount>
+  <input type="file" name="avatar" />
+  <button type="submit">Upload</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/avatar" method="post" cancelOnUnmount>
+    <input type="file" name="avatar" />
+    <button type="submit">Upload</button>
+</Form>
+```
+
+### Dotted Key Notation
+
+The `<Form>` component supports dotted key notation for creating nested objects from flat input names. This provides a convenient way to structure form data.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/users" method="post">
+    <input type="text" name="user.name" />
+    <input type="text" name="user.skills[]" />
+    <input type="text" name="address.street" />
+    <button type="submit">Submit</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  <input type="text" name="user.name" />
+  <input type="text" name="user.skills[]" />
+  <input type="text" name="address.street" />
+  <button type="submit">Submit</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    <input type="text" name="user.name" />
+    <input type="text" name="user.skills[]" />
+    <input type="text" name="address.street" />
+    <button type="submit">Submit</button>
+</Form>
+```
+
+The example above would generate the following data structure.
+
+```json theme={null}
+{
+  "user": {
+    "name": "John Doe",
+    "skills": ["JavaScript"]
+  },
+  "address": {
+    "street": "123 Main St"
+  }
+}
+```
+
+If you need literal dots in your field names (not as nested object separators), you can escape them using backslashes.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form action="/config" method="post">
+    <input type="text" name="app\.name" />
+    <input type="text" name="settings.theme\.mode" />
+    <button type="submit">Save</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/config" method="post">
+  <input type="text" name="app\.name" />
+  <input type="text" name="settings.theme\.mode" />
+  <button type="submit">Save</button>
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/config" method="post">
+    <input type="text" name="app\.name" />
+    <input type="text" name="settings.theme\.mode" />
+    <button type="submit">Save</button>
+</Form>
+```
+
+The example above would generate the following data structure.
+
+```json theme={null}
+{
+  "app.name": "My Application",
+  "settings": {
+    "theme.mode": "dark"
+  }
+}
+```
+
+### Programmatic Access
+
+You can access the form's methods programmatically using refs. This provides an alternative to [slot props](#slot-props) when you need to trigger form actions from outside the form.
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { ref } from "vue";
+import { Form } from "@inertiajs/vue3";
+
+const formRef = ref();
+
+const handleSubmit = () => {
+  formRef.value.submit();
+};
+</script>
+
+<template>
+  <Form ref="formRef" action="/users" method="post">
+    <input type="text" name="name" />
+    <button type="submit">Submit</button>
+  </Form>
+
+  <button @click="handleSubmit">Submit Programmatically</button>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { useRef } from 'react'
+import { Form } from '@inertiajs/react'
+
+export default function CreateUser() {
+    const formRef = useRef()
+
+    const handleSubmit = () => {
+        formRef.current.submit()
+    }
+
+    return (
+        <Form ref={formRef} action="/users" method="post">
+            <input type="text" name="name" />
+            <button type="submit">Submit</button>
+        </Form>
+
+        <button onClick={handleSubmit}>Submit Programmatically</button>
+    )
+}
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+import { Form } from '@inertiajs/svelte'
+
+let formRef
+
+function handleSubmit() {
+    formRef.submit()
+}
+</script>
+
+<Form bind:this={formRef} action="/users" method="post">
+    <input type="text" name="name" />
+    <button type="submit">Submit</button>
+</Form>
+
+<button onclick={handleSubmit}>Submit Programmatically</button>
+```
+
+In React and Vue, refs provide access to all form methods and reactive state. In Svelte, refs expose only methods, so reactive state like `isDirty` and `errors` should be accessed via [slot props](#slot-props) instead.
+
+### Form Context
+
+Deeply nested child components may need access to form state or methods without passing props through multiple levels. The `useFormContext` hook provides access to the parent `<Form>` component's state and methods from any child component.
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { useFormContext } from "@inertiajs/vue3";
+
+const form = useFormContext();
+</script>
+
+<template>
+  <div v-if="form">
+    <span v-if="form.isDirty">Unsaved changes</span>
+    <span v-if="form.errors.name">{{ form.errors.name }}</span>
+    <button type="button" @click="form.submit()">Submit</button>
+    <button type="button" @click="form.reset()">Reset</button>
+  </div>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { useFormContext } from "@inertiajs/react";
+
+export default function FormActions() {
+  const form = useFormContext();
+
+  if (!form) {
+    return null;
+  }
+
+  return (
+    <div>
+      {form.isDirty && <span>Unsaved changes</span>}
+      {form.errors.name && <span>{form.errors.name}</span>}
+      <button type="button" onClick={() => form.submit()}>
+        Submit
+      </button>
+      <button type="button" onClick={() => form.reset()}>
+        Reset
+      </button>
+    </div>
+  );
+}
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+import { useFormContext } from '@inertiajs/svelte'
+
+const form = useFormContext()
+</script>
+
+{#if form}
+    {#if form.isDirty}<span>Unsaved changes</span>{/if}
+    {#if form.errors.name}<span>{form.errors.name}</span>{/if}
+    <button type="button" onclick={() => form.submit()}>Submit</button>
+    <button type="button" onclick={() => form.reset()}>Reset</button>
+{/if}
+```
+
+The context provides access to all the same properties and methods available through [slot props](#slot-props).
+
+> [!NOTE]
+>
+> Both the `<Form>` component and `useFormContext` accept generic type parameters for type-safe errors and slot props. See the [TypeScript](https://inertiajs.com/docs/v3/advanced/typescript.md#form-component) documentation for details.
+
+### Precognition
+
+The `<Form>` component includes built-in support for [Laravel Precognition](https://laravel.com/docs/precognition), enabling real-time form validation without duplicating your server-side validation rules on the client.
+
+> [!NOTE]
+>
+> Precognition requires server-side support. Laravel users should see the
+> [Laravel Precognition documentation](https://laravel.com/docs/precognition)
+> for setup instructions. For other frameworks, see the [protocol
+> page](https://inertiajs.com/docs/v3/core-concepts/the-protocol.md#request-headers) for implementation
+> details.
+
+Once your server is configured, call `validate()` with a field name to trigger validation for that field. The `invalid()` helper checks if a field has validation errors, while `validating` indicates when a request is in progress.
+
+```vue Vue icon="vuejs" theme={null}
+<template>
+  <Form
+    action="/users"
+    method="post"
+    #default="{ errors, invalid, validate, validating }"
+  >
+    <label for="name">Name:</label>
+    <input id="name" name="name" @change="validate('name')" />
+    <p v-if="invalid('name')">{{ errors.name }}</p>
+
+    <label for="email">Email:</label>
+    <input id="email" name="email" @change="validate('email')" />
+    <p v-if="invalid('email')">{{ errors.email }}</p>
+
+    <p v-if="validating">Validating...</p>
+
+    <button type="submit">Create User</button>
+  </Form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  {({ errors, invalid, validate, validating }) => (
+    <>
+      <label htmlFor="name">Name:</label>
+      <input id="name" name="name" onChange={() => validate("name")} />
+      {invalid("name") && <p>{errors.name}</p>}
+
+      <label htmlFor="email">Email:</label>
+      <input id="email" name="email" onChange={() => validate("email")} />
+      {invalid("email") && <p>{errors.email}</p>}
+
+      {validating && <p>Validating...</p>}
+
+      <button type="submit">Create User</button>
+    </>
+  )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ errors, invalid, validate, validating })}
+        <label for="name">Name:</label>
+        <input id="name" name="name" onchange={() => validate('name')} />
+        {#if invalid('name')}
+            <p>{errors.name}</p>
+        {/if}
+
+        <label for="email">Email:</label>
+        <input id="email" name="email" onchange={() => validate('email')} />
+        {#if invalid('email')}
+            <p>{errors.email}</p>
+        {/if}
+
+        {#if validating}
+            <p>Validating...</p>
+        {/if}
+
+        <button type="submit">Create User</button>
+    {/snippet}
+</Form>
+```
+
+You may also use the `valid()` helper to check if a field has passed validation.
+
+```vue Vue icon="vuejs" theme={null}
+<Form
+  action="/users"
+  method="post"
+  #default="{ errors, invalid, valid, validate }"
+>
+    <input name="email" @change="validate('email')" />
+    <p v-if="valid('email')">Valid email address</p>
+    <p v-if="invalid('email')">{{ errors.email }}</p>
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  {({ errors, invalid, valid, validate }) => (
+    <>
+      <input name="email" onChange={() => validate("email")} />
+      {valid("email") && <p>Valid email address</p>}
+      {invalid("email") && <p>{errors.email}</p>}
+    </>
+  )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ errors, invalid, valid, validate })}
+        <input name="email" onchange={() => validate('email')} />
+        {#if valid('email')}
+            <p>Valid email address</p>
+        {/if}
+        {#if invalid('email')}
+            <p>{errors.email}</p>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+> [!WARNING]
+>
+> A form input will only appear as valid or invalid once it has changed and a
+> validation response has been received. Calling `validate('field')` will not send a validation request until the field's value differs from the initial data.
+
+#### Validating Multiple Fields
+
+You may validate multiple fields at once using the `only` option. This is particularly useful when building wizard-style forms where you want to validate all visible fields before proceeding to the next step.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" #default="{ validate }">
+    <!-- Step 1 fields -->
+    <input name="name" />
+    <input name="email" />
+
+    <button
+        type="button"
+        @click="validate({
+            only: ['name', 'email'],
+            onSuccess: () => goToNextStep(),
+            onValidationError: () => showErrors(),
+        })"
+    >
+        Next Step
+    </button>
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  {({ validate }) => (
+    <>
+      {/* Step 1 fields */}
+      <input name="name" />
+      <input name="email" />
+
+      <button
+        type="button"
+        onClick={() =>
+          validate({
+            only: ["name", "email"],
+            onSuccess: () => goToNextStep(),
+            onValidationError: () => showErrors(),
+          })
+        }
+      >
+        Next Step
+      </button>
+    </>
+  )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ validate })}
+        <!-- Step 1 fields -->
+        <input name="name" />
+        <input name="email" />
+
+        <button
+            type="button"
+            onclick={() => validate({
+                only: ['name', 'email'],
+                onSuccess: () => goToNextStep(),
+                onValidationError: () => showErrors(),
+            })}
+        >
+            Next Step
+        </button>
+    {/snippet}
+</Form>
+```
+
+#### Touch and Validate
+
+The `touch()` method marks fields as "touched" without triggering validation. You may then validate all touched fields by calling `validate()` without arguments.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" #default="{ validate, touch, touched }">
+    <input name="name" @blur="touch('name')" />
+    <input name="email" @blur="touch('email')" />
+    <input name="phone" @blur="touch('phone')" />
+
+    <button type="button" @click="validate()">Validate Touched Fields</button>
+
+    <p v-if="touched('name')">Name has been touched</p>
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post">
+  {({ validate, touch, touched }) => (
+    <>
+      <input name="name" onBlur={() => touch("name")} />
+      <input name="email" onBlur={() => touch("email")} />
+      <input name="phone" onBlur={() => touch("phone")} />
+
+      <button type="button" onClick={() => validate()}>
+        Validate Touched Fields
+      </button>
+
+      {touched("name") && <p>Name has been touched</p>}
+    </>
+  )}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post">
+    {#snippet children({ validate, touch, touched })}
+        <input name="name" onblur={() => touch('name')} />
+        <input name="email" onblur={() => touch('email')} />
+        <input name="phone" onblur={() => touch('phone')} />
+
+        <button type="button" onclick={() => validate()}>Validate Touched Fields</button>
+
+        {#if touched('name')}
+            <p>Name has been touched</p>
+        {/if}
+    {/snippet}
+</Form>
+```
+
+The `touched()` helper may also be called without arguments to check if any field has been touched. The `reset()` method clears the touched state for reset fields.
+
+#### Options
+
+The `validate()` method accepts an options object with callbacks and configuration.
+
+```js theme={null}
+validate("username", {
+  onSuccess: () => {
+    // Validation passed...
+  },
+  onValidationError: (response) => {
+    // Validation failed (422 response)...
+  },
+  onBeforeValidation: (newRequest, oldRequest) => {
+    // Return false to prevent validation...
+  },
+  onFinish: () => {
+    // Always runs after validation...
+  },
+});
+```
+
+You may also call `validate()` with only an options object to validate specific fields.
+
+```js theme={null}
+validate({
+  only: ["name", "email"],
+  onSuccess: () => goToNextStep(),
+});
+```
+
+Validation requests are automatically debounced. The first request fires immediately, then subsequent changes are debounced (1500ms by default). You may customize this timeout.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" :validation-timeout="500">
+    <!-- ... -->
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post" validationTimeout={500}>
+  {/* ... */}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post" validationTimeout={500}>
+    <!-- ... -->
+</Form>
+```
+
+By default, files are excluded from validation requests to avoid unnecessary uploads. You may enable file validation when you need to validate file inputs like size or mime type.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" validate-files>
+    <!-- ... -->
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post" validateFiles>
+  {/* ... */}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post" validateFiles>
+    <!-- ... -->
+</Form>
+```
+
+By default, validation errors are simplified to strings (the first error message). You may keep errors as arrays to display all error messages for fields with multiple validation rules.
+
+```vue Vue icon="vuejs" theme={null}
+<Form action="/users" method="post" with-all-errors>
+    <!-- ... -->
+</Form>
+```
+
+```jsx React icon="react" theme={null}
+<Form action="/users" method="post" withAllErrors>
+  {/* ... */}
+</Form>
+```
+
+```svelte Svelte icon="s" theme={null}
+<Form action="/users" method="post" withAllErrors>
+    <!-- ... -->
+</Form>
+```
+
+## Form Helper
+
+In addition to the `<Form>` component, Inertia also provides a `useForm` helper for when you need programmatic control over your form's data and submission behavior.
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { useForm } from "@inertiajs/vue3";
+
+const form = useForm({
+  email: null,
+  password: null,
+  remember: false,
+});
+</script>
+
+<template>
+  <form @submit.prevent="form.post('/login')">
+    <input type="text" v-model="form.email" />
+    <div v-if="form.errors.email">{{ form.errors.email }}</div>
+    <input type="password" v-model="form.password" />
+    <div v-if="form.errors.password">{{ form.errors.password }}</div>
+    <input type="checkbox" v-model="form.remember" /> Remember Me
+    <button type="submit" :disabled="form.processing">Login</button>
+  </form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { useForm } from "@inertiajs/react";
+
+const { data, setData, post, processing, errors } = useForm({
+  email: "",
+  password: "",
+  remember: false,
+});
+
+function submit(e) {
+  e.preventDefault();
+  post("/login");
+}
+
+return (
+  <form onSubmit={submit}>
+    <input
+      type="text"
+      value={data.email}
+      onChange={(e) => setData("email", e.target.value)}
+    />
+    {errors.email && <div>{errors.email}</div>}
+    <input
+      type="password"
+      value={data.password}
+      onChange={(e) => setData("password", e.target.value)}
+    />
+    {errors.password && <div>{errors.password}</div>}
+    <input
+      type="checkbox"
+      checked={data.remember}
+      onChange={(e) => setData("remember", e.target.checked)}
+    />{" "}
+    Remember Me
+    <button type="submit" disabled={processing}>
+      Login
+    </button>
+  </form>
+);
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+import { useForm } from '@inertiajs/svelte'
+
+const form = useForm({
+    email: null,
+    password: null,
+    remember: false,
+})
+
+function submit(e) {
+    e.preventDefault()
+    form.post('/login')
+}
+</script>
+
+<form onsubmit={submit}>
+    <input type="text" bind:value={form.email} />
+    {#if form.errors.email}
+        <div class="form-error">{form.errors.email}</div>
+    {/if}
+    <input type="password" bind:value={form.password} />
+    {#if form.errors.password}
+        <div class="form-error">{form.errors.password}</div>
+    {/if}
+    <input type="checkbox" bind:checked={form.remember} /> Remember Me
+    <button type="submit" disabled={form.processing}>Submit</button>
+</form>
+```
+
+To submit the form, you may use the `get`, `post`, `put`, `patch`, `delete`, and `query` methods.
+
+```js Vue icon="vuejs" theme={null}
+form.submit(method, url, options);
+form.get(url, options);
+form.post(url, options);
+form.put(url, options);
+form.patch(url, options);
+form.delete(url, options);
+form.query(url, options);
+```
+
+```js React icon="react" theme={null}
+const { submit, get, post, put, patch, delete: destroy, query } = useForm({ ... })
+
+submit(method, url, options)
+get(url, options)
+post(url, options)
+put(url, options)
+patch(url, options)
+destroy(url, options)
+query(url, options)
+```
+
+```js Svelte icon="s" theme={null}
+form.submit(method, url, options);
+form.get(url, options);
+form.post(url, options);
+form.put(url, options);
+form.patch(url, options);
+form.delete(url, options);
+form.query(url, options);
+```
+
+The submit methods support all of the typical [visit options](https://inertiajs.com/docs/v3/the-basics/manual-visits.md), such as `preserveState`, `preserveScroll`, and event callbacks, which can be helpful for performing tasks on successful form submissions. For example, you might use the `onSuccess` callback to reset inputs to their original state.
+
+```js Vue icon="vuejs" theme={null}
+form.post("/profile", {
+  preserveScroll: true,
+  onSuccess: () => form.reset("password"),
+});
+```
+
+```js React icon="react" theme={null}
+const { post, reset } = useForm({ ... })
+
+post('/profile', {
+    preserveScroll: true,
+    onSuccess: () => reset('password'),
+})
+```
+
+```js Svelte icon="s" theme={null}
+form.post("/profile", {
+  preserveScroll: true,
+  onSuccess: () => form.reset("password"),
+});
+```
+
+You may pass the HTTP method and URL as the first two arguments to `useForm()`, then call `submit()` without arguments to dispatch the request. This also unlocks real-time validation. See [Precognition](#precognition-2) for details.
+
+If you need to modify the form data before it's sent to the server, you can do so via the `transform()` method.
+
+```js Vue icon="vuejs" theme={null}
+form
+  .transform((data) => ({
+    ...data,
+    remember: data.remember ? "on" : "",
+  }))
+  .post("/login");
+```
+
+```js React icon="react" theme={null}
+const { transform } = useForm({ ... })
+
+transform((data) => ({
+    ...data,
+    remember: data.remember ? 'on' : '',
+}))
+```
+
+```js Svelte icon="s" theme={null}
+form
+  .transform((data) => ({
+    ...data,
+    remember: data.remember ? "on" : "",
+  }))
+  .post("/login");
+```
+
+You can use the `processing` property to track if a form is currently being submitted. This can be helpful for preventing double form submissions by disabling the submit button.
+
+```vue Vue icon="vuejs" theme={null}
+<button type="submit" :disabled="form.processing">Submit</button>
+```
+
+```jsx React icon="react" theme={null}
+const { processing } = useForm({ ... })
+
+<button type="submit" disabled={processing}>Submit</button>
+```
+
+```svelte Svelte icon="s" theme={null}
+<button type="submit" disabled={form.processing}>Submit</button>
+```
+
+If your form is uploading files, the current progress event is available via the `progress` property, allowing you to easily display the upload progress.
+
+```vue Vue icon="vuejs" theme={null}
+<progress v-if="form.progress" :value="form.progress.percentage" max="100">
+    {{ form.progress.percentage }}%
+</progress>
+```
+
+```jsx React icon="react" theme={null}
+const { progress } = useForm({ ... })
+
+{progress && (
+    <progress value={progress.percentage} max="100">
+        {progress.percentage}%
+    </progress>
+)}
+```
+
+```svelte Svelte icon="s" theme={null}
+{#if form.progress}
+    <progress value={form.progress.percentage} max="100">
+        {form.progress.percentage}%
+    </progress>
+{/if}
+```
+
+### Form Errors
+
+If there are form validation errors, they are available via the `errors` property. When building Laravel-powered Inertia applications, form errors will automatically be populated when your application throws instances of `ValidationException`, such as when using `{'$request->validate()'}`.
+
+```vue Vue icon="vuejs" theme={null}
+<div v-if="form.errors.email">{{ form.errors.email }}</div>
+```
+
+```jsx React icon="react" theme={null}
+const { errors } = useForm({ ... })
+
+{errors.email && <div>{errors.email}</div>}
+```
+
+```svelte Svelte icon="s" theme={null}
+{#if form.errors.email}
+    <div>{form.errors.email}</div>
+{/if}
+```
+
+For a more thorough discussion of form validation and errors, please consult the [validation documentation](https://inertiajs.com/docs/v3/the-basics/validation.md).
+
+To determine if a form has any errors, you may use the `hasErrors` property. To clear form errors, use the `clearErrors()` method.
+
+```js Vue icon="vuejs" theme={null}
+// Clear all errors...
+form.clearErrors();
+
+// Clear errors for specific fields...
+form.clearErrors("field", "anotherfield");
+```
+
+```js React icon="react" theme={null}
+const { clearErrors } = useForm({ ... })
 
 // Clear all errors...
-              form.clearErrors()
+clearErrors()
 
-              // Clear errors for specific fields...
-              form.clearErrors(
+// Clear errors for specific fields...
+clearErrors('field', 'anotherfield')
+```
 
+```js Svelte icon="s" theme={null}
 // Clear all errors...
-              $form.clearErrors()
+form.clearErrors();
 
-              // Clear errors for specific fields...
-              $form.clearErrors(
+// Clear errors for specific fields...
+form.clearErrors("field", "anotherfield");
+```
+
+If you're using client-side input validation libraries or do client-side validation manually, you can set your own errors on the form using the `setErrors()` method.
+
+```js Vue icon="vuejs" theme={null}
+// Set a single error...
+form.setError("field", "Your error message.");
+
+// Set multiple errors at once...
+form.setError({
+  foo: "Your error message for the foo field.",
+  bar: "Some other error for the bar field.",
+});
+```
+
+```js React icon="react" theme={null}
+const { setError } = useForm({ ... })
 
 // Set a single error...
-              form.setError(
+setError('field', 'Your error message.');
 
-Some other error for the bar field.
+// Set multiple errors at once...
+setError({
+    foo: 'Your error message for the foo field.',
+    bar: 'Some other error for the bar field.'
+});
+```
 
+```js Svelte icon="s" theme={null}
 // Set a single error
-              $form.setError(
+form.setError("field", "Your error message.");
+
+// Set multiple errors at once
+form.setError({
+  foo: "Your error message for the foo field.",
+  bar: "Some other error for the bar field.",
+});
+```
+
+Unlike an actual form submission, the page's props remain unchanged when manually setting errors on a form instance.
+
+When a form has been successfully submitted, the `wasSuccessful` property will be `true`. In addition to this, forms have a `recentlySuccessful` property, which will be set to `true` for two seconds after a successful form submission. This property can be utilized to show temporary success messages.
+
+You may customize the duration of the `recentlySuccessful` state by setting the `form.recentlySuccessfulDuration` option in your [application defaults](https://inertiajs.com/docs/v3/installation/client-side-setup.md#configuring-defaults). The default value is `2000` milliseconds.
+
+### Resetting the Form
+
+To reset the form's values back to their default values, you can use the `reset()` method.
+
+```js Vue icon="vuejs" theme={null}
+// Reset the form...
+form.reset();
+
+// Reset specific fields...
+form.reset("field", "anotherfield");
+```
+
+```js React icon="react" theme={null}
+const { reset } = useForm({ ... })
 
 // Reset the form...
-              form.reset()
+reset()
 
-              // Reset specific fields...
-              form.reset(
+// Reset specific fields...
+reset('field', 'anotherfield')
+```
 
+```js Svelte icon="s" theme={null}
 // Reset the form...
-              $form.reset()
+form.reset();
 
-              // Reset specific fields...
-              $form.reset(
+// Reset specific fields...
+form.reset("field", "anotherfield");
+```
+
+Sometimes, you may want to restore your form fields to their default values and clear any validation errors at the same time. Instead of calling `reset()` and `clearErrors()` separately, you can use the `resetAndClearErrors()` method, which combines both actions into a single call.
+
+```js Vue icon="vuejs" theme={null}
+// Reset the form and clear all errors...
+form.resetAndClearErrors();
+
+// Reset specific fields and clear their errors...
+form.resetAndClearErrors("field", "anotherfield");
+```
+
+```js React icon="react" theme={null}
+const { resetAndClearErrors } = useForm({ ... })
 
 // Reset the form and clear all errors...
-              form.resetAndClearErrors()
+resetAndClearErrors()
 
-              // Reset specific fields and clear their errors...
-              form.resetAndClearErrors(
+// Reset specific fields and clear their errors...
+resetAndClearErrors('field', 'anotherfield')
+```
 
+```js Svelte icon="s" theme={null}
 // Reset the form and clear all errors...
-              $form.resetAndClearErrors()
+form.resetAndClearErrors();
 
-              // Reset specific fields and clear their errors...
-              $form.resetAndClearErrors(
+// Reset specific fields and clear their errors...
+form.resetAndClearErrors("field", "anotherfield");
+```
+
+### Setting New Default Values
+
+If your form's default values become outdated, you can use the `defaults()` method to update them. Then, the form will be reset to the correct values the next time the `reset()` method is invoked.
+
+```js Vue icon="vuejs" theme={null}
+// Set the form's current values as the new defaults...
+form.defaults();
+
+// Update the default value of a single field...
+form.defaults("email", "updated-default@example.com");
+
+// Update the default value of multiple fields...
+form.defaults({
+  name: "Updated Example",
+  email: "updated-default@example.com",
+});
+```
+
+```js React icon="react" theme={null}
+const { setDefaults } = useForm({ ... })
+
+// Set the form's current values as the new defaults...
+setDefaults()
+
+// Update the default value of a single field...
+setDefaults('email', 'updated-default@example.com')
+
+// Update the default value of multiple fields...
+setDefaults({
+    name: 'Updated Example',
+    email: 'updated-default@example.com',
+})
+```
+
+```js Svelte icon="s" theme={null}
+// Set the form's current values as the new defaults...
+form.defaults();
+
+// Update the default value of a single field...
+form.defaults("email", "updated-default@example.com");
+
+// Change the default value of multiple fields...
+form.defaults({
+  name: "Updated Example",
+  email: "updated-default@example.com",
+});
+```
+
+### Form Field Change Tracking
+
+To determine if a form has any changes, you may use the `isDirty` property.
+
+```vue Vue icon="vuejs" theme={null}
+<div v-if="form.isDirty">There are unsaved form changes.</div>
+```
+
+```jsx React icon="react" theme={null}
+const { isDirty } = useForm({ ... })
+
+{isDirty && <div>There are unsaved form changes.</div>}
+```
+
+```svelte Svelte icon="s" theme={null}
+{#if form.isDirty}
+    <div>There are unsaved form changes.</div>
+{/if}
+```
+
+### Canceling Form Submissions
+
+To cancel a form submission, use the `cancel()` method.
+
+```js Vue icon="vuejs" theme={null}
+form.cancel();
+```
+
+```js React icon="react" theme={null}
+const { cancel } = useForm({ ... })
+
+cancel()
+```
+
+```js Svelte icon="s" theme={null}
+form.cancel();
+```
+
+### Form Data and History State
+
+To instruct Inertia to store a form's data and errors in [history state](https://inertiajs.com/docs/v3/data-props/remembering-state.md), you can provide a unique form key as the first argument when instantiating your form.
+
+```js Vue icon="vuejs" theme={null}
+import { useForm } from '@inertiajs/vue3'
+
+const form = useForm('CreateUser', data)
+const form = useForm(`EditUser:${user.id}`, data)
+```
+
+```js React icon="react" theme={null}
+import { useForm } from '@inertiajs/react'
+
+const form = useForm('CreateUser', data)
+const form = useForm(`EditUser:${user.id}`, data)
+```
+
+```js Svelte icon="s" theme={null}
+import { useForm } from '@inertiajs/svelte'
+
+const form = useForm('CreateUser', data)
+const form = useForm(`EditUser:${user.id}`, data)
+```
+
+#### Excluding Fields
+
+Sensitive fields like passwords may be excluded from history state using the `dontRemember()` method.
+
+```js Vue icon="vuejs" theme={null}
+import { useForm } from "@inertiajs/vue3";
+
+const form = useForm("LoginForm", {
+  email: "",
+  password: "",
+}).dontRemember("password");
+```
+
+```js React icon="react" theme={null}
+import { useForm } from "@inertiajs/react";
+
+const form = useForm("LoginForm", {
+  email: "",
+  password: "",
+}).dontRemember("password");
+```
+
+```js Svelte icon="s" theme={null}
+import { useForm } from "@inertiajs/svelte";
+
+const form = useForm("LoginForm", {
+  email: "",
+  password: "",
+}).dontRemember("password");
+```
+
+Multiple fields may be excluded by passing additional arguments.
+
+```js theme={null}
+form.dontRemember("password", "password_confirmation");
+```
+
+> [!NOTE]
+>
+> Some browsers trigger a "save password" prompt whenever password field values
+> are written to history state, even without form submission. Excluding password
+> fields avoids this issue.
+
+### Wayfinder
+
+When using [Wayfinder](https://github.com/laravel/wayfinder) in conjunction with the form helper, you can simply pass the resulting object directly to the `form.submit` method. The form helper will infer the HTTP method and URL from the Wayfinder object.
+
+```js Vue icon="vuejs" theme={null}
+import { useForm } from "@inertiajs/vue3";
+import { store } from "App/Http/Controllers/UserController";
+
+const form = useForm({
+  name: "John Doe",
+  email: "john.doe@example.com",
+});
+
+form.submit(store());
+```
+
+```js React icon="react" theme={null}
+import { useForm } from "@inertiajs/react";
+import { store } from "App/Http/Controllers/UserController";
+
+const form = useForm({
+  name: "John Doe",
+  email: "john.doe@example.com",
+});
+
+form.submit(store());
+```
+
+```js Svelte icon="s" theme={null}
+import { useForm } from "@inertiajs/svelte";
+import { store } from "App/Http/Controllers/UserController";
+
+const form = useForm({
+  name: "John Doe",
+  email: "john.doe@example.com",
+});
+
+form.submit(store());
+```
+
+### Precognition
+
+Just like the `<Form>` component, the `useForm` helper supports [Precognition](#precognition) for real-time validation. You may enable it by chaining the `withPrecognition()` method with the HTTP method and endpoint for validation requests.
+
+> [!NOTE]
+>
+> Precognition requires server-side support. Laravel users should see the
+> [Laravel Precognition documentation](https://laravel.com/docs/precognition)
+> for setup instructions. For other frameworks, see the [protocol
+> page](https://inertiajs.com/docs/v3/core-concepts/the-protocol.md#request-headers) for implementation
+> details.
+
+```js Vue icon="vuejs" theme={null}
+import { useForm } from "@inertiajs/vue3";
+
+const form = useForm({
+  name: "",
+  email: "",
+}).withPrecognition("post", "/users");
+```
+
+```js React icon="react" theme={null}
+import { useForm } from "@inertiajs/react";
+
+const form = useForm({
+  name: "",
+  email: "",
+}).withPrecognition("post", "/users");
+```
+
+```js Svelte icon="s" theme={null}
+import { useForm } from "@inertiajs/svelte";
+
+const form = useForm({
+  name: "",
+  email: "",
+}).withPrecognition("post", "/users");
+```
+
+For backward compatibility with the `laravel-precognition` packages, you may also pass the method and URL as the first arguments to `useForm()`.
+
+```js theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+  email: "",
+});
+```
+
+> [!TIP]
+>
+> Since Precognition is now built-in, you may remove the `laravel-precognition`
+> package and import `useForm` from your Inertia adapter instead.
+
+You may also use [Wayfinder](https://github.com/laravel/wayfinder) when enabling Precognition.
+
+```js theme={null}
+import { store } from "App/Http/Controllers/UserController";
+
+const form = useForm({
+  name: "",
+  email: "",
+}).withPrecognition(store());
+
+// Or passing Wayfinder as the first argument...
+const form = useForm(store(), {
+  name: "",
+  email: "",
+});
+```
+
+Once Precognition is enabled, call `validate()` with a field name to trigger validation for that field. The `invalid()` helper checks if a field has validation errors, while `validating` indicates when a request is in progress.
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { useForm } from "@inertiajs/vue3";
+
+const form = useForm("post", "/users", {
+  name: "",
+  email: "",
+});
+</script>
+
+<template>
+  <form @submit.prevent="form.submit()">
+    <input v-model="form.name" @change="form.validate('name')" />
+    <p v-if="form.invalid('name')">{{ form.errors.name }}</p>
+
+    <input v-model="form.email" @change="form.validate('email')" />
+    <p v-if="form.invalid('email')">{{ form.errors.email }}</p>
+
+    <p v-if="form.validating">Validating...</p>
+
+    <button type="submit">Create User</button>
+  </form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { useForm } from "@inertiajs/react";
+
+const { data, setData, submit, errors, validating, validate, invalid } = useForm(
+  "post",
+  "/users",
+  {
+    name: "",
+    email: "",
+  },
+);
+
+function handleSubmit(e) {
+  e.preventDefault();
+  submit();
+}
+
+return (
+  <form onSubmit={handleSubmit}>
+    <input
+      value={data.name}
+      onChange={(e) => setData("name", e.target.value)}
+      onBlur={() => validate("name")}
+    />
+    {invalid("name") && <p>{errors.name}</p>}
+
+    <input
+      value={data.email}
+      onChange={(e) => setData("email", e.target.value)}
+      onBlur={() => validate("email")}
+    />
+    {invalid("email") && <p>{errors.email}</p>}
+
+    {validating && <p>Validating...</p>}
+
+    <button type="submit">Create User</button>
+  </form>
+);
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+import { useForm } from '@inertiajs/svelte'
+
+const form = useForm('post', '/users', {
+    name: '',
+    email: '',
+})
+</script>
+
+<form onsubmit={(e) => { e.preventDefault(); form.submit() }}>
+    <input bind:value={form.name} onchange={() => form.validate('name')} />
+    {#if form.invalid('name')}
+        <p>{form.errors.name}</p>
+    {/if}
+
+    <input bind:value={form.email} onchange={() => form.validate('email')} />
+    {#if form.invalid('email')}
+        <p>{form.errors.email}</p>
+    {/if}
+
+    {#if form.validating}
+        <p>Validating...</p>
+    {/if}
+
+    <button type="submit">Create User</button>
+</form>
+```
+
+You may also use the `valid()` helper to check if a field has passed validation.
+
+#### Touch and Validate
+
+The `touch()` method marks fields as "touched" without triggering validation. You may then validate all touched fields by calling `validate()` without arguments. The `touched()` helper checks if a field has been touched. The `reset()` method clears the touched state for reset fields.
+
+```vue Vue icon="vuejs" theme={null}
+<input v-model="form.name" @blur="form.touch('name')" />
+<input v-model="form.email" @blur="form.touch('email')" />
+
+<button type="button" @click="form.validate()">Validate Touched Fields</button>
+
+<p v-if="form.touched('name')">Name has been touched</p>
+```
+
+```jsx React icon="react" theme={null}
+<input value={data.name} onChange={e => setData('name', e.target.value)} onBlur={() => touch('name')} />
+<input value={data.email} onChange={e => setData('email', e.target.value)} onBlur={() => touch('email')} />
+
+<button type="button" onClick={() => validate()}>Validate Touched Fields</button>
+
+{touched('name') && <p>Name has been touched</p>}
+```
+
+```svelte Svelte icon="s" theme={null}
+<input bind:value={form.name} onblur={() => form.touch('name')} />
+<input bind:value={form.email} onblur={() => form.touch('email')} />
+
+<button type="button" onclick={() => form.validate()}>Validate Touched Fields</button>
+
+{#if form.touched('name')}
+    <p>Name has been touched</p>
+{/if}
+```
+
+#### Options
+
+Validation requests are automatically debounced. The first request fires immediately, then subsequent changes are debounced (1500ms by default). You may customize this timeout using `setValidationTimeout()`.
+
+```js Vue icon="vuejs" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+}).setValidationTimeout(500);
+```
+
+```js React icon="react" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+});
+
+form.setValidationTimeout(500);
+```
+
+```js Svelte icon="s" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+});
+
+form.setValidationTimeout(500);
+```
+
+By default, files are excluded from validation requests to avoid unnecessary uploads. You may enable file validation using `validateFiles()`.
+
+```js Vue icon="vuejs" theme={null}
+const form = useForm("post", "/users", {
+  avatar: null,
+}).validateFiles();
+```
+
+```js React icon="react" theme={null}
+const form = useForm("post", "/users", {
+  avatar: null,
+});
+
+form.validateFiles();
+```
+
+```js Svelte icon="s" theme={null}
+const form = useForm("post", "/users", {
+  avatar: null,
+});
+
+form.validateFiles();
+```
+
+By default, validation errors are simplified to strings (the first error message). You can indicate you would like all errors as arrays using `withAllErrors()`.
+
+```js Vue icon="vuejs" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+}).withAllErrors();
+```
+
+```js React icon="react" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+});
+
+form.withAllErrors();
+```
+
+```js Svelte icon="s" theme={null}
+const form = useForm("post", "/users", {
+  name: "",
+});
+
+form.withAllErrors();
+```
+
+With Precognition enabled, you may call `submit()` without arguments to dispatch the request to the configured endpoint.
+
+## Server-Side Responses
+
+When using Inertia, you don't typically inspect form responses client-side like you would with traditional XHR/fetch requests. Instead, your server-side route or controller issues a [redirect](https://inertiajs.com/docs/v3/the-basics/redirects.md) response after processing the form, often redirecting to a success page.
+
+```php theme={null}
+class UsersController extends Controller
+{
+    public function index()
+    {
+        return Inertia::render('Users/Index', [
+            'users' => User::all(),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        User::create($request->validate([
+            'first_name' => ['required', 'max:50'],
+            'last_name' => ['required', 'max:50'],
+            'email' => ['required', 'max:50', 'email'],
+        ]));
+
+        return to_route('users.index');
+    }
+}
+```
+
+This redirect-based approach works with all form submission methods: the `<Form>` component, `useForm` helper, and manual router submissions. It makes handling Inertia forms feel very similar to classic server-side form submissions.
+
+## Server-Side Validation
+
+Both the `<Form>` component and `useForm` helper automatically handle server-side validation errors. When your server returns validation errors, they're automatically available in the `errors` object without any additional configuration.
+
+Unlike traditional XHR/fetch requests where you might check for a `422` status code, Inertia handles validation errors as part of its redirect-based flow, just like classic server-side form submissions, but without the full page reload.
+
+For a complete guide on validation error handling, including error bags and advanced scenarios, see the [validation documentation](https://inertiajs.com/docs/v3/the-basics/validation.md).
+
+## Manual Form Submissions
+
+It's also possible to submit forms manually using Inertia's `router` methods directly, without using the `<Form>` component or `useForm` helper:
+
+```vue Vue icon="vuejs" theme={null}
+<script setup>
+import { reactive } from "vue";
+import { router } from "@inertiajs/vue3";
+
+const form = reactive({
+  first_name: null,
+  last_name: null,
+  email: null,
+});
+
+function submit() {
+  router.post("/users", form);
+}
+</script>
+
+<template>
+  <form @submit.prevent="submit">
+    <label for="first_name">First name:</label>
+    <input id="first_name" v-model="form.first_name" />
+    <label for="last_name">Last name:</label>
+    <input id="last_name" v-model="form.last_name" />
+    <label for="email">Email:</label>
+    <input id="email" v-model="form.email" />
+    <button type="submit">Submit</button>
+  </form>
+</template>
+```
+
+```jsx React icon="react" theme={null}
+import { useState } from "react";
+import { router } from "@inertiajs/react";
+
+export default function Edit() {
+  const [values, setValues] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+  });
+
+  function handleChange(e) {
+    const key = e.target.id;
+    const value = e.target.value;
+    setValues((values) => ({
+      ...values,
+      [key]: value,
+    }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    router.post("/users", values);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="first_name">First name:</label>
+      <input
+        id="first_name"
+        value={values.first_name}
+        onChange={handleChange}
+      />
+      <label htmlFor="last_name">Last name:</label>
+      <input id="last_name" value={values.last_name} onChange={handleChange} />
+      <label htmlFor="email">Email:</label>
+      <input id="email" value={values.email} onChange={handleChange} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+```svelte Svelte icon="s" theme={null}
+<script>
+import { router } from '@inertiajs/svelte'
+
+let values = {
+    first_name: null,
+    last_name: null,
+    email: null,
+}
+
+function submit(e) {
+    e.preventDefault()
+    router.post('/users', values)
+}
+</script>
+
+<form onsubmit={submit}>
+    <label for="first_name">First name:</label>
+    <input id="first_name" bind:value={values.first_name}>
+
+    <label for="last_name">Last name:</label>
+    <input id="last_name" bind:value={values.last_name}>
+
+    <label for="email">Email:</label>
+    <input id="email" bind:value={values.email}>
+
+    <button type="submit">Submit</button>
+</form>
+```
+
+## File Uploads
+
+When making requests or form submissions that include files, Inertia will automatically convert the request data into a `FormData` object. This works with the `<Form>` component, `useForm` helper, and manual router submissions.
+
+For more information on file uploads, including progress tracking, see the [file uploads documentation](https://inertiajs.com/docs/v3/the-basics/file-uploads.md).
+
+## Optimistic Updates
+
+Both the `<Form>` component and `useForm` helper support optimistic updates, allowing you to update the UI immediately before the server responds. For more details, see the [optimistic updates](https://inertiajs.com/docs/v3/the-basics/optimistic-updates.md) documentation.
+
+## Non-Inertia Submissions
+
+Using Inertia to submit forms works great for the vast majority of situations. For standalone HTTP requests that don't trigger page visits, you may use the [`useHttp`](https://inertiajs.com/docs/v3/the-basics/http-requests) hook, which provides the same developer experience as `useForm`. You're also free to make plain XHR or `fetch` requests using the library of your choice.

@@ -2,116 +2,36 @@
 
 Source: https://livewire.laravel.com/docs/downloads
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 File Downloads
 ==============
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 File downloads in Livewire work much the same as in Laravel itself. Typically, you can use any Laravel download utility inside a Livewire component, and it should work as expected.
 
 However, behind the scenes, file downloads are handled differently than in a standard Laravel application. When using Livewire, the file's contents are Base64 encoded, sent to the frontend, and decoded back into binary to be downloaded directly from the client.
 
-#Basic usage
+Basic usage¶
 ------------
 
 Triggering a file download in Livewire is as simple as returning a standard Laravel download response.
 
-Below is an example of a `ShowInvoice` component that contains a "Download" button to download the invoice PDF:
+Below is an example of a `show-invoice` component that contains a "Download" button to download the invoice PDF:
 
 ```php
-
-<?php
-
-namespace App\Livewire;
+<?php // resources/views/components/⚡show-invoice.blade.php
 
 use Livewire\Component;
 
 use App\Models\Invoice;
 
-class ShowInvoice extends Component
-
-{
+new class extends Component {
 
 public Invoice $invoice;
 
@@ -135,19 +55,9 @@ $this->invoice->file_path, 'invoice.pdf'
 
 }
 
-public function render()
-
-{
-
-return view('livewire.show-invoice');
-
-}
-
-}
-
+};
 ```
 ```php
-
 <div>
 
 <h1>{{ $invoice->title }}</h1>
@@ -159,12 +69,10 @@ return view('livewire.show-invoice');
 <button type="button" wire:click="download">Download</button>
 
 </div>
-
 ```
 Just like in a Laravel controller, you can also use the `Storage` facade to initiate downloads:
 
 ```php
-
 public function download()
 
 {
@@ -172,15 +80,13 @@ public function download()
 return Storage::disk('invoices')->download('invoice.csv');
 
 }
-
 ```
-#Streaming downloads
+Streaming downloads¶
 --------------------
 
 Livewire can also stream downloads; however, they aren't truly streamed. The download isn't triggered until the file's contents are collected and delivered to the browser:
 
 ```php
-
 public function download()
 
 {
@@ -192,67 +98,74 @@ echo '...'; // Echo download contents directly...
 }, 'invoice.pdf');
 
 }
-
 ```
-#Testing file downloads
+Testing file downloads¶
 -----------------------
 
 Livewire also provides a `->assertFileDownloaded()` method to easily test that a file was downloaded with a given name:
 
 ```php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Invoice;
 
-/** @test */
+use Livewire\Livewire;
 
-public function can_download_invoice()
+uses(RefreshDatabase::class);
 
-{
+it('can download an invoice', function () {
 
-$invoice = Invoice::factory();
+Storage::fake('invoices');
 
-Livewire::test(ShowInvoice::class)
+Storage::disk('invoices')->put('invoice.pdf', 'Invoice contents');
+
+$invoice = Invoice::factory()->create([
+
+'file_path' => Storage::disk('invoices')->path('invoice.pdf'),
+
+]);
+
+Livewire::test('show-invoice', ['invoice' => $invoice])
 
 ->call('download')
 
 ->assertFileDownloaded('invoice.pdf');
 
-}
-
+});
 ```
-You can also test to ensure a file was not downloaded using the `->assertNoFileDownloaded()` method:
+You can also use the `->assertNoFileDownloaded()` method to check that rendering the component doesn't trigger a download:
 
 ```php
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Models\Invoice;
 
-/** @test */
+use Livewire\Livewire;
 
-public function does_not_download_invoice_if_unauthorised()
+uses(RefreshDatabase::class);
 
-{
+it('does not download an invoice until requested', function () {
 
-$invoice = Invoice::factory();
+$invoice = Invoice::factory()->create();
 
-Livewire::test(ShowInvoice::class)
-
-->call('download')
+Livewire::test('show-invoice', ['invoice' => $invoice])
 
 ->assertNoFileDownloaded();
 
-}
-
+});
 ```
-On this page
+Ecosystem sponsor
 
-* Basic usage
-* Streaming downloads
-* Testing file downloads
 
-![Flux Ad](/images/flux_ad.jpg)
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
 
-Pro UI Components
+Return to
 
-Flux · The official Livewire component library
+Redirecting
 
-Built by the folks behind Livewire and Alpine.
+Continue to
+
+Teleport

@@ -1,0 +1,312 @@
+Source: https://filamentphp.com/docs/5.x/resources/viewing-records.md
+
+# Viewing records
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/resources/viewing-records.md
+
+
+
+## Creating a resource with a View page
+
+To create a new resource with a View page, you can use the ` --view ` flag:
+
+```bash
+php artisan make:filament-resource User --view
+```
+
+## Using an infolist instead of a disabled form
+
+By default, the View page will display a disabled form with the record's data. If you preferred to display the record's data in an "infolist", you can define an ` infolist() ` method on the resource class:
+
+```php
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Schema;
+
+public static function infolist(Schema $schema): Schema
+{
+    return $schema
+        ->components([
+            TextEntry::make('name'),
+            TextEntry::make('email'),
+            TextEntry::make('notes')
+                ->columnSpanFull(),
+        ]);
+}
+```
+
+The ` components() ` method is used to define the structure of your infolist. It is an array of [entries](https://filamentphp.com/docs/5.x/infolists/overview.md#defining-entries) and [layout components](https://filamentphp.com/docs/5.x/schemas/layouts.md#basic-layout-components), in the order they should appear in your infolist.
+
+Check out the Infolists docs for a [guide](https://filamentphp.com/docs/5.x/infolists) on how to build infolists with Filament.
+
+## Adding a View page to an existing resource
+
+If you want to add a View page to an existing resource, create a new page in your resource's ` Pages ` directory:
+
+```bash
+php artisan make:filament-page ViewUser --resource=UserResource --type=ViewRecord
+```
+
+You must register this new page in your resource's ` getPages() ` method:
+
+```php
+public static function getPages(): array
+{
+    return [
+        'index' => Pages\ListUsers::route('/'),
+        'create' => Pages\CreateUser::route('/create'),
+        'view' => Pages\ViewUser::route('/{record}'),
+        'edit' => Pages\EditUser::route('/{record}/edit'),
+    ];
+}
+```
+
+## Viewing records in modals
+
+If your resource is simple, you may wish to view records in modals rather than on the [View page](https://filamentphp.com/docs/5.x/resources/viewing-records.md). If this is the case, you can just [delete the view page](https://filamentphp.com/docs/5.x/resources/overview.md#deleting-resource-pages).
+
+If your resource doesn't contain a ` ViewAction `, you can add one to the ` $table->recordActions() ` array:
+
+```php
+use Filament\Actions\ViewAction;
+use Filament\Tables\Table;
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->recordActions([
+            ViewAction::make(),
+            // ...
+        ]);
+}
+```
+
+## Customizing data before filling the form
+
+You may wish to modify the data from a record before it is filled into the form. To do this, you may define a ` mutateFormDataBeforeFill() ` method on the View page class to modify the ` $data ` array, and return the modified version before it is filled into the form:
+
+```php
+protected function mutateFormDataBeforeFill(array $data): array
+{
+    $data['user_id'] = auth()->id();
+
+    return $data;
+}
+```
+
+Alternatively, if you're viewing records in a modal action, check out the [Actions documentation](https://filamentphp.com/docs/5.x/actions/view.md#customizing-data-before-filling-the-form).
+
+## Refreshing form data
+
+If an action modifies a record while you are viewing it in a disabled form, you can refresh selected data in the form using the ` refreshFormData() ` method:
+
+```php
+use App\Models\Post;
+use Filament\Actions\Action;
+
+Action::make('approve')
+    ->action(function (Post $record) {
+        $record->approve();
+
+        $this->refreshFormData([
+            'status',
+        ]);
+    })
+```
+
+Pass the form state paths you want to refresh. Other fields retain their state unless your customization code changes it. ` refreshFormData() ` uses the page's current record, so call ` $this->getRecord()->refresh() ` first if it was updated elsewhere. For hydration behavior and precautions when refreshing relationships or parent paths, see [refreshing form data on Edit pages](https://filamentphp.com/docs/5.x/resources/editing-records.md#refreshing-form-data).
+
+## Lifecycle hooks
+
+Hooks may be used to execute code at various points within a page's lifecycle, like before a form is filled. To set up a hook, create a protected method on the View page class with the name of the hook:
+
+```php
+use Filament\Resources\Pages\ViewRecord;
+
+class ViewUser extends ViewRecord
+{
+    // ...
+
+    protected function beforeFill(): void
+    {
+        // Runs before the disabled form fields are populated from the database. Not run on pages using an infolist.
+    }
+
+    protected function afterFill(): void
+    {
+        // Runs after the disabled form fields are populated from the database. Not run on pages using an infolist.
+    }
+}
+```
+
+### Defining lifecycle hooks in traits
+
+To define a lifecycle hook in a trait, suffix the hook name with the trait's name. This follows the ` boot{TraitName}() ` convention used by Eloquent and the ` mount{TraitName}() ` convention used by Livewire, allowing reusable traits to hook into the page lifecycle without colliding with hooks defined on the page itself:
+
+```php
+use Filament\Resources\Pages\ViewRecord;
+
+trait LoadsAuditData
+{
+    protected function afterFillLoadsAuditData(): void
+    {
+        // Runs after the form fields are populated from the database, in
+        // addition to the hook on the page.
+    }
+}
+
+class ViewUser extends ViewRecord
+{
+    use LoadsAuditData;
+
+    protected function afterFill(): void
+    {
+        // Both lifecycle hooks are called.
+    }
+}
+```
+
+The page's own hook is called first, followed by each trait hook. Hooks from traits used by other traits are also called. Trait hooks are called automatically, so you should not also call them from the page's own hook.
+
+## Authorization
+
+For authorization, Filament will observe any [model policies](https://laravel.com/docs/authorization#creating-policies) that are registered in your app.
+
+Users may access the View page if the ` view() ` method of the model policy returns ` true `.
+
+## Creating another View page
+
+One View page may not be enough space to allow users to navigate a lot of information. You can create as many View pages for a resource as you want. This is especially useful if you are using [resource sub-navigation](https://filamentphp.com/docs/5.x/resources/overview.md#resource-sub-navigation), as you are then easily able to switch between the different View pages.
+
+To create a View page, you should use the ` make:filament-page ` command:
+
+```bash
+php artisan make:filament-page ViewCustomerContact --resource=CustomerResource --type=ViewRecord
+```
+
+You must register this new page in your resource's ` getPages() ` method:
+
+```php
+public static function getPages(): array
+{
+    return [
+        'index' => Pages\ListCustomers::route('/'),
+        'create' => Pages\CreateCustomer::route('/create'),
+        'view' => Pages\ViewCustomer::route('/{record}'),
+        'view-contact' => Pages\ViewCustomerContact::route('/{record}/contact'),
+        'edit' => Pages\EditCustomer::route('/{record}/edit'),
+    ];
+}
+```
+
+Now, you can define the ` infolist() ` or ` form() ` for this page, which can contain other components that are not present on the main View page:
+
+```php
+use Filament\Schemas\Schema;
+
+public function infolist(Schema $schema): Schema
+{
+    return $schema
+        ->components([
+            // ...
+        ]);
+}
+```
+
+## Customizing relation managers for a specific view page
+
+You can specify which relation managers should appear on a view page by defining a ` getAllRelationManagers() ` method:
+
+```php
+protected function getAllRelationManagers(): array
+{
+    return [
+        CustomerAddressesRelationManager::class,
+        CustomerContactsRelationManager::class,
+    ];
+}
+```
+
+This is useful when you have [multiple view pages](https://filamentphp.com/docs/5.x/resources/viewing-records.md#creating-another-view-page) and need different relation managers on
+each page:
+
+```php
+// ViewCustomer.php
+protected function getAllRelationManagers(): array
+{
+    return [
+        RelationManagers\OrdersRelationManager::class,
+        RelationManagers\SubscriptionsRelationManager::class,
+    ];
+}
+
+// ViewCustomerContact.php 
+protected function getAllRelationManagers(): array
+{
+    return [
+        RelationManagers\ContactsRelationManager::class,
+        RelationManagers\AddressesRelationManager::class,
+    ];
+}
+```
+
+If ` getAllRelationManagers() ` isn't defined, any relation managers defined in the resource will be used.
+
+## Adding view pages to resource sub-navigation
+
+If you're using [resource sub-navigation](https://filamentphp.com/docs/5.x/resources/overview.md#resource-sub-navigation), you can register this page as normal in ` getRecordSubNavigation() ` of the resource:
+
+```php
+use App\Filament\Resources\Customers\Pages\ViewCustomerContact;
+use Filament\Resources\Pages\Page;
+
+public static function getRecordSubNavigation(Page $page): array
+{
+    return $page->generateNavigationItems([
+        // ...
+        ViewCustomerContact::class,
+    ]);
+}
+```
+
+## Custom page content
+
+Each page in Filament has its own [schema](https://filamentphp.com/docs/5.x/schemas), which defines the overall structure and content. You can override the schema for the page by defining a ` content() ` method on it. The ` content() ` method for the View page contains the following components by default:
+
+```php
+use Filament\Schemas\Schema;
+
+public function content(Schema $schema): Schema
+{
+    return $schema
+        ->components([
+            $this->hasInfolist() // This method returns `true` if the page has an infolist defined
+                ? $this->getInfolistContentComponent() // This method returns a component to display the infolist that is defined in this resource
+                : $this->getFormContentComponent(), // This method returns a component to display the form that is defined in this resource
+            $this->getRelationManagersContentComponent(), // This method returns a component to display the relation managers that are defined in this resource
+        ]);
+}
+```
+
+Inside the ` components() ` array, you can insert any [schema component](https://filamentphp.com/docs/5.x/schemas). You can reorder the components by changing the order of the array or remove any of the components that are not needed.
+
+### Using a custom Blade view
+
+For further customization opportunities, you can override the ` $view ` property on the page class to a custom view in your app:
+
+```php
+protected string $view = 'filament.resources.users.pages.view-user';
+```
+
+This assumes that you have created a view at ` resources/views/filament/resources/users/pages/view-user.blade.php `:
+
+```blade
+<x-filament-panels::page>
+    {{-- `$this->getRecord()` will return the current Eloquent record for this page --}}
+    
+    {{ $this->content }} {{-- This will render the content of the page defined in the `content()` method, which can be removed if you want to start from scratch --}}
+</x-filament-panels::page>
+```

@@ -3,22 +3,36 @@
 Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/exceptions
 
 SPATIE
+
 Laravel Permission
 ==================
+
 spatie.be/open-source
+
 Docs
+
 Laravel-permission
+
 Advanced-usage
+
 Exceptions
+
 You are viewing the documentation for **an older version** of this package.
 You can check the version you are using with the following command:
+
 `composer show spatie/laravel-permission`
+
 Exceptions
 ==========
+
 If you need to override exceptions thrown by this package, you can simply use normal Laravel practices for handling exceptions.
+
 An example is shown below for your convenience, but nothing here is specific to this package other than the name of the exception.
+
 You can find all the exceptions added by this package in the code here: https://github.com/spatie/laravel-permission/tree/main/src/Exceptions
+
 **Laravel 10: app/Exceptions/Handler.php**
+
 ```php
 public function register()
 {
@@ -31,6 +45,7 @@ public function register()
 }
 ```
 **Laravel 11: bootstrap/app.php**
+
 ```php
 ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->render(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
@@ -42,5 +57,7 @@ public function register()
 }
 ```
 Database Seeding
+
 Extending
+
 Help us improve this page

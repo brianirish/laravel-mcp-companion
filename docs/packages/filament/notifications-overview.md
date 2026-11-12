@@ -1,187 +1,504 @@
-# Filament - Notifications/Overview
+Source: https://filamentphp.com/docs/5.x/notifications/overview.md
 
-Source: https://filamentphp.com/docs/3.x/notifications/overview
+# Overview
 
-#Requirements
--------------
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/notifications/overview.md
 
-Filament requires the following to run:
+## Introduction
 
-* PHP 8.1+
-* Laravel v10.0+
-* Livewire v3.0+
-
-#Installation
--------------
-
-> If you are upgrading from Filament v2, please review the upgrade guide.
-
-Install the Filament Panel Builder by running the following commands in your Laravel project directory:
-
-```php
-composer require filament/filament:"^3.3" -W
-
-php artisan filament:install --panels
-
-```
-This will create and register a new Laravel service provider called `app/Providers/Filament/AdminPanelProvider.php`.
-
-> If you get an error when accessing your panel, check that the service provider was registered in `bootstrap/providers.php` (Laravel 11 and above) or `config/app.php` (Laravel 10 and below). If not, you should manually add it.
-
-#Create a user
---------------
-
-You can create a new user account with the following command:
-
-```php
-php artisan make:filament-user
-
-```
-Open `/admin` in your web browser, sign in, and start building your app!
-
-Not sure where to start? Review the Getting Started guide to learn how to build a complete Filament admin panel.
-
-#Using other Filament packages
-------------------------------
-
-The Filament Panel Builder pre-installs the Form Builder, Table Builder, Notifications, Actions, Infolists, and Widgets packages. No other installation steps are required to use these packages within a panel.
-
-#Improving Filament panel performance
--------------------------------------
-
-### #Optimizing Filament for production
-
-To optimize Filament for production, you should run the following command in your deployment script:
-
-```php
-php artisan filament:optimize
-
-```
-This command will cache the Filament components and additionally the Blade icons, which can significantly improve the performance of your Filament panels. This command is a shorthand for the commands `php artisan filament:cache-components` and `php artisan icons:cache`.
-
-To clear the caches at once, you can run:
-
-```php
-php artisan filament:optimize-clear
-
-```
-#### #Caching Filament components
-
-If you’re not using the `filament:optimize` command, you may wish to consider running `php artisan filament:cache-components` in your deployment script, especially if you have large numbers of components (resources, pages, widgets, relation managers, custom Livewire components, etc.). This will create cache files in the `bootstrap/cache/filament` directory of your application, which contain indexes for each type of component. This can significantly improve the performance of Filament in some apps, as it reduces the number of files that need to be scanned and auto-discovered for components.
-
-However, if you are actively developing your app locally, you should avoid using this command, as it will prevent any new components from being discovered until the cache is cleared or rebuilt.
-
-You can clear the cache at any time without rebuilding it by running `php artisan filament:clear-cached-components`.
-
-#### #Caching Blade Icons
-
-If you’re not using the `filament:optimize` command, you may wish to consider running `php artisan icons:cache` locally, and also in your deployment script. This is because Filament uses the Blade Icons package, which can be much more performant when cached.
-
-### #Enabling OPcache on your server
-
-From the Laravel Forge documentation:
-
-> Optimizing the PHP OPcache for production will configure OPcache to store your compiled PHP code in memory to greatly improve performance.
-
-Please use a search engine to find the relevant OPcache setup instructions for your environment.
-
-### #Optimizing your Laravel app
-
-You should also consider optimizing your Laravel app for production by running `php artisan optimize` in your deployment script. This will cache the configuration files and routes.
-
-#Deploying to production
-------------------------
-
-### #Allowing users to access a panel
-
-By default, all `User` models can access Filament locally. However, when deploying to production or running unit tests, you must update your `App\Models\User.php` to implement the `FilamentUser` contract — ensuring that only the correct users can access your panel:
+Notifications are sent using a ` Notification ` object that's constructed through a fluent API. Calling the ` send() ` method on the ` Notification ` object will dispatch the notification and display it in your application. Notifications can be sent from PHP or JavaScript, not just Livewire components.
 
 ```php
 <?php
 
-namespace App\Models;
+namespace App\Livewire;
 
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Filament\Notifications\Notification;
+use Livewire\Component;
 
-class User extends Authenticatable implements FilamentUser
+class EditPost extends Component
 {
-    // ...
-
-    public function canAccessPanel(Panel $panel): bool
+    public function save(): void
     {
-        return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
+        // ...
+
+        Notification::make()
+            ->title('Saved successfully')
+            ->success()
+            ->send();
     }
 }
-
 ```
-> If you don’t complete these steps, a 403 Forbidden error will be returned when accessing the app in production.
 
-Learn more about users.
 
-### #Using a production-ready storage disk
 
-Filament has a storage disk defined in the configuration, which by default is set to `public`. You can set the `FILAMENT_FILESYSTEM_DISK` environment variable to change this.
+## Setting a title
 
-The `public` disk, while great for easy local development, is not suitable for production. It does not support file visibility, so features of Filament such as file uploads will create public files. In production, you need to use a production-ready disk such as `s3` with a private access policy, to prevent unauthorized access to the uploaded files.
-
-#Publishing configuration
--------------------------
-
-You can publish the Filament package configuration (if needed) using the following command:
+The main message of the notification is shown in the title. You can set the title as follows:
 
 ```php
-php artisan vendor:publish --tag=filament-config
+use Filament\Notifications\Notification;
 
+Notification::make()
+    ->title('Saved successfully')
+    ->send();
 ```
-#Publishing translations
-------------------------
 
-You can publish the language files for translations (if needed) with the following command:
+The title text can contain basic, safe HTML elements. To generate safe HTML with Markdown, you can use the [` Str::markdown() ` helper](https://laravel.com/docs/strings#method-str-markdown): ` title(Str::markdown('Saved **successfully**')) `
+
+> **Danger**
+>
+> Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
+
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .send()
+```
+
+## Setting an icon
+
+Optionally, a notification can have an [icon](https://filamentphp.com/docs/5.x/styling/icons.md) that's displayed in front of its content. You may also set a color for the icon, which is gray by default:
 
 ```php
-php artisan vendor:publish --tag=filament-panels-translations
+use Filament\Notifications\Notification;
 
+Notification::make()
+    ->title('Saved successfully')
+    ->icon('heroicon-o-document-text')
+    ->iconColor('success')
+    ->send();
 ```
-Since this package depends on other Filament packages, you can publish the language files for those packages with the following commands:
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .icon('heroicon-o-document-text')
+    .iconColor('success')
+    .send()
+```
+
+
+
+Notifications often have a status like ` success `, ` warning `, ` danger ` or ` info `. Instead of manually setting the corresponding [icons](https://filamentphp.com/docs/5.x/styling/icons.md) and [colors](https://filamentphp.com/docs/5.x/styling/colors.md), there's a ` status() ` method which you can pass the status. You may also use the dedicated ` success() `, ` warning() `, ` danger() ` and ` info() ` methods instead. So, cleaning up the above example would look like this:
 
 ```php
-php artisan vendor:publish --tag=filament-actions-translations
+use Filament\Notifications\Notification;
 
-php artisan vendor:publish --tag=filament-forms-translations
-
-php artisan vendor:publish --tag=filament-infolists-translations
-
-php artisan vendor:publish --tag=filament-notifications-translations
-
-php artisan vendor:publish --tag=filament-tables-translations
-
-php artisan vendor:publish --tag=filament-translations
-
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->send();
 ```
-#Upgrading
-----------
 
-> Upgrading from Filament v2? Please review the upgrade guide.
+Or with JavaScript:
 
-Filament automatically upgrades to the latest non-breaking version when you run `composer update`. After any updates, all Laravel caches need to be cleared, and frontend assets need to be republished. You can do this all at once using the `filament:upgrade` command, which should have been added to your `composer.json` file when you ran `filament:install` the first time:
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .send()
+```
+
+
+
+## Setting a background color
+
+Notifications have no background color by default. You may want to provide additional context to your notification by setting a color as follows:
 
 ```php
-"post-autoload-dump": [
-    // ...
-    "@php artisan filament:upgrade"
-],
+use Filament\Notifications\Notification;
 
+Notification::make()
+    ->title('Saved successfully')
+    ->color('success')
+    ->send();
 ```
-Please note that `filament:upgrade` does not actually handle the update process, as Composer does that already. If you’re upgrading manually without a `post-autoload-dump` hook, you can run the command yourself:
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .color('success')
+    .send()
+```
+
+
+
+## Setting a duration
+
+By default, notifications are shown for 6 seconds before they're automatically closed. You may specify a custom duration value in milliseconds as follows:
 
 ```php
-composer update
+use Filament\Notifications\Notification;
 
-php artisan filament:upgrade
-
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->duration(5000)
+    ->send();
 ```
-Edit on GitHub
 
-Still need help? Join our Discord community or open a GitHub discussion
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .duration(5000)
+    .send()
+```
+
+If you prefer setting a duration in seconds instead of milliseconds, you can do so:
+
+```php
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->seconds(5)
+    ->send();
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .seconds(5)
+    .send()
+```
+
+You might want some notifications to not automatically close and require the user to close them manually. This can be achieved by making the notification persistent:
+
+```php
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->persistent()
+    ->send();
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .persistent()
+    .send()
+```
+
+If a notification contains information or a function that is not available elsewhere on the page, make it persistent so that users can choose when to close it.
+
+## Setting body text
+
+Additional notification text can be shown in the ` body() `:
+
+```php
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->body('Changes to the post have been saved.')
+    ->send();
+```
+
+The body text can contain basic, safe HTML elements. To generate safe HTML with Markdown, you can use the [` Str::markdown() ` helper](https://laravel.com/docs/strings#method-str-markdown): ` body(Str::markdown('Changes to the **post** have been saved.')) `
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .body('Changes to the post have been saved.')
+    .send()
+```
+
+
+
+## Adding actions to notifications
+
+Notifications support [Actions](https://filamentphp.com/docs/5.x/actions/overview.md), which are buttons that render below the content of the notification. They can open a URL or dispatch a Livewire event. Actions can be defined as follows:
+
+```php
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->body('Changes to the post have been saved.')
+    ->actions([
+        Action::make('view')
+            ->button(),
+        Action::make('undo')
+            ->color('gray'),
+    ])
+    ->send();
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .body('Changes to the post have been saved.')
+    .actions([
+        new FilamentNotificationAction('view')
+            .button(),
+        new FilamentNotificationAction('undo')
+            .color('gray'),
+    ])
+    .send()
+```
+
+
+
+You can learn more about how to style action buttons [here](https://filamentphp.com/docs/5.x/actions/overview.md).
+
+### Opening URLs from notification actions
+
+You can open a URL, optionally in a new tab, when clicking on an action:
+
+```php
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->body('Changes to the post have been saved.')
+    ->actions([
+        Action::make('view')
+            ->button()
+            ->url(route('posts.show', $post), shouldOpenInNewTab: true),
+        Action::make('undo')
+            ->color('gray'),
+    ])
+    ->send();
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .body('Changes to the post have been saved.')
+    .actions([
+        new FilamentNotificationAction('view')
+            .button()
+            .url('/view')
+            .openUrlInNewTab(),
+        new FilamentNotificationAction('undo')
+            .color('gray'),
+    ])
+    .send()
+```
+
+> **Danger**
+>
+> If you are passing user-controlled data to the ` url() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
+
+
+### Dispatching Livewire events from notification actions
+
+Sometimes you want to execute additional code when a notification action is clicked. This can be achieved by setting a Livewire event which should be dispatched on clicking the action. You may optionally pass an array of data, which will be available as parameters in the event listener on your Livewire component:
+
+```php
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->body('Changes to the post have been saved.')
+    ->actions([
+        Action::make('view')
+            ->button()
+            ->url(route('posts.show', $post), shouldOpenInNewTab: true),
+        Action::make('undo')
+            ->color('gray')
+            ->dispatch('undoEditingPost', [$post->id]),
+    ])
+    ->send();
+```
+
+You can also ` dispatchSelf ` and ` dispatchTo `:
+
+```php
+Action::make('undo')
+    ->color('gray')
+    ->dispatchSelf('undoEditingPost', [$post->id])
+
+Action::make('undo')
+    ->color('gray')
+    ->dispatchTo('another_component', 'undoEditingPost', [$post->id])
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .body('Changes to the post have been saved.')
+    .actions([
+        new FilamentNotificationAction('view')
+            .button()
+            .url('/view')
+            .openUrlInNewTab(),
+        new FilamentNotificationAction('undo')
+            .color('gray')
+            .dispatch('undoEditingPost'),
+    ])
+    .send()
+```
+
+Similarly, ` dispatchSelf ` and ` dispatchTo ` are also available:
+
+```js
+new FilamentNotificationAction('undo')
+    .color('gray')
+    .dispatchSelf('undoEditingPost')
+
+new FilamentNotificationAction('undo')
+    .color('gray')
+    .dispatchTo('another_component', 'undoEditingPost')
+```
+
+### Closing notifications from actions
+
+After opening a URL or dispatching an event from your action, you may want to close the notification right away:
+
+```php
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+
+Notification::make()
+    ->title('Saved successfully')
+    ->success()
+    ->body('Changes to the post have been saved.')
+    ->actions([
+        Action::make('view')
+            ->button()
+            ->url(route('posts.show', $post), shouldOpenInNewTab: true),
+        Action::make('undo')
+            ->color('gray')
+            ->dispatch('undoEditingPost', [$post->id])
+            ->close(),
+    ])
+    ->send();
+```
+
+Or with JavaScript:
+
+```js
+new FilamentNotification()
+    .title('Saved successfully')
+    .success()
+    .body('Changes to the post have been saved.')
+    .actions([
+        new FilamentNotificationAction('view')
+            .button()
+            .url('/view')
+            .openUrlInNewTab(),
+        new FilamentNotificationAction('undo')
+            .color('gray')
+            .dispatch('undoEditingPost')
+            .close(),
+    ])
+    .send()
+```
+
+## Using the JavaScript objects
+
+The JavaScript objects (` FilamentNotification ` and ` FilamentNotificationAction `) are assigned to ` window.FilamentNotification ` and ` window.FilamentNotificationAction `, so they are available in on-page scripts.
+
+You may also import them in a bundled JavaScript file:
+
+```js
+import { Notification, Action as NotificationAction } from '../../vendor/filament/notifications/resources/js/notification.js'
+
+// ...
+```
+
+## Closing a notification with JavaScript
+
+Once a notification has been sent, you can close it on demand by dispatching a browser event on the window called ` close-notification `.
+
+The event needs to contain the ID of the notification you sent. To get the ID, you can use the ` getId() ` method on the ` Notification ` object:
+
+```php
+use Filament\Notifications\Notification;
+
+$notification = Notification::make()
+    ->title('Hello')
+    ->persistent()
+    ->send();
+
+$notificationId = $notification->getId();
+```
+
+To close the notification, you can dispatch the event from Livewire:
+
+```php
+$this->dispatch('close-notification', id: $notificationId);
+```
+
+Or from JavaScript, in this case Alpine.js:
+
+```blade
+<button x-on:click="$dispatch('close-notification', { id: notificationId })" type="button">
+    Close Notification
+</button>
+```
+
+If you are able to retrieve the notification ID, persist it, and then use it to close the notification, that is the recommended approach, as IDs are generated uniquely, and you will not risk closing the wrong notification. However, if it is not possible to persist the random ID, you can pass in a custom ID when sending the notification:
+
+```php
+use Filament\Notifications\Notification;
+
+Notification::make('greeting')
+    ->title('Hello')
+    ->persistent()
+    ->send()
+```
+
+In this case, you can close the notification by dispatching the event with the custom ID:
+
+```blade
+<button x-on:click="$dispatch('close-notification', { id: 'greeting' })" type="button">
+    Close Notification
+</button>
+```
+
+Please be aware that if you send multiple notifications with the same ID, you may experience unexpected side effects, so random IDs are recommended.
+
+## Positioning notifications
+
+You can configure the alignment of the notifications in a service provider or middleware, by calling ` Notifications::alignment() ` and ` Notifications::verticalAlignment() `. You can pass ` Alignment::Start `, ` Alignment::Center `, ` Alignment::End `, ` VerticalAlignment::Start `, ` VerticalAlignment::Center ` or ` VerticalAlignment::End `:
+
+```php
+use Filament\Notifications\Livewire\Notifications;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\VerticalAlignment;
+
+Notifications::alignment(Alignment::Start);
+Notifications::verticalAlignment(VerticalAlignment::End);
+```

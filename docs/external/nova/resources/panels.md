@@ -1,21 +1,13 @@
-# Nova - Resources/Panels
+Source: https://nova.laravel.com/docs/v5/resources/panels.md
 
-*Source: https://nova.laravel.com/docs/v5/resources/panels*
-
----
-
-## On this page
-Back to top
-- [Limiting Displayed Fields](#limiting-displayed-fields)
-- [Collapsible Panels](#collapsible-panels)
-- [Tabs](#tabs)
-  - [Omitting Tab Group Titles](#omitting-tab-group-titles)
-Resources
 # Field Panels
-If your resource contains many fields, your resource “detail” page can become crowded. For that reason, you may choose to break up groups of fields into their own “panels”:
+
+If your resource contains many fields, your resource "detail" page can become crowded. For that reason, you may choose to break up groups of fields into their own "panels":
+
+
 You may accomplish this by creating a new `Panel` instance within the `fields` method of a resource. Each panel requires a name and an array of fields that belong to that panel:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php {1,18-22} theme={null}
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
@@ -41,9 +33,12 @@ public function fields(NovaRequest $request): array
     ];
 }
 ```
-### [​](#limiting-displayed-fields) Limiting Displayed Fields
+
+### Limiting Displayed Fields
+
 You may limit the amount of fields shown in a panel by default using the `limit` method:
-```
+
+```php {9} theme={null}
 use Laravel\Nova\Panel;
 
 // ...
@@ -54,10 +49,14 @@ Panel::make('Profile', [
     Text::make('Place of Birth'),
 ])->limit(1),
 ```
+
 Panels with a defined field limit will display a **Show All Fields** button in order to allow the user to view all of the defined fields when needed.
-### [​](#collapsible-panels) Collapsible Panels
-You may allow field panels to be collapsible by invoking the `collapsible` method when defining the panel. This method utilizes JavaScript’s `localStorage` feature to remember the current state of the panel between requests:
-```
+
+### Collapsible Panels
+
+You may allow field panels to be collapsible by invoking the `collapsible` method when defining the panel. This method utilizes JavaScript's `localStorage` feature to remember the current state of the panel between requests:
+
+```php {9} theme={null}
 use Laravel\Nova\Panel;
 
 // ...
@@ -68,8 +67,10 @@ Panel::make('Profile', [
     Text::make('Place of Birth'),
 ])->collapsible(),
 ```
+
 You may indicate that a panel should always be collapsed by default via the `collapsedByDefault` method:
-```
+
+```php {9} theme={null}
 use Laravel\Nova\Panel;
 
 // ...
@@ -80,11 +81,15 @@ Panel::make('Profile', [
     Text::make('Place of Birth'),
 ])->collapsedByDefault(),
 ```
-## [​](#tabs) Tabs
+
+## Tabs
+
 The `Tab` panel allows you to organize resource fields and relationships within tab panels:
-To create a tab panel when defining your resource’s fields, provide the tab group title and array of tabs to the `Tab::group` method. Each individual tab may be constructed using `Tab::make` and receives a tab title and array of fields:
-app/Nova/Event.php
-```
+
+
+To create a tab panel when defining your resource's fields, provide the tab group title and array of tabs to the `Tab::group` method. Each individual tab may be constructed using `Tab::make` and receives a tab title and array of fields:
+
+```php app/Nova/Event.php {5,23-42} theme={null}
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
@@ -130,9 +135,12 @@ public function fields(NovaRequest $request): array
     ]
 }
 ```
-### [​](#omitting-tab-group-titles) Omitting Tab Group Titles
+
+### Omitting Tab Group Titles
+
 Tab group titles may be omitted by simply providing `fields` to the `Tab::group` method:
-```
+
+```php theme={null}
 use Laravel\Nova\Tabs\Tab;
 
 // ...
@@ -142,6 +150,3 @@ Tab::group(fields: [
     HasManyThrough::make('Tickets'),
 ]),
 ```
-Was this page helpful?
-YesNo
-[Repeater Fields](/docs/v5/resources/repeater-fields)[Relationships](/docs/v5/resources/relationships)

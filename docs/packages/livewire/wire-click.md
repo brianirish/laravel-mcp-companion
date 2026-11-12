@@ -2,98 +2,22 @@
 
 Source: https://livewire.laravel.com/docs/wire-click
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 wire:click
 ==========
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Livewire provides a simple `wire:click` directive for calling component methods (aka actions) when a user clicks a specific element on the page.
 
 For example, given the `ShowInvoice` component below:
 
 ```php
-
 <?php
 
 namespace App\Livewire;
@@ -121,43 +45,113 @@ $this->invoice->file_path, 'invoice.pdf'
 }
 
 }
-
 ```
 You can trigger the `download()` method from the class above when a user clicks a "Download Invoice" button by adding `wire:click="download"`:
 
 ```php
-
 <button type="button" wire:click="download">
 
 Download Invoice
 
 </button>
-
 ```
-#Using `wire:click` on links
-----------------------------
+Passing parameters¶
+-------------------
 
-When using `wire:click` on `<a>` tags, you must append `.prevent` to prevent the default handling of a link in the browser. Otherwise, the browser will visit the provided link and update the page's URL.
+You can pass parameters to actions directly in the `wire:click` directive:
 
 ```php
-
-<a href="#" wire:click.prevent="...">
-
+<button wire:click="delete({{ $post->id }})">Delete</button>
 ```
-#Going deeper
+When the button is clicked, the `delete()` method will be called with the post's ID.
+
+Don't trust action parameters
+
+Action parameters should be treated like HTTP request input and should not be trusted. Always authorize ownership before updating data.
+
+Using on links¶
+---------------
+
+When using `wire:click` on `<a>` tags, you must append `.prevent` to prevent the default link behavior. Otherwise, the browser will navigate to the provided `href`.
+
+```php
+<a href="#" wire:click.prevent="show">View Details</a>
+```
+Preventing re-renders¶
+----------------------
+
+Use `.renderless` to skip re-rendering the component after the action completes. This is useful for actions that only perform side effects (like logging or analytics):
+
+```php
+<button wire:click.renderless="trackClick">Track Event</button>
+```
+Preserving scroll position¶
+---------------------------
+
+By default, updating content may change the scroll position. Use `.preserve-scroll` to maintain the current scroll position:
+
+```php
+<button wire:click.preserve-scroll="loadMore">Load More</button>
+```
+Parallel execution¶
+-------------------
+
+By default, Livewire queues actions within the same component. Use `.async` to allow actions to run in parallel:
+
+```php
+<button wire:click.async="process">Process</button>
+```
+Going deeper¶
 -------------
 
 The `wire:click` directive is just one of many different available event listeners in Livewire. For full documentation on its (and other event listeners) capabilities, visit the Livewire actions documentation page.
 
-On this page
+See also¶
+---------
 
-* Using wire:click on links
-* Going deeper
+* **Actions** — Complete guide to component actions
+* **Events** — Dispatch events from click handlers
+* **wire:confirm** — Add confirmation dialogs to actions
 
-![Flux Ad](/images/flux_ad.jpg)
+Reference¶
+----------
 
-Pro UI Components
+```php
+wire:click="methodName"
 
-Flux · The official Livewire component library
+wire:click="methodName(param1, param2)"
+```
+### Modifiers¶
 
-Built by the folks behind Livewire and Alpine.
+| Modifier | Description |
+| --- | --- |
+| `.prevent` | Prevents default browser behavior |
+| `.stop` | Stops event propagation |
+| `.self` | Only triggers if event originated on this element |
+| `.once` | Ensures listener is only called once |
+| `.debounce` | Debounces handler by 250ms (use `.debounce.500ms` for custom duration) |
+| `.throttle` | Throttles handler to every 250ms minimum (use `.throttle.500ms` for custom) |
+| `.window` | Listens for event on the `window` object |
+| `.document` | Listens for event on the `document` object |
+| `.outside` | Only listens for clicks outside the element |
+| `.passive` | Won't block scroll performance |
+| `.capture` | Listens during the capturing phase |
+| `.camel` | Converts event name to camel case |
+| `.dot` | Converts event name to dot notation |
+| `.renderless` | Skips re-rendering after action completes |
+| `.preserve-scroll` | Maintains scroll position during updates |
+| `.async` | Executes action in parallel instead of queued |
+
+Ecosystem sponsor
+
+
+Neon is a complete backend built around Lakebase Postgres, for developers, startups, and agent platforms, by Databricks.
+neon.com ↗
+
+Return to
+
+wire:bind
+
+Continue to
+
+wire:submit

@@ -3,43 +3,61 @@
 Source: https://spatie.be/docs/laravel-medialibrary/v11/installation-setup
 
 SPATIE
+
 Laravel Media Library
 =====================
+
 spatie.be/open-source
+
 Docs
+
 Laravel-medialibrary
+
 Base installation
+
 Base installation
 =================
+
 ### On this page
+
 1. Preparing the database
 2. Publishing the config file
 3. Adding a media disk
 4. Setting up a queue
 5. Installing Media Library Pro
+
 Media Library can be installed via Composer:
+
 If you only use the base package issue this command:
+
 ```php
 composer require "spatie/laravel-medialibrary"
 ```
 If you have a license for Media Library Pro, you should install `spatie/laravel-media-library-pro` instead. Please refer to our Media Library Pro installation instructions to continue.
+
 ##Preparing the database
 ------------------------
+
 You need to publish the migration to create the `media` table:
+
 ```php
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
 ```
 After that, you need to run migrations.
+
 ```php
 php artisan migrate
 ```
 ##Publishing the config file
 ----------------------------
+
 Publishing the config file is optional:
+
 ```php
 php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
 ```
 This is the default content of the config file:
+
 ```php
 return [
 
@@ -286,7 +304,9 @@ return [
 ```
 ##Adding a media disk
 ---------------------
+
 By default, the media library will store its files on Laravel's `public` disk. If you want a dedicated disk you should add a disk to `config/filesystems.php`. This would be a typical configuration:
+
 ```php
     ...
     'disks' => [
@@ -302,7 +322,9 @@ By default, the media library will store its files on Laravel's `public` disk. I
     ...
 ```
 Don't forget to `.gitignore` the directory of your configured disk, so the files won't end up in your git repo.
+
 To store all media on that disk by default, you should set the `disk_name` config value in the `media-library` config file to the name of the disk you added.
+
 ```php
 // config/media-library.php
 
@@ -313,7 +335,9 @@ return [
 ];
 ```
 Want to use S3? Then follow Laravel's instructions on how to add the S3 Flysystem driver. If possible, we recommend using a remote filesystem like S3 instead of your local filesystem to prevent security issues.
+
 If you keep your originals on a remote disk like S3 but want to store the generated conversions (thumbnails, responsive images) on a different disk — for example, locally so the application can serve them without an extra remote round-trip — you can set the `conversions_disk_name` config value:
+
 ```php
 // config/media-library.php
 
@@ -325,33 +349,43 @@ return [
 ];
 ```
 When `conversions_disk_name` is left `null` (the default), conversions are stored on the same disk as the original media. The setting is overridden by any explicit `->storingConversionsOnDisk(...)` call or by a `storeConversionsOnDisk(...)` setting on a media collection.
+
 ##Setting up a queue
 --------------------
+
 If you are planning on working with image manipulations it's recommended to configure a queue on your server and specify it in the config file.
+
 ### ##Setting up optimization tools
+
 Media library will use these tools to optimize converted images if they are present on your system:
+
 * JpegOptim
 * Optipng
 * Pngquant 2
 * SVGO
 * Gifsicle
 * Avifenc
+
 Here's how to install all the optimizers on Ubuntu:
+
 ```php
 sudo apt install jpegoptim optipng pngquant gifsicle libavif-bin
 npm install -g svgo
 ```
 If you don't want to install `npm` on your Ubuntu server, you can use `snap` which is installed by default:
+
 ```php
 sudo apt install jpegoptim optipng pngquant gifsicle libavif-bin
 sudo snap install svgo
 ```
 Here's how to install all the optimizers on Alpine Linux:
+
 ```php
 apk add jpegoptim optipng pngquant gifsicle libavif-apps
 npm install -g svgo
 ```
 Here's how to install the binaries on MacOS (using Homebrew):
+
 ```php
 brew install jpegoptim
 brew install optipng
@@ -362,9 +396,15 @@ brew install libavif
 ```
 ##Installing Media Library Pro
 ------------------------------
+
 Media Library Pro is an optional add-on package that offers Blade, Vue, and React components to upload files to your application. It integrates beautifully with the laravel-medialibrary.
+
 You can buy a license for Media Library Pro on the product page at spatie.be.
+
 To install Media Library Pro, you should follow these instructions.
+
 Support us
+
 Questions and issues
+
 Help us improve this page

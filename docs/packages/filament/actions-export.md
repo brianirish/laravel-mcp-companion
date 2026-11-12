@@ -1,0 +1,1171 @@
+Source: https://filamentphp.com/docs/5.x/actions/export.md
+
+# Export action
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/actions/export.md
+
+## Introduction
+
+Filament includes an action that is able to export rows to a CSV or XLSX file. When the trigger button is clicked, a modal asks for the columns that they want to export, and what they should be labeled. This feature uses [job batches](https://laravel.com/docs/queues#job-batching) and [database notifications](https://filamentphp.com/docs/5.x/notifications/database-notifications.md), so you need to publish those migrations from Laravel. Also, you need to publish the migrations for tables that Filament uses to store information about exports:
+
+```bash
+php artisan make:queue-batches-table
+php artisan make:notifications-table
+php artisan vendor:publish --tag=filament-actions-migrations
+php artisan migrate
+```
+
+If you'd like to receive export notifications in a panel, you can enable them in the [panel configuration](https://filamentphp.com/docs/5.x/notifications/database-notifications.md#enabling-database-notifications-in-a-panel).
+
+> **Info**
+>
+> If you're using PostgreSQL, make sure that the ` data ` column in the notifications migration is using ` json() `: ` $table->json('data') `.
+
+
+> **Info**
+>
+> If you're using UUIDs for your ` User ` model, make sure that your ` notifiable ` column in the notifications migration is using ` uuidMorphs() `: ` $table->uuidMorphs('notifiable') `.
+
+
+You may use the ` ExportAction ` like so:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+```
+
+
+
+If you want to add this action to the header of a table, you may do so like this:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->headerActions([
+            ExportAction::make()
+                ->exporter(ProductExporter::class),
+        ]);
+}
+```
+
+Or if you want to add it as a table bulk action, so that the user can choose which rows to export, they can use ` Filament\Actions\ExportBulkAction `:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportBulkAction;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->toolbarActions([
+            ExportBulkAction::make()
+                ->exporter(ProductExporter::class),
+        ]);
+}
+```
+
+The ["exporter" class needs to be created](https://filamentphp.com/docs/5.x/actions/export.md#creating-an-exporter) to tell Filament how to export each row.
+
+## Creating an exporter
+
+To create an exporter class for a model, you may use the ` make:filament-exporter ` command, passing the name of a model:
+
+```bash
+php artisan make:filament-exporter Product
+```
+
+This will create a new class in the ` app/Filament/Exports ` directory. You now need to define the [columns](https://filamentphp.com/docs/5.x/actions/export.md#defining-exporter-columns) that can be exported.
+
+### Automatically generating exporter columns
+
+If you'd like to save time, Filament can automatically generate the [columns](https://filamentphp.com/docs/5.x/actions/export.md#defining-exporter-columns) for you, based on your model's database columns, using ` --generate `:
+
+```bash
+php artisan make:filament-exporter Product --generate
+```
+
+## Defining exporter columns
+
+To define the columns that can be exported, you need to override the ` getColumns() ` method on your exporter class, returning an array of ` ExportColumn ` objects:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+public static function getColumns(): array
+{
+    return [
+        ExportColumn::make('name'),
+        ExportColumn::make('sku')
+            ->label('SKU'),
+        ExportColumn::make('price'),
+    ];
+}
+```
+
+### Customizing the label of an export column
+
+The label for each column will be generated automatically from its name, but you can override it by calling the ` label() ` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('sku')
+    ->label('SKU')
+```
+
+### Configuring the default column selection
+
+By default, all columns will be selected when the user is asked which columns they would like to export. You can customize the default selection state for a column with the ` enabledByDefault() ` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->enabledByDefault(false)
+```
+
+You can use the ` enableVisibleTableColumnsByDefault() ` method on the ` ExportAction ` to enable only the columns that are currently visible in the table by default. Columns that use ` enabledByDefault(false) ` will also be disabled by default:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->enableVisibleTableColumnsByDefault()
+```
+
+### Hiding an export column
+
+You may hide a column entirely by using the ` hidden() ` or ` visible() ` method. A hidden column is not shown in the column selection form, and is never written to the exported file:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('sku')
+    ->hidden()
+
+ExportColumn::make('sku')
+    ->visible()
+```
+
+To hide a column conditionally, you may pass a boolean value to either method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('cost_price')
+    ->hidden(fn (): bool => ! auth()->user()->isAdmin())
+
+ExportColumn::make('cost_price')
+    ->visible(fn (): bool => auth()->user()->isAdmin())
+```
+
+> **Info**
+>
+> Unlike table columns, export columns are resolved without a record, so a ` hidden() ` or ` visible() ` closure cannot depend on row data. Use it for schema-level conditions such as the authenticated user, feature flags, or configuration.
+> 
+> To keep a column selectable but unchecked by default instead of hiding it entirely, use [` enabledByDefault(false) `](https://filamentphp.com/docs/5.x/actions/export.md#configuring-the-default-column-selection).
+
+
+### Configuring the column selection form layout
+
+By default, the column selection form uses a single column layout. You can change this using the ` columnMappingColumns() ` method, passing the number of columns you would like to use for the layout on large screens:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->columnMappingColumns(3)
+```
+
+This will display the column selection checkboxes and label inputs in a 3-column layout, making better use of available space when you have many exportable columns. Note that while there will be three columns in the layout on large screens, the layout will still be responsive and there will be fewer columns displayed on smaller screens.
+
+### Disabling column selection
+
+By default, user will be asked which columns they would like to export. You can disable this functionality using ` columnMapping(false) `:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->columnMapping(false)
+```
+
+### Calculated export column state
+
+Sometimes you need to calculate the state of a column, instead of directly reading it from a database column.
+
+By passing a callback function to the ` state() ` method, you can customize the returned state for that column based on the ` $record `:
+
+```php
+use App\Models\Order;
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('amount_including_vat')
+    ->state(function (Order $record): float {
+        return $record->amount * (1 + $record->vat_rate);
+    })
+```
+
+As well as ` $record `, the ` state() ` function can inject various utilities as parameters.
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Export column | ` Filament\Actions\Exports\ExportColumn ` | ` $column ` | The current export column instance. |
+| Exporter | ` ?Filament\Actions\Exports\Exporter ` | ` $exporter ` | The instance of the exporter class that is currently being used for exporting data. |
+| Options | ` array<string, mixed> ` | ` $options ` | The options that were defined when the export started. |
+| Eloquent record | ` ?Illuminate\Database\Eloquent\Model ` | ` $record ` | The Eloquent record that is currently being exported. |
+
+
+### Formatting the value of an export column
+
+You may instead pass a custom formatting callback to ` formatStateUsing() `, which accepts the ` $state ` of the cell, and optionally the Eloquent ` $record `:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('status')
+    ->formatStateUsing(fn (string $state): string => __("statuses.{$state}"))
+```
+
+As well as ` $state `, the ` formatStateUsing() ` function can inject various utilities as parameters.
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Export column | ` Filament\Actions\Exports\ExportColumn ` | ` $column ` | The current export column instance. |
+| Exporter | ` ?Filament\Actions\Exports\Exporter ` | ` $exporter ` | The instance of the exporter class that is currently being used for exporting data. |
+| Options | ` array<string, mixed> ` | ` $options ` | The options that were defined when the export started. |
+| Eloquent record | ` ?Illuminate\Database\Eloquent\Model ` | ` $record ` | The Eloquent record that is currently being exported. |
+| State | ` mixed ` | ` $state ` | The state to format. |
+
+
+If there are [multiple values](https://filamentphp.com/docs/5.x/actions/export.md#exporting-multiple-values-in-a-cell) in the column, the function will be called for each value.
+
+#### Limiting text length
+
+You may ` limit() ` the length of the cell's value:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->limit(50)
+```
+
+As well as allowing a static value, the ` limit() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Export column | ` Filament\Actions\Exports\ExportColumn ` | ` $column ` | The current export column instance. |
+| Exporter | ` ?Filament\Actions\Exports\Exporter ` | ` $exporter ` | The instance of the exporter class that is currently being used for exporting data. |
+| Options | ` array<string, mixed> ` | ` $options ` | The options that were defined when the export started. |
+| Eloquent record | ` ?Illuminate\Database\Eloquent\Model ` | ` $record ` | The Eloquent record that is currently being exported. |
+
+
+#### Limiting word count
+
+You may limit the number of ` words() ` displayed in the cell:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->words(10)
+```
+
+As well as allowing a static value, the ` words() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Export column | ` Filament\Actions\Exports\ExportColumn ` | ` $column ` | The current export column instance. |
+| Exporter | ` ?Filament\Actions\Exports\Exporter ` | ` $exporter ` | The instance of the exporter class that is currently being used for exporting data. |
+| Options | ` array<string, mixed> ` | ` $options ` | The options that were defined when the export started. |
+| Eloquent record | ` ?Illuminate\Database\Eloquent\Model ` | ` $record ` | The Eloquent record that is currently being exported. |
+
+
+#### Adding a prefix or suffix
+
+You may add a ` prefix() ` or ` suffix() ` to the cell's value:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('domain')
+    ->prefix('https://')
+    ->suffix('.com')
+```
+
+As well as allowing static values, the ` prefix() ` and ` suffix() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the functions as parameters.
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Export column | ` Filament\Actions\Exports\ExportColumn ` | ` $column ` | The current export column instance. |
+| Exporter | ` ?Filament\Actions\Exports\Exporter ` | ` $exporter ` | The instance of the exporter class that is currently being used for exporting data. |
+| Options | ` array<string, mixed> ` | ` $options ` | The options that were defined when the export started. |
+| Eloquent record | ` ?Illuminate\Database\Eloquent\Model ` | ` $record ` | The Eloquent record that is currently being exported. |
+
+
+### Exporting multiple values in a cell
+
+By default, if there are multiple values in the column, they will be comma-separated. You may use the ` listAsJson() ` method to list them as a JSON array instead:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('tags')
+    ->listAsJson()
+```
+
+### Displaying data from relationships
+
+You may use "dot notation" to access columns within relationships. The name of the relationship comes first, followed by a period, followed by the name of the column to display:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('author.name')
+```
+
+### Counting relationships
+
+If you wish to count the number of related records in a column, you may use the ` counts() ` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('users_count')
+    ->counts('users')
+```
+
+In this example, ` users ` is the name of the relationship to count from. The name of the column must be ` users_count `, as this is the convention that [Laravel uses](https://laravel.com/docs/eloquent-relationships#counting-related-models) for storing the result.
+
+If you'd like to scope the relationship before counting, you can pass an array to the method, where the key is the relationship name and the value is the function to scope the Eloquent query with:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportColumn::make('users_count')
+    ->counts([
+        'users' => fn (Builder $query) => $query->where('is_active', true),
+    ])
+```
+
+### Determining relationship existence
+
+If you simply wish to indicate whether related records exist in a column, you may use the ` exists() ` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('users_exists')
+    ->exists('users')
+```
+
+In this example, ` users ` is the name of the relationship to check for existence. The name of the column must be ` users_exists `, as this is the convention that [Laravel uses](https://laravel.com/docs/eloquent-relationships#other-aggregate-functions) for storing the result.
+
+If you'd like to scope the relationship before checking existence, you can pass an array to the method, where the key is the relationship name and the value is the function to scope the Eloquent query with:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportColumn::make('users_exists')
+    ->exists([
+        'users' => fn (Builder $query) => $query->where('is_active', true),
+    ])
+```
+
+### Aggregating relationships
+
+Filament provides several methods for aggregating a relationship field, including ` avg() `, ` max() `, ` min() ` and ` sum() `. For instance, if you wish to show the average of a field on all related records in a column, you may use the ` avg() ` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('users_avg_age')
+    ->avg('users', 'age')
+```
+
+In this example, ` users ` is the name of the relationship, while ` age ` is the field that is being averaged. The name of the column must be ` users_avg_age `, as this is the convention that [Laravel uses](https://laravel.com/docs/eloquent-relationships#other-aggregate-functions) for storing the result.
+
+If you'd like to scope the relationship before aggregating, you can pass an array to the method, where the key is the relationship name and the value is the function to scope the Eloquent query with:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportColumn::make('users_avg_age')
+    ->avg([
+        'users' => fn (Builder $query) => $query->where('is_active', true),
+    ], 'age')
+```
+
+## Configuring the export formats
+
+By default, the export action will generate both CSV and XLSX formats and allow user to choose between them in the notification. You can use the ` ExportFormat ` enum to customize this, by passing an array of formats to the ` formats() ` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+use Filament\Actions\Exports\Enums\ExportFormat;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->formats([
+        ExportFormat::Csv,
+    ])
+    // or
+    ->formats([
+        ExportFormat::Xlsx,
+    ])
+    // or
+    ->formats([
+        ExportFormat::Xlsx,
+        ExportFormat::Csv,
+    ])
+```
+
+Alternatively, you can override the ` getFormats() ` method on the exporter class, which will set the default formats for all actions that use that exporter:
+
+```php
+use Filament\Actions\Exports\Enums\ExportFormat;
+
+public function getFormats(): array
+{
+    return [
+        ExportFormat::Csv,
+    ];
+}
+```
+
+### Customizing how export files are downloaded
+
+By default, each export format uses its own downloader to return a streamed response. You may customize the downloader for an exporter by overriding the ` getDownloader() ` method:
+
+```php
+use App\Filament\Exports\Downloaders\CustomCsvDownloader;
+use App\Filament\Exports\Downloaders\CustomXlsxDownloader;
+use Filament\Actions\Exports\Downloaders\Contracts\Downloader;
+use Filament\Actions\Exports\Enums\Contracts\ExportFormat as ExportFormatInterface;
+use Filament\Actions\Exports\Enums\ExportFormat;
+
+public static function getDownloader(ExportFormatInterface $format): Downloader
+{
+    return match ($format) {
+        ExportFormat::Csv => app(CustomCsvDownloader::class),
+        ExportFormat::Xlsx => app(CustomXlsxDownloader::class),
+        default => $format->getDownloader(),
+    };
+}
+```
+
+A downloader is an invokable class that accepts the ` Export ` model and returns a Symfony ` Response `. This response may stream a download, return a file, or redirect the user to a temporary URL on a remote filesystem.
+
+Filament's built-in download route only resolves the ` ExportFormat::Csv ` and ` ExportFormat::Xlsx ` formats. If you use a custom ` ExportFormatInterface ` implementation, its ` getDownloadNotificationAction() ` method must link to a route that handles the custom format.
+
+If your custom downloader only changes how the generated content is delivered, you may use ` CsvExportContentGenerator ` to iterate over the generated CSV chunks, or ` XlsxExportContentGenerator ` to write the generated rows to an OpenSpout ` Writer `. Filament resolves both classes from the container so that you can reuse the built-in content generation without duplicating it. You must open the ` Writer ` before passing it to ` XlsxExportContentGenerator ` and close it afterwards. ` XlsxExportContentGenerator ` mirrors Filament's on-demand XLSX download and does not apply the writer options, styles, custom row creation, or writer lifecycle hooks that are used when the queued XLSX file is generated.
+
+## Modifying the export query
+
+By default, if you are using the ` ExportAction ` with a table, the action will use the table's currently filtered and sorted query to export the data. If you don't have a table, it will use the model's default query. To modify the query builder before exporting, you can use the ` modifyQueryUsing() ` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true))
+```
+
+You may inject the ` $options ` argument into the function, which is an array of [options](https://filamentphp.com/docs/5.x/actions/export.md#using-export-options) for that export:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->modifyQueryUsing(fn (Builder $query, array $options) => $query->where('is_active', $options['isActive'] ?? true))
+```
+
+Alternatively, you can override the ` modifyQuery() ` method on the exporter class, which will modify the query for all actions that use that exporter:
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+public static function modifyQuery(Builder $query): Builder
+{
+    return $query->with([
+        'purchasable' => fn (MorphTo $morphTo) => $morphTo->morphWith([
+            ProductPurchase::class => ['product'],
+            ServicePurchase::class => ['service'],
+            Subscription::class => ['plan'],
+        ]),
+    ]);
+}
+```
+
+## Configuring the export filesystem
+
+### Customizing the storage disk
+
+Exports use the storage disk defined in the [configuration file](https://filamentphp.com/docs/5.x/introduction/installation.md#publishing-configuration), which defaults to ` local `. You can change it using the ` FILESYSTEM_DISK ` environment variable. If the configured disk is ` public ` and a ` local ` disk exists, exports use ` local ` instead. Explicitly setting ` fileDisk('public') ` overrides that fallback.
+
+> **Warning**
+>
+> Use private storage for exports, such as a non-public ` local ` disk or ` s3 ` with a private access policy. Filament's [download authorization](https://filamentphp.com/docs/5.x/actions/export.md#authorization) does not protect files exposed directly by your storage disk or web server.
+
+
+To use a different disk for a specific export, pass its name to ` fileDisk() ` on the action:
+
+```php
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->fileDisk('s3')
+```
+
+You may set the disk for all export actions at once in the ` boot() ` method of a service provider such as ` AppServiceProvider `:
+
+```php
+use Filament\Actions\ExportAction;
+
+ExportAction::configureUsing(fn (ExportAction $action) => $action->fileDisk('s3'));
+```
+
+Alternatively, you can override the ` getFileDiskName() ` method on the exporter class, returning the name of the disk:
+
+```php
+public function getFileDiskName(): string
+{
+    return 's3';
+}
+```
+
+Export files that are created are the developer's responsibility to delete if they wish. Filament does not delete these files in case the exports need to be downloaded again at a later date.
+
+### Configuring the export file names
+
+By default, exported files are given a name generated based on the export's ID and type. You can customize the file name by using the ` fileName() ` method on the action:
+
+```php
+use Filament\Actions\ExportAction;
+use Filament\Actions\Exports\Models\Export;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->fileName(fn (Export $export): string => "products-{$export->getKey()}")
+```
+
+Alternatively, you can override the ` getFileName() ` method on the exporter class and return a custom string:
+
+```php
+use Filament\Actions\Exports\Models\Export;
+
+public function getFileName(Export $export): string
+{
+    return "products-{$export->getKey()}";
+}
+```
+
+## Using export options
+
+The export action can render extra form components that the user can interact with when exporting a CSV. This can be useful to allow the user to customize the behavior of the exporter. For instance, you might want a user to be able to choose the format of specific columns when exporting. To do this, you can return schema components from the ` getOptionsFormComponents() ` method on your exporter class:
+
+```php
+use Filament\Forms\Components\TextInput;
+
+public static function getOptionsFormComponents(): array
+{
+    return [
+        TextInput::make('descriptionLimit')
+            ->label('Limit the length of the description column content')
+            ->integer(),
+    ];
+}
+```
+
+Alternatively, you can pass a set of static options to the exporter through the ` options() ` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->options([
+        'descriptionLimit' => 250,
+    ])
+```
+
+As well as allowing a static value, the ` options() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/actions/overview.md#action-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Action | ` Filament\Actions\Action ` | ` $action ` | The current action instance. |
+| Arguments | ` array<string, mixed> ` | ` $arguments ` | The array of arguments passed to the action when it was triggered. |
+| Data | ` array<string, mixed> ` | ` $data ` | The array of data submitted from form fields in the action's modal. It will be empty before the modal form is submitted. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current action, if one is attached. |
+| Mounted actions | ` array<Filament\Actions\Action> ` | ` $mountedActions ` | The array of actions that are currently mounted in the Livewire component. This is useful for accessing data from parent actions. |
+| Parent action | ` ?Filament\Actions\Action ` | ` $parentAction ` | The mounted parent action, or the containing parent action if one exists. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current action, if one is attached. |
+| Schema | ` Filament\Schemas\Schema ` | ` $schema ` | \[Actions in schemas only\] The schema object that this action belongs to. |
+| Schema component | ` Filament\Schemas\Components\Component ` | ` $schemaComponent ` | \[Actions in schemas only\] The schema component that this action belongs to. |
+| Schema component state | ` mixed ` | ` $schemaComponentState ` | \[Actions in schemas only\] The current value of the schema component. |
+| Schema get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $schemaGet ` | \[Actions in schemas only\] A function for retrieving values from the schema data. Validation is not run on form fields. |
+| Schema operation | ` string ` | ` $schemaOperation ` | \[Actions in schemas only\] The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Schema set function | ` Filament\Schemas\Components\Utilities\Set ` | ` $schemaSet ` | \[Actions in schemas only\] A function for setting values in the schema data. |
+| Schema state | ` mixed ` | ` $schemaState ` | \[Actions in schemas only\] The current value of the schema that this action belongs to, like the current repeater item. |
+| Selected Eloquent records | ` Illuminate\Support\Collection\|Illuminate\Support\LazyCollection ` | ` $selectedRecords ` | \[Actions in tables only\] The selected records, filtered by individual record authorization when it is enabled. Requires ` accessSelectedRecords() `. |
+| Selected Eloquent records query | ` Illuminate\Database\Eloquent\Builder ` | ` $selectedRecordsQuery ` | \[Actions in Eloquent-query-backed tables only\] The query for the selected records. Requires ` accessSelectedRecords() `. Individual record authorization has not been applied to this query. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
+
+
+Now, you can access the data from these options inside the exporter class, by injecting the ` $options ` argument into any closure function. For example, you might want to use it inside ` formatStateUsing() ` to [format a column's value](https://filamentphp.com/docs/5.x/actions/export.md#formatting-the-value-of-an-export-column):
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->formatStateUsing(function (string $state, array $options): string {
+        return (string) str($state)->limit($options['descriptionLimit'] ?? 100);
+    })
+```
+
+Alternatively, since the ` $options ` argument is passed to all closure functions, you can access it inside ` limit() `:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->limit(fn (array $options): int => $options['descriptionLimit'] ?? 100)
+```
+
+## Using a custom user model
+
+By default, the ` exports ` table has a ` user_id ` column. That column is constrained to the ` users ` table:
+
+```php
+$table->foreignId('user_id')->constrained()->cascadeOnDelete();
+```
+
+In the ` Export ` model, the ` user() ` relationship is defined as a ` BelongsTo ` relationship to the ` App\Models\User ` model. If the ` App\Models\User ` model does not exist, or you want to use a different one, you can bind a new ` Authenticatable ` model to the container in a service provider's ` register() ` method:
+
+```php
+use App\Models\Admin;
+use Illuminate\Contracts\Auth\Authenticatable;
+
+$this->app->bind(Authenticatable::class, Admin::class);
+```
+
+If your authenticatable model uses a different table to ` users `, you should pass that table name to ` constrained() `:
+
+```php
+$table->foreignId('user_id')->constrained('admins')->cascadeOnDelete();
+```
+
+### Using a polymorphic user relationship
+
+If you want to associate exports with multiple user models, you can use a polymorphic ` MorphTo ` relationship instead. To do this, you need to replace the ` user_id ` column in the ` exports ` table:
+
+```php
+$table->morphs('user');
+```
+
+Then, in a service provider's ` boot() ` method, you should call ` Export::polymorphicUserRelationship() ` to swap the ` user() ` relationship on the ` Export ` model to a ` MorphTo ` relationship:
+
+```php
+use Filament\Actions\Exports\Models\Export;
+
+Export::polymorphicUserRelationship();
+```
+
+## Limiting the maximum number of rows that can be exported
+
+To prevent server overload, you may wish to limit the maximum number of rows that can be exported from one CSV file. You can do this by calling the ` maxRows() ` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->maxRows(100000)
+```
+
+## Changing the export chunk size
+
+Filament will chunk the CSV, and process each chunk in a different queued job. By default, chunks are 100 rows at a time. You can change this by calling the ` chunkSize() ` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->chunkSize(250)
+```
+
+As well as allowing a static value, the ` chunkSize() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/actions/overview.md#action-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Action | ` Filament\Actions\Action ` | ` $action ` | The current action instance. |
+| Arguments | ` array<string, mixed> ` | ` $arguments ` | The array of arguments passed to the action when it was triggered. |
+| Data | ` array<string, mixed> ` | ` $data ` | The array of data submitted from form fields in the action's modal. It will be empty before the modal form is submitted. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current action, if one is attached. |
+| Mounted actions | ` array<Filament\Actions\Action> ` | ` $mountedActions ` | The array of actions that are currently mounted in the Livewire component. This is useful for accessing data from parent actions. |
+| Parent action | ` ?Filament\Actions\Action ` | ` $parentAction ` | The mounted parent action, or the containing parent action if one exists. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current action, if one is attached. |
+| Schema | ` Filament\Schemas\Schema ` | ` $schema ` | \[Actions in schemas only\] The schema object that this action belongs to. |
+| Schema component | ` Filament\Schemas\Components\Component ` | ` $schemaComponent ` | \[Actions in schemas only\] The schema component that this action belongs to. |
+| Schema component state | ` mixed ` | ` $schemaComponentState ` | \[Actions in schemas only\] The current value of the schema component. |
+| Schema get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $schemaGet ` | \[Actions in schemas only\] A function for retrieving values from the schema data. Validation is not run on form fields. |
+| Schema operation | ` string ` | ` $schemaOperation ` | \[Actions in schemas only\] The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Schema set function | ` Filament\Schemas\Components\Utilities\Set ` | ` $schemaSet ` | \[Actions in schemas only\] A function for setting values in the schema data. |
+| Schema state | ` mixed ` | ` $schemaState ` | \[Actions in schemas only\] The current value of the schema that this action belongs to, like the current repeater item. |
+| Selected Eloquent records | ` Illuminate\Support\Collection\|Illuminate\Support\LazyCollection ` | ` $selectedRecords ` | \[Actions in tables only\] The selected records, filtered by individual record authorization when it is enabled. Requires ` accessSelectedRecords() `. |
+| Selected Eloquent records query | ` Illuminate\Database\Eloquent\Builder ` | ` $selectedRecordsQuery ` | \[Actions in Eloquent-query-backed tables only\] The query for the selected records. Requires ` accessSelectedRecords() `. Individual record authorization has not been applied to this query. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
+
+
+> **Tip**
+>
+> If you are encountering memory or timeout issues when importing large CSV files, you may wish to reduce the chunk size.
+
+
+## Changing the CSV delimiter
+
+The default delimiter for CSVs is the comma (` , `). If you want to export using a different delimiter, you may override the ` getCsvDelimiter() ` method on the exporter class, returning a new one:
+
+```php
+public static function getCsvDelimiter(): string
+{
+    return ';';
+}
+```
+
+You can only specify a single character, otherwise an exception will be thrown.
+
+## Customizing XLSX files
+
+### Styling XLSX rows
+
+If you want to style the cells of the XLSX file, you may override the ` getXlsxCellStyle() ` method on the exporter class, returning an [OpenSpout ` Style ` object](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling):
+
+```php
+use OpenSpout\Common\Entity\Style\Style;
+
+public function getXlsxCellStyle(): ?Style
+{
+    return (new Style())
+        ->setFontSize(12)
+        ->setFontName('Consolas');
+}
+```
+
+If you want to use a different style for the header cells of the XLSX file only, you may override the ` getXlsxHeaderCellStyle() ` method on the exporter class, returning an [OpenSpout ` Style ` object](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling):
+
+```php
+use OpenSpout\Common\Entity\Style\CellAlignment;
+use OpenSpout\Common\Entity\Style\CellVerticalAlignment;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\Style;
+
+public function getXlsxHeaderCellStyle(): ?Style
+{
+    return (new Style())
+        ->setFontBold()
+        ->setFontItalic()
+        ->setFontSize(14)
+        ->setFontName('Consolas')
+        ->setFontColor(Color::rgb(255, 255, 77))
+        ->setBackgroundColor(Color::rgb(0, 0, 0))
+        ->setCellAlignment(CellAlignment::CENTER)
+        ->setCellVerticalAlignment(CellVerticalAlignment::CENTER);
+}
+```
+
+### Styling XLSX columns
+
+The ` makeXlsxRow() ` and ` makeXlsxHeaderRow() ` methods on the exporter class allow you to customize the styling of individual cells within a row. By default, the methods are implemented like this:
+
+```php
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+
+/**
+ * @param array<mixed> $values
+ */
+public function makeXlsxRow(array $values, ?Style $style = null): Row
+{
+    return Row::fromValues($values, $style);
+}
+```
+
+When a user exports, they can choose which columns to export. As such, the ` $this->columnMap ` property may be used to determine which columns are being exported and in which order. You can replace ` Row::fromValues() ` with an array of ` Cell ` objects, which allow you to style them individually using [OpenSpout ` Style ` objects](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling). A ` StyleMerger ` can be used to merge the default style with the custom style for a cell, allowing you to apply additional styles on top of the default ones:
+
+```php
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\Common\Manager\Style\StyleMerger;
+
+/**
+ * @param array<mixed> $values
+ */
+public function makeXlsxRow(array $values, ?Style $style = null): Row
+{
+    $styleMerger = new StyleMerger();
+
+    $cells = [];
+    
+    foreach (array_keys($this->columnMap) as $columnIndex => $column) {
+        $cells[] = match ($column) {
+            'name' => Cell::fromValue(
+                $values[$columnIndex],
+                $styleMerger->merge(
+                    (new Style())->setFontUnderline(),
+                    $style,
+                ),
+            ),
+            'price' => Cell::fromValue(
+                $values[$columnIndex],
+                (new Style())->setFontSize(12),
+            ),
+            default => Cell::fromValue($values[$columnIndex]),
+        };
+    }
+    
+    return new Row($cells, $style);
+}
+```
+
+### Customizing the XLSX writer
+
+If you want to pass "options" to the [OpenSpout XLSX ` Writer `](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#column-widths), you can return an ` OpenSpout\Writer\XLSX\Options ` instance from the ` getXlsxWriterOptions() ` method of the exporter class:
+
+```php
+use OpenSpout\Writer\XLSX\Options;
+
+public function getXlsxWriterOptions(): ?Options
+{
+    $options = new Options();
+    $options->setColumnWidth(10, 1);
+    $options->setColumnWidthForRange(12, 2, 3);
+    
+    return $options;
+}
+```
+
+If you want to customize the XLSX writer immediately after it is opened, before any rows have been written, you can override the ` configureXlsxWriterAfterOpen() ` method on the exporter class. This method receives the ` Writer ` instance as a parameter, and you can modify it before the header and data rows are written. This is useful for adding custom rows, such as a title or sub-header, above the exported table:
+
+```php
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\XLSX\Writer;
+
+public function configureXlsxWriterAfterOpen(Writer $writer): Writer
+{
+    $writer->addRow(Row::fromValues(
+        ['This is a custom header added after opening the XLSX writer.'],
+        (new Style())->setShouldWrapText(false),
+    ));
+
+    return $writer;
+}
+```
+
+> **Warning**
+>
+> Any rows you add here appear above the header row, shifting the exported table down. If you also use ` configureXlsxWriterBeforeClose() ` to freeze rows, remember to account for the extra rows in ` setFreezeRow() `.
+
+
+If you want to customize the XLSX writer before it is closed, you can override the ` configureXlsxWriterBeforeClose() ` method on the exporter class. This method receives the ` Writer ` instance as a parameter, and you can modify it before it is closed:
+
+```php
+use OpenSpout\Writer\XLSX\Entity\SheetView;
+use OpenSpout\Writer\XLSX\Writer;
+
+public function configureXlsxWriterBeforeClose(Writer $writer): Writer
+{
+    $sheetView = new SheetView();
+    $sheetView->setFreezeRow(2);
+    $sheetView->setFreezeColumn('B');
+    
+    $sheet = $writer->getCurrentSheet();
+    $sheet->setSheetView($sheetView);
+    $sheet->setName('export');
+    
+    return $writer;
+}
+```
+
+## Customizing the completion notification
+
+When an export finishes, Filament sends a notification to the user who started it. You can customize the title and body of that notification by overriding ` getCompletedNotificationTitle() ` and ` getCompletedNotificationBody() ` on your exporter:
+
+```php
+use Filament\Actions\Exports\Models\Export;
+
+public static function getCompletedNotificationTitle(Export $export): string
+{
+    return 'Your product export is ready';
+}
+
+public static function getCompletedNotificationBody(Export $export): string
+{
+    return $export->successful_rows . ' products were exported.';
+}
+```
+
+For anything beyond the title and body — for example, changing the notification color, adding extra actions, or replacing the icon — override ` modifyCompletedNotification() `. You can either mutate the ` Notification ` passed in and return it, or build and return a completely new one:
+
+```php
+use Filament\Actions\Action;
+use Filament\Actions\Exports\Models\Export;
+use Filament\Notifications\Notification;
+
+public static function modifyCompletedNotification(Notification $notification, Export $export): Notification
+{
+    $notification->icon('heroicon-o-shopping-bag');
+
+    if ($export->getOptions()['notifyTeam'] ?? false) {
+        $notification->actions([
+            ...$notification->getActions(),
+            Action::make('shareWithTeam')
+                ->url(route('exports.share', $export)),
+        ]);
+    }
+
+    return $notification;
+}
+```
+
+The ` Export ` model exposes the column mapping and options the user selected via ` $export->getColumnMap() ` and ` $export->getOptions() `, so you can tailor the notification based on what the user exported.
+
+## Customizing the export job
+
+The default job for processing exports is ` Filament\Actions\Exports\Jobs\PrepareCsvExport `. If you want to extend this class and override any of its methods, you may replace the original class in the ` register() ` method of a service provider:
+
+```php
+use App\Jobs\PrepareCsvExport;
+use Filament\Actions\Exports\Jobs\PrepareCsvExport as BasePrepareCsvExport;
+
+$this->app->bind(BasePrepareCsvExport::class, PrepareCsvExport::class);
+```
+
+Or, you can pass the new job class to the ` job() ` method on the action, to customize the job for a specific export:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use App\Jobs\PrepareCsvExport;
+use Filament\Actions\ExportAction;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->job(PrepareCsvExport::class)
+```
+
+### Customizing the export queue and connection
+
+By default, the export system will use the default queue and connection. If you'd like to customize the queue used for jobs of a certain exporter, you may override the ` getJobQueue() ` method in your exporter class:
+
+```php
+public function getJobQueue(): ?string
+{
+    return 'exports';
+}
+```
+
+You can also customize the connection used for jobs of a certain exporter, by overriding the ` getJobConnection() ` method in your exporter class:
+
+```php
+public function getJobConnection(): ?string
+{
+    return 'sqs';
+}
+```
+
+### Customizing the export job middleware
+
+By default, the export system will only process one job at a time from each export. This is to prevent the server from being overloaded, and other jobs from being delayed by large exports. That functionality is defined in the ` WithoutOverlapping ` middleware on the exporter class:
+
+```php
+use Illuminate\Queue\Middleware\WithoutOverlapping;
+
+public function getJobMiddleware(): array
+{
+    return [
+        (new WithoutOverlapping("filament:exports:{$this->export->getKey()}"))->expireAfter(600),
+    ];
+}
+```
+
+If you'd like to customize the middleware that is applied to jobs of a certain exporter, you may override this method in your exporter class. You can read more about job middleware in the [Laravel docs](https://laravel.com/docs/queues#job-middleware).
+
+### Customizing the export job retries
+
+By default, the export system will retry a job for 24 hours, or until it fails with 5 unhandled exceptions, whichever happens first. This is to allow for temporary issues, such as the database being unavailable, to be resolved. You may change the time period for the job to retry, which is defined in the ` getJobRetryUntil() ` method on the exporter class:
+
+```php
+use Carbon\CarbonInterface;
+
+public function getJobRetryUntil(): ?CarbonInterface
+{
+    return now()->addHours(12);
+}
+```
+
+You can read more about job retries in the [Laravel docs](https://laravel.com/docs/queues#max-job-attempts-and-timeout).
+
+#### Customizing the export job backoff strategy
+
+By default, the export system will wait 1 minute, then 2 minutes, then 5 minutes, then 10 minutes thereafter before retrying a job. This is to prevent the server from being overloaded by a job that is failing repeatedly. That functionality is defined in the ` getJobBackoff() ` method on the exporter class:
+
+```php
+/**
+* @return int | array<int> | null
+ */
+public function getJobBackoff(): int | array | null
+{
+    return [60, 120, 300, 600];
+}
+```
+
+You can read more about job backoff, including how to configure exponential backoffs, in the [Laravel docs](https://laravel.com/docs/queues#dealing-with-failed-jobs).
+
+### Customizing the export job tags
+
+By default, the export system will tag each job with the ID of the export. This is to allow you to easily find all jobs related to a certain export. That functionality is defined in the ` getJobTags() ` method on the exporter class:
+
+```php
+public function getJobTags(): array
+{
+    return ["export{$this->export->getKey()}"];
+}
+```
+
+If you'd like to customize the tags that are applied to jobs of a certain exporter, you may override this method in your exporter class.
+
+### Customizing the export job batch name
+
+By default, the export system doesn't define any name for the job batches. If you'd like to customize the name that is applied to job batches of a certain exporter, you may override the ` getJobBatchName() ` method in your exporter class:
+
+```php
+public function getJobBatchName(): ?string
+{
+    return 'product-export';
+}
+```
+
+## Testing
+
+To test exporter row values and export actions, see the [Testing exports](https://filamentphp.com/docs/5.x/testing/testing-exports.md) guide.
+
+## Authorization
+
+By default, only the user who started the export may download files that get generated. If you'd like to customize the authorization logic, you may create an ` ExportPolicy ` class, and [register it in your ` AuthServiceProvider `](https://laravel.com/docs/authorization#registering-policies):
+
+```php
+use App\Policies\ExportPolicy;
+use Filament\Actions\Exports\Models\Export;
+
+protected $policies = [
+    Export::class => ExportPolicy::class,
+];
+```
+
+The ` view() ` method of the policy will be used to authorize access to the downloads.
+
+Please note that if you define a policy, the existing logic of ensuring only the user who started the export can access it will be removed. You will need to add that logic to your policy if you want to keep it:
+
+```php
+use App\Models\User;
+use Filament\Actions\Exports\Models\Export;
+
+public function view(User $user, Export $export): bool
+{
+    return $export->user()->is($user);
+}
+```
+
+## Security
+
+### Per-record authorization
+
+The export system does not perform per-record authorization checks. When an export is triggered, all records matching the table query (or the model's full dataset, if used outside a table) are included in the export without consulting your application's [Laravel policies](https://laravel.com/docs/authorization#creating-policies). This means that if a user is allowed to trigger an export, they may receive records they would not normally be authorized to view through your application's UI.
+
+If you need to restrict which records are exported, you should scope the query using the [` modifyQueryUsing() ` method](https://filamentphp.com/docs/5.x/actions/export.md#modifying-the-export-query):
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->modifyQueryUsing(fn (Builder $query) => $query->whereBelongsTo(auth()->user()))
+```
+
+You could also apply [global scopes](https://laravel.com/docs/eloquent#global-scopes) to your model to ensure that only authorized records are ever queried.
+
+> **Danger**
+>
+> If your application has per-record visibility rules, you should scope the export query to ensure users only receive records they are authorized to view.
+
+
+### CSV formula injection
+
+Filament's export system writes data to CSV and XLSX files exactly as it is stored in the database, without any transformation. This means that if your database contains values beginning with characters like ` = `, ` + `, ` - `, or ` @ `, they will appear unchanged in the exported file. When opened in spreadsheet software such as Microsoft Excel or Google Sheets, these values may be interpreted as formulas, which could pose a security risk if your data includes untrusted or user-submitted content. You should ensure that your users are aware of this risk, or sanitize the data before export using the [` formatStateUsing() ` method](https://filamentphp.com/docs/5.x/actions/export.md#formatting-the-value-of-an-export-column) on each column, for example by prefixing values with a single quote (` ' `) to prevent formula interpretation.
+
+Alternatively, you may opt in to Filament's built-in protection. When enabled on a column, strings beginning with a formula-triggering character (` = `, ` + `, ` - `, ` @ `, a tab, or a carriage return) are automatically prefixed with a single quote (` ' `) so that spreadsheet software treats them as plain text. Purely numeric strings beginning with ` + ` or ` - `, such as ` +42 ` or ` -5 `, remain unchanged. Enable it using the ` preventFormulaInjection() ` method on the column:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->preventFormulaInjection()
+```
+
+If you would like to enable this protection for every export column across your application, you can use the ` configureUsing() ` method inside the ` boot() ` method of a service provider. Since this is applied to all columns, you can opt an individual column back out by passing ` false ` to ` preventFormulaInjection() `:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::configureUsing(function (ExportColumn $column): void {
+    $column->preventFormulaInjection();
+});
+
+// Opt a specific column back out:
+ExportColumn::make('temperature')
+    ->preventFormulaInjection(false)
+```
+
+> **Warning**
+>
+> This protection is **opt in** and disabled by default, because prefixing a single quote alters legitimate data. For example, a phone number like ` +44 1234 567890 ` begins with a formula trigger and would be rewritten to ` '+44 1234 567890 `. Only enable it when you are exporting untrusted or user-submitted content, and make sure the transformation is acceptable for the columns you enable it on.

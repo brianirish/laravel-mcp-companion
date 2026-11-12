@@ -1,33 +1,34 @@
-# Vapor - Projects/Development
+Source: https://docs.vapor.build/projects/development.md
 
-*Source: https://docs.vapor.build/projects/development*
-
----
-
-## On this page
-Back to top
-- [Binary Responses](#binary-responses)
-- [Configuring OpenSSL](#configuring-openssl)
-- [“After Response” Jobs](#%E2%80%9Cafter-response%E2%80%9D-jobs)
-- [Inertia SSR](#inertia-ssr)
-Projects
 # Development
-Learn how to develop applications for Laravel Vapor.
-## [​](#binary-responses) Binary Responses
+
+> Learn how to develop applications for Laravel Vapor.
+
+## Binary Responses
+
 To return binary responses, such as PDF downloads, from your Vapor application, your HTTP response should include the `X-Vapor-Base64-Encode` header:
-```
+
+```php theme={null}
 return $response->withHeaders([
     'X-Vapor-Base64-Encode' => 'True',
 ]);
 ```
-Lambda limits responses to 6MB. If you need to serve a larger file, consider returning a signed, temporary S3 URL that your user may use to download the file directly from S3.
-## [​](#configuring-openssl) Configuring OpenSSL
-To use certain OpenSSL functions such as [openssl_pkey_new](https://www.php.net/manual/en/function.openssl-pkey-new.php), you must create an `openssl.cnf` configuration file and instruct Vapor to load it via the `OPENSSL_CONF` environment variable. For example, this environment variable will instruct Vapor to load an `openssl.cnf` file from the root of your project:
-```
+
+> [!WARNING]
+>
+> Lambda limits responses to 6MB. If you need to serve a larger file, consider returning a signed, temporary S3 URL that your user may use to download the file directly from S3.
+
+## Configuring OpenSSL
+
+To use certain OpenSSL functions such as [openssl\_pkey\_new](https://www.php.net/manual/en/function.openssl-pkey-new.php), you must create an `openssl.cnf` configuration file and instruct Vapor to load it via the `OPENSSL_CONF` environment variable. For example, this environment variable will instruct Vapor to load an `openssl.cnf` file from the root of your project:
+
+```ini theme={null}
 OPENSSL_CONF="/var/task/openssl.cnf"
 ```
+
 An example `openssl.cnf` file is available below:
-```
+
+```ini theme={null}
 dir = certificates
 
 [ ca ]
@@ -74,22 +75,26 @@ authorityKeyIdentifier = keyid:always,issuer:always
 basicConstraints = CA:FALSE
 subjectKeyIdentifier = hash
 ```
-## [​](#“after-response”-jobs) “After Response” Jobs
+
+## "After Response" Jobs
+
 In typical Laravel applications, you may dispatch jobs that will be executed after the HTTP response is sent to the browser:
-```
+
+```php theme={null}
 Route::get('/', function () {
     dispatch(function () {
-        Mail::to('[email protected]')->send(new WelcomeMessage);
+        Mail::to('taylor@example.com')->send(new WelcomeMessage);
     })->afterResponse();
 
     return view('home');
 });
 ```
+
 However, we recommend that you always dispatch jobs to your queue workers when using Vapor. Vapor is not able to execute a job after sending a response to the browser; therefore, attempting to do so will cause your application to appear slower to the end user.
-## [​](#inertia-ssr) Inertia SSR
+
+## Inertia SSR
+
 Currently, Inertia server-side rendering (SSR) is not available on Vapor environments due to constraints of AWS Lambda. For applications requiring [Inertia with SSR capabilities](https://inertiajs.com/server-side-rendering), we recommend:
-- **[Laravel Cloud](https://cloud.laravel.com/docs/compute#inertia-ssr)** - Our fully-managed Laravel application platform.
-- **[Laravel Forge](https://forge.laravel.com/docs/sites/laravel#inertia-server-side-rendering-ssr)** - Our VPS server management platform.
-Was this page helpful?
-YesNo
-[Deployments](/projects/deployments)[Domains](/projects/domains)
+
+* **[Laravel Cloud](https://cloud.laravel.com/docs/compute#inertia-ssr)** - Our fully-managed Laravel application platform.
+* **[Laravel Forge](https://forge.laravel.com/docs/sites/laravel#inertia-server-side-rendering-ssr)** - Our VPS server management platform.

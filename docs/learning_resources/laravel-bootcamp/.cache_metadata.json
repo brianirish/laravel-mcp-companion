@@ -1,9 +1,14 @@
 {
   "source": "laravel-bootcamp",
-  "name": "Laravel Bootcamp",
-  "fetched_sections": 8,
-  "total_sections": 8,
+  "name": "Laravel Learn",
+  "courses": [
+    "getting-started-with-laravel",
+    "php-fundamentals"
+  ],
+  "courses_discovered": 2,
+  "fetched_sections": 23,
+  "total_sections": 23,
   "success_rate": 1.0,
   "difficulty": "beginner",
-  "cached_at": 1792541271.0334377
+  "cached_at": 1794484410.1845438
 }

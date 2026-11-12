@@ -1,0 +1,78 @@
+Source: https://filamentphp.com/docs/5.x/plugins/getting-started.md
+
+# Getting started
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/plugins/getting-started.md
+
+## Introduction
+
+Filament's plugin system lets you extend the framework with your own components and features. You can keep extensions within your application or distribute them as Composer packages for other developers to use.
+
+## Creating a plugin
+
+You can build plugins from scratch or use the [Filament Plugin Skeleton](https://github.com/filamentphp/plugin-skeleton) as a starting point. The skeleton provides a package structure and a configuration script.
+
+### Usage
+
+To use the skeleton, go to the GitHub repository and click the "Use this template" button. This creates a new repository in your account with the skeleton code. Clone the repository to your machine, navigate to its root directory, and run:
+
+```bash
+php ./configure.php
+```
+
+The command asks you a series of questions, then configures the new plugin so you can begin building it.
+
+## Understanding plugin types
+
+Plugins can be used in two main contexts:
+
+1. **Panel Plugins**: These are plugins that are used with [Panel Builders](https://filamentphp.com/docs/5.x/introduction/installation.md). They are typically used only to add functionality when used inside a Panel or as a complete Panel in and of itself. Examples of this are:
+   
+   1. A plugin that adds specific functionality to the dashboard in the form of Widgets.
+   2. A plugin that adds a set of Resources / functionality to an app like a Blog or User Management feature.
+2. **Standalone Plugins**: These are plugins that are used in any context outside a Panel Builder. Examples of this are:
+   
+   1. A plugin that adds custom fields to be used with the [Form Builders](https://filamentphp.com/docs/5.x/forms/overview.md).
+   2. A plugin that adds custom columns or filters to the [Table Builders](https://filamentphp.com/docs/5.x/tables/overview.md).
+
+Although these are two different mental contexts to keep in mind when building plugins, they can be used together inside the same plugin. They do not have to be mutually exclusive.
+
+## Important concepts
+
+Before we dive into the specifics of building plugins, there are a few concepts that are important to understand. You should familiarize yourself with the following before building a plugin:
+
+1. [Laravel Package Development](https://laravel.com/docs/packages)
+2. [Spatie Package Tools](https://github.com/spatie/laravel-package-tools)
+3. [Filament Asset Management](https://filamentphp.com/docs/5.x/advanced/assets.md)
+
+### The Plugin object
+
+Filament introduces the concept of a Plugin object that is used to configure the plugin. This object is a simple PHP class that implements the ` Filament\Contracts\Plugin ` interface. This class is used to configure the plugin and is the main entry point for the plugin. It is also used to register Resources and Icons that might be used by your plugin.
+
+While the plugin object is extremely helpful, it is not required to build a plugin. You can still build plugins without using the plugin object as you can see in the [building a panel plugin](https://filamentphp.com/docs/5.x/plugins/building-a-panel-plugin.md) tutorial.
+
+> **Info**
+>
+> The Plugin object is only used for Panel Providers. Standalone Plugins do not use this object. All configuration for Standalone Plugins should be handled in the plugin's service provider.
+
+
+### Registering assets
+
+Register [assets](https://filamentphp.com/docs/5.x/advanced/assets.md) shared by standalone components, including lazily loaded CSS, JavaScript, and Alpine components, in the plugin service provider's ` packageBooted() ` method. For assets that should load on every page of a particular panel, use [` $panel->assets() `](https://filamentphp.com/docs/5.x/panel-configuration.md#registering-assets-for-a-panel) in the plugin object's ` register() ` method. This avoids loading panel-specific assets in panels that do not use your plugin.
+
+For a field built with React, Vue, Svelte, or native JavaScript, follow [building reusable JavaScript fields](https://filamentphp.com/docs/5.x/forms/custom-fields.md#building-reusable-plugin-fields) and [publishing ES modules in plugins](https://filamentphp.com/docs/5.x/advanced/assets.md#publishing-es-modules-in-plugins). Build and include any framework dependencies in your plugin's assets so consumers do not need to change their application's Vite configuration.
+
+## Upgrading existing plugins
+
+To update a plugin for a new major version of Filament, follow the [upgrade guide](https://filamentphp.com/docs/5.x/upgrade-guide.md) for the packages your plugin uses. Update its Composer constraints and test it in an application using the target version of Filament, including any custom views, styles, and JavaScript.
+
+### Helpful links
+
+Please read this guide in its entirety before upgrading your plugin. It will help you understand the concepts and how to build your plugin.
+
+1. [Filament Asset Management](https://filamentphp.com/docs/5.x/advanced/assets.md)
+2. [Panel Plugin Development](https://filamentphp.com/docs/5.x/plugins/panel-plugins.md)
+3. [Icon Management](https://filamentphp.com/docs/5.x/styling/icons.md)
+4. [Colors Management](https://filamentphp.com/docs/5.x/styling/colors.md)
+5. [CSS Hooks](https://filamentphp.com/docs/5.x/styling/css-hooks.md)

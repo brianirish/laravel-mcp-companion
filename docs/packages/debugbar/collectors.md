@@ -80,7 +80,6 @@ config/debugbar.php
         'jobs'            => false, // Display dispatched jobs
         'pennant'         => false, // Display Pennant feature flags
     ],
-
 ```
 Database Queries¶
 -----------------
@@ -101,7 +100,6 @@ The Query Collector has the following features
 - Exclude paths (eg. for session or vendors)
 - Show memory usage (disabled by default)
 
-![Query Collector](../img/queries.png)
 
 config/debugbar.php
 
@@ -129,7 +127,6 @@ config/debugbar.php
         ],
         // ...
     ],
-
 ```
 ### On-demand query EXPLAIN¶
 
@@ -139,8 +136,8 @@ options.db.explain
 
 Enable the `options.db.explain` option to run on-demand EXPLAIN queries for any SELECT query in the Debugbar.
 This will update in the interface. You also have an option to navigate to mysqlexplain.com for a visual explain.
+EXPLAIN is only available when the storage is open (see `storage.open`, localhost/private network only by default).
 
-![Query On-demand Explain](../img/query-explain.gif)
 
 ### Query limits¶
 
@@ -152,7 +149,6 @@ With Query Hard & Soft limits, you can reduce the amount of queries shown by def
 When the hard limit is reached, the queries are excluded altogether to prevent loading too much data.
 If you want to avoid any limits, you can set the option to `null`
 
-![Query Limits](../img/query-limits.png)
 
 Messages¶
 ---------
@@ -171,7 +167,6 @@ When calling `debug()`, the source of the call is shown and can be opened with y
 v3.10.0
 options.messages.trace
 
-![Messages Collector](../img/messages.png)
 
 Logger¶
 -------
@@ -181,7 +176,6 @@ collectors.log
 
 When the Messages Collector is enabled, Log messages are added to the Messages tab. Otherwise a Monolog tab will show with just the log messages
 
-![Monolog](../img/monolog.png)
 
 config/debugbar.php
 
@@ -209,7 +203,6 @@ config/debugbar.php
         ],
         // ...
     ],
-
 ```
 Views¶
 ------
@@ -225,7 +218,6 @@ The ViewCollector shows views and has the following features:
 * Exclude folders (eg. for Filament or other vendors)
 * Optionally show data (this can be resource heavy)
 
-![ViewCollector](../img/views.png)
 
 ```php
     'options' => [
@@ -238,7 +230,6 @@ The ViewCollector shows views and has the following features:
             ],
         ],
     ]
-
 ```
 Timeline¶
 ---------
@@ -246,7 +237,6 @@ Timeline¶
 v1.0
 collectors.time
 
-![Timeline Collector](../img/timeline.png)
 
 config/debugbar.php
 
@@ -256,7 +246,6 @@ config/debugbar.php
             'memory_usage' => false,  // Calculated by subtracting memory start and end, it may be inaccurate
         ],
     ]
-
 ```
 Route¶
 ------
@@ -266,7 +255,6 @@ collectors.route
 
 This shows the current route and middleware.
 
-![RouteCollector](../img/route.png)
 
 config/debugbar.php
 
@@ -276,7 +264,6 @@ config/debugbar.php
             'label' => true,  // show complete route on bar
         ],
     ],
-
 ```
 Exceptions¶
 -----------
@@ -288,7 +275,6 @@ Show any errors from the application, including traces.
 
 You can manually add exceptions by calling `debugbar()->addThrowable($throwable);`
 
-![ExceptionCollector](../img/exceptions.png)
 
 Session¶
 --------
@@ -299,7 +285,6 @@ false
 
 A simple widget showing the current PHP Version.
 
-![Session Collector](../img/session.png)
 
 Request¶
 --------
@@ -309,7 +294,6 @@ collectors.request
 
 Show Request info, like headers, data, cookies etc. Sensitive data is hidden by default, but you can add your own sensitive data to the config.
 
-![Request Collector](../img/request.png)
 
 config/debugbar.php
 
@@ -319,7 +303,6 @@ config/debugbar.php
             'hiddens' => [], // hides sensitive values using array paths, example: request_request.password
         ],
     ],
-
 ```
 Livewire¶
 ---------
@@ -329,7 +312,6 @@ collectors.livewire
 
 Show the Livewire components that are rendered on the page.
 
-![Livewire Collector](../img/livewire.png)
 
 PHP Info¶
 ---------
@@ -339,7 +321,6 @@ collectors.phpinfo
 
 A simple widget showing the current PHP Version.
 
-![PhpInfo Collector](../img/phpinfo.png)
 
 Gate¶
 -----
@@ -350,7 +331,6 @@ false
 
 The Gate Collector shows the checks that have passed or failed.
 
-![Gate Collector](../img/gate.png)
 
 Events¶
 -------
@@ -360,7 +340,6 @@ collectors.events
 
 This is similar to the Timeline buts adds all events. This can be a lot of data, so use with caution.
 
-![Events](../img/events.gif)
 
 config/debugbar.php
 
@@ -370,7 +349,6 @@ config/debugbar.php
             'data' => false, // collect events data, listeners
         ],
     ],
-
 ```
 Auth¶
 -----
@@ -381,7 +359,6 @@ false
 
 A widget showing the current login status + a collector with more information.
 
-![Auth Collector](../img/auth.png)
 
 config/debugbar.php
 
@@ -392,7 +369,6 @@ config/debugbar.php
             'show_guards' => true, // Show the guards that are used
         ],
     ],
-
 ```
 Mail¶
 -----
@@ -403,7 +379,6 @@ false
 
 A collector showing the sent emails.
 
-![Mail Collector](../img/mail.png)
 
 ### Mail Preview¶
 
@@ -413,7 +388,6 @@ true
 
 You can open a rendered preview of the email when the body is attached, by clicking 'View Mail'
 
-![Mail Preview](../img/mail-preview.png)
 
 Laravel Info¶
 -------------
@@ -424,7 +398,6 @@ false
 
 A widget showing the current Laravel Version, environment and locale.
 
-![Laravel Collector](../img/laravel-info.png)
 
 Memory Usage¶
 -------------
@@ -445,9 +418,7 @@ config/debugbar.php
             'precision' => 0,          // Memory rounding precision
         ],
     ]
-
 ```
-![Memory Collector](../img/memory.png)
 
 Config¶
 -------
@@ -462,7 +433,6 @@ Be careful when turning this on, as it can expose sensitive credentials. Make su
 
 Shows the loaded configuration values.
 
-![Config Collector](../img/config.png)
 
 Cache¶
 ------
@@ -473,7 +443,6 @@ false
 
 Show the hits/misses of the Cache in a Timeline.
 
-![Cache Collector](../img/cache.png)
 
 config/debugbar.php
 
@@ -482,7 +451,6 @@ config/debugbar.php
         'cache' => [
             'values' => true, // collect cache values
         ],    ],
-
 ```
 Models¶
 -------
@@ -492,7 +460,6 @@ false
 
 Shows how often each Model is loaded. If this is high, you might want move some logic to SQL instead of processing large Collections.
 
-![Models Collector](../img/models.png)
 
 Jobs¶
 -----
@@ -502,7 +469,6 @@ false
 
 Show the Jobs that are dispatched from this request.
 
-![Jobs Collector](../img/jobs.png)
 
 Logs¶
 -----
@@ -512,7 +478,6 @@ false
 
 Show the most recent logs from the log files in storage/logs
 
-![Logs Collector](../img/logs.png)
 
 config/debugbar.php
 
@@ -522,7 +487,6 @@ config/debugbar.php
             'file' => null, // Additional files
         ],
      ],
-
 ```
 Pennant¶
 --------
@@ -533,7 +497,6 @@ false
 
 Shows all the Pennant flags that are checked during this request
 
-![Pennant Collector](../img/pennant.png)
 
 Files¶
 ------
@@ -546,6 +509,5 @@ Deprecated
 
 This was mainly useful before OPcache was widely used, and this collector could be used for optimizing files. It's deprecated now.
 
-![Files Collector](../img/files.png)
 
 Back to top

@@ -2,91 +2,16 @@
 
 Source: https://livewire.laravel.com/docs/lifecycle-hooks
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 Lifecycle Hooks
 ===============
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Livewire provides a variety of lifecycle hooks that allow you to execute code at specific points during a component's lifecycle. These hooks enable you to perform actions before or after particular events, such as initializing the component, updating properties, or rendering the template.
 
@@ -99,29 +24,28 @@ Here's a list of all the available component lifecycle hooks:
 | `boot()` | Called at the beginning of every request. Both initial, and subsequent |
 | `updating()` | Called before updating a component property |
 | `updated()` | Called after updating a property |
-| `rendering()` | Called before `render()` is called |
-| `rendered()` | Called after `render()` is called |
+| `rendering()` | Called before the component's view is rendered |
+| `rendered()` | Called after the component's view is rendered |
 | `dehydrate()` | Called at the end of every component request |
 | `exception($e, $stopPropagation)` | Called when an exception is thrown |
 
-#Mount
+Mount¶
 ------
 
 In a standard PHP class, a constructor (`__construct()`) takes in outside parameters and initializes the object's state. However, in Livewire, you use the `mount()` method for accepting parameters and initializing the state of your component.
 
 Livewire components don't use `__construct()` because Livewire components are *re-constructed* on subsequent network requests, and we only want to initialize the component once when it is first created.
 
-Here's an example of using the `mount()` method to initialize the `name` and `email` properties of an `UpdateProfile` component:
+Here's an example of using the `mount()` method to initialize the `name` and `email` properties of a `profile.edit` component:
 
 ```php
+<?php // resources/views/components/profile/⚡edit.blade.php
 
 use Illuminate\Support\Facades\Auth;
 
 use Livewire\Component;
 
-class UpdateProfile extends Component
-
-{
+new class extends Component {
 
 public $name;
 
@@ -139,20 +63,18 @@ $this->email = Auth::user()->email;
 
 // ...
 
-}
-
+};
 ```
 As mentioned earlier, the `mount()` method receives data passed into the component as method parameters:
 
 ```php
+<?php // resources/views/components/post/⚡edit.blade.php
 
 use Livewire\Component;
 
 use App\Models\Post;
 
-class UpdatePost extends Component
-
-{
+new class extends Component {
 
 public $title;
 
@@ -170,8 +92,7 @@ $this->content = $post->content;
 
 // ...
 
-}
-
+};
 ```
 You can use dependency injection with all hook methods
 
@@ -183,7 +104,7 @@ The `mount()` method is a crucial part of using Livewire. The following document
 * Receiving data from parent components
 * Accessing route parameters
 
-#Boot
+Boot¶
 -----
 
 As helpful as `mount()` is, it only runs once per component lifecycle, and you may want to run logic at the beginning of every single request to the server for a given component.
@@ -193,6 +114,7 @@ For these cases, Livewire provides a `boot()` method where you can write compone
 The `boot()` method can be useful for things like initializing protected properties, which are not persisted between requests. Below is an example of initializing a protected property as an Eloquent model:
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
 use Livewire\Attributes\Locked;
 
@@ -200,9 +122,7 @@ use Livewire\Component;
 
 use App\Models\Post;
 
-class ShowPost extends Component
-
-{
+new class extends Component {
 
 #[Locked]
 
@@ -220,8 +140,7 @@ $this->post = Post::find($this->postId);
 
 // ...
 
-}
-
+};
 ```
 You can use this technique to have complete control over initializing a component property in your Livewire component.
 
@@ -233,9 +152,9 @@ Always lock sensitive public properties
 
 As you can see above, we are using the `#[Locked]` attribute on the `$postId` property. In a scenario like the above, where you want to ensure the `$postId` property isn't tampered with by users on the client-side, it's important to authorize the property's value before using it or add `#[Locked]` to the property ensure it is never changed.
 
-For more information, check out the documentation on Locked properties.
+For more information, check out the documentation on the Locked attribute.
 
-#Update
+Update¶
 -------
 
 Client-side users can update public properties in many different ways, most commonly by modifying an input with `wire:model` on it.
@@ -247,14 +166,13 @@ Below is an example of using `updating` to prevent the modification of the `$pos
 It's worth noting that for this particular example, in an actual application, you should use the `#[Locked]` attribute instead, like in the above example.
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
 use Exception;
 
 use Livewire\Component;
 
-class ShowPost extends Component
-
-{
+new class extends Component {
 
 public $postId = 1;
 
@@ -276,18 +194,16 @@ throw new Exception;
 
 // ...
 
-}
-
+};
 ```
 The above `updating()` method runs before the property is updated, allowing you to catch invalid input and prevent the property from updating. Below is an example of using `updated()` to ensure a property's value stays consistent:
 
 ```php
+<?php // resources/views/components/user/⚡create.blade.php
 
 use Livewire\Component;
 
-class CreateUser extends Component
-
-{
+new class extends Component {
 
 public $username = '';
 
@@ -309,20 +225,18 @@ $this->username = strtolower($this->username);
 
 // ...
 
-}
-
+};
 ```
 Now, anytime the `$username` property is updated client-side, we will ensure that the value will always be lowercase.
 
 Because you are often targeting a specific property when using update hooks, Livewire allows you to specify the property name directly as part of the method name. Here's the same example from above but rewritten utilizing this technique:
 
 ```php
+<?php // resources/views/components/user/⚡create.blade.php
 
 use Livewire\Component;
 
-class CreateUser extends Component
-
-{
+new class extends Component {
 
 public $username = '';
 
@@ -338,24 +252,22 @@ $this->username = strtolower($this->username);
 
 // ...
 
-}
-
+};
 ```
 Of course, you can also apply this technique to the `updating` hook.
 
-### #Arrays
+### Arrays¶
 
 Array properties have an additional `$key` argument passed to these functions to specify the changing element.
 
 Note that when the array itself is updated instead of a specific key, the `$key` argument is null.
 
 ```php
+<?php // resources/views/components/preferences/⚡edit.blade.php
 
 use Livewire\Component;
 
-class UpdatePreferences extends Component
-
-{
+new class extends Component {
 
 public $preferences = [];
 
@@ -371,10 +283,9 @@ public function updatedPreferences($value, $key)
 
 // ...
 
-}
-
+};
 ```
-#Hydrate & Dehydrate
+Hydrate & Dehydrate¶
 --------------------
 
 Hydrate and dehydrate are lesser-known and lesser-utilized hooks. However, there are specific scenarios where they can be powerful.
@@ -386,12 +297,11 @@ We often use the terms "hydrate" and "dehydrate" to refer to this process throug
 Let's look at an example that uses both `mount()` , `hydrate()`, and `dehydrate()` all together to support using a custom data transfer object (DTO) instead of an Eloquent model to store the post data in the component:
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
 use Livewire\Component;
 
-class ShowPost extends Component
-
-{
+new class extends Component {
 
 public $post;
 
@@ -435,37 +345,35 @@ $this->post = $this->post->toArray();
 
 // ...
 
-}
-
+};
 ```
 Now, from actions and other places inside your component, you can access the `PostDto` object instead of the primitive data.
 
 The above example mainly demonstrates the abilities and nature of the `hydrate()` and `dehydrate()` hooks. However, it is recommended that you use Wireables or Synthesizers to accomplish this instead.
 
-#Render
+Render¶
 -------
 
 If you want to hook into the process of rendering a component's Blade view, you can do so using the `rendering()` and `rendered()` hooks:
 
 ```php
+<?php // resources/views/components/post/⚡index.blade.php
 
 use Livewire\Component;
 
 use App\Models\Post;
 
-class ShowPosts extends Component
-
-{
+new class extends Component {
 
 public function render()
 
 {
 
-return view('livewire.show-posts', [
+return $this->view([
 
 'post' => Post::all(),
 
-])
+]);
 
 }
 
@@ -499,22 +407,20 @@ public function rendered($view, $html)
 
 // ...
 
-}
-
+};
 ```
-#Exception
+Exception¶
 ----------
 
 Sometimes it can be helpful to intercept and catch errors, eg: to customize the error message or ignore specific type of exceptions. The `exception()` hook allows you to do just that: you can perform check on the `$error`, and use the `$stopPropagation` parameter to catch the issue.
 This also unlocks powerful patterns when you want to stop further execution of code (return early), this is how internal methods like `validate()` works.
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
 use Livewire\Component;
 
-class ShowPost extends Component
-
-{
+new class extends Component {
 
 public function mount()
 
@@ -538,10 +444,9 @@ $stopPropagation();
 
 // ...
 
-}
-
+};
 ```
-#Using hooks inside a trait
+Using hooks inside a trait¶
 ---------------------------
 
 Traits are a helpful way to reuse code across components or extract code from a single component into a dedicated file.
@@ -553,24 +458,21 @@ This way, you can have multiple traits using the same lifecycle hooks and avoid 
 Below is an example of a component referencing a trait called `HasPostForm`:
 
 ```php
+<?php // resources/views/components/post/⚡create.blade.php
 
 use Livewire\Component;
 
-class CreatePost extends Component
-
-{
+new class extends Component {
 
 use HasPostForm;
 
 // ...
 
-}
-
+};
 ```
 Now here's the actual `HasPostForm` trait containing all the available prefixed hooks:
 
 ```php
-
 trait HasPostForm
 
 {
@@ -646,23 +548,114 @@ public function dehydrateHasPostForm()
 // ...
 
 }
-
 ```
-On this page
+Using hooks inside a form object¶
+---------------------------------
 
-* Mount
-* Boot
-* Update
-  + Arrays
-* Hydrate & Dehydrate
-* Render
-* Exception
-* Using hooks inside a trait
+Form objects in Livewire support property update hooks. These hooks work similarly to component update hooks, letting you perform actions when properties in the form object change.
 
-![Flux Ad](/images/flux_ad.jpg)
+Below is an example of a component using a `PostForm` form object:
 
-Pro UI Components
+```php
+<?php // resources/views/components/post/⚡create.blade.php
 
-Flux · The official Livewire component library
+use Livewire\Component;
 
-Built by the folks behind Livewire and Alpine.
+new class extends Component {
+
+public PostForm $form;
+
+// ...
+
+};
+```
+Here's the `PostForm` form object containing all the available hooks:
+
+```php
+namespace App\Livewire\Forms;
+
+use Livewire\Attributes\Validate;
+
+use Livewire\Form;
+
+class PostForm extends Form
+
+{
+
+public $title = '';
+
+public $tags = [];
+
+public function updating($property, $value)
+
+{
+
+// ...
+
+}
+
+public function updated($property, $value)
+
+{
+
+// ...
+
+}
+
+public function updatingTitle($value)
+
+{
+
+// ...
+
+}
+
+public function updatedTitle($value)
+
+{
+
+// ...
+
+}
+
+public function updatingTags($value, $key)
+
+{
+
+// ...
+
+}
+
+public function updatedTags($value, $key)
+
+{
+
+// ...
+
+}
+
+// ...
+
+}
+```
+See also¶
+---------
+
+* **Properties** — Initialize properties in mount() and boot()
+* **Components** — Understand when hooks run during component creation
+* **Pages** — Use mount() to receive route parameters
+* **Hydration** — Understand the hydrate() and dehydrate() hooks
+
+Ecosystem sponsor
+
+
+Neon is a complete backend built around Lakebase Postgres, for developers, startups, and agent platforms, by Databricks.
+neon.com ↗
+
+Return to
+
+Events
+
+Continue to
+
+Nesting Components

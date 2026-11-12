@@ -15,8 +15,7 @@ Use the Debugbar only in development. Do not use Debugbar on publicly accessible
 Require this package with composer. It is recommended to only require the package for development.
 
 ```php
-composer require barryvdh/laravel-debugbar --dev
-
+composer require fruitcake/laravel-debugbar --dev
 ```
 Laravel uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
 
@@ -48,13 +47,11 @@ The profiler is enabled by default, if you have APP\_DEBUG=true. You can overrid
         'telescope*',
         'horizon*',
     ],
-
 ```
 ### Publish config¶
 
 ```php
-php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-
+php artisan vendor:publish --provider="Fruitcake\LaravelDebugbar\ServiceProvider"
 ```
 Non-default installs¶
 ---------------------
@@ -64,8 +61,7 @@ Non-default installs¶
 If you don't use auto-discovery, add the ServiceProvider to the providers list. For Laravel 11 or newer, add the ServiceProvider in bootstrap/providers.php. For Laravel 10 or older, add the ServiceProvider in config/app.php.
 
 ```php
-Barryvdh\Debugbar\ServiceProvider::class,
-
+Fruitcake\LaravelDebugbar\ServiceProvider::class,
 ```
 If you want to use the facade to log messages, add this within the `register` method of `app/Providers/AppServiceProvider.php` class:
 
@@ -73,34 +69,17 @@ If you want to use the facade to log messages, add this within the `register` me
 public function register(): void
 {
     $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-    $loader->alias('Debugbar', \Barryvdh\Debugbar\Facades\Debugbar::class);
+    $loader->alias('Debugbar', \Fruitcake\LaravelDebugbar\Facades\Debugbar::class);
 }
-
 ```
 ### With Octane¶
 
-Make sure to add LaravelDebugbar to your flush list in `config/octane.php`.
+Laravel Debugbar 4.x works out of the box with Octane. No need to add anything to your config.
 
-```php
-    'flush' => [
-        \Barryvdh\Debugbar\LaravelDebugbar::class,
-    ],
+If you're upgrading from Laravel Debugbar 3.x, remove the 'flush' config for Debugbar in `config/octane.php`.
 
-```
 ### With Lumen¶
 
-For Lumen, register a different Provider in `bootstrap/app.php`:
+Lumen is not supported anymore, as it's no longer actively maintained.
 
-```php
-if (env('APP_DEBUG')) {
- $app->register(Barryvdh\Debugbar\LumenServiceProvider::class);
-}
-
-```
-To change the configuration, copy the file to your config folder and enable it:
-
-```php
-$app->configure('debugbar');
-
-```
 Back to top

@@ -1,0 +1,1928 @@
+Source: https://filamentphp.com/docs/5.x/forms/rich-editor.md
+
+# Rich editor
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/forms/rich-editor.md
+
+## Introduction
+
+The rich editor allows you to edit and preview HTML content, as well as upload images. It uses [TipTap](https://tiptap.dev) as the underlying editor.
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+```
+
+
+
+## Configuring Livewire's maximum nesting depth
+
+The rich editor synchronizes its TipTap document with Livewire as nested data. Livewire limits nested property paths to 10 levels by default, which may not be enough for structures such as lists and tables. If you encounter a ` Livewire\Exceptions\MaxNestingDepthExceededException ` and your application does not already have a ` config/livewire.php ` file, publish Livewire's configuration file:
+
+```bash
+php artisan livewire:publish --config
+```
+
+The command overwrites an existing ` config/livewire.php ` file, so skip it if you have already published the configuration.
+
+Then, increase the existing ` max_nesting_depth ` setting in ` config/livewire.php `. For example, a depth of 32 allows room for deeply nested rich content:
+
+```php
+'payload' => [
+    // ...
+    'max_nesting_depth' => 32,
+],
+```
+
+Only change the ` max_nesting_depth ` value in the existing ` payload ` array, so that you preserve Livewire's other version-specific payload settings.
+
+## Storing content as JSON
+
+By default, the rich editor stores content as HTML. If you would like to store the content as JSON instead, you can use the ` json() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->json()
+```
+
+The JSON is in [TipTap's](https://tiptap.dev) format, which is a structured representation of the content.
+
+If you're saving the JSON content using Eloquent, you should be sure to add an ` array ` [cast](https://laravel.com/docs/eloquent-mutators#array-and-json-casting) to the model property:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'content' => 'array',
+        ];
+    }
+
+    // ...
+}
+```
+
+## Customizing the toolbar buttons
+
+You may set the toolbar buttons for the editor using the ` toolbarButtons() ` method. The options shown here are the defaults:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->toolbarButtons([
+        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3'],
+        ['alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
+        ['undo', 'redo'],
+    ])
+```
+
+Each nested array in the main array represents a group of buttons in the toolbar.
+
+
+
+Additional tools available in the toolbar include:
+
+- ` h1 ` - Applies the "h1" tag to the text.
+- ` h4 ` - Applies the "h4" tag to the text.
+- ` h5 ` - Applies the "h5" tag to the text.
+- ` h6 ` - Applies the "h6" tag to the text.
+- ` alignJustify ` - Justifies the text.
+- ` clearFormatting ` - Clears all formatting from the selected text.
+- ` details ` - Inserts a ` <details> ` tag, which allows users to create collapsible sections in their content.
+- ` grid ` - Inserts a grid layout into the editor, allowing users to create responsive columns of content.
+- ` gridAddColumnAfter ` - Adds a column after the current column in a symmetrical grid.
+- ` gridAddColumnBefore ` - Adds a column before the current column in a symmetrical grid.
+- ` gridDeleteColumn ` - Deletes the current grid column and its content.
+- ` gridDelete ` - Deletes the current grid layout while preserving its content.
+- ` highlight ` - Highlights the selected text with a ` <mark> ` tag around it.
+- ` horizontalRule ` - Inserts a horizontal rule.
+- ` lead ` - Applies a ` lead ` class around the text, which is typically used for the first paragraph of an article.
+- ` paragraph ` - Sets the current block to a paragraph, removing any heading formatting.
+- ` small ` - Applies the ` <small> ` tag to the text, which is typically used for small print or disclaimers.
+- ` code ` - Format the selected text as inline code.
+- ` textColor ` - Changes the [text color](https://filamentphp.com/docs/5.x/forms/rich-editor.md#customizing-text-colors) of the selected text.
+- ` table ` - Creates a table in the editor with a default layout of 3 columns and 2 rows, with the first row configured as a header row.
+- ` tableAddColumnBefore ` - Adds a new column before the current column.
+- ` tableAddColumnAfter ` - Adds a new column after the current column.
+- ` tableDeleteColumn ` - Deletes the current column.
+- ` tableAddRowBefore ` - Adds a new row above the current row.
+- ` tableAddRowAfter ` - Adds a new row below the current row.
+- ` tableDeleteRow ` - Deletes the current row.
+- ` tableMergeCells ` - Merges the selected cells into one cell.
+- ` tableSplitCell ` - Splits the selected cell into multiple cells.
+- ` tableToggleHeaderRow ` - Toggles the header row of the table.
+- ` tableToggleHeaderCell ` - Toggles the header cell of the table.
+- ` tableDelete ` - Deletes the table.
+
+As well as allowing a static value, the ` toolbarButtons() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+### Using the toolbar with a keyboard
+
+You can enter the main toolbar using Tab, or Shift+Tab from the editor. The toolbar has one tab stop, which remembers the last focused tool. Use the left and right arrow keys to move between tools, and Home or End to reach the first or last tool. Disabled and hidden tools are skipped. Enter or Space activates the focused tool.
+
+Tab and Shift+Tab leave the toolbar normally. Escape returns to the editor without changing your selection. If a tooltip is showing, Escape dismisses the tooltip first. These keys retain their normal text-editing behavior while you are inside the editor.
+
+### Customizing floating toolbars
+
+If your toolbar is too full, you can use a floating toolbar to show certain tools near the current node, only when the user is inside a specific node type. This allows you to keep the main toolbar clean while still providing access to additional tools when needed.
+
+You can customize the floating toolbars that appear when your cursor is placed inside a specific node by using the ` floatingToolbars() ` method.
+
+In the example below, a floating toolbar appears when the cursor is inside a paragraph node. It shows bold, italic, and similar buttons. When the cursor is in a heading node, it displays heading-related buttons. Grids and tables show controls specific to those nodes.
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->floatingToolbars([
+        'paragraph' => [
+            'bold', 'italic', 'underline', 'strike', 'subscript', 'superscript',
+        ],
+        'heading' => [
+            'h1', 'h2', 'h3',
+        ],
+        'grid' => [
+            'gridAddColumnBefore', 'gridAddColumnAfter', 'gridDeleteColumn', 'gridDelete',
+        ],
+        'table' => [
+            'tableAddColumnBefore', 'tableAddColumnAfter', 'tableDeleteColumn',
+            'tableAddRowBefore', 'tableAddRowAfter', 'tableDeleteRow',
+            'tableMergeCells', 'tableSplitCell',
+            'tableToggleHeaderRow', 'tableToggleHeaderCell',
+            'tableDelete',
+        ],
+    ])
+```
+
+
+
+You can press Alt+F10 inside the editor to enter an applicable floating toolbar, or the main toolbar if no floating toolbar applies. Press Alt+F10 again while a toolbar tool is focused to cycle through the applicable floating toolbars in your configured order, followed by the main toolbar. For example, you can reach both the grid and table toolbars when editing a table inside a grid. Floating toolbars use the same arrow, Home, End, and Escape behavior as the main toolbar, without adding extra tab stops.
+
+Actions opened from a floating toolbar return focus to the editor when their modal closes, since the floating toolbar may disappear. Actions opened from the main toolbar return focus to their tool or dropdown trigger.
+
+### Grouping toolbar buttons into dropdowns
+
+You may group related toolbar buttons into a dropdown menu using ` ToolbarButtonGroup `. The first argument is a label used for the dropdown's tooltip and accessibility, and the second argument is an array of button names to include in the dropdown:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\ToolbarButtonGroup;
+
+RichEditor::make('content')
+    ->toolbarButtons([
+        ['bold', 'italic', 'underline', 'strike'],
+        [ToolbarButtonGroup::make('Paragraph', ['paragraph', 'h1', 'h2', 'h3'])],
+        [ToolbarButtonGroup::make('Alignment', ['alignStart', 'alignCenter', 'alignEnd', 'alignJustify'])],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['undo', 'redo'],
+    ])
+```
+
+By default, the first button's icon is used as the dropdown trigger, and it updates reactively to reflect the currently active button. Clicking on the trigger reveals the grouped buttons.
+
+You can also open a focused dropdown using Enter, Space, or the up and down arrow keys. Inside a horizontal icon menu, the left and right arrow keys move between tools, following the reading direction. Home and End move to the first and last tools. The up and down arrow keys also work. Vertical menus configured using ` textualButtons() ` use the up and down arrow keys. Disabled tools remain focusable so you can discover them, but cannot be activated. Escape closes the menu and returns focus to its trigger; Tab leaves the menu. Toggle tools expose their formatting state as checked menu items.
+
+You can set a fixed icon for the dropdown trigger using the ` icon() ` method. When a custom icon is set, the trigger icon remains static and does not change based on the active button:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\ToolbarButtonGroup;
+
+RichEditor::make('content')
+    ->toolbarButtons([
+        ['bold', 'italic', 'underline', 'strike'],
+        [ToolbarButtonGroup::make('Heading', ['h1', 'h2', 'h3'])->icon('fi-o-heading')],
+        [ToolbarButtonGroup::make('Alignment', ['alignStart', 'alignCenter', 'alignEnd', 'alignJustify'])],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['undo', 'redo'],
+    ])
+```
+
+
+
+### Using textual dropdown toolbar buttons
+
+By default, dropdown toolbar buttons display icons only. If you'd like to show text labels alongside icons in the dropdown items, you can use the ` textualButtons() ` method on a ` ToolbarButtonGroup `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\ToolbarButtonGroup;
+
+RichEditor::make('content')
+    ->toolbarButtons([
+        ['bold', 'italic', 'underline', 'strike', 'link'],
+        [ToolbarButtonGroup::make('Paragraph', ['paragraph', 'h1', 'h2', 'h3'])->textualButtons()],
+        [ToolbarButtonGroup::make('Alignment', ['alignStart', 'alignCenter', 'alignEnd', 'alignJustify'])],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['undo', 'redo'],
+    ])
+```
+
+
+
+In this example, the ` Paragraph ` dropdown items display their icon alongside a text label (e.g., "Paragraph", "Heading 1"). The ` Alignment ` dropdown remains icon-only.
+
+## Setting the height
+
+You may control the editor's height by defining the ` minHeight() ` and ` maxHeight() ` methods, which accept any CSS length value:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->minHeight('12rem')
+    ->maxHeight('24rem')
+```
+
+The editor has a minimum height of ` 10rem ` by default. Once the content exceeds ` maxHeight() `, the editor stops growing and becomes scrollable. Each method may be used on its own — ` minHeight() ` sets a starting height while still allowing the editor to grow, and ` maxHeight() ` caps how tall it may become. Pass ` null ` to ` minHeight() ` to use the editor's intrinsic ` 3rem ` minimum height, or to ` maxHeight() ` to remove the cap. These constraints also apply when the editor is disabled.
+
+As well as allowing static values, the ` minHeight() ` and ` maxHeight() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the functions as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+## Keeping the toolbar and panels visible while scrolling
+
+You can keep the toolbar visible while scrolling through a long document using ` stickyToolbar() `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->stickyToolbar()
+```
+
+You can also keep the custom blocks and merge tags panels visible using ` stickyPanels() `. Each option can be enabled independently:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->stickyToolbar()
+    ->stickyPanels()
+```
+
+Panels only stick when the editor is wide enough to display them beside the content. In narrower editors, panels scroll with the page so they leave room for editing.
+
+Inside an action modal or slide-over, sticky panels fit within the modal's scrollable area, leaving room for its sticky footer. If the blocks or merge tags exceed the available height, you can scroll the panel independently.
+
+Both options are disabled by default. Pass ` false ` to ` stickyToolbar() ` or ` stickyPanels() ` to disable them.
+
+### Setting the sticky offset
+
+Inside a Filament panel, the sticky toolbar and panels automatically account for the topbar. Inside an action modal or slide-over, they account for the modal's sticky header instead. If your page has a custom fixed header, you can set the distance from the top of the scroll viewport using ` stickyOffset() `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->stickyToolbar()
+    ->stickyPanels()
+    ->stickyOffset('5rem')
+```
+
+The offset accepts a CSS length value. Pass ` null ` to restore the automatic offset.
+
+As well as allowing static values, the ` stickyToolbar() `, ` stickyPanels() `, and ` stickyOffset() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the functions as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+## Customizing text colors
+
+The rich editor includes a text color tool for styling inline text. By default, it uses the [Tailwind CSS color palette](https://tailwindcss.com/docs/colors). In light mode, the 600 shades are applied to text, and in dark mode, the 400 shades are used.
+
+You can customize which colors are available in the picker using the ` textColors() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->textColors([
+        '#ef4444' => 'Red',
+        '#10b981' => 'Green',
+        '#0ea5e9' => 'Sky',
+    ])
+```
+
+
+
+If you would like to define different colors for light and dark mode, you can use the a ` TextColor ` object to define the color:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\TextColor;
+
+RichEditor::make('content')
+    ->textColors([
+        'brand' => TextColor::make('Brand', '#0ea5e9'),
+        'warning' => TextColor::make('Warning', '#f59e0b', darkColor: '#fbbf24'),
+    ])
+```
+
+If you would like to add new colors onto the existing Tailwind palette, you can merge your colors into the ` TextColor::getDefaults() ` array:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\TextColor;
+
+RichEditor::make('content')
+    ->textColors([
+        'brand' => TextColor::make('Brand', '#0ea5e9'),
+        'warning' => TextColor::make('Warning', '#f59e0b', darkColor: '#fbbf24'),
+        ...TextColor::getDefaults(),
+    ])
+```
+
+When you use a ` TextColor ` object, the key of the array becomes the stored ` data-color ` attribute on the ` <span> ` tag, allowing you to reference the color in your CSS if needed. When you use the color as the array values, the actual color value (e.g., a HEX string) is stored as the ` data-color ` attribute.
+
+You can also pass ` textColors() ` to the [content renderer](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-rich-content) and [rich content attribute](https://filamentphp.com/docs/5.x/forms/rich-editor.md#registering-rich-content-attributes) so that server-side rendering matches your editor configuration.
+
+You can also allow users to pick custom colors that aren't in the predefined list by using the ` customTextColors() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->textColors([
+        // ...
+    ])
+    ->customTextColors()
+```
+
+You do not need to use ` customTextColors() ` on the [content renderer](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-rich-content), as it will automatically render any custom colors that are used in the content.
+
+## Rendering rich content
+
+If you're [storing content as JSON](https://filamentphp.com/docs/5.x/forms/rich-editor.md#storing-content-as-json) instead of HTML, or your content requires processing to inject [private image URLs](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-private-images-in-the-editor) or similar, you'll need to use the ` RichContentRenderer ` tool in Filament to output HTML:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)->toHtml()
+```
+
+The ` toHtml() ` method returns a string. If you would like to output HTML in a Blade view without escaping the HTML, you can echo the ` RichContentRenderer ` object without calling ` toHtml() `:
+
+```blade
+{{ \Filament\Forms\Components\RichEditor\RichContentRenderer::make($record->content) }}
+```
+
+If you have configured the [file attachments behavior](https://filamentphp.com/docs/5.x/forms/rich-editor.md#uploading-images-to-the-editor) of the editor to change the disk or visibility of the uploaded files, you must also pass these settings to the renderer to ensure that the correct URLs are generated:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->fileAttachmentsDisk('s3')
+    ->fileAttachmentsVisibility('private')
+    ->toHtml()
+```
+
+If you are using [custom blocks](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-custom-blocks) in the rich editor, you can pass an array of custom blocks to the renderer to ensure that they are rendered correctly:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->customBlocks([
+        HeroBlock::class => [
+            'categoryUrl' => $record->category->getUrl(),
+        ],
+        CallToActionBlock::class,
+    ])
+    ->toHtml()
+```
+
+For details about handling custom block HTML and configuration safely, see [rendering content with custom blocks](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-content-with-custom-blocks).
+
+If you are using [merge tags](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-merge-tags), you can pass an array of values to replace the merge tags with:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->mergeTags([
+        'name' => $record->user->name,
+        'today' => now()->toFormattedDateString(),
+    ])
+    ->toHtml()
+```
+
+If you are using [custom text colors](https://filamentphp.com/docs/5.x/forms/rich-editor.md#customizing-text-colors), you can pass an array of colors to the renderer to ensure that the colors are rendered correctly:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+use Filament\Forms\Components\RichEditor\TextColor;
+
+RichContentRenderer::make($record->content)
+    ->textColors([
+        'brand' => TextColor::make('Brand', '#0ea5e9', darkColor: '#38bdf8'),
+    ])
+    ->toHtml();
+```
+
+### Styling the rendered content
+
+The rich editor HTML uses a combination of HTML elements, CSS classes, and inline styles to style the content, depending on the features used in the editor. If you render the content in a Filament table column or infolist entry with ` prose() `, Filament will automatically apply the necessary styles for you. If you are outputting the content in your own Blade view, you may need to add some additional styles to ensure that the content is styled correctly.
+
+One way of styling the content is to use [Tailwind CSS Typography](https://tailwindcss.com/docs/typography-plugin). This plugin provides a set of pre-defined styles for common HTML elements, such as headings, paragraphs, lists, and tables. You can apply these styles to a container element using the ` prose ` class:
+
+```blade
+<div class="prose dark:prose-invert">
+    {!! \Filament\Forms\Components\RichEditor\RichContentRenderer::make($record->content) !!}
+</div>
+```
+
+However, some features, such as the grid layout and text colors, require additional styles that are not included in the Tailwind CSS Typography plugin. Filament also includes its own ` fi-prose ` CSS class that adds these additional styles. Any app that loads Filament's ` vendor/filament/support/resources/css/index.css ` CSS will have access to this class. The styling is different to the ` prose ` class, but fits with Filament's design system better:
+
+```blade
+<div class="fi-prose">
+    {!! \Filament\Forms\Components\RichEditor\RichContentRenderer::make($record->content) !!}
+</div>
+```
+
+## Security
+
+By default, the editor outputs raw HTML, and sends it to the backend. Attackers are able to intercept the value of the component and send a different raw HTML string to the backend. As such, it is important that when outputting the HTML from a rich editor, it is sanitized; otherwise your site may be exposed to Cross-Site Scripting (XSS) vulnerabilities.
+
+When Filament outputs raw HTML from the database in components such as ` TextColumn ` and ` TextEntry `, it sanitizes it to remove any dangerous JavaScript. However, if you are outputting the HTML from a rich editor in your own Blade view, this is your responsibility. One option is to use Filament's ` sanitizeHtml() ` helper to do this, which is the same tool we use to sanitize HTML in the components mentioned above:
+
+```blade
+{!! str($record->content)->sanitizeHtml() !!}
+```
+
+If you're [storing content as JSON](https://filamentphp.com/docs/5.x/forms/rich-editor.md#storing-content-as-json) instead of HTML, or your content requires processing to inject [private image URLs](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-private-images-in-the-editor) or similar, you can use the [content renderer](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-rich-content) to output HTML. The renderer automatically sanitizes the editor's content, but treats HTML returned by [registered custom blocks](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-content-with-custom-blocks) as trusted application HTML. You are responsible for escaping or sanitizing user-supplied configuration values in both the block's output and its [preview](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-a-preview-for-a-custom-block).
+
+> **Danger**
+>
+> Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
+
+
+## Uploading images to the editor
+
+By default, uploaded images are stored publicly on your storage disk, so that the rich content stored in the database can be output easily anywhere. You may customize how images are uploaded using configuration methods:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->fileAttachmentsDisk('s3')
+    ->fileAttachmentsDirectory('attachments')
+    ->fileAttachmentsVisibility('private')
+```
+
+As well as allowing static values, the ` fileAttachmentsDisk() `, ` fileAttachmentsDirectory() `, and ` fileAttachmentsVisibility() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+> **Tip**
+>
+> Filament also supports [` spatie/laravel-medialibrary `](https://github.com/spatie/laravel-medialibrary) for storing rich editor file attachments. See our [plugin documentation](https://filamentphp.com/plugins/filament-spatie-media-library#using-media-library-for-rich-editor-file-attachments) for more information.
+
+
+### Using private images in the editor
+
+Using private images in the editor adds a layer of complexity to the process, since private images cannot be accessed directly via a permanent URL. Each time the editor is loaded or its content is rendered, temporary URLs need to be generated for each image, which are never stored in the database. Instead, Filament adds a ` data-id ` attribute to the image tags, which contains an identifier for the image in the storage disk, so that a temporary URL can be generated on demand.
+
+When rendering the content using private images, ensure that you are using the [` RichContentRenderer ` tool](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-rich-content) in Filament to output HTML:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->fileAttachmentsDisk('s3')
+    ->fileAttachmentsVisibility('private')
+    ->toHtml()
+```
+
+### Securing file attachment IDs
+
+The ` data-id ` attribute on an image node is an identifier for a file on the configured disk. When the content is rendered, Filament generates a URL for it — a signed temporary URL if the visibility is ` private `. Like any other Livewire form field value, the content and its ` data-id ` attributes are controlled by the client: a request can be intercepted to change a ` data-id ` to any other identifier on the same disk. If the disk also stores files belonging to other users or records, an attacker could otherwise cause the rendered content to reference (and serve a signed URL for) someone else's file.
+
+Filament allows this by default because legitimate features depend on it — for example, an action that inserts an image from a pre-existing library, or a "copy from another record" button. If none of your editors rely on such a flow, call ` preventFileAttachmentPathTampering() ` on the field to enable a built-in check:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->preventFileAttachmentPathTampering()
+```
+
+Filament parses the record's original content (via ` $record->getOriginal() ` for the attribute matching the field name) and allows only the ` data-id ` values already present. Any other existing ` data-id ` causes the field to fail validation, so the record is never saved with a tampered value. Newly uploaded images always pass through.
+
+The default file attachment provider performs no per-record scoping — any ` data-id ` that resolves to a file on the configured disk is accepted unless you enable ` preventFileAttachmentPathTampering() ` or use a dedicated disk containing only files that the current user may access. Setting ` fileAttachmentsDirectory() ` only changes where new attachments are stored; it does not restrict which existing paths can be submitted. If instead you are using the [` spatie/laravel-medialibrary ` plugin](https://filamentphp.com/plugins/filament-spatie-media-library#using-media-library-for-rich-editor-file-attachments) as the file attachment provider, it only generates URLs for ` data-id ` values in the record's own media collection. This prevents another record's media from being served, but it does not reject the submitted content during validation. Use ` preventFileAttachmentPathTampering() ` if you also need unapproved IDs to fail validation.
+
+> **Warning**
+>
+> ` preventFileAttachmentPathTampering() ` needs a record on the form. Without one — for example, on a create page — every existing ` data-id ` fails validation unless the [` allowFilePathUsing `](https://filamentphp.com/docs/5.x/forms/rich-editor.md#allowing-additional-data-id-values-with-a-callback) callback approves it. New uploads are unaffected.
+
+
+To apply this check to every ` RichEditor ` in your application without repeating it on each field, call ` configureUsing() ` in a service provider's ` boot() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::configureUsing(function (RichEditor $component): void {
+    $component->preventFileAttachmentPathTampering();
+});
+```
+
+Individual fields can still opt out by calling ` preventFileAttachmentPathTampering(false) `.
+
+#### Allowing additional ` data-id ` values with a callback
+
+If your application legitimately references an identifier that is not on the record — for example, a "copy from another record" action — pass the ` allowFilePathUsing ` argument to approve it. Approved identifiers bypass the validation error:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->preventFileAttachmentPathTampering(
+        allowFilePathUsing: fn (string $file): bool => in_array($file, [
+            'templates/default-image.png',
+            'templates/company-logo.png',
+        ], strict: true),
+    )
+```
+
+The callback receives the path exactly as submitted by the client. Use exact trusted paths where possible. Do not authorize an arbitrary directory using a prefix check, since the filesystem may normalize segments such as ` .. ` after the callback runs.
+
+You can inject various utilities into the function passed to ` allowFilePathUsing ` as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| File | ` string ` | ` $file ` | The submitted ` data-id ` value being authorized. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+The validation error message can be customized via [` validationMessages() `](https://filamentphp.com/docs/5.x/forms/validation.md#validation-messages) using the ` tampered ` key:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->preventFileAttachmentPathTampering()
+    ->validationMessages([
+        'tampered' => 'The content references an image that is not permitted.',
+    ])
+```
+
+### Validating uploaded images
+
+You may use the ` fileAttachmentsAcceptedFileTypes() ` method to control a list of accepted mime types for uploaded images. By default, ` image/png `, ` image/jpeg `, ` image/gif `, and ` image/webp ` are accepted:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->fileAttachmentsAcceptedFileTypes(['image/png', 'image/jpeg'])
+```
+
+You may use the ` fileAttachmentsMaxSize() ` method to control the maximum file size for uploaded images. The size is specified in kilobytes. By default, the maximum size is 12288 KB (12 MB):
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->fileAttachmentsMaxSize(5120) // 5 MB
+```
+
+### Allowing users to resize images
+
+By default, images in the editor cannot be resized by the user. You may enable image resizing using the ` resizableImages() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->resizableImages()
+```
+
+When enabled, users can resize images by clicking on them and dragging the resize handles. The aspect ratio is always preserved when resizing.
+
+As well as allowing a static value, the ` resizableImages() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+## Using custom blocks
+
+Custom blocks are elements that users can drag and drop into the rich editor. You can define custom blocks that user can insert into the rich editor using the ` customBlocks() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        HeroBlock::class,
+        CallToActionBlock::class,
+    ])
+```
+
+
+
+To create a custom block, you can use the following command:
+
+```bash
+php artisan make:filament-rich-content-custom-block HeroBlock
+```
+
+Each block needs a corresponding class that extends the ` Filament\Forms\Components\RichEditor\RichContentCustomBlock ` class. The ` getId() ` method should return a unique identifier for the block, and the ` getLabel() ` method should return the label that will be displayed in the editor's side panel:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    public static function getId(): string
+    {
+        return 'hero';
+    }
+
+    public static function getLabel(): string
+    {
+        return 'Hero section';
+    }
+}
+```
+
+When a user drags a custom block into the editor, you can choose to open a modal to collect additional information from the user before inserting the block. To do this, you can use the ` configureEditorAction() ` method to configure the [modal](https://filamentphp.com/docs/5.x/actions/modals.md) that will be opened when the block is inserted:
+
+```php
+use Filament\Actions\Action;
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    // ...
+
+    public static function configureEditorAction(Action $action): Action
+    {
+        return $action
+            ->modalDescription('Configure the hero section')
+            ->schema([
+                TextInput::make('heading')
+                    ->required(),
+                TextInput::make('subheading'),
+            ]);
+    }
+}
+```
+
+The ` schema() ` method on the action can define form fields that will be displayed in the modal. When the user submits the form, the form data will be saved as "configuration" for that block.
+
+### Rendering a preview for a custom block
+
+Once a block is inserted into the editor, you may define a "preview" for it using the ` toPreviewHtml() ` method. This method should return a string of HTML that will be displayed in the editor when the block is inserted, allowing users to see what the block will look like before they save it. You can access the ` $config ` for the block in this method, which contains the data that was submitted in the modal when the block was inserted:
+
+> **Danger**
+>
+> Filament treats HTML returned by ` toPreviewHtml() ` and the block's [` toHtml() ` method](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-content-with-custom-blocks) as trusted application HTML and does not sanitize it. Treat ` $config ` as untrusted user input, including when it comes from saved content. Escape plain text using Blade's ` {{ }} ` syntax or Laravel's ` e() ` helper, and validate user-supplied URLs before rendering them. If a configuration value intentionally contains HTML, [sanitize it](https://filamentphp.com/docs/5.x/forms/rich-editor.md#security) before including it in either the preview or the final output.
+
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    // ...
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    public static function toPreviewHtml(array $config): string
+    {
+        return view('filament.forms.components.rich-editor.rich-content-custom-blocks.hero.preview', [
+            'heading' => $config['heading'],
+            'subheading' => $config['subheading'] ?? 'Default subheading',
+        ])->render();
+    }
+}
+```
+
+In the preview's Blade view, escape the heading and subheading:
+
+```blade
+<h2>{{ $heading }}</h2>
+<p>{{ $subheading }}</p>
+```
+
+
+
+The ` getPreviewLabel() ` can be defined if you would like to customize the label that is displayed above the preview in the editor. By default, it will use the label defined in the ` getLabel() ` method, but the ` getPreviewLabel() ` is able to access the ` $config ` for the block, allowing you to display dynamic information in the label:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    // ...
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    public static function getPreviewLabel(array $config): string
+    {
+        return "Hero section: {$config['heading']}";
+    }
+}
+```
+
+#### Using minimal custom block controls
+
+You can reduce the framing around custom block previews to make the content look closer to how it would render on the frontend using ` minimalCustomBlockControls() `. This stacks compact edit and delete buttons beside the preview and visually hides the block's label, while keeping it available to screen readers:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        HeroBlock::class,
+        CallToActionBlock::class,
+    ])
+    ->minimalCustomBlockControls()
+```
+
+
+
+This setting applies to all custom blocks with previews in the editor. Blocks without a preview keep their usual header and label. Disabled editors do not display edit or delete buttons.
+
+The buttons stay at the top beside tall previews. Previews shorter than the buttons are vertically centered, with enough space for both buttons.
+
+As well as allowing a static value, the ` minimalCustomBlockControls() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+### Rendering content with custom blocks
+
+When rendering the rich content, you can pass the array of custom blocks to the ` RichContentRenderer ` to ensure that the blocks are rendered correctly:
+
+> **Danger**
+>
+> The renderer sanitizes the surrounding editor content, but preserves HTML returned by registered custom blocks without sanitization, just like [custom block previews](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-a-preview-for-a-custom-block). Your block's ` toHtml() ` method must escape or sanitize user-supplied configuration values itself. Do not return user-supplied HTML directly from this method.
+
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->customBlocks([
+        HeroBlock::class,
+        CallToActionBlock::class,
+    ])
+    ->toHtml()
+```
+
+The renderer still uses your application's [configured HTML sanitizer](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for the surrounding content. Custom sanitizers must escape HTML characters in text and attribute values, as Filament's built-in sanitizer does. A block is restored only if its complete placeholder (` <div data-id="…"></div> `) remains unchanged in the sanitizer's output. Sanitizer policies or input length limits may prevent restoration. This does not sanitize the block's own HTML.
+
+Each block class may have a ` toHtml() ` method that returns the HTML that should be rendered for that block:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    // ...
+
+    /**
+     * @param  array<string, mixed>  $config
+     * @param  array<string, mixed>  $data
+     */
+    public static function toHtml(array $config, array $data): string
+    {
+        return view('filament.forms.components.rich-editor.rich-content-custom-blocks.hero.index', [
+            'heading' => $config['heading'],
+            'subheading' => $config['subheading'],
+            'buttonLabel' => 'View category',
+            'buttonUrl' => $data['categoryUrl'],
+        ])->render();
+    }
+}
+```
+
+As seen above, the ` toHtml() ` method receives two parameters: ` $config `, which contains the configuration data submitted in the modal when the block was inserted, and ` $data `, which contains any additional data that may be needed to render the block. This allows you to access the configuration data and render the block accordingly. The data can be passed in the ` customBlocks() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->customBlocks([
+        HeroBlock::class => [
+            'categoryUrl' => $record->category->getUrl(),
+        ],
+        CallToActionBlock::class,
+    ])
+    ->toHtml()
+```
+
+### Adding icons to custom blocks
+
+You can display an [icon](https://filamentphp.com/docs/5.x/styling/icons.md) alongside a block's label in the side panel by defining its ` getIcon() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+use Filament\Support\Icons\Heroicon;
+
+class HeroBlock extends RichContentCustomBlock
+{
+    // ...
+
+    public static function getIcon(): Heroicon
+    {
+        return Heroicon::RectangleGroup;
+    }
+}
+```
+
+You may return an icon name, a ` BackedEnum ` such as ` Heroicon `, or an object implementing Laravel's ` Htmlable ` interface. By default, ` getIcon() ` returns ` null ` and the block displays its label without an icon.
+
+### Displaying custom blocks in a grid
+
+By default, the side panel displays custom blocks as a list. You can display them as a grid using ` customBlocksGrid() `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        HeroBlock::class,
+        CallToActionBlock::class,
+    ])
+    ->customBlocksGrid()
+```
+
+Each grid item displays the block's label and its [icon](https://filamentphp.com/docs/5.x/forms/rich-editor.md#adding-icons-to-custom-blocks), if one is defined. Pass ` false ` to ` customBlocksGrid() ` to restore the list.
+
+Defining an icon for each block makes the grid easier to scan:
+
+
+
+As well as allowing a static value, the ` customBlocksGrid() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+### Grouping custom blocks
+
+You can organize custom blocks into groups using string keys in the ` customBlocks() ` array. Blocks passed directly (without a string key) are ungrouped and appear first in the panel:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        AlertBlock::class,
+        DividerBlock::class,
+        'Marketing' => [
+            HeroBlock::class,
+            CallToActionBlock::class,
+            BannerBlock::class,
+        ],
+        'Media' => [
+            ImageGalleryBlock::class,
+            VideoEmbedBlock::class,
+        ],
+    ])
+```
+
+
+
+Groups are displayed in the order they are defined in the array, with sticky headings in the side panel.
+
+When rendering content with grouped blocks, you can pass the same grouped array structure to the ` RichContentRenderer `. Groups are ignored during rendering — only the block classes are used:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->customBlocks([
+        'Marketing' => [
+            HeroBlock::class => [
+                'categoryUrl' => $record->category->getUrl(),
+            ],
+            CallToActionBlock::class,
+        ],
+    ])
+    ->toHtml()
+```
+
+### Searching custom blocks
+
+You can add a search field to the custom blocks panel using ` searchableCustomBlocks() `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        'Marketing' => [
+            HeroBlock::class,
+            CallToActionBlock::class,
+        ],
+        'Media' => [
+            ImageGalleryBlock::class,
+            VideoEmbedBlock::class,
+        ],
+    ])
+    ->searchableCustomBlocks()
+```
+
+Search matches block labels and group names, ignoring capitalization and surrounding whitespace. When a group name matches, all blocks in that group appear. If nothing matches, the panel displays a message. Clearing the search restores all blocks.
+
+Search works with both the list and [grid](https://filamentphp.com/docs/5.x/forms/rich-editor.md#displaying-custom-blocks-in-a-grid) layouts. It is disabled by default, and you can pass ` false ` to ` searchableCustomBlocks() ` to disable it.
+
+As well as allowing a static value, the ` searchableCustomBlocks() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+
+
+### Opening the custom blocks panel by default
+
+If you want the custom blocks panel to be open by default when the rich editor is loaded, you can use the ` activePanel('customBlocks') ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->customBlocks([
+        HeroBlock::class,
+        CallToActionBlock::class,
+    ])
+    ->activePanel('customBlocks')
+```
+
+### Styling custom block previews with prose
+
+By default, custom block previews are displayed without prose styling to make styling easier. You can enable prose styling for a block's preview using the ` shouldApplyProseStylingToPreview() ` method. This is useful when you want the preview to display with typography styles like headings, paragraphs, and other prose elements:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class HeadingBlock extends RichContentCustomBlock
+{
+    // ...
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    public static function shouldApplyProseStylingToPreview(array $config): bool
+    {
+        return true;
+    }
+}
+```
+
+When ` shouldApplyProseStylingToPreview() ` returns ` true `, the block's preview will be styled with the prose typography styles defined in the rich editor, including proper margins, font sizes, and other text formatting. By default, this method returns ` false `, so previews are displayed with minimal styling.
+
+You can make this decision based on the block's configuration, allowing different blocks to have different preview styling:
+
+```php
+public static function shouldApplyProseStylingToPreview(array $config): bool
+{
+    return ($config['useProseStyle'] ?? false) === true;
+}
+```
+
+## Using merge tags
+
+Merge tags allow the user to insert "placeholders" into their rich content, which can be replaced with dynamic values when the content is rendered. This is useful for inserting things like the current user's name, or the current date.
+
+To register merge tags on an editor, use the ` mergeTags() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->mergeTags([
+        'name',
+        'today',
+    ])
+```
+
+
+
+Merge tags are surrounded by double curly braces, like ` {{ name }} `. When the content is rendered, these tags will be replaced with the corresponding values.
+
+To insert a merge tag into the content, users can start typing ` {{ ` to search for a tag to insert. Alternatively, they can click on the "merge tags" tool in the editor's toolbar, which opens a panel containing all the merge tags. They can then drag a merge tag from the editor's side panel into the content or click to insert it.
+
+### Rendering content with merge tags
+
+When rendering the rich content, you can pass an array of values to replace the merge tags with:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->mergeTags([
+        'name' => $record->user->name,
+        'today' => now()->toFormattedDateString(),
+    ])
+    ->toHtml()
+```
+
+If you have many merge tags or you need to run some logic to determine the values, you can use a function as the value of each merge tag. This function will be called when a merge tag is first encountered in the content, and its result is cached for subsequent tags of the same name:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->mergeTags([
+        'name' => fn (): string => $record->user->name,
+        'today' => now()->toFormattedDateString(),
+    ])
+    ->toHtml()
+```
+
+#### Using HTML content in merge tags
+
+By default, merge tags render their values as plain text. However, you can render HTML content in merge tags by providing values that implement Laravel's ` Htmlable ` interface. This is useful for inserting formatted content, links, or other HTML elements:
+
+```php
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+use Illuminate\Support\HtmlString;
+
+RichContentRenderer::make($record->content)
+    ->mergeTags([
+        'user_name' => $record->user->name, // Plain text
+        'user_profile_link' => new HtmlString('<a href="' . route('profile', $record->user) . '">View Profile</a>'),
+    ])
+    ->toHtml()
+```
+
+When a merge tag value implements the ` Htmlable ` interface (such as ` HtmlString `), the system automatically detects this and renders the HTML content without escaping it. Non-` Htmlable ` values continue to be rendered as plain text for security.
+
+### Using custom merge tag labels
+
+You may provide custom labels for merge tags that will be displayed in the editor's side panel and content preview using an associative array where the keys are the merge tag names and the values are the labels:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->mergeTags([
+        'name' => 'Full name',
+        'today' => 'Today\'s date',
+    ])
+```
+
+The labels aren't saved in the content of the editor and are only used for display purposes.
+
+### Opening the merge tags panel by default
+
+If you want the merge tags panel to be open by default when the rich editor is loaded, you can use the ` activePanel('mergeTags') ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->mergeTags([
+        'name',
+        'today',
+    ])
+    ->activePanel('mergeTags')
+```
+
+## Using mentions
+
+Mentions allow users to insert references to other records (such as users, issues, or tags) by typing a trigger character. When the user types a trigger character like ` @ `, a dropdown appears allowing them to search and select from available options. The selected mention is inserted as a non-editable inline token.
+
+To register mentions on an editor, use the ` mentions() ` method with one or more ` MentionProvider ` instances:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\MentionProvider;
+
+RichEditor::make('content')
+    ->mentions([
+        MentionProvider::make('@')
+            ->items([
+                1 => 'Jane Doe',
+                2 => 'John Smith',
+            ]),
+    ])
+```
+
+
+
+Items passed to ` items() ` are sent to the browser along with the editor, so typing after the trigger character filters them client-side without making any requests to the server.
+
+Each provider is configured with a trigger character (passed to ` make() `) that activates the mention search. You can have multiple providers with different triggers:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\MentionProvider;
+
+RichEditor::make('content')
+    ->mentions([
+        MentionProvider::make('@')
+            ->items([
+                1 => 'Jane Doe',
+                2 => 'John Smith',
+            ]),
+        MentionProvider::make('#')
+            ->items([
+                'bug' => 'Bug',
+                'feature' => 'Feature',
+            ]),
+    ])
+```
+
+### Searching mentions from the database
+
+For large datasets, you should fetch results dynamically using ` getSearchResultsUsing() `. The callback receives the search term and should return an array of options with the format ` [id => label] `.
+
+When using dynamic search results, only the mention's ` id ` is stored in the content. To display the correct label when the content is loaded, you must also provide ` getLabelsUsing() `. This callback receives an array of IDs and should return an array with the format ` [id => label] `:
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\MentionProvider;
+
+RichEditor::make('content')
+    ->mentions([
+        MentionProvider::make('@')
+            ->getSearchResultsUsing(fn (string $search): array => User::query()
+                ->where('name', 'like', "%{$search}%")
+                ->orderBy('name')
+                ->limit(10)
+                ->pluck('name', 'id')
+                ->all())
+            ->getLabelsUsing(fn (array $ids): array => User::query()
+                ->whereIn('id', $ids)
+                ->pluck('name', 'id')
+                ->all()),
+    ])
+```
+
+### Rendering content with mentions
+
+When rendering the rich content, you can pass the array of mention providers to the ` RichContentRenderer ` to ensure that the mentions are rendered correctly.
+
+You can make mentions link to a URL when rendered using the ` url() ` method. The callback receives the mention's ` id ` and ` label `, and should return a URL string:
+
+```php
+use Filament\Forms\Components\RichEditor\MentionProvider;
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichContentRenderer::make($record->content)
+    ->mentions([
+        MentionProvider::make('@')
+            ->getLabelsUsing(fn (array $ids): array => User::query()
+                ->whereIn('id', $ids)
+                ->pluck('name', 'id')
+                ->all())
+            ->url(fn (string $id, string $label): string => route('users.show', $id)),
+    ])
+    ->toHtml()
+```
+
+> **Tip**
+>
+> The string returned from the ` url() ` closure is rendered directly into the ` href ` attribute of an ` <a> ` tag, so if any part of the URL is built from user input you should make sure it cannot resolve to a scheme like ` javascript: ` or ` data: ` that the browser would execute. The simplest way to guarantee this is to wrap the return value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/advanced/security#validating-user-input) helper, which only allows ` http `/` https ` and relative URLs:
+> 
+> ```php
+> use Illuminate\Support\Str;
+> 
+> ->url(fn (string $id, string $label): ?string => Str::sanitizeUrl(
+>     route('users.show', $id),
+> ))
+> ```
+
+
+## Registering rich content attributes
+
+There are elements of the rich editor configuration that apply to both the editor and the renderer. For example, if you are using [private images](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-private-images-in-the-editor), [custom blocks](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-custom-blocks), [merge tags](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-merge-tags), [mentions](https://filamentphp.com/docs/5.x/forms/rich-editor.md#using-mentions), or [plugins](https://filamentphp.com/docs/5.x/forms/rich-editor.md#extending-the-rich-editor), you need to ensure that the same configuration is used in both places. To do this, Filament provides you with a way to register rich content attributes that can be used in both the editor and the renderer. If a plugin implements ` HasFileAttachmentProvider `, the file attachment provider is automatically resolved from the plugin, so you do not need to call ` fileAttachmentProvider() ` on the attribute or on the renderer.
+
+To register rich content attributes on an Eloquent model, you should use the ` InteractsWithRichContent ` trait and implement the ` HasRichContent ` interface. This allows you to register the attributes in the ` setUpRichContent() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor\MentionProvider;
+use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
+use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model implements HasRichContent
+{
+    use InteractsWithRichContent;
+
+    public function setUpRichContent(): void
+    {
+        $this->registerRichContent('content')
+            ->fileAttachmentsDisk('s3')
+            ->fileAttachmentsVisibility('private')
+            ->customBlocks([
+                HeroBlock::class => fn (): array => [
+                    'categoryUrl' => $this->category->getUrl(),
+                ],
+                CallToActionBlock::class,
+            ])
+            ->mergeTags([
+                'name' => fn (): string => $this->user->name,
+                'today' => now()->toFormattedDateString(),
+            ])
+            ->mergeTagLabels([
+                'name' => 'Full name',
+                'today' => 'Today\'s date',
+            ])
+            ->mentions([
+                MentionProvider::make('@')
+                    ->items([
+                        1 => 'Jane Doe',
+                        2 => 'John Smith',
+                    ]),
+            ])
+            ->textColors([
+                'brand' => TextColor::make('Brand', '#0ea5e9', darkColor: '#38bdf8'),
+            ])
+            ->customTextColors()
+            ->linkProtocols(['http', 'https', 'mailto'])
+            ->plugins([
+                HighlightRichContentPlugin::make(),
+            ]);
+    }
+}
+```
+
+Whenever you use the ` RichEditor ` component, the configuration registered for the corresponding attribute will be used:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+```
+
+To easily render the rich content HTML from a model with the given configuration, you can call the ` renderRichContent() ` method on the model, passing the name of the attribute:
+
+```blade
+{!! $record->renderRichContent('content') !!}
+```
+
+Alternatively, you can get an ` Htmlable ` object to render without escaping the HTML:
+
+```blade
+{{ $record->getRichContentAttribute('content') }}
+```
+
+When using a [text column](https://filamentphp.com/docs/5.x/tables/columns/text.md) in a table or a [text entry](https://filamentphp.com/docs/5.x/infolists/text-entry.md) in an infolist, you don't need to manually render the rich content. Filament will do this for you automatically:
+
+```php
+use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('content')
+
+TextEntry::make('content')
+```
+
+## Generating fake rich content
+
+You can generate rich content in database factories using Faker's ` filamentRichContent() ` method. You can build the document by chaining methods, then store it as HTML using ` toHtml() `:
+
+```php
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class PostFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'content' => fake()
+                ->filamentRichContent()
+                ->heading()
+                ->paragraphs(3)
+                ->bulletList()
+                ->toHtml(),
+        ];
+    }
+}
+```
+
+If the rich editor is [storing content as JSON](https://filamentphp.com/docs/5.x/forms/rich-editor.md#storing-content-as-json), you can use ` toArray() ` instead:
+
+```php
+'content' => fake()
+    ->filamentRichContent()
+    ->heading()
+    ->paragraphs(3)
+    ->toArray(),
+```
+
+You can generate a complete article using the ` article() ` method. An article starts with a lead introduction followed by sections with level-two headings. The ` depth ` argument recursively adds nested sections, using the next heading level for each depth:
+
+```php
+'content' => fake()
+    ->filamentRichContent()
+    ->article(depth: 2)
+    ->toHtml(),
+```
+
+In this example, the article contains level-two sections with level-three subsections. The maximum depth is ` 5 `, corresponding to heading levels two through six.
+
+You can generate the following block content:
+
+- ` heading() `
+- ` paragraphs() `
+- ` lead() `
+- ` bulletList() `
+- ` orderedList() `
+- ` blockquote() `
+- ` codeBlock() `
+- ` horizontalRule() `
+- ` table() `
+- ` details() `
+- ` grid() `
+- ` image() ` for an image with a URL
+- ` fileAttachment() ` for an existing image ID managed by a [file attachment provider](https://filamentphp.com/docs/5.x/forms/rich-editor.md#uploading-images-to-the-editor)
+
+The ` paragraphs() ` method can generate links and the ` bold `, ` italic `, ` underline `, ` strike `, ` subscript `, ` superscript `, ` code `, ` small `, and ` highlight ` marks:
+
+```php
+'content' => fake()
+    ->filamentRichContent()
+    ->paragraphs(
+        count: 3,
+        links: true,
+        bold: true,
+        italic: true,
+    )
+    ->toHtml(),
+```
+
+You can apply a configured text color to generated text using ` textColor() `, apply an alignment using ` textAlignment() `, or insert a hard break using ` hardBreak() `.
+
+### Using rich content attribute configuration
+
+You may pass a [rich content attribute](https://filamentphp.com/docs/5.x/forms/rich-editor.md#registering-rich-content-attributes) to ` filamentRichContent() `. The faker will use its JSON mode, renderer, custom blocks, merge tags, mentions, text colors, plugins, link protocols, and file attachment configuration:
+
+```php
+use App\Models\Post;
+
+$attribute = (new Post)->getRichContentAttribute('content');
+
+return [
+    'content' => fake()
+        ->filamentRichContent($attribute)
+        ->article()
+        ->mergeTags(2)
+        ->mention()
+        ->textColor()
+        ->toValue(),
+];
+```
+
+The ` toValue() ` method returns an array when the attribute uses JSON mode and storage HTML otherwise, so the factory does not need to repeat that configuration. Storage HTML preserves custom blocks, merge tags, mentions, and attachments so that they can be edited later. You may also use ` toArray() ` or ` toHtml() ` to choose the stored format explicitly.
+
+If you need to render the generated content for display instead of storing it, use ` toRenderedHtml() ` or ` toText() `. The ` attribute() ` method can set the attribute after constructing the faker, and ` renderUsing() ` can override the renderer used for display output.
+
+The ` mergeTag() ` and ` mention() ` methods insert inline nodes into generated paragraphs. Without arguments, they choose from the merge tags or mention providers registered on the attribute. You can use ` mergeTags() ` and ` mentions() ` to insert several. You may also pass a specific merge tag ID to ` mergeTag() `, or a mention ID and trigger character to ` mention() `. When multiple mention providers are configured, you must specify the trigger character when passing an ID.
+
+### Generating custom blocks
+
+Calling ` customBlock() ` without arguments only selects from registered custom blocks that implement the ` CanGenerateFakeConfiguration ` contract. This prevents the faker from generating blocks with invalid empty configuration:
+
+```php
+use Faker\Generator;
+use Filament\Forms\Components\RichEditor\Contracts\CanGenerateFakeConfiguration;
+use Filament\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class CallToActionBlock extends RichContentCustomBlock implements CanGenerateFakeConfiguration
+{
+    public static function generateFakeConfiguration(Generator $faker): array
+    {
+        return [
+            'heading' => $faker->sentence(),
+            'buttonLabel' => $faker->words(3, true),
+            'buttonUrl' => $faker->url(),
+        ];
+    }
+
+    // ...
+}
+```
+
+You may pass a block class or ID and its configuration directly when you need a particular block:
+
+```php
+->customBlock(CallToActionBlock::class, [
+    'heading' => 'Start building today',
+    'buttonLabel' => 'Get started',
+    'buttonUrl' => '/register',
+])
+```
+
+### Generating plugin content
+
+Plugins may add arbitrary TipTap nodes, so you may insert their raw JSON structures using ` block() ` and ` inline() `:
+
+```php
+->block([
+    'type' => 'callout',
+    'attrs' => ['variant' => 'info'],
+])
+->inline([
+    'type' => 'stockTicker',
+    'attrs' => ['symbol' => 'AAPL'],
+])
+```
+
+The ` RichContentFaker ` class is macroable, so a plugin can also register fluent methods for its own nodes.
+
+All random values use the same Faker generator, so seeded Faker output remains reproducible.
+
+## Extending the rich editor
+
+Custom ` RichEditorTool ` buttons participate in toolbar keyboard navigation automatically. Use ` toggle() ` to expose a tool's formatting state, and ` disabledWhenNotActive() ` to disable it when its active expression is false. Use ` action() ` for Filament action modals so selection and focus return are preserved. If you use ` jsHandler() ` to open your own dialog or another asynchronous interface, you are responsible for managing its focus and returning to a valid editor or toolbar control when it closes.
+
+You can create plugins for the rich editor, which allow you to add custom TipTap extensions to the editor and renderer, as well as custom toolbar buttons. Create a new class that implements the ` RichContentPlugin ` interface:
+
+```php
+use Filament\Actions\Action;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\EditorCommand;
+use Filament\Forms\Components\RichEditor\Plugins\Contracts\RichContentPlugin;
+use Filament\Forms\Components\RichEditor\RichEditorTool;
+use Filament\Support\Enums\Width;
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Icons\Heroicon;
+use Tiptap\Core\Extension;
+use Tiptap\Marks\Highlight;
+
+class HighlightRichContentPlugin implements RichContentPlugin
+{
+    public static function make(): static
+    {
+        return app(static::class);
+    }
+
+    /**
+     * @return array<Extension>
+     */
+    public function getTipTapPhpExtensions(): array
+    {
+        // This method should return an array of PHP TipTap extension objects.
+        // See: https://github.com/ueberdosis/tiptap-php
+    
+        return [
+            app(Highlight::class, [
+                'options' => ['multicolor' => true],
+            ]),
+        ];
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getTipTapJsExtensions(): array
+    {
+        // This method should return an array of URLs to JavaScript files containing
+        // TipTap extensions that should be asynchronously loaded into the editor
+        // when the plugin is used.
+    
+        return [
+            FilamentAsset::getScriptSrc('rich-content-plugins/highlight'),
+        ];
+    }
+
+    /**
+     * @return array<RichEditorTool>
+     */
+    public function getEditorTools(): array
+    {
+        // This method should return an array of `RichEditorTool` objects, which can then be
+        // used in the `toolbarButtons()` of the editor.
+        
+        // The `jsHandler()` method allows you to access the TipTap editor instance
+        // through `$getEditor()`, and `chain()` any TipTap commands to it.
+        // See: https://tiptap.dev/docs/editor/api/commands
+        
+        // The `action()` method allows you to run an action (registered in the `getEditorActions()`
+        // method) when the toolbar button is clicked. This allows you to open a modal to
+        // collect additional information from the user before running a command.
+    
+        return [
+            RichEditorTool::make('highlight')
+                ->jsHandler('$getEditor()?.chain().focus().toggleHighlight().run()')
+                ->icon(Heroicon::CursorArrowRays),
+            RichEditorTool::make('highlightWithCustomColor')
+                ->action(arguments: '{ color: $getEditor().getAttributes(\'highlight\')?.[\'data-color\'] }')
+                ->icon(Heroicon::CursorArrowRipple),
+        ];
+    }
+
+    /**
+     * @return array<Action>
+     */
+    public function getEditorActions(): array
+    {
+        // This method should return an array of `Action` objects, which can be used by the tools
+        // registered in the `getEditorTools()` method. The name of the action should match
+        // the name of the tool that uses it.
+        
+        // The `runCommands()` method allows you to run TipTap commands on the editor instance.
+        // It accepts an array of `EditorCommand` objects that define the command to run,
+        // as well as any arguments to pass to the command. You should also pass in the
+        // `editorSelection` argument, which is the current selection in the editor
+        // to apply the commands to.
+    
+        return [
+            Action::make('highlightWithCustomColor')
+                ->modalWidth(Width::Large)
+                ->fillForm(fn (array $arguments): array => [
+                    'color' => $arguments['color'] ?? null,
+                ])
+                ->schema([
+                    ColorPicker::make('color'),
+                ])
+                ->action(function (array $arguments, array $data, RichEditor $component): void {
+                    $component->runCommands(
+                        [
+                            EditorCommand::make(
+                                'toggleHighlight',
+                                arguments: [[
+                                    'color' => $data['color'],
+                                ]],
+                            ),
+                        ],
+                        editorSelection: $arguments['editorSelection'],
+                    );
+                }),
+        ];
+    }
+}
+```
+
+You can use the ` plugins() ` method to register your plugin with the rich editor and [rich content renderer](https://filamentphp.com/docs/5.x/forms/rich-editor.md#rendering-rich-content):
+
+```php
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
+
+RichEditor::make('content')
+    ->toolbarButtons([
+        ['bold', 'highlight', 'highlightWithCustomColor'],
+        ['h2', 'h3'],
+        ['bulletList', 'orderedList'],
+    ])
+    ->plugins([
+        HighlightRichContentPlugin::make(),
+    ])
+
+RichContentRenderer::make($record->content)
+    ->plugins([
+        HighlightRichContentPlugin::make(),
+    ])
+```
+
+### Enabling or disabling toolbar buttons from a plugin
+
+By default, when a plugin provides tools via ` getEditorTools() `, those tools are registered but not automatically shown in the toolbar. The user needs to manually add them using ` toolbarButtons() ` or ` enableToolbarButtons() `.
+
+If you want your plugin to automatically enable or disable toolbar buttons, you can implement the ` HasToolbarButtons ` interface alongside ` RichContentPlugin `. This is an optional, separate interface:
+
+```php
+use Filament\Forms\Components\RichEditor\Plugins\Contracts\HasToolbarButtons;
+use Filament\Forms\Components\RichEditor\Plugins\Contracts\RichContentPlugin;
+
+class HighlightRichContentPlugin implements RichContentPlugin, HasToolbarButtons
+{
+    // ... other methods ...
+
+    /**
+     * @return array<string | array<string | array<string>>>
+     */
+    public function getEnabledToolbarButtons(): array
+    {
+        return ['highlight', 'highlightWithCustomColor'];
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getDisabledToolbarButtons(): array
+    {
+        return [];
+    }
+}
+```
+
+The ` getEnabledToolbarButtons() ` method returns button names to add to the toolbar. The ` getDisabledToolbarButtons() ` method returns button names to remove from the toolbar.
+
+Plugin toolbar modifications are applied before user-level modifications. This means the user can always override the plugin's behavior using ` enableToolbarButtons() ` or ` disableToolbarButtons() `:
+
+```php
+RichEditor::make('content')
+    ->plugins([
+        HighlightRichContentPlugin::make(),
+    ])
+    ->disableToolbarButtons(['highlightWithCustomColor'])
+```
+
+### Setting up a TipTap JavaScript extension
+
+Filament is able to asynchronously load JavaScript extensions for TipTap. To do this, you need to create a JavaScript file that contains the extension, and register it in the ` getTipTapJsExtensions() ` method of your [plugin](https://filamentphp.com/docs/5.x/forms/rich-editor.md#extending-the-rich-editor).
+
+For instance, if you wanted to use the [TipTap highlight extension](https://tiptap.dev/docs/editor/extensions/marks/highlight), make sure it is installed first:
+
+```bash
+npm install @tiptap/extension-highlight --save-dev
+```
+
+Then, create a JavaScript file that imports the extension. In this example, create a file called ` highlight.js ` in the ` resources/js/filament/rich-content-plugins ` directory, and add the following code to it:
+
+```javascript
+import Highlight from '@tiptap/extension-highlight'
+
+export default Highlight.configure({
+    multicolor: true,
+})
+```
+
+One way to compile this file is to use [esbuild](https://esbuild.github.io). You can install it using ` npm `:
+
+```bash
+npm install esbuild --save-dev
+```
+
+You must create an [esbuild](https://esbuild.github.io) script to compile the file. You can put this anywhere, for example ` bin/build.js `:
+
+```js
+import * as esbuild from 'esbuild'
+
+async function compile(options) {
+    const context = await esbuild.context(options)
+
+    await context.rebuild()
+    await context.dispose()
+}
+
+compile({
+    define: {
+        'process.env.NODE_ENV': `'production'`,
+    },
+    bundle: true,
+    mainFields: ['module', 'main'],
+    platform: 'neutral',
+    sourcemap: false,
+    sourcesContent: false,
+    treeShaking: true,
+    target: ['es2020'],
+    minify: true,
+    entryPoints: ['./resources/js/filament/rich-content-plugins/highlight.js'],
+    outfile: './resources/js/dist/filament/rich-content-plugins/highlight.js',
+})
+```
+
+As you can see at the bottom of the script, we are compiling a file called ` resources/js/filament/rich-content-plugins/highlight.js ` into ` resources/js/dist/filament/rich-content-plugins/highlight.js `. You can change these paths to suit your needs. You can compile as many files as you want.
+
+To run the script and compile this file into ` resources/js/dist/filament/rich-content-plugins/highlight.js ` run the following command:
+
+```bash
+node bin/build.js
+```
+
+You should register it in the ` boot() ` method of a service provider, like ` AppServiceProvider `, and use ` loadedOnRequest() ` so that it is not downloaded until the rich editor is loaded on a page:
+
+```php
+use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
+
+FilamentAsset::register([
+    Js::make('rich-content-plugins/highlight', __DIR__ . '/../../resources/js/dist/filament/rich-content-plugins/highlight.js')->loadedOnRequest(),
+]);
+```
+
+To publish this new JavaScript file into the ` /public ` directory of your app so that it can be served, you can use the ` filament:assets ` command:
+
+```bash
+php artisan filament:assets
+```
+
+In the [plugin object](https://filamentphp.com/docs/5.x/forms/rich-editor.md#extending-the-rich-editor), the ` getTipTapJsExtensions() ` method should return the path to the JavaScript file you just created. Now that it's registered with ` FilamentAsset `, you can use the ` getScriptSrc() ` method to get the URL to the file:
+
+```php
+use Filament\Support\Facades\FilamentAsset;
+
+/**
+ * @return array<string>
+ */
+public function getTipTapJsExtensions(): array
+{
+    return [
+        FilamentAsset::getScriptSrc('rich-content-plugins/highlight'),
+    ];
+}
+```
+
+#### Sharing the bundled TipTap/ProseMirror instance
+
+When custom JavaScript extensions import from ` @tiptap/core ` or ` @tiptap/pm/* `, each compiled extension includes its own copy of these packages. This wastes around 150-200 KB per extension and — more importantly — creates multiple ProseMirror instances on the page. Because ProseMirror relies heavily on ` instanceof ` checks (for ` Node `, ` Mark `, ` Plugin `, ` DecorationSet `, etc.), extensions that bundle their own copy of these modules can fail to interoperate with the editor's core.
+
+To avoid this, Filament exposes the bundled TipTap and ProseMirror modules on ` window.FilamentRichEditor.tiptap `:
+
+```js
+window.FilamentRichEditor.tiptap = {
+    core,     // @tiptap/core
+    pmState,  // @tiptap/pm/state
+    pmView,   // @tiptap/pm/view
+    pmModel,  // @tiptap/pm/model
+}
+```
+
+You can reference these modules directly in your extension:
+
+```javascript
+const { Node, mergeAttributes } = window.FilamentRichEditor.tiptap.core
+const { Plugin, PluginKey } = window.FilamentRichEditor.tiptap.pmState
+
+export default Node.create({
+    name: 'myExtension',
+    // ...
+})
+```
+
+Alternatively, you can configure your build to intercept imports of ` @tiptap/core ` and ` @tiptap/pm/{state,view,model} ` and resolve them from the global at runtime. This lets you keep writing normal ` import ` statements in your extension source — other ` @tiptap/* ` packages (like ` @tiptap/extension-highlight `) continue to be bundled as usual. The following esbuild plugin inspects each intercepted package's real named exports at build time and rewrites the imports to read from ` window.FilamentRichEditor.tiptap `:
+
+```bash
+npm install --save-dev @tiptap/core @tiptap/pm
+```
+
+```js
+// bin/build.js
+import * as esbuild from 'esbuild'
+
+const tiptapSharedPlugin = {
+    name: 'tiptap-shared',
+    setup(build) {
+        const keys = {
+            '@tiptap/core': 'core',
+            '@tiptap/pm/state': 'pmState',
+            '@tiptap/pm/view': 'pmView',
+            '@tiptap/pm/model': 'pmModel',
+        }
+
+        build.onResolve({ filter: /^@tiptap\/(core|pm\/(state|view|model))$/ }, (args) => ({
+            path: args.path,
+            namespace: 'tiptap-shared',
+        }))
+
+        build.onLoad({ filter: /.*/, namespace: 'tiptap-shared' }, async (args) => {
+            const realModule = await import(args.path)
+            const namedExports = Object.keys(realModule).filter(
+                (key) => key !== '__esModule' && key !== 'default',
+            )
+
+            const key = keys[args.path]
+            let code = `const __module = window.FilamentRichEditor.tiptap.${key};\n`
+
+            if (namedExports.length) {
+                code += `export const { ${namedExports.join(', ')} } = __module;\n`
+            }
+
+            code += `export default __module?.default ?? __module;\n`
+
+            return { contents: code, loader: 'js' }
+        })
+    },
+}
+
+esbuild.build({
+    // ...
+    plugins: [tiptapSharedPlugin],
+    entryPoints: ['./resources/js/filament/rich-content-plugins/my-extension.js'],
+    outfile: './resources/js/dist/filament/rich-content-plugins/my-extension.js',
+})
+```
+
+> **Info**
+>
+> ` window.FilamentRichEditor.tiptap ` is assigned when the rich editor bundle loads, which happens before ` getTipTapJsExtensions() ` URLs are fetched. If you need to use the modules in a context where the rich editor has not yet loaded, bundle your own copies instead.
+> 
+> The esbuild plugin above reads the named exports from your locally-installed ` @tiptap/core ` and ` @tiptap/pm ` at build time, so keep those versions roughly in sync with the version bundled by Filament — otherwise a newer named export referenced in your extension may be ` undefined ` at runtime.

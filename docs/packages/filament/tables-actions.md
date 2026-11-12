@@ -1,32 +1,19 @@
-# Filament - Tables/Actions
+Source: https://filamentphp.com/docs/5.x/tables/actions.md
 
-Source: https://filamentphp.com/docs/3.x/tables/actions
+# Actions
 
-#Overview
----------
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/actions.md
 
-![Filament](/docs/_astro/filament-laracasts-logo.CzN-P2OP.webp)  ![Laracasts](/docs/_astro/laracasts.xZHGp0JC.svg)
+## Introduction
 
-Table Actions
+Filament's tables can use [Actions](https://filamentphp.com/docs/5.x/actions). They are buttons that can be added to the [end of any table row](https://filamentphp.com/docs/5.x/tables/actions.md#record-actions), or even in the [header](https://filamentphp.com/docs/5.x/tables/actions.md#header-actions) or [toolbar](https://filamentphp.com/docs/5.x/tables/actions.md#toolbar-actions) of a table. For instance, you may want an action to "create" a new record in the header, and then "edit" and "delete" actions on each row. [Bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) can be used to execute code when records in the table are selected. Additionally, actions can be added to any [table column](https://filamentphp.com/docs/5.x/tables/actions.md#column-actions), such that each cell in that column is a trigger for your action.
 
-Watch the Rapid Laravel Development with Filament series on Laracasts - it will teach you the basics of adding actions to Filament resource tables.
+For more ways to customize actions, see [action trigger buttons](https://filamentphp.com/docs/5.x/actions/overview.md) and [action modals](https://filamentphp.com/docs/5.x/actions/modals.md).
 
-Play Video
+## Record actions
 
-![Kevin McKee](https://avatars.githubusercontent.com/u/4503765?v=4)
-
-Kevin McKee
-
-Instructor
-
-Filament’s tables can use Actions. They are buttons that can be added to the end of any table row, or even in the header of a table. For instance, you may want an action to “create” a new record in the header, and then “edit” and “delete” actions on each row. Bulk actions can be used to execute code when records in the table are selected. Additionally, actions can be added to any table column, such that each cell in that column is a trigger for your action.
-
-It’s highly advised that you read the documentation about customizing action trigger buttons and action modals to that you are aware of the full capabilities of actions.
-
-#Row actions
-------------
-
-Action buttons can be rendered at the end of each table row. You can put them in the `$table->actions()` method:
+Action buttons can be rendered at the end of each table row. You can put them in the ` $table->recordActions() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -34,19 +21,19 @@ use Filament\Tables\Table;
 public function table(Table $table): Table
 {
     return $table
-        ->actions([
+        ->recordActions([
             // ...
         ]);
 }
-
 ```
-Actions may be created using the static `make()` method, passing its unique name.
 
-You can then pass a function to `action()` which executes the task, or a function to `url()` which creates a link:
+Actions may be created using the static ` make() ` method, passing its unique name.
+
+You can then pass a function to ` action() ` which executes the task, or a function to ` url() ` which creates a link:
 
 ```php
 use App\Models\Post;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 
 Action::make('edit')
     ->url(fn (Post $record): string => route('posts.edit', $record))
@@ -55,59 +42,75 @@ Action::make('edit')
 Action::make('delete')
     ->requiresConfirmation()
     ->action(fn (Post $record) => $record->delete())
-
 ```
-All methods on the action accept callback functions, where you can access the current table `$record` that was clicked.
 
-![Table with actions](/docs/3.x/images/light/tables/actions/simple.jpg) ![Table with actions](/docs/3.x/images/dark/tables/actions/simple.jpg)
+All methods on the action accept callback functions, where you can access the current table ` $record ` that was clicked.
 
-### #Positioning row actions before columns
+Custom actions must be [authorized explicitly](https://filamentphp.com/docs/5.x/actions/overview.md#authorization). For URL actions, the destination route must also authorize access.
 
-By default, the row actions in your table are rendered in the final cell of each row. You may move them before the columns by using the `position` argument:
+
+
+### Positioning record actions before columns
+
+By default, the record actions in your table are rendered in the final cell of each row. You may move them before the columns by using the ` position ` argument:
 
 ```php
-use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 
 public function table(Table $table): Table
 {
     return $table
-        ->actions([
+        ->recordActions([
             // ...
-        ], position: ActionsPosition::BeforeColumns);
+        ], position: RecordActionsPosition::BeforeColumns);
 }
-
 ```
-![Table with actions before columns](/docs/3.x/images/light/tables/actions/before-columns.jpg) ![Table with actions before columns](/docs/3.x/images/dark/tables/actions/before-columns.jpg)
 
-### #Positioning row actions before the checkbox column
 
-By default, the row actions in your table are rendered in the final cell of each row. You may move them before the checkbox column by using the `position` argument:
+
+### Positioning record actions before the checkbox column
+
+By default, the record actions in your table are rendered in the final cell of each row. You may move them before the checkbox column by using the ` position ` argument:
 
 ```php
-use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 
 public function table(Table $table): Table
 {
     return $table
-        ->actions([
+        ->recordActions([
             // ...
-        ], position: ActionsPosition::BeforeCells);
+        ], position: RecordActionsPosition::BeforeCells);
 }
-
 ```
-![Table with actions before cells](/docs/3.x/images/light/tables/actions/before-cells.jpg) ![Table with actions before cells](/docs/3.x/images/dark/tables/actions/before-cells.jpg)
 
-### #Accessing the selected table rows
 
-You may want an action to be able to access all the selected rows in the table. Usually, this is done with a bulk action in the header of the table. However, you may want to do this with a row action, where the selected rows provide context for the action.
 
-For example, you may want to have a row action that copies the row data to all the selected records. To force the table to be selectable, even if there aren’t bulk actions defined, you need to use the `selectable()` method. To allow the action to access the selected records, you need to use the `accessSelectedRecords()` method. Then, you can use the `$selectedRecords` parameter in your action to access the selected records:
+### Global record action settings
+
+To customize the default configuration used for ungrouped record actions, you can use ` modifyUngroupedRecordActionsUsing() ` from a [` Table::configureUsing() ` function](https://filamentphp.com/docs/5.x/tables/overview.md#global-settings) in the ` boot() ` method of a service provider:
 
 ```php
+use Filament\Actions\Action;
 use Filament\Tables\Table;
-use Filament\Tables\Actions\Action;
+
+Table::configureUsing(function (Table $table): void {
+    $table
+        ->modifyUngroupedRecordActionsUsing(fn (Action $action) => $action->iconButton());
+});
+```
+
+### Accessing the selected table rows
+
+You may want an action to be able to access all the selected rows in the table. Usually, this is done with a [bulk action](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) in the header of the table. However, you may want to do this with a row action, where the selected rows provide context for the action.
+
+For example, you may want to have a row action that copies the row data to all the selected records. To force the table to be selectable, even if there aren't bulk actions defined, you need to use the ` selectable() ` method. To allow the action to access the selected records, you need to use the ` accessSelectedRecords() ` method. Then, you can use the ` $selectedRecords ` parameter in your action to access the selected records:
+
+```php
+use Filament\Actions\Action;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -115,7 +118,7 @@ public function table(Table $table): Table
 {
     return $table
         ->selectable()
-        ->actions([
+        ->recordActions([
             Action::make('copyToSelected')
                 ->accessSelectedRecords()
                 ->action(function (Model $record, Collection $selectedRecords) {
@@ -127,12 +130,13 @@ public function table(Table $table): Table
                 }),
         ]);
 }
-
 ```
-#Bulk actions
--------------
 
-Tables also support “bulk actions”. These can be used when the user selects rows in the table. Traditionally, when rows are selected, a “bulk actions” button appears in the top left corner of the table. When the user clicks this button, they are presented with a dropdown menu of actions to choose from. You can put them in the `$table->bulkActions()` method:
+Authorize access to the source record and permission to update each selected record before copying data. Selecting a record does not authorize the operation.
+
+## Bulk actions
+
+Tables also support "bulk actions". These can be used when the user selects rows in the table. Traditionally, when rows are selected, a "bulk actions" button appears. When the user clicks this button, they are presented with a dropdown menu of actions to choose from. You can put them in the ` $table->toolbarActions() ` or ` $table->headerActions() ` methods:
 
 ```php
 use Filament\Tables\Table;
@@ -140,40 +144,175 @@ use Filament\Tables\Table;
 public function table(Table $table): Table
 {
     return $table
-        ->bulkActions([
+        ->toolbarActions([
             // ...
         ]);
 }
-
 ```
-Bulk actions may be created using the static `make()` method, passing its unique name. You should then pass a callback to `action()` which executes the task:
+
+Bulk actions may be created using the static ` make() ` method, passing its unique name. You should then pass a callback to ` action() ` which executes the task:
 
 ```php
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
 BulkAction::make('delete')
     ->requiresConfirmation()
     ->action(fn (Collection $records) => $records->each->delete())
-
 ```
-The function allows you to access the current table `$records` that are selected. It is an Eloquent collection of models.
 
-![Table with bulk action](/docs/3.x/images/light/tables/actions/bulk.jpg) ![Table with bulk action](/docs/3.x/images/dark/tables/actions/bulk.jpg)
+The function allows you to access the current table ` $records ` that are selected. It is an Eloquent collection of models.
 
-### #Grouping bulk actions
+Custom bulk actions need explicit authorization. See [authorizing bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions) to check each selected record's policy before processing it.
 
-You may use a `BulkActionGroup` object to group multiple bulk actions together in a dropdown. Any bulk actions that remain outside the `BulkActionGroup` will be rendered next to the dropdown’s trigger button:
+> **Info**
+>
+> Bulk-action queries must return one row per selectable record key. Joins that repeat the same model key are not supported: use ` whereHas() ` or ` whereExists() ` when filtering by related records instead. Many-to-many relationships using [` allowDuplicates() `](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#handling-duplicates) remain supported because each pivot row has its own primary key.
+
+
+
+
+### Authorizing bulk actions
+
+When using a bulk action, you may check a policy method for each record that is selected. This is useful for checking if the user has permission to perform the action on each record. You can use the ` authorizeIndividualRecords() ` method, passing the name of a policy method, which will be called for each record. If the policy denies authorization, the record will not be present in the bulk action's ` $records ` parameter:
 
 ```php
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+
+BulkAction::make('delete')
+    ->requiresConfirmation()
+    ->authorizeIndividualRecords('delete')
+    ->action(fn (Collection $records) => $records->each->delete())
+```
+
+### Bulk action notifications
+
+After a bulk action is completed, you may want to send a notification to the user with a summary of the action's success. This is especially useful if you're using [authorization](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions) for individual records, as the user may not know how many records were actually affected.
+
+To send a notification after the bulk action is completed, you should set the ` successNotificationTitle() ` and ` failureNotificationTitle() `:
+
+- The ` successNotificationTitle() ` is used as the title of the notification when all records have been successfully processed.
+- The ` failureNotificationTitle() ` is used as the title of the notification when some or all of the records failed to be processed. By passing a function to this methods, you can inject the ` $successCount ` and ` $failureCount ` parameters, to provide this information to the user.
+
+For example:
+
+```php
+use Filament\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+
+BulkAction::make('delete')
+    ->requiresConfirmation()
+    ->authorizeIndividualRecords('delete')
+    ->action(fn (Collection $records) => $records->each->delete())
+    ->successNotificationTitle('Deleted users')
+    ->failureNotificationTitle(function (int $successCount, int $totalCount): string {
+        if ($successCount) {
+            return "{$successCount} of {$totalCount} users deleted";
+        }
+
+        return 'Failed to delete any users';
+    })
+```
+
+You can also use a special [authorization response object](https://laravel.com/docs/authorization#policy-responses) in a policy method to provide a custom message about why the authorization failed. The special object is called ` DenyResponse ` and replaces ` Response::deny() `, allowing the developer to pass a function as the message which can receive information about how many records were denied by that authorization check:
+
+```php
+use App\Models\User;
+use Filament\Support\Authorization\DenyResponse;
+use Illuminate\Auth\Access\Response;
+
+class UserPolicy
+{
+    public function delete(User $user, User $model): bool | Response
+    {
+        if (! $model->is_admin) {
+            return true;
+        }
+
+        return DenyResponse::make('cannot_delete_admin', message: function (int $failureCount, int $totalCount): string {
+            if (($failureCount === 1) && ($totalCount === 1)) {
+                return 'You cannot delete an admin user.';
+            }
+
+            if ($failureCount === $totalCount) {
+                return 'All users selected were admin users.';
+            }
+
+            if ($failureCount === 1) {
+                return 'One of the selected users was an admin user.';
+            }
+
+            return "{$failureCount} of the selected users were admin users.";
+        });
+    }
+}
+```
+
+The first argument to the ` make() ` method is a unique key to identify that failure type. If multiple failures of that key are detected, they are grouped together and only one message is generated. If there are multiple points of failure in the policy method, each response object can have its own key, and the messages will be concatenated together in the notification.
+
+#### Reporting failures in bulk action processing
+
+Alongside [individual record authorization](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions) messages, you can also report failures in the bulk action processing itself. This is useful if you want to provide a message for each record that failed to be processed for a particular reason, even after authorization passes. This is done by injecting the ` Action ` instance into the ` action() ` function, and calling the ` reportBulkProcessingFailure() ` method on it, passing a key and message function similar to ` DenyResponse `:
+
+```php
+use Filament\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+
+BulkAction::make('delete')
+    ->requiresConfirmation()
+    ->authorizeIndividualRecords('delete')
+    ->action(function (BulkAction $action, Collection $records) {
+        $records->each(function (Model $record) use ($action) {
+            $record->delete() || $action->reportBulkProcessingFailure(
+                'deletion_failed',
+                message: function (int $failureCount, int $totalCount): string {
+                    if (($failureCount === 1) && ($totalCount === 1)) {
+                        return 'One user failed to delete.';
+                    }
+        
+                    if ($failureCount === $totalCount) {
+                        return 'All users failed to delete.';
+                    }
+        
+                    if ($failureCount === 1) {
+                        return 'One of the selected users failed to delete.';
+                    }
+        
+                    return "{$failureCount} of the selected users failed to delete.";
+                },
+            );
+        });
+    })
+    ->successNotificationTitle('Deleted users')
+    ->failureNotificationTitle(function (int $successCount, int $totalCount): string {
+        if ($successCount) {
+            return "{$successCount} of {$totalCount} users deleted";
+        }
+
+        return 'Failed to delete any users';
+    })
+```
+
+The ` delete() ` method on an Eloquent model returns ` false ` if the deletion fails, so you can use that to determine if the record was deleted successfully. The ` reportBulkProcessingFailure() ` method will then add a failure message to the notification, which will be displayed when the action is completed.
+
+The ` reportBulkProcessingFailure() ` method can be called at multiple points during the action execution for different reasons, but you should only call it once per record. You should not proceed with the action for that particular record once you have called the method for it.
+
+### Grouping bulk actions
+
+You may use a ` BulkActionGroup ` object to [group multiple bulk actions together](https://filamentphp.com/docs/5.x/actions/grouping-actions.md) in a dropdown. Any bulk actions that remain outside the ` BulkActionGroup ` will be rendered next to the dropdown's trigger button:
+
+```php
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 public function table(Table $table): Table
 {
     return $table
-        ->bulkActions([
+        ->toolbarActions([
             BulkActionGroup::make([
                 BulkAction::make('delete')
                     ->requiresConfirmation()
@@ -182,17 +321,23 @@ public function table(Table $table): Table
                     ->requiresConfirmation()
                     ->action(fn (Collection $records) => $records->each->forceDelete()),
             ]),
-            BulkAction::make('export')->button()->action(fn (Collection $records) => ...),
+            BulkAction::make('export')
+                ->button()
+                ->action(function (Collection $records) {
+                    // Export the selected records...
+                }),
         ]);
 }
-
 ```
-Alternatively, if all of your bulk actions are grouped, you can use the shorthand `groupedBulkActions()` method:
+
+
+
+Alternatively, if all of your bulk actions are grouped, you can use the shorthand ` groupedBulkActions() ` method:
 
 ```php
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 public function table(Table $table): Table
 {
@@ -206,22 +351,22 @@ public function table(Table $table): Table
                 ->action(fn (Collection $records) => $records->each->forceDelete()),
         ]);
 }
-
 ```
-### #Deselecting records once a bulk action has finished
 
-You may deselect the records after a bulk action has been executed using the `deselectRecordsAfterCompletion()` method:
+### Deselecting records once a bulk action has finished
+
+You may deselect the records after a bulk action has been executed using the ` deselectRecordsAfterCompletion() ` method:
 
 ```php
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
 BulkAction::make('delete')
     ->action(fn (Collection $records) => $records->each->delete())
     ->deselectRecordsAfterCompletion()
-
 ```
-### #Disabling bulk actions for some rows
+
+### Disabling bulk actions for some rows
 
 You may conditionally disable bulk actions for a specific record:
 
@@ -232,18 +377,36 @@ use Illuminate\Database\Eloquent\Model;
 public function table(Table $table): Table
 {
     return $table
-        ->bulkActions([
+        ->toolbarActions([
             // ...
         ])
         ->checkIfRecordIsSelectableUsing(
             fn (Model $record): bool => $record->status === Status::Enabled,
         );
 }
-
 ```
-### #Preventing bulk-selection of all pages
 
-The `selectCurrentPageOnly()` method can be used to prevent the user from easily bulk-selecting all records in the table at once, and instead only allows them to select one page at a time:
+### Limiting the number of selectable records
+
+You may restrict how many records the user can select in total:
+
+```php
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->toolbarActions([
+            // ...
+        ])
+        ->maxSelectableRecords(4);
+}
+```
+
+### Preventing bulk-selection of all pages
+
+The ` selectCurrentPageOnly() ` method limits the table's selection controls to the current page, preventing the user from easily bulk-selecting all pages at once:
 
 ```php
 use Filament\Tables\Table;
@@ -251,17 +414,78 @@ use Filament\Tables\Table;
 public function table(Table $table): Table
 {
     return $table
-        ->bulkActions([
+        ->toolbarActions([
             // ...
         ])
         ->selectCurrentPageOnly();
 }
-
 ```
-#Header actions
----------------
 
-Both row actions and bulk actions can be rendered in the header of the table. You can put them in the `$table->headerActions()` method:
+> **Info**
+>
+> This only changes the selection controls, not which records a bulk-action request can select. Use [` maxSelectableRecords() `](https://filamentphp.com/docs/5.x/tables/actions.md#limiting-the-number-of-selectable-records) to enforce a maximum selection size. Selection controls do not replace [authorization](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions).
+
+
+### Restricting bulk selection to groups only
+
+The ` selectGroupsOnly() ` method can be used to restrict bulk selection to only records within the same group, preventing bulk selection across multiple groups at once:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->toolbarActions([
+            // ...
+        ])
+        ->selectGroupsOnly();
+}
+```
+
+### Improving the performance of bulk actions
+
+By default, a bulk action will load all selected Eloquent records into memory before passing them to the ` action() ` function. For large selections, this can exceed your PHP memory limit.
+
+If you are processing a large number of records, use the ` chunkSelectedRecords() ` method to fetch a smaller number of records at a time. This reduces the memory needed to load the selected models:
+
+```php
+use Filament\Actions\BulkAction;
+use Illuminate\Support\LazyCollection;
+
+BulkAction::make()
+    ->chunkSelectedRecords(250)
+    ->action(function (LazyCollection $records) {
+        // Process the records...
+    })
+```
+
+You can still loop through the ` $records ` collection as normal, but the collection will be a ` LazyCollection ` instead of a normal collection.
+
+Chunking does not limit the total number of records processed. You can combine it with [` maxSelectableRecords() `](https://filamentphp.com/docs/5.x/tables/actions.md#limiting-the-number-of-selectable-records) to limit the selection size. Avoid collecting the entire lazy collection into memory, as this removes the memory benefit of chunking.
+
+For bounded selections, Filament loads the selected keys into memory before fetching the models in chunks. Sorting determines which records fall within the limit, but chunked traversal uses primary-key or pivot-key order. If you use ` checkIfRecordIsSelectableUsing() `, Filament must also load models to evaluate that callback when calculating the initial selection total.
+
+You can also prevent Filament from fetching the Eloquent models in the first place, and instead just pass the IDs of the selected records to the ` action() ` function. This is useful if you are processing a large number of records, and you don't need to load them into memory:
+
+```php
+use Filament\Actions\BulkAction;
+use Illuminate\Support\Collection;
+
+BulkAction::make()
+    ->fetchSelectedRecords(false)
+    ->action(function (Collection $records) {
+        // Process the records...
+    })
+```
+
+The IDs are still loaded into a collection in memory, so this uses less memory than fetching models but does not make an unlimited selection memory-safe.
+
+For bounded selections, sorting determines which records fall within the limit, but the returned IDs and selected-records query results are not guaranteed to retain that order. If your action reads from ` $action->getSelectedRecordsQuery() ` and depends on ordering, apply ` orderBy() ` to that query before reading it.
+
+## Header actions
+
+Both actions and [bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) can be rendered in the header of the table. You can put them in the ` $table->headerActions() ` method:
 
 ```php
 use Filament\Tables\Table;
@@ -273,48 +497,51 @@ public function table(Table $table): Table
             // ...
         ]);
 }
-
 ```
-This is useful for things like “create” actions, which are not related to any specific table row, or bulk actions that need to be more visible.
 
-![Table with header actions](/docs/3.x/images/light/tables/actions/header.jpg) ![Table with header actions](/docs/3.x/images/dark/tables/actions/header.jpg)
+This is useful for things like "create" actions, which are not related to any specific table row, or bulk actions that need to be more visible.
 
-#Column actions
----------------
 
-Actions can be added to columns, such that when a cell in that column is clicked, it acts as the trigger for an action. You can learn more about column actions in the documentation.
 
-#Prebuilt table actions
------------------------
+## Toolbar actions
 
-Filament includes several prebuilt actions and bulk actions that you can add to a table. Their aim is to simplify the most common Eloquent-related actions:
-
-* Create
-* Edit
-* View
-* Delete
-* Replicate
-* Force-delete
-* Restore
-* Import
-* Export
-
-#Grouping actions
------------------
-
-You may use an `ActionGroup` object to group multiple table actions together in a dropdown:
+Both actions and [bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) can be rendered in the toolbar of the table. You can put them in the ` $table->toolbarActions() ` method:
 
 ```php
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 
 public function table(Table $table): Table
 {
     return $table
-        ->actions([
+        ->toolbarActions([
+            // ...
+        ]);
+}
+```
+
+This is useful for things like "create" actions, which are not related to any specific table row, or bulk actions that need to be more visible.
+
+
+
+## Column actions
+
+Actions can be added to columns, such that when a cell in that column is clicked, it acts as the trigger for an action. You can learn more about [column actions](https://filamentphp.com/docs/5.x/tables/columns/overview.md#triggering-actions) in the documentation.
+
+## Grouping actions
+
+You may use an ` ActionGroup ` object to group multiple table actions together in a dropdown:
+
+```php
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->recordActions([
             ActionGroup::make([
                 ViewAction::make(),
                 EditAction::make(),
@@ -323,152 +550,6 @@ public function table(Table $table): Table
             // ...
         ]);
 }
-
 ```
-![Table with action group](/docs/3.x/images/light/tables/actions/group.jpg) ![Table with action group](/docs/3.x/images/dark/tables/actions/group.jpg)
 
-### #Choosing an action group button style
-
-Out of the box, action group triggers have 3 styles - “button”, “link”, and “icon button”.
-
-“Icon button” triggers are circular buttons with an icon and no label. Usually, this is the default button style, but you can use it manually with the `iconButton()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])->iconButton()
-
-```
-![Table with icon button action group](/docs/3.x/images/light/tables/actions/group-icon-button.jpg) ![Table with icon button action group](/docs/3.x/images/dark/tables/actions/group-icon-button.jpg)
-
-“Button” triggers have a background color, label, and optionally an icon. You can switch to that style with the `button()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])
-    ->button()
-    ->label('Actions')
-
-```
-![Table with button action group](/docs/3.x/images/light/tables/actions/group-button.jpg) ![Table with button action group](/docs/3.x/images/dark/tables/actions/group-button.jpg)
-
-“Link” triggers have no background color. They must have a label and optionally an icon. They look like a link that you might find embedded within text. You can switch to that style with the `link()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])
-    ->link()
-    ->label('Actions')
-
-```
-![Table with link action group](/docs/3.x/images/light/tables/actions/group-link.jpg) ![Table with link action group](/docs/3.x/images/dark/tables/actions/group-link.jpg)
-
-### #Setting the action group button icon
-
-You may set the icon of the action group button using the `icon()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])->icon('heroicon-m-ellipsis-horizontal');
-
-```
-![Table with customized action group icon](/docs/3.x/images/light/tables/actions/group-icon.jpg) ![Table with customized action group icon](/docs/3.x/images/dark/tables/actions/group-icon.jpg)
-
-### #Setting the action group button color
-
-You may set the color of the action group button using the `color()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])->color('info');
-
-```
-![Table with customized action group color](/docs/3.x/images/light/tables/actions/group-color.jpg) ![Table with customized action group color](/docs/3.x/images/dark/tables/actions/group-color.jpg)
-
-### #Setting the action group button size
-
-Buttons come in 3 sizes - `sm`, `md` or `lg`. You may set the size of the action group button using the `size()` method:
-
-```php
-use Filament\Support\Enums\ActionSize;
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])->size(ActionSize::Small);
-
-```
-![Table with small action group](/docs/3.x/images/light/tables/actions/group-small.jpg) ![Table with small action group](/docs/3.x/images/dark/tables/actions/group-small.jpg)
-
-### #Setting the action group tooltip
-
-You may set the tooltip of the action group using the `tooltip()` method:
-
-```php
-use Filament\Tables\Actions\ActionGroup;
-
-ActionGroup::make([
-    // ...
-])->tooltip('Actions');
-
-```
-![Table with action group tooltip](/docs/3.x/images/light/tables/actions/group-tooltip.jpg) ![Table with action group tooltip](/docs/3.x/images/dark/tables/actions/group-tooltip.jpg)
-
-#Table action utility injection
--------------------------------
-
-All actions, not just table actions, have access to many utilities within the vast majority of configuration methods. However, in addition to those, table actions have access to a few more:
-
-### #Injecting the current Eloquent record
-
-If you wish to access the current Eloquent record of the action, define a `$record` parameter:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-function (Model $record) {
-    // ...
-}
-
-```
-Be aware that bulk actions, header actions, and empty state actions do not have access to the `$record`, as they are not related to any table row.
-
-### #Injecting the current Eloquent model class
-
-If you wish to access the current Eloquent model class of the table, define a `$model` parameter:
-
-```php
-function (string $model) {
-    // ...
-}
-
-```
-### #Injecting the current table instance
-
-If you wish to access the current table configuration instance that the action belongs to, define a `$table` parameter:
-
-```php
-use Filament\Tables\Table;
-
-function (Table $table) {
-    // ...
-}
-
-```
-Edit on GitHub
-
-Still need help? Join our Discord community or open a GitHub discussion
+You may find out more about customizing action groups in the [Actions documentation](https://filamentphp.com/docs/5.x/actions/grouping-actions.md).

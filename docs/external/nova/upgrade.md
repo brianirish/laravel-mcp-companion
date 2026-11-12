@@ -1,71 +1,68 @@
-# Nova - Upgrade
+Source: https://nova.laravel.com/docs/v5/upgrade.md
 
-*Source: https://nova.laravel.com/docs/v5/upgrade*
-
----
-
-## On this page
-Back to top
-- [Dependency Upgrades](#dependency-upgrades)
-  - [Server](#server)
-  - [Client](#client)
-  - [Updating Composer Dependencies](#updating-composer-dependencies)
-  - [Updating Assets and Translations](#updating-assets-and-translations)
-  - [Updating Third-Party Nova Packages ​](#updating-third-party-nova-packages-%E2%80%8B)
-- [Upgrading Authentication Features](#upgrading-authentication-features)
-- [Updating Nova Components (Custom Tool, Cards, Fields, Filters)](#updating-nova-components-custom-tool-cards-fields-filters)
-  - [Inertia 2 Compatibility](#inertia-2-compatibility)
-  - [Replacing form-backend-validation](#replacing-form-backend-validation)
-- [Medium Impact Changes](#medium-impact-changes)
-  - [Form Abandonment (Using Browser Navigation)](#form-abandonment-using-browser-navigation)
-  - [Algolia Place Field Removed](#algolia-place-field-removed)
-- [Low Impact Changes](#low-impact-changes)
-  - [Update Published Stubs](#update-published-stubs)
-Get Started
 # Upgrade Guide
-Learn how to upgrade your Laravel Nova installation to the latest version.
-## [​](#dependency-upgrades) Dependency Upgrades
-Nova’s upstream dependencies have been upgraded. You will find a complete list of our dependency upgrades below:
-#### [​](#server) Server
-- PHP 8.1+
-- Laravel Framework 10.34+ and 11.0+
-- Inertia Laravel 1.3+ and 2.0+
-- Replaced `laravel/ui` with `laravel/fortify` v1.21+
-- Removed `doctrine/dbal`
-#### [​](#client) Client
-- Update to `@inertiajs/vue3` v2
-- Update to Heroicons v2
-- Update to `trix` v2
-- Remove deprecated `form-backend-validation`
-- Remove deprecated `places.js`
-### [​](#updating-composer-dependencies) Updating Composer Dependencies
-You should update your `laravel/nova` dependency to `^5.0` in your application’s `composer.json` file:
-composer.json
-```
+
+> Learn how to upgrade your Laravel Nova installation to the latest version.
+
+## Dependency Upgrades
+
+Nova's upstream dependencies have been upgraded. You will find a complete list of our dependency upgrades below:
+
+#### Server
+
+* PHP 8.1+
+* Laravel Framework 10.34+ and 11.0+
+* Inertia Laravel 1.3+ and 2.0+
+* Replaced `laravel/ui` with `laravel/fortify` v1.21+
+* Removed `doctrine/dbal`
+
+#### Client
+
+* Update to `@inertiajs/vue3` v2
+* Update to Heroicons v2
+* Update to `trix` v2
+* Remove deprecated `form-backend-validation`
+* Remove deprecated `places.js`
+
+### Updating Composer Dependencies
+
+You should update your `laravel/nova` dependency to `^5.0` in your application's `composer.json` file:
+
+```diff composer.json theme={null}
     "require": {
 -       "laravel/nova": "^4.0",
 +       "laravel/nova": "^5.0",
     }
 ```
+
 Next, install your updated Composer dependencies:
-```
+
+```shell theme={null}
 composer update mirrors
 
 composer update
 ```
-### [​](#updating-assets-and-translations) Updating Assets and Translations
-Next, you should update your application’s Nova assets and translation files. To get started, you may run the following commands to update your assets and translations.
+
+### Updating Assets and Translations
+
+Next, you should update your application's Nova assets and translation files. To get started, you may run the following commands to update your assets and translations.
+
 **You may wish to store a copy of your current translation file before running this command so you can easily port any custom translations back into the new file after running these commands.**:
-```
+
+```shell theme={null}
 php artisan vendor:publish --tag=nova-assets --force
 php artisan vendor:publish --tag=nova-lang --force
 ```
-### [​](#updating-third-party-nova-packages-​) Updating Third-Party Nova Packages ​
+
+### Updating Third-Party Nova Packages ​
+
 If your application relies on Nova tools or packages developed by third-parties, it is possible that these packages are not yet compatible with Nova 5.0 and will require an update from their maintainers.
-## [​](#upgrading-authentication-features) Upgrading Authentication Features
-Next, you will need to update your Nova configuration file. Ensure that the `api_middleware` configuration option within your application’s `nova` configuration file appears as follows:
-config/nova.php
-```
+
+## Upgrading Authentication Features
+
+Next, you will need to update your Nova configuration file. Ensure that the `api_middleware` configuration option within your application's `nova` configuration file appears as follows:
+
+```php config/nova.php {8} theme={null}
 return [
 
     // ...
@@ -79,9 +76,10 @@ return [
 
 ];
 ```
-Next, update the `register` method in your application’s `App\Providers\NovaServiceProvider` class to call the parent’s `register` method. The `parent::register()` method should be invoked before any other code in the method:
-app/Nova/NovaServiceProvider.php
-```
+
+Next, update the `register` method in your application's `App\Providers\NovaServiceProvider` class to call the parent's `register` method. The `parent::register()` method should be invoked before any other code in the method:
+
+```php app/Nova/NovaServiceProvider.php {6} theme={null}
 /**
  * Register any application services.
  */
@@ -92,10 +90,14 @@ public function register(): void
     //
 }
 ```
-## [​](#updating-nova-components-custom-tool-cards-fields-filters) Updating Nova Components (Custom Tool, Cards, Fields, Filters)
-### [​](#inertia-2-compatibility) Inertia 2 Compatibility
-In Nova 5, Nova’s frontend JavaScript now utilizes Inertia.js 2.x, which will affect any projects that directly import from `@inertiajs/inertia` or `@inertiajs/inertia-vue3`. You should inspect your custom components and packages to ensure all references have been updated as suggested in [Inertia’s upgrade guide](https://inertiajs.com/upgrade-guide).
-```
+
+## Updating Nova Components (Custom Tool, Cards, Fields, Filters)
+
+### Inertia 2 Compatibility
+
+In Nova 5, Nova's frontend JavaScript now utilizes Inertia.js 2.x, which will affect any projects that directly import from `@inertiajs/inertia` or `@inertiajs/inertia-vue3`. You should inspect your custom components and packages to ensure all references have been updated as suggested in [Inertia's upgrade guide](https://inertiajs.com/upgrade-guide).
+
+```diff theme={null}
 <script>
 -import { usePage } from '@inertiajs/inertia-vue3'
 -import { Inertia } from '@inertiajs/inertia'
@@ -105,9 +107,12 @@ In Nova 5, Nova’s frontend JavaScript now utilizes Inertia.js 2.x, which will 
 
 </script>
 ```
-### [​](#replacing-form-backend-validation) Replacing `form-backend-validation`
+
+### Replacing `form-backend-validation`
+
 The `form-backend-validation` repository has been archived and should no longer be used by third-party packages or components. Instead, you may simply import `Errors` from `laravel-nova`:
-```
+
+```diff theme={null}
 <script>
 -import { Errors } from 'form-backend-validation'
 +import { Errors } from 'laravel-nova'
@@ -116,21 +121,29 @@ The `form-backend-validation` repository has been archived and should no longer 
 
 </script>
 ```
-Then, you may remove `form-backend-validation` from your component’s `package.json`:
-```
+
+Then, you may remove `form-backend-validation` from your component's `package.json`:
+
+```shell theme={null}
 npm remove form-backend-validation
 ```
-## [​](#medium-impact-changes) Medium Impact Changes
-### [​](#form-abandonment-using-browser-navigation) Form Abandonment (Using Browser Navigation)
-With the introduction of Inertia.js 2.x, we are no longer able to provide form abandonment warnings when using the browser’s back button.
-### [​](#algolia-place-field-removed) Algolia Place Field Removed
-Algolia [retired their “Places” API](https://www.algolia.com/blog/product/sunsetting-our-places-feature/) on May 31, 2022; therefore, the `Place` field was deprecated on Nova 4 and is now removed in Nova 5.
-## [​](#low-impact-changes) Low Impact Changes
-### [​](#update-published-stubs) Update Published Stubs
-Due to various changes in Nova 5.x, you should re-publish the Nova “stubs” if you have previously published them. You can accomplish this by executing the `nova:stubs` Artisan command with the `--force` option:
-```
+
+## Medium Impact Changes
+
+### Form Abandonment (Using Browser Navigation)
+
+With the introduction of Inertia.js 2.x, we are no longer able to provide form abandonment warnings when using the browser's back button.
+
+### Algolia Place Field Removed
+
+Algolia [retired their "Places" API](https://www.algolia.com/blog/product/sunsetting-our-places-feature/) on May 31, 2022; therefore, the `Place` field was deprecated on Nova 4 and is now removed in Nova 5.
+
+## Low Impact Changes
+
+### Update Published Stubs
+
+Due to various changes in Nova 5.x, you should re-publish the Nova "stubs" if you have previously published them. You can accomplish this by executing the `nova:stubs` Artisan command with the `--force` option:
+
+```shell theme={null}
 php artisan nova:stubs --force
 ```
-Was this page helpful?
-YesNo
-[Release Notes](/docs/v5/releases)[The Basics](/docs/v5/resources/the-basics)
