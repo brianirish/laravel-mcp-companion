@@ -11,7 +11,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from docs_updater import DocsUpdater, DocumentationAutoDiscovery, ExternalDocsFetcher
+from docs_updater import DocsUpdater, ExternalDocsFetcher
 
 
 def http_error(code, reason="err"):
@@ -181,19 +181,3 @@ class TestGetLatestCommitRetries:
         assert updater.needs_update() is True
 
 
-class TestAutoDiscoveryCourtesyDelay:
-    def test_pre_attempt_courtesy_sleep_on_retries_only(self, sleeps, monkeypatch):
-        discovery = DocumentationAutoDiscovery(max_retries=2, request_delay=1.5)
-        attempts = []
-
-        def flaky(request, *a, **k):
-            attempts.append(1)
-            if len(attempts) < 2:
-                raise ValueError("hiccup")
-            return ok_response(b"page")
-
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
-        assert discovery._retry_request("https://x.test") == b"page"
-        # attempt 0: no courtesy delay; failure sleeps min(30, 2**0)=1;
-        # attempt 1: courtesy delay request_delay * 2**(1-1) = 1.5
-        assert sleeps == [1, 1.5]

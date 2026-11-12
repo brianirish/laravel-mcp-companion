@@ -14,7 +14,7 @@ import tempfile
 import re
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 import urllib.parse
 import urllib.request
 import urllib.error
@@ -176,6 +176,144 @@ def is_within_directory(base_dir: Path, target: Path) -> bool:
         return False
 
 
+def fetch_llms_index_docs(
+    name: str,
+    index_url: str,
+    page_prefix: str,
+    target_dir: Path,
+    fetch: Callable[[str], bytes],
+    layout: str = "basename",
+) -> Optional[Dict[str, Any]]:
+    """Save every page listed in a site's llms.txt index, as markdown.
+
+    A growing number of documentation sites publish an llms.txt: the site's own
+    list of its pages, each also served as markdown at a `.md` URL. Reading it
+    means there is no page list to maintain here, no navigation to parse and no
+    HTML to convert. A reorganised sidebar or a new major version is picked up
+    by the next sync.
+
+    Each listed page is saved verbatim, minus the banner blockquote it opens
+    with. When the index lists several major versions, only the newest is
+    fetched. A version is recognised only as the first path segment below
+    `page_prefix` ("v3", "5.x"), so a numbered segment deeper in a path is left
+    alone. After a complete sync, saved pages the index no longer lists are
+    removed; a partial sync removes nothing.
+
+    `layout` chooses where a page lands under `target_dir`, from its path below
+    the prefix and version:
+        "basename"  routing.md                 the final segment only
+        "flat"      forms-text-input.md        the path, joined with "-"
+        "nested"    servers/php.md             the path, as directories
+
+    `fetch` takes a URL and returns the response body.
+
+    Returns None when the index cannot be read or lists no usable page.
+    Otherwise a dict: `sections`, the pages saved, in index order and without
+    ".md"; `total`, how many the index listed; `version`, the major fetched or
+    None.
+    """
+    try:
+        index_text = fetch(index_url).decode('utf-8')
+    except Exception as e:
+        logger.error(f"Error fetching {name} docs index: {str(e)}")
+        return None
+
+    # Only URLs on the site's own docs path qualify: the index is remote
+    # input, and following arbitrary URLs from it would let a compromised
+    # page turn the fetcher into a generic downloader.
+    page_urls = list(dict.fromkeys(re.findall(
+        rf"\(({re.escape(page_prefix)}[A-Za-z0-9/._-]+\.md)\)", index_text
+    )))
+
+    def path_of(url: str) -> str:
+        return url[len(page_prefix):-len(".md")]
+
+    # The path becomes a file path, so it gets the same checks as any other
+    # name parsed out of a remote page.
+    page_urls = [url for url in page_urls if is_safe_section_name(path_of(url))]
+    if not page_urls:
+        logger.warning(f"{name} llms.txt index yielded no documentation URLs")
+        return None
+
+    version_segment = re.compile(r"v?(\d+)(?:\.x)?")
+
+    def version_of(url: str) -> Optional[tuple[int, str]]:
+        first, _, rest = path_of(url).partition("/")
+        match = version_segment.fullmatch(first) if rest else None
+        return (int(match.group(1)), first) if match else None
+
+    # An index can list every maintained major. Saved side by side their
+    # pages collide -- with Inertia's v3, v2 and v1 all listed, each file
+    # ended up holding the v1 page -- so keep the newest only.
+    version_label: Optional[str] = None
+    versions = {v for v in map(version_of, page_urls) if v}
+    if versions:
+        newest = max(versions)
+        version_label = newest[1]
+        page_urls = [url for url in page_urls if version_of(url) == newest]
+        logger.info(f"{name} index lists versions {sorted(v[1] for v in versions)}; fetching {version_label}")
+
+    def section_of(url: str) -> str:
+        path = path_of(url)
+        if version_label:
+            path = path[len(version_label) + 1:]
+        if layout == "nested":
+            return path
+        if layout == "flat":
+            return path.replace("/", "-")
+        return path.rsplit("/", 1)[-1]
+
+    # Two URLs can map to one file under the flatter layouts; keep the first.
+    pages: Dict[str, str] = {}
+    for url in page_urls:
+        pages.setdefault(section_of(url), url)
+
+    fetched_sections: List[str] = []
+    for section, url in pages.items():
+        page_file = target_dir / f"{section}.md"
+        if not is_within_directory(target_dir, page_file):
+            logger.warning(f"Skipping out-of-tree {name} page: {section!r}")
+            continue
+        try:
+            page = fetch(url).decode('utf-8')
+
+            # Strip the leading "> ..." documentation-index banner.
+            lines = page.splitlines()
+            while lines and (lines[0].startswith(">") or not lines[0].strip()):
+                lines.pop(0)
+            content = remove_image_references("\n".join(lines)).strip()
+            if len(content) < 100:
+                logger.warning(f"{name} page {section} too thin, skipping")
+                continue
+
+            page_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(page_file, 'w', encoding='utf-8') as f:
+                f.write(f"Source: {url}\n\n{content}\n")
+            fetched_sections.append(section)
+        except Exception as e:
+            logger.warning(f"Error fetching {name} page {url}: {str(e)}")
+
+    if len(fetched_sections) == len(pages):
+        # A complete fetch is the only safe moment to prune: pages the index
+        # no longer lists would otherwise stay searchable forever. A partial
+        # fetch keeps everything, stale included, rather than deleting docs
+        # we failed to replace.
+        expected = {(target_dir / f"{section}.md").resolve() for section in pages}
+        saved = target_dir.rglob("*.md") if layout == "nested" else target_dir.glob("*.md")
+        for stale in sorted(saved):
+            if stale.resolve() not in expected:
+                logger.info(f"Pruning {name} page no longer in the index: {stale.relative_to(target_dir)}")
+                stale.unlink()
+        if layout == "nested":
+            # Remove directories the pruning emptied, deepest first.
+            directories = [p for p in target_dir.rglob("*") if p.is_dir()]
+            for directory in sorted(directories, key=lambda p: len(p.parts), reverse=True):
+                if not any(directory.iterdir()):
+                    directory.rmdir()
+
+    return {"sections": fetched_sections, "total": len(pages), "version": version_label}
+
+
 def _write_versions_cache(versions: list[str], cache_file: Path) -> None:
     """Write versions to cache file. Errors are logged but not raised."""
     try:
@@ -320,398 +458,12 @@ SUPPORTED_VERSIONS = get_cached_supported_versions()
 DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]  # Always use the latest version as default
 USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
-# Lines of site chrome that survive HTML-to-Markdown conversion verbatim.
-SITE_CHROME_LINES = frozenset({"Was this page helpful?", "YesNo", "Yes", "No", "Back to top"})
-
-
 class DocumentationSourceType(Enum):
     """Types of documentation sources supported."""
     GITHUB_REPO = "github_repo"
     DIRECT_URL = "direct_url"
     LARAVEL_SERVICE = "laravel_service"
     COMMUNITY_PACKAGE = "community_package"
-
-class DocumentationAutoDiscovery:
-    """Handles automatic discovery of documentation sections from Laravel services."""
-    
-    def __init__(self, max_retries: int = 3, request_delay: float = 1.0):
-        """
-        Initialize the documentation auto-discovery system.
-        
-        Args:
-            max_retries: Maximum number of retry attempts for failed requests
-            request_delay: Delay between requests in seconds to be respectful
-        """
-        self.max_retries = max_retries
-        self.request_delay = request_delay
-        
-        # Common asset file extensions and patterns to exclude
-        self.asset_extensions = {'.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'}
-        self.asset_patterns = {'/_next/', '/static/', '/assets/', '/images/', '/fonts/', '/favicon'}
-
-        # Things a docs site links to that are not documentation pages: the
-        # machine-readable twins Mintlify publishes for every page (page.md,
-        # llms.txt), sitemaps, and Cloudflare's email-obfuscation endpoint.
-        self.non_page_extensions = ('.md', '.txt', '.xml', '.json')
-        self.non_page_prefixes = ('cdn-cgi/', '_mintlify/', 'mintlify-assets/', '_next/')
-
-    def discover_sections(self, service: str, service_config: Dict) -> List[str]:
-        """
-        Discover documentation sections for a given service.
-        
-        Args:
-            service: Service name (forge, vapor, envoyer, nova)
-            service_config: Service configuration dictionary
-            
-        Returns:
-            List of discovered section paths
-        """
-        if not service_config.get("auto_discovery", False):
-            logger.debug(f"Auto-discovery disabled for {service}")
-            return []
-        
-        discovery_rules = service_config.get("discovery_rules", {})
-        discovered_sections = []
-        
-        try:
-            logger.info(f"Starting auto-discovery for {service}")
-            
-            if service == "forge":
-                discovered_sections = self._discover_forge_sections(service_config, discovery_rules)
-            elif service == "nova":
-                discovered_sections = self._discover_nova_sections(service_config, discovery_rules)
-            elif service == "vapor":
-                discovered_sections = self._discover_vapor_sections(service_config, discovery_rules)
-            elif service == "envoyer":
-                discovered_sections = self._discover_envoyer_sections(service_config, discovery_rules)
-            else:
-                logger.warning(f"No discovery method available for service: {service}")
-                
-            logger.info(f"Auto-discovery completed for {service}: found {len(discovered_sections)} sections")
-            return discovered_sections
-            
-        except Exception as e:
-            logger.error(f"Error during auto-discovery for {service}: {str(e)}")
-            return []
-    
-    def _is_asset_file(self, path: str) -> bool:
-        """
-        Check if a path represents an asset file (CSS, JS, images, etc.).
-        
-        Args:
-            path: URL path to check
-            
-        Returns:
-            True if the path is an asset file, False otherwise
-        """
-        # Remove query parameters for extension check
-        clean_path = path.split('?')[0].lower()
-        
-        # Check if path contains common asset directories
-        for pattern in self.asset_patterns:
-            if pattern in clean_path:
-                return True
-        
-        # Check file extension
-        for ext in self.asset_extensions:
-            if clean_path.endswith(ext):
-                return True
-                
-        return False
-    
-    def _is_page_section(self, section: str) -> bool:
-        """
-        Check whether a discovered path names a documentation page.
-
-        Every discovery method funnels its candidates through here, and so does
-        the fetch loop. Without it, llms.txt, sitemap.xml and the `.md` twin of
-        each page were fetched and committed as documentation.
-        """
-        clean = section.split('?')[0].split('#')[0].strip('/').lower()
-
-        if not clean or clean in ('sitemap', 'robots.txt'):
-            return False
-        if self._is_asset_file(f"/{clean}"):
-            return False
-        if clean.startswith(self.non_page_prefixes):
-            return False
-        return not clean.endswith(self.non_page_extensions)
-
-    def _discover_forge_sections(self, config: Dict, rules: Dict) -> List[str]:
-        """Discover Forge documentation sections by parsing the docs index page."""
-        base_url = config["base_url"]
-        sections = []
-        
-        try:
-            # Fetch the main docs page
-            content_bytes = self._retry_request(f"{base_url}")
-            content = content_bytes.decode('utf-8')
-            
-            # Links are site-absolute, so they carry the base URL's path. Take
-            # the prefix from base_url instead of hardcoding it: Forge moved
-            # from forge.laravel.com/docs to laravel.com/forge/docs, and a
-            # literal "/docs/" then matched nothing, silently.
-            prefix = urllib.parse.urlparse(base_url).path.rstrip('/') + '/'
-            doc_links = re.findall(rf'href="({re.escape(prefix)}[^"]*)"', content, re.IGNORECASE)
-
-            for link in doc_links:
-                # Remove query parameters and fragments
-                clean_link = link.split('?')[0].split('#')[0]
-
-                # Remove the prefix to get the section name
-                section = clean_link[len(prefix):].strip('/')
-
-                if not self._is_page_section(section):
-                    continue
-
-                if section and section not in sections:
-                    sections.append(section)
-                    
-            # Sort sections to maintain consistent ordering
-            sections.sort()
-            logger.debug(f"Discovered {len(sections)} Forge sections")
-            
-        except Exception as e:
-            logger.warning(f"Error discovering Forge sections: {str(e)}")
-            
-        return sections
-    
-    def _discover_nova_sections(self, config: Dict, rules: Dict) -> List[str]:
-        """Discover Nova documentation sections and auto-detect version."""
-        base_url = config["base_url"]
-        sections = []
-        
-        try:
-            # First, try to detect the latest version
-            nova_base = "https://nova.laravel.com/docs"
-            
-            # Try to find version links or check if current version is still valid
-            content_bytes = self._retry_request(f"{nova_base}")
-            content = content_bytes.decode('utf-8')
-            
-            # Look for version links like /docs/v6, /docs/v5, etc.
-            version_matches = re.findall(r'/docs/(v\d+)', content)
-            if version_matches:
-                latest_version = max(version_matches, key=lambda v: int(v[1:]))
-                actual_base_url = f"{nova_base}/{latest_version}"
-                logger.info(f"Auto-detected Nova version: {latest_version}")
-            else:
-                actual_base_url = base_url
-            
-            # Fetch the navigation/index page
-            nav_content_bytes = self._retry_request(f"{actual_base_url}")
-            nav_content = nav_content_bytes.decode('utf-8')
-            
-            # Extract navigation links - Nova typically uses relative links
-            nav_links = re.findall(r'href="(/docs/[^"]*)"', nav_content, re.IGNORECASE)
-            
-            for link in nav_links:
-                # Remove fragments from link
-                clean_link = link.split('#')[0]
-                # Extract section after version (e.g., /docs/v5/installation -> installation)
-                section_match = re.search(r'/docs/v\d+/(.+)', clean_link)
-                if section_match:
-                    section = section_match.group(1)
-
-                    if not self._is_page_section(section):
-                        continue
-
-                    if section and section not in sections:
-                        sections.append(section)
-            
-            sections.sort()
-            logger.debug(f"Discovered {len(sections)} Nova sections")
-            
-        except Exception as e:
-            logger.warning(f"Error discovering Nova sections: {str(e)}")
-            
-        return sections
-    
-    def _discover_vapor_sections(self, config: Dict, rules: Dict) -> List[str]:
-        """Discover Vapor documentation sections by parsing Mintlify navigation."""
-        base_url = config["base_url"]
-        sections = []
-        
-        try:
-            # Vapor uses Mintlify, which often has a special navigation structure
-            content_bytes = self._retry_request(f"{base_url}")
-            content = content_bytes.decode('utf-8')
-            
-            # Look for Mintlify navigation patterns
-            # Try multiple patterns that Mintlify commonly uses
-            nav_patterns = [
-                r'href="(/[^"]*)"[^>]*>([^<]+)</a>',  # General link pattern
-                r'"href":"(/[^"]*)"',  # JSON-style navigation
-                r'data-href="(/[^"]*)"',  # Data attribute pattern
-            ]
-            
-            for pattern in nav_patterns:
-                links = re.findall(pattern, content, re.IGNORECASE)
-                for link in links:
-                    if isinstance(link, tuple):
-                        path = link[0]
-                    else:
-                        path = link
-                    
-                    # Filter for documentation paths (exclude external links, assets, etc.)
-                    if (path.startswith('/') and
-                        not path.startswith('//') and
-                        not self._is_asset_file(path) and
-                        path != '/'):
-
-                        # Strip fragment identifier (everything after #)
-                        path_without_fragment = path.split('#')[0]
-                        section = path_without_fragment.lstrip('/')
-
-                        if not self._is_page_section(section):
-                            continue
-
-                        if section and section not in sections:
-                            sections.append(section)
-            
-            # Remove dupliculates and sort
-            sections = list(set(sections))
-            sections.sort()
-            logger.debug(f"Discovered {len(sections)} Vapor sections")
-            
-        except Exception as e:
-            logger.warning(f"Error discovering Vapor sections: {str(e)}")
-            
-        return sections
-    
-    def _discover_envoyer_sections(self, config: Dict, rules: Dict) -> List[str]:
-        """Discover Envoyer documentation sections, handling category redirects."""
-        base_url = config["base_url"]
-        sections = []
-        
-        try:
-            # Fetch the main docs page
-            content_bytes = self._retry_request(f"{base_url}")
-            content = content_bytes.decode('utf-8')
-            
-            # Extract documentation links
-            doc_links = re.findall(r'href="(/docs/[^"]*)"', content, re.IGNORECASE)
-            
-            for link in doc_links:
-                # Remove fragments and /docs/ prefix
-                clean_link = link.split('#')[0]
-                section = clean_link.replace('/docs/', '')
-
-                if not self._is_page_section(section):
-                    continue
-
-                if section and section not in sections:
-                    # Test if this is a real page (not a redirect)
-                    try:
-                        test_url = f"{base_url}/{section}"
-                        test_content_bytes = self._retry_request(test_url)
-                        test_content = test_content_bytes.decode('utf-8')
-                        
-                        # Check if this is actual documentation content
-                        if self._is_valid_envoyer_content(test_content, section):
-                            sections.append(section)
-                        else:
-                            logger.debug(f"Skipping {section} - appears to be redirect or invalid content")
-                            
-                    except Exception as test_e:
-                        logger.debug(f"Skipping {section} - error testing content: {str(test_e)}")
-                        continue
-            
-            sections.sort()
-            logger.debug(f"Discovered {len(sections)} Envoyer sections")
-            
-        except Exception as e:
-            logger.warning(f"Error discovering Envoyer sections: {str(e)}")
-            
-        return sections
-    
-    def _is_valid_envoyer_content(self, content: str, section: str) -> bool:
-        """Check if Envoyer content is actual documentation (not redirect page)."""
-        # Look for common documentation indicators
-        doc_indicators = [
-            'envoyer', 'deployment', 'zero downtime', 'project', 
-            'server', 'hook', 'notification', 'repository'
-        ]
-        
-        # Look for redirect indicators (things that suggest this isn't real content)
-        redirect_indicators = [
-            'window.location', 'http-equiv="refresh"', 'redirecting',
-            'please wait', 'loading...', 'not found'
-        ]
-        
-        content_lower = content.lower()
-        
-        # Check for documentation indicators
-        doc_score = sum(1 for indicator in doc_indicators if indicator in content_lower)
-        
-        # Check for redirect indicators
-        redirect_score = sum(1 for indicator in redirect_indicators if indicator in content_lower)
-        
-        # Must have some documentation indicators and minimal redirect indicators
-        return doc_score >= 1 and redirect_score == 0 and len(content.strip()) > 500
-    
-    def _retry_request(self, url: str, headers: Optional[Dict] = None) -> bytes:
-        """
-        Make a request with retry logic and respectful delays.
-        
-        Args:
-            url: URL to request
-            headers: Optional headers to include
-            
-        Returns:
-            Response content as bytes
-        """
-        if headers is None:
-            headers = {"User-Agent": USER_AGENT}
-        
-        last_exception: Optional[Exception] = None
-        
-        for attempt in range(self.max_retries + 1):
-            try:
-                # Add respectful delay between requests
-                if attempt > 0:
-                    time.sleep(self.request_delay * (2 ** (attempt - 1)))
-                
-                request = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    return response.read()
-                    
-            except urllib.error.HTTPError as e:
-                last_exception = e
-                if e.code == 404:
-                    # Don't retry 404 errors
-                    raise
-                elif e.code == 429 or (e.code == 403 and "rate limit" in str(e.reason).lower()):
-                    # Rate limiting - wait longer
-                    if attempt < self.max_retries:
-                        wait_time = min(300, (2 ** attempt) * 10 + random.uniform(0, 5))
-                        logger.warning(f"Rate limited on attempt {attempt + 1}, waiting {wait_time:.1f}s")
-                        time.sleep(wait_time)
-                    else:
-                        raise
-                elif e.code >= 500 and attempt < self.max_retries:
-                    # Server errors are worth retrying
-                    wait_time = min(60, (2 ** attempt) + random.uniform(0, 2))
-                    logger.warning(f"Server error {e.code} on attempt {attempt + 1}, retrying in {wait_time:.1f}s")
-                    time.sleep(wait_time)
-                else:
-                    raise
-                    
-            except Exception as e:
-                last_exception = e
-                if attempt < self.max_retries:
-                    wait_time = min(30, (2 ** attempt) + random.uniform(0, 2))
-                    logger.warning(f"Request error on attempt {attempt + 1}, retrying in {wait_time:.1f}s: {str(e)}")
-                    time.sleep(wait_time)
-                else:
-                    raise
-        
-        # This should never be reached, but just in case
-        if last_exception:
-            raise last_exception
-        else:
-            raise RuntimeError(f"Failed to fetch {url} after {self.max_retries + 1} attempts")
-
 
 class ExternalDocsFetcher:
     """Handles fetching documentation from external Laravel services and packages."""
@@ -731,136 +483,43 @@ class ExternalDocsFetcher:
         self.external_dir = target_dir / "external"
         self.external_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize auto-discovery system
-        self.auto_discovery = DocumentationAutoDiscovery(max_retries=max_retries)
-        
-        # Laravel services documentation sources
+        # Laravel services documentation sources. Each site publishes an
+        # llms.txt index of its pages, served as markdown, so a service needs
+        # only where its index is and which URLs in it belong to the docs:
+        # no page list, no link pattern, no pinned version.
         self.laravel_services = {
             "forge": {
                 "name": "Laravel Forge",
                 "type": DocumentationSourceType.LARAVEL_SERVICE,
-                # Forge's docs moved here from forge.laravel.com/docs. The old
-                # host still redirects, but only for pages that kept their path.
                 "base_url": "https://laravel.com/forge/docs",
-                "auto_discovery": True,
-                "discovery_rules": {
-                    "index_url": "https://laravel.com/forge/docs",
-                    "link_pattern": r'href="(/forge/docs/[^"]*)"',
-                    "nested_sections": ["servers", "sites", "resources", "integrations"]
-                },
-                "sections": [
-                    # Manual fallback, used only when discovery finds too
-                    # little. Discovery must reach 75% of this list to be
-                    # trusted, so it also guards against a broken index page:
-                    # keep it roughly in step with the site.
-                    # Get Started
-                    "introduction", "cli", "sdk", "api", "changelog",
-                    # Account
-                    "organizations", "teams", "source-control", "ssh",
-                    "server-providers", "storage-providers", "notifications", "recipes",
-                    # Servers
-                    "servers/the-basics", "servers/types", "servers/laravel-vps", "servers/php",
-                    "servers/load-balancing", "servers/nginx-templates", "servers/security",
-                    "servers/monitoring", "servers/real-time-metrics",
-                    # Sites
-                    "sites/the-basics", "sites/laravel", "sites/domains", "sites/deployments",
-                    "sites/environment-variables", "sites/commands", "sites/queues",
-                    "sites/network", "sites/logs", "sites/repository-access", "sites/user-isolation",
-                    # Resources
-                    "resources/background-processes", "resources/databases", "resources/database-backups",
-                    "resources/managed-databases", "resources/caches", "resources/managed-cache",
-                    "resources/object-storage", "resources/network", "resources/scheduler",
-                    "resources/packages",
-                    # Integrations
-                    "integrations/envoyer", "integrations/sentry", "integrations/aikido",
-                    "integrations/openclaw",
-                    # Other
-                    "knowledge-base/servers", "api-reference/introduction", "support", "abuse"
-                ]
+                "llms_index": "https://laravel.com/forge/docs/llms.txt",
+                "llms_page_prefix": "https://laravel.com/forge/docs/",
             },
             "vapor": {
-                "name": "Laravel Vapor", 
+                "name": "Laravel Vapor",
                 "type": DocumentationSourceType.LARAVEL_SERVICE,
                 "base_url": "https://docs.vapor.build",
-                "auto_discovery": True,
-                "discovery_rules": {
-                    "index_url": "https://docs.vapor.build",
-                    "navigation_patterns": [
-                        r'href="(/[^"]*)"[^>]*>([^<]+)</a>',
-                        r'"href":"(/[^"]*)"',
-                        r'data-href="(/[^"]*)"'
-                    ],
-                    "exclude_extensions": [".css", ".js", ".png", ".jpg", ".svg"],
-                    "min_content_length": 500
-                },
-                "sections": [
-                    # Manual fallback sections
-                    "introduction", "projects/the-basics", "projects/environments",
-                    "projects/deployments", "resources/queues", "resources/storage",
-                    "resources/databases", "resources/caches"
-                ]
+                "llms_index": "https://docs.vapor.build/llms.txt",
+                "llms_page_prefix": "https://docs.vapor.build/",
             },
             "envoyer": {
                 "name": "Laravel Envoyer",
                 "type": DocumentationSourceType.LARAVEL_SERVICE,
                 "base_url": "https://docs.envoyer.io",
-                "auto_discovery": True,
-                "discovery_rules": {
-                    "index_url": "https://docs.envoyer.io",
-                    "link_pattern": r'href="(/docs/[^"]*)"',
-                    "validate_content": True,
-                    "content_indicators": ["envoyer", "deployment", "zero downtime", "project"],
-                    "redirect_indicators": ["window.location", "redirecting", "loading..."]
-                },
-                "sections": [
-                    # Manual fallback sections
-                    "introduction", "quick-start",
-                    "accounts/source-control", "accounts/your-account",
-                    "projects/management", "projects/servers", "projects/deployment-hooks",
-                    "projects/heartbeats", "projects/notifications", "projects/collaborators"
-                ]
+                "llms_index": "https://docs.envoyer.io/llms.txt",
+                "llms_page_prefix": "https://docs.envoyer.io/",
             },
             "nova": {
                 "name": "Laravel Nova",
                 "type": DocumentationSourceType.LARAVEL_SERVICE,
-                "base_url": "https://nova.laravel.com/docs/v5",
-                "auto_discovery": True,
-                "discovery_rules": {
-                    "base_url": "https://nova.laravel.com/docs",
-                    "version_detection": True,
-                    "version_pattern": r'/docs/(v\d+)',
-                    "link_pattern": r'href="(/docs/[^"]*)"',
-                    "section_pattern": r'/docs/v\d+/(.+)',
-                    "navigation_sections": ["Get Started", "Resources", "Search", "Filters", "Lenses", "Actions", "Metrics", "Digging Deeper"]
-                },
-                "sections": [
-                    # Manual fallback sections
-                    # Get Started
-                    "installation", "releases", "upgrade",
-                    # Resources
-                    "resources/the-basics", "resources/fields", "resources/dependent-fields",
-                    "resources/date-fields", "resources/file-fields", "resources/repeater-fields",
-                    "resources/panels", "resources/relationships", "resources/validation", "resources/authorization",
-                    # Search
-                    "search/the-basics", "search/global-search", "search/scout-integration", 
-                    # Filters
-                    "filters/defining-filters", "filters/registering-filters",
-                    # Lenses  
-                    "lenses/defining-lenses", "lenses/registering-lenses",
-                    # Actions
-                    "actions/defining-actions", "actions/registering-actions",
-                    # Metrics
-                    "metrics/defining-metrics", "metrics/registering-metrics",
-                    # Digging Deeper (Customization)
-                    "customization/dashboards", "customization/menus", "customization/notifications",
-                    "customization/authentication", "customization/impersonation", "customization/tools",
-                    "customization/resource-tools", "customization/cards", "customization/fields",
-                    "customization/filters", "customization/frontend", "customization/assets",
-                    "customization/localization", "customization/stubs"
-                ]
-            }
+                # Pages live under a major ("/docs/v5/..."); the newest one in
+                # the index is fetched and saved without the version segment.
+                "base_url": "https://nova.laravel.com/docs",
+                "llms_index": "https://nova.laravel.com/docs/llms.txt",
+                "llms_page_prefix": "https://nova.laravel.com/docs/",
+            },
         }
-    
+
     def get_service_cache_path(self, service: str) -> Path:
         """Get the cache directory path for a service."""
         service_dir = self.external_dir / service
@@ -949,509 +608,43 @@ class ExternalDocsFetcher:
         logger.info(f"Fetching documentation for {service_config['name']}")
         
         try:
-            if service_config["type"] == DocumentationSourceType.LARAVEL_SERVICE:
-                return self._fetch_service_documentation(service, service_config, service_dir)
-            elif service_config["type"] == DocumentationSourceType.GITHUB_REPO:
-                return self._fetch_github_documentation(service, service_config, service_dir)
-            else:
-                logger.error(f"Unsupported documentation source type for {service}")
-                return False
+            return self._fetch_service_from_index(service, service_config, service_dir)
         except Exception as e:
             logger.error(f"Error fetching documentation for {service}: {str(e)}")
             return False
     
-    def _fetch_service_documentation(self, service: str, config: Dict, target_dir: Path) -> bool:
-        """Fetch documentation from Laravel service websites."""
-        base_url = config["base_url"]
-        
-        # Try auto-discovery first, fallback to manual sections
-        discovered_sections = []
-        manual_sections = config.get("sections", [])
+    def _fetch_service_from_index(self, service: str, config: Dict, target_dir: Path) -> bool:
+        """Fetch a Laravel service's documentation from its llms.txt index.
 
-        if config.get("auto_discovery", False):
-            try:
-                discovered_sections = self.auto_discovery.discover_sections(service, config)
-                logger.info(f"Auto-discovery found {len(discovered_sections)} sections for {service}")
-            except Exception as e:
-                logger.warning(f"Auto-discovery failed for {service}: {str(e)}, falling back to manual sections")
-
-        # Use discovered sections if available AND better than manual fallback
-        # Otherwise use manual sections
-        should_use_discovery = (
-            discovered_sections and
-            (not manual_sections or len(discovered_sections) >= len(manual_sections) * 0.75)
-        )
-
-        if should_use_discovery:
-            sections = discovered_sections
-            discovery_method = "auto-discovery"
-        else:
-            if discovered_sections and manual_sections:
-                logger.info(f"Auto-discovery found only {len(discovered_sections)} sections but manual config has {len(manual_sections)}, using manual")
-            sections = manual_sections
-            discovery_method = "manual configuration"
-
-        logger.info(f"Using {discovery_method} for {service}: {len(sections)} sections")
-        
-        # All configured services are now publicly accessible
-        # No longer creating placeholder documentation
-        
-        fetched_sections = []
-        
-        for section in sections:
-            # Double-check that this is a documentation page
-            if not self.auto_discovery._is_page_section(section):
-                logger.debug(f"Skipping non-page path: {section}")
-                continue
-
-            # Section names come from remote HTML and are used as file paths
-            if not is_safe_section_name(section):
-                logger.warning(f"Skipping section with unsafe name for {service}: {section!r}")
-                continue
-
-            section_url = f"{base_url}/{section}"
-            section_file = target_dir / f"{section}.md"
-
-            # Defence in depth: reject anything that still escapes the target dir
-            if not is_within_directory(target_dir, section_file):
-                logger.warning(f"Skipping out-of-tree section path for {service}: {section!r}")
-                continue
-            
-            # Create parent directories if needed for nested sections
-            section_file.parent.mkdir(parents=True, exist_ok=True)
-            
-            try:
-                logger.debug(f"Fetching {section} documentation from {section_url}")
-                content_bytes = self._retry_request(section_url)
-                content = content_bytes.decode('utf-8')
-                
-                # Extract main content (this would need service-specific parsing)
-                # For now, we'll save the raw HTML and note that it needs processing
-                processed_content = self._process_service_html(content, service, section)
-                
-                with open(section_file, 'w', encoding='utf-8') as f:
-                    f.write(processed_content)
-                
-                fetched_sections.append(section)
-                logger.debug(f"Successfully fetched {section} documentation")
-                
-            except urllib.error.HTTPError as e:
-                if e.code == 404:
-                    logger.info(f"Section {section} not found (404) - may not be available")
-                else:
-                    logger.warning(f"Failed to fetch {section} documentation: HTTP {e.code}")
-                continue
-            except Exception as e:
-                logger.warning(f"Failed to fetch {section} documentation: {str(e)}")
-                continue
-        
-        if fetched_sections:
-            # Save metadata about what was fetched
-            metadata = {
-                "service": service,
-                "fetched_sections": fetched_sections,
-                "total_sections": len(sections),
-                "success_rate": len(fetched_sections) / len(sections),
-                "discovery_method": discovery_method,
-                "auto_discovery_enabled": config.get("auto_discovery", False),
-                "discovered_count": len(discovered_sections) if discovered_sections else 0,
-                "manual_fallback": discovery_method == "manual configuration" and config.get("auto_discovery", False)
-            }
-            self.save_cache_metadata(service, metadata)
-            logger.info(f"Successfully fetched {len(fetched_sections)}/{len(sections)} sections for {service} using {discovery_method}")
-
-            # A complete sync of a freshly discovered index is the only safe
-            # moment to prune: it is positive evidence of what the site holds.
-            # A partial fetch, or one driven by the manual fallback list, keeps
-            # everything rather than deleting docs because a site had a bad day.
-            if discovery_method == "auto-discovery" and len(fetched_sections) == len(sections):
-                self._prune_stale_sections(service, target_dir, fetched_sections)
-
-            return True
-
-        return False
-
-    def _prune_stale_sections(self, service: str, target_dir: Path, sections: List[str]) -> None:
-        """Delete saved pages that are no longer part of the service's docs.
-
-        Without this, pages removed or renamed upstream were served forever:
-        most of the Forge files in the repository predated its restructure.
+        Pages keep their path below the docs root ("servers/php.md"), so the
+        laravel-external:// URIs that name them do not change.
         """
-        expected = {(target_dir / f"{section}.md").resolve() for section in sections}
+        result = fetch_llms_index_docs(
+            name=config["name"],
+            index_url=config["llms_index"],
+            page_prefix=config["llms_page_prefix"],
+            target_dir=target_dir,
+            fetch=self._retry_request,
+            layout="nested",
+        )
+        if not result or not result["sections"]:
+            return False
 
-        for path in sorted(target_dir.rglob("*.md")):
-            if path.resolve() not in expected:
-                logger.info(f"Pruning {service} page no longer on the site: {path.relative_to(target_dir)}")
-                path.unlink()
-
-        # Remove directories the pruning emptied, deepest first.
-        directories = [p for p in target_dir.rglob("*") if p.is_dir()]
-        for directory in sorted(directories, key=lambda p: len(p.parts), reverse=True):
-            if not any(directory.iterdir()):
-                directory.rmdir()
-    
-    def _create_placeholder_documentation(self, service: str, config: Dict, target_dir: Path) -> bool:
-        """Create placeholder documentation for services that require authentication."""
-        logger.info(f"Creating placeholder documentation for {service} (authentication required)")
-        
-        sections = config.get("sections", [])
-        service_name = config.get("name", service.title())
-        base_url = config.get("base_url", "")
-        
-        for section in sections:
-            section_file = target_dir / f"{section}.md"
-            
-            content = f"# {service_name} - {section.replace('-', ' ').title()}\n\n"
-            content += f"*Note: {service_name} documentation requires authentication to access.*\n\n"
-            content += "## Overview\n\n"
-            content += f"This section covers {section.replace('-', ' ')} functionality in {service_name}.\n\n"
-            content += "## Documentation Access\n\n"
-            content += f"To access the complete {service_name} documentation:\n\n"
-            content += f"1. Visit [{service_name}]({base_url.replace('/docs/1.0', '')})\n"
-            content += "2. Sign in to your account\n"
-            content += "3. Navigate to the documentation section\n\n"
-            content += "## Common Use Cases\n\n"
-            
-            if service == "vapor":
-                if section == "getting-started":
-                    content += "- Setting up serverless Laravel applications\n"
-                    content += "- Configuring AWS Lambda deployment\n"
-                elif section == "projects":
-                    content += "- Creating and managing Vapor projects\n"
-                    content += "- Environment configuration\n"
-                elif section == "deployments":
-                    content += "- Deploying Laravel applications to AWS Lambda\n"
-                    content += "- Managing deployment rollbacks\n"
-            elif service == "envoyer":
-                if section == "getting-started":
-                    content += "- Setting up zero-downtime deployment\n"
-                    content += "- Connecting your repositories\n"
-                elif section == "projects":
-                    content += "- Creating deployment projects\n"
-                    content += "- Managing project settings\n"
-                elif section == "deployments":
-                    content += "- Configuring deployment hooks\n"
-                    content += "- Managing deployment history\n"
-            
-            content += f"\n*For detailed information, please visit the official {service_name} documentation.*\n"
-            
-            with open(section_file, 'w', encoding='utf-8') as f:
-                f.write(content)
-        
-        # Save metadata
         metadata = {
             "service": service,
-            "fetched_sections": sections,
-            "total_sections": len(sections),
-            "success_rate": 1.0,
-            "type": "placeholder"
+            "fetched_sections": result["sections"],
+            "total_sections": result["total"],
+            "success_rate": len(result["sections"]) / result["total"],
+            "discovery_method": "llms-index",
+            "index_url": config["llms_index"],
         }
+        if result["version"]:
+            metadata["version"] = result["version"]
         self.save_cache_metadata(service, metadata)
-        
-        logger.info(f"Created placeholder documentation for {service} with {len(sections)} sections")
+        logger.info(
+            f"Successfully fetched {len(result['sections'])}/{result['total']} pages for {service} from its llms.txt index"
+        )
         return True
-    
-    def _fetch_github_documentation(self, service: str, config: Dict, target_dir: Path) -> bool:
-        """Fetch documentation from GitHub repositories."""
-        repo = config["repo"]
-        branch = config.get("branch", "main")
-        
-        # Use similar logic to the main DocsUpdater but for external repos
-        archive_url = f"https://github.com/{repo}/archive/refs/heads/{branch}.zip"
-        
-        try:
-            with tempfile.TemporaryDirectory() as temp_dir:
-                temp_path = Path(temp_dir)
-                zip_path = temp_path / f"{service}_docs.zip"
-                
-                logger.debug(f"Downloading {service} documentation from {archive_url}")
-                content_bytes = self._retry_request(archive_url)
-                
-                with open(zip_path, 'wb') as out_file:
-                    out_file.write(content_bytes)
-                
-                # Extract the zip file
-                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                    zip_ref.extractall(temp_path)
-                
-                # Find the extracted directory
-                extracted_dirs = [d for d in temp_path.iterdir() if d.is_dir() and d.name.startswith(repo.split('/')[-1])]
-                
-                if not extracted_dirs:
-                    raise FileNotFoundError(f"Could not find extracted {service} documentation directory")
-                
-                extracted_dir = extracted_dirs[0]
-                
-                # Clear the target directory
-                if target_dir.exists():
-                    shutil.rmtree(target_dir)
-                target_dir.mkdir(parents=True)
-                
-                # Copy documentation files
-                for item in extracted_dir.iterdir():
-                    if item.is_dir():
-                        shutil.copytree(item, target_dir / item.name)
-                    else:
-                        shutil.copy2(item, target_dir / item.name)
-                
-                # Save metadata. success_rate matters: is_cache_valid treats a
-                # missing rate as 0.0 quality, which invalidated every
-                # archive-fetched cache.
-                metadata = {
-                    "service": service,
-                    "repo": repo,
-                    "branch": branch,
-                    "fetch_method": "github_archive",
-                    "success_rate": 1.0
-                }
-                self.save_cache_metadata(service, metadata)
-                
-                logger.info(f"Successfully fetched GitHub documentation for {service}")
-                return True
-                
-        except Exception as e:
-            logger.error(f"Error fetching GitHub documentation for {service}: {str(e)}")
-            return False
-    
-    def _process_service_html(self, html_content: str, service: str, section: str) -> str:
-        """
-        Process HTML content from Laravel services to extract documentation.
-        Extracts main content from HTML and converts to markdown-like format.
-        """
-        # Basic HTML content extraction
-        processed_content = f"# {service.title()} - {section.title()}\n\n"
-        processed_content += f"*Source: {self.laravel_services[service]['base_url']}/{section}*\n\n"
-        processed_content += "---\n\n"
-        
-        try:
-            # Try to extract meaningful content from HTML
-            content_text = self._extract_html_content(html_content)
-            if len(content_text.strip()) > 100:  # Simplified validation for testing
-                processed_content += content_text
-            else:
-                # Log warning but don't create fake content
-                logger.warning(f"Content extraction failed for {service}/{section} - content too short or invalid")
-                processed_content += f"*Content extraction failed for {service.title()} {section}.*\n"
-                processed_content += "*This may indicate a URL redirect or parsing issue.*\n\n"
-                processed_content += "*Please visit the official documentation at the source URL above.*\n\n"
-                processed_content += f"<!-- Content length: {len(content_text.strip()) if content_text else 0} characters -->\n"
-        except Exception as e:
-            logger.warning(f"Error processing HTML content for {service}/{section}: {str(e)}")
-            processed_content += f"*Content processing error: {str(e)}*\n\n"
-            processed_content += "*Please visit the official documentation at the source URL above.*\n\n"
-        
-        return processed_content
-    
-    def _extract_html_content(self, html_content: str) -> str:
-        """
-        Extract readable content from HTML using markdownify.
-        Simplified approach that leverages markdownify's built-in HTML parsing.
-        """
-        try:
-            from bs4 import BeautifulSoup
-        except ImportError:
-            logger.warning("BeautifulSoup not installed, using simple extraction")
-            # Fallback to just converting the entire HTML
-            text_content = self._html_to_text(html_content)
-            return text_content[:10000] if len(text_content) > 10000 else text_content
-        
-        # Parse HTML with BeautifulSoup for better content extraction
-        soup = BeautifulSoup(html_content, 'html.parser')
-        
-        # Try to find main content areas
-        content_areas = [
-            soup.find('main'),
-            soup.find('article'),
-            soup.find('div', class_=re.compile(r'prose|content|documentation|markdown', re.I)),
-            soup.find('div', id=re.compile(r'content|docs|documentation', re.I)),
-            soup.find('section', class_=re.compile(r'content|docs', re.I)),
-        ]
-        
-        # Use the first valid content area found
-        content_html = None
-        for area in content_areas:
-            if area and len(str(area)) > 200:  # Ensure it has substantial content
-                content_html = str(area)
-                break
-        
-        # If no specific content area found, use the body
-        if not content_html:
-            body = soup.find('body')
-            content_html = str(body) if body else html_content
-        
-        # Convert to markdown
-        text_content = self._html_to_text(content_html)
-        
-        # Limit length to prevent extremely long outputs
-        if len(text_content) > 50000:
-            text_content = text_content[:50000] + "\n\n*[Content truncated for length]*"
-        
-        return text_content
-    
-    def _is_valid_content(self, content: str, service: str, section: str) -> bool:
-        """
-        Validate that extracted content is actually documentation.
-        Enhanced version with better quality scoring.
-        
-        Args:
-            content: Extracted text content
-            service: Service name (forge, vapor, etc.)
-            section: Section name
-            
-        Returns:
-            True if content appears to be valid documentation
-        """
-        if not content or len(content.strip()) < 200:
-            return False
-        
-        # Check for service-specific keywords that indicate real documentation
-        service_keywords = {
-            "forge": ["server", "deployment", "laravel", "forge", "provision", "ssh", "nginx", "database"],
-            "vapor": ["serverless", "lambda", "aws", "vapor", "deployment", "environment", "queue", "cache"],
-            "envoyer": ["zero downtime", "deployment", "envoyer", "rollback", "hook", "notification", "repository"],
-            "nova": ["admin", "resource", "nova", "eloquent", "dashboard", "field", "filter", "lens", "action", "metric"]
-        }
-        
-        # Enhanced section-specific keywords
-        section_keywords = {
-            "introduction": ["overview", "getting started", "what is", "welcome"],
-            "installation": ["install", "composer", "requirements", "setup"],
-            "deployment": ["deploy", "release", "production", "build"],
-            "backups": ["backup", "database", "restore", "snapshot"],
-            "ssl": ["certificate", "https", "tls", "ssl", "encryption"],
-            "authentication": ["auth", "login", "user", "password", "token"],
-            "configuration": ["config", "settings", "environment", "env"],
-            "database": ["mysql", "postgresql", "migration", "schema", "query"]
-        }
-        
-        content_lower = content.lower()
-        
-        # Quality scoring system
-        quality_score = 0
-        
-        # Service keyword matching (higher weight)
-        service_matches = 0
-        if service in service_keywords:
-            service_matches = sum(1 for keyword in service_keywords[service] if keyword in content_lower)
-            quality_score += service_matches * 2
-        
-        # Section keyword matching
-        section_base = section.split('/')[-1].replace('-', ' ')
-        if section_base in section_keywords:
-            section_matches = sum(1 for keyword in section_keywords[section_base] if keyword in content_lower)
-            quality_score += section_matches
-        
-        # Generic documentation indicators
-        doc_indicators = [
-            "documentation", "guide", "tutorial", "reference", "api", "configuration", 
-            "deploy", "server", "application", "framework", "laravel", "php",
-            "example", "usage", "method", "class", "function", "parameter"
-        ]
-        doc_matches = sum(1 for indicator in doc_indicators if indicator in content_lower)
-        quality_score += doc_matches
-        
-        # Structural indicators (signs of well-structured documentation)
-        structure_indicators = ["# ", "## ", "### ", "```", "**", "*", "1.", "2.", "-", "•"]
-        structure_matches = sum(1 for indicator in structure_indicators if indicator in content)
-        quality_score += min(structure_matches, 5)  # Cap at 5 to avoid over-weighting
-        
-        # Negative indicators (things that suggest this isn't documentation)
-        bad_indicators = [
-            "search...", "⌘k", "dashboard", "login", "sign in", "register", 
-            "404", "not found", "error", "loading...", "please wait",
-            "window.location", "redirect", "javascript:", "mailto:",
-            "cookie", "privacy policy", "terms of service"
-        ]
-        bad_matches = sum(1 for indicator in bad_indicators if indicator in content_lower)
-        quality_score -= bad_matches * 2
-        
-        # Length bonus (longer content is generally better documentation)
-        if len(content) > 1000:
-            quality_score += 2
-        elif len(content) > 500:
-            quality_score += 1
-        
-        # Content must have a minimum quality score to be considered valid
-        min_score = 3
-        is_valid = quality_score >= min_score
-        
-        if not is_valid:
-            logger.debug(f"Content validation failed for {service}/{section}: score {quality_score} < {min_score}")
-        
-        return is_valid
-    
-    def _html_to_text(self, html_content: str) -> str:
-        """
-        Convert HTML to Markdown using markdownify.
-        """
-        try:
-            from markdownify import markdownify as md
-            from bs4 import BeautifulSoup
-        except ImportError:
-            logger.error("markdownify not installed. Please install it with: pip install markdownify")
-            # Fallback to basic conversion
-            return re.sub(r'<[^>]+>', '', html_content)
-        
-        # Parse HTML and remove script and style elements completely
-        soup = BeautifulSoup(html_content, 'html.parser')
-        
-        # Remove all script and style tags and their contents
-        for tag in soup(['script', 'style']):
-            tag.decompose()
-        
-        # Get the cleaned HTML
-        cleaned_html = str(soup)
-        
-        # Convert HTML to Markdown with specific options
-        markdown = md(
-            cleaned_html,
-            strip=['nav', 'header', 'footer', 'aside', 'meta', 'link'],
-            heading_style='ATX',  # Use # style headings
-            bullets='-',  # Use - for unordered lists
-            code_language='',  # Don't assume code language
-            escape_asterisks=False,  # Don't escape asterisks
-            escape_underscores=False,  # Don't escape underscores
-            escape_misc=False,  # Don't escape other special chars
-            autolinks=True,  # Convert URLs to links automatically
-        )
-        
-        # Post-process to handle CloudFlare email protection links
-        # Replace all email protection links with placeholder
-        # In practice, these are always used for email addresses, not navigation
-        # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
-        markdown = re.sub(
-            r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
-            '[email protected]',
-            markdown
-        )
-        
-        # Remove any remaining inline JavaScript patterns
-        markdown = re.sub(r'\(self\.__next_s=self\.__next_s\|\|\[\]\)\.push[^\n]+', '', markdown)
-        markdown = re.sub(r'\(function\s+[a-zA-Z]\([^)]*\)\s*\{[^}]+\}\)[^\n]*', '', markdown)
-        
-        # Remove CSS blocks that might have been left
-        markdown = re.sub(r'h1,\s*h2,\s*h3,\s*h4\s*\{[^}]+\}', '', markdown)
-        markdown = re.sub(r'\.[a-zA-Z0-9-]+\s*\{[^}]+\}', '', markdown)
-        markdown = re.sub(r'#[a-zA-Z0-9-]+\s*>\s*[^{]+\{[^}]+\}', '', markdown)
-        
-        # Drop page chrome that sits inside <main> on the Mintlify sites: the
-        # feedback widget and the table-of-contents button. Whole lines only,
-        # so prose that merely contains the words is untouched.
-        markdown = "\n".join(
-            line for line in markdown.split("\n")
-            if line.strip() not in SITE_CHROME_LINES
-        )
-
-        # Clean up excessive newlines
-        markdown = re.sub(r'\n\s*\n\s*\n', '\n\n', markdown)
-
-        # Remove social media links
-        markdown = remove_social_media_lines(markdown)
-
-        # Remove image references
-        markdown = remove_image_references(markdown)
-
-        return markdown.strip()
 
     def fetch_all_services(self, force: bool = False) -> Dict[str, bool]:
         """
@@ -2160,118 +1353,41 @@ class CommunityPackageFetcher:
     def _fetch_llms_index_docs(self, package: str, config: Dict) -> bool:
         """Fetch a package's documentation from the llms.txt index its site publishes.
 
-        The index is the site's own list of its pages, each served as markdown,
-        so there is no page list to maintain here and no HTML to scrape: a
-        reorganised sidebar or a new major version is picked up by the next
-        sync. Every listed page is saved verbatim, minus any banner blockquote
-        it opens with.
-
-        When the index lists several major versions only the newest is fetched.
-        Filenames come from the page URL: its final segment, or its whole path
-        below the version, per `llms_filenames`.
+        See fetch_llms_index_docs. Filenames come from the page URL: its final
+        segment, or its whole path below the version, per `llms_filenames`.
         """
-        index_url = config["llms_index"]
-        page_prefix = config["llms_page_prefix"]
-        use_path = config.get("llms_filenames") == "path"
-        name = config["name"]
-        package_dir = self.get_package_cache_path(package)
-
-        try:
-            request = urllib.request.Request(index_url, headers={"User-Agent": USER_AGENT})
+        def fetch(url: str) -> bytes:
+            request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                index_text = response.read().decode('utf-8')
-        except Exception as e:
-            logger.error(f"Error fetching {name} docs index: {str(e)}")
+                return response.read()
+
+        name = config["name"]
+        result = fetch_llms_index_docs(
+            name=name,
+            index_url=config["llms_index"],
+            page_prefix=config["llms_page_prefix"],
+            target_dir=self.get_package_cache_path(package),
+            fetch=fetch,
+            layout="flat" if config.get("llms_filenames") == "path" else "basename",
+        )
+        if not result or not result["sections"]:
             return False
 
-        # Only URLs on the site's own docs path qualify: the index is remote
-        # input, and following arbitrary URLs from it would let a compromised
-        # page turn the fetcher into a generic downloader.
-        page_urls = list(dict.fromkeys(re.findall(
-            rf"\(({re.escape(page_prefix)}[A-Za-z0-9/._-]+\.md)\)", index_text
-        )))
-        if not page_urls:
-            logger.warning(f"{name} llms.txt index yielded no documentation URLs")
-            return False
-
-        # Versions appear as a path segment: "v3" (Inertia) or "5.x" (Filament).
-        version_segment = re.compile(r"/(v?(\d+)(?:\.x)?)/")
-
-        def version_of(url: str) -> Optional[tuple[int, str]]:
-            match = version_segment.search(url[len(page_prefix) - 1:])
-            return (int(match.group(2)), match.group(1)) if match else None
-
-        # An index can list every maintained major. Saved side by side their
-        # pages collide -- with Inertia's v3, v2 and v1 all listed, each file
-        # ended up holding the v1 page -- so keep the newest only.
-        version_label: Optional[str] = None
-        versions = {v for v in map(version_of, page_urls) if v}
-        if versions:
-            newest = max(versions)
-            version_label = newest[1]
-            page_urls = [url for url in page_urls if version_of(url) == newest]
-            logger.info(f"{name} index lists versions {sorted(v[1] for v in versions)}; fetching {version_label}")
-
-        def filename_for(url: str) -> str:
-            if not use_path:
-                return url.rsplit("/", 1)[-1]
-            path = url[len(page_prefix):]
-            if version_label and path.startswith(f"{version_label}/"):
-                path = path[len(version_label) + 1:]
-            return path.replace("/", "-")
-
-        fetched = 0
-        expected = set()
-        for url in page_urls:
-            filename = filename_for(url)
-            expected.add(filename)
-            try:
-                request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-                with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    page = response.read().decode('utf-8')
-
-                # Strip the leading "> ..." documentation-index banner.
-                lines = page.splitlines()
-                while lines and (lines[0].startswith(">") or not lines[0].strip()):
-                    lines.pop(0)
-                content = remove_image_references("\n".join(lines)).strip()
-                if len(content) < 100:
-                    logger.warning(f"{name} page {filename} too thin, skipping")
-                    continue
-
-                with open(package_dir / filename, 'w', encoding='utf-8') as f:
-                    f.write(f"Source: {url}\n\n{content}\n")
-                fetched += 1
-            except Exception as e:
-                logger.warning(f"Error fetching {name} page {url}: {str(e)}")
-
-        if fetched == len(page_urls):
-            # A complete fetch is the only safe moment to prune: pages the
-            # index no longer lists would otherwise stay searchable forever.
-            # A partial fetch keeps everything, stale included, rather than
-            # deleting docs we failed to replace.
-            for stale in package_dir.glob("*.md"):
-                if stale.name not in expected:
-                    logger.info(f"Pruning {name} page no longer in the index: {stale.name}")
-                    stale.unlink()
-
-        if fetched > 0:
-            metadata = {
-                "package": package,
-                "name": name,
-                "sections_count": fetched,
-                "total_sections": len(page_urls),
-                "success_rate": fetched / len(page_urls),
-                "source_type": "llms_index",
-                "index_url": index_url,
-            }
-            if version_label:
-                metadata["version"] = version_label
-            self.save_cache_metadata(package, metadata)
-            logger.info(f"Successfully fetched {fetched}/{len(page_urls)} {name} pages")
-            return True
-
-        return False
+        fetched = len(result["sections"])
+        metadata = {
+            "package": package,
+            "name": name,
+            "sections_count": fetched,
+            "total_sections": result["total"],
+            "success_rate": fetched / result["total"],
+            "source_type": "llms_index",
+            "index_url": config["llms_index"],
+        }
+        if result["version"]:
+            metadata["version"] = result["version"]
+        self.save_cache_metadata(package, metadata)
+        logger.info(f"Successfully fetched {fetched}/{result['total']} {name} pages")
+        return True
 
     def _process_jsx_to_markdown(self, jsx_content: str, section: str) -> Optional[str]:
         """
@@ -4164,21 +3280,15 @@ def main():
                     if info.get('success_rate') != 'unknown':
                         print(f"    Success Rate: {info.get('success_rate', 'unknown'):.1%}")
                     
-                    # Show auto-discovery status if available
+                    # Show how the pages were discovered, if recorded
                     metadata_path = updater.external_fetcher.get_cache_metadata_path(service)
                     if metadata_path.exists():
                         try:
-                            import json
                             with open(metadata_path, 'r') as f:
                                 metadata = json.load(f)
-                            if metadata.get('auto_discovery_enabled'):
-                                discovery_method = metadata.get('discovery_method', 'unknown')
-                                discovered_count = metadata.get('discovered_count', 0)
-                                print(f"    Auto-Discovery: ✅ {discovery_method} ({discovered_count} sections)")
-                                if metadata.get('manual_fallback'):
-                                    print("    Fallback: Used manual configuration (auto-discovery failed)")
-                            else:
-                                print("    Auto-Discovery: ❌ disabled (using manual configuration)")
+                            if metadata.get('discovery_method'):
+                                fetched = len(metadata.get('fetched_sections', []))
+                                print(f"    Discovery: {metadata['discovery_method']} ({fetched}/{metadata.get('total_sections', '?')} pages)")
                         except Exception:
                             pass
             
