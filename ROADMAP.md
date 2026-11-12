@@ -10,7 +10,7 @@ This roadmap outlines the planned development path toward v1.0.0.
 
 ---
 
-## Current Version: v0.13.0
+## Current Version: v0.14.0
 
 ### ✅ Completed Features
 - **Multi-version Laravel documentation** support (6.x through latest)
@@ -188,6 +188,18 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
   corpus; warm search p95 ~4ms against the v1.0.0 100ms target)*
 - [x] Documentation completeness audit *(claims-vs-reality sweep; notes in
   docs/superpowers/specs/2026-08-03-claims-audit-notes.md)*
+
+---
+
+## ✅ v0.14.0 - Sync Reliability (COMPLETED)
+**Released: Q4 2026 — unplanned; it came out of an audit of the nightly docs sync**
+
+- [x] Laravel service docs (Forge, Vapor, Nova, Envoyer) read from each site's `llms.txt` index
+- [x] Filament docs follow the current major from the site's index
+- [x] Community package docs refresh again (cache age no longer read from file mtime)
+- [x] Laravel Learn courses replace the retired Bootcamp site; Laracasts topic index restored
+- [x] Per-source sync health report, gating the nightly pipeline
+- [x] CI running again and required on `main`; failure notifications on the docs and release pipelines
 
 ---
 

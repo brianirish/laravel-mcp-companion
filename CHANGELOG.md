@@ -18,6 +18,12 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-12
+
+An audit of the nightly documentation sync, and the repairs that came out of
+it. Most sources other than the Laravel framework docs had been stale or
+failing without any signal, and CI itself had not run since 2026-08-04.
+
 ### Added
 - The docs and release pipelines email the Harness "Pipeline Alerts" user
   group when a run fails.
@@ -46,13 +52,15 @@ docs-only commit and contains no code change.
   alternate nights.
 - CI no longer runs on tag pushes, which re-tested the commit `main` had just
   tested and spent build credits doing it.
-- **Filament docs track the current major automatically.** They are discovered
+- **Breaking: Filament docs track the current major automatically, and their
+  file names change.** They are discovered
   from the site's `llms.txt` index instead of a hand-listed set of pages under
   a pinned `3.x`, which was two majors behind with seven dead pages. Filenames
-  now follow the page path (`forms-text-input.md`); the `3.x` files
-  (`panels-*.md`, `forms-fields-*.md`) are removed by the next sync.
-- **The `laravel-bootcamp` learning source now holds the courses at
-  laravel.com/learn.** `bootcamp.laravel.com` was folded into that site and no
+  now follow the page path (`forms-text-input.md`), so `laravel-package://`
+  URIs for the `3.x` files (`panels-*.md`, `forms-fields-*.md`) no longer
+  resolve.
+- **Breaking: the `laravel-bootcamp` learning source now holds the courses at
+  laravel.com/learn, under new file names.** `bootcamp.laravel.com` was folded into that site and no
   longer resolves; the eight saved "bootcamp" pages were all copies of its
   landing page. Courses and lessons are discovered from the site, lessons are
   saved as `<course>-<lesson>.md` with their code samples, and the source key
@@ -66,8 +74,6 @@ docs-only commit and contains no code change.
   as markdown (Inertia, Filament) were saved with their paragraphs run together.
 - Spatie, Livewire and Debugbar record how many pages they wanted as well as
   how many they fetched, so the sync report can flag a mostly failed fetch.
-- A Laravel Learn course whose page fails to load no longer has its saved
-  lessons pruned, and the sync is reported as incomplete.
 - The Laracasts topic index is fetched from `laracasts.com/series`;
   `/topics` had become a 404, so the index had never been saved.
 - Forge docs follow the move to `laravel.com/forge/docs`. Discovery had
@@ -78,10 +84,9 @@ docs-only commit and contains no code change.
   Inertia, Debugbar and IDE Helper had sat at their 2025-07-30 snapshot.
 - The Inertia fetcher saved v1, v2 and v3 pages under the same filenames, with
   v1 winning. Only the newest version in the index is fetched.
-- Service-docs discovery no longer saves `llms.txt`, `sitemap.xml`, the `.md`
-  twin of each page or Cloudflare's email endpoint as documentation, and a
-  complete discovered sync prunes pages that have left the site.
-- The feedback widget and "Back to top" lines are stripped from service docs.
+- Saved service docs no longer include non-pages (`llms.txt`, `sitemap.xml`,
+  the `.md` twin of each page, `#anchor` files) or the sites' feedback widget,
+  and a complete sync removes pages that have left a site.
 - `--force` now refetches service docs whose cache is still valid.
 - The docs pipeline no longer waits on every pull request check. A status
   that never completed hung each run until the stage timed out, so no docs
@@ -341,7 +346,8 @@ docs-only commit and contains no code change.
 - Startup reads the supported-version list from cache with a 24-hour TTL, and
   all network calls have timeouts.
 
-[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.10.0...v0.11.0
