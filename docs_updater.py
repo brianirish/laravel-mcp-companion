@@ -1910,26 +1910,50 @@ class CommunityPackageFetcher:
         return cache_dir / ".metadata" / "cache.json"
     
     def is_cache_valid(self, package: str, subpackage: Optional[str] = None) -> bool:
-        """Check if the cache for a package is still valid."""
+        """Check if the cache for a package is still valid.
+
+        Age is read from the timestamp stored in the metadata, not from the
+        file's mtime. The daily sync runs in a fresh clone, where every mtime
+        is the checkout time, so an mtime check called every package fresh on
+        every run and nothing was ever refetched.
+        """
+        # Spatie has no metadata of its own, only one file per sub-package.
+        if subpackage is None:
+            sub_packages = self.community_packages.get(package, {}).get("packages")
+            if sub_packages:
+                return all(self.is_cache_valid(package, sub) for sub in sub_packages)
+
         metadata_path = self.get_cache_metadata_path(package, subpackage)
-        
+
         if not metadata_path.exists():
             return False
-        
+
         try:
-            # Use file modification time instead of stored cache_time
-            cache_time = metadata_path.stat().st_mtime
-            current_time = time.time()
-            
-            if current_time - cache_time > self.cache_duration:
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+
+            # `cache_time` is the key older committed metadata carries.
+            cache_time = float(metadata.get("cached_at") or metadata.get("cache_time") or 0)
+
+            if time.time() - cache_time > self.cache_duration:
                 logger.debug(f"Cache expired for {package}/{subpackage or 'all'}")
                 return False
-            
+
             return True
         except Exception as e:
             logger.warning(f"Error reading cache metadata for {package}: {str(e)}")
             return False
-    
+
+    def save_cache_metadata(self, package: str, metadata: Dict, subpackage: Optional[str] = None) -> None:
+        """Write cache metadata for a package, stamping when it was fetched."""
+        metadata.setdefault("cached_at", time.time())
+
+        metadata_path = self.get_cache_metadata_path(package, subpackage)
+        metadata_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f, indent=2)
+
     def fetch_package_docs(self, package: str, force: bool = False) -> bool:
         """
         Fetch documentation for a community package.
@@ -2010,11 +2034,7 @@ class CommunityPackageFetcher:
                         "base_url": base_url
                     }
                     
-                    metadata_path = self.get_cache_metadata_path("spatie", package_key)
-                    metadata_path.parent.mkdir(parents=True, exist_ok=True)
-                    
-                    with open(metadata_path, 'w') as f:
-                        json.dump(metadata, f, indent=2)
+                    self.save_cache_metadata("spatie", metadata, subpackage=package_key)
                     
                     success_count += 1
                     logger.info(f"Successfully fetched {fetched_sections} sections for Spatie {package_info['name']}")
@@ -2056,11 +2076,7 @@ class CommunityPackageFetcher:
                 "base_url": base_url
             }
             
-            metadata_path = self.get_cache_metadata_path("livewire")
-            metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(metadata_path, 'w') as f:
-                json.dump(metadata, f, indent=2)
+            self.save_cache_metadata("livewire", metadata)
             
             logger.info(f"Successfully fetched {fetched_sections} sections for Livewire")
             return True
@@ -2143,10 +2159,7 @@ class CommunityPackageFetcher:
                 "source_type": "llms_index",
                 "index_url": index_url,
             }
-            metadata_path = self.get_cache_metadata_path("inertia")
-            metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(metadata_path, 'w') as f:
-                json.dump(metadata, f, indent=2)
+            self.save_cache_metadata("inertia", metadata)
             logger.info(f"Successfully fetched {fetched}/{len(page_urls)} Inertia.js pages")
             return True
 
@@ -2344,11 +2357,7 @@ class CommunityPackageFetcher:
                 "base_url": base_url
             }
             
-            metadata_path = self.get_cache_metadata_path("filament")
-            metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(metadata_path, 'w') as f:
-                json.dump(metadata, f, indent=2)
+            self.save_cache_metadata("filament", metadata)
             
             logger.info(f"Successfully fetched {fetched_sections} sections for Filament")
             return True
@@ -2387,11 +2396,7 @@ class CommunityPackageFetcher:
                 "base_url": base_url
             }
             
-            metadata_path = self.get_cache_metadata_path("debugbar")
-            metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(metadata_path, 'w') as f:
-                json.dump(metadata, f, indent=2)
+            self.save_cache_metadata("debugbar", metadata)
             
             logger.info(f"Successfully fetched {fetched_sections} sections for Laravel Debugbar")
             return True
@@ -2443,11 +2448,7 @@ class CommunityPackageFetcher:
                     "file": file
                 }
                 
-                metadata_path = self.get_cache_metadata_path("ide-helper")
-                metadata_path.parent.mkdir(parents=True, exist_ok=True)
-                
-                with open(metadata_path, 'w') as f:
-                    json.dump(metadata, f, indent=2)
+                self.save_cache_metadata("ide-helper", metadata)
                 
                 logger.info("Successfully fetched documentation for Laravel IDE Helper")
                 return True

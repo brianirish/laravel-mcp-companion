@@ -284,18 +284,11 @@ class TestPackageFetchers:
     
     def test_fetch_package_docs_with_cache(self, package_fetcher):
         """Test that cached packages aren't re-fetched."""
-        # Create valid cache metadata for the main package
-        metadata_path = package_fetcher.get_cache_metadata_path("spatie")
-        metadata_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        metadata = {
-            "cache_time": time.time(),  # Current time - cache is fresh
-            "package": "spatie"
-        }
-        
-        with open(metadata_path, 'w') as f:
-            json.dump(metadata, f)
-        
+        # Spatie keeps one metadata file per sub-package and none of its own;
+        # it is cached when every one of those is fresh.
+        for sub in package_fetcher.community_packages["spatie"]["packages"]:
+            package_fetcher.save_cache_metadata("spatie", {"package": sub}, subpackage=sub)
+
         # Mock the fetch method to ensure it's not called
         with patch.object(package_fetcher, '_fetch_spatie_docs') as mock_fetch:
             result = package_fetcher.fetch_package_docs("spatie")
