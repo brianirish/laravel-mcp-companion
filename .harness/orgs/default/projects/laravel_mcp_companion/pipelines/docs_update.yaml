@@ -9,6 +9,24 @@ pipeline:
         build: <+input>
         connectorRef: Laravel_MCP_Companion
         repoName: brianirish/laravel-mcp-companion
+  # Email the "Pipeline Alerts" user group when a run fails. The group lives in
+  # Harness (project scope) and holds the addresses, so none are kept in this
+  # public file. This only covers runs that start: a trigger that fails to
+  # create an execution -- a rejected YAML, an exhausted build allowance --
+  # produces no run and so no notification. Check the trigger's event history
+  # for those.
+  notificationRules:
+    - name: Notify on failure
+      identifier: notify_on_failure
+      pipelineEvents:
+        - type: PipelineFailed
+      notificationMethod:
+        type: Email
+        spec:
+          userGroups:
+            - pipeline_alerts
+          recipients: []
+      enabled: true
   stages:
     - stage:
         identifier: check_and_update

@@ -19,6 +19,8 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
+- The docs and release pipelines email the Harness "Pipeline Alerts" user
+  group when a run fails.
 - `docs_updater.py --sync-report` prints a per-source health report and exits
   non-zero when a source fetched too little, has not synced recently, or has
   never been saved. The daily sync puts it in the pull request body and fails
