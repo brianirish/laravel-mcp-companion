@@ -109,8 +109,14 @@ pipeline:
                       # This exit code is not a health signal -- it is non-zero
                       # whenever the framework docs were already up to date --
                       # so health is read from the report below instead.
+                      #
+                      # --force: every source is refetched on every run. The
+                      # fetchers cache for 24 hours, and this job runs every 24
+                      # hours, so without it a source whose last fetch landed a
+                      # few seconds inside the window was skipped, and each one
+                      # refreshed on alternate days at best.
                       echo "Updating services, packages and learning resources..."
-                      python docs_updater.py --update --log-level INFO
+                      python docs_updater.py --update --force --log-level INFO
 
                       # Per-source health, from the metadata each fetch leaves
                       # behind. Exits non-zero if any source fetched too little

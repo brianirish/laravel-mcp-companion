@@ -53,9 +53,41 @@ async def test_documentation_link_resolves(pkg_id, link_guard_server):
     assert link.startswith(RESOURCE_SCHEMES), f"{pkg_id}: unsupported scheme {link}"
     async with Client(link_guard_server) as client:
         content = (await client.read_resource(link))[0].text
-    assert "not found" not in content.lower(), f"{pkg_id}: dead link {link}"
-    assert "access denied" not in content.lower(), f"{pkg_id}: {link}"
+    assert not is_dead_link_response(content), f"{pkg_id}: dead link {link}"
     assert len(content) > 200, f"{pkg_id}: {link} resolved to a stub"
+
+
+def is_dead_link_response(content: str) -> bool:
+    """A resource that does not resolve answers with a one-line error.
+
+    Only the first line is examined. Searching the whole document for "not
+    found" failed the guard on a live page: the Livewire quickstart has a
+    troubleshooting entry titled "Component not found error".
+    """
+    first_line = content.lstrip().split("\n", 1)[0].lower()
+    return "not found" in first_line or first_line.startswith(("error", "access denied"))
+
+
+@pytest.mark.parametrize("link", [
+    "laravel://12.x/no-such-page-anywhere.md",
+    "laravel-package://livewire/no-such-page-anywhere.md",
+    "laravel-external://forge/no-such-page-anywhere.md",
+])
+async def test_the_guard_recognises_a_link_that_does_not_resolve(link, link_guard_server):
+    """The control for the test above: if the server's not-found response ever
+    changes shape, this fails instead of every dead link passing silently."""
+    async with Client(link_guard_server) as client:
+        try:
+            content = (await client.read_resource(link))[0].text
+        except Exception:
+            return  # a raised error is also an unmistakable dead link
+    assert is_dead_link_response(content), content[:200]
+
+
+def test_a_page_that_merely_mentions_the_phrase_is_not_a_dead_link():
+    page = "# Quickstart\n\nInstall Livewire.\n\n**Component not found error:** check the file exists.\n"
+
+    assert is_dead_link_response(page) is False
 
 
 def test_most_packages_keep_documentation_links():
