@@ -15,6 +15,7 @@ import re
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Union
+import urllib.parse
 import urllib.request
 import urllib.error
 import zipfile
@@ -317,6 +318,10 @@ SUPPORTED_VERSIONS = get_cached_supported_versions()
 DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]  # Always use the latest version as default
 USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
+# Lines of site chrome that survive HTML-to-Markdown conversion verbatim.
+SITE_CHROME_LINES = frozenset({"Was this page helpful?", "YesNo", "Yes", "No", "Back to top"})
+
+
 class DocumentationSourceType(Enum):
     """Types of documentation sources supported."""
     GITHUB_REPO = "github_repo"
@@ -341,7 +346,13 @@ class DocumentationAutoDiscovery:
         # Common asset file extensions and patterns to exclude
         self.asset_extensions = {'.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'}
         self.asset_patterns = {'/_next/', '/static/', '/assets/', '/images/', '/fonts/', '/favicon'}
-        
+
+        # Things a docs site links to that are not documentation pages: the
+        # machine-readable twins Mintlify publishes for every page (page.md,
+        # llms.txt), sitemaps, and Cloudflare's email-obfuscation endpoint.
+        self.non_page_extensions = ('.md', '.txt', '.xml', '.json')
+        self.non_page_prefixes = ('cdn-cgi/', '_mintlify/', 'mintlify-assets/', '_next/')
+
     def discover_sections(self, service: str, service_config: Dict) -> List[str]:
         """
         Discover documentation sections for a given service.
@@ -406,6 +417,24 @@ class DocumentationAutoDiscovery:
                 
         return False
     
+    def _is_page_section(self, section: str) -> bool:
+        """
+        Check whether a discovered path names a documentation page.
+
+        Every discovery method funnels its candidates through here, and so does
+        the fetch loop. Without it, llms.txt, sitemap.xml and the `.md` twin of
+        each page were fetched and committed as documentation.
+        """
+        clean = section.split('?')[0].split('#')[0].strip('/').lower()
+
+        if not clean or clean in ('sitemap', 'robots.txt'):
+            return False
+        if self._is_asset_file(f"/{clean}"):
+            return False
+        if clean.startswith(self.non_page_prefixes):
+            return False
+        return not clean.endswith(self.non_page_extensions)
+
     def _discover_forge_sections(self, config: Dict, rules: Dict) -> List[str]:
         """Discover Forge documentation sections by parsing the docs index page."""
         base_url = config["base_url"]
@@ -416,22 +445,21 @@ class DocumentationAutoDiscovery:
             content_bytes = self._retry_request(f"{base_url}")
             content = content_bytes.decode('utf-8')
             
-            # Extract href="/docs/*" links using regex
-            doc_links = re.findall(r'href="(/docs/[^"]*)"', content, re.IGNORECASE)
-            
+            # Links are site-absolute, so they carry the base URL's path. Take
+            # the prefix from base_url instead of hardcoding it: Forge moved
+            # from forge.laravel.com/docs to laravel.com/forge/docs, and a
+            # literal "/docs/" then matched nothing, silently.
+            prefix = urllib.parse.urlparse(base_url).path.rstrip('/') + '/'
+            doc_links = re.findall(rf'href="({re.escape(prefix)}[^"]*)"', content, re.IGNORECASE)
+
             for link in doc_links:
                 # Remove query parameters and fragments
                 clean_link = link.split('?')[0].split('#')[0]
 
-                # Check if this is an asset file (CSS, JS, images, etc.)
-                if self._is_asset_file(clean_link):
-                    continue
+                # Remove the prefix to get the section name
+                section = clean_link[len(prefix):].strip('/')
 
-                # Remove the /docs/ prefix to get the section name
-                section = clean_link.replace('/docs/', '')
-
-                # Exclude non-documentation files
-                if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                if not self._is_page_section(section):
                     continue
 
                 if section and section not in sections:
@@ -483,8 +511,7 @@ class DocumentationAutoDiscovery:
                 if section_match:
                     section = section_match.group(1)
 
-                    # Exclude non-documentation files
-                    if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                    if not self._is_page_section(section):
                         continue
 
                     if section and section not in sections:
@@ -534,8 +561,7 @@ class DocumentationAutoDiscovery:
                         path_without_fragment = path.split('#')[0]
                         section = path_without_fragment.lstrip('/')
 
-                        # Exclude non-documentation files
-                        if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                        if not self._is_page_section(section):
                             continue
 
                         if section and section not in sections:
@@ -569,8 +595,7 @@ class DocumentationAutoDiscovery:
                 clean_link = link.split('#')[0]
                 section = clean_link.replace('/docs/', '')
 
-                # Exclude non-documentation files
-                if section in ('sitemap.xml', 'sitemap', 'robots.txt'):
+                if not self._is_page_section(section):
                     continue
 
                 if section and section not in sections:
@@ -712,29 +737,43 @@ class ExternalDocsFetcher:
             "forge": {
                 "name": "Laravel Forge",
                 "type": DocumentationSourceType.LARAVEL_SERVICE,
-                "base_url": "https://forge.laravel.com/docs",
+                # Forge's docs moved here from forge.laravel.com/docs. The old
+                # host still redirects, but only for pages that kept their path.
+                "base_url": "https://laravel.com/forge/docs",
                 "auto_discovery": True,
                 "discovery_rules": {
-                    "index_url": "https://forge.laravel.com/docs",
-                    "link_pattern": r'href="(/docs/[^"]*)"',
-                    "nested_sections": ["accounts", "servers", "sites", "resources"]
+                    "index_url": "https://laravel.com/forge/docs",
+                    "link_pattern": r'href="(/forge/docs/[^"]*)"',
+                    "nested_sections": ["servers", "sites", "resources", "integrations"]
                 },
                 "sections": [
-                    # Get Started (manual fallback)
-                    "introduction", "cli", "sdk",
-                    # Accounts  
-                    "accounts/your-account", "accounts/circles", "accounts/source-control", "accounts/ssh", "accounts/api",
+                    # Manual fallback, used only when discovery finds too
+                    # little. Discovery must reach 75% of this list to be
+                    # trusted, so it also guards against a broken index page:
+                    # keep it roughly in step with the site.
+                    # Get Started
+                    "introduction", "cli", "sdk", "api", "changelog",
+                    # Account
+                    "organizations", "teams", "source-control", "ssh",
+                    "server-providers", "storage-providers", "notifications", "recipes",
                     # Servers
-                    "servers/providers", "servers/types", "servers/management", "servers/provisioning-process",
-                    "servers/ssh", "servers/php", "servers/packages", "servers/recipes", "servers/load-balancing",
-                    "servers/nginx-templates", "servers/backups", "servers/monitoring", "servers/cookbook",
+                    "servers/the-basics", "servers/types", "servers/laravel-vps", "servers/php",
+                    "servers/load-balancing", "servers/nginx-templates", "servers/security",
+                    "servers/monitoring", "servers/real-time-metrics",
                     # Sites
-                    "sites/the-basics", "sites/applications", "sites/deployments", "sites/commands",
-                    "sites/packages", "sites/queues", "sites/security-rules", "sites/redirects",
-                    "sites/ssl", "sites/user-isolation", "sites/cookbook",
+                    "sites/the-basics", "sites/laravel", "sites/domains", "sites/deployments",
+                    "sites/environment-variables", "sites/commands", "sites/queues",
+                    "sites/network", "sites/logs", "sites/repository-access", "sites/user-isolation",
                     # Resources
-                    "resources/daemons", "resources/databases", "resources/caches", "resources/network",
-                    "resources/scheduler", "resources/integrations", "resources/cookbook"
+                    "resources/background-processes", "resources/databases", "resources/database-backups",
+                    "resources/managed-databases", "resources/caches", "resources/managed-cache",
+                    "resources/object-storage", "resources/network", "resources/scheduler",
+                    "resources/packages",
+                    # Integrations
+                    "integrations/envoyer", "integrations/sentry", "integrations/aikido",
+                    "integrations/openclaw",
+                    # Other
+                    "knowledge-base/servers", "api-reference/introduction", "support", "abuse"
                 ]
             },
             "vapor": {
@@ -882,12 +921,13 @@ class ExternalDocsFetcher:
         except Exception as e:
             logger.error(f"Error saving cache metadata for {service}: {str(e)}")
     
-    def fetch_laravel_service_docs(self, service: str) -> bool:
+    def fetch_laravel_service_docs(self, service: str, force: bool = False) -> bool:
         """
         Fetch documentation for a Laravel service.
         
         Args:
             service: Service name (forge, vapor, envoyer, nova)
+            force: Refetch even if the cache is still valid
             
         Returns:
             True if successful, False otherwise
@@ -897,7 +937,7 @@ class ExternalDocsFetcher:
             return False
         
         # Check if cache is valid
-        if self.is_cache_valid(service):
+        if not force and self.is_cache_valid(service):
             logger.debug(f"Using cached documentation for {service}")
             return True
         
@@ -957,9 +997,9 @@ class ExternalDocsFetcher:
         fetched_sections = []
         
         for section in sections:
-            # Double-check that this isn't an asset file
-            if self.auto_discovery._is_asset_file(section):
-                logger.debug(f"Skipping asset file: {section}")
+            # Double-check that this is a documentation page
+            if not self.auto_discovery._is_page_section(section):
+                logger.debug(f"Skipping non-page path: {section}")
                 continue
 
             # Section names come from remote HTML and are used as file paths
@@ -1017,9 +1057,36 @@ class ExternalDocsFetcher:
             }
             self.save_cache_metadata(service, metadata)
             logger.info(f"Successfully fetched {len(fetched_sections)}/{len(sections)} sections for {service} using {discovery_method}")
+
+            # A complete sync of a freshly discovered index is the only safe
+            # moment to prune: it is positive evidence of what the site holds.
+            # A partial fetch, or one driven by the manual fallback list, keeps
+            # everything rather than deleting docs because a site had a bad day.
+            if discovery_method == "auto-discovery" and len(fetched_sections) == len(sections):
+                self._prune_stale_sections(service, target_dir, fetched_sections)
+
             return True
-        
+
         return False
+
+    def _prune_stale_sections(self, service: str, target_dir: Path, sections: List[str]) -> None:
+        """Delete saved pages that are no longer part of the service's docs.
+
+        Without this, pages removed or renamed upstream were served forever:
+        most of the Forge files in the repository predated its restructure.
+        """
+        expected = {(target_dir / f"{section}.md").resolve() for section in sections}
+
+        for path in sorted(target_dir.rglob("*.md")):
+            if path.resolve() not in expected:
+                logger.info(f"Pruning {service} page no longer on the site: {path.relative_to(target_dir)}")
+                path.unlink()
+
+        # Remove directories the pruning emptied, deepest first.
+        directories = [p for p in target_dir.rglob("*") if p.is_dir()]
+        for directory in sorted(directories, key=lambda p: len(p.parts), reverse=True):
+            if not any(directory.iterdir()):
+                directory.rmdir()
     
     def _create_placeholder_documentation(self, service: str, config: Dict, target_dir: Path) -> bool:
         """Create placeholder documentation for services that require authentication."""
@@ -1365,6 +1432,14 @@ class ExternalDocsFetcher:
         markdown = re.sub(r'\.[a-zA-Z0-9-]+\s*\{[^}]+\}', '', markdown)
         markdown = re.sub(r'#[a-zA-Z0-9-]+\s*>\s*[^{]+\{[^}]+\}', '', markdown)
         
+        # Drop page chrome that sits inside <main> on the Mintlify sites: the
+        # feedback widget and the table-of-contents button. Whole lines only,
+        # so prose that merely contains the words is untouched.
+        markdown = "\n".join(
+            line for line in markdown.split("\n")
+            if line.strip() not in SITE_CHROME_LINES
+        )
+
         # Clean up excessive newlines
         markdown = re.sub(r'\n\s*\n\s*\n', '\n\n', markdown)
 
@@ -1390,7 +1465,7 @@ class ExternalDocsFetcher:
         
         for service in self.laravel_services.keys():
             if force or not self.is_cache_valid(service):
-                results[service] = self.fetch_laravel_service_docs(service)
+                results[service] = self.fetch_laravel_service_docs(service, force=force)
             else:
                 results[service] = True
                 logger.debug(f"Skipping {service} (cache valid)")
@@ -1920,7 +1995,7 @@ class CommunityPackageFetcher:
         # Spatie has no metadata of its own, only one file per sub-package.
         if subpackage is None:
             sub_packages = self.community_packages.get(package, {}).get("packages")
-            if sub_packages:
+            if isinstance(sub_packages, dict) and sub_packages:
                 return all(self.is_cache_valid(package, sub) for sub in sub_packages)
 
         metadata_path = self.get_cache_metadata_path(package, subpackage)
@@ -2090,9 +2165,9 @@ class CommunityPackageFetcher:
         upstream; the site now publishes clean markdown at .md endpoints with
         an llms.txt index. Every page listed there is fetched verbatim, minus
         the documentation-index banner blockquote each page starts with.
-        Filenames keep the URL's final segment ("routing.md"), which is
-        collision-free in the current index and keeps existing catalog links
-        stable.
+        Filenames keep the URL's final segment ("routing.md"), which keeps
+        existing catalog links stable and is collision-free within one major
+        version; only the newest version in the index is fetched.
         """
         index_url = config["llms_index"]
         package_dir = self.get_package_cache_path("inertia")
@@ -2114,6 +2189,19 @@ class CommunityPackageFetcher:
         if not page_urls:
             logger.warning("Inertia llms.txt index yielded no documentation URLs")
             return False
+
+        # The index lists every maintained major version, and pages are saved
+        # by their final URL segment, so versions collide: with v3, v2 and v1
+        # all listed, each file ended up holding the v1 page. Keep the newest.
+        versions = {
+            int(match.group(1))
+            for url in page_urls
+            if (match := re.search(r"/docs/v(\d+)/", url))
+        }
+        if versions:
+            newest = f"/docs/v{max(versions)}/"
+            page_urls = [url for url in page_urls if newest in url]
+            logger.info(f"Inertia index lists versions {sorted(versions)}; fetching v{max(versions)}")
 
         fetched = 0
         for url in page_urls:
