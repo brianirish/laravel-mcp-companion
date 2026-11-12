@@ -13,7 +13,8 @@
 - No breaking changes to the MCP tool surface in this plan — tool names, arguments, and output text stay byte-identical. (The breaking consolidation is Plan 2.)
 - Full test suite must pass after every task: `pytest` (uses `pytest.ini` defaults).
 - Lint/type gates: `ruff check .` and `mypy --ignore-missing-imports .` clean after every task.
-- Personal repo commit-timestamp rule applies: during Toronto weekday business hours commit with `git lc`; otherwise plain `git commit`. Never `git add -A` (the versions cache and docs corpus dirty easily — stage explicit paths).
+- Commit with plain `git commit` and real timestamps; `git lc` is retired (2026-10-02). This repo is evening-only: no commits or pushes Monday–Friday 09:00–16:59 Toronto time, so work that lands in that window waits uncommitted. Never `git add -A` (the versions cache and docs corpus dirty easily — stage explicit paths).
+- Line numbers quoted for `docs_updater.py` predate v0.14.0, which removed about 900 lines from that file. Find the code by name.
 - Python's stdlib only; no new dependencies.
 
 ---
