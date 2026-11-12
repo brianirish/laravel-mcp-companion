@@ -40,6 +40,13 @@ docs-only commit and contains no code change.
   is unchanged.
 
 ### Fixed
+- `docs_updater.py --all-versions` exits 0 when every version is already up to
+  date. It exited 1 whenever any version had nothing to update, which the docs
+  pipeline read as a failed framework update.
+- Spatie, Livewire and Debugbar record how many pages they wanted as well as
+  how many they fetched, so the sync report can flag a mostly failed fetch.
+- A Laravel Learn course whose page fails to load no longer has its saved
+  lessons pruned, and the sync is reported as incomplete.
 - The Laracasts topic index is fetched from `laracasts.com/series`;
   `/topics` had become a 404, so the index had never been saved.
 - Forge docs follow the move to `laravel.com/forge/docs`. Discovery had

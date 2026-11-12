@@ -2090,6 +2090,8 @@ class CommunityPackageFetcher:
                         "package": package_key,
                         "name": package_info['name'],
                         "sections_count": fetched_sections,
+                        "total_sections": len(sections),
+                        "success_rate": fetched_sections / len(sections),
                         "base_url": base_url
                     }
                     
@@ -2132,6 +2134,8 @@ class CommunityPackageFetcher:
                 "package": "livewire",
                 "name": config['name'],
                 "sections_count": fetched_sections,
+                "total_sections": len(sections),
+                "success_rate": fetched_sections / len(sections),
                 "base_url": base_url
             }
             
@@ -2458,6 +2462,8 @@ class CommunityPackageFetcher:
                 "package": "debugbar",
                 "name": config['name'],
                 "sections_count": fetched_sections,
+                "total_sections": len(sections),
+                "success_rate": fetched_sections / len(sections),
                 "base_url": base_url
             }
             
@@ -3254,15 +3260,28 @@ class LearningResourceFetcher:
             logger.warning("Laravel Learn landing page listed no courses")
             return False
 
+        # A course whose page fails to load, or lists no lessons, contributes
+        # nothing to `lessons`. Left uncounted, the lessons that were found
+        # would pass for the whole site: a complete sync, a success rate of
+        # 1.0, and that course's saved lessons pruned as if it had been removed.
         lessons: List[tuple[str, str]] = []
+        courses_discovered = 0
         for course in courses:
             try:
                 course_page = self._retry_request(f"{base_url}/{course}").decode('utf-8')
             except Exception as e:
                 logger.warning(f"Error fetching Laravel Learn course {course}: {str(e)}")
                 continue
-            found = re.findall(rf'href="{re.escape(prefix)}/{re.escape(course)}/({slug})"', course_page)
-            lessons.extend((course, lesson) for lesson in dict.fromkeys(found))
+            found = list(dict.fromkeys(
+                re.findall(rf'href="{re.escape(prefix)}/{re.escape(course)}/({slug})"', course_page)
+            ))
+            if not found:
+                logger.warning(f"Laravel Learn course {course} listed no lessons")
+                continue
+            courses_discovered += 1
+            lessons.extend((course, lesson) for lesson in found)
+
+        discovery_complete = courses_discovered == len(courses)
 
         if not lessons:
             logger.warning("Laravel Learn courses listed no lessons")
@@ -3291,7 +3310,7 @@ class LearningResourceFetcher:
                 fetched += 1
                 logger.debug(f"Fetched Laravel Learn lesson: {course}/{lesson}")
 
-        if fetched == len(lessons):
+        if discovery_complete and fetched == len(lessons):
             # Complete sync: drop whatever the site no longer lists, including
             # the pages saved under the old Bootcamp layout.
             for stale in source_dir.glob("*.md"):
@@ -3304,9 +3323,12 @@ class LearningResourceFetcher:
                 "source": "laravel-bootcamp",
                 "name": config['name'],
                 "courses": courses,
+                "courses_discovered": courses_discovered,
                 "fetched_sections": fetched,
                 "total_sections": len(lessons),
-                "success_rate": fetched / len(lessons),
+                # Lessons fetched, scaled by the share of courses whose lesson
+                # list could be read at all.
+                "success_rate": (fetched / len(lessons)) * (courses_discovered / len(courses)),
                 "difficulty": config.get("difficulty", "beginner"),
             }
             self.save_cache_metadata("laravel-bootcamp", metadata)
@@ -3879,7 +3901,7 @@ def build_sync_report(
                     if now - synced_at > max_age:
                         problem = f"last synced {age_days} days ago"
                     elif isinstance(success_rate, (int, float)) and success_rate < min_success_rate:
-                        if fetched is not None and total is not None:
+                        if fetched is not None and total is not None and fetched != total:
                             problem = f"fetched {fetched} of {total} pages"
                         else:
                             problem = f"success rate {success_rate:.0%}"
@@ -4210,14 +4232,19 @@ def main():
             # Update all supported versions (core only)
             all_success = True
             
+            # update() returns False for a version that is already current,
+            # which is not a failure: the old Laravel versions never change, so
+            # treating it as one made this command exit 1 on every run.
+            # update_version separates "did it work" from "did anything change"
+            # and turns an exception into a failed version rather than a crash,
+            # so the remaining versions are still processed.
             for version in SUPPORTED_VERSIONS:
                 logger.info(f"Processing version {version}...")
-                version_updater = MultiSourceDocsUpdater(target_dir, version)
-                success = version_updater.update_core_docs(force=args.force)
-                
+                success, _updated = update_version(target_dir, version, force=args.force, check_only=False)
+
                 if not success:
                     all_success = False
-            
+
             return 0 if all_success else 1
         
         else:
