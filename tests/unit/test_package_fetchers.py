@@ -214,74 +214,8 @@ class TestPackageFetchers:
         assert (package_dir / "components.md").exists()
         assert not (package_dir / "missing-section.md").exists()
     
-    @patch('urllib.request.urlopen')
-    def test_fetch_filament_docs_with_version(self, mock_urlopen, package_fetcher):
-        """Test fetching Filament documentation with version."""
-        config = {
-            "name": "Filament",
-            "base_url": "https://filamentphp.com/docs",
-            "version": "3.x",
-            "sections": ["panels/installation", "forms/fields", "tables/columns"]
-        }
-        
-        # Mock responses
-        mock_response = MagicMock()
-        mock_response.read.return_value = b"""
-        <html>
-        <body>
-            <div class="prose">
-                <h1>Filament Documentation</h1>
-                <p>Building admin panels with Filament</p>
-                <code>composer require filament/filament</code>
-            </div>
-        </body>
-        </html>
-        """
-        mock_response.__enter__ = lambda self: self
-        mock_response.__exit__ = lambda self, *args: None
-        mock_urlopen.return_value = mock_response
-        
-        result = package_fetcher._fetch_filament_docs(config)
-        
-        assert result is True
-        
-        # Verify URLs were constructed with version
-        expected_urls = [
-            "https://filamentphp.com/docs/3.x/panels/installation",
-            "https://filamentphp.com/docs/3.x/forms/fields",
-            "https://filamentphp.com/docs/3.x/tables/columns"
-        ]
-        
-        # Get the actual URLs that were called
-        actual_urls = [call[0][0].full_url for call in mock_urlopen.call_args_list]
-        assert actual_urls == expected_urls
-        
-        # Check files were created with dashes instead of directories
-        package_dir = package_fetcher.get_package_cache_path("filament")
-        assert (package_dir / "panels-installation.md").exists()
-        assert (package_dir / "forms-fields.md").exists()
-        assert (package_dir / "tables-columns.md").exists()
-    
-    @patch('urllib.request.urlopen')
-    def test_fetch_filament_docs_all_fail(self, mock_urlopen, package_fetcher):
-        """Test Filament docs when all sections fail."""
-        config = {
-            "name": "Filament",
-            "base_url": "https://filamentphp.com/docs",
-            "version": "3.x",
-            "sections": ["missing1", "missing2"]
-        }
-        
-        # All requests fail
-        mock_urlopen.side_effect = urllib.error.HTTPError(
-            url="test", code=404, msg="Not Found", hdrs=None, fp=None
-        )
-        
-        result = package_fetcher._fetch_filament_docs(config)
-        
-        # Should return False when all sections fail
-        assert result is False
-    
+    # Filament is fetched from its llms.txt index: test_filament_index_fetch.py.
+
     def test_fetch_package_docs_with_cache(self, package_fetcher):
         """Test that cached packages aren't re-fetched."""
         # Spatie keeps one metadata file per sub-package and none of its own;

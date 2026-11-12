@@ -1917,41 +1917,25 @@ class CommunityPackageFetcher:
                 # upstream; the site publishes markdown endpoints indexed by
                 # llms.txt, and the fetcher discovers pages from that index.
                 "llms_index": "https://inertiajs.com/docs/llms.txt",
+                "llms_page_prefix": "https://inertiajs.com/docs/",
+                # Final URL segment ("routing.md"): unique within one major
+                # version, and what existing catalog links point at.
+                "llms_filenames": "basename",
             },
             "filament": {
                 "name": "Filament",
                 "type": DocumentationSourceType.COMMUNITY_PACKAGE,
                 "base_url": "https://filamentphp.com/docs",
-                "version": "3.x",
-                "sections": [
-                    "panels/installation", "panels/configuration", "panels/resources/getting-started",
-                    "panels/resources/listing-records", "panels/resources/creating-records",
-                    "panels/resources/editing-records", "panels/resources/viewing-records",
-                    "panels/resources/deleting-records", "panels/resources/custom-pages",
-                    "panels/resources/relation-managers", "panels/resources/widgets",
-                    "panels/pages", "panels/dashboard", "panels/navigation",
-                    "panels/users", "panels/tenancy", "panels/plugins",
-                    "forms/fields/getting-started", "forms/fields/text-input",
-                    "forms/fields/select", "forms/fields/checkbox", "forms/fields/toggle",
-                    "forms/fields/radio", "forms/fields/date-time-picker",
-                    "forms/fields/file-upload", "forms/fields/rich-editor",
-                    "forms/fields/markdown-editor", "forms/fields/repeater",
-                    "forms/fields/builder", "forms/fields/tags-input",
-                    "forms/fields/textarea", "forms/fields/key-value",
-                    "forms/fields/color-picker", "forms/fields/hidden",
-                    "forms/fields/placeholder", "forms/fields/fieldset",
-                    "forms/layout/getting-started", "forms/layout/grid",
-                    "forms/layout/tabs", "forms/layout/wizard",
-                    "forms/validation", "forms/advanced",
-                    "tables/columns/getting-started", "tables/columns/text",
-                    "tables/columns/icon", "tables/columns/image", "tables/columns/badge",
-                    "tables/columns/tags", "tables/columns/toggle",
-                    "tables/filters", "tables/actions", "tables/bulk-actions",
-                    "tables/summaries", "tables/grouping", "tables/advanced",
-                    "actions/overview", "actions/prebuilt-actions", "actions/modals",
-                    "notifications/overview", "notifications/sending-notifications",
-                    "notifications/database-notifications", "widgets/overview"
-                ]
+                # No pinned version and no page list. The site's llms.txt names
+                # the current major and every page in it, served as markdown.
+                # The previous config pinned "3.x" and listed 62 pages by hand:
+                # it was two majors behind and seven of its pages 404'd.
+                "llms_index": "https://filamentphp.com/docs/llms.txt",
+                "llms_page_prefix": "https://filamentphp.com/docs/",
+                # Path below the version ("forms-text-input.md"): Filament has
+                # an overview.md in most sections, so the final segment alone
+                # would collide.
+                "llms_filenames": "path",
             },
             "debugbar": {
                 "name": "Laravel Debugbar",
@@ -2163,49 +2147,78 @@ class CommunityPackageFetcher:
 
         The old source repo of JSX pages (inertiajs/inertiajs.com) was deleted
         upstream; the site now publishes clean markdown at .md endpoints with
-        an llms.txt index. Every page listed there is fetched verbatim, minus
-        the documentation-index banner blockquote each page starts with.
-        Filenames keep the URL's final segment ("routing.md"), which keeps
-        existing catalog links stable and is collision-free within one major
-        version; only the newest version in the index is fetched.
+        an llms.txt index.
+        """
+        return self._fetch_llms_index_docs("inertia", config)
+
+    def _fetch_llms_index_docs(self, package: str, config: Dict) -> bool:
+        """Fetch a package's documentation from the llms.txt index its site publishes.
+
+        The index is the site's own list of its pages, each served as markdown,
+        so there is no page list to maintain here and no HTML to scrape: a
+        reorganised sidebar or a new major version is picked up by the next
+        sync. Every listed page is saved verbatim, minus any banner blockquote
+        it opens with.
+
+        When the index lists several major versions only the newest is fetched.
+        Filenames come from the page URL: its final segment, or its whole path
+        below the version, per `llms_filenames`.
         """
         index_url = config["llms_index"]
-        package_dir = self.get_package_cache_path("inertia")
+        page_prefix = config["llms_page_prefix"]
+        use_path = config.get("llms_filenames") == "path"
+        name = config["name"]
+        package_dir = self.get_package_cache_path(package)
 
         try:
             request = urllib.request.Request(index_url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
                 index_text = response.read().decode('utf-8')
         except Exception as e:
-            logger.error(f"Error fetching Inertia docs index: {str(e)}")
+            logger.error(f"Error fetching {name} docs index: {str(e)}")
             return False
 
         # Only URLs on the site's own docs path qualify: the index is remote
         # input, and following arbitrary URLs from it would let a compromised
         # page turn the fetcher into a generic downloader.
-        page_urls = re.findall(
-            r"\((https://inertiajs\.com/docs/[A-Za-z0-9/._-]+\.md)\)", index_text
-        )
+        page_urls = list(dict.fromkeys(re.findall(
+            rf"\(({re.escape(page_prefix)}[A-Za-z0-9/._-]+\.md)\)", index_text
+        )))
         if not page_urls:
-            logger.warning("Inertia llms.txt index yielded no documentation URLs")
+            logger.warning(f"{name} llms.txt index yielded no documentation URLs")
             return False
 
-        # The index lists every maintained major version, and pages are saved
-        # by their final URL segment, so versions collide: with v3, v2 and v1
-        # all listed, each file ended up holding the v1 page. Keep the newest.
-        versions = {
-            int(match.group(1))
-            for url in page_urls
-            if (match := re.search(r"/docs/v(\d+)/", url))
-        }
+        # Versions appear as a path segment: "v3" (Inertia) or "5.x" (Filament).
+        version_segment = re.compile(r"/(v?(\d+)(?:\.x)?)/")
+
+        def version_of(url: str) -> Optional[tuple[int, str]]:
+            match = version_segment.search(url[len(page_prefix) - 1:])
+            return (int(match.group(2)), match.group(1)) if match else None
+
+        # An index can list every maintained major. Saved side by side their
+        # pages collide -- with Inertia's v3, v2 and v1 all listed, each file
+        # ended up holding the v1 page -- so keep the newest only.
+        version_label: Optional[str] = None
+        versions = {v for v in map(version_of, page_urls) if v}
         if versions:
-            newest = f"/docs/v{max(versions)}/"
-            page_urls = [url for url in page_urls if newest in url]
-            logger.info(f"Inertia index lists versions {sorted(versions)}; fetching v{max(versions)}")
+            newest = max(versions)
+            version_label = newest[1]
+            page_urls = [url for url in page_urls if version_of(url) == newest]
+            logger.info(f"{name} index lists versions {sorted(v[1] for v in versions)}; fetching {version_label}")
+
+        def filename_for(url: str) -> str:
+            if not use_path:
+                return url.rsplit("/", 1)[-1]
+            path = url[len(page_prefix):]
+            if version_label and path.startswith(f"{version_label}/"):
+                path = path[len(version_label) + 1:]
+            return path.replace("/", "-")
 
         fetched = 0
+        expected = set()
         for url in page_urls:
-            filename = url.rsplit("/", 1)[-1]
+            filename = filename_for(url)
+            expected.add(filename)
             try:
                 request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
                 with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
@@ -2215,40 +2228,41 @@ class CommunityPackageFetcher:
                 lines = page.splitlines()
                 while lines and (lines[0].startswith(">") or not lines[0].strip()):
                     lines.pop(0)
-                content = "\n".join(lines).strip()
+                content = remove_image_references("\n".join(lines)).strip()
                 if len(content) < 100:
-                    logger.warning(f"Inertia page {filename} too thin, skipping")
+                    logger.warning(f"{name} page {filename} too thin, skipping")
                     continue
 
                 with open(package_dir / filename, 'w', encoding='utf-8') as f:
                     f.write(f"Source: {url}\n\n{content}\n")
                 fetched += 1
             except Exception as e:
-                logger.warning(f"Error fetching Inertia page {url}: {str(e)}")
+                logger.warning(f"Error fetching {name} page {url}: {str(e)}")
 
         if fetched == len(page_urls):
             # A complete fetch is the only safe moment to prune: pages the
             # index no longer lists would otherwise stay searchable forever.
             # A partial fetch keeps everything, stale included, rather than
             # deleting docs we failed to replace.
-            expected = {url.rsplit("/", 1)[-1] for url in page_urls}
             for stale in package_dir.glob("*.md"):
                 if stale.name not in expected:
-                    logger.info(f"Pruning Inertia page no longer in the index: {stale.name}")
+                    logger.info(f"Pruning {name} page no longer in the index: {stale.name}")
                     stale.unlink()
 
         if fetched > 0:
             metadata = {
-                "package": "inertia",
-                "name": config['name'],
+                "package": package,
+                "name": name,
                 "sections_count": fetched,
                 "total_sections": len(page_urls),
                 "success_rate": fetched / len(page_urls),
                 "source_type": "llms_index",
                 "index_url": index_url,
             }
-            self.save_cache_metadata("inertia", metadata)
-            logger.info(f"Successfully fetched {fetched}/{len(page_urls)} Inertia.js pages")
+            if version_label:
+                metadata["version"] = version_label
+            self.save_cache_metadata(package, metadata)
+            logger.info(f"Successfully fetched {fetched}/{len(page_urls)} {name} pages")
             return True
 
         return False
@@ -2412,46 +2426,9 @@ class CommunityPackageFetcher:
         return text
     
     def _fetch_filament_docs(self, config: Dict) -> bool:
-        """Fetch Filament documentation."""
-        base_url = config["base_url"]
-        version = config.get("version", "3.x")
-        sections = config.get("sections", [])
-        package_dir = self.get_package_cache_path("filament")
-        
-        fetched_sections = 0
-        for section in sections:
-            try:
-                section_url = f"{base_url}/{version}/{section}"
-                content = self._fetch_and_process_content(section_url, "filament", section)
-                
-                if content:
-                    file_path = package_dir / f"{section.replace('/', '-')}.md"
-                    file_path.parent.mkdir(parents=True, exist_ok=True)
-                    
-                    with open(file_path, 'w', encoding='utf-8') as f:
-                        f.write(content)
-                    
-                    fetched_sections += 1
-            except Exception as e:
-                logger.warning(f"Error fetching Filament section {section}: {str(e)}")
-        
-        if fetched_sections > 0:
-            # Update cache metadata
-            metadata = {
-                "package": "filament",
-                "name": config['name'],
-                "version": version,
-                "sections_count": fetched_sections,
-                "base_url": base_url
-            }
-            
-            self.save_cache_metadata("filament", metadata)
-            
-            logger.info(f"Successfully fetched {fetched_sections} sections for Filament")
-            return True
-        
-        return False
-    
+        """Fetch Filament documentation from its llms.txt markdown index."""
+        return self._fetch_llms_index_docs("filament", config)
+
     def _fetch_debugbar_docs(self, config: Dict) -> bool:
         """Fetch Laravel Debugbar documentation from website."""
         base_url = config["base_url"]
@@ -2988,7 +2965,7 @@ class MultiSourceDocsUpdater:
                     "name": package_info.get("name", package),
                     "type": type_value,
                     "cache_valid": cache_valid,
-                    "last_fetched": metadata.get("cache_time", "never"),
+                    "last_fetched": metadata.get("cached_at", metadata.get("cache_time", "never")),
                     "sections_count": metadata.get("sections_count", 0)
                 }
                 
@@ -3128,22 +3105,16 @@ class LearningResourceFetcher:
 
         # Learning resource sources
         self.learning_sources = {
+            # The key predates the move: bootcamp.laravel.com was folded into
+            # laravel.com/learn and no longer resolves. It is kept so callers
+            # filtering on "laravel-bootcamp" keep working.
             "laravel-bootcamp": {
-                "name": "Laravel Bootcamp",
+                "name": "Laravel Learn",
                 "type": DocumentationSourceType.DIRECT_URL,
-                "base_url": "https://bootcamp.laravel.com",
-                "description": "Official Laravel tutorial for beginners",
+                "base_url": "https://laravel.com/learn",
+                "description": "Official Laravel courses for beginners (formerly Laravel Bootcamp)",
                 "difficulty": "beginner",
-                "sections": [
-                    "introduction",
-                    "installation",
-                    "creating-chirps",
-                    "showing-chirps",
-                    "editing-chirps",
-                    "deleting-chirps",
-                    "notifications-and-events",
-                    "deploying",
-                ],
+                # No course or lesson list: both are discovered from the site.
             },
             "laravel-blog": {
                 "name": "Laravel Blog",
@@ -3168,7 +3139,9 @@ class LearningResourceFetcher:
                 "description": "Video tutorial metadata (respects paywall)",
                 "difficulty": "mixed",
                 "fetch_type": "metadata",  # Only fetch metadata, respect paywall
-                "topics_url": "https://laracasts.com/topics",
+                # /topics is a 404 now; the topic list is part of the series
+                # browser, whose page payload the extractor already parses.
+                "topics_url": "https://laracasts.com/series",
             },
         }
 
@@ -3258,41 +3231,138 @@ class LearningResourceFetcher:
             return False
 
     def _fetch_bootcamp_docs(self, config: Dict) -> bool:
-        """Fetch Laravel Bootcamp documentation."""
-        base_url = config["base_url"]
-        sections = config.get("sections", [])
+        """Fetch the courses published at laravel.com/learn.
+
+        Courses are discovered from the landing page and lessons from each
+        course page, so a new course or lesson needs no change here. Lessons
+        are saved flat, as "<course>-<lesson>.md", because the learning tools
+        list a source's directory without recursing.
+        """
+        base_url = config["base_url"].rstrip("/")
+        prefix = urllib.parse.urlparse(base_url).path  # "/learn"
         source_dir = self.get_source_cache_path("laravel-bootcamp")
+        slug = r"[A-Za-z0-9][A-Za-z0-9-]*"
 
-        fetched_sections = 0
-        for section in sections:
+        try:
+            landing = self._retry_request(base_url).decode('utf-8')
+        except Exception as e:
+            logger.error(f"Error fetching Laravel Learn course list: {str(e)}")
+            return False
+
+        courses = list(dict.fromkeys(re.findall(rf'href="{re.escape(prefix)}/({slug})"', landing)))
+        if not courses:
+            logger.warning("Laravel Learn landing page listed no courses")
+            return False
+
+        lessons: List[tuple[str, str]] = []
+        for course in courses:
             try:
-                # Bootcamp uses /docs/{section} URLs
-                section_url = f"{base_url}/blade/{section}" if section != "introduction" else f"{base_url}"
-                content = self._fetch_and_process_html(section_url, "laravel-bootcamp", section)
-
-                if content:
-                    file_path = source_dir / f"{section}.md"
-                    with open(file_path, 'w', encoding='utf-8') as f:
-                        f.write(content)
-                    fetched_sections += 1
-                    logger.debug(f"Fetched bootcamp section: {section}")
+                course_page = self._retry_request(f"{base_url}/{course}").decode('utf-8')
             except Exception as e:
-                logger.warning(f"Error fetching bootcamp section {section}: {str(e)}")
+                logger.warning(f"Error fetching Laravel Learn course {course}: {str(e)}")
+                continue
+            found = re.findall(rf'href="{re.escape(prefix)}/{re.escape(course)}/({slug})"', course_page)
+            lessons.extend((course, lesson) for lesson in dict.fromkeys(found))
 
-        if fetched_sections > 0:
+        if not lessons:
+            logger.warning("Laravel Learn courses listed no lessons")
+            return False
+
+        fetched = 0
+        expected = set()
+        for course, lesson in lessons:
+            filename = f"{course}-{lesson}.md"
+            expected.add(filename)
+            lesson_url = f"{base_url}/{course}/{lesson}"
+            content = None
+            try:
+                content = self._learn_lesson_from_payload(self._retry_request(lesson_url).decode('utf-8'), lesson_url)
+            except Exception as e:
+                logger.warning(f"Error fetching Laravel Learn lesson {course}/{lesson}: {str(e)}")
+                continue
+            if content is None:
+                # No usable payload: fall back to the rendered page, which has
+                # the prose but neither the code samples nor a clean heading.
+                title = f"Laravel Learn - {course.replace('-', ' ').title()} - {lesson.replace('-', ' ').title()}"
+                content = self._fetch_and_process_html(lesson_url, "laravel-bootcamp", lesson, title=title)
+            if content:
+                with open(source_dir / filename, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                fetched += 1
+                logger.debug(f"Fetched Laravel Learn lesson: {course}/{lesson}")
+
+        if fetched == len(lessons):
+            # Complete sync: drop whatever the site no longer lists, including
+            # the pages saved under the old Bootcamp layout.
+            for stale in source_dir.glob("*.md"):
+                if stale.name not in expected:
+                    logger.info(f"Pruning Laravel Learn page no longer on the site: {stale.name}")
+                    stale.unlink()
+
+        if fetched > 0:
             metadata = {
                 "source": "laravel-bootcamp",
                 "name": config['name'],
-                "fetched_sections": fetched_sections,
-                "total_sections": len(sections),
-                "success_rate": fetched_sections / len(sections),
+                "courses": courses,
+                "fetched_sections": fetched,
+                "total_sections": len(lessons),
+                "success_rate": fetched / len(lessons),
                 "difficulty": config.get("difficulty", "beginner"),
             }
             self.save_cache_metadata("laravel-bootcamp", metadata)
-            logger.info(f"Successfully fetched {fetched_sections}/{len(sections)} bootcamp sections")
+            logger.info(f"Successfully fetched {fetched}/{len(lessons)} Laravel Learn lessons")
             return True
 
         return False
+
+    def _learn_lesson_from_payload(self, page_html: str, lesson_url: str) -> Optional[str]:
+        """Build a lesson's markdown from the Inertia payload embedded in its page.
+
+        laravel.com is an Inertia app: the server-rendered <main> has the
+        lesson's prose but not its code samples, and opens with the course
+        sidebar. The complete lesson HTML is in the page's JSON payload, under
+        props.lesson.content. Returns None when the payload is missing or has
+        no lesson content, so the caller can fall back to the rendered page.
+        """
+        try:
+            from bs4 import BeautifulSoup
+            from markdownify import markdownify as md
+        except ImportError:
+            return None
+
+        script = BeautifulSoup(page_html, 'html.parser').find(
+            'script', attrs={'data-page': True, 'type': 'application/json'}
+        )
+        if script is None or not script.string:
+            return None
+
+        try:
+            props = json.loads(script.string).get("props", {})
+            lesson = props.get("lesson") or {}
+            course = props.get("course") or {}
+            lesson_html = lesson.get("content")
+        except (ValueError, AttributeError):
+            return None
+
+        if not isinstance(lesson_html, str) or not lesson_html.strip():
+            return None
+
+        def language_of(element: Any) -> str:
+            code = element.find('code')
+            classes = (code.get('class') or []) if code else []
+            return next((c[len('language-'):] for c in classes if c.startswith('language-')), '')
+
+        body = md(lesson_html, heading_style='ATX', bullets='-', code_language_callback=language_of)
+        body = remove_image_references(re.sub(r'\n{3,}', '\n\n', body)).strip()
+        if len(body) < 100:
+            return None
+
+        names = [str(n) for n in (course.get("name"), lesson.get("name")) if n]
+        parts = [f"# Laravel Learn - {': '.join(names)}" if names else "# Laravel Learn", f"Source: {lesson_url}", "---"]
+        if lesson.get("description"):
+            parts.append(str(lesson["description"]).strip())
+        parts.append(body)
+        return "\n\n".join(parts) + "\n"
 
     def _fetch_blog_index(self, config: Dict) -> bool:
         """Fetch Laravel Blog article index (summaries only)."""
@@ -3392,7 +3462,7 @@ class LearningResourceFetcher:
 
     def _fetch_laracasts_metadata(self, config: Dict) -> bool:
         """Fetch Laracasts topic metadata (respects paywall)."""
-        topics_url = config.get("topics_url", "https://laracasts.com/topics")
+        topics_url = config["topics_url"]
         source_dir = self.get_source_cache_path("laracasts-index")
 
         try:
@@ -3621,8 +3691,12 @@ class LearningResourceFetcher:
             topics.append(topic)
         return topics
 
-    def _fetch_and_process_html(self, url: str, source: str, section: str) -> Optional[str]:
-        """Fetch and process HTML content to markdown."""
+    def _fetch_and_process_html(self, url: str, source: str, section: str, title: Optional[str] = None) -> Optional[str]:
+        """Fetch and process HTML content to markdown.
+
+        `title` overrides the heading otherwise built from the source key and
+        section name.
+        """
         try:
             content_bytes = self._retry_request(url)
             content = content_bytes.decode('utf-8')
@@ -3668,7 +3742,8 @@ class LearningResourceFetcher:
                     markdown_content = markdown_content.strip()
 
                     if len(markdown_content) > 100:
-                        header = f"# {source.replace('-', ' ').title()} - {section.replace('-', ' ').title()}\n\n"
+                        heading = title or f"{source.replace('-', ' ').title()} - {section.replace('-', ' ').title()}"
+                        header = f"# {heading}\n\n"
                         header += f"Source: {url}\n\n---\n\n"
                         return header + markdown_content
 
@@ -3784,7 +3859,8 @@ def build_sync_report(
                 problem = "metadata unreadable"
 
             if metadata is not None:
-                fetched = metadata.get("fetched_sections", metadata.get("sections_count", metadata.get("article_count")))
+                fetched = next((metadata[key] for key in ("fetched_sections", "sections_count", "article_count", "topic_count")
+                                if key in metadata), None)
                 if isinstance(fetched, list):
                     fetched = len(fetched)
                 total = metadata.get("total_sections")
