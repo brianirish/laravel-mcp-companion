@@ -4,17 +4,17 @@ Source: https://laravel-news.com
 
 ---
 
-## Flock: A Free, Native Herd Alternative for Laravel
+## UUID Request Input and Migration Failure Events in Laravel 13.42
 
-[Read more](https://laravel-news.com/flock-laravel-local-development)
+[Read more](https://laravel-news.com/laravel-13-42-0)
 
 ---
 
-## Slow Job Alerts and Replica Commit IDs in Laravel 13.40
+## UUID Request Input and Migration Failure Events in Laravel 13.42
 
 Latest Laravel Release
 
-[Read more](https://laravel-news.com/laravel-13-40-0)
+[Read more](https://laravel-news.com/laravel-13-42-0)
 
 ---
 
@@ -24,39 +24,39 @@ Latest Laravel Release
 
 ---
 
-## Insert Middleware Before or After Existing Laravel Middleware
-
-[Read more](https://laravel-news.com/laravel-middleware-insert-before-after)
-
----
-
 ## Real-Time Inertia Props With Laravel Reverb
 
 [Read more](https://laravel-news.com/inertia-live-props-laravel-reverb)
 
 ---
 
-## Laravel Cloud is here! Zero-config managed infrastructure for Laravel apps.
+## Laravel Rest Api 3.0: Typed Fields, Metrics, and OpenAPI Docs
 
-[Read more](https://go.laravel.news/cloud/home)
-
----
-
-## Flock: A Free, Native Herd Alternative for Laravel
-
-[Read more](https://laravel-news.com/flock-laravel-local-development)
+[Read more](https://laravel-news.com/laravel-rest-api-3)
 
 ---
 
-## Prevent Duplicate File Uploads With Laravel Storage Dedupler
+## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
 
-[Read more](https://laravel-news.com/laravel-storage-dedupler)
+[Read more](https://jb.gg/aysiyl)
 
 ---
 
-## Decide with Jev: Tie Every AI Check to the Exact Draft
+## UUID Request Input and Migration Failure Events in Laravel 13.42
 
-[Read more](https://laravel-news.com/decide-with-jev-tie-every-ai-check-to-the-exact-draft)
+[Read more](https://laravel-news.com/laravel-13-42-0)
+
+---
+
+## Replay Missed Laravel Scheduled Tasks With Schedule Catchup
+
+[Read more](https://laravel-news.com/schedule-catchup)
+
+---
+
+## Strict Request Input Casting in Laravel
+
+[Read more](https://laravel-news.com/laravel-strict-request-input)
 
 ---
 
