@@ -27,6 +27,16 @@ docs-only commit and contains no code change.
   on it, after publishing whatever did sync.
 
 ### Changed
+- **Forge, Vapor, Nova and Envoyer are read from each site's `llms.txt` index,
+  as markdown.** The per-site link discovery and HTML scraping are gone, with
+  their hand-kept fallback page lists. Envoyer, whose pages were never
+  discovered, now is; Forge gains the knowledge base and API reference pages
+  its navigation did not link; Nova follows the newest major in its index.
+  Page paths, and so `laravel-external://` URIs, are unchanged for pages that
+  still exist. Saved pages now open with a `Source:` line rather than a
+  generated `# Service - Section` heading.
+- CI no longer runs on tag pushes, which re-tested the commit `main` had just
+  tested and spent build credits doing it.
 - **Filament docs track the current major automatically.** They are discovered
   from the site's `llms.txt` index instead of a hand-listed set of pages under
   a pinned `3.x`, which was two majors behind with seven dead pages. Filenames

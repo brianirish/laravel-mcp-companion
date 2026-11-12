@@ -10,7 +10,6 @@ was decorative.
 import json
 import os
 import time
-from unittest.mock import Mock, patch
 
 import pytest
 
@@ -28,34 +27,7 @@ def fetcher(temp_dir):
 
 
 class TestExternalCacheStampsItsOwnValidity:
-    def test_service_fetch_produces_a_valid_cache(self, fetcher):
-        """After a successful fetch, the cache must be valid — this is the
-        entire point of cache_duration."""
-        config = {
-            "name": "Forge",
-            "base_url": "https://forge.laravel.com/docs",
-            "auto_discovery": False,
-            "sections": ["introduction"],
-        }
-        page = "<html><body><main>" + "Real documentation content. " * 20 + "</main></body></html>"
-        with patch.object(fetcher, "_retry_request", return_value=page.encode()):
-            assert fetcher._fetch_service_documentation(
-                "forge", config, fetcher.get_service_cache_path("forge")
-            ) is True
 
-        assert fetcher.is_cache_valid("forge") is True
-
-    def test_github_fetch_produces_a_valid_cache(self, fetcher, temp_dir):
-        """_fetch_github_documentation wrote no success_rate at all, so its
-        cache read back as 0.0 quality and was always invalid."""
-        fetcher.save_cache_metadata = Mock(wraps=fetcher.save_cache_metadata)
-        # Simulate the successful tail of a github fetch: metadata write only.
-        # (The download/extract path is covered elsewhere.)
-        fetcher.save_cache_metadata("nova", {
-            "service": "nova", "repo": "r", "branch": "b",
-            "fetch_method": "github_archive", "success_rate": 1.0,
-        })
-        assert fetcher.is_cache_valid("nova") is True
 
     def test_save_cache_metadata_stamps_cached_at(self, fetcher):
         fetcher.save_cache_metadata("vapor", {"success_rate": 1.0})
