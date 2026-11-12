@@ -36,9 +36,9 @@ Latest Laravel Release
 
 ---
 
-## The go-to PHP IDE with extensive out-of-the-box support for Laravel and its ecosystem.
+## Let your users buy domains without leaving your app
 
-[Read more](https://jb.gg/aysiyl)
+[Read more](https://www.name.com/nameapi?utm_campaign=Name_Email_11226.nameAPI&utm_medium=Link&utm_source=Website)
 
 ---
 

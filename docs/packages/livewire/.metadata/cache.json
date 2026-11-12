@@ -1,7 +1,9 @@
 {
-  "cache_time": 1753841281.2447538,
   "package": "livewire",
   "name": "Livewire",
   "sections_count": 36,
-  "base_url": "https://livewire.laravel.com/docs"
+  "total_sections": 36,
+  "success_rate": 1.0,
+  "base_url": "https://livewire.laravel.com/docs",
+  "cached_at": 1794484327.9481325
 }

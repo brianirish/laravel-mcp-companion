@@ -2,98 +2,22 @@
 
 Source: https://livewire.laravel.com/docs/wire-submit
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 wire:submit
 ===========
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Livewire makes it easy to handle form submissions via the `wire:submit` directive. By adding `wire:submit` to a `<form>` element, Livewire will intercept the form submission, prevent the default browser handling, and call any Livewire component method.
 
 Here's a basic example of using `wire:submit` to handle a "Create Post" form submission:
 
 ```php
-
 <?php
 
 namespace App\Livewire;
@@ -135,10 +59,8 @@ return view('livewire.create-post');
 }
 
 }
-
 ```
 ```php
-
 <form wire:submit="save">
 
 <input type="text" wire:model="title">
@@ -148,7 +70,6 @@ return view('livewire.create-post');
 <button type="submit">Save</button>
 
 </form>
-
 ```
 In the above example, when a user submits the form by clicking "Save", `wire:submit` intercepts the `submit` event and calls the `save()` action on the server.
 
@@ -160,7 +81,7 @@ Livewire automatically disables forms while submitting
 
 By default, when Livewire is sending a form submission to the server, it will disable form submit buttons and mark all form inputs as `readonly`. This way a user cannot submit the same form again until the initial submission is complete.
 
-#Going deeper
+Going deeper¶
 -------------
 
 `wire:submit` is just one of many event listeners that Livewire provides. The following two pages provide much more complete documentation on using `wire:submit` in your application:
@@ -168,14 +89,49 @@ By default, when Livewire is sending a form submission to the server, it will di
 * Responding to browser events with Livewire
 * Creating forms in Livewire
 
-On this page
+See also¶
+---------
 
-* Going deeper
+* **Forms** — Handle form submissions with Livewire
+* **Actions** — Process form data in actions
+* **Validation** — Validate forms before submission
 
-![Flux Ad](/images/flux_ad.jpg)
+Reference¶
+----------
 
-Pro UI Components
+```php
+wire:submit="methodName"
 
-Flux · The official Livewire component library
+wire:submit="methodName(param1, param2)"
+```
+### Modifiers¶
 
-Built by the folks behind Livewire and Alpine.
+| Modifier | Description |
+| --- | --- |
+| `.prevent` | Prevents default browser behavior (automatic for `wire:submit`) |
+| `.stop` | Stops event propagation |
+| `.self` | Only triggers if event originated on this element |
+| `.once` | Ensures listener is only called once |
+| `.debounce` | Debounces handler by 250ms (use `.debounce.500ms` for custom duration) |
+| `.throttle` | Throttles handler to every 250ms minimum (use `.throttle.500ms` for custom) |
+| `.window` | Listens for event on the `window` object |
+| `.document` | Listens for event on the `document` object |
+| `.passive` | Won't block scroll performance |
+| `.capture` | Listens during the capturing phase |
+| `.renderless` | Skips re-rendering after action completes |
+| `.preserve-scroll` | Maintains scroll position during updates |
+| `.async` | Executes action in parallel instead of queued |
+
+Ecosystem sponsor
+
+
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
+
+Return to
+
+wire:click
+
+Continue to
+
+wire:model

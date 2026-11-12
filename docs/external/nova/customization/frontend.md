@@ -1,63 +1,66 @@
-# Nova - Customization/Frontend
+Source: https://nova.laravel.com/docs/v5/customization/frontend.md
 
-*Source: https://nova.laravel.com/docs/v5/customization/frontend*
-
----
-
-## On this page
-Back to top
-- [Nova Requests](#nova-requests)
-- [Manual Navigation](#manual-navigation)
-- [Event Bus](#event-bus)
-- [Notifications](#notifications)
-- [Shortcuts](#shortcuts)
-- [Global Variables](#global-variables)
-- [Localizations](#localizations)
-- [Using Nova Mixins](#using-nova-mixins)
-- [Vue DevTools](#vue-devtools)
-Digging Deeper
 # CSS / JavaScript
-Learn how to customize the CSS and JavaScript of your Nova application.
+
+> Learn how to customize the CSS and JavaScript of your Nova application.
+
 When building custom Nova tools, resource tools, cards, and fields, you may use a variety of helpers that are globally available to your JavaScript components.
-### [​](#nova-requests) Nova Requests
+
+### Nova Requests
+
 You may use the `Nova.request()` method to make XHR requests to backend routes provided by your application or custom tools, cards, and fields. The `Nova.request()` method is powered by [Axios](https://github.com/axios/axios) and offers the same API. However, the `Nova.request()` method configures its own instance of Axios that has pre-configured interceptors to properly handle and redirect on `401`, `403`, and `500` level HTTP server responses:
-```
+
+```js theme={null}
 Nova.request().get('/nova-vendor/stripe-inspector/endpoint').then(response => {
     // ...
 })
 ```
-### [​](#manual-navigation) Manual Navigation
+
+### Manual Navigation
+
 The global `Nova` JavaScript object offers a `visit` method that may be invoked to navigate to other URLs within your Nova dashboard:
-```
+
+```js theme={null}
 // Navigate to User's detail page...
 Nova.visit(`/resources/users/${userId}`)
 
 // Navigate to remote URL...
 Nova.visit({ url: 'https://nova.laravel.com', remote: true })
 ```
-The `visit` method accepts an array of navigation options as its second argument. As the `visit` method uses Inertia’s own `visit` method behind the scenes, all of [Inertia’s `visit` options](https://legacy.inertiajs.com/manual-visits) are supported by Nova’s `visit` method:
-```
+
+The `visit` method accepts an array of navigation options as its second argument. As the `visit` method uses Inertia's own `visit` method behind the scenes, all of [Inertia's `visit` options](https://legacy.inertiajs.com/manual-visits) are supported by Nova's `visit` method:
+
+```js theme={null}
 Nova.visit(`/resources/users/${userId}`, {
   onFinish: () => Nova.success(`User ${userId} detail page.`)
 })
 ```
-### [​](#event-bus) Event Bus
+
+### Event Bus
+
 The global `Nova` JavaScript object may be used as an event bus by your custom components. The bus provides the following methods, which correspond to and have the same behavior as the event methods provided by [tiny-emitter](https://www.npmjs.com/package/tiny-emitter):
-```
+
+```js theme={null}
 Nova.$on(event, callback)
 Nova.$once(event, callback)
 Nova.$off(event, callback)
 Nova.$emit(event, [...args])
 ```
-### [​](#notifications) Notifications
+
+### Notifications
+
 You may display toast notification to users of your custom frontend components by calling the `success`, `error`, `info`, or `warning` methods on the global `Nova` object:
-```
+
+```js theme={null}
 Nova.success('It worked!')
 Nova.error('It failed!')
 ```
-### [​](#shortcuts) Shortcuts
+
+### Shortcuts
+
 Nova provides two convenience methods for managing keyboard shortcuts, powered by [Mousetrap](https://craig.is/killing/mice). You may use these methods within your custom components to register and unregister shortcuts:
-```
+
+```js theme={null}
 // Add a single keyboard shortcut...
 Nova.addShortcut('ctrl+k', event => {
     // Callback...
@@ -79,15 +82,19 @@ Nova.disableShortcut('ctrl+k')
 // Remove multiple shortcuts...
 Nova.disableShortcut(['ctrl+k', 'command+k'])
 ```
-### [​](#global-variables) Global Variables
-The global `Nova` JavaScript object’s `config` method allows you to get the current Nova `base` path and `userId` configuration values:
-```
+
+### Global Variables
+
+The global `Nova` JavaScript object's `config` method allows you to get the current Nova `base` path and `userId` configuration values:
+
+```js theme={null}
 const userId = Nova.config('userId');
 const basePath = Nova.config('base');
 ```
-However, you are free to add additional values to this object using the `Nova::provideToScript` method. You may call this method within a `Nova::serving` listener, which should typically be registered in the `boot` method of your application or custom component’s service provider:
-app/Providers/NovaServiceProvider.php
-```
+
+However, you are free to add additional values to this object using the `Nova::provideToScript` method. You may call this method within a `Nova::serving` listener, which should typically be registered in the `boot` method of your application or custom component's service provider:
+
+```php app/Providers/NovaServiceProvider.php {16-18} theme={null}
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 
@@ -109,16 +116,22 @@ public function boot()
     });
 }
 ```
-Once the variable has been provided to Nova via the `provideToScript` method, you may access it using the global `Nova` JavaScript object’s `config` method:
-```
+
+Once the variable has been provided to Nova via the `provideToScript` method, you may access it using the global `Nova` JavaScript object's `config` method:
+
+```js theme={null}
 const driver = Nova.config('mail_driver');
 ```
-### [​](#localizations) Localizations
-Localization strings can be passed to the frontend via your `NovaServiceProvider`. To learn more, please consult the [full custom localization documentation](/docs/v5/customization/localization#frontend).
-### [​](#using-nova-mixins) Using Nova Mixins
-Custom Nova tools, resource tools, cards, and other custom packages that are being developed within a `nova-components` directory of a Laravel application can utilize `laravel-nova` mixins by importing `nova.mix.js` Mix Extension from the Nova Devtool installation that is located within your root application’s `vendor` directory. This extension should be placed in your package’s `webpack.mix.js`:
-webpack.mix.js
-```
+
+### Localizations
+
+Localization strings can be passed to the frontend via your `NovaServiceProvider`. To learn more, please consult the [full custom localization documentation](https://nova.laravel.com/docs/v5/customization/localization.md#frontend).
+
+### Using Nova Mixins
+
+Custom Nova tools, resource tools, cards, and other custom packages that are being developed within a `nova-components` directory of a Laravel application can utilize `laravel-nova` mixins by importing `nova.mix.js` Mix Extension from the Nova Devtool installation that is located within your root application's `vendor` directory. This extension should be placed in your package's `webpack.mix.js`:
+
+```js webpack.mix.js {2,9} theme={null}
 let mix = require('laravel-mix')
 mix.extend('nova', new require('laravel-nova-devtool'))
 
@@ -129,21 +142,25 @@ mix
   .css('resources/css/card.css', 'css')
   .nova('acme/analytics')
 ```
-Laravel Nova’s assets are built using **lockfile** version `3` and require NPM 9+.
-### [​](#vue-devtools) Vue DevTools
+
+> [!NOTE]
+>
+> Laravel Nova's assets are built using **lockfile** version `3` and require NPM 9+.
+
+### Vue DevTools
+
 The following feature require the `laravel/nova-devtool` Composer package to be installed:
-```
+
+```shell theme={null}
 composer require --dev "laravel/nova-devtool"
 ```
-By default, Nova’s JavaScript is compiled for production. As such, you will not be able to access the Vue DevTools out of the box without compiling Nova’s JavaScript for development. To accomplish this, you may issue the following terminal commands from the root of your Nova project:
-Application
-Package
-```
+
+By default, Nova's JavaScript is compiled for production. As such, you will not be able to access the Vue DevTools out of the box without compiling Nova's JavaScript for development. To accomplish this, you may issue the following terminal commands from the root of your Nova project:
+
+```shell Application theme={null}
 php artisan nova:enable-vue-devtool
 ```
-```
+
+```shell Package theme={null}
 php vendor/bin/testbench nova:enable-vue-devtool
 ```
-Was this page helpful?
-YesNo
-[Filters](/docs/v5/customization/filters)[Assets](/docs/v5/customization/assets)

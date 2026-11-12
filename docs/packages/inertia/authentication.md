@@ -1,13 +1,11 @@
-# Inertia - Authentication
-
-Source: https://inertiajs.com/authentication
+Source: https://inertiajs.com/docs/v3/security/authentication.md
 
 # Authentication
 
-One of the benefits of using Inertia is that you don't need a special authentication system such as OAuth to connect to your data provider (API). Also, since your data is provided via your controllers, and housed on the same domain as your JavaScript components, you don't have to worry about setting up CORS.
+One benefit of using Inertia is that you don't need a special authentication system, such as OAuth, to connect to your API. Since your data is provided through your controllers and served from the same domain as your JavaScript components, you don't need to set up CORS.
 
-Rather, when using Inertia, you can simply use whatever authentication system your server-side framework ships with. Typically, this will be a session based authentication system such as the authentication system included with Laravel.
+Instead, you can use whatever authentication system your server-side framework provides. Typically, this is a session-based system, such as Laravel's.
 
-Laravel's starter kits provide out-of-the-box scaffolding for new Inertia applications, including authentication.
-
-[starter kits](https://laravel.com/docs/starter-kits)
+> [card] [Laravel Starter Kits](https://laravel.com/docs/starter-kits)
+>
+> Laravel's starter kits provide out-of-the-box scaffolding for new Inertia applications, including authentication.

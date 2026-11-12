@@ -2,163 +2,118 @@
 
 Source: https://livewire.laravel.com/docs/javascript
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 JavaScript
 ==========
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
 
-#Using JavaScript in Livewire components
+
+Using JavaScript in Livewire components¶
 ----------------------------------------
 
-Livewire and Alpine provide plenty of utilities for building dynamic components directly in your HTML, however, there are times when it's helpful to break out of the HTML and execute plain JavaScript for your component. Livewire's `@script` and `@assets` directive allow you to do this in a predictable, maintainable way.
+Livewire and Alpine provide plenty of utilities for building dynamic components directly in your HTML, however, there are times when it's helpful to break out of the HTML and execute plain JavaScript for your component.
 
-### #Executing scripts
+Class-based components need the @script directive
 
-To execute bespoke JavaScript in your Livewire component, simply wrap a `<script>` element with `@script` and `@endscript`. This will tell Livewire to handle the execution of this JavaScript.
+The examples on this page use bare `<script>` tags, which work for **single-file** and **multi-file** components. If you're using **class-based components** (where the Blade view is in a separate file from the PHP class), you must wrap your script tags with the `@script` directive:
 
-Because scripts inside `@script` are handled by Livewire, they are executed at the perfect time after the page has loaded, but before the Livewire component has rendered. This means you no longer need to wrap your scripts in `document.addEventListener('...')` to load them properly.
+```php
+@script
+
+<script>
+
+// Your JavaScript here...
+
+</script>
+
+@endscript
+```
+This tells Livewire to handle the execution timing properly for class-based components.
+
+### Executing scripts¶
+
+You can add `<script>` tags directly inside your component template to execute JavaScript when the component loads.
+
+Because these scripts are handled by Livewire, they execute at the perfect time—after the page has loaded, but before the Livewire component renders. This means you no longer need to wrap your scripts in `document.addEventListener('...')` to load them properly.
 
 This also means that lazily or conditionally loaded Livewire components are still able to execute JavaScript after the page has initialized.
 
 ```php
-
 <div>
 
 ...
 
 </div>
 
-@script
-
 <script>
 
 // This Javascript will get executed every time this component is loaded onto the page...
 
 </script>
-
-@endscript
-
 ```
 Here's a more full example where you can do something like register a JavaScript action that is used in your Livewire component.
 
 ```php
-
 <div>
 
 <button wire:click="$js.increment">+</button>
 
 </div>
 
-@script
-
 <script>
 
-$js('increment', () => {
+this.$js.increment = () => {
 
 console.log('increment')
 
-})
+}
 
 </script>
-
-@endscript
-
 ```
 To learn more about JavaScript actions, visit the actions documentation.
 
-### #Using `$wire` from scripts
+### When scripts run¶
 
-Another helpful feature of using `@script` for your JavaScript is that you automatically have access to your Livewire component's `$wire` object.
+A component's script runs when its markup is in the DOM, but before Alpine has initialized it. Livewire suspends initialization of the component's tree until the script has finished, so anything the script registers—`Alpine.data()` providers, `$js` actions, custom directives—is guaranteed to exist before any expression in the component's markup evaluates:
+
+```php
+<div x-data="audioUploader">
+
+<span x-text="message"></span>
+
+</div>
+
+<script>
+
+Alpine.data('audioUploader', () => ({
+
+message: 'Loaded',
+
+}))
+
+</script>
+```
+This holds on the initial page load and every other way a component enters the page: lazy loading, dynamic mounting from a parent update, islands, and `wire:navigate`.
+
+A few consequences of this timing worth knowing:
+
+* `$wire.$el` and plain DOM queries work—the markup is present when the script runs.
+* Anything produced by initializing the markup—`$refs`, Alpine component state—doesn't exist yet. Reach for it from an `init()` hook on your Alpine component, or after `await $wire.$nextTick()`.
+* While a script is loading, the component's markup is visible but not yet interactive. This window is normally imperceptible, but for a heavy module you can put `x-cloak` on elements that shouldn't appear until the script is ready—it's honored until the component initializes.
+* If a script fails to load or throws, Livewire logs the error and initializes the component anyway so the page keeps working.
+
+### Using `$wire` from scripts¶
+
+When you add `<script>` tags inside your component, you automatically have access to your Livewire component's `$wire` object.
 
 Here's an example of using a simple `setInterval` to refresh the component every 2 seconds (You could easily do this with `wire:poll`, but it's a simple way to demonstrate the point):
 
-You can learn more about `$wire` on the `$wire` documentation.
-
 ```php
-
-@script
-
 <script>
 
 setInterval(() => {
@@ -168,57 +123,61 @@ $wire.$refresh()
 }, 2000)
 
 </script>
-
-@endscript
-
 ```
-### #Evaluating one-off JavaScript expressions
+The `$wire` object¶
+-------------------
 
-In addition to designating entire methods to be evaluated in JavaScript, you can use the `js()` method to evaluate smaller, individual expressions on the backend.
+The `$wire` object is your JavaScript interface to your Livewire component. It provides access to component properties, methods, and utilities for interacting with the server.
 
-This is generally useful for performing some kind of client-side follow-up after a server-side action is performed.
-
-For example, here is an example of a `CreatePost` component that triggers a client-side alert dialog after the post is saved to the database:
+Inside component scripts, you can use `$wire` directly. Here are the most essential methods you'll use:
 
 ```php
+// Access and modify properties
 
-<?php
+$wire.count
 
-namespace App\Livewire;
+$wire.count = 5
 
-use Livewire\Component;
+$wire.$set('count', 5)
 
-class CreatePost extends Component
+// Call component methods
 
-{
+$wire.save()
 
-public $title = '';
+$wire.delete(postId)
 
-public function save()
+// Refresh the component
 
-{
+$wire.$refresh()
 
-// ...
+// Dispatch events
 
-$this->js("alert('Post saved!')");
+$wire.$dispatch('post-created', { postId: 2 })
 
-}
+// Listen for events
 
-}
+$wire.$on('post-created', (event) => {
 
+console.log(event.postId)
+
+})
+
+// Access the root element
+
+$wire.$el.querySelector('.modal')
 ```
-The JavaScript expression `alert('Post saved!')` will now be executed on the client after the post has been saved to the database on the server.
+Complete $wire reference
 
-You can access the current component's `$wire` object inside the expression.
+For a comprehensive list of all `$wire` methods and properties, see the $wire reference at the bottom of this page.
 
-### #Loading assets
+Loading assets¶
+---------------
 
-The `@script` directive is useful for executing a bit of JavaScript every time a Livewire component loads, however, there are times you might want to load entire script and style assets on the page along with the component.
+Component `<script>` tags are useful for executing a bit of JavaScript every time a Livewire component loads, however, there are times you might want to load entire script and style assets on the page along with the component.
 
-Here is an example of using `@assets` to load a date picker library called Pikaday and initialize it inside your component using `@script`:
+Here is an example of using `@assets` to load a date picker library called Pikaday and initialize it inside your component:
 
 ```php
-
 <div>
 
 <input type="text" data-picker>
@@ -233,26 +192,324 @@ Here is an example of using `@assets` to load a date picker library called Pikad
 
 @endassets
 
-@script
-
 <script>
 
 new Pikaday({ field: $wire.$el.querySelector('[data-picker]') });
 
 </script>
-
-@endscript
-
 ```
-When this component loads, Livewire will make sure any `@assets` are loaded on that page before evaluating `@script`s. In addition, it will ensure the provided `@assets` are only loaded once per page no matter how many instances of this component there are, unlike `@script`, which will evaluate for every component instance on the page.
+When this component loads, Livewire will make sure any `@assets` are loaded on that page before evaluating scripts. In addition, it will ensure the provided `@assets` are only loaded once per page no matter how many instances of this component there are, unlike component scripts, which will evaluate for every component instance on the page.
 
-#Global Livewire events
+Interceptors¶
+-------------
+
+Intercept Livewire requests at three levels: **action** (most granular), **message** (per-component), and **request** (HTTP level).
+
+```php
+// Action interceptors - fire for each action call
+
+$wire.intercept(callback)                     // All actions on this component
+
+$wire.intercept('save', callback)             // Only 'save' action
+
+Livewire.interceptAction(callback)            // Global (all components)
+
+// Message interceptors - fire for each component message
+
+$wire.interceptMessage(callback)              // Messages from this component
+
+$wire.interceptMessage('save', callback)      // Only when message contains 'save'
+
+Livewire.interceptMessage(callback)           // Global (all components)
+
+// Request interceptors - fire for each HTTP request
+
+$wire.interceptRequest(callback)              // Requests involving this component
+
+$wire.interceptRequest('save', callback)      // Only when request contains 'save'
+
+Livewire.interceptRequest(callback)           // Global (all requests)
+```
+All interceptors return an unsubscribe function:
+
+```php
+let unsubscribe = $wire.intercept(callback)
+
+unsubscribe() // Remove the interceptor
+```
+### Action interceptors¶
+
+Action interceptors are the most granular. They fire for each method call on a component.
+
+```php
+$wire.intercept(({ action, onSend, onCancel, onSuccess, onError, onFailure, onFinish }) => {
+
+// action.name        - Method name ('save', '$refresh', etc.)
+
+// action.params      - Method parameters
+
+// action.component   - Component instance
+
+// action.cancel()    - Cancel this action
+
+onSend(({ call }) => {
+
+// call: { method, params, metadata }
+
+})
+
+onCancel(() => {})
+
+onSuccess((result) => {
+
+// result: Return value from PHP method
+
+})
+
+onError(({ response, body, preventDefault }) => {
+
+preventDefault() // Prevent error modal
+
+})
+
+onFailure(({ error }) => {
+
+// error: Network error
+
+})
+
+onFinish(() => {
+
+// Runs after DOM morph completes (or on error/cancel)
+
+})
+
+})
+```
+### Message interceptors¶
+
+Message interceptors fire for each component update. A message contains one or more actions.
+
+```php
+$wire.interceptMessage(({ message, cancel, onSend, onCancel, onSuccess, onSkipped, onError, onFailure, onStream, onFinish }) => {
+
+// message.component  - Component instance
+
+// message.actions    - Set of actions in this message
+
+// message.isSkipped() - True if the server skipped this message
+
+// cancel()           - Cancel this message
+
+onSend(({ payload }) => {
+
+// payload: { snapshot, updates, calls }
+
+})
+
+onCancel(() => {})
+
+onSuccess(({ payload, onSync, onEffect, onMorph, onMorphed, onRender }) => {
+
+// payload: { snapshot, effects }
+
+onSync(() => {})          // After state synced
+
+onEffect(() => {})        // After effects processed
+
+onMorph(async () => {})   // Advanced: add awaited DOM morph work
+
+onMorphed(() => {})       // After all DOM morph work completes
+
+onRender(() => {})        // In the next animation frame
+
+})
+
+onSkipped(() => {
+
+// Server intentionally skipped this message (e.g. an unchanged
+
+// reactive child). No payload, no morph, no render — but action
+
+// promises still resolve. Use for telemetry or dev tools.
+
+})
+
+onError(({ response, body, preventDefault }) => {
+
+preventDefault() // Prevent error modal
+
+})
+
+onFailure(({ error }) => {})
+
+onStream(async ({ json }) => {
+
+// json: Parsed stream chunk
+
+// Async work is awaited before the next chunk is processed
+
+})
+
+onFinish(() => {
+
+// Runs after DOM morph completes (or on error/cancel/skip)
+
+})
+
+})
+```
+`onMorph` is an advanced hook for contributing asynchronous DOM work that Livewire must wait for. Most code that needs to access the updated DOM should use `onMorphed`, which runs after the response's component, island, and slot morphs have all completed, but before action promises resolve and `onFinish` runs.
+
+#### Timing¶
+
+Hook execution order for successful requests:
+
+1. `onSuccess` - Immediately after server response
+2. `onSync` - After state merged
+3. `onEffect` - After effects processed
+4. `onMorph` - During the awaited DOM morph phase
+5. `onMorphed` - After all DOM morph work completes
+6. `onFinish` - After `onMorphed`
+7. `onRender` - In the next `requestAnimationFrame`
+
+For skipped messages (e.g. an unchanged reactive child) `onSkipped` fires instead of `onSuccess`, then `onFinish`. None of the morph/render hooks fire since there's nothing to apply.
+
+Action promises (`.then()`) resolve at the same time as `onFinish` (after morph, or immediately on skip).
+
+### Request interceptors¶
+
+Request interceptors fire for each HTTP request. A request may contain messages from multiple components.
+
+```php
+$wire.interceptRequest(({ request, onSend, onCancel, onSuccess, onError, onFailure, onResponse, onParsed, onStream, onRedirect, onDump, onFinish }) => {
+
+// request.messages   - Set of messages in this request
+
+// request.cancel()   - Cancel this request
+
+onSend(({ responsePromise }) => {})
+
+onCancel(() => {})
+
+onResponse(({ response }) => {
+
+// response: Fetch Response (before body read)
+
+})
+
+onParsed(({ response, body }) => {
+
+// body: Response body as string
+
+})
+
+onSuccess(({ response, body, json }) => {})
+
+onError(({ response, body, preventDefault }) => {
+
+preventDefault() // Prevent error modal
+
+})
+
+onFailure(({ error }) => {})
+
+onStream(({ response }) => {})
+
+onRedirect(({ url, preventDefault }) => {
+
+preventDefault() // Prevent redirect
+
+})
+
+onDump(({ html, preventDefault }) => {
+
+preventDefault() // Prevent dump modal
+
+})
+
+onFinish(() => {})
+
+})
+```
+### Examples¶
+
+**Loading state for a component:**
+
+```php
+<script>
+
+$wire.intercept(({ onSend, onFinish }) => {
+
+onSend(() => $wire.$el.classList.add('opacity-50'))
+
+onFinish(() => $wire.$el.classList.remove('opacity-50'))
+
+})
+
+</script>
+```
+**Confirm before delete:**
+
+```php
+<script>
+
+$wire.intercept('delete', ({ action }) => {
+
+if (!confirm('Are you sure?')) {
+
+action.cancel()
+
+}
+
+})
+
+</script>
+```
+**Global session expiration handling:**
+
+```php
+Livewire.interceptRequest(({ onError }) => {
+
+onError(({ response, preventDefault }) => {
+
+if (response.status === 419) {
+
+preventDefault()
+
+if (confirm('Session expired. Refresh?')) {
+
+window.location.reload()
+
+}
+
+}
+
+})
+
+})
+```
+**Action-specific success notification:**
+
+```php
+<script>
+
+$wire.intercept('save', ({ onSuccess, onError }) => {
+
+onSuccess(() => showToast('Saved!'))
+
+onError(() => showToast('Failed to save', 'error'))
+
+})
+
+</script>
+```
+Global Livewire events¶
 -----------------------
 
 Livewire dispatches two helpful browser events for you to register any custom extension points from outside scripts:
 
 ```php
-
 <script>
 
 document.addEventListener('livewire:init', () => {
@@ -272,11 +529,12 @@ document.addEventListener('livewire:initialized', () => {
 })
 
 </script>
-
 ```
+info
+
 It is often beneficial to register any custom directives or lifecycle hooks inside of `livewire:init` so that they are available before Livewire begins initializing on the page.
 
-#The `Livewire` global object
+The `Livewire` global object¶
 -----------------------------
 
 Livewire's global object is the best starting point for interacting with Livewire from external scripts.
@@ -285,12 +543,11 @@ You can access the global `Livewire` JavaScript object on `window` from anywhere
 
 It is often helpful to use `window.Livewire` inside a `livewire:init` event listener
 
-### #Accessing components
+### Accessing components¶
 
 You can use the following methods to access specific Livewire components loaded on the current page:
 
 ```php
-
 // Retrieve the $wire object for the first component on the page...
 
 let component = Livewire.first()
@@ -306,19 +563,19 @@ let components = Livewire.getByName(name)
 // Retrieve $wire objects for every component on the page...
 
 let components = Livewire.all()
-
 ```
+info
+
 Each of these methods returns a `$wire` object representing the component's state in Livewire.
 
 
 You can learn more about these objects in the `$wire` documentation.
 
-### #Interacting with events
+### Interacting with events¶
 
 In addition to dispatching and listening for events from individual components in PHP, the global `Livewire` object allows you to interact with Livewire's event system from anywhere in your application:
 
 ```php
-
 // Dispatch an event to any Livewire components listening...
 
 Livewire.dispatch('post-created', { postId: 2 })
@@ -334,12 +591,10 @@ Livewire.on('post-created', ({ postId }) => {
 // ...
 
 })
-
 ```
 In certain scenarios, you might need to unregister global Livewire events. For instance, when working with Alpine components and `wire:navigate`, multiple listeners may be registered as `init` is called when navigating between pages. To address this, utilize the `destroy` function, automatically invoked by Alpine. Loop through all your listeners within this function to unregister them and prevent any unwanted accumulation.
 
 ```php
-
 Alpine.data('MyComponent', () => ({
 
 listeners: [],
@@ -369,14 +624,12 @@ listener();
 }
 
 }));
-
 ```
-### #Using lifecycle hooks
+### Using lifecycle hooks¶
 
 Livewire allows you to hook into various parts of its global lifecycle using `Livewire.hook()`:
 
 ```php
-
 // Register a callback to execute on a given internal Livewire hook...
 
 Livewire.hook('component.init', ({ component, cleanup }) => {
@@ -384,25 +637,21 @@ Livewire.hook('component.init', ({ component, cleanup }) => {
 // ...
 
 })
-
 ```
 More information about Livewire's JavaScript hooks can be found below.
 
-### #Registering custom directives
+### Registering custom directives¶
 
 Livewire allows you to register custom directives using `Livewire.directive()`.
 
 Below is an example of a custom `wire:confirm` directive that uses JavaScript's `confirm()` dialog to confirm or cancel an action before it is sent to the server:
 
 ```php
-
 <button wire:confirm="Are you sure?" wire:click="delete">Delete post</button>
-
 ```
 Here is the implementation of `wire:confirm` using `Livewire.directive()`:
 
 ```php
-
 Livewire.directive('confirm', ({ el, directive, component, cleanup }) => {
 
 let content =  directive.expression
@@ -448,10 +697,307 @@ el.removeEventListener('click', onClick)
 })
 
 })
-
 ```
-#Object schemas
+JavaScript hooks¶
+-----------------
+
+For advanced users, Livewire exposes its internal client-side "hook" system. You can use the following hooks to extend Livewire's functionality or gain more information about your Livewire application.
+
+### Component initialization¶
+
+Every time a new component is discovered by Livewire — whether on the initial page load or later on — the `component.init` event is triggered. You can hook into `component.init` to intercept or initialize anything related to the new component:
+
+```php
+Livewire.hook('component.init', ({ component, cleanup }) => {
+
+//
+
+})
+```
+For advanced integrations that depend on Livewire's initial effects—such as event listeners, scripts, or server-dispatched JavaScript—use `component.initialized`. It runs after those effects have been processed, but before Livewire continues initializing the component's descendant elements:
+
+```php
+Livewire.hook('component.initialized', ({ component }) => {
+
+//
+
+})
+```
+For more information, please consult the documentation on the component object.
+
+### DOM element initialization¶
+
+In addition to triggering an event when new components are initialized, Livewire triggers an event for each DOM element within a given Livewire component.
+
+This can be used to provide custom Livewire HTML attributes within your application:
+
+```php
+Livewire.hook('element.init', ({ component, el }) => {
+
+//
+
+})
+```
+### DOM Morph hooks¶
+
+During the DOM morphing phase—which occurs after Livewire completes a network roundtrip—Livewire triggers a series of events for every element that is mutated.
+
+```php
+Livewire.hook('morph.updating',  ({ el, component, toEl, skip, childrenOnly }) => {
+
+//
+
+})
+
+Livewire.hook('morph.updated', ({ el, component }) => {
+
+//
+
+})
+
+Livewire.hook('morph.removing', ({ el, component, skip }) => {
+
+//
+
+})
+
+Livewire.hook('morph.removed', ({ el, component }) => {
+
+//
+
+})
+
+Livewire.hook('morph.adding',  ({ el, component }) => {
+
+//
+
+})
+
+Livewire.hook('morph.added',  ({ el }) => {
+
+//
+
+})
+```
+In addition to the events fired per element, a `morph` and `morphed` event is fired for each Livewire component:
+
+```php
+Livewire.hook('morph',  ({ el, component }) => {
+
+// Runs just before the child elements in `component` are morphed (exluding partial morphing)
+
+})
+
+Livewire.hook('morphed',  ({ el, component }) => {
+
+// Runs after all child elements in `component` are morphed (excluding partial morphing)
+
+})
+```
+Server-side JavaScript evaluation¶
+----------------------------------
+
+In addition to executing JavaScript directly in your components, you can use the `js()` method to evaluate JavaScript expressions from your server-side PHP code.
+
+This is generally useful for performing some kind of client-side follow-up after a server-side action is performed.
+
+For example, here is a `post.create` component that triggers a client-side alert dialog after the post is saved to the database:
+
+```php
+<?php // resources/views/components/post/⚡create.blade.php
+
+use Livewire\Component;
+
+new class extends Component {
+
+public $title = '';
+
+public function save()
+
+{
+
+// Save post to database...
+
+$this->js("alert('Post saved!')");
+
+}
+
+};
+```
+The JavaScript expression `alert('Post saved!')` will be executed on the client after the post has been saved to the database on the server and the response's DOM morph has completed.
+
+You can access the current component's `$wire` object inside the expression:
+
+```php
+$this->js('$wire.$refresh()');
+
+$this->js('$wire.$dispatch("post-created", { id: ' . $post->id . ' })');
+```
+Common patterns¶
+----------------
+
+Here are some common patterns for using JavaScript with Livewire in real-world applications.
+
+### Integrating third-party libraries¶
+
+Many JavaScript libraries need to be initialized when elements are added to the page. Use component scripts to initialize libraries when your component loads:
+
+```php
+<div>
+
+<div id="map" style="height: 400px;"></div>
+
+</div>
+
+@assets
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY"></script>
+
+@endassets
+
+<script>
+
+new google.maps.Map($wire.$el.querySelector('#map'), {
+
+center: { lat: {{ $latitude }}, lng: {{ $longitude }} },
+
+zoom: 12
+
+});
+
+</script>
+```
+### Syncing with localStorage¶
+
+You can sync component state with localStorage using `$watch`:
+
+```php
+<script>
+
+// Load from localStorage on init
+
+if (localStorage.getItem('draft')) {
+
+$wire.content = localStorage.getItem('draft');
+
+}
+
+// Save to localStorage when it changes
+
+$wire.$watch('content', (value) => {
+
+localStorage.setItem('draft', value);
+
+});
+
+</script>
+```
+### Using the `@js` directive¶
+
+If you need to output PHP data for use in JavaScript directly, you can use the `@js` directive.
+
+```php
+<script>
+
+let posts = @js($posts)
+
+// "posts" will now be a JavaScript array of post data from PHP.
+
+</script>
+```
+Best practices¶
 ---------------
+
+### Component scripts vs global scripts¶
+
+**Use component scripts when:**
+
+* The JavaScript is specific to that component's functionality
+* You need access to `$wire` or component-specific data
+* The code should run every time the component loads
+
+**Use global scripts when:**
+
+* Registering custom directives or hooks
+* Setting up global event listeners
+* Initializing app-wide JavaScript
+
+### Avoiding memory leaks¶
+
+When adding event listeners in component scripts, Livewire automatically cleans them up when the component is removed. However, if you're using global interceptors or hooks, make sure to clean up when appropriate:
+
+```php
+// Component-level - automatically cleaned up ✓
+
+$wire.intercept(({ onSend }) => {
+
+onSend(() => console.log('Sending...'));
+
+});
+
+// Global-level - lives for the entire page lifecycle
+
+Livewire.interceptMessage(({ onSend }) => {
+
+onSend(() => console.log('Sending...'));
+
+});
+```
+### Debugging tips¶
+
+**Access component from browser console:**
+
+```php
+// Get first component on page
+
+let $wire = Livewire.first()
+
+// Inspect component state
+
+console.log($wire.count)
+
+// Call methods
+
+$wire.increment()
+```
+**Monitor all requests:**
+
+```php
+Livewire.interceptRequest(({ onSend }) => {
+
+onSend(() => {
+
+console.log('Request sent:', Date.now());
+
+});
+
+});
+```
+**View component snapshots:**
+
+```php
+let component = Livewire.first().__instance()
+
+console.log(component.snapshot)
+```
+### Performance considerations¶
+
+* Use `wire:ignore` on elements that shouldn't be touched by Livewire's DOM morphing
+* Debounce expensive operations using `wire:model.debounce` or JavaScript debouncing
+* Use lazy loading (`lazy` parameter) for components that aren't immediately visible
+* Consider using islands for isolated regions that update independently
+
+See also¶
+---------
+
+* **Styles** — Add scoped CSS to your components
+* **Alpine** — Use Alpine for client-side interactivity
+* **Actions** — Create JavaScript actions in components
+* **Properties** — Access properties from JavaScript with $wire
+* **Events** — Dispatch and listen for events in JavaScript
+
+Reference¶
+----------
 
 When extending Livewire's JavaScript system, it's important to understand the different objects you might encounter.
 
@@ -459,12 +1005,11 @@ Here is an exhaustive reference of each of Livewire's relevant internal properti
 
 As a reminder, the average Livewire user may never interact with these. Most of these objects are available for Livewire's internal system or advanced users.
 
-### #The `$wire` object
+### The `$wire` object¶
 
 Given the following generic `Counter` component:
 
 ```php
-
 <?php
 
 namespace App\Livewire;
@@ -494,12 +1039,10 @@ return view('livewire.counter');
 }
 
 }
-
 ```
 Livewire exposes a JavaScript representation of the server-side component in the form of an object that is commonly referred to as `$wire`:
 
 ```php
-
 let $wire = {
 
 // All component public properties are directly accessible on $wire...
@@ -548,11 +1091,13 @@ $call(method, ...params) { ... },
 
 // Usage: $wire.$js('increment', () => { ... })
 
+// Usage: $wire.$js.increment = () => { ... }
+
 $js(name, callback) { ... },
 
-// Entangle the value of a Livewire property with a different,
+// [DEPRECATED] Entangle - You probably don't need this.
 
-// arbitrary, Alpine property...
+// Use $wire directly to access properties instead.
 
 // Usage: <div x-data="{ count: $wire.$entangle('count') }">
 
@@ -564,7 +1109,19 @@ $entangle(name, live = false) { ... },
 
 $watch(name, callback) { ... },
 
-// Refresh a component by sending a commit to the server
+// Scope the next action to a named island...
+
+// Returns $wire so you can chain any method call.
+
+// The chained action will only re-render the named island.
+
+// Usage: $wire.$island('revenue').$refresh()
+
+// Usage: $wire.$island('feed', { mode: 'append' }).loadMore()
+
+$island(name, options = {}) { ... },
+
+// Refresh a component by sending a message to the server
 
 // to re-render the HTML and swap it into the page...
 
@@ -572,7 +1129,7 @@ $refresh() { ... },
 
 // Identical to the above `$refresh`. Just a more technical name...
 
-$commit() { ... },
+$commit() { ... }, // Alias for $refresh()
 
 // Listen for a an event dispatched from this component or its children...
 
@@ -582,7 +1139,7 @@ $on(event, callback) { ... },
 
 // Listen for a lifecycle hook triggered from this component or the request...
 
-// Usage: $wire.$hook('commit', () => { ... })
+// Usage: $wire.$hook('message.sent', () => { ... })
 
 $hook(name, callback) { ... },
 
@@ -632,21 +1189,47 @@ $uploadMultiple(name, files, finish, error, progress) { },
 
 $removeUpload(name, tmpFilename, finish, error) { ... },
 
+// Register an action interceptor for this component instance
+
+// Usage: $wire.intercept(({ action, onSend, onCancel, onSuccess, onError, onFailure, onFinish }) => { ... })
+
+// Or scope to specific action: $wire.intercept('save', ({ action, onSuccess }) => { ... })
+
+intercept(actionOrCallback, callback) { ... },
+
+// Alias for intercept
+
+interceptAction(actionOrCallback, callback) { ... },
+
+// Register a message interceptor for this component instance
+
+// Usage: $wire.interceptMessage(({ message, cancel, onSend, onCancel, onSuccess, onSkipped, onError, onFailure, onFinish }) => { ... })
+
+// Or scope to specific action: $wire.interceptMessage('save', callback)
+
+interceptMessage(actionOrCallback, callback) { ... },
+
+// Register a request interceptor for this component instance
+
+// Usage: $wire.interceptRequest(({ request, onSend, onCancel, onSuccess, onError, onFailure, onFinish }) => { ... })
+
+// Or scope to specific action: $wire.interceptRequest('save', callback)
+
+interceptRequest(actionOrCallback, callback) { ... },
+
 // Retrieve the underlying "component" object...
 
 __instance() { ... },
 
 }
-
 ```
 You can learn more about `$wire` in Livewire's documentation on accessing properties in JavaScript.
 
-### #The `snapshot` object
+### The `snapshot` object¶
 
 Between each network request, Livewire serializes the PHP component into an object that can be consumed in JavaScript. This snapshot is used to unserialize the component back into a PHP object and therefore has mechanisms built in to prevent tampering:
 
 ```php
-
 let snapshot = {
 
 // The serialized state of the component (public properties)...
@@ -671,7 +1254,7 @@ name: 'counter',
 
 // to re-apply any middleware from the original request
 
-// to subsequent component update requests (commits)...
+// to subsequent component update requests (messages)...
 
 path: '/',
 
@@ -685,7 +1268,7 @@ locale: 'en',
 
 children: [],
 
-// Weather or not this component was "lazy loaded"...
+// Whether or not this component was "lazy loaded"...
 
 lazyLoaded: false,
 
@@ -710,16 +1293,14 @@ errors: [],
 checksum: '1bc274eea17a434e33d26bcaba4a247a4a7768bd286456a83ea6e9be2d18c1e7',
 
 }
-
 ```
-### #The `component` object
+### The `component` object¶
 
 Every component on a page has a corresponding component object behind the scenes keeping track of its state and exposing its underlying functionality. This is one layer deeper than `$wire`. It is only meant for advanced usage.
 
 Here's an actual component object for the above `Counter` component with descriptions of relevant properties in JS comments:
 
 ```php
-
 let component = {
 
 // The root HTML element of the component...
@@ -787,19 +1368,17 @@ snapshot: {...},
 snapshotEncoded: '{"data":{"count":0},"memo":{"id":"0qCY3ri9pzSSMIXPGg8F","name":"counter","path":"\/","method":"GET","children":[],"lazyLoaded":true,"errors":[],"locale":"en"},"checksum":"1bc274eea17a434e33d26bcaba4a247a4a7768bd286456a83ea6e9be2d18c1e7"}',
 
 }
-
 ```
-### #The `commit` payload
+### The `message` payload¶
 
-When an action is performed on a Livewire component in the browser, a network request is triggered. That network request contains one or many components and various instructions for the server. Internally, these component network payloads are called "commits".
+When an action is performed on a Livewire component in the browser, a network request is triggered. That network request contains one or many components and various instructions for the server. Internally, these component network payloads are called "messages".
 
-The term "commit" was chosen as a helpful way to think about Livewire's relationship between frontend and backend. A component is rendered and manipulated on the frontend until an action is performed that requires it to "commit" its state and updates to the backend.
+A "message" represents the data sent from the frontend to the backend when a component needs to update. A component is rendered and manipulated on the frontend until an action is performed that requires it to send a message with its state and updates to the backend.
 
 You will recognize this schema from the payload in the network tab of your browser's DevTools, or Livewire's JavaScript hooks:
 
 ```php
-
-let commit = {
+let message = {
 
 // Snapshot object...
 
@@ -820,264 +1399,17 @@ calls: [
 ],
 
 }
-
 ```
-#JavaScript hooks
------------------
+Ecosystem sponsor
 
-For advanced users, Livewire exposes its internal client-side "hook" system. You can use the following hooks to extend Livewire's functionality or gain more information about your Livewire application.
 
-### #Component initialization
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
 
-Every time a new component is discovered by Livewire — whether on the initial page load or later on — the `component.init` event is triggered. You can hook into `component.init` to intercept or initialize anything related to the new component:
+Return to
 
-```php
+CSP
 
-Livewire.hook('component.init', ({ component, cleanup }) => {
+Continue to
 
-//
-
-})
-
-```
-For more information, please consult the documentation on the component object.
-
-### #DOM element initialization
-
-In addition to triggering an event when new components are initialized, Livewire triggers an event for each DOM element within a given Livewire component.
-
-This can be used to provide custom Livewire HTML attributes within your application:
-
-```php
-
-Livewire.hook('element.init', ({ component, el }) => {
-
-//
-
-})
-
-```
-### #DOM Morph hooks
-
-During the DOM morphing phase—which occurs after Livewire completes a network roundtrip—Livewire triggers a series of events for every element that is mutated.
-
-```php
-
-Livewire.hook('morph.updating',  ({ el, component, toEl, skip, childrenOnly }) => {
-
-//
-
-})
-
-Livewire.hook('morph.updated', ({ el, component }) => {
-
-//
-
-})
-
-Livewire.hook('morph.removing', ({ el, component, skip }) => {
-
-//
-
-})
-
-Livewire.hook('morph.removed', ({ el, component }) => {
-
-//
-
-})
-
-Livewire.hook('morph.adding',  ({ el, component }) => {
-
-//
-
-})
-
-Livewire.hook('morph.added',  ({ el }) => {
-
-//
-
-})
-
-```
-In addition to the events fired per element, a `morph` and `morphed` event is fired for each Livewire component:
-
-```php
-
-Livewire.hook('morph',  ({ el, component }) => {
-
-// Runs just before the child elements in `component` are morphed
-
-})
-
-Livewire.hook('morphed',  ({ el, component }) => {
-
-// Runs after all child elements in `component` are morphed
-
-})
-
-```
-### #Commit hooks
-
-Because Livewire requests contain multiple components, *request* is too broad of a term to refer to an individual component's request and response payload. Instead, internally, Livewire refers to component updates as *commits* — in reference to *committing* component state to the server.
-
-These hooks expose `commit` objects. You can learn more about their schema by reading the commit object documentation.
-
-#### #Preparing commits
-
-The `commit.prepare` hook will be triggered immediately before a request is sent to the server. This gives you a chance to add any last minute updates or actions to the outgoing request:
-
-```php
-
-Livewire.hook('commit.prepare', ({ component }) => {
-
-// Runs before commit payloads are collected and sent to the server...
-
-})
-
-```
-#### #Intercepting commits
-
-Every time a Livewire component is sent to the server, a *commit* is made. To hook into the lifecycle and contents of an individual commit, Livewire exposes a `commit` hook.
-
-This hook is extremely powerful as it provides methods for hooking into both the request and response of a Livewire commit:
-
-```php
-
-Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
-
-// Runs immediately before a commit's payload is sent to the server...
-
-respond(() => {
-
-// Runs after a response is received but before it's processed...
-
-})
-
-succeed(({ snapshot, effect }) => {
-
-// Runs after a successful response is received and processed
-
-// with a new snapshot and list of effects...
-
-})
-
-fail(() => {
-
-// Runs if some part of the request failed...
-
-})
-
-})
-
-```
-#Request hooks
---------------
-
-If you would like to instead hook into the entire HTTP request going and returning from the server, you can do so using the `request` hook:
-
-```php
-
-Livewire.hook('request', ({ url, options, payload, respond, succeed, fail }) => {
-
-// Runs after commit payloads are compiled, but before a network request is sent...
-
-respond(({ status, response }) => {
-
-// Runs when the response is received...
-
-// "response" is the raw HTTP response object
-
-// before await response.text() is run...
-
-})
-
-succeed(({ status, json }) => {
-
-// Runs when the response is received...
-
-// "json" is the JSON response object...
-
-})
-
-fail(({ status, content, preventDefault }) => {
-
-// Runs when the response has an error status code...
-
-// "preventDefault" allows you to disable Livewire's
-
-// default error handling...
-
-// "content" is the raw response content...
-
-})
-
-})
-
-```
-### #Customizing page expiration behavior
-
-If the default page expired dialog isn't suitable for your application, you can implement a custom solution using the `request` hook:
-
-```php
-
-<script>
-
-document.addEventListener('livewire:init', () => {
-
-Livewire.hook('request', ({ fail }) => {
-
-fail(({ status, preventDefault }) => {
-
-if (status === 419) {
-
-confirm('Your custom page expiration behavior...')
-
-preventDefault()
-
-}
-
-})
-
-})
-
-})
-
-</script>
-
-```
-With the above code in your application, users will receive a custom dialog when their session has expired.
-
-On this page
-
-* Using JavaScript in Livewire components
-  + Executing scripts
-  + Using $wire from scripts
-  + Evaluating one-off JavaScript expressions
-  + Loading assets
-* Global Livewire events
-* The Livewire global object
-  + Accessing components
-  + Interacting with events
-  + Using lifecycle hooks
-  + Registering custom directives
-* Object schemas
-  + The $wire object
-  + The snapshot object
-  + The component object
-  + The commit payload
-* JavaScript hooks
-  + Component initialization
-  + DOM element initialization
-  + DOM Morph hooks
-  + Commit hooks
-* Request hooks
-  + Customizing page expiration behavior
-
-![Flux Ad](/images/flux_ad.jpg)
-
-Pro UI Components
-
-Flux · The official Livewire component library
-
-Built by the folks behind Livewire and Alpine.
+Synthesizers

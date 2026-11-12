@@ -1,24 +1,138 @@
-# Filament - Tables/Columns/Text
+Source: https://filamentphp.com/docs/5.x/tables/columns/text.md
 
-Source: https://filamentphp.com/docs/3.x/tables/columns/text
+# Text column
 
-#Overview
----------
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/columns/text.md
 
-Text columns display simple text from your database:
+## Introduction
+
+Text columns display simple text:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('title')
-
 ```
-![Text column](/docs/3.x/images/light/tables/columns/text/simple.jpg) ![Text column](/docs/3.x/images/dark/tables/columns/text/simple.jpg)
 
-#Displaying as a “badge”
-------------------------
 
-By default, the text is quite plain and has no background color. You can make it appear as a “badge” instead using the `badge()` method. A great use case for this is with statuses, where may want to display a badge with a color that matches the status:
+
+## Customizing the color
+
+You may set a [color](https://filamentphp.com/docs/5.x/styling/colors.md) for the text:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('status')
+    ->color('primary')
+```
+
+As well as allowing a static value, the ` color() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+## Adding an icon
+
+Text columns may also have an [icon](https://filamentphp.com/docs/5.x/styling/icons.md):
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Icons\Heroicon;
+
+TextColumn::make('email')
+    ->icon(Heroicon::Envelope)
+```
+
+The ` icon() ` method also accepts a function to dynamically calculate the icon. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+You may set the position of an icon using ` iconPosition() `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Enums\IconPosition;
+use Filament\Support\Icons\Heroicon;
+
+TextColumn::make('email')
+    ->icon(Heroicon::Envelope)
+    ->iconPosition(IconPosition::After) // `IconPosition::Before` or `IconPosition::After`
+```
+
+The ` iconPosition() ` method also accepts a function to dynamically calculate the icon position. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+The icon color defaults to the text color, but you may customize the icon [color](https://filamentphp.com/docs/5.x/styling/colors.md) separately using ` iconColor() `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Icons\Heroicon;
+
+TextColumn::make('email')
+    ->icon(Heroicon::Envelope)
+    ->iconColor('primary')
+```
+
+The ` iconColor() ` method also accepts a function to dynamically calculate the icon color. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+## Displaying as a "badge"
+
+By default, text is quite plain and has no background color. You can make it appear as a "badge" instead using the ` badge() ` method. A great use case for this is with statuses, where may want to display a badge with a [color](https://filamentphp.com/docs/5.x/tables/columns/text.md#customizing-the-color) that matches the status:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
@@ -31,159 +145,878 @@ TextColumn::make('status')
         'published' => 'success',
         'rejected' => 'danger',
     })
-
 ```
-![Text column as badge](/docs/3.x/images/light/tables/columns/text/badge.jpg) ![Text column as badge](/docs/3.x/images/dark/tables/columns/text/badge.jpg)
 
-You may add other things to the badge, like an icon.
 
-#Displaying a description
--------------------------
 
-Descriptions may be used to easily render additional text above or below the column contents.
+You may add other things to the badge, like an [icon](https://filamentphp.com/docs/5.x/tables/columns/text.md#adding-an-icon).
 
-You can display a description below the contents of a text column using the `description()` method:
+Optionally, you may pass a boolean value to control if the text should be in a badge or not:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
-TextColumn::make('title')
-    ->description(fn (Post $record): string => $record->description)
-
+TextColumn::make('status')
+    ->badge(FeatureFlag::active())
 ```
-![Text column with description](/docs/3.x/images/light/tables/columns/text/description.jpg) ![Text column with description](/docs/3.x/images/dark/tables/columns/text/description.jpg)
 
-By default, the description is displayed below the main text, but you can move it above using the second parameter:
+As well as allowing a static value, the ` badge() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Formatting
+
+When using a text column, you may want the actual outputted text in the UI to differ from the raw [state](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-content-state) of the column, which is often automatically retrieved from an Eloquent model. Formatting the state allows you to preserve the integrity of the raw data while also allowing it to be presented in a more user-friendly way.
+
+To format the state of a text column without changing the state itself, you can use the ` formatStateUsing() ` method. This method accepts a function that takes the state as an argument and returns the formatted state:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
-TextColumn::make('title')
-    ->description(fn (Post $record): string => $record->description, position: 'above')
-
+TextColumn::make('status')
+    ->formatStateUsing(fn (string $state): string => __("statuses.{$state}"))
 ```
-![Text column with description above the content](/docs/3.x/images/light/tables/columns/text/description-above.jpg) ![Text column with description above the content](/docs/3.x/images/dark/tables/columns/text/description-above.jpg)
 
-#Date formatting
-----------------
+In this case, the ` status ` column in the database might contain values like ` draft `, ` reviewing `, ` published `, or ` rejected `, but the formatted state will be the translated version of these values.
 
-You may use the `date()` and `dateTime()` methods to format the column’s state using PHP date formatting tokens:
+The function passed to ` formatStateUsing() ` can inject various utilities as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Date formatting
+
+Instead of passing a function to ` formatStateUsing() `, you may use the ` date() `, ` dateTime() `, and ` time() ` methods to format the column's state using [PHP date formatting tokens](https://www.php.net/manual/en/datetime.format.php):
 
 ```php
 use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->date()
 
 TextColumn::make('created_at')
     ->dateTime()
 
+TextColumn::make('created_at')
+    ->time()
 ```
-You may use the `since()` method to format the column’s state using Carbon’s `diffForHumans()`:
+
+
+
+You may customize the date format by passing a custom format string to the ` date() `, ` dateTime() `, or ` time() ` method. You may use any [PHP date formatting tokens](https://www.php.net/manual/en/datetime.format.php):
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->date('M j, Y')
+    
+TextColumn::make('created_at')
+    ->dateTime('M j, Y H:i:s')
+    
+TextColumn::make('created_at')
+    ->time('H:i:s')
+```
+
+As well as allowing static values, the ` date() `, ` dateTime() `, and ` time() ` methods also accept a function to dynamically calculate the format. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+#### Date formatting using Carbon macro formats
+
+You may use also the ` isoDate() `, ` isoDateTime() `, and ` isoTime() ` methods to format the column's state using [Carbon's macro-formats](https://carbon.nesbot.com/guide/getting-started/localization.html#iso-format-available-replacements):
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->isoDate()
+
+TextColumn::make('created_at')
+    ->isoDateTime()
+
+TextColumn::make('created_at')
+    ->isoTime()
+```
+
+You may customize the date format by passing a custom macro format string to the ` isoDate() `, ` isoDateTime() `, or ` isoTime() ` method. You may use any [Carbon's macro-formats](https://carbon.nesbot.com/guide/getting-started/localization.html#iso-format-available-replacements):
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->isoDate('L')
+
+TextColumn::make('created_at')
+    ->isoDateTime('LLL')
+
+TextColumn::make('created_at')
+    ->isoTime('LT')
+```
+
+As well as allowing static values, the ` isoDate() `, ` isoDateTime() `, and ` isoTime() ` methods also accept a function to dynamically calculate the format. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+#### Relative date formatting
+
+You may use the ` since() ` method to format the column's state using [Carbon's ` diffForHumans() `](https://carbon.nesbot.com/guide/date-time-manipulation/difference-for-humans.html):
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('created_at')
     ->since()
-
 ```
-Additionally, you can use the `dateTooltip()`, `dateTimeTooltip()` or `timeTooltip()` method to display a formatted date in a tooltip, often to provide extra information:
+
+
+
+#### Displaying a formatting date in a tooltip
+
+Additionally, you can use the ` dateTooltip() `, ` dateTimeTooltip() `, ` timeTooltip() `, ` isoDateTooltip() `, ` isoDateTimeTooltip() `, ` isoTimeTooltip() `, or ` sinceTooltip() ` method to display a formatted date in a [tooltip](https://filamentphp.com/docs/5.x/tables/columns/overview.md#adding-a-tooltip-to-a-column), often to provide extra information:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('created_at')
     ->since()
-    ->dateTimeTooltip()
+    ->dateTooltip() // Accepts a custom PHP date formatting string
 
+TextColumn::make('created_at')
+    ->since()
+    ->dateTimeTooltip() // Accepts a custom PHP date formatting string
+
+TextColumn::make('created_at')
+    ->since()
+    ->timeTooltip() // Accepts a custom PHP date formatting string
+
+TextColumn::make('created_at')
+    ->since()
+    ->isoDateTooltip() // Accepts a custom Carbon macro format string
+
+TextColumn::make('created_at')
+    ->since()
+    ->isoDateTimeTooltip() // Accepts a custom Carbon macro format string
+
+TextColumn::make('created_at')
+    ->since()
+    ->isoTimeTooltip() // Accepts a custom Carbon macro format string
+
+TextColumn::make('created_at')
+    ->dateTime()
+    ->sinceTooltip()
 ```
-#Number formatting
-------------------
 
-The `numeric()` method allows you to format an entry as a number:
+
+
+#### Setting the timezone for date formatting
+
+Each of the date formatting methods listed above also accepts a ` timezone ` argument, which allows you to convert the time set in the state to a different timezone:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->dateTime(timezone: 'America/New_York')
+```
+
+You can also pass a timezone to the ` timezone() ` method of the column to apply a timezone to all date-time formatting methods at once:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('created_at')
+    ->timezone('America/New_York')
+    ->dateTime()
+```
+
+As well as allowing static values, the ` timezone() ` method also accepts a function to dynamically calculate the timezone. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+If you do not pass a ` timezone() ` to the column, it will use Filament's default timezone. You can set Filament's default timezone using the ` FilamentTimezone::set() ` method in the ` boot() ` method of a service provider such as ` AppServiceProvider `:
+
+```php
+use Filament\Support\Facades\FilamentTimezone;
+
+public function boot(): void
+{
+    FilamentTimezone::set('America/New_York');
+}
+```
+
+This is useful if you want to set a default timezone for all text columns in your application. It is also used in other places where timezones are used in Filament.
+
+> **Warning**
+>
+> Filament's default timezone will only apply when the column stores a time. If the column stores a date only (` date() ` instead of ` dateTime() `), the timezone will not be applied. This is to prevent timezone shifts when storing dates without times.
+
+
+### Number formatting
+
+Instead of passing a function to ` formatStateUsing() `, you can use the ` numeric() ` method to format a column as a number:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('stock')
     ->numeric()
-
 ```
-If you would like to customize the number of decimal places used to format the number with, you can use the `decimalPlaces` argument:
+
+
+
+If you would like to customize the number of decimal places used to format the number with, you can use the ` decimalPlaces ` argument:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('stock')
     ->numeric(decimalPlaces: 0)
-
 ```
-By default, your app’s locale will be used to format the number suitably. If you would like to customize the locale used, you can pass it to the `locale` argument:
+
+As well as allowing static values, the ` decimalPlaces ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+By default, your app's locale will be used to format the number suitably. If you would like to customize the locale used, you can pass it to the ` locale ` argument:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('stock')
     ->numeric(locale: 'nl')
-
 ```
-Alternatively, you can set the default locale used across your app using the `Table::$defaultNumberLocale` method in the `boot()` method of a service provider:
 
-```php
-use Filament\Tables\Table;
+As well as allowing static values, the ` locale ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
-Table::$defaultNumberLocale = 'nl';
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-```
-#Currency formatting
---------------------
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-The `money()` method allows you to easily format monetary values, in any currency:
+
+### Money formatting
+
+Instead of passing a function to ` formatStateUsing() `, you can use the ` money() ` method to easily format amounts of money, in any currency:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('price')
     ->money('EUR')
-
 ```
-There is also a `divideBy` argument for `money()` that allows you to divide the original value by a number before formatting it. This could be useful if your database stores the price in cents, for example:
+
+
+
+As well as allowing static values, the ` money() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+There is also a ` divideBy ` argument for ` money() ` that allows you to divide the original value by a number before formatting it. This could be useful if your database stores the price in cents, for example:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('price')
     ->money('EUR', divideBy: 100)
-
 ```
-By default, your app’s locale will be used to format the money suitably. If you would like to customize the locale used, you can pass it to the `locale` argument:
+
+As well as allowing static values, the ` divideBy ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+By default, your app's locale will be used to format the money suitably. If you would like to customize the locale used, you can pass it to the ` locale ` argument:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('price')
     ->money('EUR', locale: 'nl')
-
 ```
-Alternatively, you can set the default locale used across your app using the `Table::$defaultNumberLocale` method in the `boot()` method of a service provider:
+
+As well as allowing static values, the ` locale ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+If you would like to customize the number of decimal places used to format the number with, you can use the ` decimalPlaces ` argument:
 
 ```php
-use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
-Table::$defaultNumberLocale = 'nl';
-
+TextColumn::make('price')
+    ->money('EUR', decimalPlaces: 3)
 ```
-#Limiting text length
----------------------
 
-You may `limit()` the length of the cell’s value:
+As well as allowing static values, the ` decimalPlaces ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Rendering Markdown
+
+If your column value is Markdown, you may render it using ` markdown() `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('description')
+    ->markdown()
+```
+
+
+
+Optionally, you may pass a boolean value to control if the text should be rendered as Markdown or not:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('description')
+    ->markdown(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` markdown() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Rendering HTML
+
+If your column value is HTML, you may render it using ` html() `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('description')
+    ->html()
+```
+
+
+
+Optionally, you may pass a boolean value to control if the text should be rendered as HTML or not:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('description')
+    ->html(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` html() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+> **Danger**
+>
+> Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
+
+
+#### Rendering raw HTML without sanitization
+
+If you use this method, then the HTML will be sanitized to remove any potentially unsafe content before it is rendered. If you'd like to opt out of this behavior, you can wrap the HTML in an ` HtmlString ` object by formatting it:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\HtmlString;
+
+TextColumn::make('description')
+    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state))
+```
+
+> **Danger**
+>
+> Be cautious when rendering raw HTML, as it may contain malicious content, which can lead to security vulnerabilities in your app such as cross-site scripting (XSS) attacks. Always ensure that the HTML you are rendering is safe before using this method.
+
+
+Alternatively, you can return a ` view() ` object from the ` formatStateUsing() ` method, which will also not be sanitized:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Contracts\View\View;
+
+TextColumn::make('description')
+    ->formatStateUsing(fn (string $state): View => view(
+        'filament.tables.columns.description-column-content',
+        ['state' => $state],
+    ))
+```
+
+## Displaying a description
+
+Descriptions may be used to easily render additional text above or below the column contents.
+
+You can display a description below the contents of a text column using the ` description() ` method:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('title')
+    ->description(fn (Post $record): string => $record->description)
+```
+
+The function passed to ` description() ` can inject various utilities as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+By default, the description is displayed below the main text, but you can move it using ` 'above' ` as the second parameter:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('title')
+    ->description(fn (Post $record): string => $record->description, position: 'above')
+```
+
+
+
+## Listing multiple values
+
+Multiple values can be rendered in a text column if its [state](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-content-state) is an array. This can happen if you are using an ` array ` cast on an Eloquent attribute, an Eloquent relationship with multiple results, or if you have passed an array to the [` state() ` method](https://filamentphp.com/docs/5.x/tables/columns/overview.md#setting-the-state-of-a-column). If there are multiple values inside your text column, they will be comma-separated. You may use the ` listWithLineBreaks() ` method to display them on new lines instead:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->listWithLineBreaks()
+```
+
+Optionally, you may pass a boolean value to control if the text should have line breaks between each item or not:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->listWithLineBreaks(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` listWithLineBreaks() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+### Adding bullet points to the list
+
+You may add a bullet point to each list item using the ` bulleted() ` method:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->bulleted()
+```
+
+Optionally, you may pass a boolean value to control if the text should have bullet points or not:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->bulleted(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` bulleted() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+### Limiting the number of values in the list
+
+You can limit the number of values in the list using the ` limitList() ` method:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->listWithLineBreaks()
+    ->limitList(3)
+```
+
+As well as allowing a static value, the ` limitList() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+#### Expanding the limited list
+
+You can allow the limited items to be expanded and collapsed, using the ` expandableLimitedList() ` method:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->listWithLineBreaks()
+    ->limitList(3)
+    ->expandableLimitedList()
+```
+
+> **Info**
+>
+> This is only a feature for ` listWithLineBreaks() ` or ` bulleted() `, where each item is on its own line.
+
+
+Optionally, you may pass a boolean value to control if the text should be expandable or not:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('authors.name')
+    ->listWithLineBreaks()
+    ->limitList(3)
+    ->expandableLimitedList(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` expandableLimitedList() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+### Splitting a single value into multiple list items
+
+If you want to "explode" a text string from your model into multiple list items, you can do so with the ` separator() ` method. This is useful for displaying comma-separated tags [as badges](https://filamentphp.com/docs/5.x/tables/columns/text.md#displaying-as-a-badge), for example:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('tags')
+    ->badge()
+    ->separator(',')
+```
+
+
+
+As well as allowing a static value, the ` separator() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Customizing the text size
+
+Text columns have small font size by default, but you may change this to ` TextSize::ExtraSmall `, ` TextSize::Medium `, or ` TextSize::Large `.
+
+For instance, you may make the text larger using ` size(TextSize::Large) `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Enums\TextSize;
+
+TextColumn::make('title')
+    ->size(TextSize::Large)
+```
+
+
+
+## Customizing the font weight
+
+Text columns have regular font weight by default, but you may change this to any of the following options: ` FontWeight::Thin `, ` FontWeight::ExtraLight `, ` FontWeight::Light `, ` FontWeight::Medium `, ` FontWeight::SemiBold `, ` FontWeight::Bold `, ` FontWeight::ExtraBold ` or ` FontWeight::Black `.
+
+For instance, you may make the font bold using ` weight(FontWeight::Bold) `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Enums\FontWeight;
+
+TextColumn::make('title')
+    ->weight(FontWeight::Bold)
+```
+
+As well as allowing a static value, the ` weight() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+## Customizing the font family
+
+You can change the text font family to any of the following options: ` FontFamily::Sans `, ` FontFamily::Serif ` or ` FontFamily::Mono `.
+
+For instance, you may make the font monospaced using ` fontFamily(FontFamily::Mono) `:
+
+```php
+use Filament\Support\Enums\FontFamily;
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('email')
+    ->fontFamily(FontFamily::Mono)
+```
+
+As well as allowing a static value, the ` fontFamily() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+## Handling long text
+
+### Limiting text length
+
+You may ` limit() ` the length of the column's value:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
     ->limit(50)
-
 ```
-You may also reuse the value that is being passed to `limit()`:
+
+As well as allowing a static value, the ` limit() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+By default, when text is truncated, an ellipsis (` ... `) is appended to the end of the text. You may customize this by passing a custom string to the ` end ` argument:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('description')
+    ->limit(50, end: ' (more)')
+```
+
+As well as allowing a static value, the ` end ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+You may also reuse the value that is being passed to ` limit() ` in a function, by getting it using the ` getCharacterLimit() ` method:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
@@ -197,288 +1030,130 @@ TextColumn::make('description')
             return null;
         }
 
-        // Only render the tooltip if the column content exceeds the length limit.
+        // Only render the tooltip if the column contents exceeds the length limit.
         return $state;
     })
-
 ```
-#Limiting word count
---------------------
 
-You may limit the number of `words()` displayed in the cell:
+### Limiting word count
+
+You may limit the number of ` words() ` displayed in the column:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
     ->words(10)
-
 ```
-#Limiting text to a specific number of lines
---------------------------------------------
 
-You may want to limit text to a specific number of lines instead of limiting it to a fixed length. Clamping text to a number of lines is useful in responsive interfaces where you want to ensure a consistent experience across all screen sizes. This can be achieved using the `lineClamp()` method:
+As well as allowing a static value, the ` words() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+By default, when text is truncated, an ellipsis (` ... `) is appended to the end of the text. You may customize this by passing a custom string to the ` end ` argument:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
-    ->lineClamp(2)
-
+    ->words(10, end: ' (more)')
 ```
-#Adding a prefix or suffix
---------------------------
 
-You may add a prefix or suffix to the cell’s value:
+As well as allowing a static value, the ` end ` argument also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
-```php
-use Filament\Tables\Columns\TextColumn;
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-TextColumn::make('domain')
-    ->prefix('https://')
-    ->suffix('.com')
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-```
-#Wrapping content
------------------
 
-If you’d like your column’s content to wrap if it’s too long, you may use the `wrap()` method:
+### Allowing text wrapping
+
+By default, text will not wrap to the next line if it exceeds the width of the container. You can enable this behavior using the ` wrap() ` method:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
     ->wrap()
-
 ```
-#Listing multiple values
-------------------------
 
-By default, if there are multiple values inside your text column, they will be comma-separated. You may use the `listWithLineBreaks()` method to display them on new lines instead:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('authors.name')
-    ->listWithLineBreaks()
-
-```
-### #Adding bullet points to the list
-
-You may add a bullet point to each list item using the `bulleted()` method:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('authors.name')
-    ->listWithLineBreaks()
-    ->bulleted()
-
-```
-### #Limiting the number of values in the list
-
-You can limit the number of values in the list using the `limitList()` method:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('authors.name')
-    ->listWithLineBreaks()
-    ->limitList(3)
-
-```
-#### #Expanding the limited list
-
-You can allow the limited items to be expanded and collapsed, using the `expandableLimitedList()` method:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('authors.name')
-    ->listWithLineBreaks()
-    ->limitList(3)
-    ->expandableLimitedList()
-
-```
-Please note that this is only a feature for `listWithLineBreaks()` or `bulleted()`, where each item is on its own line.
-
-### #Using a list separator
-
-If you want to “explode” a text string from your model into multiple list items, you can do so with the `separator()` method. This is useful for displaying comma-separated tags as badges, for example:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('tags')
-    ->badge()
-    ->separator(',')
-
-```
-#Rendering HTML
----------------
-
-If your column value is HTML, you may render it using `html()`:
+Optionally, you may pass a boolean value to control if the text should wrap or not:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
-    ->html()
-
+    ->wrap(FeatureFlag::active())
 ```
-If you use this method, then the HTML will be sanitized to remove any potentially unsafe content before it is rendered. If you’d like to opt out of this behavior, you can wrap the HTML in an `HtmlString` object by formatting it:
 
-```php
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Support\HtmlString;
+As well as allowing a static value, the ` wrap() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
-TextColumn::make('description')
-    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state))
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-```
-Or, you can return a `view()` object from the `formatStateUsing()` method, which will also not be sanitized:
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-```php
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Contracts\View\View;
 
-TextColumn::make('description')
-    ->formatStateUsing(fn (string $state): View => view(
-        'filament.tables.columns.description-entry-content',
-        ['state' => $state],
-    ))
 
-```
-### #Rendering Markdown as HTML
 
-If your column contains Markdown, you may render it using `markdown()`:
+#### Limiting text to a specific number of lines
+
+You may want to limit text to a specific number of lines instead of limiting it to a fixed length. Clamping text to a number of lines is useful in responsive interfaces where you want to ensure a consistent experience across all screen sizes. This can be achieved using the ` lineClamp() ` method:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('description')
-    ->markdown()
-
+    ->wrap()
+    ->lineClamp(2)
 ```
-#Custom formatting
-------------------
 
-You may instead pass a custom formatting callback to `formatStateUsing()`, which accepts the `$state` of the cell, and optionally its `$record`:
+As well as allowing a static value, the ` lineClamp() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
-```php
-use Filament\Tables\Columns\TextColumn;
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-TextColumn::make('status')
-    ->formatStateUsing(fn (string $state): string => __("statuses.{$state}"))
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-```
-#Customizing the color
-----------------------
 
-You may set a color for the text, either `danger`, `gray`, `info`, `primary`, `success` or `warning`:
 
-```php
-use Filament\Tables\Columns\TextColumn;
 
-TextColumn::make('status')
-    ->color('primary')
+## Allowing the text to be copied to the clipboard
 
-```
-![Text column in the primary color](/docs/3.x/images/light/tables/columns/text/color.jpg) ![Text column in the primary color](/docs/3.x/images/dark/tables/columns/text/color.jpg)
-
-#Adding an icon
----------------
-
-Text columns may also have an icon:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('email')
-    ->icon('heroicon-m-envelope')
-
-```
-![Text column with icon](/docs/3.x/images/light/tables/columns/text/icon.jpg) ![Text column with icon](/docs/3.x/images/dark/tables/columns/text/icon.jpg)
-
-You may set the position of an icon using `iconPosition()`:
-
-```php
-use Filament\Support\Enums\IconPosition;
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('email')
-    ->icon('heroicon-m-envelope')
-    ->iconPosition(IconPosition::After) // `IconPosition::Before` or `IconPosition::After`
-
-```
-![Text column with icon after](/docs/3.x/images/light/tables/columns/text/icon-after.jpg) ![Text column with icon after](/docs/3.x/images/dark/tables/columns/text/icon-after.jpg)
-
-The icon color defaults to the text color, but you may customize the icon color separately using `iconColor()`:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('email')
-    ->icon('heroicon-m-envelope')
-    ->iconColor('primary')
-
-```
-![Text column with icon in the primary color](/docs/3.x/images/light/tables/columns/text/icon-color.jpg) ![Text column with icon in the primary color](/docs/3.x/images/dark/tables/columns/text/icon-color.jpg)
-
-#Customizing the text size
---------------------------
-
-Text columns have small font size by default, but you may change this to `TextColumnSize::ExtraSmall`, `TextColumnSize::Medium`, or `TextColumnSize::Large`.
-
-For instance, you may make the text larger using `size(TextColumnSize::Large)`:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('title')
-    ->size(TextColumn\TextColumnSize::Large)
-
-```
-![Text column in a large font size](/docs/3.x/images/light/tables/columns/text/large.jpg) ![Text column in a large font size](/docs/3.x/images/dark/tables/columns/text/large.jpg)
-
-#Customizing the font weight
-----------------------------
-
-Text columns have regular font weight by default, but you may change this to any of the following options: `FontWeight::Thin`, `FontWeight::ExtraLight`, `FontWeight::Light`, `FontWeight::Medium`, `FontWeight::SemiBold`, `FontWeight::Bold`, `FontWeight::ExtraBold` or `FontWeight::Black`.
-
-For instance, you may make the font bold using `weight(FontWeight::Bold)`:
-
-```php
-use Filament\Support\Enums\FontWeight;
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('title')
-    ->weight(FontWeight::Bold)
-
-```
-![Text column in a bold font](/docs/3.x/images/light/tables/columns/text/bold.jpg) ![Text column in a bold font](/docs/3.x/images/dark/tables/columns/text/bold.jpg)
-
-#Customizing the font family
-----------------------------
-
-You can change the text font family to any of the following options: `FontFamily::Sans`, `FontFamily::Serif` or `FontFamily::Mono`.
-
-For instance, you may make the font mono using `fontFamily(FontFamily::Mono)`:
-
-```php
-use Filament\Support\Enums\FontFamily;
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('email')
-    ->fontFamily(FontFamily::Mono)
-
-```
-![Text column in a monospaced font](/docs/3.x/images/light/tables/columns/text/mono.jpg) ![Text column in a monospaced font](/docs/3.x/images/dark/tables/columns/text/mono.jpg)
-
-#Allowing the text to be copied to the clipboard
-------------------------------------------------
-
-You may make the text copyable, such that clicking on the cell copies the text to the clipboard, and optionally specify a custom confirmation message and duration in milliseconds. This feature only works when SSL is enabled for the app.
+You may make the text copyable, such that clicking on the column copies the text to the clipboard, and optionally specify a custom confirmation message and duration in milliseconds:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
@@ -487,74 +1162,34 @@ TextColumn::make('email')
     ->copyable()
     ->copyMessage('Email address copied')
     ->copyMessageDuration(1500)
-
 ```
-![Text column with a button to copy it](/docs/3.x/images/light/tables/columns/text/copyable.jpg) ![Text column with a button to copy it](/docs/3.x/images/dark/tables/columns/text/copyable.jpg)
 
-### #Customizing the text that is copied to the clipboard
 
-You can customize the text that gets copied to the clipboard using the `copyableState()` method:
+
+Optionally, you may pass a boolean value to control if the text should be copyable or not:
 
 ```php
 use Filament\Tables\Columns\TextColumn;
 
-TextColumn::make('url')
-    ->copyable()
-    ->copyableState(fn (string $state): string => "URL: {$state}")
-
+TextColumn::make('email')
+    ->copyable(FeatureFlag::active())
 ```
-In this function, you can access the whole table row with `$record`:
 
-```php
-use App\Models\Post;
-use Filament\Tables\Columns\TextColumn;
+As well as allowing static values, the ` copyable() `, ` copyMessage() `, and ` copyMessageDuration() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the function as parameters.
 
-TextColumn::make('url')
-    ->copyable()
-    ->copyableState(fn (Post $record): string => "URL: {$record->url}")
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-```
-#Displaying the row index
--------------------------
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-You may want a column to contain the number of the current row in the table:
 
-```php
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-
-TextColumn::make('index')->state(
-    static function (HasTable $livewire, stdClass $rowLoop): string {
-        return (string) (
-            $rowLoop->iteration +
-            ($livewire->getTableRecordsPerPage() * (
-                $livewire->getTablePage() - 1
-            ))
-        );
-    }
-),
-
-```
-As `$rowLoop` is Laravel Blade’s `$loop` object, you can reference all other `$loop` properties.
-
-As a shortcut, you may use the `rowIndex()` method:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('index')
-    ->rowIndex()
-
-```
-To start counting from 0 instead of 1, use `isFromZero: true`:
-
-```php
-use Filament\Tables\Columns\TextColumn;
-
-TextColumn::make('index')
-    ->rowIndex(isFromZero: true)
-
-```
-Edit on GitHub
-
-Still need help? Join our Discord community or open a GitHub discussion
+> **Warning**
+>
+> This feature only works when SSL is enabled for the app.

@@ -3,24 +3,39 @@
 Source: https://spatie.be/docs/laravel-backup/v9/sending-notifications/overview
 
 SPATIE
+
 Laravel Backup
 ==============
+
 spatie.be/open-source
+
 Docs
+
 Laravel-backup
+
 Sending-notifications
+
 Sending notifications
+
 You are viewing the documentation for **an older version** of this package.
 You can check the version you are using with the following command:
+
 `composer show spatie/laravel-backup`
+
 Sending notifications
 =====================
+
 ### On this page
+
 1. Configuration
+
 The package leverages Laravel's native notifications to let you know that your backups are ok, or not. Out of the box it can send notifications via mail and Slack (for Slack you'll need to require `laravel/slack-notification-channel` in your project).
+
 ##Configuration
 ---------------
+
 This is the portion of the configuration that will determine when and how notifications will be sent.
+
 ```php
 //config/backup.php
 
@@ -73,5 +88,7 @@ This is the portion of the configuration that will determine when and how notifi
     ],
 ```
 Events
+
 Adding extra notification channels
+
 Help us improve this page

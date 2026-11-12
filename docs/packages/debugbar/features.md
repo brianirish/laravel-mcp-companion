@@ -17,7 +17,6 @@ Laravel Debugbar tracks AJAX/XHR request in your application. You can open these
 
 Tip: you can disable he 'autoshow' toggle in the history tab to keep the current dataset active, instead of switching.
 
-![AJAX Request](../img/ajax.gif)
 
 config/debugbar.php
 
@@ -43,20 +42,18 @@ config/debugbar.php
 'add_ajax_timing' => false,
 'ajax_handler_auto_show' => true,
 'ajax_handler_enable_tab' => true,
-
 ```
 History browser¶
 ----------------
 
 By default, Debugbar stores request history. This is useful for non-browser requests, redirects or external requests. You can open it with the 'folder' button (3rd from the right).
 
-With the default settings, storage is only visible from your local IP. To enable browsing the history, change the `storage.open` setting or `DEBUGBAR_OPEN_STORAGE` env key.
+With the default settings, the history is only available for requests from localhost or a private network (e.g. Docker/Sail or your LAN). This also applies to on-demand query EXPLAIN and query results. To change this, use the `storage.open` setting or `DEBUGBAR_OPEN_STORAGE` env key.
 
 Warning
 
 Do not open the history outside your local environment, to avoid leaking credentials or sensitive data.
 
-![History](../img/history.gif)
 
 config/debugbar.php
 
@@ -75,7 +72,8 @@ config/debugbar.php
      | Warning: Enabling storage.open will allow everyone to access previous
      | request, do not enable open storage in publicly available environments!
      | Specify a callback if you want to limit based on IP or authentication.
-     | Leaving it to null will allow localhost only.
+     | Leaving it to null will allow localhost and private network IPs
+     | (eg. Docker/Sail or LAN) only. Set to false to disable it completely.
      */
     'storage' => [
         'enabled'    => true,
@@ -87,7 +85,6 @@ config/debugbar.php
         'hostname'   => '127.0.0.1', // Hostname to use with the "socket" driver
         'port'       => 2304, // Port to use with the "socket" driver
     ],
-
 ```
 Light and Dark mode Theme¶
 --------------------------
@@ -99,7 +96,6 @@ auto
 Debugbar supports Dark and Light mode. It defaults to `auto` which uses the browser setting. You can set it with `DEBUGBAR_THEME` or change the config to force th `light` or `dark`.
 See Light Mode below:
 
-![Light Theme](../img/light-theme.png)
 
 Editor integration¶
 -------------------
@@ -107,7 +103,6 @@ Editor integration¶
 Debugbar can open links to views, exception, routes etc in your Editor directly, if you set this up correctly. By default this should just work for PHPStorm on local development. You can change your editor by setting `DEBUGBAR_EDITOR` or the config.
 If your working in a remote host or docker, you can change the mapping between remote and local paths.
 
-![History](../img/editor.gif)
 
 config/debugbar.php
 
@@ -153,7 +148,6 @@ config/debugbar.php
 
     'remote_sites_path' => env('DEBUGBAR_REMOTE_SITES_PATH'),
     'local_sites_path' => env('DEBUGBAR_LOCAL_SITES_PATH', env('IGNITION_LOCAL_SITES_PATH')),
-
 ```
 Configuraton¶
 -------------

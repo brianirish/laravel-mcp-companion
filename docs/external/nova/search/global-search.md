@@ -1,30 +1,23 @@
-# Nova - Search/Global-Search
+Source: https://nova.laravel.com/docs/v5/search/global-search.md
 
-*Source: https://nova.laravel.com/docs/v5/search/global-search*
-
----
-
-## On this page
-Back to top
-- [Title / Subtitle Attributes](#title-%2F-subtitle-attributes)
-  - [Subtitles](#subtitles)
-- [Customization](#customization)
-  - [Limiting Global Search Results](#limiting-global-search-results)
-  - [Global Search Debounce](#global-search-debounce)
-  - [Custom Avatars / Covers](#custom-avatars-%2F-covers)
-- [Disabling Global Search for a Resource](#disabling-global-search-for-a-resource)
-- [Disabling Global Search Globally](#disabling-global-search-globally)
-Search
 # Global Search
-Learn how to use Nova’s global search feature to search across all your resources.
+
+> Learn how to use Nova's global search feature to search across all your resources.
+
 Nova not only allows you to search within specific resources and relationships, you may also globally search across all your resources using the global search input located within the top-navigation bar of the Nova administration panel:
-You can focus the global search input by pressing `/` (forward slash) on your keyboard. Pressing `ESC` (the escape key) will also close the global search input.
-## [​](#title-/-subtitle-attributes) Title / Subtitle Attributes
-When a resource is shown within the search results, the results will display the “title” of the resource. For example, a `User` resource may specify the `name` attribute as its title. Then, when the resource is shown within the global search results, that attribute will be displayed.
-To customize the “title” attribute of a resource, you may define a `title` property or `title` method on the resource class:
-Property
-Method
-```
+
+
+> [!NOTE]
+>
+> You can focus the global search input by pressing `/` (forward slash) on your keyboard. Pressing `ESC` (the escape key) will also close the global search input.
+
+## Title / Subtitle Attributes
+
+When a resource is shown within the search results, the results will display the "title" of the resource. For example, a `User` resource may specify the `name` attribute as its title. Then, when the resource is shown within the global search results, that attribute will be displayed.
+
+To customize the "title" attribute of a resource, you may define a `title` property or `title` method on the resource class:
+
+```php Property theme={null}
 namespace App\Nova;
 
 class Team extends Resource 
@@ -37,8 +30,10 @@ class Team extends Resource
     public static $title = 'name';
 }
 ```
-Alternatively, you may override the resource’s `title` method:
-```
+
+Alternatively, you may override the resource's `title` method:
+
+```php Method theme={null}
 namespace App\Nova;
 
 class Team extends Resource 
@@ -54,12 +49,19 @@ class Team extends Resource
     }
 }
 ```
-You may also display resource’s “avatar” next to the title in the search result by adding an [Avatar](/docs/v5/resources/fields#avatar-field) field to the resource.
-### [​](#subtitles) Subtitles
-You may also display a smaller “subtitle” attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource’s author is displayed as a subtitle, allowing quick identification of who wrote a given post:
-To define a resource’s subtitle, you should override the `subtitle` method of the resource:
-app/Nova/Post.php
-```
+
+> [!NOTE]
+>
+> You may also display resource's "avatar" next to the title in the search result by adding an [Avatar](https://nova.laravel.com/docs/v5/resources/fields.md#avatar-field) field to the resource.
+
+### Subtitles
+
+You may also display a smaller "subtitle" attribute within the global search results. The subtitle will be placed directly under the title attribute. In this screenshot, you can see that the `Post` resource's author is displayed as a subtitle, allowing quick identification of who wrote a given post:
+
+
+To define a resource's subtitle, you should override the `subtitle` method of the resource:
+
+```php app/Nova/Post.php theme={null}
 /**
  * Get the search result subtitle for the resource.
  *
@@ -70,12 +72,18 @@ public function subtitle()
     return "Author: {$this->user->name}";
 }
 ```
-If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource’s [eager load array](/docs/v5/resources/the-basics#eager-loadings).
-## [​](#customization) Customization
-### [​](#limiting-global-search-results) Limiting Global Search Results
+
+> [!NOTE]
+>
+> If your subtitle accesses information on a related resource, you should consider adding the related resource to your resource's [eager load array](https://nova.laravel.com/docs/v5/resources/the-basics.md#eager-loadings).
+
+## Customization
+
+### Limiting Global Search Results
+
 You can limit the number of results that are returned via global search for a given resource by overriding the `globalSearchResults` property on the resource:
-app/Nova/Post.php
-```
+
+```php app/Nova/Post.php theme={null}
 /**
  * The maximum number of results to include when searching globally.
  *
@@ -83,10 +91,12 @@ app/Nova/Post.php
  */
 public static $globalSearchResults = 5;
 ```
-### [​](#global-search-debounce) Global Search Debounce
-You can configure the debounce timing of the global search field using the `Nova::globalSearchDebounce` method. Normally, this method should be called from within your application’s `NovaServiceProvider`:
-app/Providers/NovaServiceProvider.php
-```
+
+### Global Search Debounce
+
+You can configure the debounce timing of the global search field using the `Nova::globalSearchDebounce` method. Normally, this method should be called from within your application's `NovaServiceProvider`:
+
+```php app/Providers/NovaServiceProvider.php {8} theme={null}
 /**
  * Boot any application services.
  */
@@ -97,10 +107,12 @@ public function boot(): void
     Nova::globalSearchDebounce(1); // 1 second
 }
 ```
-### [​](#custom-avatars-/-covers) Custom Avatars / Covers
-If you are building a [custom field](/docs/v5/customization/fields) that you would like to serve as the “avatar image” / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired “cover art”:
-app/Nova/Team.php
-```
+
+### Custom Avatars / Covers
+
+If you are building a [custom field](https://nova.laravel.com/docs/v5/customization/fields.md) that you would like to serve as the "avatar image" / cover art for global search results, your field should implement the `Laravel\Nova\Contracts\Cover` interface. This interface requires you to define a `resolveThumbnailUrl` method, which should return the URL of your desired "cover art":
+
+```php app/Nova/Team.php theme={null}
 namespace App\Nova;
 
 class Team extends Resource 
@@ -116,10 +128,12 @@ class Team extends Resource
     }
 }
 ```
-## [​](#disabling-global-search-for-a-resource) Disabling Global Search for a Resource
+
+## Disabling Global Search for a Resource
+
 By default, all Nova resources are globally searchable; however, you may exclude a given resource from the global search by overriding the `globallySearchable` property on the resource:
-app/Nova/Team.php
-```
+
+```php app/Nova/Team.php theme={null}
 /**
  * Indicates if the resource should be globally searchable.
  *
@@ -127,10 +141,12 @@ app/Nova/Team.php
  */
 public static $globallySearchable = false;
 ```
-## [​](#disabling-global-search-globally) Disabling Global Search Globally
+
+## Disabling Global Search Globally
+
 If you wish to completely disable global search inside of Nova, you can call the `withoutGlobalSearch` method from your `App/Providers/NovaServiceProvider`:
-app/Providers/NovaServiceProvider.php
-```
+
+```php app/Providers/NovaServiceProvider.php {8} theme={null}
 /**
  * Boot any application services.
  */
@@ -141,6 +157,3 @@ public function boot(): void
     Nova::withoutGlobalSearch();
 }
 ```
-Was this page helpful?
-YesNo
-[The Basics](/docs/v5/search/the-basics)[Scout Integration](/docs/v5/search/scout-integration)

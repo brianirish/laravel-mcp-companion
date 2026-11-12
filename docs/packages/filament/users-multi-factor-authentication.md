@@ -1,0 +1,627 @@
+Source: https://filamentphp.com/docs/5.x/users/multi-factor-authentication.md
+
+# Multi-factor authentication
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/users/multi-factor-authentication.md
+
+## Introduction
+
+Users in Filament can sign in with their email address and password by default. However, you can enable multi-factor authentication (MFA) to add an extra layer of security to your users' accounts.
+
+When MFA is enabled, users must perform an extra step before they are authenticated and have access to the application.
+
+
+
+Filament includes two methods of MFA which you can enable out of the box:
+
+- [App authentication](https://filamentphp.com/docs/5.x/users/multi-factor-authentication.md#app-authentication) uses a Google Authenticator-compatible app (such as the Google Authenticator, Authy, or Microsoft Authenticator apps) to generate a time-based one-time password (TOTP) that is used to verify the user.
+- [Email authentication](https://filamentphp.com/docs/5.x/users/multi-factor-authentication.md#email-authentication) sends a one-time code to the user's email address, which they must enter to verify their identity.
+
+> **Warning**
+>
+> The built-in providers use your application's default cache store for challenge or replay-protection state and use an atomic cache lock when the store supports one. In a multi-server deployment, every server should use the same authoritative cache backend, and this state should remain available while its codes can be accepted. Cache locks reduce the chance that overlapping requests accept the same code while the lock lease remains valid. Without lock support, sequential code reuse is still prevented, but concurrent requests may accept the same code.
+
+
+In Filament, users set up multi-factor authentication from their [profile page](https://filamentphp.com/docs/5.x/users/overview.md#authentication-features). If you use Filament's profile page feature, setting up multi-factor authentication will automatically add the correct UI elements to the profile page:
+
+```php
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->profile();
+}
+```
+
+
+
+## App authentication
+
+To enable app authentication in a panel, you must first add a new column to your ` users ` table (or whichever table is being used for your "authenticatable" Eloquent model in this panel). The column needs to store the secret key used to generate and verify the time-based one-time passwords. It can be a normal ` text() ` column in a migration:
+
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('users', function (Blueprint $table) {
+    $table->text('app_authentication_secret')->nullable();
+});
+```
+
+In the ` User ` model, you should implement the ` HasAppAuthentication ` interface and use the ` InteractsWithAppAuthentication ` trait which provides the necessary methods to interact with the secret code and other information about the integration:
+
+```php
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, MustVerifyEmail
+{
+    use InteractsWithAppAuthentication;
+    
+    // ...
+}
+```
+
+> **Tip**
+>
+> Filament provides a default implementation for speed and simplicity, but you could implement the required methods yourself and customize the column name or store the secret in a completely separate table.
+
+
+Finally, you should activate the app authentication feature in your panel. To do this, use the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md), and pass a ` AppAuthentication ` instance to it:
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make(),
+        ]);
+}
+```
+
+### Setting up app recovery codes
+
+If your users lose access to their two-factor authentication app, they will be unable to sign in to your application. To prevent this, you can generate a set of recovery codes that users can use to sign in if they lose access to their two-factor authentication app.
+
+In a similar way to the ` app_authentication_secret ` column, you should add a new column to your ` users ` table (or whichever table is being used for your "authenticatable" Eloquent model in this panel). The column needs to store the recovery codes. It can be a normal ` text() ` column in a migration:
+
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('users', function (Blueprint $table) {
+    $table->text('app_authentication_recovery_codes')->nullable();
+});
+```
+
+Next, you should implement the ` HasAppAuthenticationRecovery ` interface on the ` User ` model and use the ` InteractsWithAppAuthenticationRecovery ` trait which provides Filament with the necessary methods to interact with the recovery codes:
+
+```php
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, MustVerifyEmail
+{
+    use InteractsWithAppAuthentication;
+    use InteractsWithAppAuthenticationRecovery;
+    
+    // ...
+}
+```
+
+> **Tip**
+>
+> Filament provides a default implementation for speed and simplicity, but you could implement the required methods yourself and customize the column name or store the recovery codes in a completely separate table.
+
+
+Finally, you should activate the app authentication recovery codes feature in your panel. To do this, pass the ` recoverable() ` method to the ` AppAuthentication ` instance in the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md):
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make()
+                ->recoverable(),
+        ]);
+}
+```
+
+#### Changing the number of recovery codes that are generated
+
+By default, Filament generates 8 recovery codes for each user. If you want to change this, you can use the ` recoveryCodeCount() ` method on the ` AppAuthentication ` instance in the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md):
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make()
+                ->recoverable()
+                ->recoveryCodeCount(10),
+        ]);
+}
+```
+
+#### Preventing users from regenerating their recovery codes
+
+By default, users can visit their profile to regenerate their recovery codes. If you want to prevent this, you can use the ` regenerableRecoveryCodes(false) ` method on the ` AppAuthentication ` instance in the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md):
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make()
+                ->recoverable()
+                ->regenerableRecoveryCodes(false),
+        ]);
+}
+```
+
+### Changing the app code expiration time
+
+App codes are issued using a time-based one-time password (TOTP) algorithm, which means that they are only valid for a short period of time before and after the time they are generated. The time is defined in a "window" of time. By default, Filament uses an expiration window of ` 8 `, which creates a 4-minute validity period on either side of the generation time (8 minutes in total).
+
+To change the window, for example to only be valid for 2 minutes after it is generated, you can use the ` codeWindow() ` method on the ` AppAuthentication ` instance, set to ` 4 `:
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make()
+                ->codeWindow(4),
+        ]);
+}
+```
+
+### Customizing the app authentication brand name
+
+Each app authentication integration has a "brand name" that is displayed in the authentication app. By default, this is the name of your app. If you want to change this, you can use the ` brandName() ` method on the ` AppAuthentication ` instance in the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md):
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make()
+                ->brandName('Filament Demo'),
+        ]);
+}
+```
+
+## Email authentication
+
+Email authentication sends the user one-time codes to their email address, which they must enter to verify their identity.
+
+To enable email authentication in a panel, you must first add a new column to your ` users ` table (or whichever table is being used for your "authenticatable" Eloquent model in this panel). The column needs to store a boolean indicating whether or not email authentication is enabled:
+
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('users', function (Blueprint $table) {
+    $table->boolean('has_email_authentication')->default(false);
+});
+```
+
+Next, you should implement the ` HasEmailAuthentication ` interface on the ` User ` model and use the ` InteractsWithEmailAuthentication ` trait which provides Filament with the necessary methods to interact with the column that indicates whether or not email authentication is enabled:
+
+```php
+use Filament\Auth\MultiFactor\Email\Contracts\HasEmailAuthentication;
+use Filament\Auth\MultiFactor\Email\Concerns\InteractsWithEmailAuthentication;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements FilamentUser, HasEmailAuthentication, MustVerifyEmail
+{
+    use InteractsWithEmailAuthentication;
+    
+    // ...
+}
+```
+
+> **Tip**
+>
+> Filament provides a default implementation for speed and simplicity, but you could implement the required methods yourself and customize the column name or store the value in a completely separate table.
+
+
+Finally, you should activate the email authentication feature in your panel. To do this, use the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md), and pass an ` EmailAuthentication ` instance to it:
+
+```php
+use Filament\Auth\MultiFactor\Email\EmailAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            EmailAuthentication::make(),
+        ]);
+}
+```
+
+### Changing the email code expiration time
+
+Email codes are issued with a lifetime of 4 minutes, after which they expire.
+
+To change the expiration period, for example to only be valid for 2 minutes after codes are generated, you can use the ` codeExpiryMinutes() ` method on the ` EmailAuthentication ` instance, set to ` 2 `:
+
+```php
+use Filament\Auth\MultiFactor\Email\EmailAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            EmailAuthentication::make()
+                ->codeExpiryMinutes(2),
+        ]);
+}
+```
+
+### Customizing email code generation
+
+You can customize how each email code is generated using ` generateCodeUsing() `. The callback receives no arguments and must return a string. Use a cryptographically secure random source and return a six-digit code to match the challenge input:
+
+```php
+use Filament\Auth\MultiFactor\Email\EmailAuthentication;
+
+EmailAuthentication::make()
+    ->generateCodeUsing(fn (): string => str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT));
+```
+
+Pass ` null ` to ` generateCodeUsing() ` to restore the default generator.
+
+## Requiring multi-factor authentication
+
+By default, users are not required to set up multi-factor authentication. You can require users to configure it by passing ` isRequired: true ` as a parameter to the ` multiFactorAuthentication() ` method in the [configuration](https://filamentphp.com/docs/5.x/panel-configuration.md):
+
+```php
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            AppAuthentication::make(),
+        ], isRequired: true);
+}
+```
+
+When this is enabled, users will be prompted to set up multi-factor authentication after they sign in, if they have not already done so.
+
+## Creating a custom multi-factor authentication provider
+
+You can add another MFA method by creating an object that implements the ` MultiFactorAuthenticationProvider ` interface. The provider tells Filament how to identify the method, determine whether it is enabled for a user, manage it, and validate its login challenge.
+
+The following sections use an SMS authentication provider as an example. The provider delegates code generation, storage, delivery, and verification to an ` SmsAuthenticationService ` in your app. This keeps the provider focused on integrating your authentication method with Filament:
+
+```php
+<?php
+
+namespace App\Filament\Auth\MultiFactor;
+
+use App\Services\SmsAuthenticationService;
+use Filament\Auth\MultiFactor\Contracts\MultiFactorAuthenticationProvider;
+
+class SmsAuthentication implements MultiFactorAuthenticationProvider
+{
+    public function __construct(
+        protected SmsAuthenticationService $service,
+    ) {}
+
+    public static function make(): static
+    {
+        return app(static::class);
+    }
+
+    // ...
+}
+```
+
+The service should generate codes using a cryptographically secure random source, store only a hash of each code, give codes a short expiry time, consume valid codes after verification, and rate-limit both delivery and verification attempts. It may deliver codes using any [SMS notification channel supported by Laravel](https://laravel.com/docs/notifications#sms-notifications).
+
+Code storage and rate limits must be scoped to the complete authentication principal, not only the user's model key or authentication identifier. Numeric keys and other identifiers can belong to unrelated users when an application has multiple authentication guards or user models. You can use ` Filament::getUserScopedAuthIdentifier($user) ` to generate an opaque identifier containing the active authentication guard, concrete user model class, and authentication identifier:
+
+```php
+use Filament\Facades\Filament;
+
+$principal = Filament::getUserScopedAuthIdentifier($user);
+```
+
+For codes generated for a particular login challenge, also bind the stored code to the current session so that a code issued for one browser's challenge cannot satisfy another. If your application runs on multiple servers, code storage and rate limits should use a shared backend.
+
+When the storage backend supports it, validation and consumption should be atomic, using a database transaction with a row lock, an atomic compare-and-delete operation, or a cache lock. If work can outlive a lock lease, checking lock ownership and re-reading the stored state immediately before changing it can reject many stale operations, but only an atomic conditional mutation can eliminate the final race after that check. An older request should never delete a newer code or overwrite newer verification progress. Without a suitable atomic primitive, you should still consume valid codes to prevent sequential reuse, but concurrent requests may both accept the same code.
+
+For a time-based provider like app authentication, store the timestep of the last accepted code and only replace it with a newer timestep. This rejects both repeated and older codes and prevents verification progress from moving backwards.
+
+### Identifying the provider
+
+The ` getId() ` method must return a stable identifier that is unique among the panel's MFA providers. Filament uses it to identify the provider and scope its form state. The ` getLoginFormLabel() ` method returns the option shown when a user has more than one MFA method enabled:
+
+```php
+// ...
+
+public function getId(): string
+{
+    return 'sms';
+}
+
+public function getLoginFormLabel(): string
+{
+    return 'SMS';
+}
+
+// ...
+```
+
+### Checking whether the provider is enabled
+
+The ` isEnabled() ` method determines whether a user should be challenged by the provider. For example, you could store a ` has_sms_authentication ` boolean and a ` phone_number ` on the ` User ` model:
+
+```php
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+
+// ...
+
+public function isEnabled(Authenticatable $user): bool
+{
+    if (! ($user instanceof User)) {
+        return false;
+    }
+
+    return filled($user->phone_number) && ((bool) $user->has_sms_authentication);
+}
+
+// ...
+```
+
+The user passed to ` isEnabled() ` is not authenticated yet when Filament is preparing a login challenge, so you should always use the method's ` $user ` argument instead of the currently authenticated user.
+
+### Rendering the management schema
+
+The ` getManagementSchemaComponents() ` method returns the [schema components](https://filamentphp.com/docs/5.x/schemas) and [actions](https://filamentphp.com/docs/5.x/actions) used to manage the provider. Filament renders them on the user's profile page and, when MFA is required, on the required MFA setup page:
+
+```php
+use App\Filament\Auth\MultiFactor\Actions\DisableSmsAuthenticationAction;
+use App\Filament\Auth\MultiFactor\Actions\SetUpSmsAuthenticationAction;
+use Filament\Schemas\Components\Actions;
+
+// ...
+
+public function getManagementSchemaComponents(): array
+{
+    return [
+        Actions::make([
+            SetUpSmsAuthenticationAction::make($this->service),
+            DisableSmsAuthenticationAction::make($this->service),
+        ]),
+    ];
+}
+
+// ...
+```
+
+In this example, the setup and disable actions should send an SMS code, display a ` OneTimeCodeInput `, verify the code using the service, and then persist the new enabled state. Any temporary enrollment state that is passed between requests, including encrypted action arguments, should contain the scoped principal identifier and be rejected if it no longer matches the current user. Keeping these workflows in separate action classes prevents the provider from becoming difficult to read. If your integration manages enrollment elsewhere, the management schema could instead contain an action that links to that page.
+
+### Rendering the challenge form
+
+The ` getChallengeFormComponents() ` method returns the fields shown after the user's password has been verified. Filament completes authentication only when the components pass validation, so the SMS code field uses the service to reject an invalid challenge:
+
+```php
+use Closure;
+use Filament\Forms\Components\OneTimeCodeInput;
+use Illuminate\Contracts\Auth\Authenticatable;
+use SensitiveParameter;
+
+// ...
+
+public function getChallengeFormComponents(Authenticatable $user): array
+{
+    return [
+        OneTimeCodeInput::make('code')
+            ->label('SMS code')
+            ->required()
+            ->rule(fn (): Closure => function (string $attribute, #[SensitiveParameter] mixed $value, Closure $fail) use ($user): void {
+                if (is_string($value) && $this->service->verifyCode($user, $value)) {
+                    return;
+                }
+
+                $fail('The SMS code is invalid or has expired.');
+            }),
+    ];
+}
+
+// ...
+```
+
+The verification operation should follow the storage, expiry, rate-limiting, and one-time consumption practices described above.
+
+### Running logic before the challenge
+
+SMS providers need to send a code before displaying the challenge. To run logic at that point, also implement the ` HasBeforeChallengeHook ` interface and add the ` beforeChallenge() ` method:
+
+```php
+use Filament\Auth\MultiFactor\Contracts\HasBeforeChallengeHook;
+use Illuminate\Contracts\Auth\Authenticatable;
+
+class SmsAuthentication implements HasBeforeChallengeHook, MultiFactorAuthenticationProvider
+{
+    // ...
+
+    public function beforeChallenge(Authenticatable $user): void
+    {
+        $this->service->sendCode($user);
+    }
+
+    // ...
+}
+```
+
+The ` beforeChallenge() ` method may be called more than once if the user switches between enabled providers. The service should rate-limit code delivery using the scoped principal identifier and avoid invalidating an existing code when another code cannot be sent yet.
+
+> **Danger**
+>
+> Store phone numbers in a consistent format such as E.164, and disable SMS authentication whenever a user's phone number changes so that they must verify the new number. You should also provide a secure account recovery process for users who lose access to their phone. SMS authentication is vulnerable to risks such as SIM swapping, so consider offering app authentication or security keys as stronger alternatives.
+
+
+### Registering the provider
+
+Finally, register the provider with the panel's ` multiFactorAuthentication() ` method:
+
+```php
+use App\Filament\Auth\MultiFactor\SmsAuthentication;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->multiFactorAuthentication([
+            SmsAuthentication::make(),
+        ]);
+}
+```
+
+## Challenging a user outside of the login page
+
+The multi-factor challenge that the login page presents is also available on its own, so that you can ask a signed-in user to verify a configured factor before they perform a sensitive action.
+
+The ` MultiFactorChallenge ` class builds the challenge form for a user. Its components carry the validation rules that verify the code that the user enters.
+
+> **Info**
+>
+> The examples below assume that ` $user ` is the signed-in user and is an instance of ` Authenticatable `. Your Livewire component must also be [set up to use schemas](https://filamentphp.com/docs/5.x/components/schema.md) and use the ` RestrictsFileUploadsToSchemaComponents ` trait described in the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#restricting-livewire-file-uploads-to-schema-components).
+
+
+### Checking whether a user can be challenged
+
+You should use ` hasEnabledProviders() ` to check that the user has at least one enabled provider before presenting a challenge:
+
+```php
+use Filament\Auth\MultiFactor\MultiFactorChallenge;
+
+$multiFactorChallenge = MultiFactorChallenge::make();
+
+abort_unless($multiFactorChallenge->hasEnabledProviders($user), 403);
+```
+
+Always repeat this check immediately before validating the challenge. When no provider is enabled, ` getFormComponents() ` returns no components, and validating an empty form succeeds. Your application must treat that state as a failed challenge.
+
+You can use ` getEnabledProviders() ` to retrieve all enabled provider instances, or ` getFirstEnabledProvider() ` to retrieve the first one. ` getFirstEnabledProvider() ` returns ` null ` when none are enabled.
+
+### Building the challenge form
+
+Use ` getFormComponents() ` to get the provider picker and challenge fields for every enabled provider:
+
+```php
+use Filament\Auth\MultiFactor\MultiFactorChallenge;
+
+$form
+    ->components(MultiFactorChallenge::make()->getFormComponents($user))
+    ->statePath('multiFactorData');
+```
+
+When more than one provider is enabled, the generated provider picker controls which provider's fields are visible. If you need to place the picker and fields separately, use ` getProviderPickerFormComponent() ` and ` getChallengeFormComponents() ` instead. Both components must belong to the same root schema so that the picker can find the selected provider's fields.
+
+Render and submit the form like any other Filament form.
+
+### Running logic before the challenge
+
+Some providers need to do work before their challenge is presented, such as emailing the user a code. Use ` beforeChallenge() ` before filling and presenting the form:
+
+```php
+$multiFactorChallenge->beforeChallenge($user);
+
+$this->multiFactorChallengeForm->fill();
+```
+
+This runs the hook for the first enabled provider. When the generated provider picker is used, it runs the appropriate hook whenever the user switches provider.
+
+### Rate limiting challenge attempts
+
+Challenges should be rate limited so that a user's second factor cannot be brute forced. Check ` isRateLimited() ` before each validation attempt, then call ` hitRateLimiter() ` immediately before validation:
+
+```php
+abort_if($multiFactorChallenge->isRateLimited($user), 429);
+
+$multiFactorChallenge->hitRateLimiter($user);
+```
+
+The rate limiter is shared with the login page's challenge and is scoped to the authentication guard and user. You can use ` getMaxRateLimiterAttempts() ` to retrieve the maximum number of attempts, and ` getRateLimiterAvailableInSeconds() ` to determine how long remains before another attempt may be made.
+
+### Validating the challenge
+
+Call ` getState() ` on the form to validate the selected provider's fields. Immediately before doing so, check that the user still has an enabled provider and record a rate-limited attempt:
+
+```php
+abort_unless($multiFactorChallenge->hasEnabledProviders($user), 403);
+abort_if($multiFactorChallenge->isRateLimited($user), 429);
+
+$multiFactorChallenge->hitRateLimiter($user);
+
+$this->multiFactorChallengeForm->getState();
+```
+
+> **Danger**
+>
+> Verifying a challenge does not authenticate anyone or authorize the protected operation. It only proves that the signed-in user holds a factor currently registered against their account. After validation succeeds, reload any security-sensitive state and reauthorize the protected operation immediately before performing it.
+
+
+## Security notes about multi-factor authentication
+
+When a user with an enabled multi-factor authentication provider signs in through Filament's login page, the challenge must succeed before Filament authenticates them. Users without an enabled provider can still sign in; [require multi-factor authentication](https://filamentphp.com/docs/5.x/users/multi-factor-authentication.md#requiring-multi-factor-authentication) if they must configure one before accessing the panel.
+
+Filament does not challenge users who arrive at the panel already authenticated through another part of your application. Requiring multi-factor authentication enforces setup for these users, not a new challenge for an already-configured provider. If your application has other login routes or authentication paths, enforce the challenges you need on those paths separately.
+
+### Concurrent recovery code submissions
+
+When a user signs in with a recovery code, Filament's ` verifyRecoveryCode() ` method wraps the read-validate-write sequence in a database transaction with a ` lockForUpdate() ` row lock on the user's row. This prevents concurrent submissions using the built-in Eloquent storage from consuming the same code or writing a stale list of codes. Filament also uses a per-user cache lock when the configured cache store supports atomic locks.
+
+> **Warning**
+>
+> If you override ` getAppAuthenticationRecoveryCodes() ` / ` saveAppAuthenticationRecoveryCodes() `, your storage is responsible for preventing concurrent updates. ` saveAppAuthenticationRecoveryCodes() ` must either persist the new state successfully or throw an exception, since silently ignoring a failed write can allow a recovery code to be reused.

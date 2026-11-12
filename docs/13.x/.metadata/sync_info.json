@@ -4,5 +4,5 @@
   "commit_date": "2026-11-11T14:28:43Z",
   "commit_message": "docs(collections): add missing methods to enumerable contract list (#11449)\n\nThe Enumerable contract list had fallen behind the interface. These 25 methods are defined on Illuminate\\Support\\Enumerable and already documented on this page, so readers of the lazy collection section could not tell they are available.",
   "commit_url": "https://github.com/laravel/docs/commit/2e7f6c6d3c515800e80da27ac0d0a214858e8d71",
-  "sync_time": "2026-11-12T00:02:23Z"
+  "sync_time": "2026-11-12T11:50:42Z"
 }

@@ -2,166 +2,112 @@
 
 Source: https://livewire.laravel.com/docs/locked
 
-Version 3.x
+Locked
+======
 
-Version 3.x
-Version 2.x
-Version 1.x
+The official Livewire UI kit
 
-* ##### Getting Started
+Build polished Livewire apps faster.
 
-  + Quickstart
-  + Installation
-  + Upgrade Guide
+Explore Flux Pro
+→
 
-UI Components →
 
-* ##### Essentials
+The `#[Locked]` attribute prevents properties from being modified on the client-side, protecting sensitive data like model IDs from tampering by users.
 
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
-Locked Properties
-=================
-
-Are you a visual learner?
-
-Master Livewire with our in-depth screencasts
-
-Watch now
-
-Livewire properties are able to be modified freely on both the frontend and backend using utilities like `wire:model`. If you want to prevent a property — like a model ID — from being modified on the frontend, you can use Livewire's `#[Locked]` attribute.
-
-#Basic usage
+Basic usage¶
 ------------
 
-Below is a `ShowPost` component that stores a `Post` model's ID as a public property named `$id`. To keep this property from being modified by a curious or malicious user, you can add the `#[Locked]` attribute to the property:
-
-Make sure you import attribute classes
-
-Make sure you import any attribute classes. For example, the below `#[Locked]` attribute requires the following import `use Livewire\Attributes\Locked;`.
+Apply the `#[Locked]` attribute to any public property that should not be changed from the frontend:
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
 use Livewire\Attributes\Locked;
 
 use Livewire\Component;
 
-class ShowPost extends Component
+use App\Models\Post;
 
-{
+new class extends Component {
 
 #[Locked]
 
-public $id;
+public $postId;
 
-public function mount($postId)
+public function mount($id)
 
 {
 
-$this->id = $postId;
+$this->postId = $id;
 
 }
 
-// ...
+public function delete()
+
+{
+
+Post::find($this->postId)->delete();
+
+return redirect('/posts');
 
 }
 
+};
 ```
-By adding the `#[Locked]` attribute, you are ensured that the `$id` property will never be tampered with.
+If a user attempts to modify a locked property through browser DevTools or by tampering with requests, Livewire will throw an exception and prevent the action from executing.
+
+Backend modifications still allowed
+
+Properties with the `#[Locked]` attribute can still be changed in your component's PHP code. The lock only prevents client-side tampering. Be careful not to pass untrusted user input to locked properties in your own methods.
+
+When to use¶
+------------
+
+Use `#[Locked]` when you need to:
+
+* Store model IDs that should never be changed by users
+* Preserve authorization-sensitive data throughout component lifecycle
+* Protect any public property that acts as a security boundary
 
 Model properties are secure by default
 
-If you store an Eloquent model in a public property instead of just the model's ID, Livewire will ensure the ID isn't tampered with, without you needing to explicitly add the `#[Locked]` attribute to the property. For most cases, this is a better approach than using `#[Locked]`:
+If you store an Eloquent model in a public property, Livewire automatically ensures the ID isn't tampered with—no `#[Locked]` attribute needed:
 
 ```php
+<?php // resources/views/components/post/⚡show.blade.php
 
-class ShowPost extends Component
+use Livewire\Component;
+
+use App\Models\Post;
+
+new class extends Component {
+
+public Post $post; // Already protected
+
+public function mount($id)
 
 {
 
-public Post $post;
-
-public function mount($postId)
-
-{
-
-$this->post = Post::find($postId);
+$this->post = Post::find($id);
 
 }
 
-// ...
-
-}
-
+};
 ```
-### #Why not use protected properties?
+Why not protected properties?¶
+------------------------------
 
-You might ask yourself: why not just use protected properties for sensitive data?
+You might wonder why you can't just use `protected` properties for sensitive data.
 
-Remember, Livewire only persists public properties between network requests. For static, hard-coded data, protected properties are suitable. However, for data that is stored at runtime, you must use a public property to ensure that the data is persisted properly.
+Remember, Livewire only persists public properties between requests. Protected properties work fine for static, hard-coded values, but any data that needs to be stored at runtime must use a public property to persist properly between requests.
 
-### #Can't Livewire do this automatically?
+This is where `#[Locked]` becomes essential: it gives you the persistence of public properties with protection against client-side tampering.
 
-In a perfect world, Livewire would lock properties by default, and only allow modifications when `wire:model` is used on that property.
+Can't Livewire do this automatically?¶
+--------------------------------------
+
+In a perfect world, Livewire would lock properties by default and only allow modifications when `wire:model` is used on that property.
 
 Unfortunately, that would require Livewire to parse all of your Blade templates to understand if a property is modified by `wire:model` or a similar API.
 
@@ -169,16 +115,16 @@ Not only would that add technical and performance overhead, it would be impossib
 
 Therefore, Livewire will continue to make public properties freely mutable by default and give developers the tools to lock them as needed.
 
-On this page
+Ecosystem sponsor
 
-* Basic usage
-  + Why not use protected properties?
-  + Can't Livewire do this automatically?
 
-![Flux Ad](/images/flux_ad.jpg)
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
 
-Pro UI Components
+Return to
 
-Flux · The official Livewire component library
+Lazy
 
-Built by the folks behind Livewire and Alpine.
+Continue to
+
+Modelable

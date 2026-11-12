@@ -1,0 +1,174 @@
+Source: https://filamentphp.com/docs/5.x/tables/columns/text-input.md
+
+# Text input column
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/columns/text-input.md
+
+## Introduction
+
+The text input column allows you to render a text input inside the table, which can be used to update that database record without needing to open a new page or a modal:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('email')
+```
+
+
+
+## Validation
+
+You can validate the input by passing any [Laravel validation rules](https://laravel.com/docs/validation#available-validation-rules) in an array:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('name')
+    ->rules(['required', 'max:255'])
+```
+
+## Customizing the HTML input type
+
+You may use the ` type() ` method to pass a custom [HTML input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types):
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('background_color')->type('color')
+```
+
+## Setting the HTML input mode
+
+You may use the ` inputMode() ` method to set the [HTML inputmode attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode), which hints at the type of keyboard to show on mobile. For numeric inputs, use ` inputMode('decimal') ` for decimal values or ` inputMode('numeric') ` for integers:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('quantity')
+    ->type('number')
+    ->inputMode('decimal')
+```
+
+## Setting the numeric step
+
+When using ` type('number') `, you may use the ` step() ` method to set the [HTML step attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number#step). Use ` step('any') ` for decimal values or ` step('1') ` for integers:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('quantity')
+    ->type('number')
+    ->inputMode('decimal')
+    ->step('1')
+```
+
+## Adding affix text aside the field
+
+You may place text before and after the input using the ` prefix() ` and ` suffix() ` methods:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('domain')
+    ->prefix('https://')
+    ->suffix('.com')
+```
+
+As well as allowing static values, the ` prefix() ` and ` suffix() ` methods also accept a function to dynamically calculate them. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+### Using icons as affixes
+
+You may place an [icon](https://filamentphp.com/docs/5.x/styling/icons.md) before and after the input using the ` prefixIcon() ` and ` suffixIcon() ` methods:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+use Filament\Support\Icons\Heroicon;
+
+TextInputColumn::make('domain')
+    ->prefixIcon(Heroicon::GlobeAlt)
+    ->suffixIcon(Heroicon::CheckCircle)
+```
+
+As well as allowing static values, the ` prefixIcon() ` and ` suffixIcon() ` methods also accept a function to dynamically calculate them. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+#### Setting the affix icon's color
+
+Affix icons are gray by default, but you may set a different color using the ` prefixIconColor() ` and ` suffixIconColor() ` methods:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+use Filament\Support\Icons\Heroicon;
+
+TextInputColumn::make('status')
+    ->suffixIcon(Heroicon::CheckCircle)
+    ->suffixIconColor('success')
+```
+
+As well as allowing static values, the ` prefixIconColor() ` and ` suffixIconColor() ` methods also accept a function to dynamically calculate them. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+## Lifecycle hooks
+
+Hooks may be used to execute code at various points within the input's lifecycle:
+
+```php
+use Filament\Tables\Columns\TextInputColumn;
+
+TextInputColumn::make('email')
+    ->beforeStateUpdated(function ($record, $state) {
+        // Runs before the state is saved to the database.
+    })
+    ->afterStateUpdated(function ($record, $state) {
+        // Runs after the state is saved to the database.
+    })
+```
+
+## Security
+
+### Authorization
+
+Text input columns do not automatically check model policies. Without an authorization check, users can update the column for records accessible through the table query, even if the record's ` update() ` policy denies access to its edit page. Use ` disabled() ` with your authorization logic, for example ` disabled(fn ($record) => $record->user_id !== auth()->id()) `. Filament checks this condition on the server before saving.
+
+Check permission for the specific attribute being changed. If the column updates a related model or pivot, authorize that operation too. Alternatively, use a resource edit page or a policy-backed ` EditAction ` to apply the resource's edit authorization.

@@ -1,10 +1,11 @@
 {
-  "cache_time": 1753841283.904481,
   "package": "inertia",
   "name": "Inertia.js",
-  "sections_count": 27,
-  "source_type": "github_repo",
-  "repo": "inertiajs/inertiajs.com",
-  "branch": "master",
-  "docs_path": "resources/js/Pages"
+  "sections_count": 53,
+  "total_sections": 53,
+  "success_rate": 1.0,
+  "source_type": "llms_index",
+  "index_url": "https://inertiajs.com/docs/llms.txt",
+  "version": "v3",
+  "cached_at": 1794484339.5128388
 }

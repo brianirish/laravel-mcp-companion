@@ -1,66 +1,145 @@
-# Filament - Tables/Columns/Image
+Source: https://filamentphp.com/docs/5.x/tables/columns/image.md
 
-Source: https://filamentphp.com/docs/3.x/tables/columns/image
+# Image column
 
-#Overview
----------
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/columns/image.md
 
-Images can be easily displayed within your table:
+## Introduction
+
+Tables can render images, based on the path in the state of the column:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('avatar')
-
 ```
-The column in the database must contain the path to the image, relative to the root directory of its storage disk.
 
-![Image column](/docs/3.x/images/light/tables/columns/image/simple.jpg) ![Image column](/docs/3.x/images/dark/tables/columns/image/simple.jpg)
+In this case, the ` avatar ` state could contain ` users/avatars/4281246003439.jpg `, which is relative to the root directory of the storage disk. The storage disk is defined in the [configuration file](https://filamentphp.com/docs/5.x/introduction/installation.md#publishing-configuration), ` local ` by default. You can also set the ` FILESYSTEM_DISK ` environment variable to change this.
 
-#Managing the image disk
-------------------------
+Alternatively, the state could contain an absolute URL to an image, such as ` https://example.com/images/avatar.jpg `.
 
-By default, the `public` disk will be used to retrieve images. You may pass a custom disk name to the `disk()` method:
+
+
+## Setting the alt text
+
+You should set descriptive alt text on your images so that screen reader users understand what each image shows. Use the ` alt() ` method:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('avatar')
+    ->alt('User avatar')
+```
+
+As well as allowing a static value, the ` alt() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters, including the ` $state ` of the current image.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+If you do not set any alt text, the image is rendered with an empty ` alt ` attribute, which marks it as decorative for assistive technology.
+
+> **Warning**
+>
+> When an image [links to a URL](https://filamentphp.com/docs/5.x/tables/columns/overview.md#opening-urls), its alt text becomes the accessible name of the link. Always set meaningful ` alt() ` text on linked images, otherwise screen reader users will encounter a link with no name.
+
+
+## Managing the image disk
+
+The default storage disk is defined in the [configuration file](https://filamentphp.com/docs/5.x/introduction/installation.md#publishing-configuration), ` local ` by default. You can also set the ` FILESYSTEM_DISK ` environment variable to change this. If you want to deviate from the default disk, you may pass a custom disk name to the ` disk() ` method:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('header_image')
     ->disk('s3')
-
 ```
-#Private images
----------------
 
-Filament can generate temporary URLs to render private images, you may set the `visibility()` to `private`:
+As well as allowing a static value, the ` disk() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Public images
+
+By default, Filament will generate temporary URLs to images in the filesystem, unless the [disk](https://filamentphp.com/docs/5.x/tables/columns/image.md#managing-the-image-disk) is set to ` public `. If your images are stored in a public disk, you can set the ` visibility() ` to ` public `:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('header_image')
-    ->visibility('private')
-
+    ->visibility('public')
 ```
-#Customizing the size
----------------------
 
-You may customize the image size by passing a `width()` and `height()`, or both with `size()`:
+As well as allowing a static value, the ` visibility() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Customizing the size
+
+You may customize the image size by passing a ` imageWidth() ` and ` imageHeight() `, or both with ` imageSize() `:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('header_image')
-    ->width(200)
+    ->imageWidth(200)
 
 ImageColumn::make('header_image')
-    ->height(50)
+    ->imageHeight(50)
 
-ImageColumn::make('author.avatar')
-    ->size(40)
-
+ImageColumn::make('avatar')
+    ->imageSize(40)
 ```
-#Square image
--------------
+
+
+
+As well as allowing a static values, the ` imageWidth() `, ` imageHeight() ` and ` imageSize() ` methods also accept functions to dynamically calculate them. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Square images
 
 You may display the image using a 1:1 aspect ratio:
 
@@ -68,13 +147,37 @@ You may display the image using a 1:1 aspect ratio:
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('avatar')
+    ->imageHeight(40)
     ->square()
-
 ```
-![Square image column](/docs/3.x/images/light/tables/columns/image/square.jpg) ![Square image column](/docs/3.x/images/dark/tables/columns/image/square.jpg)
 
-#Circular image
----------------
+
+
+Optionally, you may pass a boolean value to control if the image should be square or not:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('avatar')
+    ->imageHeight(40)
+    ->square(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` square() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Circular images
 
 You may make the image fully rounded, which is useful for rendering avatars:
 
@@ -82,64 +185,294 @@ You may make the image fully rounded, which is useful for rendering avatars:
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('avatar')
+    ->imageHeight(40)
     ->circular()
-
 ```
-![Circular image column](/docs/3.x/images/light/tables/columns/image/circular.jpg) ![Circular image column](/docs/3.x/images/dark/tables/columns/image/circular.jpg)
 
-#Adding a default image URL
----------------------------
 
-You can display a placeholder image if one doesn’t exist yet, by passing a URL to the `defaultImageUrl()` method:
+
+Optionally, you may pass a boolean value to control if the image should be circular or not:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('avatar')
-    ->defaultImageUrl(url('/images/placeholder.png'))
-
+    ->imageHeight(40)
+    ->circular(FeatureFlag::active())
 ```
-#Stacking images
-----------------
 
-You may display multiple images as a stack of overlapping images by using `stacked()`:
+As well as allowing a static value, the ` circular() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Adding a default image URL
+
+You can display a placeholder image if one doesn't exist yet, by passing a URL to the ` defaultImageUrl() ` method:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('header_image')
+    ->defaultImageUrl(url('storage/posts/header-images/default.jpg'))
+```
+
+As well as allowing a static value, the ` defaultImageUrl() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Stacking images
+
+You may display multiple images as a stack of overlapping images by using ` stacked() `:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
     ->circular()
     ->stacked()
-
 ```
-![Stacked image column](/docs/3.x/images/light/tables/columns/image/stacked.jpg) ![Stacked image column](/docs/3.x/images/dark/tables/columns/image/stacked.jpg)
 
-### #Customizing the stacked ring width
 
-The default ring width is `3`, but you may customize it to be from `0` to `8`:
+
+Optionally, you may pass a boolean value to control if the images should be stacked or not:
 
 ```php
+use Filament\Tables\Columns\ImageColumn;
+
 ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
+    ->circular()
+    ->stacked(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` stacked() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Customizing the stacked ring width
+
+No ring is displayed by default, but you may add one with a width from ` 0 ` to ` 8 `:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
     ->circular()
     ->stacked()
     ->ring(5)
-
 ```
-### #Customizing the stacked overlap
 
-The default overlap is `4`, but you may customize it to be from `0` to `8`:
+
+
+As well as allowing a static value, the ` ring() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+### Customizing the stacked overlap
+
+The default overlap is ` 4 `, but you may customize it to be from ` 0 ` to ` 8 `:
 
 ```php
+use Filament\Tables\Columns\ImageColumn;
+
 ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
     ->circular()
     ->stacked()
     ->overlap(2)
-
 ```
-#Wrapping multiple images
--------------------------
 
-Images can be set to wrap if they can’t fit on one line, by setting `wrap()`:
+
+
+As well as allowing a static value, the ` overlap() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Setting a limit
+
+You may limit the maximum number of images you want to display by passing ` limit() `:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
+    ->circular()
+    ->stacked()
+    ->limit(3)
+```
+
+As well as allowing a static value, the ` limit() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+
+
+### Showing the remaining images count
+
+When you set a limit you may also display the count of remaining images by passing ` limitedRemainingText() `.
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
+    ->circular()
+    ->stacked()
+    ->limit(3)
+    ->limitedRemainingText()
+```
+
+
+
+Optionally, you may pass a boolean value to control if the remaining text should be displayed or not:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
+    ->circular()
+    ->stacked()
+    ->limit(3)
+    ->limitedRemainingText(FeatureFlag::active())
+```
+
+As well as allowing a static value, the ` limitedRemainingText() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+#### Customizing the limited remaining text size
+
+By default, the size of the remaining text is ` TextSize::Small `. You can customize this to be ` TextSize::ExtraSmall `, ` TextSize::Medium ` or ` TextSize::Large ` using the ` size ` parameter:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Support\Enums\TextSize;
+
+ImageColumn::make('colleagues.avatar')
+    ->imageHeight(40)
+    ->circular()
+    ->stacked()
+    ->limit(3)
+    ->limitedRemainingText(size: TextSize::Large)
+```
+
+As well as allowing a static value, the ` limitedRemainingText() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Prevent file existence checks
+
+When the schema is loaded, it will automatically detect whether the images exist to prevent errors for missing files. This is all done on the backend. When using remote storage with many images, this can be time-consuming. You can use the ` checkFileExistence(false) ` method to disable this feature:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('attachment')
+    ->checkFileExistence(false)
+```
+
+As well as allowing a static value, the ` checkFileExistence() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+## Wrapping multiple images
+
+Images can be set to wrap if they can't fit on one line, by setting ` wrap() `:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
@@ -148,107 +481,40 @@ ImageColumn::make('colleagues.avatar')
     ->circular()
     ->stacked()
     ->wrap()
-
 ```
-Note: the “width” for wrapping is affected by the column label, so you may need to use a shorter or hidden label to wrap more tightly.
 
-#Setting a limit
-----------------
+> **Tip**
+>
+> The "width" for wrapping is affected by the column label, so you may need to use a shorter or hidden label to wrap more tightly.
 
-You may limit the maximum number of images you want to display by passing `limit()`:
 
-```php
-use Filament\Tables\Columns\ImageColumn;
+## Adding extra HTML attributes to the image
 
-ImageColumn::make('colleagues.avatar')
-    ->circular()
-    ->stacked()
-    ->limit(3)
-
-```
-![Limited image column](/docs/3.x/images/light/tables/columns/image/limited.jpg) ![Limited image column](/docs/3.x/images/dark/tables/columns/image/limited.jpg)
-
-### #Showing the remaining images count
-
-When you set a limit you may also display the count of remaining images by passing `limitedRemainingText()`.
-
-```php
-use Filament\Tables\Columns\ImageColumn;
-
-ImageColumn::make('colleagues.avatar')
-    ->circular()
-    ->stacked()
-    ->limit(3)
-    ->limitedRemainingText()
-
-```
-![Limited image column with remaining text](/docs/3.x/images/light/tables/columns/image/limited-remaining-text.jpg) ![Limited image column with remaining text](/docs/3.x/images/dark/tables/columns/image/limited-remaining-text.jpg)
-
-#### #Showing the limited remaining text separately
-
-By default, `limitedRemainingText()` will display the count of remaining images as a number stacked on the other images. If you prefer to show the count as a number after the images, you may use the `isSeparate: true` parameter:
-
-```php
-use Filament\Tables\Columns\ImageColumn;
-
-ImageColumn::make('colleagues.avatar')
-    ->circular()
-    ->stacked()
-    ->limit(3)
-    ->limitedRemainingText(isSeparate: true)
-
-```
-![Limited image column with remaining text separately](/docs/3.x/images/light/tables/columns/image/limited-remaining-text-separately.jpg) ![Limited image column with remaining text separately](/docs/3.x/images/dark/tables/columns/image/limited-remaining-text-separately.jpg)
-
-#### #Customizing the limited remaining text size
-
-By default, the size of the remaining text is `sm`. You can customize this to be `xs`, `md` or `lg` using the `size` parameter:
-
-```php
-use Filament\Tables\Columns\ImageColumn;
-
-ImageColumn::make('colleagues.avatar')
-    ->circular()
-    ->stacked()
-    ->limit(3)
-    ->limitedRemainingText(size: 'lg')
-
-```
-#Custom attributes
-------------------
-
-You may customize the extra HTML attributes of the image using `extraImgAttributes()`:
+You can pass extra HTML attributes to the ` <img> ` element via the ` extraImgAttributes() ` method. The attributes should be represented by an array, where the key is the attribute name and the value is the attribute value:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
 
 ImageColumn::make('logo')
-    ->extraImgAttributes(['loading' => 'lazy']),
-
+    ->extraImgAttributes([
+        'alt' => 'Logo',
+        'loading' => 'lazy',
+    ])
 ```
-You can access the current record using a `$record` parameter:
 
-```php
-use Filament\Tables\Columns\ImageColumn;
+As well as allowing a static value, the ` extraImgAttributes() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
-ImageColumn::make('logo')
-    ->extraImgAttributes(fn (Company $record): array => [
-        'alt' => "{$record->name} logo",
-    ]),
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
 
-```
-#Prevent file existence checks
-------------------------------
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Related record | ` Illuminate\Database\Eloquent\Model ` | ` $relatedRecord ` | The current related Eloquent record for the rendered item. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
-When the table is loaded, it will automatically detect whether the images exist. This is all done on the backend. When using remote storage with many images, this can be time-consuming. You can use the `checkFileExistence(false)` method to disable this feature:
 
-```php
-use Filament\Tables\Columns\ImageColumn;
-
-ImageColumn::make('attachment')
-    ->checkFileExistence(false)
-
-```
-Edit on GitHub
-
-Still need help? Join our Discord community or open a GitHub discussion
+By default, calling ` extraImgAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.

@@ -1,28 +1,18 @@
-# Nova - Resources/Validation
+Source: https://nova.laravel.com/docs/v5/resources/validation.md
 
-*Source: https://nova.laravel.com/docs/v5/resources/validation*
-
----
-
-## On this page
-Back to top
-- [Rules](#rules)
-  - [Attaching Rules](#attaching-rules)
-  - [Creation Rules](#creation-rules)
-  - [Update Rules](#update-rules)
-- [After Validation Hooks](#after-validation-hooks)
-  - [The afterValidation Method](#the-aftervalidation-method)
-  - [The afterCreationValidation Method](#the-aftercreationvalidation-method)
-  - [The afterUpdateValidation Method](#the-afterupdatevalidation-method)
-Resources
 # Validation
-Nova provides a variety of ways to validate your resource fields.
-Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it’s a cinch to attach all of the Laravel validation rules you’re familiar with to your Nova resource fields. Let’s get started.
-## [​](#rules) Rules
-### [​](#attaching-rules) Attaching Rules
+
+> Nova provides a variety of ways to validate your resource fields.
+
+Unless you like to live dangerously, any Nova fields that are displayed on the Nova creation / update pages will need some validation. Thankfully, it's a cinch to attach all of the Laravel validation rules you're familiar with to your Nova resource fields. Let's get started.
+
+## Rules
+
+### Attaching Rules
+
 When defining a field on a resource, you may use the `rules` method to attach [validation rules](https://laravel.com/docs/validation#available-validation-rules) to the field:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php {16} theme={null}
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -42,8 +32,10 @@ public function fields(NovaRequest $request): array
     ];
 }
 ```
-Of course, if you are leveraging Laravel’s support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
-```
+
+Of course, if you are leveraging Laravel's support for [validation rule objects](https://laravel.com/docs/validation#using-rule-objects), you may attach those to resources as well:
+
+```php theme={null}
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
@@ -53,8 +45,10 @@ Text::make('State')
     ->sortable()
     ->rules('required', new ValidState),
 ```
+
 You may also provide rules to the `rules` method via an array or Closure:
-```
+
+```php theme={null}
 use App\Rules\ValidState;
 use Laravel\Nova\Fields\Text;
 
@@ -69,8 +63,10 @@ Text::make('State')->rules(fn ($request) => [
     new ValidState(),
 ]);
 ```
+
 Additionally, you may use [custom closure rules](https://laravel.com/docs/validation#using-closures) to validate your resource fields:
-```
+
+```php {7-12} theme={null}
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -83,9 +79,12 @@ Text::make('State')
         }
     }),
 ```
-### [​](#creation-rules) Creation Rules
+
+### Creation Rules
+
 If you would like to define rules that only apply when a resource is being created, you may use the `creationRules` method:
-```
+
+```php {8} theme={null}
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -95,9 +94,12 @@ Text::make('Email')
     ->rules('required', 'email', 'max:255')
     ->creationRules('unique:users,email'),
 ```
-### [​](#update-rules) Update Rules
+
+### Update Rules
+
 Likewise, if you would like to define rules that only apply when a resource is being updated, you may use the `updateRules` method. If necessary, you may use `resourceId` place-holder within your rule definition. This place-holder will automatically be replaced with the primary key of the resource being updated:
-```
+
+```php {9} theme={null}
 use Laravel\Nova\Fields\Text;
 
 // ...
@@ -108,15 +110,20 @@ Text::make('Email')
     ->creationRules('unique:users,email')
     ->updateRules('unique:users,email,{{resourceId}}'),
 ```
-## [​](#after-validation-hooks) After Validation Hooks
+
+## After Validation Hooks
+
 Nova also provides several methods that allow you to perform tasks after a resource has been validated, providing the opportunity to perform more custom validation before the resource is persisted to the database:
-- [`afterValidation`](#after-validation-method)
-- [`afterCreationValidation`](#after-creation-validation-method)
-- [`afterUpdateValidation`](#after-update-validation-method)
-#### [​](#the-aftervalidation-method) The `afterValidation` Method
+
+* [`afterValidation`](#after-validation-method)
+* [`afterCreationValidation`](#after-creation-validation-method)
+* [`afterUpdateValidation`](#after-update-validation-method)
+
+#### The `afterValidation` Method
+
 The `afterValidation` method will always be called after a resource has been validated during its creation or during an update. This method will be called before calling `afterCreationValidation` or `afterUpdateValidation`:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php theme={null}
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -136,10 +143,12 @@ protected static function afterValidation(
     }
 }
 ```
-#### [​](#the-aftercreationvalidation-method) The `afterCreationValidation` Method
+
+#### The `afterCreationValidation` Method
+
 The `afterCreationValidation` method will be called after a resource that is being created has been validated:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php theme={null}
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -159,10 +168,12 @@ protected static function afterCreationValidation(
     }
 }
 ```
-#### [​](#the-afterupdatevalidation-method) The `afterUpdateValidation` Method
+
+#### The `afterUpdateValidation` Method
+
 The `afterUpdateValidation` method will be called after a resource that is being updated has been validated:
-app/Nova/~Resource.php
-```
+
+```php app/Nova/~Resource.php theme={null}
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -182,6 +193,3 @@ protected static function afterUpdateValidation(
     }
 }
 ```
-Was this page helpful?
-YesNo
-[Relationships](/docs/v5/resources/relationships)[Authorization](/docs/v5/resources/authorization)

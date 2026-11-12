@@ -1,0 +1,171 @@
+Source: https://filamentphp.com/docs/5.x/components/tabs.md
+
+# Tabs Blade component
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/components/tabs.md
+
+## Introduction
+
+The tabs Blade component provides styled navigation links or buttons. It does not implement the keyboard behavior or content panels of an accessible tabset. For switching between schema content panels, use the [schema tabs component](https://filamentphp.com/docs/5.x/schemas/tabs.md).
+
+```blade
+<x-filament::tabs label="Content tabs">
+    <x-filament::tabs.item>
+        Tab 1
+    </x-filament::tabs.item>
+
+    <x-filament::tabs.item>
+        Tab 2
+    </x-filament::tabs.item>
+
+    <x-filament::tabs.item>
+        Tab 3
+    </x-filament::tabs.item>
+</x-filament::tabs>
+```
+
+
+
+## Triggering the active state of the tab
+
+By default, tabs do not appear "active". To make a tab appear active, you can use the ` active ` attribute:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item active>
+        Tab 1
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+You can also use the ` active ` attribute to make a tab appear active conditionally:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item
+        :active="$activeTab === 'tab1'"
+        wire:click="$set('activeTab', 'tab1')"
+    >
+        Tab 1
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+Or you can use the ` alpine-active ` attribute to make a tab appear active conditionally using Alpine.js:
+
+```blade
+<x-filament::tabs x-data="{ activeTab: 'tab1' }">
+    <x-filament::tabs.item
+        alpine-active="activeTab === 'tab1'"
+        x-on:click="activeTab = 'tab1'"
+    >
+        Tab 1
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+## Setting a tab icon
+
+Tabs may have an [icon](https://filamentphp.com/docs/5.x/styling/icons.md), which you can set using the ` icon ` attribute:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item icon="heroicon-m-bell">
+        Notifications
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+
+
+### Setting the tab icon position
+
+The icon of the tab may be positioned before or after the label using the ` icon-position ` attribute:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item
+        icon="heroicon-m-bell"
+        icon-position="after"
+    >
+        Notifications
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+
+
+## Setting a tab badge
+
+Tabs may have a [badge](https://filamentphp.com/docs/5.x/components/badge.md), which you can set using the ` badge ` slot:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item>
+        Notifications
+
+        <x-slot name="badge">
+            5
+        </x-slot>
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+
+
+## Using a tab as an anchor link
+
+By default, a tab's underlying HTML tag is ` <button> `. You can change it to be an ` <a> ` tag by using the ` tag ` attribute:
+
+```blade
+<x-filament::tabs>
+    <x-filament::tabs.item
+        :href="route('notifications')"
+        tag="a"
+    >
+        Notifications
+    </x-filament::tabs.item>
+
+    {{-- Other tabs --}}
+</x-filament::tabs>
+```
+
+Do not add tablist or tabpanel roles to these navigation links.
+
+> **Danger**
+>
+> If you are passing user-controlled data to the ` href ` attribute, validate its scheme using [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) before rendering it. HTML escaping alone does not prevent a ` javascript: ` URL from executing code when clicked.
+
+
+## Using vertical tabs
+
+You can render the tabs vertically by using the ` vertical ` attribute:
+
+```blade
+<x-filament::tabs vertical>
+    <x-filament::tabs.item>
+        Tab 1
+    </x-filament::tabs.item>
+
+    <x-filament::tabs.item>
+        Tab 2
+    </x-filament::tabs.item>
+
+    <x-filament::tabs.item>
+        Tab 3
+    </x-filament::tabs.item>
+</x-filament::tabs>
+```

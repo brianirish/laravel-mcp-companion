@@ -1,0 +1,179 @@
+Source: https://filamentphp.com/docs/5.x/introduction/ai.md
+
+# AI-assisted development
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/introduction/ai.md
+
+## Introduction
+
+> **Info**
+>
+> This page is inspired by Laravel's [AI Assisted Development documentation](https://laravel.com/docs/ai). Laravel Boost is developed by the Laravel team, and you can find out more about it in their official docs, alongside other information about building Laravel projects with AI assistance.
+
+
+You can use AI coding agents like [Claude Code](https://www.claude.com/product/claude-code), [Cursor](https://cursor.com), and [GitHub Copilot](https://github.com/features/copilot) when developing with Filament. Filament includes an Agent Skill for [Laravel Boost](https://laravel.com/ai/boost) that gives agents guidance on idiomatic Filament code and framework conventions. Laravel Boost also allows your agent to search the Filament documentation for answers when it encounters unfamiliar requirements.
+
+## Installing Laravel Boost
+
+Install Boost as a development dependency:
+
+```bash
+composer require laravel/boost --dev
+```
+
+Then run the interactive installer. Select **Agent Skills**, followed by **filament/filament (skills)** when prompted:
+
+```bash
+php artisan boost:install
+```
+
+The installer will detect your IDE and AI agents, generating the necessary configuration files. To verify installation, check your agent's skills directory for ` filament-development/SKILL.md `.
+
+> **Info**
+>
+> If you installed Boost before Filament provided an Agent Skill, rerun ` php artisan boost:install ` and select **Agent Skills**. Running ` php artisan boost:update ` alone does not enable new features.
+
+
+For more information about Laravel Boost, including available tools, documentation search, and IDE integration, see the [Laravel AI documentation](https://laravel.com/docs/ai).
+
+## Filament Blueprint
+
+The Filament skill is designed primarily for **implementing agents**: it provides guidance on Filament conventions when writing application code. A separate implementation plan can record the intended behavior, technical choices, and requirements the agent should follow.
+
+For complex features, use the plan to choose components, describe relationships, and identify edge cases before implementation. Record unresolved business choices so you can review them rather than leaving the implementing agent to decide them implicitly.
+
+**Filament Blueprint is a premium extension for planning Filament implementations with AI agents.** Blueprint 2.x supports Filament v5.
+
+Blueprint provides a structured planning skill for writing specification documents that an implementing agent can use.
+
+A blueprint can specify:
+
+- **Models**: Attributes, casts, relationships, and enums with exact syntax
+- **Resources**: Full namespaces, scaffold commands, and configuration
+- **Forms**: Field components, validation rules, and layout structure
+- **Tables**: Columns, filters, actions, and sorting behavior
+- **Authorization**: Plain-English policy rules that translate directly to code
+- **Testing**: What to test and how to verify it works
+- **More**: Reactive fields, wizards, imports/exports, bulk actions, widgets, multi-tenancy, and more
+
+The planning skill includes guidance on namespaces, method names, component selection, and nested layout calculations. Review the resulting plan against your requirements, then verify the implementation with the relevant tests. A plan does not guarantee that generated code is correct.
+
+The planning skill is intended for the planning agent. Include the relevant namespaces, documentation URLs, and method syntax in the saved blueprint so the implementing agent can refer to those details without loading the planning skill.
+
+If you're interested in an example of a plan that GPT-6 Astra can write with and without Blueprint, visit the [Blueprint Plan Example](https://filamentphp.com/docs/5.x/introduction/ai.md#blueprint-plan-example) section.
+
+### Installing Blueprint
+
+Use Blueprint 2.x with Filament v5.
+
+Once you have [purchased a license for Blueprint](https://packages.filamentphp.com/portal/blueprint/checkout), install it via Composer:
+
+```bash
+composer config repositories.filament composer https://packages.filamentphp.com/composer
+composer config --auth http-basic.packages.filamentphp.com "YOUR_EMAIL_ADDRESS" "YOUR_LICENSE_KEY"
+composer require filament/blueprint --dev
+```
+
+Then run the Boost installer. Select **Agent Skills**, followed by **filament/blueprint (skills)** when prompted:
+
+```bash
+php artisan boost:install
+```
+
+To verify installation, check your agent's skills directory for ` planning-filament/SKILL.md `, ` reviewing-filament-plans/SKILL.md `, and ` filament-security-audit/SKILL.md `.
+
+> **Info**
+>
+> To access your purchased license, sign in to [Filament Packages](https://packages.filamentphp.com) with the email address used to purchase your Blueprint license.
+
+
+### Using Blueprint
+
+#### Writing a blueprint
+
+To create a blueprint, enable **planning mode** in your AI agent, ask it to use the ` planning-filament ` skill, and specify a Markdown file for the plan:
+
+```
+Using the planning-filament skill, create a Filament Blueprint for a SaaS invoicing
+system using this application's Filament version. Write the plan as Markdown to
+blueprints/invoicing.md.
+
+Include managing customers and products, creating and editing invoices with line
+items, sending invoices, and recording and tracking payments. Describe the user
+flows, Filament components, and state transitions. Flag unresolved business choices.
+```
+
+#### Implementing a blueprint
+
+Read the saved plan and resolve its outstanding business choices. Then switch out of planning mode and give the implementing agent the saved blueprint and access to your application checkout:
+
+```
+Implement blueprints/invoicing.md in this application checkout. Follow the plan
+and run the relevant tests. Report what was implemented and any checks that
+could not be completed.
+```
+
+#### Reviewing an implementation against a blueprint
+
+After implementation, use Blueprint's ` reviewing-filament-plans ` skill with the same saved blueprint and application checkout to check whether the implementation satisfies the plan:
+
+```
+Using the reviewing-filament-plans skill, review the implementation in
+this checkout against blueprints/invoicing.md, including the current uncommitted
+changes.
+Report requirement traceability, confirmed deviations, and anything blocked
+or not verified. Do not change application code.
+```
+
+The report traces plan requirements to code and test evidence using **Conforms**, **Deviates**, **Blocked**, and **Not verified**. It distinguishes inspected code and test assertions from executed tests or browser checks, and recommends the smallest correction and verification for each confirmed deviation. Existing focused tests run only when an isolated, safe harness is established.
+
+This is a plan-conformance review, not a second planning pass or a general security audit. It does not invent requirements omitted from the blueprint or treat omissions in an update plan as deletions.
+
+### Blueprint Plan Example
+
+The following Filament v5 prompt was used with GPT-6 Astra and Amp agent in independent threads, with and without the ` planning-filament ` skill:
+
+```markdown
+Produce an implementation plan for a Filament v5 application. The application is
+a SaaS invoicing system with the following capabilities:
+
+- Manage customers
+- Manage products
+- Create and edit invoices
+- Add line items to invoices
+- Send invoices to customers
+- Record and track payments
+  
+The plan should:
+- Describe the primary user flows end to end (for example: creating an invoice,
+  sending it, recording a payment).
+- Map each domain concept and flow to concrete Filament primitives (Resources,
+  Relation Managers, Pages, Actions).
+- Identify state transitions (such as draft → sent → paid) and the Actions that
+  trigger them.
+```
+
+You can read the plans written for this prompt [**without Blueprint**](https://filamentphp.com/blueprint/examples/invoicing/gpt-6-astra/before.md) and [**with Blueprint**](https://filamentphp.com/blueprint/examples/invoicing/gpt-6-astra/after.md), and compare their proposed implementation details. These are planning outputs, not implemented applications or verified test results. Review their assumptions and resolve the outstanding business choices before passing either plan to an implementing agent.
+
+> **Info**
+>
+> The Blueprint run additionally requested: "Use the planning-filament skill." The ` blueprints/invoicing.md ` output path in the workflow above is a suggested addition, not part of this recorded comparison prompt.
+
+
+### Running a security audit
+
+Blueprint also ships a **Filament Security Audit** skill that scans a Filament codebase against a catalogue of known security misconfigurations (authorization, file uploads, XSS, query scoping, dependency CVEs, etc.) and writes a per-finding remediation plan. Every entry names the exact file, component namespace, documentation URL, and pasteable fix, so an implementing agent can apply it without guessing.
+
+Naming the skill explicitly in your prompt is the most reliable way to invoke it. The skill also responds to the keywords ` security-audit `, ` security-review `, ` harden `, and ` pen-test ` when paired with a target like a panel, resource, page, or Livewire component:
+
+```
+Using the filament-security-audit skill, audit the admin panel and write
+the remediation plan to SECURITY_AUDIT.md.
+```
+
+The agent will produce a Markdown report grouped by finding category, plus a table of every check performed (` Finding ` / ` Pass ` / ` N/A `) and recommended tests for each confirmed issue.
+
+### Reporting issues with Blueprint
+
+If you encounter any issues or have suggestions for improving Filament Blueprint, please open an issue or discussion on the [Filament Blueprint Issues GitHub repository](https://github.com/filamentphp/blueprint-issues). If you have account or purchase-related questions, please email [support@filamentphp.com](mailto:support@filamentphp.com).

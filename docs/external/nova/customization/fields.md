@@ -1,43 +1,30 @@
-# Nova - Customization/Fields
+Source: https://nova.laravel.com/docs/v5/customization/fields.md
 
-*Source: https://nova.laravel.com/docs/v5/customization/fields*
-
----
-
-## On this page
-Back to top
-- [Overview](#overview)
-- [Defining Fields](#defining-fields)
-- [Registering Fields](#registering-fields)
-  - [Field Options](#field-options)
-  - [Accessing Field Options](#accessing-field-options)
-- [Building Fields](#building-fields)
-  - [Index Fields](#index-fields)
-  - [Detail Fields](#detail-fields)
-  - [Form Fields](#form-fields)
-  - [Preview Fields](#preview-fields)
-  - [Setting the Form Value](#setting-the-form-value)
-  - [Dependent Form Field](#dependent-form-field)
-  - [Hydrating the Model](#hydrating-the-model)
-- [Assets](#assets)
-  - [Registering Assets](#registering-assets)
-  - [Compiling Assets](#compiling-assets)
-Digging Deeper
 # Fields
-Learn how to build custom fields for your Nova resources.
-## [​](#overview) Overview
-Nova ships with a variety of field types; however, sometimes you may need a field type that isn’t provided out of the box. For this reason, Nova allows you to build custom fields. Custom fields consist of three Vue components that determine how the field is displayed in various contexts.
-## [​](#defining-fields) Defining Fields
+
+> Learn how to build custom fields for your Nova resources.
+
+## Overview
+
+Nova ships with a variety of field types; however, sometimes you may need a field type that isn't provided out of the box. For this reason, Nova allows you to build custom fields. Custom fields consist of three Vue components that determine how the field is displayed in various contexts.
+
+## Defining Fields
+
 Custom fields may be generated using the `nova:field` Artisan command. By default, all new fields will be placed in the `nova-components` directory of your application. When generating a field using the `nova:field` command, the field name you pass to the command should follow the Composer `vendor/package` format. So, if we were building a color-picker field, we might run the following command:
-```
+
+```php theme={null}
 php artisan nova:field acme/color-picker
 ```
-When generating a field, Nova will prompt you to install the field’s NPM dependencies, compile its assets, and update your application’s `composer.json` file. All custom fields are registered with your application as a Composer [“path” repository](https://getcomposer.org/doc/05-repositories#path).
+
+When generating a field, Nova will prompt you to install the field's NPM dependencies, compile its assets, and update your application's `composer.json` file. All custom fields are registered with your application as a Composer ["path" repository](https://getcomposer.org/doc/05-repositories#path).
+
 Nova fields include all of the scaffolding necessary to build your field. Each field even contains its own `composer.json` file and is ready to be shared with the world on GitHub or the source control provider of your choice.
-## [​](#registering-fields) Registering Fields
-Nova fields may be registered in your resource’s `fields` method. This method returns an array of fields available to the resource. To register your field, add your field to the array of fields returned by this method:
-app/Nova/~Resource.php
-```
+
+## Registering Fields
+
+Nova fields may be registered in your resource's `fields` method. This method returns an array of fields available to the resource. To register your field, add your field to the array of fields returned by this method:
+
+```php app/Nova/~Resource.php {1,15} theme={null}
 use Acme\ColorPicker\ColorPicker;
 
 // ...
@@ -56,10 +43,12 @@ public function fields(NovaRequest $request): array
     ];
 }
 ```
-### [​](#field-options) Field Options
-Often, you will need to allow the consumers of your field to customize run-time configuration options on the field. You may do this by exposing methods on your field class. These methods may call the field’s underlying `withMeta` method to add information to the field’s metadata, which will be available within your field’s Vue components. The `withMeta` method accepts an array of key / value options:
-nova-components/ColorPicker/src/ColorPicker.php
-```
+
+### Field Options
+
+Often, you will need to allow the consumers of your field to customize run-time configuration options on the field. You may do this by exposing methods on your field class. These methods may call the field's underlying `withMeta` method to add information to the field's metadata, which will be available within your field's Vue components. The `withMeta` method accepts an array of key / value options:
+
+```php nova-components/ColorPicker/src/ColorPicker.php {20-23} theme={null}
 namespace Acme\ColorPicker;
 
 use Laravel\Nova\Fields\Field;
@@ -85,25 +74,46 @@ class ColorPicker extends Field
     }
 }
 ```
-#### [​](#accessing-field-options) Accessing Field Options
-Your field’s Vue components receive a `field` Vue `prop`. The `field` property provides access to any field options that may be available:
-```
+
+#### Accessing Field Options
+
+Your field's Vue components receive a `field` Vue `prop`. The `field` property provides access to any field options that may be available:
+
+```js theme={null}
 const hues = this.field.hues;
 ```
-## [​](#building-fields) Building Fields
-Each field generated by Nova includes its own service provider and “field” class. Using the `color-picker` field as an example, the field class will be located at `src/ColorPicker.php`.
-The field’s service provider is also located within the `src` directory of the field, and is registered within the `extra` section of your field’s `composer.json` file so that it will be auto-loaded by Laravel.
-### [​](#index-fields) Index Fields
-When Nova generates your field, it creates a `resources/js/components/IndexField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource index page. By default, this component simply displays the field’s value in a simple `<span>` element; however, you are free to modify this field component as needed.
-### [​](#detail-fields) Detail Fields
-When creating fields, Nova also creates a `resources/js/components/DetailField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource detail page. By default, this template contains the necessary mark-up needed to display your field’s value. However, you are free to adjust this template as required by your application.
-### [​](#form-fields) Form Fields
-Finally, Nova creates a `resources/js/components/FormField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a creation or update form. By default, this template contains a simple `input` control to modify your field’s underlying value; however, you are free to customize this template. For example, we may update the template to display a color-picker control:
-nova-components/ColorPicker/resources/js/components/FormField.js
-```
+
+## Building Fields
+
+Each field generated by Nova includes its own service provider and "field" class. Using the `color-picker` field as an example, the field class will be located at `src/ColorPicker.php`.
+
+The field's service provider is also located within the `src` directory of the field, and is registered within the `extra` section of your field's `composer.json` file so that it will be auto-loaded by Laravel.
+
+### Index Fields
+
+When Nova generates your field, it creates a `resources/js/components/IndexField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource index page. By default, this component simply displays the field's value in a simple `<span>` element; however, you are free to modify this field component as needed.
+
+### Detail Fields
+
+When creating fields, Nova also creates a `resources/js/components/DetailField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource detail page. By default, this template contains the necessary mark-up needed to display your field's value. However, you are free to adjust this template as required by your application.
+
+### Form Fields
+
+Finally, Nova creates a `resources/js/components/FormField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a creation or update form. By default, this template contains a simple `input` control to modify your field's underlying value; however, you are free to customize this template. For example, we may update the template to display a color-picker control:
+
+```jsx nova-components/ColorPicker/resources/js/components/FormField.js theme={null}
 <template>
     <DefaultField :field="field">
-        <template }
+        <template #field>
+            <input :id="field.name" type="color"
+                class="w-full form-control form-input form-input-bordered"
+                :class="errorClasses"
+                :placeholder="field.name"
+                v-model="value"
+            />
+
+            <p v-if="hasError" class="my-2 text-red-500">
+                {{ firstError }}
             </p>
         </template>
     </DefaultField>
@@ -119,11 +129,14 @@ export default {
 }
 </script>
 ```
-### [​](#preview-fields) Preview Fields
+
+### Preview Fields
+
 When creating fields, Nova also creates a `resources/js/components/PreviewField.vue` Vue component. This component contains the template and logic for your field when it is displayed on a resource detail page. By default, this template extends [Detail Field](#detail-fields) Vue component but you are free to adjust this template as required by your application.
+
 To enable using `PreviewField` Vue component instead of `DetailField`, you need to enable it via `resources/js/field.js`:
-nova-components/ColorPicker/resources/js/field.js
-```
+
+```js nova-components/ColorPicker/resources/js/field.js {4,10} theme={null}
 import IndexField from './components/IndexField'
 import DetailField from './components/DetailField'
 import FormField from './components/FormField'
@@ -136,10 +149,12 @@ Nova.booting((app, store) => {
   app.component('preview-color-picker', PreviewField)
 })
 ```
-#### [​](#setting-the-form-value) Setting the Form Value
-Before creating or updating a resource, Nova asks each field on the form to “fill” the outgoing [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object with key / value pairs. Each field may add as many elements to the `FormData` as needed. This may be done in your `FormField.vue` file’s `fill` method:
-nova-components/ColorPicker/resources/js/components/FormField.js
-```
+
+#### Setting the Form Value
+
+Before creating or updating a resource, Nova asks each field on the form to "fill" the outgoing [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object with key / value pairs. Each field may add as many elements to the `FormData` as needed. This may be done in your `FormField.vue` file's `fill` method:
+
+```js nova-components/ColorPicker/resources/js/components/FormField.js theme={null}
 /**
  * Fill the given FormData object with the field's internal value.
  */
@@ -147,10 +162,12 @@ fill(formData) {
   this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
 }
 ```
-#### [​](#dependent-form-field) Dependent Form Field
-By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](/docs/v5/resources/fields#dependent-fields), you should replace `FormField` with `DependentFormField`:
-nova-components/ColorPicker/resources/js/components/FormField.js
-```
+
+#### Dependent Form Field
+
+By default, all custom fields will be created such that they use the `FormField` mixin. However, if you are building a [dependent field](https://nova.laravel.com/docs/v5/resources/fields.md#dependent-fields), you should replace `FormField` with `DependentFormField`:
+
+```diff nova-components/ColorPicker/resources/js/components/FormField.js theme={null}
 -import { FormField, HandlesValidationErrors } from 'laravel-nova'
 +import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 
@@ -161,21 +178,36 @@ export default {
   //
 }
 ```
+
 Next, within your Vue template, you should typically refer to your field using `this.currentField` instead of `this.field`:
-nova-components/ColorPicker/resources/js/components/FormField.js
-```
+
+```diff nova-components/ColorPicker/resources/js/components/FormField.js theme={null}
 <template>
 - <DefaultField :field="field" :errors="errors">
 + <DefaultField :field="currentField" :errors="errors">
-    <template }
+    <template #field>
+      <input
+-       :id="field.uniqueKey"
++       :id="currentField.uniqueKey"
+        type="text"
+        class="w-full form-control form-input form-input-bordered"
+        :class="errorClasses"
+-       :placeholder="field.placeholder"
++       :placeholder="currentField.placeholder"
+        v-model="value"
+      />
+
+      <p v-if="hasError" class="my-2 text-red-500">
+        {{ firstError }}
       </p>
     </template>
   </DefaultField>
 </template>
 ```
-Next, don’t forget to use the `Laravel\Nova\Fields\SupportsDependentFields` trait on your `Field` class:
-nova-components/ColorPicker/src/ColorPicker.php
-```
+
+Next, don't forget to use the `Laravel\Nova\Fields\SupportsDependentFields` trait on your `Field` class:
+
+```diff nova-components/ColorPicker/src/ColorPicker.php theme={null}
 use Laravel\Nova\Fields\Field;
 +use Laravel\Nova\Fields\SupportsDependentFields;
 
@@ -186,10 +218,12 @@ class ColorPicker extends Field
     // ...
 }
 ```
-#### [​](#hydrating-the-model) Hydrating the Model
-By default, when saving a model, your field class will simply copy the incoming form field value into the field’s associated model attribute. However, you may customize how your field hydrates the resource model. To accomplish this, override the `fillModelWithData` method on your field class:
-nova-components/ColorPicker/src/ColorPicker.php
-```
+
+#### Hydrating the Model
+
+By default, when saving a model, your field class will simply copy the incoming form field value into the field's associated model attribute. However, you may customize how your field hydrates the resource model. To accomplish this, override the `fillModelWithData` method on your field class:
+
+```php nova-components/ColorPicker/src/ColorPicker.php theme={null}
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Laravel\Nova\Support\Fluent;
@@ -208,13 +242,18 @@ public function fillModelWithData(Model|Fluent $model, mixed $value, string $att
     ]);
 }
 ```
-This method receives several arguments. Of course, it receives the incoming HTTP request and the model that is being updated. The method also receives the `$requestAttribute`, which is the name of the incoming form field on the HTTP request. Additionally, it receives the `$attribute`, which is the name of the model attribute the field’s value should be placed in.
-## [​](#assets) Assets
-When Nova generates your field, `resources/js` and `resources/css` directories are generated for you. These directories contain your field’s JavaScript and CSS.
-### [​](#registering-assets) Registering Assets
-Your Nova field’s service provider registers your field’s compiled assets so that they will be available to the Nova front-end:
-nova-components/ColorPicker/src/FieldServiceProvider.php
-```
+
+This method receives several arguments. Of course, it receives the incoming HTTP request and the model that is being updated. The method also receives the `$requestAttribute`, which is the name of the incoming form field on the HTTP request. Additionally, it receives the `$attribute`, which is the name of the model attribute the field's value should be placed in.
+
+## Assets
+
+When Nova generates your field, `resources/js` and `resources/css` directories are generated for you. These directories contain your field's JavaScript and CSS.
+
+### Registering Assets
+
+Your Nova field's service provider registers your field's compiled assets so that they will be available to the Nova front-end:
+
+```php nova-components/ColorPicker/src/FieldServiceProvider.php {14} theme={null}
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 
@@ -232,10 +271,16 @@ public function boot(): void
     });
 }
 ```
-Your components are bootstrapped and registered in the `resources/js/field.js` file. You are free to modify this file or register additional components here as needed.
-### [​](#compiling-assets) Compiling Assets
+
+> [!NOTE]
+>
+> Your components are bootstrapped and registered in the `resources/js/field.js` file. You are free to modify this file or register additional components here as needed.
+
+### Compiling Assets
+
 Your Nova field contains a `webpack.mix.js` file, which is generated when Nova creates your field. You may build your field using the NPM `dev` and `prod` commands:
-```
+
+```shell theme={null}
 # Prepare Laravel Nova's dependencies...
 npm run nova:install
 
@@ -245,11 +290,13 @@ npm run dev
 # Compile and minify your assets...
 npm run prod
 ```
+
 In addition, you may run the NPM `watch` command to auto-compile your assets when they are changed:
-```
+
+```shell theme={null}
 npm run watch
 ```
-The `nova:install` NPM command installs the mixins used by Nova’s built-in fields for use in your field. Please refer to the [Nova mixins](/docs/v5/customization/frontend#using-nova-mixins) documentation for more information.
-Was this page helpful?
-YesNo
-[Cards](/docs/v5/customization/cards)[Filters](/docs/v5/customization/filters)
+
+> [!NOTE]
+>
+> The `nova:install` NPM command installs the mixins used by Nova's built-in fields for use in your field. Please refer to the [Nova mixins](https://nova.laravel.com/docs/v5/customization/frontend.md#using-nova-mixins) documentation for more information.

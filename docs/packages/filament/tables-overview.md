@@ -1,0 +1,800 @@
+Source: https://filamentphp.com/docs/5.x/tables/overview.md
+
+# Overview
+
+> Filament 5.x documentation
+> Source: https://filamentphp.com/docs/5.x/tables/overview.md
+
+## Introduction
+
+Tables are a common UI pattern for displaying lists of records in web applications. Filament provides a PHP-based API for defining tables with many features, while also being incredibly customizable.
+
+
+
+### Defining table columns
+
+The basis of any table is rows and columns. Filament uses Eloquent to get the data for rows in the table, and you are responsible for defining the columns that are used in that row.
+
+Filament includes many column types prebuilt for you, and you can [view a full list here](https://filamentphp.com/docs/5.x/tables/columns/overview.md). You can even [create your own custom column types](https://filamentphp.com/docs/5.x/tables/columns/custom-columns.md) to display data in whatever way you need.
+
+Columns are stored in an array, as objects within the ` $table->columns() ` method:
+
+```php
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            TextColumn::make('title'),
+            TextColumn::make('slug'),
+            IconColumn::make('is_featured')
+                ->boolean(),
+        ]);
+}
+```
+
+
+
+In this example, there are 3 columns in the table. The first two display [text](https://filamentphp.com/docs/5.x/tables/columns/text.md) - the title and slug of each row in the table. The third column displays an [icon](https://filamentphp.com/docs/5.x/tables/columns/icon.md), either a green check or a red cross depending on if the row is featured or not.
+
+#### Making columns sortable and searchable
+
+You can easily modify columns by chaining methods onto them. For example, you can make a column [searchable](https://filamentphp.com/docs/5.x/tables/columns/overview.md#searching) using the ` searchable() ` method. Now, there will be a search field in the table, and you will be able to filter rows by the value of that column:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('title')
+    ->searchable()
+```
+
+
+
+You can make multiple columns searchable, and Filament will be able to search for matches within any of them, all at once.
+
+You can also make a column [sortable](https://filamentphp.com/docs/5.x/tables/columns/overview.md#sorting) using the ` sortable() ` method. This will add a sort button to the column header, and clicking it will sort the table by that column:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('title')
+    ->sortable()
+```
+
+
+
+#### Accessing related data from columns
+
+You can also display data in a column that belongs to a relationship. For example, if you have a ` Post ` model that belongs to a ` User ` model (the author of the post), you can display the user's name in the table:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('author.name')
+```
+
+
+
+In this case, Filament will search for an ` author ` relationship on the ` Post ` model, and then display the ` name ` attribute of that relationship. We call this "dot notation", and you can use it to display any attribute of any relationship, even nested relationships. Filament uses this dot notation to eager-load the results of that relationship for you.
+
+For more information about column relationships, visit the [Relationships section](https://filamentphp.com/docs/5.x/tables/columns/overview.md#displaying-data-from-relationships).
+
+#### Adding new columns alongside existing columns
+
+While the ` columns() ` method redefines all columns for a table, you may sometimes want to add columns to an existing configuration without overriding it completely. This is particularly useful when you have global column configurations that should appear across multiple tables.
+
+Filament provides the ` pushColumns() ` method for this purpose. Unlike ` columns() `, which replaces the entire column configuration, ` pushColumns() ` appends new columns to any existing ones.
+
+This is especially powerful when combined with [global table settings](https://filamentphp.com/docs/5.x/tables/overview.md#global-settings) in the ` boot() ` method of a service provider, such as ` AppServiceProvider `:
+
+```php
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+Table::configureUsing(function (Table $table) {
+    $table
+        ->pushColumns([
+            TextColumn::make('created_at')
+                ->label('Created')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+
+            TextColumn::make('updated_at')
+                ->label('Updated')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ]);
+});
+```
+
+### Defining table filters
+
+As well as making columns ` searchable() `, which allows the user to filter the table by searching the content of columns, you can also allow the users to filter rows in the table in other ways. [Filters](https://filamentphp.com/docs/5.x/tables/filters) can be defined in the ` $table->filters() ` method:
+
+```php
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->filters([
+            Filter::make('is_featured')
+                ->query(fn (Builder $query) => $query->where('is_featured', true)),
+            SelectFilter::make('status')
+                ->options([
+                    'draft' => 'Draft',
+                    'reviewing' => 'Reviewing',
+                    'published' => 'Published',
+                ]),
+        ]);
+}
+```
+
+
+
+In this example, we have defined 2 table filters. On the table, there is now a "filter" icon button in the top corner. Clicking it will open a dropdown with the 2 filters we have defined.
+
+The first filter is rendered as a checkbox. When it's checked, only featured rows in the table will be displayed. When it's unchecked, all rows will be displayed.
+
+The second filter is rendered as a select dropdown. When a user selects an option, only rows with that status will be displayed. When no option is selected, all rows will be displayed.
+
+You can use any [schema component](https://filamentphp.com/docs/5.x/schemas) to build the UI for a filter. For example, you could create [a custom date range filter](https://filamentphp.com/docs/5.x/tables/filters/custom.md).
+
+### Defining table actions
+
+Filament's tables can use [actions](https://filamentphp.com/docs/5.x/actions/overview.md). They are buttons that can be added to the [end of any table row](https://filamentphp.com/docs/5.x/tables/actions.md#record-actions), or even in the [header](https://filamentphp.com/docs/5.x/tables/actions.md#header-actions) of a table. For instance, you may want an action to "create" a new record in the header, and then "edit" and "delete" actions on each row. [Bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) can be used to execute code when records in the table are selected.
+
+```php
+use App\Models\Post;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->recordActions([
+            Action::make('feature')
+                ->action(function (Post $record) {
+                    $record->is_featured = true;
+                    $record->save();
+                })
+                ->hidden(fn (Post $record): bool => $record->is_featured),
+            Action::make('unfeature')
+                ->action(function (Post $record) {
+                    $record->is_featured = false;
+                    $record->save();
+                })
+                ->visible(fn (Post $record): bool => $record->is_featured),
+        ])
+        ->toolbarActions([
+            BulkActionGroup::make([
+                DeleteBulkAction::make(),
+            ]),
+        ]);
+}
+```
+
+
+
+The ` feature ` and ` unfeature ` actions update the row's record. Their ` hidden() ` and ` visible() ` conditions show the appropriate action for its current state.
+
+Custom actions need [explicit authorization](https://filamentphp.com/docs/5.x/actions/overview.md#authorization). Visibility based on a record's featured state does not replace authorization.
+
+We also define a bulk action. When bulk actions are defined, each row in the table will have a checkbox. This bulk action is [built-in to Filament](https://filamentphp.com/docs/5.x/actions/delete.md), and it will delete all selected records. However, you can [write your own custom bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#bulk-actions) easily too.
+
+
+
+Actions can also open modals to request confirmation from the user, as well as render forms inside to collect extra data. It's a good idea to read the [Actions documentation](https://filamentphp.com/docs/5.x/actions) to learn more about their extensive capabilities throughout Filament.
+
+## Pagination
+
+By default, Filament tables will be paginated. The user can choose between 5, 10, 25, and 50 records per page. If there are more records than the selected number, the user can navigate between pages using the pagination buttons.
+
+
+
+### Customizing the pagination options
+
+You may customize the options for the paginated records per page select by passing them to the ` paginated() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginated([10, 25, 50, 100, 'all']);
+}
+```
+
+> **Warning**
+>
+> Be aware when using very high numbers and ` all ` as large number of records can cause performance issues.
+
+
+### Customizing the default pagination page option
+
+To customize the default number of records shown use the ` defaultPaginationPageOption() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->defaultPaginationPageOption(25);
+}
+```
+
+> **Info**
+>
+> Make sure that the default pagination page option is included in the [pagination options](https://filamentphp.com/docs/5.x/tables/overview.md#customizing-the-pagination-options).
+
+
+### Enforcing the pagination options
+
+By default, pagination options control the choices displayed in the page-size selector, not the values accepted from a client request. You can use ` enforcePaginationPageOptions() ` to restrict the page size to the configured options:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginated([10, 25, 50])
+        ->enforcePaginationPageOptions();
+}
+```
+
+This can be useful for large tables where you want to prevent a modified client request from loading more records per page than you offer in the selector. An invalid page size falls back to a valid saved selection or the default pagination option. If the saved selection is no longer listed, Filament discards it and uses the first option. Numeric strings submitted by the selector are accepted.
+
+> **Warning**
+>
+> Enforcement does not impose an additional limit on the options you configure. If you include ` 'all' ` or a very large number, users can still request that many records. Choose options appropriate for your data and server capacity. Enforcement also does not enable pagination for a table configured with ` paginated(false) `.
+
+
+You can enable enforcement for all tables in the ` boot() ` method of a service provider:
+
+```php
+use Filament\Tables\Table;
+
+Table::configureUsing(function (Table $table): void {
+    $table->enforcePaginationPageOptions();
+});
+```
+
+Before enabling it globally, check tables that set their page size directly in PHP: when options are listed, the size must be included in that list. You can opt an individual table out using ` enforcePaginationPageOptions(false) `.
+
+For a fixed page size without a page-size selector, you can provide a single option, such as ` paginated([25]) `. If you instead provide an empty options list, enforcement uses the configured ` defaultPaginationPageOption() `, or the size initialized in the Livewire ` $tableRecordsPerPage ` property when the component first mounts. Saved or client-selected sizes do not replace that initial value. If neither is specified, it uses 10:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginationPageOptions([])
+        ->defaultPaginationPageOption(25)
+        ->enforcePaginationPageOptions();
+}
+```
+
+### Disabling records per page persistence in the user's session
+
+By default, the selected number of records per page is persisted in the user's session. To disable this behavior, use the ` persistRecordsPerPageInSession() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->persistRecordsPerPageInSession(false);
+}
+```
+
+### Displaying links to the first and the last pagination page
+
+To add "extreme" links to the first and the last page using the ` extremePaginationLinks() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->extremePaginationLinks();
+}
+```
+
+
+
+### Using simple pagination
+
+You may use simple pagination by using the ` paginationMode(PaginationMode::Simple) ` method:
+
+```php
+use Filament\Tables\Enums\PaginationMode;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginationMode(PaginationMode::Simple);
+}
+```
+
+
+
+### Using cursor pagination
+
+You may use cursor pagination by using the ` paginationMode(PaginationMode::Cursor) ` method:
+
+```php
+use Filament\Tables\Enums\PaginationMode;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginationMode(PaginationMode::Cursor);
+}
+```
+
+
+
+### Identifying tables
+
+By default, Livewire stores the pagination state in a ` page ` parameter of the URL query string. If you have multiple tables on the same page, this will mean that the pagination state of one table may be overwritten by the state of another table.
+
+To fix this, you may define a unique ` $table->identifier() ` for each table:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->identifier('users');
+}
+```
+
+The identifier also distinguishes the table's [persisted session state](https://filamentphp.com/docs/5.x/tables/overview.md#persisting-the-table-state-in-the-users-session) from other tables that use the same Livewire component class. Tables without an identifier continue to share the component class's default persisted state. When you add an identifier to an existing table, it starts with fresh persisted state instead of importing the state previously shared by the component class.
+
+By default, the identifier is also used to identify the table's pagination query string parameter. To use a different identifier for the pagination query string, you may pass it to ` queryStringIdentifier() `:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->identifier('users')
+        ->queryStringIdentifier('table');
+}
+```
+
+The ` queryStringIdentifier() ` only changes the pagination query string parameter, not the table's persisted session state.
+
+### Disabling pagination
+
+By default, tables will be paginated. To disable this, you should use the ` $table->paginated(false) ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginated(false);
+}
+```
+
+## Record URLs (clickable rows)
+
+You may allow table rows to be completely clickable by using the ` $table->recordUrl() ` method:
+
+```php
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->recordUrl(
+            fn (Model $record): string => route('posts.edit', ['record' => $record]),
+        );
+}
+```
+
+When using a [resource](https://filamentphp.com/docs/5.x/resources) table, the URL for each row is usually already set up for you, but this method can be called to override the default URL for each row.
+
+> **Danger**
+>
+> If you are passing user-controlled data to the ` recordUrl() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
+
+
+> **Tip**
+>
+> You can also [override the URL](https://filamentphp.com/docs/5.x/tables/columns/overview.md#opening-urls) for a specific column, or [trigger an action](https://filamentphp.com/docs/5.x/tables/columns/overview.md#triggering-actions) when a column is clicked.
+
+
+You may also open the URL in a new tab:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->openRecordUrlInNewTab();
+}
+```
+
+## Reordering records
+
+To allow the user to reorder records using drag and drop in your table, you can use the ` $table->reorderable() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderable('sort');
+}
+```
+
+The ` sort ` database column in this example will be used to store the order of records in the table. Whenever you order a database query using that column, they will be returned in the defined order. If you're using mass assignment protection on your model, you will also need to add the ` sort ` attribute to the ` $fillable ` array there.
+
+When making the table reorderable, a new button will be available on the table to toggle reordering.
+
+
+
+The ` reorderable() ` method accepts the name of a column to store the record order in. If you use something like [` spatie/eloquent-sortable `](https://github.com/spatie/eloquent-sortable) with an order column such as ` order_column `, you may use this instead:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderable('order_column');
+}
+```
+
+The ` reorderable() ` method also accepts a boolean condition as its second parameter, allowing you to conditionally enable reordering:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderable('sort', auth()->user()->isAdmin());
+}
+```
+
+You can pass a ` direction ` parameter as ` desc ` to reorder the records in descending order instead of ascending:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderable('sort', direction: 'desc');
+}
+```
+
+### Enabling pagination while reordering
+
+Pagination will be disabled in reorder mode to allow you to move records between pages. It is generally a bad experience to have pagination while reordering, but if would like to override this use ` $table->paginatedWhileReordering() `:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->paginatedWhileReordering();
+}
+```
+
+### Customizing the reordering trigger action
+
+To customize the reordering trigger button, you may use the ` reorderRecordsTriggerAction() ` method, passing a closure that returns an action. All methods that are available to [customize action trigger buttons](https://filamentphp.com/docs/5.x/actions/overview.md) can be used:
+
+```php
+use Filament\Actions\Action;
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderRecordsTriggerAction(
+            fn (Action $action, bool $isReordering) => $action
+                ->button()
+                ->label($isReordering ? 'Disable reordering' : 'Enable reordering'),
+        );
+}
+```
+
+
+
+### Running code before and after reordering
+
+You may run code before or after a record is reordered using the ` beforeReordering() ` and ` afterReordering() ` methods. Both methods accept a function that receives the new ` $order ` array of record keys:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->reorderable('sort')
+        ->beforeReordering(function (array $order): void {
+            // Runs before records are reordered in the database.
+        })
+        ->afterReordering(function (array $order): void {
+            // Runs after records are reordered in the database.
+        });
+}
+```
+
+## Customizing the table header
+
+You can add a heading to a table using the ` $table->heading() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->heading('Clients')
+        ->columns([
+            // ...
+        ]);
+}
+```
+
+You can also add a description below the heading using the ` $table->description() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->heading('Clients')
+        ->description('Manage your clients here.')
+        ->columns([
+            // ...
+        ]);
+}
+```
+
+
+
+You can pass a view to the ` $table->header() ` method to customize the entire header HTML:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->header(view('tables.header', [
+            'heading' => 'Clients',
+        ]))
+        ->columns([
+            // ...
+        ]);
+}
+```
+
+## Polling table content
+
+You may poll table content so that it refreshes at a set interval, using the ` $table->poll() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->poll('10s');
+}
+```
+
+## Lazy loading table data
+
+Tables with lots of data might take a while to load, in which case you can load the table data asynchronously using the ` lazyLoaded() ` method. The data loads in a separate request after the initial render; it does not wait for the table to enter the viewport:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->lazyLoaded();
+}
+```
+
+## Displaying a loading skeleton
+
+You may display a skeleton over the current table records while pagination, sorting, filtering, or searching updates them using the ` loadingSkeleton() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->loadingSkeleton();
+}
+```
+
+
+
+To enable the loading skeleton for all tables, you may use ` Table::configureUsing() ` in the ` boot() ` method of a service provider:
+
+```php
+use Filament\Tables\Table;
+
+Table::configureUsing(function (Table $table): void {
+    $table->loadingSkeleton();
+});
+```
+
+### Customizing the loading skeleton styles
+
+The loading skeleton's background color, border radius, and animation are controlled by CSS variables on the ` .fi-ta-content-loading ` element. You may customize these variables in your [theme's CSS file](https://filamentphp.com/docs/5.x/styling/overview.md#creating-a-custom-theme):
+
+```css
+.fi-ta-content-loading {
+    --loading-skeleton-animation: var(--animate-pulse);
+    --loading-skeleton-bg: var(--primary-200);
+    --loading-skeleton-border-radius: var(--radius-lg);
+}
+```
+
+These variables are inherited by all loading skeletons in the table, including those that you add to [custom columns](https://filamentphp.com/docs/5.x/tables/columns/custom-columns.md#adding-a-loading-skeleton).
+
+## Searching records with Laravel Scout
+
+While Filament doesn't provide a direct integration with [Laravel Scout](https://laravel.com/docs/scout), you may use the ` searchUsing() ` method with a ` whereKey() ` clause to filter the query for Scout results:
+
+```php
+use App\Models\Post;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->searchUsing(fn (Builder $query, string $search) => $query->whereKey(Post::search($search)->keys()));
+}
+```
+
+This loads the matching IDs from Scout and filters the table's Eloquent query with them. Check performance with your search engine and dataset, especially when searches match many records.
+
+For the global search input to show, at least one column in the table needs to be ` searchable() `. Alternatively, if you are using Scout to control which columns are searchable already, you can simply pass ` searchable() ` to the entire table instead:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->searchable();
+}
+```
+
+## Persisting the table state in the user's session
+
+Filament can remember a table's [filters](https://filamentphp.com/docs/5.x/tables/filters#persisting-filters-in-the-users-session), [search](https://filamentphp.com/docs/5.x/tables/columns#persisting-the-search-in-the-users-session), [sort](https://filamentphp.com/docs/5.x/tables/columns#persisting-the-sort-in-the-users-session), [grouping](https://filamentphp.com/docs/5.x/tables/grouping.md#persisting-the-grouping-in-the-users-session), [column manager](https://filamentphp.com/docs/5.x/tables/columns#disabling-column-persistence-in-the-users-session), and [records per page](https://filamentphp.com/docs/5.x/tables/overview.md#disabling-records-per-page-persistence-in-the-users-session) state in the user's session, so it is restored when they return to the table. Each feature has its own method, but you can toggle all of them at once using the ` persistInSession() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->persistInSession();
+}
+```
+
+Passing ` false ` disables every kind of session persistence, including the column manager, which is persisted by default:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->persistInSession(false);
+}
+```
+
+When using Filament tenancy, persisted filters, global searches, and individual column searches are isolated to the current tenant because they select tenant-specific records. Structural preferences such as sorting, grouping, column configuration, and records per page remain shared between tenants for the same table component and [identifier](https://filamentphp.com/docs/5.x/tables/overview.md#identifying-tables).
+
+In existing applications that use tenancy, persisted searches will start fresh for each tenant after upgrading. Existing search state remains available when no tenant is active. Other existing state keeps its current tenant-sharing behavior.
+
+## Styling table rows
+
+### Striped table rows
+
+To enable striped table rows, you can use the ` striped() ` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->striped();
+}
+```
+
+
+
+### Custom row classes
+
+You may want to conditionally style rows based on the record data. This can be achieved by specifying a string or array of CSS classes to be applied to the row using the ` $table->recordClasses() ` method:
+
+```php
+use App\Models\Post;
+use Closure;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->recordClasses(fn (Post $record) => match ($record->status) {
+            'draft' => 'draft-post-table-row',
+            'reviewing' => 'reviewing-post-table-row',
+            'published' => 'published-post-table-row',
+            default => null,
+        });
+}
+```
+
+
+
+## Global settings
+
+To customize the default configuration used for all tables, you can call the static ` configureUsing() ` method from the ` boot() ` method of a service provider. The function will be run for each table that gets created:
+
+```php
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Table;
+
+Table::configureUsing(function (Table $table): void {
+    $table
+        ->reorderableColumns()
+        ->filtersLayout(FiltersLayout::AboveContentCollapsible)
+        ->paginationPageOptions([10, 25, 50]);
+});
+```

@@ -2,95 +2,24 @@
 
 Source: https://livewire.laravel.com/docs/wire-loading
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 wire:loading
 ============
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Loading indicators are an important part of crafting good user interfaces. They give users visual feedback when a request is being made to the server, so they know they are waiting for a process to complete.
 
-#Basic usage
+Consider using data-loading selectors instead
+
+While `wire:loading` is great for simple show/hide scenarios, Livewire v4 introduces automatic `data-loading` attributes on elements that trigger network requests. This approach is often simpler and more flexible—you can style loading states directly with Tailwind without needing `wire:target` directives, and it works seamlessly even when dispatching events to other components. Learn more about data-loading →
+
+Basic usage¶
 ------------
 
 Livewire provides a simple yet extremely powerful syntax for controlling loading indicators: `wire:loading`. Adding `wire:loading` to any element will hide it by default (using `display: none` in CSS) and show it when a request is sent to the server.
@@ -98,7 +27,6 @@ Livewire provides a simple yet extremely powerful syntax for controlling loading
 Below is a basic example of a `CreatePost` component's form with `wire:loading` being used to toggle a loading message:
 
 ```php
-
 <form wire:submit="save">
 
 <!-- ... -->
@@ -112,20 +40,17 @@ Saving post...
 </div>
 
 </form>
-
 ```
 When a user presses "Save", the "Saving post..." message will appear below the button while the "save" action is being executed. The message will disappear when the response is received from the server and processed by Livewire.
 
-### #Removing elements
+### Removing elements¶
 
 Alternatively, you can append `.remove` for the inverse effect, showing an element by default and hiding it during requests to the server:
 
 ```php
-
 <div wire:loading.remove>...</div>
-
 ```
-#Toggling classes
+Toggling classes¶
 -----------------
 
 In addition to toggling the visibility of entire elements, it's often useful to change the styling of an existing element by toggling CSS classes on and off during requests to the server. This technique can be used for things like changing background colors, lowering opacity, triggering spinning animations, and more.
@@ -133,22 +58,18 @@ In addition to toggling the visibility of entire elements, it's often useful to 
 Below is a simple example of using the Tailwind class `opacity-50` to make the "Save" button fainter while the form is being submitted:
 
 ```php
-
 <button wire:loading.class="opacity-50">Save</button>
-
 ```
 Like toggling an element, you can perform the inverse class operation by appending `.remove` to the `wire:loading` directive. In the example below, the button's `bg-blue-500` class will be removed when the "Save" button is pressed:
 
 ```php
-
 <button class="bg-blue-500" wire:loading.class.remove="bg-blue-500">
 
 Save
 
 </button>
-
 ```
-#Toggling attributes
+Toggling attributes¶
 --------------------
 
 By default, when a form is submitted, Livewire will automatically disable the submit button and add the `readonly` attribute to each input element while the form is being processed.
@@ -156,7 +77,6 @@ By default, when a form is submitted, Livewire will automatically disable the su
 However, in addition to this default behavior, Livewire offers the `.attr` modifier to allow you to toggle other attributes on an element or toggle attributes on elements that are outside of forms:
 
 ```php
-
 <button
 
 type="button"
@@ -170,11 +90,10 @@ wire:loading.attr="disabled"
 Remove
 
 </button>
-
 ```
 Because the button above isn't a submit button, it won't be disabled by Livewire's default form handling behavior when pressed. Instead, we manually added `wire:loading.attr="disabled"` to achieve this behavior.
 
-#Targeting specific actions
+Targeting specific actions¶
 ---------------------------
 
 By default, `wire:loading` will be triggered whenever a component makes a request to the server.
@@ -186,7 +105,6 @@ For example, consider the following "Save post" form. In addition to a "Save" bu
 By adding `wire:target` to the following `wire:loading` element, you can instruct Livewire to only show the loading message when the "Remove" button is clicked:
 
 ```php
-
 <form wire:submit="save">
 
 <!-- ... -->
@@ -202,19 +120,17 @@ Removing post...
 </div>
 
 </form>
-
 ```
 When the above "Remove" button is pressed, the "Removing post..." message will be displayed to the user. However, the message will not be displayed when the "Save" button is pressed.
 
-### #Targeting multiple actions
+### Targeting multiple actions¶
 
 You may find yourself in a situation where you would like `wire:loading` to react to some, but not all, actions on a page. In these cases you can pass multiple actions into `wire:target` separated by a comma. For example:
 
 ```php
-
 <form wire:submit="save">
 
-<input type="text" wire:model.blur="title">
+<input type="text" wire:model.live.blur="title">
 
 <!-- ... -->
 
@@ -229,16 +145,14 @@ Updating post...
 </div>
 
 </form>
-
 ```
 The loading indicator ("Updating post...") will now only be shown when the "Remove" or "Save" button are pressed, and not when the `$title` field is being sent to the server.
 
-### #Targeting action parameters
+### Targeting action parameters¶
 
 In situations where the same action is triggered with different parameters from multiple places on a page, you can further scope `wire:target` to a specific action by passing in additional parameters. For example, consider the following scenario where a "Remove" button exists for each post on the page:
 
 ```php
-
 <div>
 
 @foreach ($posts as $post)
@@ -260,24 +174,18 @@ Removing post...
 @endforeach
 
 </div>
-
 ```
 Without passing `{{ $post->id }}` to `wire:target="remove"`, the "Removing post..." message would show when any of the buttons on the page are clicked.
 
 However, because we are passing in unique parameters to each instance of `wire:target`, Livewire will only show the loading message when the matching parameters are passed to the "remove" action.
 
-Multiple action parameters aren't supported
-
-At this time, Livewire only supports targeting a loading indicator by a single method/parameter pair. For example `wire:target="remove(1)"` is supported, however `wire:target="remove(1), add(1)"` is not.
-
-### #Targeting property updates
+### Targeting property updates¶
 
 Livewire also allows you to target specific component property updates by passing the property's name to the `wire:target` directive.
 
 Consider the following example where a form input named `username` uses `wire:model.live` for real-time validation as a user types:
 
 ```php
-
 <form wire:submit="save">
 
 <input type="text" wire:model.live="username">
@@ -293,22 +201,19 @@ Checking availability of username...
 <!-- ... -->
 
 </form>
-
 ```
 The "Checking availability..." message will show when the server is updated with the new username as the user types into the input field.
 
-### #Excluding specific loading targets
+### Excluding specific loading targets¶
 
 Sometimes you may wish to display a loading indicator for every Livewire request *except* a specific property or action. In these cases you can use the `wire:target.except` modifier like so:
 
 ```php
-
 <div wire:loading wire:target.except="download">...</div>
-
 ```
 The above loading indicator will now be shown for every Livewire update request on the component *except* the "download" action.
 
-#Customizing CSS display property
+Customizing CSS display property¶
 ---------------------------------
 
 When `wire:loading` is added to an element, Livewire updates the CSS `display` property of the element to show and hide the element. By default, Livewire uses `none` to hide and `inline-block` to show.
@@ -316,14 +221,11 @@ When `wire:loading` is added to an element, Livewire updates the CSS `display` p
 If you are toggling an element that uses a display value other than `inline-block`, like `flex` in the following example, you can append `.flex` to `wire:loading`:
 
 ```php
-
 <div class="flex" wire:loading.flex>...</div>
-
 ```
 Below is the complete list of available display values:
 
 ```php
-
 <div wire:loading.inline-flex>...</div>
 
 <div wire:loading.inline>...</div>
@@ -335,9 +237,8 @@ Below is the complete list of available display values:
 <div wire:loading.flex>...</div>
 
 <div wire:loading.grid>...</div>
-
 ```
-#Delaying a loading indicator
+Delaying a loading indicator¶
 -----------------------------
 
 On fast connections, updates often happen so quickly that loading indicators only flash briefly on the screen before being removed. In these cases, the indicator is more of a distraction than a helpful affordance.
@@ -345,16 +246,13 @@ On fast connections, updates often happen so quickly that loading indicators onl
 For this reason, Livewire provides a `.delay` modifier to delay the showing of an indicator. For example, if you add `wire:loading.delay` to an element like so:
 
 ```php
-
 <div wire:loading.delay>...</div>
-
 ```
 The above element will only appear if the request takes over 200 milliseconds. The user will never see the indicator if the request completes before then.
 
 To customize the amount of time to delay the loading indicator, you can use one of Livewire's helpful interval aliases:
 
 ```php
-
 <div wire:loading.delay.shortest>...</div> <!-- 50ms -->
 
 <div wire:loading.delay.shorter>...</div>  <!-- 100ms -->
@@ -368,26 +266,125 @@ To customize the amount of time to delay the loading indicator, you can use one 
 <div wire:loading.delay.longer>...</div>   <!-- 500ms -->
 
 <div wire:loading.delay.longest>...</div>  <!-- 1000ms -->
-
 ```
-On this page
+Styling with data-loading¶
+--------------------------
 
-* Basic usage
-  + Removing elements
-* Toggling classes
-* Toggling attributes
-* Targeting specific actions
-  + Targeting multiple actions
-  + Targeting action parameters
-  + Targeting property updates
-  + Excluding specific loading targets
-* Customizing CSS display property
-* Delaying a loading indicator
+Livewire automatically adds a `data-loading` attribute to any element that triggers a network request. This allows you to style loading states directly with CSS or Tailwind without using `wire:loading` directives.
 
-![Flux Ad](/images/flux_ad.jpg)
+### Using Tailwind's data attribute variant¶
 
-Pro UI Components
+You can use Tailwind's `data-loading` variant to apply styles when an element is loading:
 
-Flux · The official Livewire component library
+```php
+<button
 
-Built by the folks behind Livewire and Alpine.
+wire:click="save"
+
+class="data-loading:opacity-50 data-loading:pointer-events-none"
+
+>
+
+Save Changes
+
+</button>
+```
+When the button is clicked and the request is in-flight, it will automatically become semi-transparent and unclickable.
+
+### Using CSS¶
+
+If you're not using Tailwind, you can target the `data-loading` attribute with standard CSS:
+
+```php
+[data-loading] {
+
+opacity: 0.5;
+
+pointer-events: none;
+
+}
+
+button[data-loading] {
+
+background-color: #ccc;
+
+cursor: wait;
+
+}
+```
+### Styling parent and child elements¶
+
+You can style parent elements when a child has `data-loading` using the `has-data-loading:` variant:
+
+```php
+<div class="has-data-loading:opacity-50">
+
+<button wire:click="save">Save</button>
+
+</div>
+```
+Or style child elements from a parent with `data-loading` using the `in-data-loading:` variant:
+
+```php
+<button wire:click="save">
+
+<span class="in-data-loading:hidden">Save</span>
+
+<span class="hidden in-data-loading:block">Saving...</span>
+
+</button>
+```
+See also¶
+---------
+
+* **Loading States** — Modern approach with data-loading attributes
+* **Actions** — Show feedback during action processing
+* **Forms** — Display form submission progress
+
+Reference¶
+----------
+
+```php
+wire:loading
+
+wire:target="action"
+
+wire:target="property"
+
+wire:target.except="action"
+```
+### Modifiers¶
+
+| Modifier | Description |
+| --- | --- |
+| `.remove` | Show element by default, hide during loading |
+| `.class="class-name"` | Add a CSS class during loading |
+| `.class.remove="class-name"` | Remove a CSS class during loading |
+| `.attr="attribute"` | Add an HTML attribute during loading |
+| `.delay` | Delay showing indicator by 200ms |
+| `.delay.shortest` | Delay by 50ms |
+| `.delay.shorter` | Delay by 100ms |
+| `.delay.short` | Delay by 150ms |
+| `.delay.long` | Delay by 300ms |
+| `.delay.longer` | Delay by 500ms |
+| `.delay.longest` | Delay by 1000ms |
+| `.inline-flex` | Use `inline-flex` display value |
+| `.inline` | Use `inline` display value |
+| `.block` | Use `block` display value |
+| `.table` | Use `table` display value |
+| `.flex` | Use `flex` display value |
+| `.grid` | Use `grid` display value |
+
+Ecosystem sponsor
+
+
+Neon is a complete backend built around Lakebase Postgres, for developers, startups, and agent platforms, by Databricks.
+neon.com ↗
+
+Return to
+
+wire:model
+
+Continue to
+
+wire:navigate

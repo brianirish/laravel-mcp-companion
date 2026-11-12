@@ -1,7 +1,9 @@
 {
-  "cache_time": 1753841306.8992684,
   "package": "debugbar",
   "name": "Laravel Debugbar",
   "sections_count": 4,
-  "base_url": "https://laraveldebugbar.com"
+  "total_sections": 4,
+  "success_rate": 1.0,
+  "base_url": "https://laraveldebugbar.com",
+  "cached_at": 1794484403.0784993
 }

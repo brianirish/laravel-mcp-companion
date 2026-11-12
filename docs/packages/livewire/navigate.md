@@ -2,91 +2,16 @@
 
 Source: https://livewire.laravel.com/docs/navigate
 
-Version 3.x
-
-Version 3.x
-Version 2.x
-Version 1.x
-
-* ##### Getting Started
-
-  + Quickstart
-  + Installation
-  + Upgrade Guide
-
-UI Components →
-
-* ##### Essentials
-
-  + Components
-  + Properties
-  + Actions
-  + Forms
-  + Events
-  + Lifecycle Hooks
-  + Nesting Components
-  + Testing
-* ##### Features
-
-  + Alpine
-  + Navigate
-  + Lazy Loading
-  + Validation
-  + File Uploads
-  + Pagination
-  + URL Query Parameters
-  + Computed Properties
-  + Session Properties
-  + Redirecting
-  + File Downloads
-  + Locked Properties
-  + Request Bundling
-  + Offline States
-  + Teleport
-* ##### HTML Directives
-
-  + wire:click
-  + wire:submit
-  + wire:model
-  + wire:loading
-  + wire:navigate
-  + wire:current
-  + wire:cloak
-  + wire:dirty
-  + wire:confirm
-  + wire:transition
-  + wire:init
-  + wire:poll
-  + wire:offline
-  + wire:ignore
-  + wire:replace
-  + wire:show
-  + wire:stream
-  + wire:text
-* ##### Concepts
-
-  + Morphing
-  + Hydration
-  + Nesting
-* ##### Advanced
-
-  + Troubleshooting
-  + Security
-  + JavaScript
-  + Synthesizers
-  + Contribution Guide
-* ##### Packages
-
-  + Volt
-
 Navigate
 ========
 
-Are you a visual learner?
+The official Livewire UI kit
 
-Master Livewire with our in-depth screencasts
+Build polished Livewire apps faster.
 
-Watch now
+Explore Flux Pro
+→
+
 
 Many modern web applications are built as "single page applications" (SPAs). In these applications, each page rendered by the application no longer requires a full browser page reload, avoiding the overhead of re-downloading JavaScript and CSS assets on every request.
 
@@ -94,30 +19,27 @@ The alternative to a *single page application* is a *multi-page application*. In
 
 While most PHP applications have traditionally been multi-page applications, Livewire offers a single page application experience via a simple attribute you can add to links in your application: `wire:navigate`.
 
-#Basic usage
+Basic usage¶
 ------------
 
 Let's explore an example of using `wire:navigate`. Below is a typical Laravel routes file (`routes/web.php`) with three Livewire components defined as routes:
 
 ```php
-
 use App\Livewire\Dashboard;
 
 use App\Livewire\ShowPosts;
 
 use App\Livewire\ShowUsers;
 
-Route::get('/', Dashboard::class);
+Route::livewire('/', 'pages::dashboard');
 
-Route::get('/posts', ShowPosts::class);
+Route::livewire('/posts', 'pages::show-posts');
 
-Route::get('/users', ShowUsers::class);
-
+Route::livewire('/users', 'pages::show-users');
 ```
 By adding `wire:navigate` to each link in a navigation menu on each page, Livewire will prevent the standard handling of the link click and replace it with its own, faster version:
 
 ```php
-
 <nav>
 
 <a href="/" wire:navigate>Dashboard</a>
@@ -127,7 +49,6 @@ By adding `wire:navigate` to each link in a navigation menu on each page, Livewi
 <a href="/users" wire:navigate>Users</a>
 
 </nav>
-
 ```
 Below is a breakdown of what happens when a `wire:navigate` link is clicked:
 
@@ -138,19 +59,17 @@ Below is a breakdown of what happens when a `wire:navigate` link is clicked:
 
 This technique results in much faster page load times — often twice as fast — and makes the application "feel" like a JavaScript powered single page application.
 
-#Redirects
+Redirects¶
 ----------
 
 When one of your Livewire components redirects users to another URL within your application, you can also instruct Livewire to use its `wire:navigate` functionality to load the new page. To accomplish this, provide the `navigate` argument to the `redirect()` method:
 
 ```php
-
 return $this->redirect('/posts', navigate: true);
-
 ```
 Now, instead of a full page request being used to redirect the user to the new URL, Livewire will replace the contents and URL of the current page with the new one.
 
-#Prefetching links
+Prefetching links¶
 ------------------
 
 By default, Livewire includes a gentle strategy to *prefetch* pages before a user clicks on a link:
@@ -165,17 +84,15 @@ Surprisingly, the time between a user pressing down and lifting up on the mouse 
 If you want an even more aggressive approach to prefetching, you may use the `.hover` modifier on a link:
 
 ```php
-
 <a href="/posts" wire:navigate.hover>Posts</a>
-
 ```
-The `.hover` modifier will instruct Livewire to prefetch the page after a user has hovered over the link for `60` milliseconds.
+The `.hover` modifier will instruct Livewire to prefetch the page after a user has hovered over or focused the link for `60` milliseconds. This also gives keyboard users a head start when they tab to a link. Moving focus away before the delay elapses cancels the pending focus prefetch.
 
 Prefetching on hover increases server usage
 
-Because not all users will click a link they hover over, adding `.hover` will request pages that may not be needed, though Livewire attempts to mitigate some of this overhead by waiting `60` milliseconds before prefetching the page.
+Because not all users will follow a link they hover over or focus, adding `.hover` will request pages that may not be needed, though Livewire attempts to mitigate some of this overhead by waiting `60` milliseconds before prefetching the page.
 
-#Persisting elements across page visits
+Persisting elements across page visits¶
 ---------------------------------------
 
 Sometimes, there are parts of a user interface that you need to persist between page loads, such as audio or video players. For example, in a podcasting application, a user may want to keep listening to an episode as they browse other pages.
@@ -187,21 +104,18 @@ By wrapping an element with `@persist` and providing it with a name, when a new 
 Here is an example of an `<audio>` player element being persisted across pages using `@persist`:
 
 ```php
-
 @persist('player')
 
 <audio src="{{ $episode->file }}" controls></audio>
 
 @endpersist
-
 ```
 If the above HTML appears on both pages — the current page, and the next one — the original element will be re-used on the new page. In the case of an audio player, the audio playback won't be interrupted when navigating from one page to another.
 
-Please be aware that the persisted element must be placed outside your Livewire components. A common practice is to position the persisted element in your main layout, such as `resources/views/components/layouts/app.blade.php`.
+Please be aware that the persisted element must be placed outside your Livewire components. A common practice is to position the persisted element in your main layout, such as `resources/views/layouts/app.blade.php`.
 
 ```php
-
-<!-- resources/views/components/layouts/app.blade.php -->
+<!-- resources/views/layouts/app.blade.php -->
 
 <!DOCTYPE html>
 
@@ -213,7 +127,11 @@ Please be aware that the persisted element must be placed outside your Livewire 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>{{ $title ?? 'Page Title' }}</title>
+<title>{{ $title ?? config('app.name') }}</title>
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+
+@livewireStyles
 
 </head>
 
@@ -231,17 +149,17 @@ Please be aware that the persisted element must be placed outside your Livewire 
 
 @endpersist
 
+@livewireScripts
+
 </body>
 
 </html>
-
 ```
-### #Highlighting active links
+### Highlighting active links¶
 
 You might be used to highlighting the currently active page link in a navbar using server-side Blade like so:
 
 ```php
-
 <nav>
 
 <a href="/" class="@if (request->is('/')) font-bold text-zinc-800 @endif">Dashboard</a>
@@ -251,14 +169,47 @@ You might be used to highlighting the currently active page link in a navbar usi
 <a href="/users" class="@if (request->is('/users')) font-bold text-zinc-800 @endif">Users</a>
 
 </nav>
-
 ```
-However, this will not work inside persisted elements as they are re-used between page loads. Instead, you should use Livewire's `wire:current` directive to highlight the currently active link.
+However, this will not work inside persisted elements as they are re-used between page loads. Instead, you have two options for highlighting active links during navigation:
 
-Simply pass any CSS classes you want to apply to the currently active link to `wire:current`:
+#### Using the `data-current` attribute¶
+
+Livewire automatically adds a `data-current` attribute to any `wire:navigate` link that matches the current page. This allows you to style active links with CSS or Tailwind without any additional directives:
 
 ```php
+<nav>
 
+<a href="/dashboard" wire:navigate class="data-current:font-bold data-current:text-zinc-800">Dashboard</a>
+
+<a href="/posts" wire:navigate class="data-current:font-bold data-current:text-zinc-800">Posts</a>
+
+<a href="/users" wire:navigate class="data-current:font-bold data-current:text-zinc-800">Users</a>
+
+</nav>
+```
+When the `/posts` page is visited, the "Posts" link will automatically receive the `data-current` attribute and be styled accordingly.
+
+You can also use plain CSS to style active links:
+
+```php
+[data-current] {
+
+font-weight: bold;
+
+color: #18181b;
+
+}
+```
+If you would like to disable this behavior while still using `wire:navigate`, you may add the `wire:current.ignore` directive:
+
+```php
+<a href="/posts" wire:navigate wire:current.ignore>Posts</a>
+```
+#### Using the `wire:current` directive¶
+
+Alternatively, you can use Livewire's `wire:current` directive to add CSS classes to the currently active link:
+
+```php
 <nav>
 
 <a href="/dashboard" ... wire:current="font-bold text-zinc-800">Dashboard</a>
@@ -268,32 +219,33 @@ Simply pass any CSS classes you want to apply to the currently active link to `w
 <a href="/users" ... wire:current="font-bold text-zinc-800">Users</a>
 
 </nav>
-
 ```
 Now, when the `/posts` page is visited, the "Posts" link will have a stronger font treatment than the other links.
 
+Prefer data-current for simplicity
+
+While both approaches work well, using the `data-current` attribute is often simpler and more flexible since it doesn't require an additional directive and works seamlessly with Tailwind's data attribute variants.
+
 Read more in the `wire:current` documentation.
 
-### #Preserving scroll position
+### Preserving scroll position¶
 
 By default, Livewire will preserve the scroll position of a page when navigating back and forth between pages. However, sometimes you may want to preserve the scroll position of an individual element you are persisting between page loads.
 
-To do this, you must add `wire:scroll` to the element containing a scrollbar like so:
+To do this, you must add `wire:navigate:scroll` to the element containing a scrollbar like so:
 
 ```php
+@persist('sidebar')
 
-@persist('scrollbar')
-
-<div class="overflow-y-scroll" wire:scroll>
+<div class="overflow-y-scroll" wire:navigate:scroll>
 
 <!-- ... -->
 
 </div>
 
 @endpersist
-
 ```
-#JavaScript hooks
+JavaScript hooks¶
 -----------------
 
 Each page navigation triggers three lifecycle hooks:
@@ -302,12 +254,11 @@ Each page navigation triggers three lifecycle hooks:
 * `livewire:navigating`
 * `livewire:navigated`
 
-It's important to note that these three hooks events are dispatched on navigations of all types. This includes manual navigation using `Livewire.navigate()`, redirecting with navigation enabled, and back and forward button presses in the browser.
+It's important to note that these hooks events are dispatched on navigations of all types. This includes manual navigation using `Livewire.navigate()`, redirecting with navigation enabled, and back and forward button presses in the browser.
 
 Here's an example of registering listeners for each of these events:
 
 ```php
-
 document.addEventListener('livewire:navigate', (event) => {
 
 // Triggers when a navigation is triggered.
@@ -340,13 +291,27 @@ context.cached
 
 })
 
-document.addEventListener('livewire:navigating', () => {
+document.addEventListener('livewire:navigating', (e) => {
 
-// Triggered when new HTML is about to swapped onto the page...
+// Triggered when new HTML is about to be swapped onto the page...
 
 // This is a good place to mutate any HTML before the page
 
 // is navigated away from...
+
+// You can register an onSwap callback to run code after the
+
+// new HTML is swapped onto the page but before scripts are loaded.
+
+// This is a good place to apply critical styles such as dark mode
+
+// to prevent flickering...
+
+e.detail.onSwap(() => {
+
+// ...
+
+})
 
 })
 
@@ -357,7 +322,6 @@ document.addEventListener('livewire:navigated', () => {
 // Also triggered on page-load instead of "DOMContentLoaded"...
 
 })
-
 ```
 Event listeners will persist across pages
 
@@ -366,21 +330,18 @@ When you attach an event listener to the document it will not be removed when yo
 An easy method to remove an event listener after it runs is to pass the option `{once: true}` as a third parameter to the `addEventListener` function.
 
 ```php
-
 document.addEventListener('livewire:navigated', () => {
 
 // ...
 
 }, { once: true })
-
 ```
-#Manually visiting a new page
+Manually visiting a new page¶
 -----------------------------
 
 In addition to `wire:navigate`, you can manually call the `Livewire.navigate()` method to trigger a visit to a new page using JavaScript:
 
 ```php
-
 <script>
 
 // ...
@@ -388,9 +349,121 @@ In addition to `wire:navigate`, you can manually call the `Livewire.navigate()` 
 Livewire.navigate('/new/url')
 
 </script>
-
 ```
-#Using with analytics software
+Animating page visits with view transitions¶
+--------------------------------------------
+
+By default, `wire:navigate` swaps in the new page instantly. Add `wire:transition.navigate` to an element to animate that region with the browser's View Transitions API:
+
+```php
+<main wire:transition.navigate>
+
+<!-- ... -->
+
+</main>
+```
+The directive is element-scoped: only the marked `<main>` transitions. Siblings such as a sidebar or header update without animating. A transition runs when either the page being left or the page being entered contains a marked element, so clicks, programmatic navigation, and browser back and forward visits behave consistently.
+
+An unnamed directive is the page's primary transition region. Each page may contain one unnamed region. Give any additional regions unique names:
+
+```php
+<main wire:transition.navigate>...</main>
+
+<aside wire:transition.navigate="secondary">...</aside>
+```
+### Keeping a sidebar still¶
+
+Because transitions are element-scoped, a persistent application shell needs no special transition CSS. Mark the changing content on both pages and leave the shell unmarked:
+
+```php
+<body>
+
+<aside>
+
+<!-- This sidebar remains visually stationary... -->
+
+</aside>
+
+<main wire:transition.navigate="content">
+
+{{ $slot }}
+
+</main>
+
+</body>
+```
+Livewire temporarily disables the browser's root animation while element regions transition, preventing the unmarked sidebar from fading with the page.
+
+### Transitioning the full page¶
+
+To use the browser's native full-page transition, place the directive on the document element in your application layout:
+
+```php
+<html wire:transition.navigate>
+
+<!-- ... -->
+
+</html>
+```
+You may also place it on `<body>` to transition the complete body as a single element region.
+
+### Customizing the animation¶
+
+Put custom transition CSS in your application's shared `resources/css/app.css` file—the same stylesheet loaded by your layout using `@vite`. Keeping these styles in the shared stylesheet ensures they are present on both sides of every navigation.
+
+The unnamed region uses the transition name `livewire-navigate`. For example, this replaces its default animation with a short fade and rise:
+
+```php
+@keyframes navigate-out {
+
+to { opacity: 0; transform: translateY(-0.5rem); }
+
+}
+
+@keyframes navigate-in {
+
+from { opacity: 0; transform: translateY(0.5rem); }
+
+}
+
+html:active-view-transition-type(navigate)::view-transition-old(livewire-navigate) {
+
+animation: navigate-out 150ms ease-in both;
+
+}
+
+html:active-view-transition-type(navigate)::view-transition-new(livewire-navigate) {
+
+animation: navigate-in 200ms ease-out both;
+
+}
+```
+Navigation transitions carry the `navigate` transition type, keeping these rules separate from ordinary component `wire:transition` animations. Firefox supports the underlying transition but currently ignores transition types, so it uses the browser's default animation unless you also provide untyped fallback selectors.
+
+### Morphing elements between pages¶
+
+Give matching elements on both pages the same transition name to morph one into the other:
+
+```php
+<!-- /posts -->
+
+<h2 wire:transition.navigate="post-{{ $post->id }}">{{ $post->title }}</h2>
+
+<!-- /posts/1 -->
+
+<h1 wire:transition.navigate="post-{{ $post->id }}">{{ $post->title }}</h1>
+```
+Livewire assigns the underlying `view-transition-name` immediately before the transition and clears it when the animation finishes. Named elements can be nested inside the primary region; the browser removes them from their parent's snapshot and transitions them independently.
+
+Ordinary `wire:transition` elements remain scoped to Livewire component updates. They are not named or animated by `wire:navigate` page transitions.
+
+Transition names must be unique per page
+
+Like an `id` attribute, a transition name can only appear once per page. Include a unique identifier when rendering names in a loop.
+
+Browsers without View Transitions support, users who prefer reduced motion, and pages with an open dialog or popover fall back to an instant swap.
+
+Using with analytics software¶
 ------------------------------
 
 When navigating pages using `wire:navigate` in your app, any `<script>` tags in the `<head>` only evaluate when the page is initially loaded.
@@ -400,7 +473,6 @@ This creates a problem for analytics software such as Fathom Analytics. These to
 Tools like Google Analytics are smart enough to handle this automatically, however, when using Fathom Analytics, you must add `data-spa="auto"` to your script tag to ensure each page visit is tracked properly:
 
 ```php
-
 <head>
 
 <!-- ... -->
@@ -414,9 +486,8 @@ Tools like Google Analytics are smart enough to handle this automatically, howev
 @endif
 
 </head>
-
 ```
-#Script evaluation
+Script evaluation¶
 ------------------
 
 When navigating to a new page using `wire:navigate`, it *feels* like the browser has changed pages; however, from the browser's perspective, you are technically still on the original page.
@@ -425,7 +496,7 @@ Because of this, styles and scripts are executed normally on the first page, but
 
 Here are a few caveats and scenarios you should be aware of when using `wire:navigate`.
 
-### #Don't rely on `DOMContentLoaded`
+### Don't rely on `DOMContentLoaded`¶
 
 It's common practice to place JavaScript inside a `DOMContentLoaded` event listener so that the code you want to run only executes after the page has fully loaded.
 
@@ -434,7 +505,6 @@ When using `wire:navigate`, `DOMContentLoaded` is only fired on the first page v
 To run code on every page visit, swap every instance of `DOMContentLoaded` with `livewire:navigated`:
 
 ```php
-
 -document.addEventListener('DOMContentLoaded', () => {
 
 +document.addEventListener('livewire:navigated', () => {
@@ -442,18 +512,16 @@ To run code on every page visit, swap every instance of `DOMContentLoaded` with 
 // ...
 
 })
-
 ```
 Now, any code placed inside this listener will be run on the initial page visit, and also after Livewire has finished navigating to subsequent pages.
 
 Listening to this event is useful for things like initializing third-party libraries.
 
-### #Scripts in `<head>` are loaded once
+### Scripts in `<head>` are loaded once¶
 
 If two pages include the same `<script>` tag in the `<head>`, that script will only be run on the initial page visit and not on subsequent page visits.
 
 ```php
-
 <!-- Page one -->
 
 <head>
@@ -469,16 +537,14 @@ If two pages include the same `<script>` tag in the `<head>`, that script will o
 <script src="/app.js"></script>
 
 </head>
-
 ```
-### #New `<head>` scripts are evaluated
+### New `<head>` scripts are evaluated¶
 
 If a subsequent page includes a new `<script>` tag in the `<head>` that was not present in the `<head>` of the initial page visit, Livewire will run the new `<script>` tag.
 
 In the below example, *page two* includes a new JavaScript library for a third-party tool. When the user navigates to *page two*, that library will be evaluated.
 
 ```php
-
 <!-- Page one -->
 
 <head>
@@ -496,13 +562,12 @@ In the below example, *page two* includes a new JavaScript library for a third-p
 <script src="/third-party.js"></script>
 
 </head>
-
 ```
 Head assets are blocking
 
 If you are navigating to a new page that contains an asset like `<script src="...">` in the head tag. That asset will be fetched and processed before the navigation is complete and the new page is swapped in. This might be surprising behavior, but it ensures any scripts that depend on those assets will have immediate access to them.
 
-### #Reloading when assets change
+### Reloading when assets change¶
 
 It's common practice to include a version hash in an application's main JavaScript file name. This ensures that after deploying a new version of your application, users will receive the fresh JavaScript asset, and not an old version served from the browser's cache.
 
@@ -511,7 +576,6 @@ But, now that you are using `wire:navigate` and each page visit is no longer a f
 To prevent this, you may add `data-navigate-track` to a `<script>` tag in `<head>`:
 
 ```php
-
 <!-- Page one -->
 
 <head>
@@ -527,20 +591,17 @@ To prevent this, you may add `data-navigate-track` to a `<script>` tag in `<head
 <script src="/app.js?id=456" data-navigate-track></script>
 
 </head>
-
 ```
 When a user visits *page two*, Livewire will detect a fresh JavaScript asset and trigger a full browser page reload.
 
 If you are using Laravel's Vite plug-in to bundle and serve your assets, Livewire adds `data-navigate-track` to the rendered HTML asset tags automatically. You can continue referencing your assets and scripts like normal:
 
 ```php
-
 <head>
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
-
 ```
 Livewire will automatically inject `data-navigate-track` onto the rendered HTML tags.
 
@@ -548,12 +609,11 @@ Only query string changes are tracked
 
 Livewire will only reload a page if a `[data-navigate-track]` element's query string (`?id="456"`) changes, not the URI itself (`/app.js`).
 
-### #Scripts in the `<body>` are re-evaluated
+### Scripts in the `<body>` are re-evaluated¶
 
 Because Livewire replaces the entire contents of the `<body>` on every new page, all `<script>` tags on the new page will be run:
 
 ```php
-
 <!-- Page one -->
 
 <body>
@@ -577,20 +637,17 @@ console.log('Runs on page two')
 </script>
 
 </body>
-
 ```
 If you have a `<script>` tag in the body that you only want to be run once, you can add the `data-navigate-once` attribute to the `<script>` tag and Livewire will only run it on the initial page visit:
 
 ```php
-
 <script data-navigate-once>
 
 console.log('Runs only on page one')
 
 </script>
-
 ```
-#Customizing the progress bar
+Customizing the progress bar¶
 -----------------------------
 
 When a page takes longer than 150ms to load, Livewire will show a progress bar at the top of the page.
@@ -598,7 +655,6 @@ When a page takes longer than 150ms to load, Livewire will show a progress bar a
 You can customize the color of this bar or disable it all together inside Livewire's config file (`config/livewire.php`):
 
 ```php
-
 'navigate' => [
 
 'show_progress_bar' => false,
@@ -606,31 +662,25 @@ You can customize the color of this bar or disable it all together inside Livewi
 'progress_bar_color' => '#2299dd',
 
 ],
-
 ```
-On this page
+See also¶
+---------
 
-* Basic usage
-* Redirects
-* Prefetching links
-* Persisting elements across page visits
-  + Highlighting active links
-  + Preserving scroll position
-* JavaScript hooks
-* Manually visiting a new page
-* Using with analytics software
-* Script evaluation
-  + Don't rely on DOMContentLoaded
-  + Scripts in <head> are loaded once
-  + New <head> scripts are evaluated
-  + Reloading when assets change
-  + Scripts in the <body> are re-evaluated
-* Customizing the progress bar
+* **Pages** — Create routable page components
+* **Redirecting** — Navigate programmatically from actions
+* **@persist** — Persist elements across page navigations
+* **wire:navigate** — Add SPA navigation to links
 
-![Flux Ad](/images/flux_ad.jpg)
+Ecosystem sponsor
 
-Pro UI Components
 
-Flux · The official Livewire component library
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
 
-Built by the folks behind Livewire and Alpine.
+Return to
+
+Styles
+
+Continue to
+
+Islands
