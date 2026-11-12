@@ -18,6 +18,34 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- `docs_updater.py --sync-report` prints a per-source health report and exits
+  non-zero when a source fetched too little, has not synced recently, or has
+  never been saved. The daily sync puts it in the pull request body and fails
+  on it, after publishing whatever did sync.
+
+### Fixed
+- Forge docs follow the move to `laravel.com/forge/docs`. Discovery had
+  matched nothing since the move and the fallback list 404'd on 21 of 39
+  sections, so 64 of the 82 Forge files in the repository were stale.
+- Community package docs were never refreshed by the daily sync: cache age was
+  read from file mtime, which a fresh clone resets. Livewire, Filament,
+  Inertia, Debugbar and IDE Helper had sat at their 2025-07-30 snapshot.
+- The Inertia fetcher saved v1, v2 and v3 pages under the same filenames, with
+  v1 winning. Only the newest version in the index is fetched.
+- Service-docs discovery no longer saves `llms.txt`, `sitemap.xml`, the `.md`
+  twin of each page or Cloudflare's email endpoint as documentation, and a
+  complete discovered sync prunes pages that have left the site.
+- The feedback widget and "Back to top" lines are stripped from service docs.
+- `--force` now refetches service docs whose cache is still valid.
+- The docs pipeline no longer waits on every pull request check. A status
+  that never completed hung each run until the stage timed out, so no docs
+  tag or Docker image was published from 2026-09-19 to 2026-10-31.
+- The docs pipeline opens a pull request only when documentation content
+  changed, not for cache timestamps alone, and describes the change in it.
+- CI runs again. Two step names Harness rejects had stopped every CI
+  execution since 2026-08-04; a test now checks step names against its rule.
+
 ## [0.13.0] - 2026-08-03
 
 ### Added

@@ -83,34 +83,112 @@ pipeline:
                       set +e
                       source .venv/bin/activate
 
-                      echo "Starting documentation update with auto-discovery..."
+                      echo "Updating Laravel framework docs for all versions..."
                       python docs_updater.py --all-versions --log-level INFO
-                      UPDATE_STATUS=$?
+                      CORE_STATUS=$?
 
-                      echo "Updating external services documentation..."
-                      python docs_updater.py --external-only --log-level INFO
-                      EXTERNAL_STATUS=$?
+                      # Services, community packages and learning resources.
+                      # This exit code is not a health signal -- it is non-zero
+                      # whenever the framework docs were already up to date --
+                      # so health is read from the report below instead.
+                      echo "Updating services, packages and learning resources..."
+                      python docs_updater.py --update --log-level INFO
 
-                      echo "Checking external services status..."
-                      python docs_updater.py --status --external-only
+                      # Per-source health, from the metadata each fetch leaves
+                      # behind. Exits non-zero if any source fetched too little
+                      # or has not synced recently. This run used to discard
+                      # every exit code: Forge fetching 18 of 39 pages, and
+                      # sources whose sites had gone away, all passed as green.
+                      python docs_updater.py --sync-report > sync_report.md 2>/dev/null
+                      REPORT_STATUS=$?
 
-                      if git diff --quiet docs/; then
-                        echo "No file changes detected"
+                      DEGRADED="false"
+                      if [ "$REPORT_STATUS" -ne 0 ]; then
+                        DEGRADED="true"
+                      fi
+                      if [ "$CORE_STATUS" -ne 0 ]; then
+                        DEGRADED="true"
+                        printf '\n### Framework docs\n\n- The framework docs update exited with status %s.\n' "$CORE_STATUS" >> sync_report.md
+                      fi
+                      cat sync_report.md
+
+                      # Stage everything under docs/ -- new and deleted pages
+                      # included -- then judge the change by its content. Each
+                      # run rewrites cache timestamps, so a diff made only of
+                      # metadata is not an update. About a fifth of the pull
+                      # requests this job opened changed nothing else, and each
+                      # one still produced a tag and a Docker image.
+                      git add -A docs/
+                      METADATA='(^|/)\.cache_metadata\.json$|/\.metadata/[^/]+\.json$|(^|/)\.versions_cache\.json$'
+                      CONTENT_CHANGES=$(git diff --cached --no-renames --name-status -- docs/ | grep -vE "$METADATA" || true)
+
+                      if [ -z "$CONTENT_CHANGES" ]; then
+                        echo "No documentation content changed"
                         UPDATES_AVAILABLE="false"
                       else
-                        echo "File changes detected"
                         UPDATES_AVAILABLE="true"
+                        echo "Documentation content changed:"
+                        echo "$CONTENT_CHANGES"
 
-                        CHANGED_FILES=$(git diff --name-only docs/ | wc -l)
-                        echo "Found $CHANGED_FILES changed documentation files"
+                        # The pull request body: what this run changed, then
+                        # the health report. The body used to be a fixed text.
+                        {
+                          echo "Automated documentation sync."
+                          echo
+                          echo "## What changed"
+                          echo
+                          echo "$CONTENT_CHANGES" | awk -F'\t' '
+                            {
+                              split($2, part, "/")
+                              if (part[2] == "external" || part[2] == "packages" || part[2] == "learning_resources")
+                                area = part[2] "/" part[3]
+                              else
+                                area = "Laravel " part[2]
+                              if ($1 == "A") added[area]++
+                              else if ($1 == "D") removed[area]++
+                              else changed[area]++
+                              seen[area] = 1
+                            }
+                            END {
+                              for (area in seen)
+                                printf "- %s: %d changed, %d added, %d removed\n", area, changed[area], added[area], removed[area]
+                            }' | sort
+                          echo
+                          cat sync_report.md
+                        } > pr_body.md
+                      fi
 
-                        NEW_EXTERNAL_FILES=$(git diff --name-status docs/external/ | grep "^A" | wc -l)
-                        if [ "$NEW_EXTERNAL_FILES" -gt 0 ]; then
-                          echo "Auto-discovery found $NEW_EXTERNAL_FILES new external documentation files"
-                        fi
+                      # With nothing to publish, the tagging stage is skipped,
+                      # so a degraded run has to fail here to be seen at all.
+                      FAIL_WITHOUT_PUBLISHING="false"
+                      if [ "$DEGRADED" = "true" ] && [ "$UPDATES_AVAILABLE" = "false" ]; then
+                        FAIL_WITHOUT_PUBLISHING="true"
                       fi
                     outputVariables:
                       - name: UPDATES_AVAILABLE
+                      - name: DEGRADED
+                      - name: FAIL_WITHOUT_PUBLISHING
+              - step:
+                  identifier: report_degraded_sync
+                  name: Report degraded sync
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.DEGRADED> == "true"
+                  spec:
+                    shell: Sh
+                    envVariables:
+                      GH_TOKEN: <+secrets.getValue("GITHUB_TOKEN")>
+                    command: |
+                      # Keep one open issue current rather than opening one a
+                      # day. Never fails the run: the healthy sources still
+                      # publish, and the run is failed explicitly further on.
+                      EXISTING=$(gh issue list --state open --search "Docs sync degraded in:title" --json number -q '.[0].number' 2>/dev/null)
+                      if [ -n "$EXISTING" ]; then
+                        gh issue edit "$EXISTING" --body-file sync_report.md || echo "Could not update issue #$EXISTING"
+                      else
+                        gh issue create --title "Docs sync degraded" --body-file sync_report.md || echo "Could not open an issue"
+                      fi
               - step:
                   identifier: close_existing_prs
                   name: Close existing pull requests
@@ -149,8 +227,7 @@ pipeline:
                       git config --local user.name "GitHub Action"
                       git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/brianirish/laravel-mcp-companion.git"
                       git checkout -b update-laravel-docs
-                      git add docs/
-                      git add docs/.metadata/
+                      git add -A docs/
                       git commit -m "Update Laravel and external services documentation" || exit 0
                       git push origin update-laravel-docs --force
               - step:
@@ -167,25 +244,7 @@ pipeline:
                     command: |
                       PR_URL=$(gh pr create \
                         --title "Update Laravel and external services documentation" \
-                        --body "$(cat <<'PRBODY'
-                      Automated PR to update Laravel and external services documentation to the latest version.
-
-                      ## Auto-Discovery Status
-                      This update includes enhancements with auto-discovery for external Laravel services:
-                      - Laravel Forge - Auto-discovery enabled for comprehensive section detection
-                      - Laravel Vapor - Auto-discovery enabled with Mintlify navigation parsing
-                      - Laravel Envoyer - Auto-discovery enabled with redirect validation
-                      - Laravel Nova - Auto-discovery enabled with version detection
-
-                      ## Changes Included
-                      - Core Laravel documentation updates for all supported versions
-                      - External Laravel services documentation with auto-discovered sections
-                      - Enhanced content validation and quality scoring
-                      - Improved fallback mechanisms for manual configuration
-
-                      Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
-                      PRBODY
-                      )" \
+                        --body-file pr_body.md \
                         --head update-laravel-docs \
                         --base main)
 
@@ -197,6 +256,7 @@ pipeline:
                   identifier: enable_auto_merge
                   name: Enable auto-merge
                   type: Run
+                  timeout: 5m
                   when:
                     stageStatus: Success
                     condition: <+execution.steps.check_updates.output.outputVariables.UPDATES_AVAILABLE> == "true"
@@ -209,15 +269,32 @@ pipeline:
 
                       gh pr merge "$PR_NUMBER" --auto --squash
 
-                      echo "Checking for required status checks..."
-                      CHECK_COUNT=$(gh pr checks "$PR_NUMBER" --json state | jq '. | length')
-
-                      if [ "$CHECK_COUNT" -gt 0 ]; then
-                        echo "Found $CHECK_COUNT checks. Waiting for all checks to complete..."
-                        gh pr checks "$PR_NUMBER" --watch
-                      else
-                        echo "No checks found. Auto-merge will proceed without waiting for checks."
-                      fi
+                      # Do not wait on the pull request's checks here. This step
+                      # used to run `gh pr checks --watch`, which only returns
+                      # once every check has finished -- including ones nothing
+                      # requires. From 2026-09-19 CodeRabbit left a "Review in
+                      # progress" status pending on a pull request that had
+                      # already merged, so the watch ran until the stage timed
+                      # out at 30 minutes, the tagging stage was skipped, and
+                      # no Docker image was published for six weeks. The hung
+                      # runs then used up the account's build allowance, and
+                      # nothing ran at all from 2026-10-25 to 2026-10-31.
+                      #
+                      # GitHub merges when the required checks pass; the next
+                      # stage polls for that merge with a bounded loop.
+              - step:
+                  identifier: fail_without_publishing
+                  name: Fail when degraded with nothing to publish
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+execution.steps.check_updates.output.outputVariables.FAIL_WITHOUT_PUBLISHING> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      echo "The docs sync is degraded and there was nothing to publish."
+                      cat sync_report.md
+                      exit 1
     - stage:
         identifier: auto_tag_after_merge
         name: Auto Tag After Merge
@@ -335,3 +412,19 @@ pipeline:
                       # Intentionally no `gh release create` here. Docs syncs are
                       # not releases; the tag exists to identify the snapshot and
                       # to trigger the Docker image build.
+              - step:
+                  identifier: fail_when_degraded
+                  name: Fail when sync is degraded
+                  type: Run
+                  when:
+                    stageStatus: Success
+                    condition: <+pipeline.stages.check_and_update.spec.execution.steps.check_updates.output.outputVariables.DEGRADED> == "true"
+                  spec:
+                    shell: Sh
+                    command: |
+                      # The healthy sources were merged and tagged above. Fail
+                      # last, so a degraded source turns the run red without
+                      # holding back everything that did sync.
+                      echo "The docs sync published, but at least one source is degraded."
+                      echo "See the open 'Docs sync degraded' issue, or the body of the merged pull request."
+                      exit 1
