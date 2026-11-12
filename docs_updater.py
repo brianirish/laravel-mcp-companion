@@ -3731,6 +3731,133 @@ class LearningResourceFetcher:
         return self.learning_sources.get(source)
 
 
+def build_sync_report(
+    target_dir: Path,
+    now: Optional[float] = None,
+    max_age: float = 2 * 86400,
+    min_success_rate: float = 0.9,
+) -> tuple[str, List[str]]:
+    """Summarise the state of every documentation source after a sync.
+
+    Returns the report as Markdown and a list of problems, one per degraded
+    source. The daily pipeline pastes the Markdown into its pull request and
+    fails when the list is non-empty.
+
+    A source is degraded when its metadata is missing or unreadable, when it
+    fetched less than `min_success_rate` of its pages, or when its last
+    successful sync is older than `max_age`. The age check matters because a
+    fetch that fails outright writes nothing: the previous metadata, with its
+    perfect success rate, is all that is left behind.
+    """
+    now = time.time() if now is None else now
+
+    sources: List[tuple[str, Path]] = []
+    for service in ExternalDocsFetcher(target_dir).laravel_services:
+        sources.append((service, target_dir / "external" / service / ".cache_metadata.json"))
+    for source in LearningResourceFetcher(target_dir).learning_sources:
+        sources.append((source, target_dir / "learning_resources" / source / ".cache_metadata.json"))
+    for package, config in CommunityPackageFetcher(target_dir).community_packages.items():
+        sub_packages = config.get("packages")
+        if isinstance(sub_packages, dict) and sub_packages:
+            for sub in sub_packages:
+                sources.append((f"{package}/{sub}", target_dir / "packages" / package / sub / ".metadata" / "cache.json"))
+        else:
+            sources.append((package, target_dir / "packages" / package / ".metadata" / "cache.json"))
+
+    rows: List[str] = []
+    problems: List[str] = []
+
+    for name, metadata_path in sources:
+        pages = discovery = synced = "-"
+        problem: Optional[str] = None
+
+        if not metadata_path.exists():
+            problem = "never synced"
+        else:
+            try:
+                with open(metadata_path, 'r') as f:
+                    metadata = json.load(f)
+                if not isinstance(metadata, dict):
+                    raise ValueError("metadata is not an object")
+            except Exception:
+                metadata = None
+                problem = "metadata unreadable"
+
+            if metadata is not None:
+                fetched = metadata.get("fetched_sections", metadata.get("sections_count", metadata.get("article_count")))
+                if isinstance(fetched, list):
+                    fetched = len(fetched)
+                total = metadata.get("total_sections")
+                if fetched is not None:
+                    pages = f"{fetched}/{total}" if total is not None else str(fetched)
+                discovery = str(metadata.get("discovery_method") or metadata.get("source_type") or "-")
+
+                synced_at = metadata.get("cached_at") or metadata.get("cache_time")
+                success_rate = metadata.get("success_rate")
+
+                if not isinstance(synced_at, (int, float)):
+                    problem = "no sync timestamp"
+                else:
+                    age_days = int((now - synced_at) // 86400)
+                    synced = "today" if age_days <= 0 else f"{age_days}d ago"
+                    if now - synced_at > max_age:
+                        problem = f"last synced {age_days} days ago"
+                    elif isinstance(success_rate, (int, float)) and success_rate < min_success_rate:
+                        if fetched is not None and total is not None:
+                            problem = f"fetched {fetched} of {total} pages"
+                        else:
+                            problem = f"success rate {success_rate:.0%}"
+
+        if problem:
+            problems.append(f"{name}: {problem}")
+        rows.append(f"| {name} | {'DEGRADED' if problem else 'ok'} | {pages} | {discovery} | {synced} |")
+
+    lines = [
+        "## Sync health",
+        "",
+        "| Source | Status | Pages | Discovery | Last synced |",
+        "| --- | --- | --- | --- | --- |",
+        *rows,
+    ]
+
+    if problems:
+        lines += ["", "### Needs attention", "", *[f"- {problem}" for problem in problems]]
+
+    core_rows = []
+    for version_dir in target_dir.iterdir() if target_dir.is_dir() else []:
+        sync_info = version_dir / ".metadata" / "sync_info.json"
+        if not sync_info.is_file():
+            continue
+        try:
+            with open(sync_info, 'r') as f:
+                info = json.load(f)
+            core_rows.append((
+                str(info.get("version", version_dir.name)),
+                str(info.get("commit_sha", ""))[:7] or "-",
+                str(info.get("commit_date", ""))[:10] or "-",
+            ))
+        except Exception:
+            core_rows.append((version_dir.name, "unreadable", "-"))
+
+    if core_rows:
+        def version_key(row: tuple[str, str, str]) -> float:
+            try:
+                return float(row[0].rstrip("x").rstrip("."))
+            except ValueError:
+                return -1.0
+
+        lines += [
+            "",
+            "## Laravel framework docs",
+            "",
+            "| Version | Commit | Upstream date |",
+            "| --- | --- | --- |",
+            *[f"| {version} | {sha} | {date} |" for version, sha, date in sorted(core_rows, key=version_key, reverse=True)],
+        ]
+
+    return "\n".join(lines) + "\n", problems
+
+
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -3811,6 +3938,11 @@ def parse_arguments():
         help="Show status of all documentation sources"
     )
     parser.add_argument(
+        "--sync-report",
+        action="store_true",
+        help="Print a Markdown health report for every documentation source; exits 1 if any is degraded"
+    )
+    parser.add_argument(
         "--log-level",
         type=str,
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -3875,6 +4007,12 @@ def main():
     # Create target directory if it doesn't exist
     target_dir = Path(args.target_dir).resolve()
     target_dir.mkdir(parents=True, exist_ok=True)
+
+    # Read-only: handled before the updater is built, which creates directories.
+    if args.sync_report:
+        report, problems = build_sync_report(target_dir)
+        print(report)
+        return 1 if problems else 0
     
     # Initialize multi-source updater
     updater = MultiSourceDocsUpdater(target_dir, args.version)
