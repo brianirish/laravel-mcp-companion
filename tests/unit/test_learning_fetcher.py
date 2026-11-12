@@ -180,27 +180,9 @@ class TestExtractors:
 
 
 class TestBootcampFetch:
-    def test_partial_success_records_honest_success_rate(self, fetcher, monkeypatch):
-        config = dict(fetcher.learning_sources["laravel-bootcamp"])
-        config["sections"] = ["introduction", "installation"]
-        # introduction hits base_url, installation hits /blade/installation
-        monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
-            urlopen_returning(b"", url_map={
-                "/blade/installation": load_fixture("moved_structure.html").encode(),
-                "bootcamp.laravel.com": GOOD_PAGE.encode(),
-            }),
-        )
-        assert fetcher._fetch_bootcamp_docs(config) is True
-        meta = json.loads(fetcher.get_cache_metadata_path("laravel-bootcamp").read_text())
-        assert meta["success_rate"] == 0.5
-        # 0.5 < 0.7 quality floor: the cache it just wrote is already invalid,
-        # so the next fetch retries rather than serving the half-empty copy.
-        assert fetcher.is_cache_valid("laravel-bootcamp") is False
-
     def test_total_failure_returns_false(self, fetcher, monkeypatch):
+        # Course discovery, partial syncs and pruning: test_learning_sources.py.
         config = dict(fetcher.learning_sources["laravel-bootcamp"])
-        config["sections"] = ["introduction"]
         monkeypatch.setattr(
             "docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("moved_structure.html").encode()),

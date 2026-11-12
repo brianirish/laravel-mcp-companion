@@ -70,24 +70,58 @@ class TestExternalCacheStampsItsOwnValidity:
         assert saved["cached_at"] == 123.0
 
 
-class TestCommunityPackageMtimeCache:
+class TestCommunityPackageCacheAge:
+    """Package cache age comes from the timestamp stored in the metadata, never
+    from the file's mtime. The daily sync runs in a fresh git clone, where every
+    file's mtime is the checkout time: judged by mtime, every package looked
+    seconds old on every run, so nothing was refetched and Livewire, Filament,
+    Inertia, Debugbar and IDE Helper sat frozen at 2025-07-30 for 15 months."""
+
     @pytest.fixture
     def packages(self, temp_dir):
         return CommunityPackageFetcher(temp_dir)
 
-    def test_fresh_metadata_file_is_valid(self, packages):
-        path = packages.get_cache_metadata_path("livewire")
+    def _write(self, packages, payload, package="livewire", subpackage=None):
+        path = packages.get_cache_metadata_path(package, subpackage)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("{}")
+        path.write_text(json.dumps(payload))
+        return path
+
+    def test_old_timestamp_in_a_freshly_checked_out_file_is_invalid(self, packages):
+        # mtime is "now" (as after a clone); the stored timestamp is a day old.
+        self._write(packages, {"cached_at": time.time() - 86401})
+        assert packages.is_cache_valid("livewire") is False
+
+    def test_recent_timestamp_in_a_backdated_file_is_valid(self, packages):
+        path = self._write(packages, {"cached_at": time.time() - 3600})
+        old = time.time() - 10 * 86400
+        os.utime(path, (old, old))
         assert packages.is_cache_valid("livewire") is True
 
-    def test_backdated_metadata_file_is_invalid(self, packages):
-        path = packages.get_cache_metadata_path("livewire")
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("{}")
-        old = time.time() - 86401
-        os.utime(path, (old, old))
+    def test_legacy_cache_time_key_is_honoured(self, packages):
+        """The committed metadata predating this fix carries `cache_time`."""
+        self._write(packages, {"cache_time": 1753841281.24})  # 2025-07-30
         assert packages.is_cache_valid("livewire") is False
+
+    def test_metadata_without_any_timestamp_is_invalid(self, packages):
+        self._write(packages, {"package": "livewire"})
+        assert packages.is_cache_valid("livewire") is False
+
+    def test_save_cache_metadata_makes_the_cache_valid(self, packages):
+        packages.save_cache_metadata("livewire", {"package": "livewire"})
+        assert packages.is_cache_valid("livewire") is True
+
+    def test_spatie_is_valid_when_every_sub_package_is_fresh(self, packages):
+        for sub in packages.community_packages["spatie"]["packages"]:
+            packages.save_cache_metadata("spatie", {"package": sub}, subpackage=sub)
+        assert packages.is_cache_valid("spatie") is True
+
+    def test_spatie_is_invalid_when_one_sub_package_is_stale(self, packages):
+        subs = list(packages.community_packages["spatie"]["packages"])
+        for sub in subs[1:]:
+            packages.save_cache_metadata("spatie", {"package": sub}, subpackage=sub)
+        self._write(packages, {"cached_at": time.time() - 86401}, "spatie", subs[0])
+        assert packages.is_cache_valid("spatie") is False
 
 
 class TestVersionsCacheErrorPaths:

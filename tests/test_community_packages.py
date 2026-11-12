@@ -316,6 +316,41 @@ More content"""
         assert meta["success_rate"] == 1.0
         assert meta["source_type"] == "llms_index"
 
+    def test_inertia_saves_only_the_newest_version_listed_in_the_index(self, fetcher, monkeypatch):
+        """The index lists every maintained major version (v3, then v2, then
+        v1) and pages are saved by their final URL segment, so the versions
+        collide and the last one fetched won: routing.md came out as the v1
+        page, complete with its "no longer maintained" warning."""
+        from tests.conftest import urlopen_returning
+
+        def page(version):
+            return f"# Routing\n\nThis is the Inertia {version} routing guide. ".encode() + b"Details. " * 20
+
+        index = (
+            "- [Routing](https://inertiajs.com/docs/v3/the-basics/routing.md)\n"
+            "- [Layouts](https://inertiajs.com/docs/v3/the-basics/layouts.md)\n"
+            "- [Routing](https://inertiajs.com/docs/v2/the-basics/routing.md)\n"
+            "- [Routing](https://inertiajs.com/docs/v1/the-basics/routing.md)\n"
+        )
+        monkeypatch.setattr(
+            "docs_updater.urllib.request.urlopen",
+            urlopen_returning(b"", url_map={
+                "docs/llms.txt": index.encode(),
+                "docs/v3/": page("v3"),
+                # v2 and v1 are deliberately unmapped: requesting them fails the test.
+            }),
+        )
+        assert fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"]) is True
+
+        package_dir = fetcher.get_package_cache_path("inertia")
+        assert "Inertia v3 routing guide" in (package_dir / "routing.md").read_text()
+        assert sorted(p.name for p in package_dir.glob("*.md")) == ["layouts.md", "routing.md"]
+
+        import json as json_mod
+        meta = json_mod.loads(fetcher.get_cache_metadata_path("inertia").read_text())
+        assert meta["total_sections"] == 2
+        assert meta["success_rate"] == 1.0
+
     def test_inertia_refresh_prunes_pages_dropped_from_the_index(self, fetcher, monkeypatch):
         """A page the index no longer lists must not stay searchable after a
         complete refresh — unified search indexes this directory recursively."""
