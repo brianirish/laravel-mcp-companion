@@ -47,7 +47,7 @@ Enhancement suggestions are welcome! Please include:
 ## Development Setup
 
 1. Fork and clone the repository
-2. Install dependencies: `uv pip install -r requirements.txt`
+2. Install dependencies: `uv sync` (installs what `uv.lock` pins, development tools included)
 3. Create a test directory with some markdown files for testing
 
 ## Testing

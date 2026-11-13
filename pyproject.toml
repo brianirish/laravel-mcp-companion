@@ -69,6 +69,7 @@ source = [
     "metrics",
     "tool_schemas",
     "path_security",
+    "healthcheck",
 ]
 omit = [
     "tests/*",

@@ -81,14 +81,11 @@ pipeline:
                       curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
                       export PATH="$UV_INSTALL_DIR:$PATH"
 
+                      # Install what uv.lock pins, the same versions CI tests
+                      # and the image ships, without the development tools.
+                      # Later steps `source .venv/bin/activate`.
                       uv python install 3.12
-                      uv venv --python 3.12 .venv
-
-                      # Install from requirements.txt rather than a hand-listed
-                      # set. The previous list had drifted: it omitted toon-format
-                      # (which the tools import) and pinned feedparser, which no
-                      # module uses. Later steps `source .venv/bin/activate`.
-                      uv pip install --python .venv/bin/python -r requirements.txt
+                      uv sync --frozen --no-dev --python 3.12
 
                       .venv/bin/python --version
               - step:

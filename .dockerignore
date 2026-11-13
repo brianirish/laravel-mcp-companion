@@ -20,12 +20,12 @@ htmlcov
 
 # Tests and development-only tooling
 tests
-requirements-dev.txt
 pytest.ini
 .python-version
 
-# CI/CD definitions
+# CI/CD definitions and build tooling
 .harness
+scripts
 
 # Working notes that ship no runtime value
 docs/superpowers
@@ -42,7 +42,6 @@ test_docs/
 # Caches and repo metadata that shouldn't bake into the image
 .channels_cache_v2.json
 .users_cache.json
-uv.lock
 CHANGELOG.md
 ROADMAP.md
 CONTRIBUTING.md

@@ -28,29 +28,78 @@ def index_of(pattern: str) -> int:
     raise AssertionError(f"no Dockerfile instruction matches {pattern!r}")
 
 
+def runtime_stage() -> list[str]:
+    """The instructions of the final stage, the one that becomes the image."""
+    lines = dockerfile_lines()
+    last_from = max(i for i, line in enumerate(lines) if line.startswith("FROM "))
+    return lines[last_from:]
+
+
+def runtime_index(pattern: str) -> int:
+    for i, line in enumerate(runtime_stage()):
+        if re.search(pattern, line):
+            return i
+    raise AssertionError(f"no runtime-stage instruction matches {pattern!r}")
+
+
 class TestLayerOrdering:
-    def test_dependencies_install_before_the_source_copy(self):
+    def test_dependencies_arrive_before_the_source_copy(self):
         """The regression this file exists to prevent.
 
-        With `COPY . .` above `pip install`, the daily documentation commit
-        invalidates the dependency layer too, so everyone pulling :latest
-        re-downloads every dependency for a content-only change.
+        With the source copy above the dependencies, the daily documentation
+        commit invalidates the dependency layer too, so everyone pulling
+        :latest re-downloads every dependency for a content-only change.
         """
-        assert index_of(r"pip install.*requirements\.txt") < index_of(r"^COPY \. \."), (
-            "COPY . . must come after the dependency install, or a docs-only "
+        assert runtime_index(r"^COPY --from=build .*\.venv") < runtime_index(r"^COPY (--chown=\S+ )?\. \."), (
+            "the source copy must come after the dependencies, or a docs-only "
             "change busts the dependency layer for every user"
         )
 
-    def test_requirements_are_copied_before_they_are_installed(self):
-        assert index_of(r"^COPY .*requirements") < index_of(r"pip install.*requirements\.txt")
+    def test_the_lockfile_is_copied_before_dependencies_are_installed(self):
+        assert index_of(r"^COPY .*uv\.lock") < index_of(r"uv sync")
 
-    def test_requirements_are_copied_without_the_rest_of_the_tree(self):
-        """Copying the tree to get requirements.txt would defeat the ordering."""
-        lines = dockerfile_lines()
-        copy = lines[index_of(r"^COPY .*requirements")]
-        assert not re.match(r"^COPY \s*\.\s", copy), (
-            f"{copy!r} copies the whole context; copy only the requirements files"
+    def test_the_lockfile_is_copied_without_the_rest_of_the_tree(self):
+        """Copying the tree to get the lockfile would defeat the ordering."""
+        copy = dockerfile_lines()[index_of(r"^COPY .*uv\.lock")]
+        assert not re.match(r"^COPY (--\S+ )*\.\s", copy), (
+            f"{copy!r} copies the whole context; copy only the dependency manifests"
         )
+
+
+class TestReproducibleInstall:
+    def test_dependencies_come_from_the_lockfile(self):
+        """requirements.txt listed six direct dependencies with open ranges, so
+        the same tag built on two days could differ in everything below them."""
+        install = dockerfile_lines()[index_of(r"uv sync")]
+        assert "--frozen" in install
+        assert "--no-dev" in install
+
+    def test_the_lockfile_reaches_the_build_context(self):
+        entries = {line.strip().strip("/") for line
+                   in (REPO_ROOT / ".dockerignore").read_text().splitlines()
+                   if line.strip() and not line.startswith("#")}
+        assert "uv.lock" not in entries
+        assert "pyproject.toml" not in entries
+
+
+class TestRuntimeImage:
+    def test_the_compiler_toolchain_stays_in_the_build_stage(self):
+        assert not any(re.search(r"build-base|\bgit\b|\buv\b==", line) for line in runtime_stage())
+
+    def test_the_server_does_not_run_as_root(self):
+        user = runtime_stage()[runtime_index(r"^USER ")]
+        assert user.split()[1] not in ("root", "0")
+        assert runtime_index(r"^USER ") < runtime_index(r"^ENTRYPOINT")
+
+    def test_the_docs_directory_belongs_to_the_runtime_user(self):
+        """--update-docs writes into docs/, so root-owned files would break it."""
+        user = runtime_stage()[runtime_index(r"^USER ")].split()[1]
+        copy = runtime_stage()[runtime_index(r"^COPY (--chown=\S+ )?\. \.")]
+        assert f"--chown={user}:" in copy
+
+    def test_the_image_declares_a_health_check(self):
+        check = runtime_stage()[runtime_index(r"^HEALTHCHECK ")]
+        assert "healthcheck.py" in check
 
 
 class TestDockerignore:

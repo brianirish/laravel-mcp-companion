@@ -121,8 +121,18 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 ### Keeping documentation current
 
 Documentation ships inside the image, and a new image is published whenever the
-documentation is refreshed, so `:latest` carries the most recently published
-snapshot. The catch is that **`docker run` reuses the copy you already have** —
+documentation is refreshed. Which documentation you get depends on the tag:
+
+| Tag | Code | Documentation |
+|-----|------|---------------|
+| `:latest` | the newest release | refreshed nightly |
+| `:v0.14.0` and other version tags | that release | as it was on the release date |
+| `:docs-YYYY-MM-DD` | the newest release as of that date (`main`, for tags older than this scheme) | that night's sync |
+
+`:latest` never carries unreleased code: the nightly image is the newest
+release with that night's documentation.
+
+The catch is that **`docker run` reuses the copy you already have** —
 once you've pulled the image, you keep running it until you pull again. Refresh
 whenever you like:
 
@@ -156,6 +166,11 @@ every start. A named volume keeps it — but note the trade-off:
 docker run --rm -i -v laravel-mcp-docs:/app/docs \
   ghcr.io/brianirish/laravel-mcp-companion:latest --update-docs
 ```
+
+The server runs as an unprivileged user (uid 10001), which owns `/app/docs` in
+the image, so a new named volume is writable. A volume created by an image
+before this change is owned by root: remove it (`docker volume rm
+laravel-mcp-docs`) and let the next run recreate it.
 
 > **A volume overrides the image's documentation.** Once populated it masks
 > `/app/docs`, so pulling a newer image no longer updates what the server reads —
@@ -355,9 +370,8 @@ This application features an **intelligent auto-discovery system** that automati
 ```bash
 git clone https://github.com/brianirish/laravel-mcp-companion
 cd laravel-mcp-companion
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt -r requirements-dev.txt
+uv sync                    # creates .venv from uv.lock, development tools included
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 ```
 
 ### Running Tests

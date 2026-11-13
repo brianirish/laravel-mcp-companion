@@ -19,6 +19,28 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Changed
+- **Breaking for Docker volumes:** the image runs as an unprivileged user (uid
+  10001) instead of root. A named volume mounted at `/app/docs` that an earlier
+  image created is owned by root, so `--update-docs` can no longer write to it.
+  Remove the volume and let the next run recreate it.
+- `:latest` no longer carries unreleased code. The nightly image was built from
+  `main` as it stood at the documentation sync, so anything merged since the
+  last release shipped to `latest` the same night. It is now the newest
+  release's code with that night's documentation. Release candidates and
+  patches to an older line no longer move `latest` either.
+- The image installs the versions pinned in `uv.lock`. It installed from
+  `requirements.txt`, six direct dependencies with open ranges, so two builds of
+  one tag could differ in every transitive dependency. CI and the documentation
+  pipeline install from the same lockfile. `requirements.txt` and
+  `requirements-dev.txt` are removed; `uv sync` replaces them.
+- The image is built in two stages, so the compiler toolchain and git are no
+  longer in it.
+
+### Added
+- A container `HEALTHCHECK`. Over HTTP it asks the server's `/healthz`; over
+  stdio it passes, since there is no port to ask.
+
+### Internal
 - Importing the server no longer contacts GitHub. Version discovery used to run
   at import whenever the versions cache had expired, and rewrote the checked-in
   cache file as a side effect. The import now reads the cache only; the server
@@ -31,7 +53,6 @@ docs-only commit and contains no code change.
 - The coverage gate measures every product module. It left out `doc_search`,
   `metrics`, `tool_schemas` and `path_security`; with them included coverage is
   85%.
-
 - The Docker image no longer contains repository metadata, caches or test
   directories; `.dockerignore` now excludes them.
 

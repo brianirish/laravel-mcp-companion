@@ -22,7 +22,7 @@ pipeline:
           # permanently IGNORE_FAILED, masking the status of the steps that matter.
           # To reinstate it, cache `~/.cache/uv` (which now holds both the wheel
           # cache and the managed CPython download) with a key derived from
-          # requirements*.txt, and confirm the stage reports SUCCEEDED afterwards.
+          # uv.lock, and confirm the stage reports SUCCEEDED afterwards.
           platform:
             os: Linux
             arch: Amd64
@@ -53,10 +53,11 @@ pipeline:
                       curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
                       export PATH="$UV_INSTALL_DIR:$PATH"
 
+                      # Install what uv.lock pins, development tools included,
+                      # into .venv. The image installs from the same lockfile, so
+                      # the versions tested here are the versions shipped.
                       uv python install 3.12
-                      uv venv --python 3.12 .venv
-                      uv pip install --python .venv/bin/python \
-                        -r requirements.txt -r requirements-dev.txt
+                      uv sync --frozen --python 3.12
 
                       # Later steps run in fresh shells, so they invoke the
                       # interpreter by path rather than activating the venv. That
