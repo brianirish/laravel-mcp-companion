@@ -14,7 +14,7 @@ import tempfile
 import re
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union, Sequence
 import urllib.parse
 import urllib.request
 import urllib.error
@@ -23,7 +23,6 @@ import json
 import time
 from enum import Enum
 import random
-import html
 
 from . import resource_path
 from .path_security import is_within_directory
@@ -175,6 +174,8 @@ def fetch_llms_index_docs(
     target_dir: Path,
     fetch: Callable[[str], bytes],
     layout: str = "basename",
+    full_url: Optional[str] = None,
+    exclude_paths: Sequence[str] = (),
 ) -> Optional[Dict[str, Any]]:
     """Save every page listed in a site's llms.txt index, as markdown.
 
@@ -198,6 +199,18 @@ def fetch_llms_index_docs(
         "nested"    servers/php.md             the path, as directories
 
     `fetch` takes a URL and returns the response body.
+
+    `full_url` names the site's single-file export (llms-full.txt), which holds
+    every page in one response. When given, pages are taken from it and only
+    the ones it lacks are requested individually, so a large site costs two
+    requests instead of one per page. The index still decides which pages are
+    expected; the export adds none of its own. Export text is the site's
+    source with its components still in it, so it is passed through
+    _clean_export_markup.
+
+    `exclude_paths` lists path prefixes, below the docs root and any version,
+    that are not wanted ("api/"). Pages under them are not fetched, not kept
+    and not counted.
 
     Returns None when the index cannot be read or lists no usable page.
     Otherwise a dict: `sections`, the pages saved, in index order and without
@@ -255,10 +268,34 @@ def fetch_llms_index_docs(
             return path.replace("/", "-")
         return path.rsplit("/", 1)[-1]
 
+    if exclude_paths:
+        def unversioned(url: str) -> str:
+            path = path_of(url)
+            return path[len(version_label) + 1:] if version_label else path
+
+        page_urls = [url for url in page_urls if not unversioned(url).startswith(tuple(exclude_paths))]
+        if not page_urls:
+            logger.warning(f"{name} index lists nothing outside the excluded paths")
+            return None
+
     # Two URLs can map to one file under the flatter layouts; keep the first.
     pages: Dict[str, str] = {}
     for url in page_urls:
         pages.setdefault(section_of(url), url)
+
+    exported: Dict[str, str] = {}
+    if full_url:
+        origin = "/".join(page_prefix.split("/")[:3])
+        try:
+            exported = {
+                url: _clean_export_markup(text, origin)
+                for url, text in _split_full_export(fetch(full_url).decode('utf-8'), page_prefix).items()
+            }
+        except Exception as e:
+            logger.warning(f"Could not read the {name} single-file export, fetching page by page: {str(e)}")
+        if exported:
+            covered = sum(1 for url in pages.values() if url in exported)
+            logger.info(f"{name} export covers {covered} of {len(pages)} indexed pages")
 
     fetched_sections: List[str] = []
     for section, url in pages.items():
@@ -267,7 +304,7 @@ def fetch_llms_index_docs(
             logger.warning(f"Skipping out-of-tree {name} page: {section!r}")
             continue
         try:
-            page = fetch(url).decode('utf-8')
+            page = exported[url] if url in exported else fetch(url).decode('utf-8')
 
             # Strip the leading "> ..." documentation-index banner.
             lines = page.splitlines()
@@ -304,6 +341,141 @@ def fetch_llms_index_docs(
                     directory.rmdir()
 
     return {"sections": fetched_sections, "total": len(pages), "version": version_label}
+
+
+def _split_full_export(text: str, page_prefix: str) -> Dict[str, str]:
+    """Split a site's llms-full.txt into its pages, keyed by each page's `.md` URL.
+
+    The export introduces every page with two lines, its title and where it
+    came from:
+
+        # Start Guide
+        Source: https://nightwatch.laravel.com/docs/start-guide
+
+    Only a `Source:` under `page_prefix` starts a page. Anything else that
+    happens to look like one, a heading above a line of prose beginning
+    "Source:", or a section copied in from another site, stays in the page it
+    appears in. Returns an empty dict for text that holds no such page, which
+    is what an HTML error page is.
+    """
+    boundary = re.compile(
+        rf"(?m)^# (?P<title>[^\n]*)\nSource: (?P<url>{re.escape(page_prefix)}[A-Za-z0-9/._-]+)[ \t]*\n"
+    )
+    starts = list(boundary.finditer(text))
+    pages: Dict[str, str] = {}
+    for i, match in enumerate(starts):
+        end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
+        body = text[match.end():end].strip()
+        url = match.group("url")
+        if not url.endswith(".md"):
+            url += ".md"
+        pages.setdefault(url, f"# {match.group('title').strip()}\n\n{body}\n")
+    return pages
+
+
+_CALLOUT_LABELS = {"Note": "Note", "Info": "Note", "Check": "Note", "Tip": "Tip", "Warning": "Warning", "Danger": "Warning"}
+_COMPONENT_TAG = re.compile(r"^<(?P<close>/)?(?P<name>[A-Z][A-Za-z0-9.]*)(?P<attrs>(?:\s[^>]*)?)>(?P<rest>.*)$")
+
+
+def _clean_export_markup(text: str, origin: str) -> str:
+    """Turn a page of a site's llms-full.txt export into plain markdown.
+
+    The export is the page's source, with the documentation platform's
+    components still in it. Left as they are they read as noise, and the text
+    inside them is indented far enough that markdown takes it for a code
+    block. This keeps what a component says and drops the tag:
+
+        <Card title="Quickstart" href="/docs/quickstart">   **[Quickstart](.../docs/quickstart)**
+        <Note> ... </Note>                                   **Note:** ...
+        <Step title="Create it">, <Tab>, <Accordion>         **Create it**
+        <Frame> ... </Frame>                                 dropped (it wraps an image)
+        any other component tag on a line of its own         dropped
+
+    Site-relative links are made absolute against `origin`. Nothing inside a
+    fenced code block is touched.
+    """
+    out: List[str] = []
+    fence: Optional[str] = None
+    fence_indent = 0
+    in_frame = False
+    pending_label: Optional[str] = None
+
+    def attribute(attrs: str, key: str) -> Optional[str]:
+        found = re.search(rf'\b{key}="([^"]*)"', attrs)
+        return found.group(1) if found else None
+
+    def absolute(line: str) -> str:
+        return re.sub(r"\]\((/[^)\s]*)\)", lambda m: f"]({origin}{m.group(1)})", line)
+
+    for raw in text.split("\n"):
+        stripped = raw.strip()
+
+        if fence is not None:
+            # Inside a code block. Remove only the indentation the block
+            # itself was nested by, so the code keeps its own.
+            line = raw[fence_indent:] if raw[:fence_indent].strip() == "" else raw.lstrip()
+            out.append(line)
+            if stripped.startswith(fence) and stripped.strip(fence[0]) == "":
+                fence = None
+            continue
+
+        opening = re.match(r"^(`{3,}|~{3,})", stripped)
+        if opening and not in_frame:
+            fence = opening.group(1)
+            fence_indent = len(raw) - len(raw.lstrip())
+            out.append(stripped)
+            continue
+
+        if in_frame:
+            if "</Frame>" in stripped:
+                in_frame = False
+            continue
+        if stripped.startswith("<Frame"):
+            in_frame = "</Frame>" not in stripped
+            continue
+        if re.match(r"^<img\b[^>]*/?>$", stripped) or stripped == "&#x20;":
+            continue
+
+        tag = _COMPONENT_TAG.match(stripped)
+        if tag:
+            name, attrs = tag.group("name"), tag.group("attrs")
+            rest = re.sub(rf"</{re.escape(name)}>\s*$", "", tag.group("rest")).strip()
+            if tag.group("close"):
+                continue
+            if name in _CALLOUT_LABELS:
+                label = f"**{_CALLOUT_LABELS[name]}:**"
+                if rest:
+                    out.append(absolute(f"{label} {rest}"))
+                else:
+                    pending_label = label
+                continue
+            title = attribute(attrs, "title") or attribute(attrs, "label")
+            if title:
+                href = attribute(attrs, "href")
+                if href and href.startswith("/"):
+                    href = origin + href
+                out.append(f"**[{title}]({href})**" if href else f"**{title}**")
+                if rest:
+                    out.append(absolute(rest))
+            elif rest and not rest.startswith("<"):
+                out.append(absolute(rest))
+            continue
+
+        line = absolute(stripped if raw[:1] in (" ", "\t") and _is_component_text(raw) else raw)
+        if pending_label and stripped:
+            line = f"{pending_label} {line.lstrip()}"
+            pending_label = None
+        out.append(line)
+
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip() + "\n"
+
+
+def _is_component_text(line: str) -> bool:
+    """Whether an indented line is prose nested inside a component, as opposed
+    to a markdown construct that depends on its indentation (a nested list
+    item or a continuation of one)."""
+    stripped = line.lstrip()
+    return not re.match(r"^([-*+]|\d+\.)\s", stripped)
 
 
 def _write_versions_cache(versions: list[str], cache_file: Path) -> None:
@@ -486,6 +658,23 @@ class DocumentationSourceType(Enum):
     LARAVEL_SERVICE = "laravel_service"
     COMMUNITY_PACKAGE = "community_package"
 
+# The longest a single rate-limit pause may be, whatever the server asks for.
+MAX_RATE_LIMIT_WAIT = 120
+
+
+def _retry_after_seconds(error: urllib.error.HTTPError) -> Optional[float]:
+    """The pause a 429 response asks for, in seconds, capped. None when the
+    response gives no Retry-After or gives one that is not a number of seconds."""
+    value = error.headers.get("Retry-After") if error.headers else None
+    if value is None:
+        return None
+    try:
+        seconds = float(value)
+    except (TypeError, ValueError):
+        return None
+    return min(MAX_RATE_LIMIT_WAIT, max(0.0, seconds))
+
+
 class ExternalDocsFetcher:
     """Handles fetching documentation from external Laravel services and packages."""
     
@@ -507,7 +696,9 @@ class ExternalDocsFetcher:
         # Laravel services documentation sources. Each site publishes an
         # llms.txt index of its pages, served as markdown, so a service needs
         # only where its index is and which URLs in it belong to the docs:
-        # no page list, no link pattern, no pinned version.
+        # no page list, no link pattern, no pinned version. Pages are
+        # requested one at a time, as markdown, except where a service names
+        # its single-file export in "llms_full".
         self.laravel_services = {
             "forge": {
                 "name": "Laravel Forge",
@@ -538,6 +729,38 @@ class ExternalDocsFetcher:
                 "base_url": "https://nova.laravel.com/docs",
                 "llms_index": "https://nova.laravel.com/docs/llms.txt",
                 "llms_page_prefix": "https://nova.laravel.com/docs/",
+            },
+            "cloud": {
+                "name": "Laravel Cloud",
+                "type": DocumentationSourceType.LARAVEL_SERVICE,
+                # cloud.laravel.com/docs redirects here. The prefix keeps the
+                # fetch to Cloud's pages on a domain Forge's docs share.
+                "base_url": "https://laravel.com/cloud/docs",
+                "llms_index": "https://laravel.com/cloud/docs/llms.txt",
+                "llms_page_prefix": "https://laravel.com/cloud/docs/",
+                # 228 pages, too many to request one at a time: laravel.com
+                # blocks the client partway through, and Forge and Laravel
+                # Learn are on the same host. The export is one request.
+                "llms_full": "https://laravel.com/cloud/docs/llms-full.txt",
+                # The API reference is some 130 pages, each one the whole
+                # OpenAPI document as YAML.
+                "exclude_paths": ["api/"],
+            },
+            "nightwatch": {
+                "name": "Laravel Nightwatch",
+                "type": DocumentationSourceType.LARAVEL_SERVICE,
+                "base_url": "https://nightwatch.laravel.com/docs",
+                "llms_index": "https://nightwatch.laravel.com/docs/llms.txt",
+                "llms_page_prefix": "https://nightwatch.laravel.com/docs/",
+            },
+            "herd": {
+                "name": "Laravel Herd",
+                "type": DocumentationSourceType.LARAVEL_SERVICE,
+                # The index has a macos/ and a windows/ tree with the same page
+                # names in each; pages are saved under their full path.
+                "base_url": "https://herd.laravel.com/docs",
+                "llms_index": "https://herd.laravel.com/docs/llms.txt",
+                "llms_page_prefix": "https://herd.laravel.com/docs/",
             },
         }
 
@@ -647,6 +870,8 @@ class ExternalDocsFetcher:
             target_dir=target_dir,
             fetch=self._retry_request,
             layout="nested",
+            full_url=config.get("llms_full"),
+            exclude_paths=config.get("exclude_paths", ()),
         )
         if not result or not result["sections"]:
             return False
@@ -732,6 +957,17 @@ class ExternalDocsFetcher:
                     wait_time = min(300, (2 ** attempt) * 5 + random.uniform(0, 5))
                     logger.warning(f"Rate limited on attempt {attempt + 1}/{retries + 1}, waiting {wait_time:.1f}s")
                     time.sleep(wait_time)
+                elif e.code == 429:
+                    # The site is asking for a pause, not refusing the page.
+                    # Wait as long as it says, or back off, and ask again.
+                    if attempt < retries:
+                        wait_time = _retry_after_seconds(e)
+                        if wait_time is None:
+                            wait_time = min(MAX_RATE_LIMIT_WAIT, (2 ** attempt) * 10 + random.uniform(0, 5))
+                        logger.warning(f"Rate limited (429) on attempt {attempt + 1}/{retries + 1}, retrying in {wait_time:.1f}s")
+                        time.sleep(wait_time)
+                    else:
+                        raise
                 elif e.code >= 500:
                     # Server errors are worth retrying
                     if attempt < retries:
@@ -1272,35 +1508,104 @@ class CommunityPackageFetcher:
             logger.error(f"Error fetching {package} documentation: {str(e)}")
             return False
     
+    def _fetch_raw(self, url: str) -> bytes:
+        """One GET, following redirects, with the project's user agent."""
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
+            return response.read()
+
+    def _discover_pages(self, landing_url: str, link_pattern: str, name: str) -> Optional[tuple[str, List[str]]]:
+        """The major version a package's docs are on, and its pages, read
+        from the navigation of one of its pages.
+
+        `link_pattern` matches a documentation link and captures the version
+        and the page path. A docs page links every page of the current major
+        in its navigation and, in a version switcher, one page of each older
+        major, so the current major is the one most links point at. Returns
+        (version, pages in navigation order) or None when the page cannot be
+        read or shows no navigation.
+        """
+        try:
+            html_text = self._fetch_raw(landing_url).decode("utf-8", errors="replace")
+        except Exception as e:
+            logger.warning(f"Could not read the {name} docs navigation: {str(e)}")
+            return None
+
+        by_version: Dict[str, List[str]] = {}
+        for version, page in re.findall(link_pattern, html_text):
+            pages = by_version.setdefault(version, [])
+            if page not in pages and is_safe_section_name(page):
+                pages.append(page)
+        if not by_version:
+            return None
+
+        def major(version: str) -> int:
+            digits = re.search(r"\d+", version)
+            return int(digits.group()) if digits else 0
+
+        version, pages = max(by_version.items(), key=lambda item: (len(item[1]), major(item[0])))
+        # A lone link is a version switcher entry, not a navigation.
+        if len(pages) < 3:
+            return None
+        return version, pages
+
+    def _discover_spatie_package(self, package_key: str, docs_root: str) -> Optional[tuple[str, List[str]]]:
+        """`docs_root/<package>` redirects to the current major's introduction,
+        whose navigation links every page as an absolute URL."""
+        return self._discover_pages(
+            f"{docs_root}/{package_key}",
+            rf'href="{re.escape(docs_root)}/{re.escape(package_key)}/(v\d+)/([a-z0-9][a-z0-9/-]*)"',
+            f"Spatie {package_key}",
+        )
+
     def _fetch_spatie_docs(self, config: Dict) -> bool:
-        """Fetch documentation for Spatie packages."""
+        """Fetch documentation for Spatie packages.
+
+        Each package's version and page list are read from the site. The
+        `docs_url` and `sections` in the configuration are the fallback for a
+        night when the landing page cannot be read.
+        """
         success_count = 0
         packages = config.get("packages", {})
-        
+        docs_root = config.get("base_url", "https://spatie.be/docs")
+
         for package_key, package_info in packages.items():
             try:
                 logger.info(f"Fetching Spatie {package_info['name']} documentation")
                 package_dir = self.get_package_cache_path("spatie", package_key)
-                
-                base_url = package_info["docs_url"].rsplit('/', 1)[0]
-                sections = package_info.get("sections", [])
-                
-                fetched_sections = 0
+
+                discovered = self._discover_spatie_package(package_key, docs_root)
+                if discovered:
+                    version, sections = discovered
+                    base_url = f"{docs_root}/{package_key}/{version}"
+                    logger.info(f"Spatie {package_info['name']} is on {version} with {len(sections)} pages")
+                else:
+                    base_url = package_info["docs_url"].rsplit('/', 1)[0]
+                    sections = package_info.get("sections", [])
+                    pinned = re.search(r"/(v\d+)$", base_url)
+                    version = pinned.group(1) if pinned else ""
+                    logger.warning(f"Using the pinned version and page list for Spatie {package_info['name']}")
+
+                saved_files = []
                 for section in sections:
                     section_url = f"{base_url}/{section}"
                     content = self._fetch_and_process_content(section_url, "spatie", section)
-                    
+
                     if content:
                         # Save the processed content
                         file_path = package_dir / f"{section.replace('/', '-')}.md"
                         file_path.parent.mkdir(parents=True, exist_ok=True)
-                        
+
                         with open(file_path, 'w', encoding='utf-8') as f:
                             f.write(content)
-                        
-                        fetched_sections += 1
-                
+
+                        saved_files.append(file_path)
+
+                fetched_sections = len(saved_files)
                 if fetched_sections > 0:
+                    if fetched_sections == len(sections):
+                        self._prune_unlisted_pages(package_dir, saved_files, f"Spatie {package_info['name']}")
+
                     # Update cache metadata
                     metadata = {
                         "package": package_key,
@@ -1308,43 +1613,84 @@ class CommunityPackageFetcher:
                         "sections_count": fetched_sections,
                         "total_sections": len(sections),
                         "success_rate": fetched_sections / len(sections),
-                        "base_url": base_url
+                        "base_url": base_url,
+                        "discovery": "site navigation" if discovered else "pinned list",
                     }
-                    
+                    if version:
+                        metadata["version"] = version
+
                     self.save_cache_metadata("spatie", metadata, subpackage=package_key)
-                    
+
                     success_count += 1
                     logger.info(f"Successfully fetched {fetched_sections} sections for Spatie {package_info['name']}")
-                
+
             except Exception as e:
                 logger.error(f"Error fetching Spatie {package_key} documentation: {str(e)}")
-        
+
         return success_count > 0
-    
+
+    def _prune_unlisted_pages(self, directory: Path, kept: List[Path], name: str) -> None:
+        """Remove saved pages a complete sync did not write.
+
+        Called only after every listed page was fetched: pages left over then
+        are ones the site dropped or renamed. A partial sync must not call
+        this, or a failed fetch would delete the copy it failed to replace.
+        """
+        expected = {path.resolve() for path in kept}
+        for stale in sorted(directory.glob("*.md")):
+            if stale.resolve() not in expected:
+                logger.info(f"Pruning {name} page no longer listed: {stale.name}")
+                stale.unlink()
+
     def _fetch_livewire_docs(self, config: Dict) -> bool:
-        """Fetch Livewire documentation."""
+        """Fetch Livewire documentation.
+
+        The major version and the page list are read from the site's
+        navigation. The `sections` in the configuration, requested without a
+        version in the URL, are the fallback for a night when it cannot be.
+        """
         base_url = config["base_url"]
-        sections = config.get("sections", [])
         package_dir = self.get_package_cache_path("livewire")
-        
-        fetched_sections = 0
+
+        # Any docs URL without a version redirects to the current major.
+        discovered = self._discover_pages(
+            f"{base_url}/quickstart",
+            r'href="(?:https://livewire\.laravel\.com)?/docs/(\d+\.x)/([a-z0-9][a-z0-9/-]*)"',
+            "Livewire",
+        )
+        if discovered:
+            version: Optional[str] = discovered[0]
+            sections = discovered[1]
+            pages_url = f"{base_url}/{version}"
+            logger.info(f"Livewire is on {version} with {len(sections)} pages")
+        else:
+            version = None
+            sections = config.get("sections", [])
+            pages_url = base_url
+            logger.warning("Using the pinned page list for Livewire")
+
+        saved_files = []
         for section in sections:
             try:
-                section_url = f"{base_url}/{section}"
+                section_url = f"{pages_url}/{section}"
                 content = self._fetch_and_process_content(section_url, "livewire", section)
-                
+
                 if content:
-                    file_path = package_dir / f"{section}.md"
+                    file_path = package_dir / f"{section.replace('/', '-')}.md"
                     file_path.parent.mkdir(parents=True, exist_ok=True)
-                    
+
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(content)
-                    
-                    fetched_sections += 1
+
+                    saved_files.append(file_path)
             except Exception as e:
                 logger.warning(f"Error fetching Livewire section {section}: {str(e)}")
-        
+
+        fetched_sections = len(saved_files)
         if fetched_sections > 0:
+            if fetched_sections == len(sections):
+                self._prune_unlisted_pages(package_dir, saved_files, "Livewire")
+
             # Update cache metadata
             metadata = {
                 "package": "livewire",
@@ -1352,16 +1698,19 @@ class CommunityPackageFetcher:
                 "sections_count": fetched_sections,
                 "total_sections": len(sections),
                 "success_rate": fetched_sections / len(sections),
-                "base_url": base_url
+                "base_url": pages_url,
+                "discovery": "site navigation" if discovered else "pinned list",
             }
-            
+            if version:
+                metadata["version"] = version
+
             self.save_cache_metadata("livewire", metadata)
-            
+
             logger.info(f"Successfully fetched {fetched_sections} sections for Livewire")
             return True
-        
+
         return False
-    
+
     def _fetch_inertia_docs(self, config: Dict) -> bool:
         """Fetch Inertia.js documentation from its llms.txt markdown index.
 
@@ -1410,164 +1759,6 @@ class CommunityPackageFetcher:
         logger.info(f"Successfully fetched {fetched}/{result['total']} {name} pages")
         return True
 
-    def _process_jsx_to_markdown(self, jsx_content: str, section: str) -> Optional[str]:
-        """
-        Process JSX content and extract documentation text to markdown.
-        
-        Args:
-            jsx_content: Raw JSX file content
-            section: Section name for context
-            
-        Returns:
-            Extracted markdown content or None if no content found
-        """
-        try:
-            import re
-            
-            # Remove import statements and React component structure
-            content = jsx_content
-            
-            # Remove imports
-            content = re.sub(r'^import\s+.*?from\s+.*?[;\n]', '', content, flags=re.MULTILINE)
-            
-            # Remove export statements
-            content = re.sub(r'^export\s+.*?[;\n]', '', content, flags=re.MULTILINE)
-            
-            # Extract text content from JSX elements
-            text_content = []
-            
-            # Extract headings (both standard and custom components)
-            heading_patterns = [
-                r'<[Hh]([1-6])[^>]*>(.*?)</[Hh][1-6]>',  # Standard h1-h6
-                r'<H([1-6])[^>]*>(.*?)</H[1-6]>',         # Custom H1-H6 components
-            ]
-            
-            for pattern in heading_patterns:
-                headings = re.findall(pattern, content, re.DOTALL)
-                for level, text in headings:
-                    clean_text = self._clean_jsx_text(text)
-                    if clean_text.strip():
-                        text_content.append(f"{'#' * int(level)} {clean_text}\n")
-            
-            # Extract paragraphs (both standard and custom components)
-            paragraph_patterns = [
-                r'<[Pp][^>]*>(.*?)</[Pp]>',  # Standard p tags
-                r'<P[^>]*>(.*?)</P>',        # Custom P components
-            ]
-            
-            for pattern in paragraph_patterns:
-                paragraphs = re.findall(pattern, content, re.DOTALL)
-                for para in paragraphs:
-                    clean_text = self._clean_jsx_text(para)
-                    if clean_text.strip():
-                        text_content.append(f"{clean_text}\n")
-            
-            # Extract code blocks (both standard and custom components)
-            code_patterns = [
-                r'<pre[^>]*><code[^>]*>(.*?)</code></pre>',  # Standard code blocks
-                r'<Code[^>]*>(.*?)</Code>',                   # Custom Code components
-                r'<code[^>]*>(.*?)</code>',                   # Inline code
-            ]
-            
-            for pattern in code_patterns:
-                code_blocks = re.findall(pattern, content, re.DOTALL)
-                for code in code_blocks:
-                    clean_code = self._clean_jsx_text(code)
-                    if clean_code.strip():
-                        if '\n' in clean_code:
-                            text_content.append(f"```\n{clean_code}\n```\n")
-                        else:
-                            text_content.append(f"`{clean_code}`")
-            
-            # Extract list items
-            list_items = re.findall(r'<li[^>]*>(.*?)</li>', content, re.DOTALL)
-            for item in list_items:
-                clean_text = self._clean_jsx_text(item)
-                if clean_text.strip():
-                    text_content.append(f"- {clean_text}")
-            
-            # Extract strong/bold text
-            strong_patterns = [
-                r'<strong[^>]*>(.*?)</strong>',
-                r'<Strong[^>]*>(.*?)</Strong>',
-                r'<b[^>]*>(.*?)</b>',
-            ]
-            
-            for pattern in strong_patterns:
-                strong_texts = re.findall(pattern, content, re.DOTALL)
-                for text in strong_texts:
-                    clean_text = self._clean_jsx_text(text)
-                    if clean_text.strip():
-                        text_content.append(f"**{clean_text}**")
-            
-            # Extract links
-            link_patterns = [
-                r'<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)</a>',
-                r'<A[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)</A>',
-            ]
-            
-            for pattern in link_patterns:
-                links = re.findall(pattern, content, re.DOTALL)
-                for href, link_text in links:
-                    clean_text = self._clean_jsx_text(link_text)
-                    if clean_text.strip():
-                        text_content.append(f"[{clean_text}]({href})")
-            
-            # Extract any remaining text content from string literals (but exclude JSX markup)
-            # Look for strings that appear to be documentation content
-            string_content = re.findall(r'["`\']([^"`\']{30,})["`\']', content)
-            for text in string_content:
-                # Skip if it looks like code, imports, JSX, or other non-documentation content
-                if not any(pattern in text.lower() for pattern in [
-                    'import', 'export', 'from', 'require', 'function', 'const', 'let', 'var', 
-                    '===', '!==', '=>', 'return', 'props', 'component', '</', '/>', 'jsx', 'react'
-                ]):
-                    clean_text = text.strip()
-                    if clean_text and len(clean_text.split()) > 5:  # At least 5 words
-                        # Don't add if it's already covered by component extraction
-                        if not any(clean_text in existing for existing in text_content):
-                            text_content.append(f"{clean_text}\n")
-            
-            if text_content:
-                # Remove duplicates while preserving order
-                seen = set()
-                unique_content = []
-                for item in text_content:
-                    item_clean = item.strip()
-                    if item_clean and item_clean not in seen:
-                        # Skip if it looks like JSX remnants
-                        if not any(jsx_marker in item_clean for jsx_marker in ['<', '>', '{', '}', 'return (', '=>', 'export default']):
-                            seen.add(item_clean)
-                            unique_content.append(item)
-                
-                return '\n'.join(unique_content)
-            else:
-                logger.debug(f"No extractable content found in {section} JSX file")
-                return None
-                
-        except Exception as e:
-            logger.warning(f"Error processing JSX content for {section}: {str(e)}")
-            return None
-    
-    def _clean_jsx_text(self, text: str) -> str:
-        """Clean JSX text content of React syntax and HTML entities."""
-        import re
-        
-        # Remove JSX curly braces and expressions
-        text = re.sub(r'\{[^}]*\}', '', text)
-        
-        # Remove HTML tags
-        text = re.sub(r'<[^>]*>', '', text)
-        
-        # Decode HTML entities
-        text = html.unescape(text)
-        
-        # Clean up whitespace
-        text = re.sub(r'\s+', ' ', text)
-        text = text.strip()
-        
-        return text
-    
     def _fetch_filament_docs(self, config: Dict) -> bool:
         """Fetch Filament documentation from its llms.txt markdown index."""
         return self._fetch_llms_index_docs("filament", config)
@@ -1577,8 +1768,9 @@ class CommunityPackageFetcher:
         base_url = config["base_url"]
         sections = config.get("sections", [])
         package_dir = self.get_package_cache_path("debugbar")
-        
+
         fetched_sections = 0
+        saved_files: List[Path] = []
         for section in sections:
             try:
                 section_url = f"{base_url}/{section}/"
@@ -1592,10 +1784,13 @@ class CommunityPackageFetcher:
                         f.write(content)
                     
                     fetched_sections += 1
+                    saved_files.append(file_path)
             except Exception as e:
                 logger.warning(f"Error fetching Debugbar section {section}: {str(e)}")
-        
+
         if fetched_sections > 0:
+            if fetched_sections == len(sections):
+                self._prune_unlisted_pages(package_dir, saved_files, "Laravel Debugbar")
             # Update cache metadata
             metadata = {
                 "package": "debugbar",
@@ -1821,6 +2016,15 @@ class CommunityPackageFetcher:
         # Remove trailing whitespace
         content = '\n'.join(line.rstrip() for line in content.split('\n'))
 
+        # Livewire's docs open every page with an advertisement for its paid
+        # UI kit. Matched as the whole block, so prose that mentions the
+        # product is left alone.
+        content = re.sub(
+            r"The official Livewire UI kit\n+Build polished Livewire apps faster\.\n+Explore Flux Pro\n+→\n+",
+            "",
+            content,
+        )
+
         # Remove social media links
         content = remove_social_media_lines(content)
 
@@ -1986,8 +2190,14 @@ class MultiSourceDocsUpdater:
         }
 
         try:
-            # Update core Laravel documentation
-            results["core"] = self.update_core_docs(force=force_core)
+            # Update core Laravel documentation. "core" records whether the
+            # docs changed; a failure is recorded on its own and does not
+            # stop the other sources from being updated.
+            try:
+                results["core"] = self.update_core_docs(force=force_core)
+            except Exception as e:
+                logger.error(f"Core documentation update failed: {str(e)}")
+                results["core_error"] = str(e)
 
             # Update external services documentation
             results["external"] = self.update_external_docs(force=force_external)
@@ -2261,22 +2471,6 @@ class LearningResourceFetcher:
                 "difficulty": "beginner",
                 # No course or lesson list: both are discovered from the site.
             },
-            "laravel-blog": {
-                "name": "Laravel Blog",
-                "type": DocumentationSourceType.DIRECT_URL,
-                "base_url": "https://blog.laravel.com",
-                "description": "Official Laravel announcements and articles",
-                "difficulty": "mixed",
-                "fetch_type": "index",  # Only fetch index/list, not full articles
-            },
-            "laravel-news": {
-                "name": "Laravel News",
-                "type": DocumentationSourceType.DIRECT_URL,
-                "base_url": "https://laravel-news.com",
-                "description": "Community news, tutorials, and package announcements",
-                "difficulty": "mixed",
-                "fetch_type": "index",  # Only fetch index/summaries
-            },
             "laracasts-index": {
                 "name": "Laracasts Index",
                 "type": DocumentationSourceType.DIRECT_URL,
@@ -2362,10 +2556,6 @@ class LearningResourceFetcher:
         try:
             if source == "laravel-bootcamp":
                 return self._fetch_bootcamp_docs(source_config)
-            elif source == "laravel-blog":
-                return self._fetch_blog_index(source_config)
-            elif source == "laravel-news":
-                return self._fetch_news_index(source_config)
             elif source == "laracasts-index":
                 return self._fetch_laracasts_metadata(source_config)
             else:
@@ -2525,102 +2715,6 @@ class LearningResourceFetcher:
         parts.append(body)
         return "\n\n".join(parts) + "\n"
 
-    def _fetch_blog_index(self, config: Dict) -> bool:
-        """Fetch Laravel Blog article index (summaries only)."""
-        base_url = config["base_url"]
-        source_dir = self.get_source_cache_path("laravel-blog")
-
-        try:
-            # Fetch the main blog page to get article list
-            content_bytes = self._retry_request(base_url)
-            content = content_bytes.decode('utf-8')
-
-            # Extract article titles and summaries
-            articles = self._extract_blog_articles(content)
-
-            if articles:
-                # Save as index file
-                index_content = "# Laravel Blog - Recent Articles\n\n"
-                index_content += f"Source: {base_url}\n\n"
-                index_content += "---\n\n"
-
-                for article in articles[:20]:  # Limit to 20 most recent
-                    index_content += f"## {article.get('title', 'Untitled')}\n\n"
-                    if article.get('date'):
-                        index_content += f"*Published: {article['date']}*\n\n"
-                    if article.get('summary'):
-                        index_content += f"{article['summary']}\n\n"
-                    if article.get('url'):
-                        index_content += f"[Read more]({article['url']})\n\n"
-                    index_content += "---\n\n"
-
-                index_file = source_dir / "index.md"
-                with open(index_file, 'w', encoding='utf-8') as f:
-                    f.write(index_content)
-
-                metadata = {
-                    "source": "laravel-blog",
-                    "name": config['name'],
-                    "article_count": len(articles),
-                    "success_rate": 1.0,
-                    "difficulty": "mixed",
-                }
-                self.save_cache_metadata("laravel-blog", metadata)
-                logger.info(f"Successfully fetched {len(articles)} blog article summaries")
-                return True
-
-        except Exception as e:
-            logger.error(f"Error fetching Laravel blog index: {str(e)}")
-
-        return False
-
-    def _fetch_news_index(self, config: Dict) -> bool:
-        """Fetch Laravel News article index (summaries only)."""
-        base_url = config["base_url"]
-        source_dir = self.get_source_cache_path("laravel-news")
-
-        try:
-            content_bytes = self._retry_request(base_url)
-            content = content_bytes.decode('utf-8')
-
-            # Extract article titles and summaries
-            articles = self._extract_news_articles(content)
-
-            if articles:
-                index_content = "# Laravel News - Recent Articles\n\n"
-                index_content += f"Source: {base_url}\n\n"
-                index_content += "---\n\n"
-
-                for article in articles[:30]:  # Limit to 30 most recent
-                    index_content += f"## {article.get('title', 'Untitled')}\n\n"
-                    if article.get('category'):
-                        index_content += f"*Category: {article['category']}*\n\n"
-                    if article.get('summary'):
-                        index_content += f"{article['summary']}\n\n"
-                    if article.get('url'):
-                        index_content += f"[Read more]({article['url']})\n\n"
-                    index_content += "---\n\n"
-
-                index_file = source_dir / "index.md"
-                with open(index_file, 'w', encoding='utf-8') as f:
-                    f.write(index_content)
-
-                metadata = {
-                    "source": "laravel-news",
-                    "name": config['name'],
-                    "article_count": len(articles),
-                    "success_rate": 1.0,
-                    "difficulty": "mixed",
-                }
-                self.save_cache_metadata("laravel-news", metadata)
-                logger.info(f"Successfully fetched {len(articles)} Laravel News article summaries")
-                return True
-
-        except Exception as e:
-            logger.error(f"Error fetching Laravel News index: {str(e)}")
-
-        return False
-
     def _fetch_laracasts_metadata(self, config: Dict) -> bool:
         """Fetch Laracasts topic metadata (respects paywall)."""
         topics_url = config["topics_url"]
@@ -2669,100 +2763,6 @@ class LearningResourceFetcher:
             logger.error(f"Error fetching Laracasts metadata: {str(e)}")
 
         return False
-
-    def _extract_blog_articles(self, html_content: str) -> List[Dict]:
-        """Extract article summaries from Laravel Blog HTML."""
-        articles = []
-        try:
-            from bs4 import BeautifulSoup
-            soup = BeautifulSoup(html_content, 'html.parser')
-
-            # Look for article elements
-            article_elements = soup.find_all('article') or soup.find_all('div', class_=re.compile(r'post|article|entry', re.I))
-
-            for article in article_elements[:20]:
-                article_data: Dict[str, Any] = {}
-
-                # Find title
-                title_elem = article.find(['h1', 'h2', 'h3']) or article.find('a', class_=re.compile(r'title', re.I))
-                if title_elem:
-                    article_data['title'] = title_elem.get_text(strip=True)
-
-                # Find link
-                link_elem = article.find('a', href=True)
-                if link_elem:
-                    href = str(link_elem.get('href', ''))
-                    if href and not href.startswith('#'):
-                        article_data['url'] = href if href.startswith('http') else f"https://blog.laravel.com{href}"
-
-                # Find summary/excerpt
-                summary_elem = article.find('p') or article.find(class_=re.compile(r'excerpt|summary|description', re.I))
-                if summary_elem:
-                    summary = summary_elem.get_text(strip=True)
-                    if len(summary) > 20:
-                        article_data['summary'] = summary[:300] + "..." if len(summary) > 300 else summary
-
-                # Find date
-                date_elem = article.find('time') or article.find(class_=re.compile(r'date|time', re.I))
-                if date_elem:
-                    article_data['date'] = date_elem.get_text(strip=True)
-
-                if article_data.get('title'):
-                    articles.append(article_data)
-
-        except ImportError:
-            logger.warning("BeautifulSoup not installed, skipping article extraction")
-        except Exception as e:
-            logger.warning(f"Error extracting blog articles: {str(e)}")
-
-        return articles
-
-    def _extract_news_articles(self, html_content: str) -> List[Dict]:
-        """Extract article summaries from Laravel News HTML."""
-        articles = []
-        try:
-            from bs4 import BeautifulSoup
-            soup = BeautifulSoup(html_content, 'html.parser')
-
-            # Look for article cards
-            article_elements = soup.find_all('article') or soup.find_all('div', class_=re.compile(r'card|post|article', re.I))
-
-            for article in article_elements[:30]:
-                article_data: Dict[str, Any] = {}
-
-                # Find title
-                title_elem = article.find(['h1', 'h2', 'h3', 'h4'])
-                if title_elem:
-                    article_data['title'] = title_elem.get_text(strip=True)
-
-                # Find link
-                link_elem = article.find('a', href=True)
-                if link_elem:
-                    href = str(link_elem.get('href', ''))
-                    if href and not href.startswith('#'):
-                        article_data['url'] = href if href.startswith('http') else f"https://laravel-news.com{href}"
-
-                # Find category
-                category_elem = article.find(class_=re.compile(r'category|tag', re.I))
-                if category_elem:
-                    article_data['category'] = category_elem.get_text(strip=True)
-
-                # Find summary
-                summary_elem = article.find('p')
-                if summary_elem:
-                    summary = summary_elem.get_text(strip=True)
-                    if len(summary) > 20:
-                        article_data['summary'] = summary[:300] + "..." if len(summary) > 300 else summary
-
-                if article_data.get('title'):
-                    articles.append(article_data)
-
-        except ImportError:
-            logger.warning("BeautifulSoup not installed, skipping article extraction")
-        except Exception as e:
-            logger.warning(f"Error extracting news articles: {str(e)}")
-
-        return articles
 
     def _extract_laracasts_topics(self, html_content: str) -> List[Dict]:
         """Extract topic metadata from the Laracasts topics page.
@@ -3214,24 +3214,33 @@ def update_version(target_dir: Path, version: str, force: bool, check_only: bool
         logger.error(f"Version {version}: Update failed - {str(e)}")
         return False, False
 
+def update_exit_code(results: Dict[str, Any]) -> int:
+    """The exit code for a run of update_all.
+
+    0 when the framework docs update completed, changed or not, and at least
+    one service or package synced. 1 when the framework update raised, or
+    every service and every package failed.
+    """
+    external_results = results.get("external") or {}
+    package_results = results.get("packages") or {}
+    external_ok = sum(1 for success in external_results.values() if success)
+    package_ok = sum(1 for success in package_results.values() if success)
+    core_failed = "core_error" in results
+    core_state = "failed" if core_failed else ("updated" if results.get("core") else "already current")
+
+    logger.info(
+        f"Complete documentation update: Core {core_state}, "
+        f"External {external_ok}/{len(external_results)}, Packages {package_ok}/{len(package_results)}"
+    )
+
+    others_ok = (external_ok > 0 or not external_results) or (package_ok > 0 or not package_results)
+    return 0 if not core_failed and others_ok else 1
+
+
 def handle_update_command(args, updater):
     """Handle the unified --update command - updates everything."""
-    # Just update all documentation
     results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
-
-    core_success = results["core"]
-    external_results = results["external"]
-    package_results = results.get("packages", {})
-    external_success_count = sum(1 for success in external_results.values() if success)
-    external_total = len(external_results)
-    package_success_count = sum(1 for success in package_results.values() if success)
-    package_total = len(package_results)
-    
-    logger.info(f"Complete documentation update: Core {'successful' if core_success else 'failed'}, External {external_success_count}/{external_total}, Packages {package_success_count}/{package_total}")
-    
-    # Return success if core succeeded and at least some external services/packages succeeded
-    overall_success = core_success and ((external_success_count > 0 or external_total == 0) or (package_success_count > 0 or package_total == 0))
-    return 0 if overall_success else 1
+    return update_exit_code(results)
 
 
 def main():
@@ -3387,21 +3396,8 @@ def main():
         else:
             # Default: update all (core, external services, and packages)
             results = updater.update_all(force_core=args.force, force_external=args.force, force_packages=args.force, force_learning=args.force)
-            
-            core_success = results["core"]
-            external_results = results["external"]
-            package_results = results.get("packages", {})
-            external_success_count = sum(1 for success in external_results.values() if success)
-            external_total = len(external_results)
-            package_success_count = sum(1 for success in package_results.values() if success)
-            package_total = len(package_results)
-            
-            logger.info(f"Complete documentation update: Core {'successful' if core_success else 'failed'}, External {external_success_count}/{external_total}, Packages {package_success_count}/{package_total}")
-            
-            # Return success if core succeeded and at least some external services/packages succeeded
-            overall_success = core_success and ((external_success_count > 0 or external_total == 0) or (package_success_count > 0 or package_total == 0))
-            return 0 if overall_success else 1
-                
+            return update_exit_code(results)
+
     except KeyboardInterrupt:
         logger.info("Operation cancelled by user")
         return 130

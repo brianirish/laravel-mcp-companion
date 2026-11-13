@@ -181,3 +181,61 @@ class TestGetLatestCommitRetries:
         assert updater.needs_update() is True
 
 
+
+
+def too_many_requests(retry_after=None):
+    headers = {"Retry-After": retry_after} if retry_after is not None else {}
+    return urllib.error.HTTPError("https://x.test", 429, "Too Many Requests", headers, None)
+
+
+class TestExternalRetryOnTooManyRequests:
+    """laravel.com answers 429 partway through a large index (Cloud lists 228
+    pages). A 429 used to be treated like any other client error and raised at
+    once, so every page after the limit was lost for that night."""
+
+    def _urlopen(self, monkeypatch, failures):
+        attempts = []
+
+        def flaky(request, *a, **k):
+            attempts.append(1)
+            if len(attempts) <= len(failures):
+                raise failures[len(attempts) - 1]
+            return ok_response(b"done")
+
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
+        return attempts
+
+    def test_a_429_is_retried_after_a_growing_wait(self, external, sleeps, monkeypatch):
+        self._urlopen(monkeypatch, [too_many_requests(), too_many_requests()])
+
+        assert external._retry_request("https://x.test") == b"done"
+        assert sleeps == [10, 20]
+
+    def test_the_servers_retry_after_is_used_when_it_gives_one(self, external, sleeps, monkeypatch):
+        self._urlopen(monkeypatch, [too_many_requests("7")])
+
+        assert external._retry_request("https://x.test") == b"done"
+        assert sleeps == [7]
+
+    def test_an_absurd_retry_after_is_capped(self, external, sleeps, monkeypatch):
+        self._urlopen(monkeypatch, [too_many_requests("86400")])
+
+        external._retry_request("https://x.test")
+
+        assert sleeps == [120]
+
+    def test_a_retry_after_that_is_not_a_number_falls_back_to_the_backoff(self, external, sleeps, monkeypatch):
+        self._urlopen(monkeypatch, [too_many_requests("Wed, 21 Oct 2026 07:28:00 GMT")])
+
+        external._retry_request("https://x.test")
+
+        assert sleeps == [10]
+
+    def test_a_429_that_never_clears_is_raised_once_the_retries_run_out(self, external, sleeps, monkeypatch):
+        attempts = self._urlopen(monkeypatch, [too_many_requests()] * 20)
+
+        with pytest.raises(urllib.error.HTTPError) as raised:
+            external._retry_request("https://x.test")
+
+        assert raised.value.code == 429
+        assert len(attempts) == external.max_retries + 1

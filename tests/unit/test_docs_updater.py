@@ -515,15 +515,14 @@ class TestExternalDocsFetcher:
     def test_fetch_all_services(self, external_docs_fetcher):
         """Test fetching all services."""
         with patch.object(external_docs_fetcher, 'fetch_laravel_service_docs') as mock_fetch:
-            mock_fetch.side_effect = [True, False, True, True]  # forge, vapor, envoyer, nova
-            
+            mock_fetch.side_effect = lambda service, force=False: service != "vapor"
+
             results = external_docs_fetcher.fetch_all_services(force=False)
-            
-            assert results["forge"] is True
-            assert results["vapor"] is False
-            assert results["envoyer"] is True
-            assert results["nova"] is True
-            assert mock_fetch.call_count == 4
+
+            assert results == {
+                "forge": True, "vapor": False, "envoyer": True, "nova": True,
+                "cloud": True, "nightwatch": True, "herd": True,
+            }
     
     def test_fetch_all_services_force(self, external_docs_fetcher):
         """Test fetching all services with force flag."""
@@ -538,7 +537,7 @@ class TestExternalDocsFetcher:
             external_docs_fetcher.fetch_all_services(force=True)
             
             # All services should be attempted
-            assert mock_fetch.call_count == 4  # forge, vapor, envoyer, nova
+            assert mock_fetch.call_count == len(external_docs_fetcher.laravel_services)
     
     
     

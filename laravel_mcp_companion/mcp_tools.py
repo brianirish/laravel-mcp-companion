@@ -282,7 +282,7 @@ def resolve_corpus_file(docs_path: Path, filename: str) -> Optional[tuple[Path, 
     """Resolve a corpus-prefixed filename to (corpus_root, relative_path).
 
     Search hits name files as "<corpus-key>/<path>" — "forge/servers/php.md",
-    "spatie/laravel-permission/roles.md", "laravel-blog/index.md". When the
+    "spatie/laravel-permission/roles.md", "laracasts-index/topics.md". When the
     first path segment names an existing service, package ecosystem, or
     learning source directory, the file belongs to that corpus and version
     logic does not apply. Returns None for anything else so core resolution
@@ -1368,7 +1368,7 @@ def search_laravel_learning_resources_impl(
     Args:
         docs_path: Base path for documentation
         query: Search term to look for
-        sources: Specific sources to search (e.g., ["laravel-bootcamp", "laravel-blog"])
+        sources: Specific sources to search (e.g., ["laravel-bootcamp", "laracasts-index"])
         runtime_version: Runtime default version (from --version flag)
 
     Returns:

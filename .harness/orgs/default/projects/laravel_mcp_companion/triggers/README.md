@@ -19,10 +19,9 @@ diff against and to rebuild from.
 |---------|----------|----------|
 | `ci-push-trigger.yaml` | `ci` | Branch pushes, matching `^refs/heads/.*`; tag pushes are skipped |
 | `release-tag-trigger.yaml` | `release` | Tag pushes matching `^refs/tags/(v\|docs-).*` |
+| `docs-update-cron-trigger.yaml` | `docs_update` | Every night at 00:00 UTC, from `main` |
 
-## Not yet mirrored
-
-- **Docs update cron** (`docs_update` pipeline) — scheduled, feeds `docs_update_cron_input_set`.
+Every trigger in the project is mirrored.
 
 ## Payload conditions are ANDed, not ORed
 

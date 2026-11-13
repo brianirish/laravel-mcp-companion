@@ -1,0 +1,71 @@
+# Raises an issue when the nightly documentation sync has stopped publishing.
+#
+# The sync runs in Harness. When a run fails, Harness emails. When a run never
+# starts, nothing does: an exhausted build allowance and a pipeline file the
+# schema rejected each stopped the sync that way, the first for five weeks.
+# This workflow looks at the result instead of the run. The sync pushes a
+# docs-YYYY-MM-DD tag whenever it publishes, and scripts/docs_sync_watch.py
+# reports when the newest one is more than a few days old.
+#
+# It runs here, not in Harness, so that it does not depend on the thing it is
+# watching.
+
+name: Docs sync watch
+
+on:
+  schedule:
+    - cron: "30 6 * * *" # 06:30 UTC, six and a half hours after the sync
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Check when the sync last published
+        id: check
+        run: |
+          set +e
+          MESSAGE="$(git ls-remote --tags origin 'docs-*' | python3 scripts/docs_sync_watch.py)"
+          STATUS=$?
+          set -e
+          echo "${MESSAGE}"
+          echo "stale=$([ "${STATUS}" -ne 0 ] && echo true || echo false)" >> "${GITHUB_OUTPUT}"
+          {
+            echo "message<<MESSAGE_END"
+            echo "${MESSAGE}"
+            echo "MESSAGE_END"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Open, update or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STALE: ${{ steps.check.outputs.stale }}
+          MESSAGE: ${{ steps.check.outputs.message }}
+        run: |
+          TITLE="Docs sync has stopped publishing"
+          EXISTING="$(gh issue list --state open --search "\"${TITLE}\" in:title" --json number --jq '.[0].number // empty')"
+
+          if [ "${STALE}" = "true" ]; then
+            BODY="${MESSAGE}
+
+          Things to check, most likely first:
+
+          - The trigger's event history in Harness for \`Docs_Update_Cron\`. A trigger that cannot start a run fails there and nowhere else.
+          - The account's build credits. When they run out, every trigger fails with \"You have reached the account build limit\".
+          - Whether the last \`docs_update\` execution failed, and at which step.
+          - Whether the upstream documentation simply has not changed. The sync tags only when it publishes something."
+            if [ -n "${EXISTING}" ]; then
+              gh issue edit "${EXISTING}" --body "${BODY}"
+            else
+              gh issue create --title "${TITLE}" --body "${BODY}"
+            fi
+          elif [ -n "${EXISTING}" ]; then
+            gh issue close "${EXISTING}" --comment "${MESSAGE}"
+          fi

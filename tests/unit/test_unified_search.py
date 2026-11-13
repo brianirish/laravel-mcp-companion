@@ -36,7 +36,7 @@ def corpus(temp_dir):
         "package assigns roles to users with assignRole and syncRoles methods, "
         "including for queue worker contexts.\n"
     )
-    blog = temp_dir / "learning_resources" / "laravel-blog"
+    blog = temp_dir / "learning_resources" / "laracasts-index"
     blog.mkdir(parents=True)
     (blog / "index.md").write_text(
         "# Laravel Blog - Recent Articles\n\n## Laracon Announcements\n\n"
@@ -59,7 +59,7 @@ class TestSourcesFanOut:
             corpus, "queue", "12.x", external_dir=corpus / "external", limit=10
         )
         assert "error" not in result
-        assert {"core", "service:forge", "package:spatie", "learning:laravel-blog"} <= sources_of(result)
+        assert {"core", "service:forge", "package:spatie", "learning:laracasts-index"} <= sources_of(result)
 
     def test_sources_filter_narrows(self, corpus):
         result = search_laravel_docs_data(

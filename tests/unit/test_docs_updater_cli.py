@@ -42,8 +42,17 @@ class TestHandleUpdateCommand:
 
     def test_core_failure_exits_one(self):
         updater = Mock()
-        updater.update_all.return_value = {"core": False, "external": {}, "packages": {}}
+        updater.update_all.return_value = {
+            "core": False, "core_error": "github is unreachable", "external": {}, "packages": {},
+        }
         assert handle_update_command(self._args(), updater) == 1
+
+    def test_core_with_nothing_new_exits_zero(self):
+        """`core` is False when the docs were already current, which this
+        test used to assert was a failure."""
+        updater = Mock()
+        updater.update_all.return_value = {"core": False, "external": {}, "packages": {}}
+        assert handle_update_command(self._args(), updater) == 0
 
     def test_force_flag_fans_out(self):
         updater = Mock()

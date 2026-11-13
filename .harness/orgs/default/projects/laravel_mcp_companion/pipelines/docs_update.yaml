@@ -53,16 +53,26 @@ pipeline:
                       git reset --hard origin/main
               - step:
                   identifier: install_gh_cli
-                  name: Install latest gh CLI
+                  name: Ensure gh CLI
                   type: Run
                   spec:
                     shell: Bash
                     command: |
-                      # Harness Cloud runner may have old gh CLI, install latest
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt-get update
-                      sudo apt-get install -y gh
+                      # Everything this pipeline asks of gh (--json, -q, pr
+                      # merge --auto) has been there since 2.20, so install only
+                      # when the runner's copy is older or missing. The install
+                      # runs apt-get update, and a slow mirror once stretched
+                      # this step from 23 seconds to nearly eight minutes.
+                      MINIMUM="2.20.0"
+                      HAVE="$(gh --version 2>/dev/null | head -n 1 | awk '{print $3}' || true)"
+                      if [ -n "$HAVE" ] && [ "$(printf '%s\n' "$MINIMUM" "$HAVE" | sort -V | head -n 1)" = "$MINIMUM" ]; then
+                        echo "gh $HAVE is already installed"
+                      else
+                        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                        sudo apt-get update
+                        sudo apt-get install -y gh
+                      fi
                       gh --version
               - step:
                   identifier: install_dependencies
@@ -335,16 +345,26 @@ pipeline:
             steps:
               - step:
                   identifier: install_gh_cli
-                  name: Install latest gh CLI
+                  name: Ensure gh CLI
                   type: Run
                   spec:
                     shell: Bash
                     command: |
-                      # Harness Cloud runner may have old gh CLI, install latest
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt-get update
-                      sudo apt-get install -y gh
+                      # Everything this pipeline asks of gh (--json, -q, pr
+                      # merge --auto) has been there since 2.20, so install only
+                      # when the runner's copy is older or missing. The install
+                      # runs apt-get update, and a slow mirror once stretched
+                      # this step from 23 seconds to nearly eight minutes.
+                      MINIMUM="2.20.0"
+                      HAVE="$(gh --version 2>/dev/null | head -n 1 | awk '{print $3}' || true)"
+                      if [ -n "$HAVE" ] && [ "$(printf '%s\n' "$MINIMUM" "$HAVE" | sort -V | head -n 1)" = "$MINIMUM" ]; then
+                        echo "gh $HAVE is already installed"
+                      else
+                        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                        sudo apt-get update
+                        sudo apt-get install -y gh
+                      fi
                       gh --version
               - step:
                   identifier: wait_for_merge

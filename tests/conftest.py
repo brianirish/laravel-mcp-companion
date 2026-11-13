@@ -24,6 +24,18 @@ def _no_startup_version_refresh(request, monkeypatch):
     monkeypatch.setattr(companion_server, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
 
 
+@pytest.fixture(autouse=True)
+def _no_live_package_discovery(monkeypatch):
+    """Spatie's version and page list are discovered from spatie.be. A test
+    that fetches Spatie docs without saying what the site returns must not
+    get the real site; it gets an unreachable one, and the fetcher falls back
+    to its pinned list. Tests about discovery patch `_fetch_raw` themselves."""
+    def unreachable(self, url):
+        raise OSError(f"network access is disabled in tests: {url}")
+
+    monkeypatch.setattr(docs_updater.CommunityPackageFetcher, "_fetch_raw", unreachable)
+
+
 FIXTURES = Path(__file__).parent / "fixtures"
 
 

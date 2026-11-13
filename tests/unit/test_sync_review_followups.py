@@ -214,3 +214,27 @@ class TestImageStrippingKeepsParagraphBreaks:
         text = "```md\n![alt](path.png)\n\n```"
 
         assert docs_updater.remove_image_references(text) == text
+
+
+class TestDebugbarPrunesAfterACompleteSync:
+    @pytest.fixture
+    def packages(self, temp_dir):
+        return CommunityPackageFetcher(temp_dir)
+
+    def _sync(self, packages, failing=()):
+        stale = packages.get_package_cache_path("debugbar") / "old-page.md"
+        stale.write_text("a page the site no longer has")
+
+        def fetch(url, package, section):
+            return None if section in failing else f"# {section}\n\nText.\n"
+
+        config = dict(packages.community_packages["debugbar"], sections=["installation", "usage"])
+        with patch.object(packages, "_fetch_and_process_content", side_effect=fetch):
+            packages._fetch_debugbar_docs(config)
+        return stale
+
+    def test_a_page_no_longer_listed_is_removed(self, packages):
+        assert not self._sync(packages).exists()
+
+    def test_a_partial_sync_removes_nothing(self, packages):
+        assert self._sync(packages, failing=["usage"]).exists()

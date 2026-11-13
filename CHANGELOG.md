@@ -19,6 +19,21 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Added
+- Documentation for **Laravel Cloud, Nightwatch and Herd**. Each publishes an
+  `llms.txt` index, so each is one entry in the service table. Herd's macOS
+  and Windows guides are kept under separate paths. Cloud is read from the
+  site's single-file export (`llms-full.txt`) in two requests: fetching its
+  pages one at a time gets the client blocked by laravel.com, which also hosts
+  Forge and Laravel Learn. Cloud's API reference, about 130 pages of OpenAPI
+  YAML, is not included.
+- **Spatie and Livewire follow the site's current major and page list.** Both
+  were hand-kept lists against pinned or unversioned URLs. Laravel Permission
+  was two majors behind (v6; the site is on v8) and Livewire had 36 of the 80
+  pages Livewire 4 lists. The pinned lists remain as the fallback for a night
+  when a site's navigation cannot be read.
+- A scheduled GitHub workflow that opens an issue when the newest
+  `docs-YYYY-MM-DD` tag is more than four days old. It catches a sync that has
+  stopped starting, which no failure email can.
 - The project is an installable Python package. `uvx --from
   git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-companion`
   and `pip install git+...` both work, with the documentation bundled in the
@@ -75,6 +90,14 @@ docs-only commit and contains no code change.
   directories; `.dockerignore` now excludes them.
 
 ### Fixed
+- `docs_updater --update` exits 0 when the framework docs were already
+  current. It treated "nothing changed" as a failure. A framework update that
+  does fail no longer stops the services and packages from being updated.
+- A `429 Too Many Requests` from a documentation site is retried after the
+  pause it asks for, or a growing backoff. It was raised at once, like a 404.
+- Spatie, Livewire and Debugbar pages that a site has dropped are removed
+  after a complete sync.
+- The advertisement at the top of every Livewire docs page is no longer saved.
 - `laravel://` resource reads go through the same symlink-refusing open as the
   tools. They used a second file cache that checked a path and then opened it
   in two steps.
@@ -83,6 +106,11 @@ docs-only commit and contains no code change.
   resource handlers.
 
 ### Removed
+- **The Laravel Blog and Laravel News sources.** Each was a list of a few
+  article titles with links, refetched nightly. They held no documentation,
+  and a changed headline was enough to publish a new image. Search and reads
+  against `laravel-blog` and `laravel-news` return nothing now.
+- The unused JSX-to-markdown converter in the updater.
 - Dead server-side code: the unused search and learning-resource formatters,
   the `search_laravel_docs_impl` wrapper that no client could reach, and the
   "requires server context" stubs.

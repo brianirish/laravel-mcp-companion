@@ -33,7 +33,7 @@ def corpus(temp_dir):
     (spatie / "roles.md").write_text(
         "# Roles\n\n## Assigning Roles\n\nAssign roles with assignRole.\n"
     )
-    blog = temp_dir / "learning_resources" / "laravel-blog"
+    blog = temp_dir / "learning_resources" / "laracasts-index"
     blog.mkdir(parents=True)
     (blog / "index.md").write_text("# Blog\n\n## Recent\n\nArticle summaries here.\n")
     return temp_dir
@@ -43,7 +43,7 @@ class TestCorpusPrefixedReads:
     @pytest.mark.parametrize("filename,expected", [
         ("forge/servers/php.md", "Forge installs PHP"),
         ("spatie/laravel-permission/roles.md", "assignRole"),
-        ("laravel-blog/index.md", "Article summaries"),
+        ("laracasts-index/index.md", "Article summaries"),
     ])
     def test_content_reads_resolve_corpus_prefixes(self, corpus, filename, expected):
         content = read_laravel_doc_content_impl(corpus, filename)
@@ -52,7 +52,7 @@ class TestCorpusPrefixedReads:
     @pytest.mark.parametrize("filename,section,expected", [
         ("forge/servers/php.md", "installing-php", "Forge installs PHP"),
         ("spatie/laravel-permission/roles.md", "assigning-roles", "assignRole"),
-        ("laravel-blog/index.md", "recent", "Article summaries"),
+        ("laracasts-index/index.md", "recent", "Article summaries"),
     ])
     def test_section_reads_resolve_corpus_prefixes(self, corpus, filename, section, expected):
         content = read_laravel_doc_section_impl(corpus, filename, section)
