@@ -1614,7 +1614,7 @@ class CommunityPackageFetcher:
                         "total_sections": len(sections),
                         "success_rate": fetched_sections / len(sections),
                         "base_url": base_url,
-                        "discovery": "site navigation" if discovered else "pinned list",
+                        "source_type": "site_navigation" if discovered else "pinned_list",
                     }
                     if version:
                         metadata["version"] = version
@@ -1699,7 +1699,7 @@ class CommunityPackageFetcher:
                 "total_sections": len(sections),
                 "success_rate": fetched_sections / len(sections),
                 "base_url": pages_url,
-                "discovery": "site navigation" if discovered else "pinned list",
+                "source_type": "site_navigation" if discovered else "pinned_list",
             }
             if version:
                 metadata["version"] = version
