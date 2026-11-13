@@ -21,6 +21,18 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "external: marks tests that interact with external services")
 
 
+@pytest.fixture(autouse=True)
+def _no_startup_version_refresh(request, monkeypatch):
+    """Both entry points refresh the supported versions before parsing their
+    arguments, which can reach GitHub when the versions cache has expired. No
+    test should depend on that, so main() gets a no-op here. test_import_time
+    is about the refresh itself and uses the real one."""
+    if request.module.__name__.endswith("test_import_time"):
+        return
+    monkeypatch.setattr(docs_updater, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
+    monkeypatch.setattr(laravel_mcp_companion, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
+
+
 FIXTURES = Path(__file__).parent / "fixtures"
 
 

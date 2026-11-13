@@ -32,7 +32,10 @@ from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
 # Import documentation updater
-from docs_updater import DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions, DEFAULT_VERSION
+from docs_updater import (
+    DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions,
+    get_default_version, refresh_supported_versions,
+)
 from shutdown_handler import GracefulShutdown
 from fastmcp.tools.tool import ToolResult
 
@@ -724,8 +727,8 @@ def parse_arguments():
     parser.add_argument(
         "--version",
         type=str,
-        default=os.environ.get("VERSION", DEFAULT_VERSION),
-        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}, env: VERSION). Supported: {', '.join(SUPPORTED_VERSIONS)}"
+        default=os.environ.get("VERSION", get_default_version()),
+        help=f"Laravel version branch to use (default: {get_default_version()}, env: VERSION). Supported: {', '.join(SUPPORTED_VERSIONS)}"
     )
     parser.add_argument(
         "--update-docs",
@@ -2615,6 +2618,10 @@ def build_http_app(args, mcp: FastMCP):
 
 def main():
     """Main entry point for the Laravel MCP Companion."""
+    # The one place the server asks GitHub which Laravel versions exist.
+    # Importing the module does not, so this runs before the arguments are
+    # parsed: --version is validated against the refreshed list.
+    refresh_supported_versions()
     args = parse_arguments()
     
     # Setup server environment

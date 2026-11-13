@@ -126,8 +126,8 @@ class TestVersionParsing:
     def test_get_version_from_path_no_version(self):
         """Test version extraction when no version is specified."""
         # get_version_from_path is now mcp_tools.get_version_from_path
-        # (re-exported), so its DEFAULT_VERSION lookup resolves in mcp_tools.
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+        # (re-exported), so its get_default_version lookup resolves in mcp_tools.
+        with patch('mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("blade.md", "12.x", "blade.md"),
                 ("frontend/vite.md", "12.x", "frontend/vite.md"),
@@ -143,7 +143,7 @@ class TestVersionParsing:
         """Test version extraction with invalid version formats."""
         # get_version_from_path is now mcp_tools.get_version_from_path
         # (re-exported), so its globals resolve in mcp_tools.
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'), \
+        with patch('mcp_tools.get_default_version', return_value='12.x'), \
              patch('mcp_tools.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
             
             # These should fall back to default version
@@ -161,8 +161,8 @@ class TestVersionParsing:
     def test_get_version_from_path_empty_input(self):
         """Test version extraction with empty or invalid input."""
         # get_version_from_path is now mcp_tools.get_version_from_path
-        # (re-exported), so its DEFAULT_VERSION lookup resolves in mcp_tools.
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+        # (re-exported), so its get_default_version lookup resolves in mcp_tools.
+        with patch('mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("", "12.x", ""),
                 ("/", "12.x", "/"),  # Path("/").parts is empty, so it returns "/" 
@@ -240,7 +240,7 @@ class TestInputValidation:
         from mcp_tools import read_laravel_doc_content_impl
         
         # Test with None version (should use default)
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+        with patch('mcp_tools.get_default_version', return_value='12.x'):
             result = read_laravel_doc_content_impl(Path("/tmp"), "test.md", None)
             # Should not crash and should handle gracefully
             assert isinstance(result, str)
@@ -319,7 +319,7 @@ class TestErrorHandling:
             "12.x/" + "a" * 1000,  # Very long filename
         ]
         
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+        with patch('mcp_tools.get_default_version', return_value='12.x'):
             for test_input in edge_cases:
                 try:
                     version, relative = get_version_from_path(test_input)

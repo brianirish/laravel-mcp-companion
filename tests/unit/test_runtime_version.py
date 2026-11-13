@@ -179,7 +179,7 @@ class TestNewVersionSimulation:
     def test_version_parsing_accepts_future_version(self):
         """New version from API is recognized as valid."""
         with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             version, path = get_version_from_path("blade.md")
             assert version == self.FUTURE_VERSION
             assert path == "blade.md"
@@ -187,7 +187,7 @@ class TestNewVersionSimulation:
     def test_explicit_version_still_overrides(self):
         """Explicit version in path overrides the new default."""
         with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             version, path = get_version_from_path("12.x/blade.md")
             assert version == "12.x"
             assert path == "blade.md"
@@ -199,7 +199,7 @@ class TestNewVersionSimulation:
         (future_dir / "routing.md").write_text("# Routing for 14.x")
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION):
+             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             content = read_laravel_doc_content_impl(test_docs_dir, "routing.md")
             assert "Routing for 14.x" in content
 
@@ -210,7 +210,7 @@ class TestNewVersionSimulation:
         (future_dir / "blade.md").write_text("# Blade")
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
              patch('mcp_tools.os.listdir', return_value=['blade.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
             assert self.FUTURE_VERSION in result
@@ -221,7 +221,7 @@ class TestNewVersionSimulation:
         future_dir.mkdir(parents=True, exist_ok=True)
 
         with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
              patch('mcp_tools.os.listdir', return_value=['routing.md']), \
              patch('mcp_tools.get_file_content_cached', return_value="New routing features"):
             result = search_laravel_docs_data(test_docs_dir, "routing")
@@ -248,7 +248,7 @@ class TestNewVersionSimulation:
              patch('laravel_mcp_companion.FastMCP') as mock_fastmcp_class, \
              patch('laravel_mcp_companion.setup_docs_path') as mock_setup_docs, \
              patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.DEFAULT_VERSION', self.FUTURE_VERSION), \
+             patch('laravel_mcp_companion.get_default_version', return_value=self.FUTURE_VERSION), \
              patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
              patch.object(sys, 'argv', ['laravel-mcp-companion']):
             mock_setup_docs.return_value = "/tmp/test"

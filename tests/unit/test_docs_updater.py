@@ -794,22 +794,24 @@ class TestVersionSupport:
         assert len(versions) > 0
         assert "12.x" in versions
 
-    def test_get_cached_supported_versions(self):
-        """Test cached version support."""
-        # Clear cache first
+    def test_get_cached_supported_versions_reads_the_cache_and_never_fetches(self, monkeypatch):
+        """The import-time lookup is cache-only; the network path is refresh_supported_versions."""
         import docs_updater
-        docs_updater._SUPPORTED_VERSIONS_CACHE = None
-        
-        with patch('docs_updater.get_supported_versions', return_value=["test_version"]) as mock_get:
-            # First call should fetch
-            versions1 = get_cached_supported_versions()
-            assert versions1 == ["test_version"]
-            assert mock_get.call_count == 1
-            
-            # Second call should use cache
-            versions2 = get_cached_supported_versions()
-            assert versions2 == ["test_version"]
-            assert mock_get.call_count == 1  # Not called again
+        monkeypatch.setattr(docs_updater, "_SUPPORTED_VERSIONS_CACHE", None)
+        monkeypatch.setattr(docs_updater, "_read_versions_cache", lambda cache_file, max_age_seconds=None: ["11.x", "12.x"])
+
+        with patch('docs_updater.get_supported_versions') as fetch:
+            assert get_cached_supported_versions() == ["11.x", "12.x"]
+            assert get_cached_supported_versions() == ["11.x", "12.x"]
+
+        fetch.assert_not_called()
+
+    def test_get_cached_supported_versions_without_a_cache_uses_the_last_resort(self, monkeypatch):
+        import docs_updater
+        monkeypatch.setattr(docs_updater, "_SUPPORTED_VERSIONS_CACHE", None)
+        monkeypatch.setattr(docs_updater, "_read_versions_cache", lambda cache_file, max_age_seconds=None: None)
+
+        assert get_cached_supported_versions() == docs_updater.LAST_RESORT_VERSIONS
 
     def test_default_version_is_latest(self):
         """Test that default version is the latest supported version."""

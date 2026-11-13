@@ -371,9 +371,8 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
     2. GitHub API (writes cache on success)
     3. Stale cache file, then last resort: ["12.x"]
 
-    This runs at import time, so the cache is consulted first: a network round
-    trip on every process start is wasteful, and a stalled connection would
-    otherwise block startup.
+    The cache is consulted first: a network round trip on every process start
+    is wasteful, and a stalled connection would otherwise block startup.
 
     Args:
         cache_file: Override cache file path (for testing). Defaults to VERSIONS_CACHE_FILE.
@@ -435,19 +434,49 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
         logger.warning("No cache available, using last resort")
         return LAST_RESORT_VERSIONS
 
-# Cache supported versions to avoid repeated API calls
+# The supported versions, as one list object shared by every module that
+# imports it. Importing this module reads the versions cache and nothing else:
+# no request, no cache write. refresh_supported_versions() is the only path to
+# the network, and it updates the list in place so that modules which bound the
+# name at import see the result.
 _SUPPORTED_VERSIONS_CACHE = None
 
 def get_cached_supported_versions() -> list[str]:
-    """Get cached supported versions or fetch them if not cached."""
+    """The supported versions as last resolved. Never touches the network."""
     global _SUPPORTED_VERSIONS_CACHE
     if _SUPPORTED_VERSIONS_CACHE is None:
-        _SUPPORTED_VERSIONS_CACHE = get_supported_versions()
+        _SUPPORTED_VERSIONS_CACHE = (
+            _read_versions_cache(VERSIONS_CACHE_FILE) or list(LAST_RESORT_VERSIONS)
+        )
     return _SUPPORTED_VERSIONS_CACHE
 
 SUPPORTED_VERSIONS = get_cached_supported_versions()
-DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]  # Always use the latest version as default
-USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
+# Frozen at import, so it goes stale after a refresh. Kept for importers that
+# still read it; new code calls get_default_version().
+DEFAULT_VERSION = SUPPORTED_VERSIONS[-1]
+
+
+def get_default_version() -> str:
+    """The newest supported version, as of the last refresh."""
+    return SUPPORTED_VERSIONS[-1]
+
+
+def refresh_supported_versions() -> list[str]:
+    """Resolve the supported versions, asking GitHub if the cache has expired.
+
+    Called once at startup by the server and by this module's command line. A
+    failure leaves the versions already loaded in place: being offline must
+    not stop the server from starting.
+    """
+    try:
+        resolved = get_supported_versions()
+    except Exception as e:
+        logger.warning(f"Could not refresh the supported versions, keeping the cached list: {e}")
+        return SUPPORTED_VERSIONS
+    if resolved:
+        SUPPORTED_VERSIONS[:] = resolved
+    return SUPPORTED_VERSIONS
+
 
 class DocumentationSourceType(Enum):
     """Types of documentation sources supported."""
@@ -3079,8 +3108,8 @@ def parse_arguments():
     parser.add_argument(
         "--version",
         type=str,
-        default=DEFAULT_VERSION,
-        help=f"Laravel version branch to use (default: {DEFAULT_VERSION}). Supported: {', '.join(SUPPORTED_VERSIONS)}"
+        default=get_default_version(),
+        help=f"Laravel version branch to use (default: {get_default_version()}). Supported: {', '.join(SUPPORTED_VERSIONS)}"
     )
     parser.add_argument(
         "--all-versions",
@@ -3206,6 +3235,10 @@ def handle_update_command(args, updater):
 
 def main():
     """Main entry point for the Laravel Docs Updater."""
+    # Before the arguments are parsed: --version is validated against this
+    # list, and --all-versions walks it, so a new Laravel branch has to be
+    # known by then.
+    refresh_supported_versions()
     args = parse_arguments()
     
     # Set logging level

@@ -16,7 +16,7 @@ import json
 import threading
 
 from doc_search import Section, chunk_markdown
-from docs_updater import get_cached_supported_versions, DEFAULT_VERSION
+from docs_updater import get_cached_supported_versions, get_default_version
 from path_security import no_follow_opener, resolve_contained_path, is_safe_path as is_safe_path
 from toon_helpers import (
     toon_encode,
@@ -123,7 +123,7 @@ def get_version_from_path(path: str, runtime_version: Optional[str] = None) -> t
         return parts[0], parts[1]
     else:
         # No version specified, use runtime version or default
-        default_version = runtime_version if runtime_version else DEFAULT_VERSION
+        default_version = runtime_version if runtime_version else get_default_version()
         return default_version, path
 
 
@@ -344,7 +344,7 @@ def resolve_search_versions(
         return [version]
     if all_versions:
         return list(SUPPORTED_VERSIONS)
-    default = runtime_version or DEFAULT_VERSION
+    default = runtime_version or get_default_version()
     return [default] if default in SUPPORTED_VERSIONS else list(SUPPORTED_VERSIONS)
 
 
@@ -605,7 +605,7 @@ def read_laravel_doc_content_impl(docs_path: Path, filename: str, version: Optio
         # Use provided version or runtime version or default
         relative_path = filename
         if not version:
-            version = runtime_version if runtime_version else DEFAULT_VERSION
+            version = runtime_version if runtime_version else get_default_version()
     
     # Make sure the path ends with .md
     if not relative_path.endswith('.md'):
@@ -701,7 +701,7 @@ def read_laravel_doc_section_impl(
         return version_error
 
     if not version:
-        version = runtime_version if runtime_version else DEFAULT_VERSION
+        version = runtime_version if runtime_version else get_default_version()
 
     # A version-prefixed core path ("12.x/queues.md") names its version
     # inline, exactly as search emits core hits.
@@ -953,7 +953,7 @@ def browse_docs_by_category_impl(docs_path: Path, category: str, version: Option
         return version_error
 
     if not version:
-        version = runtime_version if runtime_version else DEFAULT_VERSION
+        version = runtime_version if runtime_version else get_default_version()
 
     # Use expanded categories from learning_resources module
     categories = EXPANDED_CATEGORIES
@@ -1034,7 +1034,7 @@ def verify_laravel_feature_impl(docs_path: Path, feature: str, version: Optional
 
     # Determine version to use
     if not version:
-        version = runtime_version if runtime_version else DEFAULT_VERSION
+        version = runtime_version if runtime_version else get_default_version()
 
     version_path = docs_path / version
     if not version_path.exists():
@@ -1188,7 +1188,7 @@ def find_laravel_docs_for_need_impl(docs_path: Path, need: str, version: Optiona
         return format_error("Need description cannot be empty")
 
     if not version:
-        version = runtime_version if runtime_version else DEFAULT_VERSION
+        version = runtime_version if runtime_version else get_default_version()
 
     # Get docs for the need using the learning_resources mappings
     docs = get_docs_for_need(need)
@@ -1301,7 +1301,7 @@ def get_laravel_content_by_difficulty_impl(docs_path: Path, difficulty: str, ver
         )
 
     if not version:
-        version = runtime_version if runtime_version else DEFAULT_VERSION
+        version = runtime_version if runtime_version else get_default_version()
 
     # Get topics at this difficulty level
     topics = get_topics_by_difficulty(difficulty_level)

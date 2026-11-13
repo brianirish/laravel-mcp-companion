@@ -541,7 +541,7 @@ class TestVersionComparisonTools:
     def test_verify_laravel_feature_uses_default_version(self, test_docs_dir):
         """Test verify_laravel_feature uses default version when none specified."""
         with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
-            with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
+            with patch('mcp_tools.get_default_version', return_value='12.x'):
                 result = verify_laravel_feature_impl(test_docs_dir, "routing", runtime_version="12.x")
 
                 assert "routing" in result
