@@ -4,9 +4,9 @@ Source: https://laravel-news.com
 
 ---
 
-## UUID Request Input and Migration Failure Events in Laravel 13.42
+## Laravel Read Replicas: Check if a Replica Has Caught Up
 
-[Read more](https://laravel-news.com/laravel-13-42-0)
+[Read more](https://laravel-news.com/laravel-read-replica-commit-ids)
 
 ---
 
@@ -36,15 +36,15 @@ Latest Laravel Release
 
 ---
 
-## Let your users buy domains without leaving your app
+## The Web Search API for Your LLM and AI Applications​
 
-[Read more](https://www.name.com/nameapi?utm_campaign=Name_Email_11226.nameAPI&utm_medium=Link&utm_source=Website)
+[Read more](https://serpapi.com/?utm_source=laravelnews)
 
 ---
 
-## UUID Request Input and Migration Failure Events in Laravel 13.42
+## Laravel Read Replicas: Check if a Replica Has Caught Up
 
-[Read more](https://laravel-news.com/laravel-13-42-0)
+[Read more](https://laravel-news.com/laravel-read-replica-commit-ids)
 
 ---
 
