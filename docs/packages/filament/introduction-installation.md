@@ -27,8 +27,7 @@ composer require filament/filament:"^5.0"
 php artisan filament:install --panels
 ```
 
-> **Warning**
->
+> [!WARNING]
 > When using Windows PowerShell to install Filament, you may need to run the command below, since it ignores ` ^ ` characters in version constraints:
 > 
 > ```bash
@@ -37,13 +36,10 @@ php artisan filament:install --panels
 > php artisan filament:install --panels
 > ```
 
-
 This will create and register a new [Laravel service provider](https://laravel.com/docs/providers) called ` app/Providers/Filament/AdminPanelProvider.php `.
 
-> **Tip**
->
+> [!TIP]
 > If you get an error when accessing your panel, check that the service provider is registered in ` bootstrap/providers.php `. If it's not registered, you'll need to [add it manually](https://laravel.com/docs/providers#registering-providers).
-
 
 You can create a new user account using the following command:
 
@@ -74,8 +70,7 @@ composer require
 
 You can install additional packages later in your project without having to repeat these installation steps.
 
-> **Warning**
->
+> [!WARNING]
 > When using Windows PowerShell to install Filament, you may need to run the command below, since it ignores ` ^ ` characters in version constraints:
 > 
 > ```bash
@@ -89,7 +84,6 @@ You can install additional packages later in your project without having to repe
 >     filament/widgets:"~5.0"
 > ```
 
-
 If you only want to use the set of [Blade UI components](https://filamentphp.com/docs/5.x/components), you'll need to require ` filament/support ` at this stage.
 
 **New Laravel projects**
@@ -98,10 +92,8 @@ Get started with Filament components quickly by running a simple command. Note t
 
 To quickly set up Filament in a new Laravel project, run the following commands to install [Livewire](https://livewire.laravel.com), [Alpine.js](https://alpinejs.dev), and [Tailwind CSS](https://tailwindcss.com):
 
-> **Warning**
->
+> [!WARNING]
 > These commands will overwrite existing files in your application. Only run them in a new Laravel project\!
-
 
 Run the following command to install the Filament frontend assets:
 
@@ -238,8 +230,7 @@ Add the following code to your new layout file:
 
 The important parts of this are the ` @filamentStyles ` in the ` <head> ` of the layout, and the ` @filamentScripts ` at the end of the ` <body> `. Make sure to also include your app's compiled CSS and JavaScript files from Vite\!
 
-> **Info**
->
+> [!NOTE]
 > The ` @livewire('notifications') ` line is required in the layout only if you have the [Notifications](https://filamentphp.com/docs/5.x/notifications) package installed and want to send flash notifications to users through Filament.
 
 

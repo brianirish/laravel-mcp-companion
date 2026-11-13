@@ -31,10 +31,8 @@ Wizard::make([
 
 
 
-> **Tip**
->
+> [!TIP]
 > We have different setup instructions if you're looking to add a wizard to the creation process inside a [panel resource](https://filamentphp.com/docs/5.x/resources/creating-records.md#using-a-wizard) or an [action modal](https://filamentphp.com/docs/5.x/actions/modals.md#rendering-a-wizard-in-a-modal). Following that documentation will ensure that the ability to submit the form is only available on the last step of the wizard.
-
 
 ## Rendering a submit button on the last step
 

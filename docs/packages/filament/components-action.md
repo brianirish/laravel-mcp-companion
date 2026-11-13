@@ -5,8 +5,7 @@ Source: https://filamentphp.com/docs/5.x/components/action.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/components/action.md
 
-> **Warning**
->
+> [!WARNING]
 > Before proceeding, make sure ` filament/actions ` is installed in your project. You can check by running:
 > 
 > ```bash
@@ -14,7 +13,6 @@ Source: https://filamentphp.com/docs/5.x/components/action.md
 > ```
 > 
 > If it's not installed, consult the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and configure the **individual components** according to the instructions.
-
 
 ## Setting up the Livewire component
 
@@ -99,10 +97,8 @@ class ManagePost extends Component implements HasActions, HasSchemas
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > ` $post ` is a model property on a regular Livewire component. Filament does not re-query or authorize it on later requests. Re-query and authorize the post before using it in the action, including any tenant or ownership restrictions your application requires. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 Finally, you need to render the action in your view. To do this, you can use ` {{ $this->deleteAction }} `, where you replace ` deleteAction ` with the name of your action method:
 
@@ -116,8 +112,7 @@ Finally, you need to render the action in your view. To do this, you can use ` {
 
 You also need ` <x-filament-actions::modals /> ` which injects the HTML required to render action modals. This only needs to be included within the Livewire component once, regardless of how many actions you have for that component.
 
-> **Info**
->
+> [!NOTE]
 > ` filament/actions ` also includes the following packages:
 > 
 > - ` filament/forms `
@@ -129,7 +124,6 @@ You also need ` <x-filament-actions::modals /> ` which injects the HTML required
 > For example, if your action uses [Notifications](https://filamentphp.com/docs/5.x/components/notifications.md), remember to include ` @livewire('notifications') ` in your layout and add ` @import '../../vendor/filament/notifications/resources/css/index.css' ` to your CSS file.
 > 
 > If you are using any other [Filament components](https://filamentphp.com/docs/5.x/components/overview.md#package-components) in your action, make sure to install and integrate the corresponding package as well.
-
 
 ## Passing action arguments
 
@@ -166,10 +160,8 @@ public function deleteAction(): Action
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Action arguments are client-controlled. Always query and authorize the requested record, including any tenant or ownership restrictions, before acting on it.
-
 
 ## Hiding actions in a Livewire view
 

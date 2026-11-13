@@ -24,10 +24,8 @@ Action::make('delete')
 
 
 
-> **Warning**
->
+> [!WARNING]
 > The confirmation modal is not available when a ` url() ` is set instead of an ` action() `. Instead, you should redirect to the URL within the ` action() ` closure.
-
 
 ## Controlling modal content
 
@@ -717,10 +715,8 @@ Action::make('help')
 
 The [methods available to customize trigger buttons](https://filamentphp.com/docs/5.x/actions/overview.md) will work to modify the ` $action ` instance inside the closure.
 
-> **Tip**
->
+> [!TIP]
 > To customize the button labels in your modal, the ` modalSubmitActionLabel() ` and ` modalCancelActionLabel() ` methods can be used instead of passing a function to ` modalSubmitAction() ` and ` modalCancelAction() `, if you don't require any further customizations.
-
 
 ### Removing a default modal footer action button
 
@@ -994,10 +990,8 @@ Action::make('second')
     })
 ```
 
-> **Warning**
->
+> [!WARNING]
 > ` getValidatedData() ` validates the data without submitting the parent action. It skips ` beforeStateDehydrated() ` hooks, so a newly uploaded file can remain a ` TemporaryUploadedFile ` instead of a stored path. It also skips ` mutateDataUsing() `, ` beforeFormValidated() `, and ` afterFormValidated() `.
-
 
 ### Filling in the data of a parent action
 
@@ -1251,10 +1245,8 @@ Action::make('updateAuthor')
 
 When a modal is click-through, its backdrop is removed, clicks outside the modal window pass through to the page beneath, and the page remains scrollable. The modal can still be closed using its close button or by pressing the escape key.
 
-> **Info**
->
+> [!NOTE]
 > A click-through modal cannot be closed by clicking away, as that would be incompatible with interacting with the page behind it. Enabling ` modalClickThrough() ` therefore disables closing by clicking away automatically.
-
 
 The ` modalClickThrough() ` method also accepts a function to dynamically calculate the value. You can inject various utilities into the function as parameters.
 
@@ -1497,10 +1489,8 @@ As well as allowing a static value, the ` extraModalWindowAttributes() ` method 
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraModalWindowAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
-
 
 ## Adding extra attributes to the modal overlay
 
@@ -1539,6 +1529,5 @@ As well as allowing a static value, the ` extraModalOverlayAttributes() ` method
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraModalOverlayAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.

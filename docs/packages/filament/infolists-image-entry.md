@@ -51,10 +51,8 @@ As well as allowing a static value, the ` alt() ` method also accepts a function
 
 If you do not set any alt text, the image is rendered with an empty ` alt ` attribute, which marks it as decorative for assistive technology.
 
-> **Warning**
->
+> [!WARNING]
 > When an image [links to a URL](https://filamentphp.com/docs/5.x/infolists/overview.md#opening-a-url-when-an-entry-is-clicked), its alt text becomes the accessible name of the link. Always set meaningful ` alt() ` text on linked images, otherwise screen reader users will encounter a link with no name.
-
 
 ## Managing the image disk
 
@@ -86,7 +84,12 @@ As well as allowing a static value, the ` disk() ` method also accepts a functio
 
 ## Public images
 
-By default, Filament will generate temporary URLs to images in the filesystem, unless the [disk](https://filamentphp.com/docs/5.x/infolists/image-entry.md#managing-the-image-disk) is set to ` public `. If your images are stored in a public disk, you can set the ` visibility() ` to ` public `:
+By default, images use ` private ` visibility unless the [disk](https://filamentphp.com/docs/5.x/infolists/image-entry.md#managing-the-image-disk) is named ` public `. Filament attempts to generate temporary URLs for private images if the disk supports them, falling back to permanent URLs if it cannot. The default visibility depends on the disk's name, not its filesystem configuration.
+
+> [!NOTE]
+> If your application uses the ` local ` disk, you may need to [enable local temporary URLs](https://laravel.com/docs/filesystem#enabling-local-temporary-urls) by adding ` 'serve' => true ` to the disk's configuration in ` config/filesystems.php `.
+
+If your images are already publicly accessible, you can set ` visibility('public') ` to use permanent URLs. This does not change the disk or make private files publicly accessible:
 
 ```php
 use Filament\Infolists\Components\ImageEntry;
@@ -339,7 +342,7 @@ ImageEntry::make('colleagues.avatar')
     ->imageHeight(40)
     ->circular()
     ->stacked()
-    ->overlap(2)
+    ->overlap(4)
 ```
 
 
@@ -469,6 +472,39 @@ As well as allowing a static value, the ` limitedRemainingText() ` method also a
 | Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
 | State | ` mixed ` | ` $state ` | The current value of the entry. |
 
+
+#### Adding a tooltip to the remaining images count
+
+You can add a tooltip to the ` +N ` count using ` limitedRemainingTextTooltip() `. This is separate from ` tooltip() `, which applies to each visible image:
+
+```php
+use Filament\Infolists\Components\ImageEntry;
+
+ImageEntry::make('colleagues.avatar')
+    ->circular()
+    ->stacked()
+    ->limit(3)
+    ->limitedRemainingText()
+    ->limitedRemainingTextTooltip('More colleagues')
+```
+
+As well as allowing a static value, the ` limitedRemainingTextTooltip() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters. The ` $state ` contains the full entry state, including images hidden by the limit.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/infolists/overview.md#entry-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Entry | ` Filament\Infolists\Components\Entry ` | ` $component ` | The current entry component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current schema data. Validation is not run on form fields. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the entry. |
+
+
+The tooltip is only displayed when the remaining images count is visible. Pass ` null ` to disable it.
 
 ## Prevent file existence checks
 

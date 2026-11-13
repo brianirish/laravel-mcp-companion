@@ -181,10 +181,8 @@ test('title is hidden', function () {
 });
 ```
 
-> **Tip**
->
+> [!TIP]
 > For both ` assertFormFieldHidden() ` and ` assertFormFieldVisible() ` you can pass the name of a specific form the field belongs to as the second argument like ` assertFormFieldHidden('title', 'createPostForm') `.
-
 
 ## Testing disabled form fields
 
@@ -210,10 +208,8 @@ test('title is disabled', function () {
 });
 ```
 
-> **Tip**
->
+> [!TIP]
 > For both ` assertFormFieldEnabled() ` and ` assertFormFieldDisabled() ` you can pass the name of a specific form the field belongs to as the second argument like ` assertFormFieldEnabled('title', 'createPostForm') `.
-
 
 ## Testing other schema components
 
@@ -315,10 +311,8 @@ test('comments section is hidden', function () {
 });
 ```
 
-> **Tip**
->
+> [!TIP]
 > For both ` assertSchemaComponentHidden() ` and ` assertSchemaComponentVisible() ` you can pass the name of a specific schema the component belongs to as the second argument like ` assertSchemaComponentHidden('comments-section', 'createPostForm') `.
-
 
 ## Testing repeaters
 

@@ -206,10 +206,8 @@ The chart takes its colors from the [color of the stat](https://filamentphp.com/
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > These properties only affect the charts inside stats. [Chart widgets](https://filamentphp.com/docs/5.x/widgets/charts.md#styling-charts-in-a-theme) are styled with their own set, prefixed ` --chart- `.
-
 
 ## Live updating stats (polling)
 

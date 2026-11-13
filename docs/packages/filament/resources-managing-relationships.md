@@ -11,19 +11,15 @@ Filament provides many ways to manage relationships in the app. Which feature yo
 
 ### Relation managers - interactive tables underneath your resource forms
 
-> **Info**
->
+> [!NOTE]
 > These are compatible with ` HasMany `, ` HasManyThrough `, ` BelongsToMany `, ` MorphMany ` and ` MorphToMany ` relationships.
-
 
 [Relation managers](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#creating-a-relation-manager) are interactive tables that allow administrators to list, create, attach, associate, edit, detach, dissociate and delete related records without leaving the resource's Edit or View page.
 
 ### Select & checkbox list - choose from existing records or create a new one
 
-> **Info**
->
+> [!NOTE]
 > These are compatible with ` BelongsTo `, ` MorphTo ` and ` BelongsToMany ` relationships.
-
 
 Using a [select](https://filamentphp.com/docs/5.x/forms/select.md#integrating-with-an-eloquent-relationship), users will be able to choose from a list of existing records. You may also [add a button that allows you to create a new record inside a modal](https://filamentphp.com/docs/5.x/forms/select.md#creating-a-new-option-in-a-modal), without leaving the page.
 
@@ -31,10 +27,8 @@ When using a ` BelongsToMany ` relationship with a select, you'll be able to sel
 
 ### Repeaters - CRUD multiple related records inside the owner's form
 
-> **Info**
->
+> [!NOTE]
 > These are compatible with ` HasMany ` and ` MorphMany ` relationships.
-
 
 [Repeaters](https://filamentphp.com/docs/5.x/forms/repeater.md#integrating-with-an-eloquent-relationship) are standard form components, which can render a repeatable set of fields infinitely. They can be hooked up to a relationship, so records are automatically read, created, updated, and deleted from the related table. They live inside the main form schema, and can be used inside resource pages, as well as nesting within action modals.
 
@@ -42,10 +36,8 @@ From a UX perspective, this solution is only suitable if your related model only
 
 ### Layout form components - saving form fields to a single relationship
 
-> **Info**
->
+> [!NOTE]
 > These are compatible with ` BelongsTo `, ` HasOne ` and ` MorphOne ` relationships.
-
 
 All layout form components ([Grid](https://filamentphp.com/docs/5.x/schemas/layouts.md#grid-component), [Section](https://filamentphp.com/docs/5.x/schemas/sections.md), [Fieldset](https://filamentphp.com/docs/5.x/schemas/layouts.md#fieldset-component), etc.) have a [` relationship() ` method](https://filamentphp.com/docs/5.x/forms/overview.md#saving-data-to-relationships). When you use this, all fields within that layout are saved to the related model instead of the owner's model:
 
@@ -312,10 +304,8 @@ public function table(Table $table): Table
 
 
 
-> **Danger**
->
+> [!CAUTION]
 > ` AssociateAction `, ` AttachAction `, ` DetachAction `, and ` DissociateAction ` (and their bulk variants) only check the relation manager's ` isReadOnly() ` state — they do not consult any model policy method by default. Bulk delete, force-delete, and restore actions use the ` deleteAny() `, ` forceDeleteAny() `, and ` restoreAny() ` policy methods (one call for the whole batch) for performance. If you need per-record authorization on a bulk action, call [` authorizeIndividualRecords('ability') `](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions) on it, accepting the extra query cost.
-
 
 ### Preloading the attachment modal select options
 
@@ -427,8 +417,7 @@ public static function configure(Table $table): Table
 }
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Filtering the table's query (via ` modifyQueryUsing() `, filters, or table arguments) is **presentational** — it only affects which records are displayed for selection. It is **not** a security boundary: a user who tampers with the submitted modal state can attach a record that was excluded from the visible table.
 > 
 > To restrict which records may actually be attached, scope the options using the [` recordSelectOptionsQuery() ` method](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#scoping-the-options-to-attach). Filament resolves the submitted record against that query, so records outside it are rejected:
@@ -442,7 +431,6 @@ public static function configure(Table $table): Table
 >     ->tableSelect(ProductsTable::class)
 >     ->recordSelectOptionsQuery(fn (Builder $query) => $query->whereBelongsTo(auth()->user()))
 > ```
-
 
 ### Handling duplicates
 
@@ -764,10 +752,8 @@ public function form(Schema $schema): Schema
 
 All methods in Filament accept a callback which you can access ` $livewire->ownerRecord ` in.
 
-> **Warning**
->
+> [!WARNING]
 > On every Livewire request, Filament runs ` canViewForRecord() `, but leaves ` $ownerRecord ` to Livewire's native model restoration. It does not reapply the model's global scopes or the parent resource's query, or automatically run the owner record's policy. A request to the relation manager does not reauthorize the parent page. Enforce tenant, ownership, and other owner-record restrictions in ` canViewForRecord() `, using your application's authoritative query and policy. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 ## Grouping relation managers
 
@@ -958,10 +944,8 @@ public function getContentTabPosition(): ?ContentTabPosition
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > Numeric relation manager keys are now preserved in this position. If your existing ` ?relation= ` links used reindexed keys, update them to match the keys in ` getRelations() `.
-
 
 ### Mixing content and relation manager tabs
 
@@ -1005,10 +989,8 @@ Generated tabs keep their usual authorization, badges, configuration, and lazy l
 
 The array order controls the tab order instead of ` getContentTabPosition() `. Keep the empty key (` '' `) for the standard form or infolist tab. Other keys are used in the URL, such as ` ?relation=overview `, so choose unique keys and keep existing manager keys to preserve links.
 
-> **Danger**
->
+> [!CAUTION]
 > An Edit page still requires edit permission, including on read-only tabs. Use a View page for view-only access.
-
 
 #### Including the remaining relation managers
 
@@ -1060,10 +1042,8 @@ Tab::make('Preferences')
 
 Define ` preferencesForm() ` as a [named form](https://filamentphp.com/docs/5.x/components/form.md#using-multiple-forms) with its own ` statePath() `. Fill it in ` mount() `, after ` parent::mount($record) `, and use ` $this->preferencesForm->getState() ` in ` savePreferences() ` to validate and save its data independently of the resource form.
 
-> **Danger**
->
+> [!CAUTION]
 > Hiding a tab does not protect its submit handler. Authorize custom saves in your application.
-
 
 #### Building a custom page layout
 
@@ -1178,8 +1158,7 @@ public function table(Table $table): Table
 }
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > ` modifyQueryUsing() ` scopes the query for records that already belong to the relationship — the table listing, and actions that operate on its rows, such as ` DetachAction `, ` DissociateAction `, and bulk actions. It is **not** applied to the records available to ` AttachAction ` or ` AssociateAction `, since those records are outside the relationship by definition.
 > 
 > To restrict which records may be attached or associated, scope the options using the ` recordSelectOptionsQuery() ` method on the action. Filament resolves the submitted record against that query, so records outside it are rejected, even if a user tampers with the submitted modal state:
@@ -1193,7 +1172,6 @@ public function table(Table $table): Table
 > ```
 > 
 > Learn more about scoping the options to [attach](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#scoping-the-options-to-attach) or [associate](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#scoping-the-options-to-associate).
-
 
 ## Customizing the relation manager title
 
@@ -1299,10 +1277,8 @@ public static function getPages(): array
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > When using a relation page, you do not need to generate a relation manager with ` make:filament-relation-manager `, and you do not need to register it in the ` getRelations() ` method of the resource.
-
 
 Now, you can customize the page in exactly the same way as a relation manager, with the same ` table() ` and ` form() `.
 

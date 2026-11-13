@@ -60,8 +60,8 @@
     "metrics/websockets",
     "metrics/object-storage",
     "logs",
-    "usage",
     "notifications",
+    "usage",
     "free-trial",
     "pricing",
     "taxes",
@@ -96,5 +96,5 @@
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://laravel.com/cloud/docs/llms.txt",
-  "cached_at": 1794543108.4160588
+  "cached_at": 1794607859.582065
 }

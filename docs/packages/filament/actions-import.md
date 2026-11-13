@@ -20,15 +20,11 @@ php artisan migrate
 
 If you'd like to receive import notifications in a panel, you can enable them in the [panel configuration](https://filamentphp.com/docs/5.x/notifications/database-notifications.md#enabling-database-notifications-in-a-panel).
 
-> **Info**
->
+> [!NOTE]
 > If you're using PostgreSQL, make sure that the ` data ` column in the notifications migration is using ` json() `: ` $table->json('data') `.
 
-
-> **Info**
->
+> [!NOTE]
 > If you're using UUIDs for your ` User ` model, make sure that your ` notifiable ` column in the notifications migration is using ` uuidMorphs() `: ` $table->uuidMorphs('notifiable') `.
-
 
 You may use the ` ImportAction ` like so:
 
@@ -193,10 +189,8 @@ Empty cells are not validated against the enum, so users may leave an optional c
 
 The backing values of the enum are also used as the [example CSV data](https://filamentphp.com/docs/5.x/actions/import.md#providing-example-csv-data) for the column, so the user can see which values are accepted without you listing them by hand. Passing ` examples() ` yourself overrides this, and passing an empty array prevents example rows from being generated for that column.
 
-> **Info**
->
+> [!NOTE]
 > If the column [handles multiple values](https://filamentphp.com/docs/5.x/actions/import.md#handling-multiple-values-in-a-single-column), each item in the array is validated against the enum.
-
 
 As well as allowing a static value, the ` enum() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 
@@ -248,10 +242,8 @@ As well as ` $state `, the ` castStateUsing() ` method allows you to inject vari
 
 In this example, we pass in a function that is used to cast the ` $state `. This function removes any non-numeric characters from the string, casts it to a float, and rounds it to two decimal places.
 
-> **Info**
->
+> [!NOTE]
 > If a column is not [required by validation](https://filamentphp.com/docs/5.x/actions/import.md#validating-csv-data), and it is empty, it will not be cast.
-
 
 Filament also ships with some built-in casting methods:
 
@@ -540,10 +532,8 @@ ImportColumn::make('skus')
 
 ## Updating existing records when importing
 
-> **Danger**
->
+> [!CAUTION]
 > Importing does not automatically check model policies. Add [per-record authorization](https://filamentphp.com/docs/5.x/actions/import.md#per-record-authorization) when users should only be able to update certain records.
-
 
 When generating an importer class, you will see this ` resolveRecord() ` method:
 
@@ -827,10 +817,8 @@ As well as allowing a static value, the ` chunkSize() ` method also accepts a fu
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Tip**
->
+> [!TIP]
 > If you are encountering memory or timeout issues when importing large CSV files, you may wish to reduce the chunk size.
-
 
 ## Setting the CSV encoding
 
@@ -1347,10 +1335,8 @@ The import system does not perform per-record authorization checks when creating
 
 If you need per-record authorization during import, you should add checks in your importer's [lifecycle hooks](https://filamentphp.com/docs/5.x/actions/import.md#lifecycle-hooks), such as ` beforeCreate() ` or ` beforeUpdate() `, to authorize the current user against the record.
 
-> **Danger**
->
+> [!CAUTION]
 > If your application allows untrusted users to trigger imports, you should implement per-record authorization checks to prevent unauthorized record creation or modification.
-
 
 ### Importing tenant-aware records
 
@@ -1385,6 +1371,5 @@ use Filament\Actions\Imports\Importer;
 Importer::preventFormulaInjection();
 ```
 
-> **Warning**
->
+> [!WARNING]
 > This protection is **opt in** and disabled by default, because the failure CSV is intended to be corrected and re-uploaded. Prefixing a single quote can still alter legitimate data — for example, a phone number like ` +44 1234 567890 ` would be rewritten to ` '+44 1234 567890 `, which would then be imported with the leading quote intact. Only enable it when the uploaded files may come from an untrusted source.

@@ -123,10 +123,8 @@ Inside the Blade view, you may access the state of another component in the sche
 </div>
 ```
 
-> **Tip**
->
+> [!TIP]
 > Unless a form field is [reactive](https://filamentphp.com/docs/5.x/forms/overview.md#the-basics-of-reactivity), the Blade view will not refresh when the value of the field changes, only when the next user interaction occurs that makes a request to the server. If you need to react to changes in a field's value, it should be ` live() `.
-
 
 ### Accessing the Eloquent record in the Blade view
 
@@ -191,15 +189,11 @@ use Filament\Schemas\Components\Livewire;
 Livewire::make(Chart::class)
 ```
 
-> **Info**
->
+> [!NOTE]
 > When inserting a Livewire component into the schema, there are limited capabilities. Only serializable data is accessible from the nested Livewire component, since they are rendered separately. As such, you can't [render a child schema](https://filamentphp.com/docs/5.x/schemas/custom-components.md#rendering-the-components-child-schema), [access another component's live state](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-state-of-another-component-in-the-blade-view), [access the current Livewire component instance](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-livewire-component-instance-in-the-blade-view), or [access the current component instance](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-component-instance-in-the-blade-view). Only [static data that you pass to the Livewire component](https://filamentphp.com/docs/5.x/schemas/custom-components.md#passing-parameters-to-a-livewire-component), and [the current record](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-record-in-the-livewire-component) are accessible. Situations where you should render a nested Livewire component instead of a [Blade view](https://filamentphp.com/docs/5.x/schemas/custom-components.md#inserting-a-blade-view-into-a-schema) are rare because of these limitations.
 
-
-> **Warning**
->
+> [!WARNING]
 > A custom Livewire component does not inherit the parent component's model scoping or authorization. Re-query and authorize models in its public properties, including a record passed into the component. Do the same for model arguments passed to a lazy component's ` mount() ` method. Filament components such as widgets still run their own documented checks. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 If you are rendering multiple of the same Livewire component, please make sure to pass a unique ` key() ` to each:
 
@@ -314,10 +308,8 @@ Livewire::make(Chart::class)
 
 You may create your own custom component classes and views, which you can reuse across your project, and even release as a plugin to the community.
 
-> **Tip**
->
+> [!TIP]
 > If you're just creating a simple custom component to use once, you could instead use a [view component](https://filamentphp.com/docs/5.x/schemas/custom-components.md#inserting-a-blade-view-into-a-schema) to render any custom Blade file.
-
 
 To create a custom component class and view, you may use the following command:
 
@@ -348,10 +340,8 @@ It will also create a view file at ` resources/views/filament/schemas/components
 
 You may use the same utilities as you would when [inserting a Blade view into a schema](https://filamentphp.com/docs/5.x/schemas/custom-components.md#inserting-a-blade-view-into-a-schema) to [render the component's child schema](https://filamentphp.com/docs/5.x/schemas/custom-components.md#rendering-the-components-child-schema), [access another component's live state](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-state-of-another-component-in-the-blade-view), [access the current Eloquent record](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-eloquent-record-in-the-blade-view), [access the current operation](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-operation-in-the-blade-view), [access the current Livewire component instance](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-livewire-component-instance-in-the-blade-view), and [access the current component instance](https://filamentphp.com/docs/5.x/schemas/custom-components.md#accessing-the-current-component-instance-in-the-blade-view).
 
-> **Info**
->
+> [!NOTE]
 > Filament schema components are **not** Livewire components. Defining public properties and methods on a schema component class will not make them accessible in the Blade view.
-
 
 ### Adding a configuration method to a custom component class
 
@@ -527,12 +517,10 @@ class Chart extends Component
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Only methods marked with ` #[Exposed] ` can be called from JavaScript. The attribute does not authorize access to the method's data or operations. Validate client-supplied arguments and [authorize sensitive operations](https://filamentphp.com/docs/5.x/advanced/security.md#authorization) inside the method.
 > 
 > Exposed methods remain callable when the component is [disabled](https://filamentphp.com/docs/5.x/forms/overview.md#disabling-a-field), since read methods may still be needed to display its value. If a method changes the component's state and should respect its disabled state, check ` $this->isDisabled() ` before making changes.
-
 
 #### Calling the method from JavaScript
 
@@ -645,10 +633,8 @@ JsComponent::make()
 
 Give each instance a unique ` key() `. Instances can share a renderer without sharing their local state.
 
-> **Danger**
->
+> [!CAUTION]
 > Only use trusted renderer URLs or ` RawJs ` code. Never let user input choose modules or generate executable code. Renderers are not sandboxed and must comply with your application's CSP and cross-origin policy. Validate and authorize requests in PHP.
-
 
 As well as allowing a static value, the ` renderer() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
 

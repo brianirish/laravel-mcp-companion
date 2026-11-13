@@ -434,10 +434,8 @@ As well as allowing static values, the ` copyable() ` method parameters also acc
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Warning**
->
+> [!WARNING]
 > This feature only works when SSL is enabled for the app.
-
 
 ## Input masking
 

@@ -297,10 +297,8 @@ Panel::configureUsing(function (Panel $panel): void {
 });
 ```
 
-> **Info**
->
+> [!NOTE]
 > The ` Panel::configureUsing() ` approach is powerful because it allows modules to configure themselves without requiring changes to your panel provider files. When you add or remove a module, its Filament integration is automatically handled.
-
 
 ## Registering Livewire components from modules
 

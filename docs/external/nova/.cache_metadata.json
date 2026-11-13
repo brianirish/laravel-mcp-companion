@@ -45,5 +45,5 @@
   "discovery_method": "llms-index",
   "index_url": "https://nova.laravel.com/docs/llms.txt",
   "version": "v5",
-  "cached_at": 1794540869.2709131
+  "cached_at": 1794607858.9204762
 }

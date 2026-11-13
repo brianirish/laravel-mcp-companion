@@ -5,10 +5,8 @@ Source: https://filamentphp.com/docs/5.x/introduction/contributing.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/introduction/contributing.md
 
-> **Info**
->
+> [!NOTE]
 > Parts of this guide are adapted from [Laravel's contribution guide](https://laravel.com/docs/contributions), which served as valuable inspiration.
-
 
 ## Reporting bugs
 

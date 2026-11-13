@@ -192,10 +192,8 @@ RepeatableEntry::make('comments')
 
 If the entry has more than 100 items, Filament aborts with an HTTP 413 response before building its item schemas, without truncating the data. This also applies to the table layout. The limit is disabled by default and accepts an integer, or ` null ` to disable it.
 
-> **Danger**
->
+> [!CAUTION]
 > The processing limit also applies to existing data loaded from your database. A record above the limit cannot be displayed through that infolist until you raise the limit or correct its data elsewhere. Choose a limit that accommodates existing records you need to display.
-
 
 ### Applying processing limits globally
 

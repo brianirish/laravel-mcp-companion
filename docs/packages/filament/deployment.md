@@ -17,10 +17,8 @@ When Filament detects that your app's ` APP_ENV ` is not ` local `, it will requ
 
 To authorize users to access a panel, you should follow the [guide in the users section](https://filamentphp.com/docs/5.x/users/overview.md#authorizing-access-to-the-panel).
 
-> **Warning**
->
+> [!WARNING]
 > If you do not follow these steps and your user model does not implement the ` FilamentUser ` interface, no users will be able to sign in to your panel in production.
-
 
 ## Improving Filament panel performance
 
@@ -68,10 +66,8 @@ opcache.enable=1 # Enable OPcache
 
 From the [Laravel Forge documentation](https://laravel.com/forge/docs/servers/php#opcache):
 
-> **Tip**
->
+> [!TIP]
 > Optimizing the PHP OPcache for production will configure OPcache to store your compiled PHP code in memory to greatly improve performance.
-
 
 Please use a search engine to find the relevant OPcache setup instructions for your environment.
 

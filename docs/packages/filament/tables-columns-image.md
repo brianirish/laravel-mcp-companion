@@ -49,10 +49,8 @@ As well as allowing a static value, the ` alt() ` method also accepts a function
 
 If you do not set any alt text, the image is rendered with an empty ` alt ` attribute, which marks it as decorative for assistive technology.
 
-> **Warning**
->
+> [!WARNING]
 > When an image [links to a URL](https://filamentphp.com/docs/5.x/tables/columns/overview.md#opening-urls), its alt text becomes the accessible name of the link. Always set meaningful ` alt() ` text on linked images, otherwise screen reader users will encounter a link with no name.
-
 
 ## Managing the image disk
 
@@ -82,7 +80,12 @@ As well as allowing a static value, the ` disk() ` method also accepts a functio
 
 ## Public images
 
-By default, Filament will generate temporary URLs to images in the filesystem, unless the [disk](https://filamentphp.com/docs/5.x/tables/columns/image.md#managing-the-image-disk) is set to ` public `. If your images are stored in a public disk, you can set the ` visibility() ` to ` public `:
+By default, images use ` private ` visibility unless the [disk](https://filamentphp.com/docs/5.x/tables/columns/image.md#managing-the-image-disk) is named ` public `. Filament attempts to generate temporary URLs for private images if the disk supports them, falling back to permanent URLs if it cannot. The default visibility depends on the disk's name, not its filesystem configuration.
+
+> [!NOTE]
+> If your application uses the ` local ` disk, you may need to [enable local temporary URLs](https://laravel.com/docs/filesystem#enabling-local-temporary-urls) by adding ` 'serve' => true ` to the disk's configuration in ` config/filesystems.php `.
+
+If your images are already publicly accessible, you can set ` visibility('public') ` to use permanent URLs. This does not change the disk or make private files publicly accessible:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
@@ -312,7 +315,7 @@ As well as allowing a static value, the ` ring() ` method also accepts a functio
 
 ### Customizing the stacked overlap
 
-The default overlap is ` 4 `, but you may customize it to be from ` 0 ` to ` 8 `:
+The default overlap is ` 2 `, but you may customize it to be from ` 0 ` to ` 8 `:
 
 ```php
 use Filament\Tables\Columns\ImageColumn;
@@ -321,7 +324,7 @@ ImageColumn::make('colleagues.avatar')
     ->imageHeight(40)
     ->circular()
     ->stacked()
-    ->overlap(2)
+    ->overlap(4)
 ```
 
 
@@ -444,6 +447,37 @@ As well as allowing a static value, the ` limitedRemainingText() ` method also a
 | Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
 
+#### Adding a tooltip to the remaining images count
+
+You can add a tooltip to the ` +N ` count using ` limitedRemainingTextTooltip() `. This is separate from ` tooltip() `, which applies to each visible image:
+
+```php
+use Filament\Tables\Columns\ImageColumn;
+
+ImageColumn::make('colleagues.avatar')
+    ->circular()
+    ->stacked()
+    ->limit(3)
+    ->limitedRemainingText()
+    ->limitedRemainingTextTooltip('More colleagues')
+```
+
+As well as allowing a static value, the ` limitedRemainingTextTooltip() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters. The ` $state ` contains the full column state, including images hidden by the limit.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/tables/columns/overview.md#column-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Column | ` Filament\Tables\Columns\Column ` | ` $column ` | The current column instance. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current table row. |
+| Row loop | ` stdClass ` | ` $rowLoop ` | The [row loop](https://laravel.com/docs/blade#the-loop-variable) object for the current table row. |
+| State | ` mixed ` | ` $state ` | The current value of the column, based on the current table row. |
+| Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
+
+
+The tooltip is only displayed when the remaining images count is visible. Pass ` null ` to disable it.
+
 ## Prevent file existence checks
 
 When the schema is loaded, it will automatically detect whether the images exist to prevent errors for missing files. This is all done on the backend. When using remote storage with many images, this can be time-consuming. You can use the ` checkFileExistence(false) ` method to disable this feature:
@@ -483,10 +517,8 @@ ImageColumn::make('colleagues.avatar')
     ->wrap()
 ```
 
-> **Tip**
->
+> [!TIP]
 > The "width" for wrapping is affected by the column label, so you may need to use a shorter or hidden label to wrap more tightly.
-
 
 ## Adding extra HTML attributes to the image
 

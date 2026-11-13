@@ -535,8 +535,7 @@ Select::make('technologies')
     ->relationship(titleAttribute: 'name')
 ```
 
-> **Warning**
->
+> [!WARNING]
 > When using ` disabled() ` with ` multiple() ` and ` relationship() `, ensure that ` disabled() ` is called before ` relationship() `. This ensures that the ` saved() ` call from ` disabled() ` is not applied after the ` relationship() ` configuration:
 > 
 > ```php
@@ -547,7 +546,6 @@ Select::make('technologies')
 >     ->disabled()
 >     ->relationship(titleAttribute: 'name')
 > ```
-
 
 ### Searching relationship options across multiple columns
 
@@ -766,10 +764,8 @@ As well as allowing a static value, the ` createOptionForm() ` method also accep
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Warning**
->
+> [!WARNING]
 > Creating an option does not automatically check the related model's ` create() ` policy, even when the select is used in a resource form. [Authorize the option action](https://filamentphp.com/docs/5.x/forms/select.md#authorizing-option-actions) separately from the parent resource.
-
 
 
 
@@ -851,10 +847,8 @@ As well as allowing a static value, the ` editOptionForm() ` method also accepts
 
 To use the same form schema for creating and editing options, use ` manageOptionForm() `.
 
-> **Warning**
->
+> [!WARNING]
 > Editing an option does not automatically check the selected record's ` view() ` or ` update() ` policy. [Authorize the option action](https://filamentphp.com/docs/5.x/forms/select.md#authorizing-option-actions) before its modal is filled, not only when saving changes.
-
 
 
 
@@ -1035,10 +1029,8 @@ MorphToSelect::make('commentable')
     ])
 ```
 
-> **Warning**
->
+> [!WARNING]
 > If ` $team ` is stored in a public Livewire property, Filament does not re-query or authorize it on later requests. Re-query and authorize the team before using it to scope the options, including any tenant or ownership restrictions your application requires. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 The ` modifyOptionsQueryUsing() ` method can inject various utilities into the function as parameters.
 
@@ -1058,10 +1050,8 @@ The ` modifyOptionsQueryUsing() ` method can inject various utilities into the f
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Tip**
->
+> [!TIP]
 > Many of the same options in the select field are available for ` MorphToSelect `, including ` searchable() `, ` preload() `, ` native() `, ` allowHtml() `, and ` optionsLimit() `.
-
 
 #### Customizing the morph select fields
 
@@ -1178,10 +1168,8 @@ Select::make('technology')
     ->allowHtml()
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Be aware that you will need to ensure that the HTML is safe to render, otherwise your application will be vulnerable to XSS attacks.
-
 
 
 
@@ -1735,8 +1723,7 @@ class ProductsTable
 }
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Filtering the table's query using ` modifyQueryUsing() ` or ` tableArguments() ` is **presentational** — it only affects which records are displayed in the table for selection. It is **not** a security boundary: a user who tampers with the submitted form state can select a record that was excluded from the visible table, and it will still pass validation and be saved.
 > 
 > To restrict which records may actually be selected and saved, scope the field's relationship query instead, using the ` modifyQueryUsing ` argument of the [` relationship() ` method](https://filamentphp.com/docs/5.x/forms/select.md#customizing-the-relationship-query). Filament validates submitted values against that query, so records outside it are rejected:
@@ -1755,7 +1742,6 @@ class ProductsTable
 >     ->tableConfiguration(ProductsTable::class)
 > ```
 
-
 ## Select validation
 
 As well as all rules listed on the [validation](https://filamentphp.com/docs/5.x/forms/validation.md) page, there are additional rules that are specific to selects.
@@ -1764,10 +1750,8 @@ As well as all rules listed on the [validation](https://filamentphp.com/docs/5.x
 
 The [` in() `](https://filamentphp.com/docs/5.x/forms/validation.md#in) rule ensures that users cannot select an option that is not in the list of options. This is an important rule for data integrity purposes, so Filament applies it by default to all select fields.
 
-> **Warning**
->
+> [!WARNING]
 > Selected option validation is crucial, so we strongly suggest that you [write automated tests](https://filamentphp.com/docs/5.x/testing/testing-schemas.md#testing-form-validation) for your forms to ensure that the validation works as expected.
-
 
 Since there are many ways for a select field to populate its options, and in many cases the options are not all loaded into the select by default and require searching to retrieve them, Filament uses the presence of a valid "option label" to determine whether the selected value exists. It also checks if that option is [disabled](https://filamentphp.com/docs/5.x/forms/select.md#disabling-specific-options) or not.
 

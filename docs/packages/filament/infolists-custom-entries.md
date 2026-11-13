@@ -40,10 +40,8 @@ class AudioPlayerEntry extends Entry
 
 It will also create a view file at ` resources/views/filament/infolists/components/audio-player-entry.blade.php `.
 
-> **Info**
->
+> [!NOTE]
 > Filament infolist entries are **not** Livewire components. Defining public properties and methods on a infolist entry class will not make them accessible in the Blade view.
-
 
 ### Accessing the state of the entry in the Blade view
 
@@ -71,10 +69,8 @@ Inside the Blade view, you may access the state of another component in the sche
 </x-dynamic-component>
 ```
 
-> **Tip**
->
+> [!TIP]
 > Unless a form field is [reactive](https://filamentphp.com/docs/5.x/forms/overview.md#the-basics-of-reactivity), the Blade view will not refresh when the value of the field changes, only when the next user interaction occurs that makes a request to the server. If you need to react to changes in a field's value, it should be ` live() `.
-
 
 ### Accessing the Eloquent record in the Blade view
 
@@ -252,10 +248,8 @@ class AudioPlayerEntry extends Entry
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > Only methods marked with ` #[Exposed] ` can be called from JavaScript. This is a security measure to prevent arbitrary method execution.
-
 
 ### Calling the method from JavaScript
 

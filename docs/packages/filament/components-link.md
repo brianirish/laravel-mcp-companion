@@ -17,10 +17,8 @@ The link component is used to render a clickable link that can perform an action
 
 
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` href ` attribute, validate its scheme using [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) before rendering it. HTML escaping alone does not prevent a ` javascript: ` URL from executing code when clicked.
-
 
 ## Using a link as a button
 

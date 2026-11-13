@@ -220,10 +220,8 @@ public function table(Table $table): Table
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Be aware when using very high numbers and ` all ` as large number of records can cause performance issues.
-
 
 ### Customizing the default pagination page option
 
@@ -239,10 +237,8 @@ public function table(Table $table): Table
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > Make sure that the default pagination page option is included in the [pagination options](https://filamentphp.com/docs/5.x/tables/overview.md#customizing-the-pagination-options).
-
 
 ### Enforcing the pagination options
 
@@ -261,10 +257,8 @@ public function table(Table $table): Table
 
 This can be useful for large tables where you want to prevent a modified client request from loading more records per page than you offer in the selector. An invalid page size falls back to a valid saved selection or the default pagination option. If the saved selection is no longer listed, Filament discards it and uses the first option. Numeric strings submitted by the selector are accepted.
 
-> **Warning**
->
+> [!WARNING]
 > Enforcement does not impose an additional limit on the options you configure. If you include ` 'all' ` or a very large number, users can still request that many records. Choose options appropriate for your data and server capacity. Enforcement also does not enable pagination for a table configured with ` paginated(false) `.
-
 
 You can enable enforcement for all tables in the ` boot() ` method of a service provider:
 
@@ -422,15 +416,11 @@ public function table(Table $table): Table
 
 When using a [resource](https://filamentphp.com/docs/5.x/resources) table, the URL for each row is usually already set up for you, but this method can be called to override the default URL for each row.
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` recordUrl() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
 
-
-> **Tip**
->
+> [!TIP]
 > You can also [override the URL](https://filamentphp.com/docs/5.x/tables/columns/overview.md#opening-urls) for a specific column, or [trigger an action](https://filamentphp.com/docs/5.x/tables/columns/overview.md#triggering-actions) when a column is clicked.
-
 
 You may also open the URL in a new tab:
 

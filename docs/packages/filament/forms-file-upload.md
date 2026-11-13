@@ -17,26 +17,20 @@ FileUpload::make('attachment')
 
 
 
-> **Tip**
->
+> [!TIP]
 > Filament also supports [` spatie/laravel-medialibrary `](https://github.com/spatie/laravel-medialibrary). See our [plugin documentation](https://filamentphp.com/plugins/filament-spatie-media-library) for more information.
 
-
-> **Danger**
->
+> [!CAUTION]
 > Restrict [accepted file types](https://filamentphp.com/docs/5.x/forms/file-upload.md#file-type-validation) using ` acceptedFileTypes() ` or ` image() `, and configure your web server so uploaded files cannot execute as code.
 > 
 > By default, ` FileUpload ` accepts any string path within the configured disk — the field value is a client-controlled string and a tampered request can submit any other file on the same disk. If the disk holds files for more than one user, tenant, or record, call [` preventFilePathTampering() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#authorizing-existing-file-paths) on the field, or use a dedicated disk containing only files that the current user may access. Setting ` directory() ` only changes where new uploads are stored; it does not restrict which existing paths can be submitted.
-
 
 ## Configuring the storage disk and directory
 
 By default, files will be uploaded to the storage disk defined in the [configuration file](https://filamentphp.com/docs/5.x/introduction/installation.md#publishing-configuration). You can also set the ` FILESYSTEM_DISK ` environment variable to change this.
 
-> **Tip**
->
+> [!TIP]
 > To correctly preview images and other files, FilePond requires files to be served from the same domain as the app, or the appropriate CORS headers need to be present. Ensure that the ` APP_URL ` environment variable is correct, or modify the [filesystem](https://laravel.com/docs/filesystem) driver to set the correct URL. If you're hosting files on a separate domain like S3, ensure that CORS headers are set up.
-
 
 To change the disk and directory for a specific field, and the visibility of files, use the ` disk() `, ` directory() ` and ` visibility() ` methods. By default, files are uploaded with ` private ` visibility to your storage disk, unless the disk is set to ` public `:
 
@@ -66,15 +60,11 @@ As well as allowing static values, the ` disk() `, ` directory() ` and ` visibil
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Warning**
->
+> [!WARNING]
 > The default visibility depends on the disk's name, not its filesystem configuration: a disk named ` public ` defaults to public visibility, and other disks default to private. Set ` visibility() ` explicitly when using a custom disk whose name does not reflect its intended visibility.
 
-
-> **Info**
->
+> [!NOTE]
 > It is the responsibility of the developer to delete these files from the disk if they are removed, as Filament is unaware if they are depended on elsewhere. One way to do this automatically is observing a [model event](https://laravel.com/docs/eloquent#events).
-
 
 ## Uploading multiple files
 
@@ -183,10 +173,8 @@ On top of this security issue, you should also be aware that allowing users to u
 
 ### Preserving original file names
 
-> **Danger**
->
+> [!CAUTION]
 > Before using this feature, please ensure that you have read the [security implications](https://filamentphp.com/docs/5.x/forms/file-upload.md#security-implications-of-controlling-file-names).
-
 
 To preserve the original filenames of the uploaded files, use the ` preserveFilenames() ` method:
 
@@ -225,10 +213,8 @@ As well as allowing a static value, the ` preserveFilenames() ` method also acce
 
 ### Generating custom file names
 
-> **Danger**
->
+> [!CAUTION]
 > Before using this feature, please ensure that you have read the [security implications](https://filamentphp.com/docs/5.x/forms/file-upload.md#security-implications-of-controlling-file-names).
-
 
 You may completely customize how file names are generated using the ` getUploadedFileNameForStorageUsing() ` method, and returning a string from the closure based on the ` $file ` that was uploaded:
 
@@ -308,10 +294,8 @@ Filament compares every submitted string path against the value originally loade
 
 The same check runs before the field returns existing file metadata or generates preview, open, and download URLs, including when the field is [disabled](https://filamentphp.com/docs/5.x/forms/overview.md#disabling-a-field). Unauthorized paths return no metadata or URLs.
 
-> **Warning**
->
+> [!WARNING]
 > ` preventFilePathTampering() ` needs a record on the form. Without one — for example, on a create page — every submitted string path fails validation unless the [` allowFilePathUsing `](https://filamentphp.com/docs/5.x/forms/file-upload.md#allowing-additional-file-paths-with-a-callback) callback approves it. New uploads are unaffected.
-
 
 To apply this check to every ` FileUpload ` in your application without repeating it on each field, call ` configureUsing() ` in a service provider's ` boot() ` method:
 
@@ -678,15 +662,11 @@ As well as allowing a static value, the ` automaticallyOpenImageEditorForAspectR
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Info**
->
+> [!NOTE]
 > The ` automaticallyOpenImageEditorForAspectRatio() ` method can only be used with a single aspect ratio. If you need to allow multiple aspect ratios, use ` imageAspectRatio() ` for validation only, and consider using [` imageEditor() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#image-editor) with [` imageEditorAspectRatioOptions() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#allowing-users-to-crop-images-to-aspect-ratios) to let users choose their preferred ratio.
 
-
-> **Info**
->
+> [!NOTE]
 > The ` automaticallyOpenImageEditorForAspectRatio() ` method is not available when [` multiple() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#uploading-multiple-files) is enabled.
-
 
 ### Cropping and resizing images without the editor
 
@@ -735,10 +715,8 @@ As well as allowing static values, the ` automaticallyResizeImagesMode() `, ` au
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Warning**
->
+> [!WARNING]
 > When using automatic image cropping, the crop is applied automatically without user interaction. The user cannot choose which part of the image to keep. If you want users to control how their images are cropped, use [` automaticallyOpenImageEditorForAspectRatio() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#enforcing-a-specific-aspect-ratio) instead.
-
 
 ## Altering the appearance of the file upload area
 
@@ -1098,10 +1076,8 @@ As well as allowing a static value, the ` storeFiles() ` method also accepts a f
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Warning**
->
+> [!WARNING]
 > Images, video and audio files will not show the stored file name in the form's preview, unless you use [` previewable(false) `](https://filamentphp.com/docs/5.x/forms/file-upload.md#previewing-files). This is due to a limitation with the FilePond preview plugin.
-
 
 ## Orienting images from their EXIF data
 
@@ -1249,17 +1225,13 @@ As well as all rules listed on the [validation](https://filamentphp.com/docs/5.x
 
 Since Filament is powered by Livewire and uses its file upload system, you will want to refer to the default Livewire file upload validation rules in the ` config/livewire.php ` file as well. This also controls the 12MB file size maximum.
 
-> **Info**
->
+> [!NOTE]
 > Many of these validation rules only apply to newly uploaded files. Existing files that were uploaded before the validation rules were added will not be re-validated.
-
 
 ### File type validation
 
-> **Danger**
->
+> [!CAUTION]
 > By default, a ` FileUpload ` accepts **any file type**, the same way Laravel's ` file ` validation rule does. On a ` local ` or ` public ` disk served by a PHP-executing web server, this means a user can upload a ` .php ` file and have it executed as code — remote code execution. You should **always** call ` acceptedFileTypes() ` (or ` image() `) with an explicit list of MIME types unless you have a specific reason not to. Doing so also activates Laravel's built-in block on PHP-family extensions (` .php `, ` .phtml `, ` .phar `, etc.) via the ` mimetypes ` validation rule, rejecting files whose client-supplied filename would otherwise land on disk as executable code.
-
 
 You may restrict the types of files that may be uploaded using the ` acceptedFileTypes() ` method, and passing an array of MIME types.
 
@@ -1428,10 +1400,8 @@ FileUpload::make('photo')
     )
 ```
 
-> **Info**
->
+> [!NOTE]
 > These dimension validation rules only apply to newly uploaded files. Existing files that were uploaded before the validation rules were added will not be re-validated.
-
 
 ### Image aspect ratio validation
 
@@ -1483,15 +1453,11 @@ FileUpload::make('banner')
     ->rule(Rule::dimensions()->minRatio(4 / 3)->maxRatio(16 / 9))
 ```
 
-> **Info**
->
+> [!NOTE]
 > These aspect ratio validation rules only apply to newly uploaded files. Existing files that were uploaded before the validation rules were added will not be re-validated.
 
-
-> **Tip**
->
+> [!TIP]
 > If you want to help users meet the aspect ratio requirement rather than just rejecting invalid uploads, consider using [` automaticallyOpenImageEditorForAspectRatio() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#enforcing-a-specific-aspect-ratio) alongside ` imageAspectRatio() `. This will automatically open a crop editor when an uploaded image doesn't match the required ratio. Alternatively, you can use [` automaticallyCropImagesToAspectRatio() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#cropping-and-resizing-images-without-the-editor) to automatically crop images to the required ratio without user interaction.
-
 
 ### Number of files validation
 

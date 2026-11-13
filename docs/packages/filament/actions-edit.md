@@ -65,8 +65,7 @@ As well as ` $data `, the ` mutateRecordDataUsing() ` function can inject variou
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Warning**
->
+> [!WARNING]
 > Filament fills the form using the record's array representation, which is sent to the browser as part of the Livewire request. If your model has a column containing binary data that is not valid UTF-8, such as a ` geometry `, ` point `, or ` blob ` column, it cannot be serialized to JSON and the modal will fail to open, often with no error in the Laravel log.
 > 
 > To resolve this, add the column to [the ` $hidden ` array](https://laravel.com/docs/eloquent-serialization#hiding-attributes-from-json) on your model, which excludes it from the model's array and JSON representations:
@@ -76,7 +75,6 @@ As well as ` $data `, the ` mutateRecordDataUsing() ` function can inject variou
 > ```
 > 
 > This applies equally to the [View](https://filamentphp.com/docs/5.x/actions/view.md) and [Replicate](https://filamentphp.com/docs/5.x/actions/replicate.md) actions.
-
 
 ## Customizing data before saving
 

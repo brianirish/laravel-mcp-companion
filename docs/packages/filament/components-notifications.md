@@ -5,8 +5,7 @@ Source: https://filamentphp.com/docs/5.x/components/notifications.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/components/notifications.md
 
-> **Warning**
->
+> [!WARNING]
 > Before proceeding, make sure ` filament/notifications ` is installed in your project. You can check by running:
 > 
 > ```bash
@@ -14,7 +13,6 @@ Source: https://filamentphp.com/docs/5.x/components/notifications.md
 > ```
 > 
 > If it's not installed, consult the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and configure the **individual components** according to the instructions.
-
 
 ## Introduction
 

@@ -512,7 +512,7 @@ To enable gRPC in your app, redeploy it. You don't need any additional configura
 **Improvements (7)**
 
 * Business plan now available with increased domain limits
-* PHP 8.5 available (pdo\_sqlsrv support coming soon)
+* PHP 8.5 available (pdo_sqlsrv support coming soon)
 * Serverless Postgres lower pricing
 * Redesigned build and deploy
 * Node 24 available

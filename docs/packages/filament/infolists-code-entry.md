@@ -55,10 +55,8 @@ As well as allowing a static value, the ` grammar() ` method also accepts a func
 
 
 
-> **Tip**
->
+> [!TIP]
 > If your code entry's content is a PHP array, it will automatically be converted to a JSON string, and the grammar will be set to ` Grammar::Json `. You can customize the ` JSON_ ` flags used during conversion with the ` jsonFlags() ` method.
-
 
 ## Changing the code's theme (highlighting)
 

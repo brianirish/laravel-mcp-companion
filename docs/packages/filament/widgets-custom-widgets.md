@@ -63,10 +63,8 @@ The React component and Vue or Svelte import are named ` RevenueOverview `, matc
 
 Renderer directories follow the PHP namespace in kebab case, excluding your application's root namespace. For example, ` App\Filament\Resources\Orders\Widgets\RevenueOverview ` uses ` resources/js/filament/resources/orders/widgets/ `.
 
-> **Info**
->
+> [!NOTE]
 > Importing the renderer does not load CSS extracted by Vite. Include those styles through your application's stylesheet or [register them separately](https://filamentphp.com/docs/5.x/advanced/assets.md#registering-css-files).
-
 
 ## Passing configuration from PHP
 
@@ -101,10 +99,8 @@ class RevenueOverview extends Widget
 
 Use the entry extension generated for your framework. When the widget re-renders, Filament passes changed configuration to the renderer's ` update() ` method without remounting it. Changing ` props.configuration ` in JavaScript does not update PHP.
 
-> **Danger**
->
+> [!CAUTION]
 > Only include data that the current user is authorized to see.
-
 
 ### Receiving dashboard filter values
 

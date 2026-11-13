@@ -41,10 +41,8 @@ The classes in the ` Pages ` directory are used to customize the pages in the ap
 
 The classes in the ` Schemas ` directory are used to define the content of the [forms](https://filamentphp.com/docs/5.x/forms) and [infolists](https://filamentphp.com/docs/5.x/infolists) for your resource. The classes in the ` Tables ` directory are used to build the table for your resource.
 
-> **Tip**
->
+> [!TIP]
 > Have you created a resource, but it's not appearing in the navigation menu? If you have a [model policy](https://filamentphp.com/docs/5.x/resources/overview.md#authorization), make sure you return ` true ` from the ` viewAny() ` method.
-
 
 ### Simple (modal) resources
 
@@ -120,10 +118,8 @@ protected static ?string $recordTitleAttribute = 'name';
 
 This is required for features like [global search](https://filamentphp.com/docs/5.x/resources/global-search.md) to work.
 
-> **Tip**
->
+> [!TIP]
 > You may specify the name of an [Eloquent accessor](https://laravel.com/docs/eloquent-mutators#defining-an-accessor) if just one column is inadequate at identifying a record.
-
 
 ## Resource forms
 
@@ -162,8 +158,7 @@ The ` components() ` method is used to define the structure of your form. It is 
 
 Check out the Forms docs for a [guide](https://filamentphp.com/docs/5.x/forms) on how to build forms with Filament.
 
-> **Tip**
->
+> [!TIP]
 > If you would prefer to define the form directly in the resource class, you can do so and delete the form schema class altogether:
 > 
 > ```php
@@ -180,7 +175,6 @@ Check out the Forms docs for a [guide](https://filamentphp.com/docs/5.x/forms) o
 >         ]);
 > }
 > ```
-
 
 ### Hiding components based on the current operation
 
@@ -263,8 +257,7 @@ public static function configure(Table $table): Table
 
 Check out the [tables](https://filamentphp.com/docs/5.x/tables) docs to find out how to add table columns, filters, actions and more.
 
-> **Tip**
->
+> [!TIP]
 > If you would prefer to define the table directly in the resource class, you can do so and delete the table class altogether:
 > 
 > ```php
@@ -299,7 +292,6 @@ Check out the [tables](https://filamentphp.com/docs/5.x/tables) docs to find out
 >         ]);
 > }
 > ```
-
 
 ## Customizing the model label
 
@@ -473,10 +465,8 @@ public static function getNavigationParentItem(): ?string
 
 The parent and child items must belong to the same navigation group. If the parent item has a navigation group, that group must also be defined on the child, otherwise the correct parent item cannot be identified. This applies whether you reference the parent by its class or by its label.
 
-> **Tip**
->
+> [!TIP]
 > If you're reaching for a third level of navigation like this, you should consider using [clusters](https://filamentphp.com/docs/5.x/navigation/clusters.md) instead, which are a logical grouping of resources and [custom pages](https://filamentphp.com/docs/5.x/navigation/custom-pages.md), which can share their own separate navigation.
-
 
 ## Generating URLs to resource pages
 
@@ -621,10 +611,8 @@ Each item in the sub-navigation can be customized using the [same navigation met
 
 
 
-> **Tip**
->
+> [!TIP]
 > If you're looking to add sub-navigation to switch *between* entire resources and [custom pages](https://filamentphp.com/docs/5.x/navigation/custom-pages.md), you might be looking for [clusters](https://filamentphp.com/docs/5.x/navigation/clusters.md), which are used to group these together. The ` getRecordSubNavigation() ` method is intended to construct a navigation between pages that relate to a particular record *inside* a resource.
-
 
 ### Setting the sub-navigation position for a resource
 
@@ -675,15 +663,11 @@ For authorization, Filament will observe any [model policies](https://laravel.co
 - ` restore() ` is used to prevent a single soft-deleted record from being restored. ` restoreAny() ` is used to prevent records from being bulk restored. Filament uses the ` restoreAny() ` method because iterating through multiple records and checking the ` restore() ` policy is not very performant. When using a ` RestoreBulkAction `, if you want to call the ` restore() ` method for each record anyway, you should use the ` RestoreBulkAction::make()->authorizeIndividualRecords() ` method. Any records that fail the authorization check will not be processed.
 - ` reorder() ` is used to control [reordering records in a table](https://filamentphp.com/docs/5.x/tables/overview.md#reordering-records).
 
-> **Warning**
->
+> [!WARNING]
 > By default, Filament allows an operation when its model policy or policy method is missing, unless a Gate before callback denies it. Define the required policy methods, or enable [strict authorization](https://filamentphp.com/docs/5.x/panel-configuration.md#strict-authorization-mode) to detect missing policies and methods. ` viewAny() ` controls resource access, not which records appear in its table: add query restrictions for records the user must not see. Custom actions and inline editable columns need their own authorization, even in strict mode. See the [security overview](https://filamentphp.com/docs/5.x/advanced/security.md#authorization) for these boundaries.
 
-
-> **Info**
->
+> [!NOTE]
 > On every Livewire request, Filament re-queries the page's ` $record ` using the resource query, then repeats the page's authorization checks. For example, edit and view pages check the resource's ` update() ` and ` view() ` policies. A ` ManageRelatedRecords ` page checks access to the related resource or model, but does not authorize the owner record unless you add that check to the page's ` canAccess() ` method. Any global scopes removed by the resource query remain removed. Filament does not re-query or authorize additional model properties that you add to the page. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 #### Skipping authorization
 
@@ -693,19 +677,15 @@ If you'd like to skip authorization for a resource, you may set the ` $shouldSki
 protected static bool $shouldSkipAuthorization = true;
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > This bypasses the resource's policy checks, including in strict authorization mode. Panel authentication and tenant scoping do not replace operation-level authorization. Only skip these checks if you enforce equivalent authorization yourself.
-
 
 ### Protecting model attributes
 
 Filament will expose all model attributes to JavaScript, except if they are ` $hidden ` on your model. This is Livewire's behavior for model binding. We preserve this functionality to facilitate the dynamic addition and removal of form fields after they are initially loaded, while preserving the data they may need.
 
-> **Danger**
->
+> [!CAUTION]
 > While attributes may be visible in JavaScript, only those with a form field are actually editable by the user. This is not an issue with mass assignment.
-
 
 To remove certain attributes from JavaScript on the Edit and View pages, you may override [the ` mutateFormDataBeforeFill() ` method](https://filamentphp.com/docs/5.x/resources/editing-records.md#customizing-data-before-filling-the-form):
 
@@ -720,8 +700,7 @@ protected function mutateFormDataBeforeFill(array $data): array
 
 In this example, we remove the ` is_admin ` attribute from JavaScript, as it's not being used by the form.
 
-> **Warning**
->
+> [!WARNING]
 > Adding a column to ` $hidden ` is required, not just recommended, when it contains binary data that is not valid UTF-8, such as a ` geometry `, ` point `, or ` blob ` column. Since Filament exposes model attributes to JavaScript, these values are sent to the browser as part of the Livewire request, but they cannot be serialized to JSON. This causes the page to fail to load, often with a blank screen and no error in the Laravel log.
 > 
 > Adding such columns to [the ` $hidden ` array](https://laravel.com/docs/eloquent-serialization#hiding-attributes-from-json) on your model excludes them from its array and JSON representations, resolving the issue:
