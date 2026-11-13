@@ -1,16 +1,9 @@
 # Livewire - Wire Transition
 
-Source: https://livewire.laravel.com/docs/wire-transition
+Source: https://livewire.laravel.com/docs/4.x/wire-transition
 
 wire:transition
 ===============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 `wire:transition` enables smooth animations when elements appear, disappear, or change using the browser's native View Transitions API.

@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Role Permissions
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/role-permissions
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/role-permissions
 
 SPATIE
 
@@ -17,21 +17,17 @@ Basic-usage
 
 Using Permissions via Roles
 
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
-
 Using Permissions via Roles
 ===========================
 
 ### On this page
 
 1. Assigning Roles
-2. Checking Roles
-3. Assigning Permissions to Roles
-4. What Permissions Does A Role Have?
-5. Assigning Direct Permissions To A User
+2. Assigning Models to a Role
+3. Checking Roles
+4. Assigning Permissions to Roles
+5. What Permissions Does A Role Have?
+6. Assigning Direct Permissions To A User
 
 ##Assigning Roles
 -----------------
@@ -56,6 +52,52 @@ Roles can also be synced:
 ```php
 // All current roles will be removed from the user and replaced by the array given
 $user->syncRoles(['writer', 'admin']);
+```
+##Assigning Models to a Role
+----------------------------
+
+Sometimes it is more convenient to work from the role's side, for example when building an admin screen that lists every user with a given role. The `assignToModels`, `removeFromModels`, and `syncModels` methods on a role do the inverse of `assignRole`, `removeRole`, and `syncRoles`:
+
+```php
+$role = Role::findByName('writer');
+
+// Give the role to two users at once.
+$role->assignToModels([$user1, $user2]);
+
+// Remove it from one user.
+$role->removeFromModels($user1);
+
+// Replace every model that currently has this role with a new set.
+$role->syncModels([$user2, $user3]);
+```
+Each method also accepts a single model, a single ID, an array of IDs, a Collection, or a mix of models and IDs:
+
+```php
+$role->assignToModels($user);                  // a single model
+$role->assignToModels($user->id);              // a single ID
+$role->assignToModels([1, 2, 3]);              // an array of IDs
+$role->assignToModels(User::query()->get());   // a Collection
+$role->assignToModels([$user1, 5, $user2]);    // mixed
+```
+When you pass raw IDs, the package needs to know which model class they belong to. By default it uses the model registered for the role's guard (the same model `Auth::user()` returns). You can override this in two ways.
+
+Pass the class as the second argument:
+
+```php
+$role->assignToModels([1, 2, 3], User::class);
+```
+Or set a default once in `config/permission.php`:
+
+```php
+'models' => [
+    // ...
+    'default_model' => App\Models\User::class,
+],
+```
+If you need to assign the role to different model types in the same call, pass them as instances. The role can be assigned to any model that uses the `HasRoles` trait, not just users:
+
+```php
+$role->assignToModels([$user, $admin, $apiClient]);
 ```
 ##Checking Roles
 ----------------

@@ -1,16 +1,9 @@
 # Livewire - Navigate
 
-Source: https://livewire.laravel.com/docs/navigate
+Source: https://livewire.laravel.com/docs/4.x/navigate
 
 Navigate
 ========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Many modern web applications are built as "single page applications" (SPAs). In these applications, each page rendered by the application no longer requires a full browser page reload, avoiding the overhead of re-downloading JavaScript and CSS assets on every request.

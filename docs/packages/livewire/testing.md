@@ -1,16 +1,9 @@
 # Livewire - Testing
 
-Source: https://livewire.laravel.com/docs/testing
+Source: https://livewire.laravel.com/docs/4.x/testing
 
 Testing
 =======
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire components are simple to test. Because they are just Laravel classes under the hood, they can be tested using Laravel's existing testing tools. However, Livewire provides many additional utilities to make testing your components a breeze.

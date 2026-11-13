@@ -1,16 +1,9 @@
 # Livewire - Wire Click
 
-Source: https://livewire.laravel.com/docs/wire-click
+Source: https://livewire.laravel.com/docs/4.x/wire-click
 
 wire:click
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire provides a simple `wire:click` directive for calling component methods (aka actions) when a user clicks a specific element on the page.

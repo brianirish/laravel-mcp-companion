@@ -1,16 +1,9 @@
 # Livewire - Forms
 
-Source: https://livewire.laravel.com/docs/forms
+Source: https://livewire.laravel.com/docs/4.x/forms
 
 Forms
 =====
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Because forms are the backbone of most web applications, Livewire provides loads of helpful utilities for building them. From handling simple input elements to complex things like real-time validation or file uploading, Livewire has simple, well-documented tools to make your life easier and delight your users.

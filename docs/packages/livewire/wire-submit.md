@@ -1,16 +1,9 @@
 # Livewire - Wire Submit
 
-Source: https://livewire.laravel.com/docs/wire-submit
+Source: https://livewire.laravel.com/docs/4.x/wire-submit
 
 wire:submit
 ===========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire makes it easy to handle form submissions via the `wire:submit` directive. By adding `wire:submit` to a `<form>` element, Livewire will intercept the form submission, prevent the default browser handling, and call any Livewire component method.

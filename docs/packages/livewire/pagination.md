@@ -1,16 +1,9 @@
 # Livewire - Pagination
 
-Source: https://livewire.laravel.com/docs/pagination
+Source: https://livewire.laravel.com/docs/4.x/pagination
 
 Pagination
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Laravel's pagination feature allows you to query a subset of data and provides your users with the ability to navigate between *pages* of those results.

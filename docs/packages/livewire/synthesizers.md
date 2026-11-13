@@ -1,0 +1,376 @@
+# Livewire - Synthesizers
+
+Source: https://livewire.laravel.com/docs/4.x/synthesizers
+
+Synthesizers
+============
+
+
+Because Livewire components are dehydrated (serialized) into JSON, then hydrated (unserialized) back into PHP components between requests, their properties need to be JSON-serializable.
+
+Natively, PHP serializes most primitive values into JSON easily. However, in order for Livewire components to support more sophisticated property types (like models, collections, carbon instances, and stringables), a more robust system is needed.
+
+Therefore, Livewire provides a point of extension called "Synthesizers" that allow users to support any custom property types they wish.
+
+Make sure you understand hydration first
+
+Before using Synthesizers, it's helpful to fully understand Livewire's hydration system. You can learn more by reading the hydration documentation.
+
+Understanding Synthesizers¶
+---------------------------
+
+Before exploring the creation of custom Synthesizers, let's first look at the internal Synthesizer that Livewire uses to support Laravel Stringables.
+
+Suppose your application contained the following `CreatePost` component:
+
+```php
+class CreatePost extends Component
+
+{
+
+public $title = '';
+
+}
+```
+Between requests, Livewire might serialize this component's state into a JSON object like the following:
+
+```php
+state: { title: '' },
+```
+Now, consider a more advanced example where the `$title` property value is a stringable instead of a plain string:
+
+```php
+class CreatePost extends Component
+
+{
+
+public $title = '';
+
+public function mount()
+
+{
+
+$this->title = str($this->title);
+
+}
+
+}
+```
+The dehydrated JSON representing this component's state now contains a metadata tuple instead of a plain empty string:
+
+```php
+state: { title: ['', { s: 'str' }] },
+```
+Livewire can now use this tuple to hydrate the `$title` property back into a stringable on the next request.
+
+Now that you've seen the outside-in effects of Synthesizers, here is the actual source code for Livewire's internal stringable synth:
+
+```php
+use Illuminate\Support\Stringable;
+
+class StringableSynth extends Synth
+
+{
+
+public static $key = 'str';
+
+public static function match($target)
+
+{
+
+return $target instanceof Stringable;
+
+}
+
+public function dehydrate($target)
+
+{
+
+return [$target->__toString(), []];
+
+}
+
+public function hydrate($value)
+
+{
+
+return str($value);
+
+}
+
+}
+```
+Let's break this down piece by piece.
+
+First is the `$key` property:
+
+```php
+public static $key = 'str';
+```
+Every synth must contain a static `$key` property that Livewire uses to convert a metadata tuple like `['', { s: 'str' }]` back into a stringable. As you may notice, each metadata tuple has an `s` key referencing this key.
+
+Inversely, when Livewire is dehydrating a property, it will use the synth's static `match()` function to identify if this particular Synthesizer is a good candidate to dehydrate the current property (`$target` being the current value of the property):
+
+```php
+public static function match($target)
+
+{
+
+return $target instanceof Stringable;
+
+}
+```
+If `match()` returns true, the `dehydrate()` method will be used to take the property's PHP value as input and return the JSONable metadata tuple:
+
+```php
+public function dehydrate($target)
+
+{
+
+return [$target->__toString(), []];
+
+}
+```
+Now, at the beginning of the next request, after this Synthesizer has been matched by the `{ s: 'str' }` key in the tuple, the `hydrate()` method will be called and passed the raw JSON representation of the property with the expectation that it returns the full PHP-compatible value to be assigned to the property.
+
+```php
+public function hydrate($value)
+
+{
+
+return str($value);
+
+}
+```
+Registering a custom Synthesizer¶
+---------------------------------
+
+To demonstrate how you might author your own Synthesizer to support a custom property, we will use the following `UpdateProperty` component as an example:
+
+```php
+class UpdateProperty extends Component
+
+{
+
+public Address $address;
+
+public function mount()
+
+{
+
+$this->address = new Address();
+
+}
+
+}
+```
+Here's the source for the `Address` class:
+
+```php
+namespace App\Dtos\Address;
+
+class Address
+
+{
+
+public $street = '';
+
+public $city = '';
+
+public $state = '';
+
+public $zip = '';
+
+}
+```
+To support properties of type `Address`, we can use the following Synthesizer:
+
+```php
+use App\Dtos\Address;
+
+class AddressSynth extends Synth
+
+{
+
+public static $key = 'address';
+
+public static function match($target)
+
+{
+
+return $target instanceof Address;
+
+}
+
+public function dehydrate($target)
+
+{
+
+return [[
+
+'street' => $target->street,
+
+'city' => $target->city,
+
+'state' => $target->state,
+
+'zip' => $target->zip,
+
+], []];
+
+}
+
+public function hydrate($value)
+
+{
+
+$instance = new Address;
+
+$instance->street = $value['street'];
+
+$instance->city = $value['city'];
+
+$instance->state = $value['state'];
+
+$instance->zip = $value['zip'];
+
+return $instance;
+
+}
+
+}
+```
+To make it available globally in your application, you can use Livewire's `propertySynthesizer` method to register the synthesizer from your service provider boot method:
+
+```php
+class AppServiceProvider extends ServiceProvider
+
+{
+
+/**
+
+* Bootstrap any application services.
+
+*/
+
+public function boot(): void
+
+{
+
+Livewire::propertySynthesizer(AddressSynth::class);
+
+}
+
+}
+```
+Supporting data binding¶
+------------------------
+
+Using the `UpdateProperty` example from above, it is likely that you would want to support `wire:model` binding directly to properties of the `Address` object. Synthesizers allow you to support this using the `get()` and `set()` methods:
+
+```php
+use App\Dtos\Address;
+
+class AddressSynth extends Synth
+
+{
+
+public static $key = 'address';
+
+public static function match($target)
+
+{
+
+return $target instanceof Address;
+
+}
+
+public function dehydrate($target)
+
+{
+
+return [[
+
+'street' => $target->street,
+
+'city' => $target->city,
+
+'state' => $target->state,
+
+'zip' => $target->zip,
+
+], []];
+
+}
+
+public function hydrate($value)
+
+{
+
+$instance = new Address;
+
+$instance->street = $value['street'];
+
+$instance->city = $value['city'];
+
+$instance->state = $value['state'];
+
+$instance->zip = $value['zip'];
+
+return $instance;
+
+}
+
+public function get(&$target, $key)
+
+{
+
+return $target->{$key};
+
+}
+
+public function set(&$target, $key, $value)
+
+{
+
+$target->{$key} = $value;
+
+}
+
+}
+```
+Array-shaped synthesizers¶
+--------------------------
+
+During property updates, Livewire may reuse synthesizer metadata from the previous snapshot to hydrate nested values. If your synthesizer always serializes its value as an array, implement the `ArrayShapedSynth` interface:
+
+```php
+use Livewire\Mechanisms\HandleComponents\Synthesizers\ArrayShapedSynth;
+
+use Livewire\Mechanisms\HandleComponents\Synthesizers\Synth;
+
+class AddressSynth extends Synth implements ArrayShapedSynth
+
+{
+
+// ...
+
+}
+```
+This tells Livewire not to run your synthesizer when a top-level or nested update replaces the previous value with any non-array value. Instead, Livewire treats the incoming value as the replacement. Array updates continue through your synthesizer as usual.
+
+Only implement this interface when your synthesizer's `hydrate()` method requires an array. Synthesizers that hydrate scalar values, such as dates, enums, integers, floats, or strings, should not implement it. Without the interface, Livewire continues applying the previous synthesizer metadata to non-array updates for backwards compatibility.
+
+Ecosystem sponsor
+
+
+Postmark delivers your app's transactional and broadcast email fast, with industry-leading deliverability and the tools developers need to see exactly what happened to every message.
+postmarkapp.com ↗
+
+Return to
+
+JavaScript
+
+Continue to
+
+Package Development

@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Basic Usage
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/basic-usage
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/basic-usage
 
 SPATIE
 
@@ -17,18 +17,13 @@ Basic-usage
 
 Basic Usage
 
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
-
 Basic Usage
 ===========
 
 ### On this page
 
 1. Add The Trait
-2. Create A Permission
+2. Create Roles and Permissions
 3. Assign A Permission To A Role
 4. Sync Permissions To A Role
 5. Remove Permission From A Role
@@ -54,10 +49,10 @@ class User extends Authenticatable
     // ...
 }
 ```
-##Create A Permission
----------------------
+##Create Roles and Permissions
+------------------------------
 
-This package allows for users to be associated with permissions and roles. Every role is associated with multiple permissions.
+This package allows for users to be associated with permissions and roles. A permission is a specific ability or capability, and a role is a named group of permissions.
 A `Role` and a `Permission` are regular Eloquent models. They require a `name` and can be created like this:
 
 ```php

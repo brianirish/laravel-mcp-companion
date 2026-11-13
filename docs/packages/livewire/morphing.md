@@ -1,16 +1,9 @@
 # Livewire - Morphing
 
-Source: https://livewire.laravel.com/docs/morphing
+Source: https://livewire.laravel.com/docs/4.x/morphing
 
 Morphing
 ========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 When a Livewire component updates the browser's DOM, it does so in an intelligent way we call "morphing". The term *morph* is in contrast with a word like *replace*.

@@ -1,6 +1,6 @@
 # Spatie - Sending Notifications/Overview
 
-Source: https://spatie.be/docs/laravel-backup/v9/sending-notifications/overview
+Source: https://spatie.be/docs/laravel-backup/v10/sending-notifications/overview
 
 SPATIE
 
@@ -17,11 +17,6 @@ Sending-notifications
 
 Sending notifications
 
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-backup`
-
 Sending notifications
 =====================
 
@@ -29,7 +24,7 @@ Sending notifications
 
 1. Configuration
 
-The package leverages Laravel's native notifications to let you know that your backups are ok, or not. Out of the box it can send notifications via mail and Slack (for Slack you'll need to require `laravel/slack-notification-channel` in your project).
+The package leverages Laravel's native notifications to let you know that your backups are ok, or not. Out of the box it can send notifications via mail, Slack (for Slack you'll need to require `laravel/slack-notification-channel` in your project), Discord, and a generic webhook channel (useful for Mattermost, Microsoft Teams, or custom integrations).
 
 ##Configuration
 ---------------
@@ -44,10 +39,9 @@ This is the portion of the configuration that will determine when and how notifi
      * For Slack you need to install laravel/slack-notification-channel.
      *
      * You can also use your own notification classes, just make sure the class is named after one of
-     * the `Spatie\Backup\Events` classes.
+     * the `Spatie\Backup\Notifications\Notifications` classes.
      */
     'notifications' => [
-
         'notifications' => [
             \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
             \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
@@ -83,7 +77,28 @@ This is the portion of the configuration that will determine when and how notifi
             'username' => null,
 
             'icon' => null,
+        ],
 
+        'discord' => [
+            'webhook_url' => '',
+
+            /*
+             * If this is an empty string, the name field on the webhook will be used.
+             */
+            'username' => '',
+
+            /*
+             * If this is an empty string, the avatar on the webhook will be used.
+             */
+            'avatar_url' => '',
+        ],
+
+        /*
+         * A generic webhook channel that POSTs JSON to a URL.
+         * Useful for Mattermost, Microsoft Teams, or custom integrations.
+         */
+        'webhook' => [
+            'url' => '',
         ],
     ],
 ```

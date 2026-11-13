@@ -1,6 +1,6 @@
 # Spatie - Introduction
 
-Source: https://spatie.be/docs/laravel-permission/v6/introduction
+Source: https://spatie.be/docs/laravel-permission/v8/introduction
 
 SPATIE
 
@@ -14,11 +14,6 @@ Docs
 Laravel-permission
 
 Introduction
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Laravel Permission
 ==================
@@ -36,6 +31,8 @@ Introduction
 ------------
 
 This package allows you to manage user permissions and roles in a database.
+
+Think of a `Permission` as a specific ability or capability your app checks for, such as `edit articles`. Think of a `Role` as a named group of permissions that can be assigned to users or other models.
 
 Once installed you can do stuff like this:
 

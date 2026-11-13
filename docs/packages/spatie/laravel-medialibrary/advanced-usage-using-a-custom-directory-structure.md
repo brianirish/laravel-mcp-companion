@@ -1,0 +1,113 @@
+# Spatie - Advanced Usage/Using A Custom Directory Structure
+
+Source: https://spatie.be/docs/laravel-medialibrary/v11/advanced-usage/using-a-custom-directory-structure
+
+SPATIE
+
+Laravel Media Library
+=====================
+
+spatie.be/open-source
+
+Docs
+
+Laravel-medialibrary
+
+Advanced-usage
+
+Using a custom directory structure
+
+Using a custom directory structure
+==================================
+
+### On this page
+
+1. Are you a visual learner?
+
+By default, files will be stored inside a directory that uses the `id` of its `Media`-object as a name. Converted images will be stored inside a directory named `conversions`.
+
+```php
+media
+---- 1
+------ file.jpg
+------ conversions
+--------- small.jpg
+--------- medium.jpg
+--------- big.jpg
+---- 2
+------ file.jpg
+------ conversions
+--------- small.jpg
+--------- medium.jpg
+--------- big.jpg
+...
+```
+Putting files inside their own folders guarantees that files with the same name can be added without any problems.
+
+To override this default folder structure, a class that conforms to the `PathGenerator`-interface can be specified as the `path_generator` in the config file. The given class will be loaded through the Laravel Service Container, so feel free to type-hint any dependencies in the constructor.
+
+Let's take a look at the interface:
+
+```php
+namespace Spatie\MediaLibrary\Support\PathGenerator;
+
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
+interface PathGenerator
+{
+    /*
+     * Get the path for the given media, relative to the root storage path.
+     */
+    public function getPath(Media $media): string;
+
+    /*
+     * Get the path for conversions of the given media, relative to the root storage path.
+     */
+    public function getPathForConversions(Media $media): string;
+
+    /*
+     * Get the path for responsive images of the given media, relative to the root storage path.
+     */
+    public function getPathForResponsiveImages(Media $media): string;
+}
+```
+There aren't any restrictions on how the directories can be named. When a `Media`-object gets deleted the package will delete its entire associated directory. To avoid tears or worse, make sure that every media gets stored its own unique directory.
+
+The `media-library:clean` command treats every top-level directory below the configured media prefix that is not used by a current media path as orphaned. Use a dedicated disk or prefix for media, and run the command with `--dry-run` before deleting files when introducing a custom path generator.
+
+### ##Model-specific Custom Path Generators
+
+In addition to setting a global path generator in the config file, You can also define a `CustomPathGenerator` class for specific models directly inside the model's `booting()` method or within a service provider:
+
+```php
+use Spatie\MediaLibrary\Support\PathGenerator\PathGeneratorFactory;
+use Spatie\MediaLibrary\Tests\Support\PathGenerator\CustomPathGenerator;
+
+class YourModel extends Model
+{
+    protected static function booting(): void
+    {
+        PathGeneratorFactory::setCustomPathGenerators(static::class, CustomPathGenerator::class);
+    }
+}
+```
+This allows you to customize the directory structure on a per-model basis.
+
+Keep in mind that path generators set in the model override those defined in the config file.
+
+### ##Defining a Custom Path Generator Inside a Model or Service Provider
+
+This approach allows for fine-grained control over the media directory structure on a per-model basis, without affecting global configuration.
+
+##Are you a visual learner?
+---------------------------
+
+Here's a video that shows custom paths:
+
+Want to see more videos like this? Check out our free video course on how to use Laravel Media Library.
+
+Rendering media
+
+Using a custom file removal strategy
+
+Help us improve this page

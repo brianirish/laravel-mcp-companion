@@ -1,9 +1,11 @@
 {
   "package": "laravel-permission",
   "name": "Laravel Permission",
-  "sections_count": 18,
-  "total_sections": 18,
+  "sections_count": 36,
+  "total_sections": 36,
   "success_rate": 1.0,
-  "base_url": "https://spatie.be/docs/laravel-permission/v6",
-  "cached_at": 1794528684.6789503
+  "base_url": "https://spatie.be/docs/laravel-permission/v8",
+  "version": "v8",
+  "cached_at": 1794540915.358964,
+  "source_type": "site_navigation"
 }

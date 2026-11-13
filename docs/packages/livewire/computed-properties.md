@@ -1,16 +1,9 @@
 # Livewire - Computed Properties
 
-Source: https://livewire.laravel.com/docs/computed-properties
+Source: https://livewire.laravel.com/docs/4.x/computed-properties
 
 Computed Properties
 ===================
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Computed properties are a way to create "derived" properties in Livewire. Like accessors on an Eloquent model, computed properties allow you to access values and memoize them for future access during the request.

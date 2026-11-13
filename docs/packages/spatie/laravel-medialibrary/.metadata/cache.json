@@ -1,9 +1,11 @@
 {
   "package": "laravel-medialibrary",
   "name": "Laravel Media Library",
-  "sections_count": 9,
-  "total_sections": 9,
+  "sections_count": 47,
+  "total_sections": 47,
   "success_rate": 1.0,
   "base_url": "https://spatie.be/docs/laravel-medialibrary/v11",
-  "cached_at": 1794528693.1036394
+  "version": "v11",
+  "cached_at": 1794540945.3025448,
+  "source_type": "site_navigation"
 }

@@ -1,6 +1,6 @@
 # Spatie - Introduction
 
-Source: https://spatie.be/docs/laravel-backup/v9/introduction
+Source: https://spatie.be/docs/laravel-backup/v10/introduction
 
 SPATIE
 
@@ -14,11 +14,6 @@ Docs
 Laravel-backup
 
 Introduction
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-backup`
 
 Laravel Backup
 ==============
@@ -49,6 +44,7 @@ php artisan backup:run
 In addition to making the backup, the package can also clean up old backups, monitor the health of the backups, and show an overview of all backups.
 
 If you need to backup multiple servers, take a look at our laravel-backup-server package.
+If you need to restore the database of your backup programatically, check out wnx/laravel-backup-restore.
 
 ##We have badges!
 -----------------

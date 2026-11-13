@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Direct Permissions
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/direct-permissions
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/direct-permissions
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Basic-usage
 
 Direct Permissions
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Direct Permissions
 ==================

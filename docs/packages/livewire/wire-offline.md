@@ -1,16 +1,9 @@
 # Livewire - Wire Offline
 
-Source: https://livewire.laravel.com/docs/wire-offline
+Source: https://livewire.laravel.com/docs/4.x/wire-offline
 
 wire:offline
 ============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 In real-time applications, it can be helpful to provide a visual indication that the user's device is no longer connected to the internet.

@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Wildcard Permissions
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/wildcard-permissions
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/wildcard-permissions
 
 SPATIE
 
@@ -17,11 +17,6 @@ Basic-usage
 
 Wildcard permissions
 
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
-
 Wildcard permissions
 ====================
 
@@ -33,7 +28,7 @@ Wildcard permissions
 4. Meaning of the \* Asterisk
 5. Subparts
 
-When enabled, wildcard permissions offers you a flexible representation for a variety of permission schemes.
+When enabled, wildcard permissions offer you a flexible representation for a variety of permission schemes.
 
 The wildcard permissions implementation is inspired by the default permission implementation of
 Apache Shiro. See the Shiro documentation for more examples and deeper explanation of the concepts.

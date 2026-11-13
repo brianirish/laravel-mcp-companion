@@ -1,16 +1,9 @@
 # Livewire - Wire Dirty
 
-Source: https://livewire.laravel.com/docs/wire-dirty
+Source: https://livewire.laravel.com/docs/4.x/wire-dirty
 
 wire:dirty
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 In a traditional HTML page containing a form, the form is only ever submitted when the user presses the "Submit" button.

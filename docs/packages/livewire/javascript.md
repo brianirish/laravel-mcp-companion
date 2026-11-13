@@ -1,16 +1,9 @@
 # Livewire - Javascript
 
-Source: https://livewire.laravel.com/docs/javascript
+Source: https://livewire.laravel.com/docs/4.x/javascript
 
 JavaScript
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Using JavaScript in Livewire components¶
