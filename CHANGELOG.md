@@ -18,6 +18,36 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Changed
+- Importing the server no longer contacts GitHub. Version discovery used to run
+  at import whenever the versions cache had expired, and rewrote the checked-in
+  cache file as a side effect. The import now reads the cache only; the server
+  and `docs_updater.py` refresh the list once at startup, and keep the cached
+  list if GitHub is unreachable.
+- Path containment and the symlink-refusing file open live in one module,
+  `path_security.py`, used by both the server and the updater. The server's
+  duplicate cache, version parser and metadata reader are gone in favour of the
+  ones in `mcp_tools`.
+- The coverage gate measures every product module. It left out `doc_search`,
+  `metrics`, `tool_schemas` and `path_security`; with them included coverage is
+  85%.
+
+- The Docker image no longer contains repository metadata, caches or test
+  directories; `.dockerignore` now excludes them.
+
+### Fixed
+- `laravel://` resource reads go through the same symlink-refusing open as the
+  tools. They used a second file cache that checked a path and then opened it
+  in two steps.
+- Two servers created in one process no longer share configuration. A module
+  global held it, so creating a second server repointed the first one's
+  resource handlers.
+
+### Removed
+- Dead server-side code: the unused search and learning-resource formatters,
+  the `search_laravel_docs_impl` wrapper that no client could reach, and the
+  "requires server context" stubs.
+
 ### Security
 - `joserfc` 1.7.4 to 1.8.0 in `uv.lock`. It is a dependency of FastMCP and
   Authlib, not of this project directly. The upgrade closes two

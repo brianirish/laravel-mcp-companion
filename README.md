@@ -297,7 +297,7 @@ and succeed again once the bucket refills.
   and reads
 
 ### Quality
-- **81% product coverage** with an 80% CI gate, end-to-end tests over real
+- **85% product coverage** with an 80% CI gate, measured over every product module, end-to-end tests over real
   stdio and HTTP transports, and report-only latency benchmarks — warm
   search p95 is a few milliseconds against the 100ms v1.0.0 target
 
