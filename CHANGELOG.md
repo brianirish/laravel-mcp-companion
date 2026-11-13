@@ -19,11 +19,13 @@ docs-only commit and contains no code change.
 ## [Unreleased]
 
 ### Security
-- `joserfc` 1.7.4 to 1.8.0 in the lockfile, which the Docker image installs from. It
-  is a dependency of FastMCP and Authlib, not of this project directly. The upgrade
-  closes two denial-of-service advisories: GHSA-jpxq-7h8p-2q76 (unbounded
-  `recipients` in JWE General JSON) and GHSA-9pg5-8c7x-5hfx (compact JWS segments
-  allocated before the size check).
+- `joserfc` 1.7.4 to 1.8.0 in `uv.lock`. It is a dependency of FastMCP and
+  Authlib, not of this project directly. The upgrade closes two
+  denial-of-service advisories: GHSA-jpxq-7h8p-2q76 (unbounded `recipients` in
+  JWE General JSON) and GHSA-9pg5-8c7x-5hfx (compact JWS segments allocated
+  before the size check). The lockfile covers local development only. CI and
+  the Docker image install from `requirements.txt`, which does not pin
+  `joserfc`, so each image build resolves it afresh.
 
 ## [0.14.0] - 2026-11-12
 
