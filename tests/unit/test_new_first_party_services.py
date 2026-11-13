@@ -117,6 +117,8 @@ The deployment platform.
 
 See [environments](/cloud/docs/environments#regions) for the list. Padding so the page is long enough to keep.
 
+Pick a [supported runtime](/docs/runtimes#php) first.
+
 ```jsx
 <Card title="An example that is code">not prose</Card>
 ```
@@ -205,6 +207,12 @@ class TestExportTextIsCleanedOfComponentMarkup:
 
     def test_a_site_relative_link_is_made_absolute(self, intro):
         assert "[environments](https://laravel.com/cloud/docs/environments#regions)" in intro
+
+    def test_a_link_written_against_the_docs_root_lands_under_the_services_own_path(self, intro):
+        """Cloud's pages link to "/docs/runtimes", written for a site whose
+        docs sit at /docs. They are served from laravel.com/cloud/docs, and
+        laravel.com/docs is the framework's documentation."""
+        assert "[supported runtime](https://laravel.com/cloud/docs/runtimes#php)" in intro
 
     def test_markup_inside_a_code_block_is_left_alone(self, intro):
         assert '<Card title="An example that is code">not prose</Card>' in intro

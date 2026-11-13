@@ -288,7 +288,7 @@ def fetch_llms_index_docs(
         origin = "/".join(page_prefix.split("/")[:3])
         try:
             exported = {
-                url: _clean_export_markup(text, origin)
+                url: _clean_export_markup(text, origin, page_prefix)
                 for url, text in _split_full_export(fetch(full_url).decode('utf-8'), page_prefix).items()
             }
         except Exception as e:
@@ -377,7 +377,7 @@ _CALLOUT_LABELS = {"Note": "Note", "Info": "Note", "Check": "Note", "Tip": "Tip"
 _COMPONENT_TAG = re.compile(r"^<(?P<close>/)?(?P<name>[A-Z][A-Za-z0-9.]*)(?P<attrs>(?:\s[^>]*)?)>(?P<rest>.*)$")
 
 
-def _clean_export_markup(text: str, origin: str) -> str:
+def _clean_export_markup(text: str, origin: str, page_prefix: str = "") -> str:
     """Turn a page of a site's llms-full.txt export into plain markdown.
 
     The export is the page's source, with the documentation platform's
@@ -391,9 +391,18 @@ def _clean_export_markup(text: str, origin: str) -> str:
         <Frame> ... </Frame>                                 dropped (it wraps an image)
         any other component tag on a line of its own         dropped
 
-    Site-relative links are made absolute against `origin`. Nothing inside a
-    fenced code block is touched.
+    Site-relative links are made absolute. A link that starts with the last
+    segment of `page_prefix` ("/docs/runtimes" under ".../cloud/docs/") was
+    written against the docs root and is resolved there; any other is
+    resolved against `origin`. Nothing inside a fenced code block is touched.
     """
+    docs_root = "/" + page_prefix.rstrip("/").rsplit("/", 1)[-1] + "/" if page_prefix else ""
+
+    def resolve(path: str) -> str:
+        if docs_root and path.startswith(docs_root):
+            return page_prefix + path[len(docs_root):]
+        return origin + path
+
     out: List[str] = []
     fence: Optional[str] = None
     fence_indent = 0
@@ -405,7 +414,7 @@ def _clean_export_markup(text: str, origin: str) -> str:
         return found.group(1) if found else None
 
     def absolute(line: str) -> str:
-        return re.sub(r"\]\((/[^)\s]*)\)", lambda m: f"]({origin}{m.group(1)})", line)
+        return re.sub(r"\]\((/[^)\s]*)\)", lambda m: f"]({resolve(m.group(1))})", line)
 
     for raw in text.split("\n"):
         stripped = raw.strip()
@@ -453,7 +462,7 @@ def _clean_export_markup(text: str, origin: str) -> str:
             if title:
                 href = attribute(attrs, "href")
                 if href and href.startswith("/"):
-                    href = origin + href
+                    href = resolve(href)
                 out.append(f"**[{title}]({href})**" if href else f"**{title}**")
                 if rest:
                     out.append(absolute(rest))
