@@ -9,11 +9,9 @@ from pathlib import Path
 
 import pytest
 
-from laravel_mcp_companion.mcp_tools import (
-    read_laravel_doc_content_impl,
-    read_laravel_doc_section_impl,
-    search_laravel_docs_data,
-)
+from laravel_mcp_companion.tools import ToolFailure
+from laravel_mcp_companion.tools.docs import read_content, read_section
+from laravel_mcp_companion.tools.search import search
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
 
@@ -46,8 +44,11 @@ class TestCorpusPrefixedReads:
         ("laracasts-index/index.md", "Article summaries"),
     ])
     def test_content_reads_resolve_corpus_prefixes(self, corpus, filename, expected):
-        content = read_laravel_doc_content_impl(corpus, filename)
-        assert expected in content
+        reply = read_content(corpus, filename)
+
+        assert expected in reply.text
+        assert reply.data["file"] == filename
+        assert reply.data["corpus"] == filename.split("/")[0]
 
     @pytest.mark.parametrize("filename,section,expected", [
         ("forge/servers/php.md", "installing-php", "Forge installs PHP"),
@@ -55,19 +56,23 @@ class TestCorpusPrefixedReads:
         ("laracasts-index/index.md", "recent", "Article summaries"),
     ])
     def test_section_reads_resolve_corpus_prefixes(self, corpus, filename, section, expected):
-        content = read_laravel_doc_section_impl(corpus, filename, section)
-        assert expected in content
+        assert expected in read_section(corpus, filename, section).text
 
     def test_core_paths_unchanged(self, corpus):
-        assert "Core routing words" in read_laravel_doc_content_impl(corpus, "12.x/routing.md")
-        assert "Core routing words" in read_laravel_doc_section_impl(corpus, "routing.md", "basics", version="12.x")
+        assert "Core routing words" in read_content(corpus, "12.x/routing.md").text
+        assert "Core routing words" in read_section(corpus, "routing.md", "basics", version="12.x").text
+
+    def test_a_core_read_reports_its_version_and_no_corpus(self, corpus):
+        data = read_content(corpus, "12.x/routing.md").data
+
+        assert (data["file"], data["version"]) == ("routing.md", "12.x")
+        assert "corpus" not in data
 
     def test_version_param_is_irrelevant_for_corpus_paths(self, corpus):
         """A corpus-prefixed read ignores the core version entirely."""
-        content = read_laravel_doc_section_impl(
-            corpus, "forge/servers/php.md", "installing-php", version="11.x"
-        )
-        assert "Forge installs PHP" in content
+        reply = read_section(corpus, "forge/servers/php.md", "installing-php", version="11.x")
+
+        assert "Forge installs PHP" in reply.text
 
     @pytest.mark.parametrize("filename", [
         "forge/../../12.x/routing.md",
@@ -80,28 +85,62 @@ class TestCorpusPrefixedReads:
         ".metadata/sync_info.json.md",
     ])
     def test_traversal_from_corpus_roots_denied(self, corpus, filename):
-        content = read_laravel_doc_content_impl(corpus, filename)
-        assert "Access denied" in content or "not found" in content.lower()
-        assert "Core routing words" not in content
+        # Read as Laravel 11.x, a version this corpus has no directory for, so
+        # a path that climbs into 12.x is climbing out of its own root.
+        with pytest.raises(ToolFailure) as raised:
+            read_content(corpus, filename, version="11.x")
+
+        assert raised.value.code in ("access_denied", "not_found")
+        assert "Core routing words" not in str(raised.value.payload())
 
     def test_unknown_prefix_falls_through_to_version_logic(self, corpus):
-        content = read_laravel_doc_content_impl(corpus, "nonexistent/thing.md", version="12.x")
-        assert "not found" in content.lower()
+        with pytest.raises(ToolFailure) as raised:
+            read_content(corpus, "nonexistent/thing.md", version="12.x")
+
+        assert raised.value.code == "not_found"
+
+
+class TestOutline:
+    def test_an_outline_lists_headings_without_the_text(self, corpus):
+        data = read_content(corpus, "forge/servers/php.md", mode="outline")
+
+        assert data["headings"] == [
+            {"level": 1, "text": "PHP", "section": ""},
+            {"level": 2, "text": "Installing PHP", "section": "installing-php"},
+        ]
+        assert "content" not in data
+
+    def test_a_hash_inside_a_code_block_is_not_a_heading(self, temp_dir):
+        (temp_dir / "12.x").mkdir()
+        (temp_dir / "12.x" / "artisan.md").write_text(
+            "# Artisan\n\n## Usage\n\n```shell\n# install the thing\nphp artisan install\n```\n\n## Next\n\nMore.\n"
+        )
+
+        headings = [h["text"] for h in read_content(temp_dir, "artisan.md", version="12.x", mode="outline")["headings"]]
+
+        assert headings == ["Artisan", "Usage", "Next"]
+
+    def test_a_section_named_in_an_outline_can_be_read(self, corpus):
+        outline = read_content(corpus, "spatie/laravel-permission/roles.md", mode="outline")
+        section = next(h["section"] for h in outline["headings"] if h["level"] == 2)
+
+        assert "assignRole" in read_section(corpus, "spatie/laravel-permission/roles.md", section).text
+
+    def test_an_unknown_mode_is_refused(self, corpus):
+        with pytest.raises(ToolFailure) as raised:
+            read_content(corpus, "12.x/routing.md", mode="summary")
+
+        assert raised.value.code == "invalid_argument"
 
 
 class TestSearchReadFlowContract:
     def test_every_hit_is_readable_back(self, corpus):
         """The contract this whole task exists for, per source type."""
-        result = search_laravel_docs_data(
-            corpus, "roles php routing article", "12.x",
-            external_dir=corpus / "external", limit=10,
-        )
+        result = search(corpus, corpus / "external", "roles php routing article", version="12.x", limit=10)
+
         assert len({h["source"].split(":")[0] for h in result["results"]}) >= 3
         for hit in result["results"]:
-            section = hit["anchor"] or hit["heading"]
-            body = read_laravel_doc_section_impl(corpus, hit["file"], section)
-            assert "not found" not in body.lower(), (hit, body)
-            assert "Access denied" not in body
+            assert read_section(corpus, hit["file"], hit["section"], runtime_version="12.x").data["content"]
 
 
 class TestPackageResource:
@@ -163,13 +202,8 @@ class TestPackageResource:
 @pytest.mark.skipif(not (REPO_DOCS / "external").is_dir(), reason="real corpus absent")
 class TestRealCorpusFlow:
     def test_nested_service_hit_reads_back(self):
-        result = search_laravel_docs_data(
-            REPO_DOCS, "supervisor daemon process", "12.x",
-            external_dir=REPO_DOCS / "external", sources=["services"], limit=5,
-        )
-        assert result.get("results"), result
+        result = search(REPO_DOCS, REPO_DOCS / "external", "supervisor daemon process", version="12.x", sources=["services"])
+
+        assert result["count"], result
         top = result["results"][0]
-        body = read_laravel_doc_section_impl(
-            REPO_DOCS, top["file"], top["anchor"] or top["heading"]
-        )
-        assert "not found" not in body.lower(), (top, body[:200])
+        assert read_section(REPO_DOCS, top["file"], top["section"]).data["content"]

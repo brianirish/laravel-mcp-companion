@@ -5,32 +5,9 @@ from unittest.mock import patch
 import argparse
 
 from laravel_mcp_companion.server import (
-    validate_version,
     setup_server_environment,
     handle_documentation_update,
 )
-
-
-class TestValidateVersion:
-    """Test version validation function.
-
-    validate_version is an identity alias for mcp_tools.validate_version: it
-    returns None for a supported version and a truthy (toon-encoded) error
-    string otherwise -- not a bool.
-    """
-
-    def test_validate_valid_version(self):
-        """Test validation of valid version."""
-        assert validate_version("12.x") is None
-        assert validate_version("11.x") is None
-        assert validate_version("10.x") is None
-
-    def test_validate_invalid_version(self):
-        """Test validation of invalid version."""
-        assert validate_version("5.x") is not None
-        assert validate_version("99.x") is not None
-        assert validate_version("invalid") is not None
-        assert validate_version("") is not None
 
 
 class TestSetupServerEnvironment:

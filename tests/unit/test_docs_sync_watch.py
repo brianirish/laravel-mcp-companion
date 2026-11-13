@@ -13,6 +13,7 @@ from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "docs_sync_watch.py"
 spec = importlib.util.spec_from_file_location("docs_sync_watch", SCRIPT)
+assert spec is not None and spec.loader is not None
 watch = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(watch)
 

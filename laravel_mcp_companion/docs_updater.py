@@ -2967,6 +2967,92 @@ class LearningResourceFetcher:
         return self.learning_sources.get(source)
 
 
+def source_statuses(
+    target_dir: Path,
+    now: Optional[float] = None,
+    max_age: Optional[float] = 2 * 86400,
+    min_success_rate: float = 0.9,
+) -> List[Dict[str, Any]]:
+    """The state of every configured documentation source other than the
+    framework docs, read from the metadata each fetcher leaves behind.
+
+    One dict per source: `name`; `kind` ("service", "learning" or "package");
+    `fetched` and `total` page counts, either of which may be None; `version`
+    when the source follows a major; `discovery`, how its pages were found;
+    `synced_at`, a Unix time, and `age_days`; and `problem`, None when the
+    source is healthy.
+
+    A source has a problem when its metadata is missing or unreadable, when it
+    fetched less than `min_success_rate` of its pages, or when its last
+    successful sync is older than `max_age`. The age check matters to the
+    pipeline because a fetch that fails outright writes nothing: the previous
+    metadata, with its perfect success rate, is all that is left behind. Pass
+    `max_age=None` to leave age out of it, as the server does: a copy that is
+    simply a few days old is not broken.
+    """
+    now = time.time() if now is None else now
+
+    sources: List[tuple[str, str, Path]] = []
+    for service in ExternalDocsFetcher(target_dir).laravel_services:
+        sources.append((service, "service", target_dir / "external" / service / ".cache_metadata.json"))
+    for source in LearningResourceFetcher(target_dir).learning_sources:
+        sources.append((source, "learning", target_dir / "learning_resources" / source / ".cache_metadata.json"))
+    for package, config in CommunityPackageFetcher(target_dir).community_packages.items():
+        sub_packages = config.get("packages")
+        if isinstance(sub_packages, dict) and sub_packages:
+            for sub in sub_packages:
+                sources.append((f"{package}/{sub}", "package", target_dir / "packages" / package / sub / ".metadata" / "cache.json"))
+        else:
+            sources.append((package, "package", target_dir / "packages" / package / ".metadata" / "cache.json"))
+
+    statuses: List[Dict[str, Any]] = []
+    for name, kind, metadata_path in sources:
+        status: Dict[str, Any] = {
+            "name": name, "kind": kind, "fetched": None, "total": None, "version": None,
+            "discovery": None, "synced_at": None, "age_days": None, "problem": None,
+        }
+        statuses.append(status)
+
+        if not metadata_path.exists():
+            status["problem"] = "never synced"
+            continue
+        try:
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+            if not isinstance(metadata, dict):
+                raise ValueError("metadata is not an object")
+        except Exception:
+            status["problem"] = "metadata unreadable"
+            continue
+
+        fetched = next((metadata[key] for key in ("fetched_sections", "sections_count", "article_count", "topic_count")
+                        if key in metadata), None)
+        if isinstance(fetched, list):
+            fetched = len(fetched)
+        total = metadata.get("total_sections")
+        status["fetched"], status["total"] = fetched, total
+        status["version"] = metadata.get("version") or None
+        status["discovery"] = metadata.get("discovery_method") or metadata.get("source_type") or None
+
+        synced_at = metadata.get("cached_at") or metadata.get("cache_time")
+        success_rate = metadata.get("success_rate")
+        if not isinstance(synced_at, (int, float)):
+            status["problem"] = "no sync timestamp"
+            continue
+
+        age_days = int((now - synced_at) // 86400)
+        status["synced_at"], status["age_days"] = synced_at, age_days
+        if max_age is not None and now - synced_at > max_age:
+            status["problem"] = f"last synced {age_days} days ago"
+        elif isinstance(success_rate, (int, float)) and success_rate < min_success_rate:
+            if fetched is not None and total is not None and fetched != total:
+                status["problem"] = f"fetched {fetched} of {total} pages"
+            else:
+                status["problem"] = f"success rate {success_rate:.0%}"
+
+    return statuses
+
+
 def build_sync_report(
     target_dir: Path,
     now: Optional[float] = None,
@@ -2977,77 +3063,24 @@ def build_sync_report(
 
     Returns the report as Markdown and a list of problems, one per degraded
     source. The daily pipeline pastes the Markdown into its pull request and
-    fails when the list is non-empty.
-
-    A source is degraded when its metadata is missing or unreadable, when it
-    fetched less than `min_success_rate` of its pages, or when its last
-    successful sync is older than `max_age`. The age check matters because a
-    fetch that fails outright writes nothing: the previous metadata, with its
-    perfect success rate, is all that is left behind.
+    fails when the list is non-empty. See source_statuses for what makes a
+    source degraded.
     """
-    now = time.time() if now is None else now
-
-    sources: List[tuple[str, Path]] = []
-    for service in ExternalDocsFetcher(target_dir).laravel_services:
-        sources.append((service, target_dir / "external" / service / ".cache_metadata.json"))
-    for source in LearningResourceFetcher(target_dir).learning_sources:
-        sources.append((source, target_dir / "learning_resources" / source / ".cache_metadata.json"))
-    for package, config in CommunityPackageFetcher(target_dir).community_packages.items():
-        sub_packages = config.get("packages")
-        if isinstance(sub_packages, dict) and sub_packages:
-            for sub in sub_packages:
-                sources.append((f"{package}/{sub}", target_dir / "packages" / package / sub / ".metadata" / "cache.json"))
-        else:
-            sources.append((package, target_dir / "packages" / package / ".metadata" / "cache.json"))
-
     rows: List[str] = []
     problems: List[str] = []
 
-    for name, metadata_path in sources:
-        pages = discovery = synced = "-"
-        problem: Optional[str] = None
-
-        if not metadata_path.exists():
-            problem = "never synced"
-        else:
-            try:
-                with open(metadata_path, 'r') as f:
-                    metadata = json.load(f)
-                if not isinstance(metadata, dict):
-                    raise ValueError("metadata is not an object")
-            except Exception:
-                metadata = None
-                problem = "metadata unreadable"
-
-            if metadata is not None:
-                fetched = next((metadata[key] for key in ("fetched_sections", "sections_count", "article_count", "topic_count")
-                                if key in metadata), None)
-                if isinstance(fetched, list):
-                    fetched = len(fetched)
-                total = metadata.get("total_sections")
-                if fetched is not None:
-                    pages = f"{fetched}/{total}" if total is not None else str(fetched)
-                discovery = str(metadata.get("discovery_method") or metadata.get("source_type") or "-")
-
-                synced_at = metadata.get("cached_at") or metadata.get("cache_time")
-                success_rate = metadata.get("success_rate")
-
-                if not isinstance(synced_at, (int, float)):
-                    problem = "no sync timestamp"
-                else:
-                    age_days = int((now - synced_at) // 86400)
-                    synced = "today" if age_days <= 0 else f"{age_days}d ago"
-                    if now - synced_at > max_age:
-                        problem = f"last synced {age_days} days ago"
-                    elif isinstance(success_rate, (int, float)) and success_rate < min_success_rate:
-                        if fetched is not None and total is not None and fetched != total:
-                            problem = f"fetched {fetched} of {total} pages"
-                        else:
-                            problem = f"success rate {success_rate:.0%}"
-
-        if problem:
-            problems.append(f"{name}: {problem}")
-        rows.append(f"| {name} | {'DEGRADED' if problem else 'ok'} | {pages} | {discovery} | {synced} |")
+    for status in source_statuses(target_dir, now, max_age, min_success_rate):
+        pages = synced = "-"
+        if status["fetched"] is not None:
+            pages = f"{status['fetched']}/{status['total']}" if status["total"] is not None else str(status["fetched"])
+        if status["age_days"] is not None:
+            synced = "today" if status["age_days"] <= 0 else f"{status['age_days']}d ago"
+        if status["problem"]:
+            problems.append(f"{status['name']}: {status['problem']}")
+        rows.append(
+            f"| {status['name']} | {'DEGRADED' if status['problem'] else 'ok'} | {pages} "
+            f"| {status['discovery'] or '-'} | {synced} |"
+        )
 
     lines = [
         "## Sync health",

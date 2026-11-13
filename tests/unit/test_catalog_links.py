@@ -14,7 +14,8 @@ import pytest
 
 from fastmcp import Client
 
-from laravel_mcp_companion.server import PACKAGE_CATALOG, create_mcp_server
+from laravel_mcp_companion.catalog import PACKAGE_CATALOG
+from laravel_mcp_companion.server import create_mcp_server
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
 

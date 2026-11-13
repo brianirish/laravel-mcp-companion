@@ -5,11 +5,11 @@ from pathlib import Path
 from unittest.mock import patch, mock_open
 from laravel_mcp_companion.mcp_tools import (
     get_file_content_cached,
-    search_laravel_docs_data,
     clear_caches,
     _FILE_CACHE_MAX_ENTRIES,
     _FILE_CACHE_EVICT_COUNT,
 )
+from laravel_mcp_companion.tools.search import search
 
 
 class TestCacheManagement:
@@ -87,15 +87,15 @@ class TestCacheManagement:
                 
                 # Fill search cache with 100 entries
                 for i in range(100):
-                    result = search_laravel_docs_data(Path("/fake/docs"), f"query{i}", version="11.x")
-                    assert "No results found" in str(result)
+                    result = search(Path("/fake/docs"), None, f"query{i}", version="11.x")
+                    assert result["count"] == 0
 
                 # Check cache size
                 from laravel_mcp_companion.mcp_tools import _search_result_cache
                 assert len(_search_result_cache) == 100
 
                 # Add one more - should trigger cleanup
-                search_laravel_docs_data(Path("/fake/docs"), "query100", version="11.x")
+                search(Path("/fake/docs"), None, "query100", version="11.x")
                 
                 # Should have 81 entries now
                 assert len(_search_result_cache) == 81
@@ -251,22 +251,25 @@ class TestCacheManagement:
             mock_metadata.return_value = {}
 
             # Test different parameter combinations
-            search_laravel_docs_data(Path("/fake/docs"), "test", version="11.x", include_external=True)
-            search_laravel_docs_data(Path("/fake/docs"), "test", version="11.x", include_external=False)
-            search_laravel_docs_data(Path("/fake/docs"), "test", version=None, include_external=True)
-            search_laravel_docs_data(Path("/fake/docs"), "test", version=None, include_external=True, all_versions=True)
+            search(Path("/fake/docs"), None, "test", version="11.x")
+            search(Path("/fake/docs"), None, "test", version="11.x", sources=["core"])
+            search(Path("/fake/docs"), None, "test", version=None)
+            search(Path("/fake/docs"), None, "test", version=None, all_versions=True)
+            search(Path("/other/docs"), None, "test", version="11.x")
 
             from laravel_mcp_companion.mcp_tools import _search_result_cache
 
             default_scope = ','.join(resolve_search_versions(None))
             all_scope = ','.join(resolve_search_versions(None, all_versions=True))
 
-            assert "search:test:11.x:core,services,packages,learning:5" in _search_result_cache
-            assert "search:test:11.x:core:5" in _search_result_cache
-            assert f"search:test:{default_scope}:core,services,packages,learning:5" in _search_result_cache
+            assert "search:/fake/docs:test:11.x:core,services,packages,learning:5" in _search_result_cache
+            assert "search:/fake/docs:test:11.x:core:5" in _search_result_cache
+            assert f"search:/fake/docs:test:{default_scope}:core,services,packages,learning:5" in _search_result_cache
             # Scoped and all-versions searches must not share a cache entry
-            assert f"search:test:{all_scope}:core,services,packages,learning:5" in _search_result_cache
+            assert f"search:/fake/docs:test:{all_scope}:core,services,packages,learning:5" in _search_result_cache
             assert default_scope != all_scope
+            # Two documentation trees must not share one either
+            assert "search:/other/docs:test:11.x:core,services,packages,learning:5" in _search_result_cache
     
     def test_clear_caches_function(self):
         """Test that clear_caches properly empties both caches."""
@@ -276,7 +279,7 @@ class TestCacheManagement:
             
             with patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata') as mock_metadata:
                 mock_metadata.return_value = {}
-                search_laravel_docs_data(Path("/fake/docs"), "test")
+                search(Path("/fake/docs"), None, "test")
             
             from laravel_mcp_companion.mcp_tools import _file_content_cache, _search_result_cache
             assert len(_file_content_cache) > 0

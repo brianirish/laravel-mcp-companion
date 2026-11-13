@@ -43,216 +43,101 @@ def mcp_server(temp_docs_dir):
     return server
 
 
+# Every tool, called through the protocol with arguments that succeed on the
+# small tree above, and one key its structured result must carry.
+CALLS = [
+    ("search_laravel_docs", {"query": "Eloquent", "version": "12.x"}, "results"),
+    ("read_laravel_doc_section", {"filename": "blade.md", "section": "blade-templates"}, "content"),
+    ("read_laravel_doc_content", {"filename": "blade.md"}, "content"),
+    ("read_laravel_doc_content", {"filename": "blade.md", "mode": "outline"}, "headings"),
+    ("list_laravel_docs", {}, "collections"),
+    ("list_laravel_docs", {"name": "12.x"}, "collections"),
+    ("laravel_docs_info", {}, "versions"),
+    ("laravel_docs_info", {"version": "12.x"}, "versions"),
+    ("get_laravel_package", {"name": "laravel/sanctum"}, "packages"),
+    ("get_laravel_package", {"category": "authentication"}, "packages"),
+    ("recommend_laravel_packages", {"use_case": "authentication"}, "packages"),
+    ("get_laravel_service_info", {"service": "forge"}, "status"),
+    ("get_laravel_learning_path", {"path_name": "getting-started"}, "paths"),
+    ("browse_docs_by_category", {}, "categories"),
+    ("browse_docs_by_category", {"category": "frontend"}, "docs"),
+]
+
+
 class TestMCPIntegration:
-    """Test MCP server integration using FastMCP Client."""
-    
+    """Each tool, reached the way a client reaches it."""
+
     @pytest.mark.asyncio
-    async def test_list_laravel_docs_tool(self, mcp_server):
-        """Test the list_laravel_docs tool through MCP protocol."""
+    @pytest.mark.parametrize("name,arguments,key", CALLS, ids=[f"{n}:{','.join(a) or 'no-args'}" for n, a, _ in CALLS])
+    async def test_a_tool_answers_with_text_and_structured_content(self, mcp_server, name, arguments, key):
         async with Client(mcp_server) as client:
-            # Call the tool
-            result = await client.call_tool("list_laravel_docs", {"version": "12.x"})
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            assert "blade.md" in content
-            assert "eloquent.md" in content
-            assert "routing.md" in content
-    
-    # Removed test_read_laravel_doc_resource - it was testing FastMCP's URI resolution, not our code.
-    # The read_laravel_doc function should be tested directly in unit tests.
-    
+            result = await client.call_tool(name, arguments)
+
+        assert result.is_error is False
+        assert key in result.structured_content
+        assert result.content[0].text
+
     @pytest.mark.asyncio
-    async def test_search_laravel_docs_tool(self, mcp_server):
-        """Test the search_laravel_docs tool through MCP protocol."""
+    async def test_compare_needs_two_versions_on_disk(self, mcp_server, temp_docs_dir):
+        (temp_docs_dir / "11.x").mkdir()
+        (temp_docs_dir / "11.x" / "blade.md").write_text("# Blade\n")
+
         async with Client(mcp_server) as client:
-            # Search for a term
-            result = await client.call_tool("search_laravel_docs", {
-                "query": "Eloquent",
-                "version": "12.x"
-            })
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            assert "eloquent.md" in content
-    
+            result = await client.call_tool("compare_laravel_versions", {"from_version": "11.x", "to_version": "12.x"})
+
+        assert result.structured_content["added_files"] == ["eloquent.md", "routing.md"]
+
     @pytest.mark.asyncio
-    async def test_laravel_docs_info_tool(self, mcp_server):
-        """Test the laravel_docs_info tool through MCP protocol."""
+    async def test_a_listing_names_the_files_of_a_version(self, mcp_server):
         async with Client(mcp_server) as client:
-            # Get documentation info
-            result = await client.call_tool("laravel_docs_info", {"version": "12.x"})
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            # TOON format: version and commit_sha fields
-            assert "12.x" in content
-            assert "abc123" in content
-    
+            result = await client.call_tool("list_laravel_docs", {"name": "12.x"})
+
+        assert result.structured_content["collections"][0]["files"] == [
+            "12.x/blade.md", "12.x/eloquent.md", "12.x/routing.md",
+        ]
+
     @pytest.mark.asyncio
-    async def test_get_laravel_package_recommendations_tool(self, mcp_server):
-        """Test the get_laravel_package_recommendations tool through MCP protocol."""
+    async def test_a_documentation_page_is_returned_as_markdown_text(self, mcp_server):
+        """A page reads better as the markdown it is than as an encoded object."""
         async with Client(mcp_server) as client:
-            # Get package recommendations
-            result = await client.call_tool("get_laravel_package_recommendations", {
-                "use_case": "authentication"
-            })
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            # TOON format: context field contains the use case
-            assert "authentication" in content
-    
-    # Removed test_read_nonexistent_doc - it was testing FastMCP's URI resolution, not our code.
-    # Error handling in read_laravel_doc should be tested directly in unit tests.
-    
-    # Removed test_invalid_tool_parameters - it was testing FastMCP's parameter validation.
-    # Our tool parameter validation should be tested in unit tests.
-    
+            result = await client.call_tool("read_laravel_doc_content", {"filename": "blade.md"})
+
+        assert result.content[0].text == "# Blade Templates\n\nThis is Blade documentation."
+        assert result.structured_content["content"] == result.content[0].text
+
     @pytest.mark.asyncio
-    async def test_list_all_tools(self, mcp_server):
-        """Test listing all available tools."""
+    async def test_a_failure_is_an_error_result_with_a_code(self, mcp_server):
         async with Client(mcp_server) as client:
-            # Get list of tools
-            tools = await client.list_tools()
-            
-            # Verify some expected tools are present
-            tool_names = [tool.name for tool in tools]
-            assert "list_laravel_docs" in tool_names
-            assert "search_laravel_docs" in tool_names
-            assert "update_laravel_docs" in tool_names
-            assert "get_laravel_package_recommendations" in tool_names
-    
+            result = await client.call_tool("read_laravel_doc_content", {"filename": "missing.md"}, raise_on_error=False)
+
+        assert result.is_error is True
+        assert result.structured_content["error"]["code"] == "not_found"
+
     @pytest.mark.asyncio
-    async def test_list_all_resources(self, mcp_server):
-        """Test listing all available resource templates."""
+    async def test_a_search_that_finds_nothing_is_not_an_error(self, mcp_server):
         async with Client(mcp_server) as client:
-            templates = await client.list_resource_templates()
-            assert templates is not None
-            template_uris = [str(t.uriTemplate) for t in templates]
-            print(f"Registered resource templates: {template_uris}")
-            assert any("laravel://" in uri for uri in template_uris)
-            assert any("laravel-external://" in uri for uri in template_uris)
+            result = await client.call_tool("search_laravel_docs", {"query": "zzzqqqxxx", "sources": ["core"]})
+
+        assert result.is_error is False
+        assert result.structured_content["count"] == 0
+
+    @pytest.mark.asyncio
+    async def test_the_removed_tools_are_gone(self, mcp_server):
+        async with Client(mcp_server) as client:
+            names = {tool.name for tool in await client.list_tools()}
+
+        assert not names & {
+            "verify_laravel_feature", "find_laravel_docs_for_need", "search_external_laravel_docs",
+            "search_laravel_learning_resources", "get_doc_structure", "list_laravel_services",
+            "update_external_laravel_docs", "get_laravel_package_info", "get_laravel_package_recommendations",
+        }
+
+    @pytest.mark.asyncio
+    async def test_there_are_no_prompts(self, mcp_server):
+        async with Client(mcp_server) as client:
+            assert await client.list_prompts() == []
 
 
-class TestMCPExternalDocumentation:
-    """Test external documentation tools through MCP protocol."""
-    
-    @pytest.mark.asyncio
-    async def test_list_laravel_services(self, mcp_server):
-        """Test listing Laravel services."""
-        async with Client(mcp_server) as client:
-            # List services
-            result = await client.call_tool("list_laravel_services", {})
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            # TOON format: services list with count
-            assert "services" in content or "count" in content
-    
-    @pytest.mark.asyncio
-    async def test_search_external_docs_empty_query(self, mcp_server):
-        """Test searching external docs with empty query."""
-        async with Client(mcp_server) as client:
-            # Search with empty query
-            result = await client.call_tool("search_external_laravel_docs", {"query": ""})
-            
-            # Verify error message
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            assert "Search query cannot be empty" in content
-
-
-class TestMCPPackageTools:
-    """Test package-related tools through MCP protocol."""
-    
-    @pytest.mark.asyncio
-    async def test_get_package_info(self, mcp_server):
-        """Test getting package information."""
-        async with Client(mcp_server) as client:
-            # Get package info
-            result = await client.call_tool("get_laravel_package_info", {
-                "package_name": "laravel/sanctum"
-            })
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            assert "Laravel Sanctum" in content
-    
-    @pytest.mark.asyncio
-    async def test_get_package_categories(self, mcp_server):
-        """Test getting packages by category."""
-        async with Client(mcp_server) as client:
-            # Get packages in authentication category
-            result = await client.call_tool("get_laravel_package_categories", {
-                "category": "authentication"
-            })
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            # TOON format: context contains category
-            assert "authentication" in content
-    
-    @pytest.mark.asyncio
-    async def test_get_features_for_package(self, mcp_server):
-        """Test getting features for a package."""
-        async with Client(mcp_server) as client:
-            # Get features for Laravel Cashier
-            result = await client.call_tool("get_features_for_laravel_package", {
-                "package": "laravel/cashier"
-            })
-            
-            # Verify result
-            assert result is not None
-            # FastMCP 2.10+ returns CallToolResult with .content attribute containing list of TextContent
-            if hasattr(result, 'content') and isinstance(result.content, list):
-                content = result.content[0].text if result.content else ""
-            else:
-                content = str(result)
-            # TOON format: package name should be present
-            assert "laravel/cashier" in content
-
-
-@pytest.mark.integration
 class TestMCPServerLifecycle:
     """Test MCP server lifecycle operations."""
     
@@ -261,12 +146,12 @@ class TestMCPServerLifecycle:
         """Test multiple clients connecting to the same server."""
         # First client
         async with Client(mcp_server) as client1:
-            result1 = await client1.call_tool("list_laravel_docs", {"version": "12.x"})
+            result1 = await client1.call_tool("list_laravel_docs", {"name": "12.x"})
             assert result1 is not None
         
         # Second client (after first closes)
         async with Client(mcp_server) as client2:
-            result2 = await client2.call_tool("list_laravel_docs", {"version": "12.x"})
+            result2 = await client2.call_tool("list_laravel_docs", {"name": "12.x"})
             assert result2 is not None
     
     @pytest.mark.asyncio
@@ -277,7 +162,7 @@ class TestMCPServerLifecycle:
             results = await asyncio.gather(
                 client.call_tool("list_laravel_docs", {}),
                 client.call_tool("laravel_docs_info", {}),
-                client.call_tool("list_laravel_services", {})
+                client.call_tool("get_laravel_service_info", {"service": "forge"})
             )
             
             # Verify all results
@@ -405,7 +290,7 @@ class TestTransformConfiguration:
             # Use the call_tool proxy to invoke a real tool
             result = await client.call_tool("call_tool", {
                 "name": "list_laravel_docs",
-                "arguments": {"version": "12.x"}
+                "arguments": {"name": "12.x"}
             })
             if hasattr(result, 'content') and isinstance(result.content, list):
                 content = result.content[0].text if result.content else ""

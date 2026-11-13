@@ -175,9 +175,9 @@ newer than that snapshot it will say so and offer to refresh instead of answerin
 from stale pages. You can also just ask — *"how current are your Laravel docs?"*
 
 To update in place without pulling a new image, `--update-docs` fetches fresh
-documentation for the selected Laravel version during startup. Documentation for
-Forge, Vapor, Nova, Envoyer and community packages refreshes separately, through the
-`update_external_laravel_docs` tool your assistant can call.
+documentation for the selected Laravel version during startup. Your assistant can
+refresh any source while the server runs with the `update_laravel_docs` tool, whose
+`scope` selects the framework docs, the services, the packages or all of them.
 
 With `--rm` the download is discarded when the container exits, so it repeats on
 every start. A named volume keeps it — but note the trade-off:

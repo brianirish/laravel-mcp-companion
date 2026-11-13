@@ -1,157 +1,52 @@
-"""Unit tests for TOON format helper functions."""
+"""TOON encoding of tool payloads.
 
-from unittest.mock import patch
+The cases pin the output of toon-format 1.x, which this project froze on.
+Three of them differ from the 0.9 beta the project used to pin: an empty
+list, a whole float, and a string that begins with `#`.
+"""
 
-from laravel_mcp_companion import toon_helpers
-class TestToonEncode:
-    """Test the toon_encode function."""
+import pytest
 
-    def test_toon_encode_basic_dict(self):
-        """Test encoding a basic dictionary."""
-        data = {"key": "value", "count": 42}
-        result = toon_helpers.toon_encode(data)
-        assert "key" in result
-        assert "value" in result
-        assert "42" in result
-
-    def test_toon_encode_list(self):
-        """Test encoding a list."""
-        data = [{"name": "item1"}, {"name": "item2"}]
-        result = toon_helpers.toon_encode(data)
-        assert "item1" in result
-        assert "item2" in result
-
-    def test_toon_encode_exception_fallback(self):
-        """Test that encoding failures fall back to string representation."""
-        # Create an object that will fail TOON encoding
-        class UnserializableObject:
-            def __repr__(self):
-                return "UnserializableObject()"
-
-        # Mock toon_format.encode to raise an exception
-        with patch('laravel_mcp_companion.toon_helpers.encode') as mock_encode:
-            mock_encode.side_effect = Exception("Encoding failed")
-
-            obj = UnserializableObject()
-            result = toon_helpers.toon_encode(obj)
-
-            # Should fall back to str representation
-            assert result == "UnserializableObject()"
+from laravel_mcp_companion.toon_helpers import toon_encode
 
 
-class TestFormatVersionList:
-    """Test the format_version_list function."""
+class TestShapes:
+    def test_a_flat_object_is_key_value_lines(self):
+        assert toon_encode({"version": "12.x", "count": 3, "stale": False}) == "version: 12.x\ncount: 3\nstale: false"
 
-    def test_format_version_list_basic(self):
-        """Test formatting a version list."""
-        versions = [
-            {"version": "12.x", "files": ["installation.md", "routing.md"]},
-            {"version": "11.x", "files": ["installation.md"]}
-        ]
-        result = toon_helpers.format_version_list(versions)
-        assert "12.x" in result
-        assert "11.x" in result
-        assert "installation.md" in result
+    def test_a_list_of_strings_is_one_line_with_its_length(self):
+        assert toon_encode({"files": ["a.md", "b.md"]}) == "files[2]: a.md,b.md"
 
+    def test_a_list_of_like_objects_is_a_table(self):
+        encoded = toon_encode({"packages": [{"id": "a/b", "name": "A"}, {"id": "c/d", "name": "C"}]})
 
-class TestFormatPackageList:
-    """Test the format_package_list function."""
+        assert encoded == "packages[2]{id,name}:\n  a/b,A\n  c/d,C"
 
-    def test_format_package_list_basic(self):
-        """Test formatting a package list."""
-        packages = [
-            {"name": "laravel/sanctum", "description": "API auth"},
-            {"name": "laravel/cashier", "description": "Payments"}
-        ]
-        result = toon_helpers.format_package_list(packages, "authentication")
+    def test_a_nested_object_is_indented(self):
+        assert toon_encode({"error": {"code": "not_found", "message": "gone"}}) == "error:\n  code: not_found\n  message: gone"
 
-        assert "sanctum" in result
-        assert "cashier" in result
-        assert "authentication" in result
+    def test_an_empty_list_is_written_as_brackets(self):
+        assert toon_encode({"results": [], "count": 0}) == "results: []\ncount: 0"
 
+    def test_a_whole_float_loses_its_point_zero(self):
+        assert toon_encode({"score": 3.0, "ratio": 2.5}) == "score: 3\nratio: 2.5"
 
-class TestFormatPackageInfo:
-    """Test the format_package_info function."""
+    def test_a_value_with_a_comma_or_colon_is_quoted(self):
+        assert toon_encode({"note": "a, b: c"}) == 'note: "a, b: c"'
 
-    def test_format_package_info_basic(self):
-        """Test formatting single package info."""
-        package = {
-            "name": "laravel/horizon",
-            "description": "Queue monitoring",
-            "installation": "composer require laravel/horizon"
-        }
-        result = toon_helpers.format_package_info(package)
+    def test_a_string_starting_with_a_hash_is_quoted(self):
+        assert toon_encode({"heading": "#top"}) == 'heading: "#top"'
 
-        assert "horizon" in result
-        assert "monitoring" in result
+    def test_a_line_break_is_escaped(self):
+        assert toon_encode({"text": "one\ntwo"}) == 'text: "one\\ntwo"'
 
 
-class TestFormatServiceList:
-    """Test the format_service_list function."""
+class TestFailure:
+    def test_a_value_that_cannot_be_encoded_is_an_error_not_a_python_repr(self):
+        """It used to fall back to str(data), which put a Python repr in a
+        field documented as TOON."""
+        class Opaque:
+            pass
 
-    def test_format_service_list_basic(self):
-        """Test formatting service list."""
-        services = [
-            {"name": "forge", "description": "Server management"},
-            {"name": "vapor", "description": "Serverless deployment"}
-        ]
-        result = toon_helpers.format_service_list(services)
-
-        assert "forge" in result
-        assert "vapor" in result
-        assert "2" in result  # count = 2
-
-
-class TestFormatCategoryDocs:
-    """Test the format_category_docs function."""
-
-    def test_format_category_docs_basic(self):
-        """Test formatting category docs."""
-        files = [
-            {"file": "authentication.md", "description": "Auth system"},
-            {"file": "authorization.md", "description": "Gates and policies"}
-        ]
-        result = toon_helpers.format_category_docs("security", "12.x", files)
-
-        assert "security" in result
-        assert "12.x" in result
-        assert "authentication.md" in result
-
-
-class TestFormatDocStructure:
-    """Test the format_doc_structure function."""
-
-    def test_format_doc_structure_basic(self):
-        """Test formatting document structure."""
-        headings = [
-            {"level": 1, "text": "Introduction"},
-            {"level": 2, "text": "Getting Started"},
-            {"level": 2, "text": "Configuration"}
-        ]
-        result = toon_helpers.format_doc_structure("installation.md", headings)
-
-        assert "installation.md" in result
-        assert "Introduction" in result
-        assert "Getting Started" in result
-
-
-class TestFormatError:
-    """Test the format_error function."""
-
-    def test_format_error_message_only(self):
-        """Test formatting error with message only."""
-        result = toon_helpers.format_error("File not found")
-
-        assert "error" in result.lower()
-        assert "File not found" in result
-
-    def test_format_error_with_context(self):
-        """Test formatting error with context."""
-        result = toon_helpers.format_error(
-            "Version not found",
-            {"requested": "13.x", "available": ["11.x", "12.x"]}
-        )
-
-        assert "Version not found" in result
-        assert "13.x" in result
-        assert "11.x" in result
+        with pytest.raises(Exception):
+            toon_encode({"thing": Opaque()})

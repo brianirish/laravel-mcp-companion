@@ -8,10 +8,6 @@ def test_one_version_parser():
     assert companion_server.get_version_from_path is mcp_tools.get_version_from_path
 
 
-def test_one_metadata_reader():
-    assert companion_server.get_laravel_docs_metadata is mcp_tools.get_laravel_docs_metadata
-
-
 def test_cached_read_refuses_symlink_swap(tmp_path):
     """The TOCTOU regression: a symlink in the final component is refused."""
     secret = tmp_path / "outside.md"

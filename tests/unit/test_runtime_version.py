@@ -1,169 +1,90 @@
-"""Unit tests for the runtime_version functionality (--version argument fix)."""
+"""Which Laravel version a call is answered from.
+
+An explicit `version` wins, then a version named in the filename, then the
+version the server was started with (`--version`), then the newest supported
+one. The same order holds for every tool that takes a version.
+"""
 
 import sys
 from unittest.mock import patch, MagicMock
 
+import pytest
+
 from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
-from laravel_mcp_companion.mcp_tools import (
-    get_version_from_path,
-    read_laravel_doc_content_impl,
-    browse_docs_by_category_impl,
-    list_laravel_docs_impl,
-    search_laravel_docs_data
-)
-
-class TestRuntimeVersion:
-    """Test that runtime_version parameter works correctly for all functions."""
-    
-    def test_get_version_from_path_without_runtime(self):
-        """Test get_version_from_path without runtime_version uses DEFAULT_VERSION."""
-        version, path = get_version_from_path("blade.md")
-        assert version == DEFAULT_VERSION
-        assert path == "blade.md"
-    
-    def test_get_version_from_path_with_runtime(self):
-        """Test get_version_from_path with runtime_version uses that version."""
-        version, path = get_version_from_path("blade.md", runtime_version="10.x")
-        assert version == "10.x"
-        assert path == "blade.md"
-    
-    def test_get_version_from_path_explicit_overrides_runtime(self):
-        """Test that explicit version in path overrides runtime_version."""
-        version, path = get_version_from_path("11.x/blade.md", runtime_version="10.x")
-        assert version == "11.x"
-        assert path == "blade.md"
-    
-    def test_read_laravel_doc_content_with_runtime_version(self, test_docs_dir):
-        """Test reading docs with runtime_version parameter."""
-        # Create test files for different versions
-        for ver in ["10.x", "11.x", DEFAULT_VERSION]:
-            version_dir = test_docs_dir / ver
-            version_dir.mkdir(parents=True, exist_ok=True)
-            (version_dir / "test.md").write_text(f"# Test for {ver}")
-
-        # Without runtime_version, should use DEFAULT_VERSION
-        content = read_laravel_doc_content_impl(test_docs_dir, "test.md")
-        assert f"Test for {DEFAULT_VERSION}" in content
-        
-        # With runtime_version, should use that version
-        content = read_laravel_doc_content_impl(test_docs_dir, "test.md", runtime_version="10.x")
-        assert "Test for 10.x" in content
-        
-        # Explicit version parameter should override runtime_version
-        content = read_laravel_doc_content_impl(test_docs_dir, "test.md", version="11.x", runtime_version="10.x")
-        assert "Test for 11.x" in content
-    
-    def test_browse_docs_by_category_with_runtime_version(self, test_docs_dir):
-        """Test browsing docs with runtime_version parameter returns TOON format."""
-        # Create test files
-        version_dir = test_docs_dir / "10.x"
-        version_dir.mkdir(parents=True, exist_ok=True)
-        (version_dir / "blade.md").write_text("# Blade Templates")
-
-        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md']):
-            # Without runtime_version, should use DEFAULT_VERSION
-            result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert DEFAULT_VERSION in result
-
-            # With runtime_version, should use that version
-            result = browse_docs_by_category_impl(test_docs_dir, "frontend", runtime_version="10.x")
-            assert "10.x" in result
-
-            # Explicit version should override runtime_version
-            result = browse_docs_by_category_impl(test_docs_dir, "frontend", version="11.x", runtime_version="10.x")
-            assert "11.x" in result
-    
-    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
-    @patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata')
-    def test_list_laravel_docs_with_runtime_version(self, mock_metadata, mock_listdir, test_docs_dir):
-        """Test listing docs with runtime_version parameter returns TOON format."""
-        # Create the version directory
-        version_dir = test_docs_dir / "10.x"
-        version_dir.mkdir(parents=True, exist_ok=True)
-
-        mock_listdir.return_value = ['test.md']
-        mock_metadata.return_value = {
-            'version': '10.x',
-            'sync_time': '2024-01-01T12:00:00Z',
-            'commit_sha': 'abc123'
-        }
-
-        # Test with specific version and runtime_version
-        # Runtime version shouldn't affect list when specific version is provided
-        result = list_laravel_docs_impl(test_docs_dir, "10.x", runtime_version="11.x")
-        assert "10.x" in result
-    
-    @patch('laravel_mcp_companion.mcp_tools.get_file_content_cached')
-    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
-    def test_search_laravel_docs_with_runtime_version(self, mock_listdir, mock_get_content, test_docs_dir):
-        """Test searching docs with runtime_version parameter returns TOON format."""
-        # Create version directories
-        for ver in ["10.x", "11.x", "12.x"]:
-            (test_docs_dir / ver).mkdir(parents=True, exist_ok=True)
-
-        mock_listdir.return_value = ['test.md']
-        mock_get_content.return_value = "Test content with search term"
-
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['10.x', '11.x', '12.x']):
-            # Without version or runtime_version, searches all versions
-            result = search_laravel_docs_data(test_docs_dir, "search")
-            assert "search" in str(result).lower()
-
-            # With runtime_version but no version, still searches all
-            # (runtime_version doesn't affect search scope, only default serving)
-            result = search_laravel_docs_data(test_docs_dir, "search", runtime_version="10.x")
-            assert "search" in str(result).lower()
-
-            # With specific version, only searches that version
-            result = search_laravel_docs_data(test_docs_dir, "search", version="10.x", runtime_version="11.x")
-            assert "search" in str(result).lower()
+from laravel_mcp_companion.mcp_tools import get_version_from_path
+from laravel_mcp_companion.tools.common import require_version
+from laravel_mcp_companion.tools.docs import read_content
+from laravel_mcp_companion.tools.learning import browse_docs
+from laravel_mcp_companion.tools.search import search
 
 
-class TestVersionArgumentIntegration:
-    """Integration tests for --version argument functionality."""
-    
-    def test_version_argument_affects_default_serving(self, test_docs_dir):
-        """Test that --version argument changes default serving behavior."""
-        # This simulates what happens when server starts with --version 10.x
-        runtime_version = "10.x"
-        
-        # Create test content
-        for ver in ["10.x", "11.x", "12.x"]:
-            version_dir = test_docs_dir / ver
-            version_dir.mkdir(parents=True, exist_ok=True)
-            (version_dir / "routing.md").write_text(f"# Routing for Laravel {ver}")
-        
-        # When requesting a file without version, it should use runtime_version
-        content = read_laravel_doc_content_impl(
-            test_docs_dir, 
-            "routing.md", 
-            runtime_version=runtime_version
-        )
-        assert "Routing for Laravel 10.x" in content
-        
-        # But explicit version in path should still work
-        content = read_laravel_doc_content_impl(
-            test_docs_dir,
-            "12.x/routing.md",
-            runtime_version=runtime_version
-        )
-        assert "Routing for Laravel 12.x" in content
-    
-    def test_backward_compatibility_without_runtime_version(self, test_docs_dir):
-        """Test that functions still work without runtime_version (backward compatibility)."""
-        # Create test content for DEFAULT_VERSION
-        version_dir = test_docs_dir / DEFAULT_VERSION
-        version_dir.mkdir(parents=True, exist_ok=True)
-        (version_dir / "test.md").write_text("# Default version content")
-        (version_dir / "blade.md").write_text("# Blade Templates")  # Frontend-related file
+@pytest.fixture
+def docs(temp_dir):
+    """10.x, 11.x and the newest supported version, each saying which it is."""
+    root = temp_dir / "docs"
+    for version in ("10.x", "11.x", DEFAULT_VERSION):
+        (root / version).mkdir(parents=True)
+        (root / version / "routing.md").write_text(f"# Routing\n\n## Basics\n\nRouting as documented for {version}.\n")
+        (root / version / "blade.md").write_text(f"# Blade\n\n## Basics\n\nBlade as documented for {version}.\n")
+    return root
 
-        # All functions should work without runtime_version parameter
-        content = read_laravel_doc_content_impl(test_docs_dir, "test.md")
-        assert "Default version content" in content
 
-        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
-            result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert DEFAULT_VERSION in result
+class TestVersionFromPath:
+    def test_a_bare_name_uses_the_default(self):
+        assert get_version_from_path("blade.md") == (DEFAULT_VERSION, "blade.md")
+
+    def test_a_bare_name_uses_the_runtime_version_when_there_is_one(self):
+        assert get_version_from_path("blade.md", runtime_version="10.x") == ("10.x", "blade.md")
+
+    def test_a_version_in_the_path_overrides_the_runtime_version(self):
+        assert get_version_from_path("11.x/blade.md", runtime_version="10.x") == ("11.x", "blade.md")
+
+
+class TestReads:
+    def test_with_nothing_said_the_newest_version_answers(self, docs):
+        assert f"documented for {DEFAULT_VERSION}" in read_content(docs, "routing.md").text
+
+    def test_the_runtime_version_is_the_servers_default(self, docs):
+        assert "documented for 10.x" in read_content(docs, "routing.md", runtime_version="10.x").text
+
+    def test_an_explicit_version_overrides_the_runtime_version(self, docs):
+        assert "documented for 11.x" in read_content(docs, "routing.md", version="11.x", runtime_version="10.x").text
+
+    def test_a_version_in_the_filename_overrides_both(self, docs):
+        reply = read_content(docs, "11.x/routing.md", version="10.x", runtime_version="10.x")
+
+        assert "documented for 11.x" in reply.text
+        assert reply.data["version"] == "11.x"
+
+
+class TestBrowse:
+    def test_the_runtime_version_is_the_default(self, docs):
+        assert browse_docs(docs, category="frontend", runtime_version="10.x")["version"] == "10.x"
+
+    def test_an_explicit_version_overrides_it(self, docs):
+        result = browse_docs(docs, category="frontend", version="11.x", runtime_version="10.x")
+
+        assert result["version"] == "11.x"
+        assert [doc["file"] for doc in result["docs"]] == ["11.x/blade.md"]
+
+
+class TestSearchScope:
+    def test_with_nothing_said_the_newest_version_is_searched(self, docs):
+        assert search(docs, None, "routing", sources=["core"])["scope"] == DEFAULT_VERSION
+
+    def test_the_runtime_version_is_the_default_scope(self, docs):
+        result = search(docs, None, "routing", runtime_version="10.x", sources=["core"])
+
+        assert result["scope"] == "10.x"
+        assert any("documented for 10.x" in hit["snippet"] for hit in result["results"])
+
+    def test_an_explicit_version_overrides_it(self, docs):
+        assert search(docs, None, "routing", version="11.x", runtime_version="10.x", sources=["core"])["scope"] == "11.x"
+
+    def test_all_versions_searches_every_one(self, docs):
+        result = search(docs, None, "routing", all_versions=True, runtime_version="10.x", sources=["core"], limit=10)
+
+        assert {hit["file"].split("/")[0] for hit in result["results"]} == {"10.x", "11.x", DEFAULT_VERSION}
 
 
 class TestNewVersionSimulation:
@@ -176,67 +97,32 @@ class TestNewVersionSimulation:
     FUTURE_VERSION = "14.x"
     FUTURE_VERSIONS = ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x", "13.x", "14.x"]
 
-    def test_version_parsing_accepts_future_version(self):
-        """New version from API is recognized as valid."""
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
-            version, path = get_version_from_path("blade.md")
-            assert version == self.FUTURE_VERSION
-            assert path == "blade.md"
-
-    def test_explicit_version_still_overrides(self):
-        """Explicit version in path overrides the new default."""
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
-            version, path = get_version_from_path("12.x/blade.md")
-            assert version == "12.x"
-            assert path == "blade.md"
-
-    def test_read_doc_uses_future_default(self, test_docs_dir):
-        """Reading a doc without explicit version uses the new default."""
-        future_dir = test_docs_dir / self.FUTURE_VERSION
-        future_dir.mkdir(parents=True, exist_ok=True)
-        (future_dir / "routing.md").write_text("# Routing for 14.x")
-
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
-            content = read_laravel_doc_content_impl(test_docs_dir, "routing.md")
-            assert "Routing for 14.x" in content
-
-    def test_browse_category_uses_future_default(self, test_docs_dir):
-        """Browsing by category uses the new default version."""
-        future_dir = test_docs_dir / self.FUTURE_VERSION
-        future_dir.mkdir(parents=True, exist_ok=True)
-        (future_dir / "blade.md").write_text("# Blade")
-
+    @pytest.fixture
+    def future(self, docs):
+        (docs / self.FUTURE_VERSION).mkdir()
+        (docs / self.FUTURE_VERSION / "routing.md").write_text("# Routing\n\n## Basics\n\nRouting as documented for 14.x.\n")
         with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
              patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
-             patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md']):
-            result = browse_docs_by_category_impl(test_docs_dir, "frontend")
-            assert self.FUTURE_VERSION in result
+             patch('laravel_mcp_companion.tools.common.get_default_version', return_value=self.FUTURE_VERSION):
+            yield docs
 
-    def test_search_includes_future_version(self, test_docs_dir):
-        """Search across all versions includes the new one."""
-        future_dir = test_docs_dir / self.FUTURE_VERSION
-        future_dir.mkdir(parents=True, exist_ok=True)
+    def test_version_parsing_accepts_future_version(self, future):
+        assert get_version_from_path("blade.md") == (self.FUTURE_VERSION, "blade.md")
 
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
-             patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['routing.md']), \
-             patch('laravel_mcp_companion.mcp_tools.get_file_content_cached', return_value="New routing features"):
-            result = search_laravel_docs_data(test_docs_dir, "routing")
-            assert "routing" in str(result).lower()
+    def test_explicit_version_still_overrides(self, future):
+        assert get_version_from_path("12.x/blade.md") == ("12.x", "blade.md")
 
-    def test_validate_version_accepts_future(self):
-        """validate_version recognizes the new version.
+    def test_read_doc_uses_future_default(self, future):
+        assert "documented for 14.x" in read_content(future, "routing.md").text
 
-        validate_version is an identity alias for mcp_tools.validate_version,
-        which checks against mcp_tools.SUPPORTED_VERSIONS and returns None
-        (not True) for a supported version.
-        """
-        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
-            from laravel_mcp_companion.server import validate_version
-            assert validate_version(self.FUTURE_VERSION) is None
+    def test_browse_category_uses_future_default(self, future):
+        assert browse_docs(future)["version"] == self.FUTURE_VERSION
+
+    def test_search_uses_future_default(self, future):
+        assert search(future, None, "routing", sources=["core"])["scope"] == self.FUTURE_VERSION
+
+    def test_the_future_version_is_accepted_as_an_argument(self, future):
+        require_version(self.FUTURE_VERSION)
 
     def test_main_uses_future_default(self):
         """Main function wires through the new default version."""

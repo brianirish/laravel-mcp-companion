@@ -1,5 +1,7 @@
 """Tests for section chunking, BM25 indexing and retrieval."""
 
+import pytest
+
 from pathlib import Path
 
 from laravel_mcp_companion.doc_search import (
@@ -275,3 +277,39 @@ def test_snippet_returns_body_text_not_just_the_heading():
     assert "failed_jobs" in snippet or "queue:retry" in snippet, (
         f"snippet carried no body: {snippet!r}"
     )
+
+
+class TestSingularAndPluralMatch:
+    """A question about "queue workers" should find a section that only says
+    "queues", and the reverse. The index used to treat them as unrelated words;
+    a per-corpus substring fallback hid the gap until searches ranked every
+    corpus together."""
+
+    def _matches(self, query, document):
+        from laravel_mcp_companion.doc_search import BM25Index
+
+        index = BM25Index()
+        index.build([document, "an unrelated sentence about nothing in particular"])
+        return [position for position, _score in index.query(query, top_k=2)] == [0]
+
+    @pytest.mark.parametrize("query,document", [
+        ("queue", "managed queues are announced"),
+        ("queues", "push a job onto the queue"),
+        ("uploads", "handle a file upload"),
+        ("query", "write database queries"),
+        ("queries", "build a query"),
+        ("class", "define your classes"),
+        ("indexes", "add an index to the column"),
+        ("policies", "write a policy"),
+    ])
+    def test_a_word_matches_its_other_number(self, query, document):
+        assert self._matches(query, document)
+
+    @pytest.mark.parametrize("word", ["status", "class", "process", "redis", "sanctum", "css", "s3", "cors"])
+    def test_words_that_only_look_plural_are_left_whole(self, word):
+        from laravel_mcp_companion.doc_search import tokenize
+
+        assert tokenize(word) == [word]
+
+    def test_folding_does_not_join_unrelated_words(self):
+        assert not self._matches("new", "the latest news")

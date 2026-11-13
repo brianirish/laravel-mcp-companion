@@ -1,4 +1,4 @@
-"""Unit tests for Laravel MCP Companion tool functions."""
+"""Path, cache and startup helpers the server module exposes."""
 
 import pytest
 from pathlib import Path
@@ -8,85 +8,16 @@ from laravel_mcp_companion import server as companion_server
 from laravel_mcp_companion.mcp_tools import is_safe_path
 from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
 from laravel_mcp_companion.server import (
-    search_by_use_case,
-    format_package_recommendation,
     get_version_from_path,
     get_file_content_cached,
     clear_file_cache,
     setup_docs_path,
     update_documentation,
-    PACKAGE_CATALOG,
-    FEATURE_MAP
 )
 
 
-class TestMCPTools:
-    """Test MCP tool functions."""
-
-    def test_search_by_use_case_authentication(self, sample_package_catalog):
-        """Test package search for authentication use case."""
-        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog, clear=True):
-            results = search_by_use_case("authentication for SPA")
-            
-            assert len(results) > 0
-            # Laravel Sanctum should be in results for SPA authentication
-            package_ids = [r['id'] for r in results]
-            assert 'laravel/sanctum' in package_ids
-            
-            # Find Sanctum in results
-            sanctum_result = next(r for r in results if r['id'] == 'laravel/sanctum')
-            assert sanctum_result['score'] > 0
-
-    def test_search_by_use_case_payment(self, sample_package_catalog):
-        """Test package search for payment use case."""
-        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
-            results = search_by_use_case("subscription billing payment")
-            
-            assert len(results) > 0
-            # Laravel Cashier should be top result for billing
-            top_result = results[0]
-            assert top_result['id'] == 'laravel/cashier'
-            assert 'billing' in top_result['categories']
-
-    def test_search_by_use_case_no_matches(self, sample_package_catalog):
-        """Test package search with no matches."""
-        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
-            results = search_by_use_case("quantum computing blockchain")
-            
-            assert len(results) == 0
-
-    def test_search_by_use_case_empty_query(self, sample_package_catalog):
-        """Test package search with empty query."""
-        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
-            results = search_by_use_case("")
-            
-            assert len(results) == 0
-
-    def test_format_package_recommendation(self, sample_package_catalog):
-        """Test package recommendation formatting returns TOON format."""
-        package = sample_package_catalog['laravel/cashier'].copy()
-        package['id'] = 'laravel/cashier'
-
-        result = format_package_recommendation(package)
-
-        # TOON format assertions
-        assert "laravel/cashier" in result
-        assert "Laravel Cashier" in result or "Cashier" in result
-        assert "expressive" in result.lower() or "billing" in result.lower()
-        assert "laravel/cashier" in result
-
-    def test_format_package_recommendation_with_features(self, sample_package_catalog):
-        """Test package recommendation formatting with features returns TOON format."""
-        package = sample_package_catalog['laravel/cashier'].copy()
-        package['id'] = 'laravel/cashier'
-
-        # Mock the FEATURE_MAP to include cashier features
-        with patch.dict(FEATURE_MAP, {'laravel/cashier': ['subscription-setup', 'webhook-handling']}):
-            result = format_package_recommendation(package)
-
-            # TOON format assertions
-            assert "subscription-setup" in result
-            assert "webhook-handling" in result
+class TestPathHelpers:
+    """Version parsing and path containment."""
 
     def test_get_version_from_path_with_version(self):
         """Test version extraction from path with version."""
@@ -250,68 +181,6 @@ class TestUtilityFunctions:
 
 
 @pytest.mark.unit
-class TestPackageCatalog:
-    """Test package catalog functionality."""
-
-    def test_package_catalog_structure(self):
-        """Test that package catalog has expected structure."""
-        assert isinstance(PACKAGE_CATALOG, dict)
-        assert len(PACKAGE_CATALOG) > 0
-        
-        # Check that all packages have required fields
-        for package_id, package_info in PACKAGE_CATALOG.items():
-            assert 'name' in package_info
-            assert 'description' in package_info
-            assert 'categories' in package_info
-            assert isinstance(package_info['categories'], list)
-            assert 'use_cases' in package_info
-            assert isinstance(package_info['use_cases'], list)
-
-    def test_feature_map_structure(self):
-        """Test that feature map has expected structure."""
-        assert isinstance(FEATURE_MAP, dict)
-        
-        # Check that feature map entries are lists
-        for package_id, features in FEATURE_MAP.items():
-            assert isinstance(features, list)
-            assert len(features) > 0
-            # Features should be strings
-            for feature in features:
-                assert isinstance(feature, str)
-                assert len(feature) > 0
-
-    def test_package_catalog_consistency(self):
-        """Test consistency between package catalog and feature map."""
-        # Not all packages need to have features, but all features should reference valid packages
-        for package_id in FEATURE_MAP.keys():
-            # Note: Not all packages with features are necessarily in PACKAGE_CATALOG
-            # (e.g., they might be external packages)
-            pass
-
-    def test_package_categories_valid(self):
-        """Test that package categories are reasonable."""
-        valid_categories = {
-            'authentication', 'authorization', 'api', 'security', 'payment', 
-            'billing', 'subscription', 'search', 'database', 'indexing',
-            'oauth', 'frontend', 'scaffolding', 'ui', 'reactivity', 'backend',
-            'acl', 'permissions', 'spa', 'framework', 'queue', 'monitoring',
-            'redis', 'dashboard', 'debugging', 'development', 'profiling',
-            'teams', 'performance', 'server', 'optimization', 'social',
-            'media', 'files', 'uploads', 'storage', 'excel', 'export',
-            'import', 'deployment', 'server-management', 'devops', 'hosting',
-            'serverless', 'aws', 'scaling', 'ci-cd', 'automation', 'admin',
-            'cms'
-        }
-        
-        all_categories = set()
-        for package_info in PACKAGE_CATALOG.values():
-            all_categories.update(package_info['categories'])
-        
-        # Most categories should be in our valid set (allows for some flexibility)
-        overlap = all_categories.intersection(valid_categories)
-        assert len(overlap) >= len(all_categories) * 0.8  # At least 80% overlap
-
-
 class TestSetupDocsPath:
     """Test documentation path setup."""
     

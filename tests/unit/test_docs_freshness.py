@@ -188,14 +188,13 @@ class TestServerInstructions:
         assert "default to Laravel 11.x" in instructions
 
     @pytest.mark.parametrize("mode,expected,forbidden", [
-        ("search", "search_tools", "read_laravel_doc_content"),
+        ("search", "search_tools", "get_schema"),
         (None, "read_laravel_doc_content", "search_tools"),
-        ("code", "get_schema", "read_laravel_doc_content"),
+        ("code", "get_schema", "search_tools"),
     ])
     def test_instructions_describe_the_exposed_tool_surface(self, tmp_path, mode, expected, forbidden):
-        """Transforms replace the individual tools, so the described flow must follow.
-
-        Naming hidden tools invites calls the client cannot route.
+        """Transforms replace the individual tools, so the described flow must
+        follow: each mode names its own way in and not another mode's.
         """
         from laravel_mcp_companion.server import build_server_instructions
 
@@ -255,9 +254,9 @@ class TestDocsInfoTool:
             result = await client.call_tool("laravel_docs_info", {})
             text = result.content[0].text
 
+        assert result.structured_content["stale"] is True
         assert "note" in text
         assert "pull" in text.lower(), "should advise pulling a newer image"
-        assert "update_laravel_docs" not in text, "that tool cannot fix a stale image"
 
     @pytest.mark.asyncio
     async def test_per_version_reports_a_date_and_never_warns(self, tmp_path):

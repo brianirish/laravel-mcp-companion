@@ -9,7 +9,10 @@ from pathlib import Path
 
 import pytest
 
-from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, search_laravel_docs_data
+from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
+from laravel_mcp_companion.tools import ToolFailure
+from laravel_mcp_companion.tools.docs import read_content, read_section
+from laravel_mcp_companion.tools.search import search
 from laravel_mcp_companion.toon_helpers import toon_encode
 
 VERSION = SUPPORTED_VERSIONS[-1]
@@ -28,16 +31,12 @@ QUESTIONS = [
 
 @pytest.mark.parametrize("question", QUESTIONS)
 def test_realistic_questions_return_results(question):
-    result = search_laravel_docs_data(
-        DOCS, question, version=VERSION, include_external=False
-    )
-    assert "No results" not in str(result), f"{question!r} returned nothing"
+    result = search(DOCS, None, question, version=VERSION, sources=["core"])
+    assert result["count"] > 0, f"{question!r} returned nothing"
 
 
 def test_ranking_prefers_the_relevant_file():
-    result = search_laravel_docs_data(
-        DOCS, "queue jobs and workers", version=VERSION, include_external=False
-    )
+    result = search(DOCS, None, "queue jobs and workers", version=VERSION, sources=["core"])
     assert any("queues.md" in r["file"] for r in result["results"])
     first = result["results"][0]
     assert "queues.md" in first["file"], f"top hit was {first!r}"
@@ -45,40 +44,34 @@ def test_ranking_prefers_the_relevant_file():
 
 def test_search_output_stays_within_budget():
     """A search response must not drift back toward whole-file cost."""
-    result = search_laravel_docs_data(
-        DOCS, "retry failed queue job", version=VERSION, include_external=False
-    )
+    result = search(DOCS, None, "retry failed queue job", version=VERSION, sources=["core"])
     encoded = toon_encode(result)
     assert len(encoded) < 4800, f"{len(encoded)} chars exceeds the ~1,200 token budget"
 
 
-def test_results_carry_an_anchor_for_drill_down():
-    result = search_laravel_docs_data(
-        DOCS, "retry failed queue job", version=VERSION, include_external=False
-    )
-    assert all("anchor" in r for r in result["results"])
+def test_results_carry_a_section_for_drill_down():
+    result = search(DOCS, None, "retry failed queue job", version=VERSION, sources=["core"])
+    assert all(r["section"] for r in result["results"])
 
 
 def test_exact_symbol_lookup_falls_back_to_substring():
-    result = search_laravel_docs_data(
-        DOCS, "queue:retry", version=VERSION, include_external=False
-    )
-    assert "No results" not in str(result)
+    result = search(DOCS, None, "queue:retry", version=VERSION, sources=["core"])
+    assert result["count"] > 0
 
 
 def test_empty_query_is_rejected():
-    result = search_laravel_docs_data(DOCS, "   ", version=VERSION)
-    assert "cannot be empty" in str(result)
+    with pytest.raises(ToolFailure) as raised:
+        search(DOCS, None, "   ", version=VERSION)
+    assert raised.value.code == "invalid_argument"
 
 
 def test_invalid_version_is_rejected():
-    result = search_laravel_docs_data(DOCS, "queue", version="..")
-    assert "Invalid version" in str(result)
+    with pytest.raises(ToolFailure) as raised:
+        search(DOCS, None, "queue", version="..")
+    assert raised.value.code == "unknown_version"
 
 
 def test_read_section_by_anchor(tmp_path):
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
-
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
     (docs / VERSION / "queues.md").write_text(
@@ -86,68 +79,61 @@ def test_read_section_by_anchor(tmp_path):
         "Retry with queue:retry.\n\n## Other\n\nUnrelated.\n"
     )
 
-    result = read_laravel_doc_section_impl(docs, "queues.md", "failed-jobs", VERSION)
+    result = read_section(docs, "queues.md", "failed-jobs", VERSION).text
 
     assert "queue:retry" in result
     assert "Unrelated" not in result
 
 
 def test_read_section_by_heading_case_insensitively(tmp_path):
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
-
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
     (docs / VERSION / "queues.md").write_text("## Failed Jobs\n\nRetry it.\n")
 
-    result = read_laravel_doc_section_impl(docs, "queues.md", "failed jobs", VERSION)
+    result = read_section(docs, "queues.md", "failed jobs", VERSION).text
 
     assert "Retry it." in result
 
 
 def test_unknown_section_lists_available_ones(tmp_path):
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
-
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
     (docs / VERSION / "queues.md").write_text(
         '<a name="failed-jobs"></a>\n## Failed Jobs\n\nBody.\n'
     )
 
-    result = read_laravel_doc_section_impl(docs, "queues.md", "nope", VERSION)
+    with pytest.raises(ToolFailure) as raised:
+        read_section(docs, "queues.md", "nope", VERSION)
 
-    assert "failed-jobs" in result
+    assert raised.value.code == "not_found"
+    assert "failed-jobs" in raised.value.details["available_sections"]
 
 
 def test_read_section_rejects_traversal(tmp_path):
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
-
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
     (tmp_path / "secret.md").write_text("## Secret\n\nCANARY-5150\n")
 
-    result = read_laravel_doc_section_impl(docs, "../../secret.md", "secret", VERSION)
+    with pytest.raises(ToolFailure) as raised:
+        read_section(docs, "../../secret.md", "secret", VERSION)
 
-    assert "CANARY-5150" not in result
+    assert raised.value.code == "access_denied"
+    assert "CANARY-5150" not in str(raised.value.payload())
 
 
 def test_read_section_rejects_invalid_version(tmp_path):
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
+    with pytest.raises(ToolFailure) as raised:
+        read_section(tmp_path, "queues.md", "failed-jobs", "..")
 
-    result = read_laravel_doc_section_impl(tmp_path, "queues.md", "failed-jobs", "..")
-
-    assert "Invalid version" in result
+    assert raised.value.code == "unknown_version"
 
 
 def test_read_section_costs_far_less_than_the_whole_file():
     """The point of the exercise: a section instead of 34,000 tokens."""
-    from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl, read_laravel_doc_section_impl
 
-    whole = read_laravel_doc_content_impl(DOCS, "queues.md", VERSION)
-    section = read_laravel_doc_section_impl(
-        DOCS, "queues.md", "dealing-with-failed-jobs", VERSION
-    )
+    whole = read_content(DOCS, "queues.md", VERSION).text
+    section = read_section(DOCS, "queues.md", "dealing-with-failed-jobs", VERSION).text
 
-    assert "Access denied" not in section
     assert len(section) < len(whole) / 5, (
         f"section {len(section)} vs whole {len(whole)} chars"
     )

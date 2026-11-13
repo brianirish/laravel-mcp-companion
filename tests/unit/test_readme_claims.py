@@ -11,7 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from laravel_mcp_companion.server import PACKAGE_CATALOG, TOOL_DESCRIPTIONS
+from laravel_mcp_companion.catalog import PACKAGE_CATALOG
+from laravel_mcp_companion.tools import REGISTRY
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -31,7 +32,7 @@ def test_curated_package_count_matches_catalog():
 
 
 def test_search_description_matches_the_actual_contract():
-    description = TOOL_DESCRIPTIONS["search_laravel_docs"]
+    description = REGISTRY["search_laravel_docs"].description
     assert "match counts" not in description  # the pre-v0.11 contract
     assert "ranked" in description.lower()
     assert "sources" in description

@@ -19,7 +19,7 @@ class TestHttpTransport:
 
             search = await client.call_tool(
                 "search_laravel_docs",
-                {"query": "basic routing", "include_external": False},
+                {"query": "basic routing", "sources": ["core"]},
             )
             assert search.structured_content.get("results")
 

@@ -18,6 +18,79 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Breaking: the tool surface is 12 tools, down from 26
+
+Every tool now declares an output schema and returns structured content that
+satisfies it, with text for a model to read beside it. Before, 5 of 26 did.
+`tests/protocol/contract.json` records every name, input schema and output
+schema, and a test fails when the served surface differs from it.
+
+| Before | Now |
+|--------|-----|
+| `search_laravel_docs` | `search_laravel_docs`. `include_external` is gone; use `sources`. `limit` (1 to 20) is new. Each result has a `section` in place of `anchor` |
+| `search_external_laravel_docs` | `search_laravel_docs` with `sources: ["services"]` |
+| `search_laravel_learning_resources` | `search_laravel_docs` with `sources: ["learning"]` |
+| `find_laravel_docs_for_need` | `search_laravel_docs`. The need table now informs the one search: a recognised task is reported in `matched_needs` and its pages are favoured |
+| `read_laravel_doc_section` | unchanged arguments; structured content is new |
+| `read_laravel_doc_content` | unchanged, plus `mode` |
+| `get_doc_structure` | `read_laravel_doc_content` with `mode: "outline"` |
+| `list_laravel_docs` | `list_laravel_docs`. `version` is now `name`, which also takes a service, package or learning source; `source` filters by kind |
+| `list_laravel_services` | `list_laravel_docs` with `source: "services"` |
+| `list_laravel_learning_resources` | `list_laravel_docs` with `source: "learning"` |
+| `laravel_docs_info` | same name; reports every service, package and learning source as well as the framework docs |
+| `compare_laravel_versions` | unchanged arguments; the per-version commit metadata is in `laravel_docs_info` now |
+| `update_laravel_docs` | `update_laravel_docs` with `scope: "core"` (the default) |
+| `update_external_laravel_docs` | `update_laravel_docs` with `scope: "services"` and `names` |
+| `get_laravel_package_info` | `get_laravel_package` with `name` |
+| `get_laravel_package_categories` | `get_laravel_package` with `category` |
+| `get_features_for_laravel_package` | `get_laravel_package` with `name`; see `features` |
+| `get_related_laravel_packages` | `get_laravel_package` with `name`; see `related` |
+| `get_laravel_package_recommendations` | `recommend_laravel_packages` |
+| `get_laravel_service_info` | same name; reports what this server holds for the service |
+| `get_laravel_learning_path` | unchanged |
+| `list_laravel_learning_paths` | `get_laravel_learning_path` with no `path_name` |
+| `browse_docs_by_category` | same name; `category` is optional and `difficulty` is new |
+| `list_laravel_categories` | `browse_docs_by_category` with no arguments |
+| `get_laravel_content_by_difficulty` | `browse_docs_by_category` with `difficulty` |
+| `verify_laravel_feature` | removed. It matched a feature name against file names and told the model to trust the answer over its own knowledge, so "websockets" came back as not found while Broadcasting and Reverb exist |
+
+The three prompts (`laravel-authentication-setup`, `find-payment-solution`,
+`laravel-forge-deployment`) are removed. They were fixed strings naming tools
+that did not exist.
+
+**Errors.** A tool that cannot do what was asked returns a result marked
+`isError` with `{"error": {"code", "message", "details"}}`, where `code` is one
+of `invalid_argument`, `unknown_version`, `not_found`, `access_denied`,
+`update_failed` or `internal`. Errors used to be an `error` key inside an
+ordinary result, or a line of prose. Finding nothing is not an error: a search
+with no hits returns `count: 0`.
+
+**Read tools return markdown.** The text of `read_laravel_doc_section` and
+`read_laravel_doc_content` is the page's markdown, as before. Their structured
+content carries the same text with the file, version and section named.
+
+**Two tools are experimental.** `get_laravel_learning_path` and
+`browse_docs_by_category` answer from hand-kept tables. They are shipped and
+tested, and tagged `experimental`: their shape may change in a minor release.
+
+### Changed in search
+
+- **One ranking across corpora.** A search over several sources is ranked
+  from a single index. Each corpus used to be scored against its own word
+  statistics, so a word common in the framework docs and rare in a package's
+  ("cache", "authentication") put package pages first and left the
+  framework's own page off the list. Searches of a single source, and
+  `all_versions`, are ranked as before.
+- **No source takes the whole page.** When several sources match, one may take
+  at most three of five results. "assign roles" returned five Spatie pages.
+- **Singular and plural match.** "queue" finds a section that says "queues".
+- **Every result can be read.** Service and package pages have no anchors, so
+  their results had an empty `anchor` and could not be passed to
+  `read_laravel_doc_section`. `section` is always set, and a page with no
+  heading of its own is readable too.
+- Search results are cached per documentation path, so two servers in one
+  process no longer see each other's.
+
 ### Added
 - Documentation for **Laravel Cloud, Nightwatch and Herd**. Each publishes an
   `llms.txt` index, so each is one entry in the service table. Herd's macOS
@@ -106,6 +179,8 @@ docs-only commit and contains no code change.
   resource handlers.
 
 ### Removed
+- `toon_encode` no longer falls back to a Python `repr` when encoding fails.
+  The failure is raised and reported as an `internal` error.
 - **The Laravel Blog and Laravel News sources.** Each was a list of a few
   article titles with links, refetched nightly. They held no documentation,
   and a changed headline was enough to publish a new image. Search and reads

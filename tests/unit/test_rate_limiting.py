@@ -14,7 +14,7 @@ from fastmcp import Client
 
 from laravel_mcp_companion import metrics
 from laravel_mcp_companion.server import build_rate_limiter, create_mcp_server
-from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
+from laravel_mcp_companion.tools.search import search
 
 
 @pytest.fixture(autouse=True)
@@ -41,7 +41,7 @@ class TestThrottleAndRecover:
             saw_limit = False
             for _ in range(8):
                 result = await client.call_tool(
-                    "list_laravel_docs", {"version": "12.x"}, raise_on_error=False
+                    "list_laravel_docs", {"name": "12.x"}, raise_on_error=False
                 )
                 if result.is_error:
                     assert "Rate limit" in result.content[0].text
@@ -52,7 +52,7 @@ class TestThrottleAndRecover:
             # ~1.2s at 1 rps refills a token; the client recovers.
             await asyncio.sleep(1.2)
             recovered = await client.call_tool(
-                "list_laravel_docs", {"version": "12.x"}, raise_on_error=False
+                "list_laravel_docs", {"name": "12.x"}, raise_on_error=False
             )
             assert not recovered.is_error
 
@@ -63,7 +63,7 @@ class TestThrottleAndRecover:
         async with Client(server) as client:
             for _ in range(5):
                 result = await client.call_tool(
-                    "list_laravel_docs", {"version": "12.x"}, raise_on_error=False
+                    "list_laravel_docs", {"name": "12.x"}, raise_on_error=False
                 )
                 assert not result.is_error
 
@@ -79,7 +79,7 @@ class TestThrottleAndRecover:
             for _ in range(8):
                 attempts += 1
                 result = await client.call_tool(
-                    "list_laravel_docs", {"version": "12.x"}, raise_on_error=False
+                    "list_laravel_docs", {"name": "12.x"}, raise_on_error=False
                 )
                 if result.is_error:
                     break
@@ -98,7 +98,7 @@ class TestCorruptCorpusDegradation:
             "# Routing\n\n## Basics\n\nRoutes are registered in web.php with "
             "plenty of surrounding words so scoring has something to rank.\n"
         )
-        result = search_laravel_docs_data(temp_dir, "routing", "12.x")
+        result = search(temp_dir, None, "routing", version="12.x")
         assert "error" not in result
         assert result["results"]
         assert result["results"][0]["file"] == "12.x/routing.md"

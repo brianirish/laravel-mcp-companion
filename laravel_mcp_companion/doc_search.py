@@ -87,9 +87,35 @@ BM25_K1 = 1.5
 BM25_B = 0.75
 
 
+# Words ending in "s" that are not plurals, so must not lose it.
+_NOT_PLURAL = frozenset({
+    "this", "its", "has", "was", "does", "as", "is", "us", "yes", "less", "always", "across", "alias",
+    "status", "class", "process", "access", "address", "success", "progress", "express", "pass", "cors",
+    "redis", "nginx", "css", "js", "https", "aws", "sqs", "ses", "dns", "tls", "ssl", "vs", "os", "ios", "news",
+    "analysis", "basis", "axis", "octane", "horizon", "canvas", "bus", "plus", "minus", "focus", "previous",
+    "various", "anonymous", "synchronous", "asynchronous", "continuous", "numerous",
+})
+
+
+def _singular(token: str) -> str:
+    """Fold a plural onto its singular, so "queues" and "queue" are one term.
+
+    Deliberately small: it handles the regular plurals and nothing else. It
+    is not a stemmer, and does not relate "uploaded" to "upload"; the aim is
+    only that singular and plural forms of a noun find each other.
+    """
+    if len(token) < 4 or not token.endswith("s") or token in _NOT_PLURAL or token.endswith(("ss", "us", "is")):
+        return token
+    if token.endswith("ies") and len(token) > 4:
+        return token[:-3] + "y"
+    if token.endswith(("xes", "ches", "shes", "sses", "zes")):
+        return token[:-2]
+    return token[:-1]
+
+
 def tokenize(text: str) -> list[str]:
-    """Lowercase alphanumeric tokens."""
-    return _TOKEN.findall(text.lower())
+    """Lowercase alphanumeric tokens, with plurals folded onto singulars."""
+    return [_singular(token) for token in _TOKEN.findall(text.lower())]
 
 
 class BM25Index:
