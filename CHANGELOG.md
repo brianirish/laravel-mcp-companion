@@ -251,8 +251,10 @@ are hand-written and had not been revised since they were first added.
 Three dependencies are upgraded in `uv.lock` for published advisories. None is
 a direct dependency of this project; each comes in through FastMCP. As of this
 release CI and the Docker image install from the lockfile, so these are the
-versions the image ships. A `pip install` resolves its own versions and gets
-current releases, which include the fixes.
+versions the image ships. A fresh `pip install` resolves its own versions and
+gets current releases, which include the fixes. An environment that already
+has the older versions keeps them until they are upgraded:
+`pip install --upgrade joserfc opentelemetry-api dnspython`.
 
 - `joserfc` 1.7.4 to 1.8.0, for two denial-of-service advisories:
   GHSA-jpxq-7h8p-2q76 (unbounded `recipients` in JWE General JSON) and
