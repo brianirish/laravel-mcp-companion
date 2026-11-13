@@ -195,7 +195,7 @@ def test_server_json_version_matches_pyproject():
     pkg = data["packages"][0]
     # OCI packages carry no separate version field (the live registry rejects
     # one); the canonical identifier is the whole reference. Its tag keeps the
-    # leading v because Harness tags images with the git tag verbatim.
+    # leading v because the image is tagged with the git tag verbatim.
     assert "version" not in pkg
     assert pkg["identifier"].endswith(f":v{project_version()}")
 

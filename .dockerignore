@@ -24,7 +24,6 @@ pytest.ini
 .python-version
 
 # CI/CD definitions and build tooling
-.harness
 scripts
 
 # Working notes that ship no runtime value

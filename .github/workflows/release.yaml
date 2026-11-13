@@ -1,52 +1,144 @@
-name: Release
+# Builds the Docker image for a tag and pushes it to ghcr.io, for linux/amd64
+# and linux/arm64.
+#
+# Two kinds of tag start it:
+#
+#   vX.Y.Z           a release, built exactly as tagged
+#   docs-YYYY-MM-DD  a nightly documentation sync on main, built as the newest
+#                    release's code with that night's docs/
+#
+# scripts/release_tree.sh decides what is built and whether the image also
+# becomes `latest`. Its tests are in tests/unit/test_release_tree.py.
+#
+# To rebuild an existing tag, run this workflow by hand with the tag. Untick
+# "push" to build both platforms without publishing anything.
 
-# Disabled - Release moved to Harness
-# on:
-#   release:
-#     types: [published]
-#   workflow_dispatch:  # Manual trigger
-#   push:
-#     tags:
-#       - 'v*'  # triggers on version tags like v1.0.0
-on: workflow_dispatch
+name: Release image
+
+on:
+  push:
+    tags: ["v*", "docs-*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build, for example v0.15.0 or docs-2026-11-13"
+        required: true
+        type: string
+      push:
+        description: "Push the image. Untick to build without publishing"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# One build per tag at a time, and never cancelled. Builds of different tags
+# are not queued behind each other: a queue keeps one waiting run and cancels
+# the rest, and a cancelled release build is worse than two builds finishing
+# in either order. Both would push `latest` with the same released code.
+concurrency:
+  group: release-image-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/brianirish/laravel-mcp-companion
 
 jobs:
-  build-docker:
-    name: Build and push Docker image
+  image:
+    name: Build and push the image
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read
       packages: write
     steps:
-    - uses: actions/checkout@v4
-    - name: Extract tag name
-      id: extract_tag
-      run: |
-        if [[ "${{ github.event_name }}" == "release" ]]; then
-          echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-        elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        else
-          # For manual triggers or other cases, use latest git tag or default
-          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-        fi
-    - name: 🔑 Log in to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: |
-          ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+      - name: Resolve the tag
+        id: tag
+        env:
+          DISPATCH_TAG: ${{ inputs.tag }}
+          PUSH: ${{ github.event_name != 'workflow_dispatch' || inputs.push }}
+        run: |
+          TAG="${DISPATCH_TAG:-${GITHUB_REF#refs/tags/}}"
+          case "${TAG}" in
+            v[0-9]*|docs-[0-9]*) ;;
+            *) echo "::error::'${TAG}' is not a version tag or a docs tag"; exit 1 ;;
+          esac
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+          echo "push=${PUSH}" >> "${GITHUB_OUTPUT}"
+
+      - name: Checkout the tag
+        uses: actions/checkout@v5
+        with:
+          ref: refs/tags/${{ steps.tag.outputs.tag }}
+
+      - name: Prepare the tree to build
+        id: tree
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          # `latest` follows the newest stable release and its nightly docs
+          # builds. A release candidate, or a patch to an older line, is pushed
+          # under its own tag only. Asked first, while the script on disk is
+          # still the tag's own.
+          MOVING_TAG="$(bash scripts/release_tree.sh --moving-tag "${TAG}")"
+          echo "revision=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+
+          # A docs tag built as tagged would ship every change merged since the
+          # last release to everyone on `latest`. For those tags this swaps in
+          # the newest release's code and keeps the tag's docs/.
+          bash scripts/release_tree.sh "${TAG}"
+
+          echo "moving_tag=${MOVING_TAG}" >> "${GITHUB_OUTPUT}"
+          echo "Building ${TAG}, also tagged ${MOVING_TAG}" | tee -a "${GITHUB_STEP_SUMMARY}"
+
+      - name: Set up QEMU for the arm64 build
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the GitHub Container Registry
+        if: steps.tag.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the image for both platforms
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: ${{ steps.tag.outputs.push == 'true' }}
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.tree.outputs.moving_tag }}
+            ${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.tree.outputs.revision }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Check that both platforms were published
+        if: steps.tag.outputs.push == 'true'
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          MOVING_TAG: ${{ steps.tree.outputs.moving_tag }}
+        run: |
+          # From January to November 2026 the build step named two platforms
+          # and published one, and nothing looked at the result.
+          for REF in "${IMAGE}:${TAG}" "${IMAGE}:${MOVING_TAG}"; do
+            PLATFORMS="$(docker buildx imagetools inspect "${REF}" --format '{{range .Manifest.Manifests}}{{.Platform.OS}}/{{.Platform.Architecture}} {{end}}')"
+            echo "${REF}: ${PLATFORMS}"
+            for WANTED in linux/amd64 linux/arm64; do
+              case " ${PLATFORMS} " in
+                *" ${WANTED} "*) ;;
+                *) echo "::error::${REF} has no ${WANTED} image"; exit 1 ;;
+              esac
+            done
+          done

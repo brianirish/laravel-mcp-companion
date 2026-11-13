@@ -18,6 +18,25 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Fixed
+- **The Docker image is published for arm64 again.** Every image from the end
+  of January 2026 through v0.15.0 was linux/amd64 only, so it ran under
+  emulation on Apple Silicon and other arm64 machines. The build step named
+  both platforms and built one. The release workflow now builds both, and
+  fails if the published image is missing either.
+
+### Changed
+- **CI, the nightly documentation sync and the image build run in GitHub
+  Actions again**, where they ran until January 2026. The workflows are
+  `ci.yaml`, `docs-update.yaml` and `release.yaml` in `.github/workflows/`,
+  and the `.harness/` directory is removed. What they do is unchanged: the
+  same checks, the same sync and health report, the same `docs-YYYY-MM-DD`
+  tags, and `:latest` built from released code. The nightly sync starts at
+  00:17 UTC, not 00:00.
+- The image build can be run by hand for an existing tag, with or without
+  pushing, and the sync can be run by hand as a dry run that fetches and
+  reports without publishing.
+
 ## [0.15.0] - 2026-11-13
 
 The breaking release before 1.0. It replaces the 26 tools with 12 that have

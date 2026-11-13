@@ -394,7 +394,7 @@ as a JSON object in `structuredContent`, which is what a program should read.
 
 ## How the documentation stays current
 
-A pipeline runs every night at 00:00 UTC. It refetches every source, and when the content has
+A GitHub Actions workflow runs every night, shortly after 00:00 UTC. It refetches every source, and when the content has
 changed it opens a pull request, which merges itself once the tests pass. The merge is tagged
 `docs-YYYY-MM-DD` and an image is built from it: the newest release's code with that night's
 documentation, published as `:latest`.

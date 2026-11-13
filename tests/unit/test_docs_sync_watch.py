@@ -4,7 +4,8 @@ Twice the nightly sync died without creating a run: once when the account's
 build allowance ran out, once when Harness rejected a pipeline file. A run
 that never starts sends no failure email, and the first outage lasted five
 weeks. The sync tags `docs-YYYY-MM-DD` whenever it publishes, so the age of the
-newest such tag is evidence anyone can read without access to Harness.
+newest such tag is evidence anyone can read without access to the build
+system.
 """
 
 import importlib.util
