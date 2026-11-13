@@ -248,13 +248,19 @@ are hand-written and had not been revised since they were first added.
   "requires server context" stubs.
 
 ### Security
-- `joserfc` 1.7.4 to 1.8.0 in `uv.lock`. It is a dependency of FastMCP and
-  Authlib, not of this project directly. The upgrade closes two
-  denial-of-service advisories: GHSA-jpxq-7h8p-2q76 (unbounded `recipients` in
-  JWE General JSON) and GHSA-9pg5-8c7x-5hfx (compact JWS segments allocated
-  before the size check). The lockfile covers local development only. CI and
-  the Docker image install from `requirements.txt`, which does not pin
-  `joserfc`, so each image build resolves it afresh.
+Three dependencies are upgraded in `uv.lock` for published advisories. None is
+a direct dependency of this project; each comes in through FastMCP. As of this
+release CI and the Docker image install from the lockfile, so these are the
+versions the image ships. A `pip install` resolves its own versions and gets
+current releases, which include the fixes.
+
+- `joserfc` 1.7.4 to 1.8.0, for two denial-of-service advisories:
+  GHSA-jpxq-7h8p-2q76 (unbounded `recipients` in JWE General JSON) and
+  GHSA-9pg5-8c7x-5hfx (compact JWS segments allocated before the size check).
+- `opentelemetry-api` 1.45.1 to 1.45.2, for GHSA-mf5v-w3w3-f6cg
+  (quadratic-time parsing of the `traceparent` header).
+- `dnspython` 2.9.0 to 2.9.2, for GHSA-vvf4-9x63-8xvv (excessive memory and
+  CPU use). It is installed for pydantic's email validation.
 
 ## [0.14.0] - 2026-11-12
 
