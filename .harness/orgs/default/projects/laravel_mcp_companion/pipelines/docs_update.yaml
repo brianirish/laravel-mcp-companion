@@ -53,16 +53,26 @@ pipeline:
                       git reset --hard origin/main
               - step:
                   identifier: install_gh_cli
-                  name: Install latest gh CLI
+                  name: Ensure gh CLI
                   type: Run
                   spec:
                     shell: Bash
                     command: |
-                      # Harness Cloud runner may have old gh CLI, install latest
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt-get update
-                      sudo apt-get install -y gh
+                      # Everything this pipeline asks of gh (--json, -q, pr
+                      # merge --auto) has been there since 2.20, so install only
+                      # when the runner's copy is older or missing. The install
+                      # runs apt-get update, and a slow mirror once stretched
+                      # this step from 23 seconds to nearly eight minutes.
+                      MINIMUM="2.20.0"
+                      HAVE="$(gh --version 2>/dev/null | head -n 1 | awk '{print $3}' || true)"
+                      if [ -n "$HAVE" ] && [ "$(printf '%s\n' "$MINIMUM" "$HAVE" | sort -V | head -n 1)" = "$MINIMUM" ]; then
+                        echo "gh $HAVE is already installed"
+                      else
+                        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                        sudo apt-get update
+                        sudo apt-get install -y gh
+                      fi
                       gh --version
               - step:
                   identifier: install_dependencies
@@ -73,7 +83,7 @@ pipeline:
                     command: |
                       set -euo pipefail
 
-                      # This job runs docs_updater.py daily in production, so it
+                      # This job runs the docs updater daily in production, so it
                       # needs the interpreter the project declares (>=3.12) rather
                       # than whatever the runner image ships, which is 3.10. CI was
                       # fixed for this; the pipeline that actually runs was not.
@@ -81,14 +91,11 @@ pipeline:
                       curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
                       export PATH="$UV_INSTALL_DIR:$PATH"
 
+                      # Install what uv.lock pins, the same versions CI tests
+                      # and the image ships, without the development tools.
+                      # Later steps `source .venv/bin/activate`.
                       uv python install 3.12
-                      uv venv --python 3.12 .venv
-
-                      # Install from requirements.txt rather than a hand-listed
-                      # set. The previous list had drifted: it omitted toon-format
-                      # (which the tools import) and pinned feedparser, which no
-                      # module uses. Later steps `source .venv/bin/activate`.
-                      uv pip install --python .venv/bin/python -r requirements.txt
+                      uv sync --frozen --no-dev --python 3.12
 
                       .venv/bin/python --version
               - step:
@@ -102,7 +109,7 @@ pipeline:
                       source .venv/bin/activate
 
                       echo "Updating Laravel framework docs for all versions..."
-                      python docs_updater.py --all-versions --log-level INFO
+                      python -m laravel_mcp_companion.docs_updater --all-versions --log-level INFO
                       CORE_STATUS=$?
 
                       # Services, community packages and learning resources.
@@ -116,14 +123,14 @@ pipeline:
                       # few seconds inside the window was skipped, and each one
                       # refreshed on alternate days at best.
                       echo "Updating services, packages and learning resources..."
-                      python docs_updater.py --update --force --log-level INFO
+                      python -m laravel_mcp_companion.docs_updater --update --force --log-level INFO
 
                       # Per-source health, from the metadata each fetch leaves
                       # behind. Exits non-zero if any source fetched too little
                       # or has not synced recently. This run used to discard
                       # every exit code: Forge fetching 18 of 39 pages, and
                       # sources whose sites had gone away, all passed as green.
-                      python docs_updater.py --sync-report > sync_report.md 2>/dev/null
+                      python -m laravel_mcp_companion.docs_updater --sync-report > sync_report.md 2>/dev/null
                       REPORT_STATUS=$?
 
                       DEGRADED="false"
@@ -338,16 +345,26 @@ pipeline:
             steps:
               - step:
                   identifier: install_gh_cli
-                  name: Install latest gh CLI
+                  name: Ensure gh CLI
                   type: Run
                   spec:
                     shell: Bash
                     command: |
-                      # Harness Cloud runner may have old gh CLI, install latest
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt-get update
-                      sudo apt-get install -y gh
+                      # Everything this pipeline asks of gh (--json, -q, pr
+                      # merge --auto) has been there since 2.20, so install only
+                      # when the runner's copy is older or missing. The install
+                      # runs apt-get update, and a slow mirror once stretched
+                      # this step from 23 seconds to nearly eight minutes.
+                      MINIMUM="2.20.0"
+                      HAVE="$(gh --version 2>/dev/null | head -n 1 | awk '{print $3}' || true)"
+                      if [ -n "$HAVE" ] && [ "$(printf '%s\n' "$MINIMUM" "$HAVE" | sort -V | head -n 1)" = "$MINIMUM" ]; then
+                        echo "gh $HAVE is already installed"
+                      else
+                        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                        sudo apt-get update
+                        sudo apt-get install -y gh
+                      fi
                       gh --version
               - step:
                   identifier: wait_for_merge

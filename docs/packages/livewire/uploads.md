@@ -1,16 +1,9 @@
 # Livewire - Uploads
 
-Source: https://livewire.laravel.com/docs/uploads
+Source: https://livewire.laravel.com/docs/4.x/uploads
 
 File Uploads
 ============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire offers powerful support for uploading files within your components.

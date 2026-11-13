@@ -1,16 +1,9 @@
 # Livewire - Events
 
-Source: https://livewire.laravel.com/docs/events
+Source: https://livewire.laravel.com/docs/4.x/events
 
 Events
 ======
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire offers a robust event system that you can use to communicate between different components on the page. Because it uses browser events under the hood, you can also use Livewire's event system to communicate with Alpine components or even plain, vanilla JavaScript.

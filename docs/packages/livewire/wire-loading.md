@@ -1,16 +1,9 @@
 # Livewire - Wire Loading
 
-Source: https://livewire.laravel.com/docs/wire-loading
+Source: https://livewire.laravel.com/docs/4.x/wire-loading
 
 wire:loading
 ============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Loading indicators are an important part of crafting good user interfaces. They give users visual feedback when a request is being made to the server, so they know they are waiting for a process to complete.

@@ -1,16 +1,9 @@
 # Livewire - Lazy
 
-Source: https://livewire.laravel.com/docs/lazy
+Source: https://livewire.laravel.com/docs/4.x/lazy
 
 Lazy Loading
 ============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire allows you to lazy load components that would otherwise slow down the initial page load.

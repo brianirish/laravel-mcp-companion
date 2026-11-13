@@ -4,28 +4,10 @@ import pytest
 from unittest.mock import patch
 import argparse
 
-from laravel_mcp_companion import (
-    validate_version,
+from laravel_mcp_companion.server import (
     setup_server_environment,
     handle_documentation_update,
 )
-
-
-class TestValidateVersion:
-    """Test version validation function."""
-    
-    def test_validate_valid_version(self):
-        """Test validation of valid version."""
-        assert validate_version("12.x") is True
-        assert validate_version("11.x") is True
-        assert validate_version("10.x") is True
-    
-    def test_validate_invalid_version(self):
-        """Test validation of invalid version."""
-        assert validate_version("5.x") is False
-        assert validate_version("99.x") is False
-        assert validate_version("invalid") is False
-        assert validate_version("") is False
 
 
 class TestSetupServerEnvironment:
@@ -40,7 +22,7 @@ class TestSetupServerEnvironment:
             transport="stdio"
         )
 
-        with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir):
+        with patch('laravel_mcp_companion.server.setup_docs_path', return_value=temp_dir):
             docs_path = setup_server_environment(args)
 
             assert docs_path == temp_dir
@@ -56,7 +38,7 @@ class TestSetupServerEnvironment:
             port=8080
         )
 
-        with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir):
+        with patch('laravel_mcp_companion.server.setup_docs_path', return_value=temp_dir):
             docs_path = setup_server_environment(args)
 
             assert docs_path == temp_dir
@@ -70,7 +52,7 @@ class TestSetupServerEnvironment:
             transport="stdio"
         )
         
-        with patch('laravel_mcp_companion.setup_docs_path', return_value=temp_dir), \
+        with patch('laravel_mcp_companion.server.setup_docs_path', return_value=temp_dir), \
              pytest.raises(SystemExit) as exc_info:
             setup_server_environment(args)
             
@@ -87,19 +69,19 @@ class TestHandleDocumentationUpdate:
     
     def test_update_requested_success(self, temp_dir):
         """Test successful documentation update."""
-        with patch('laravel_mcp_companion.update_documentation', return_value=True):
+        with patch('laravel_mcp_companion.server.update_documentation', return_value=True):
             result = handle_documentation_update(temp_dir, "12.x", True, False)
             assert result is True
     
     def test_force_update_requested(self, temp_dir):
         """Test force documentation update."""
-        with patch('laravel_mcp_companion.update_documentation', return_value=True) as mock_update:
+        with patch('laravel_mcp_companion.server.update_documentation', return_value=True) as mock_update:
             result = handle_documentation_update(temp_dir, "12.x", False, True)
             assert result is True
             mock_update.assert_called_once_with(temp_dir, "12.x", True)
     
     def test_update_requested_no_changes(self, temp_dir):
         """Test documentation update with no changes needed."""
-        with patch('laravel_mcp_companion.update_documentation', return_value=False):
+        with patch('laravel_mcp_companion.server.update_documentation', return_value=False):
             result = handle_documentation_update(temp_dir, "12.x", True, False)
             assert result is False

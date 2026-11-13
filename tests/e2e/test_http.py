@@ -6,8 +6,7 @@ import pytest
 from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 
-import laravel_mcp_companion
-
+from laravel_mcp_companion import server as companion_server
 pytestmark = [pytest.mark.e2e, pytest.mark.timeout(60)]
 
 
@@ -16,11 +15,11 @@ class TestHttpTransport:
         base = http_server("--transform-mode", "none")
         async with Client(StreamableHttpTransport(f"{base}/mcp/")) as client:
             info = client.initialize_result.serverInfo
-            assert info.version == laravel_mcp_companion.SERVER_VERSION
+            assert info.version == companion_server.SERVER_VERSION
 
             search = await client.call_tool(
                 "search_laravel_docs",
-                {"query": "basic routing", "include_external": False},
+                {"query": "basic routing", "sources": ["core"]},
             )
             assert search.structured_content.get("results")
 
@@ -31,7 +30,7 @@ class TestHttpTransport:
             assert res.status_code == 200
             data = res.json()
             assert data["name"] == "io.github.brianirish/laravel-mcp-companion"
-            assert data["version"] == laravel_mcp_companion.SERVER_VERSION
+            assert data["version"] == companion_server.SERVER_VERSION
 
     async def test_bad_host_header_rejected(self, http_server):
         base = http_server()
@@ -53,7 +52,7 @@ class TestHttpTransport:
             assert health.status_code == 200
             body = health.json()
             assert body["status"] in ("ok", "degraded")
-            assert body["version"] == laravel_mcp_companion.SERVER_VERSION
+            assert body["version"] == companion_server.SERVER_VERSION
             assert body["docs"]["versions_available"] >= 1
 
         # Generate one tool call, then confirm it shows up in the scrape.

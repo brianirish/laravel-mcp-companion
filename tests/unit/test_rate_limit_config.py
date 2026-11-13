@@ -9,7 +9,7 @@ import argparse
 
 import pytest
 
-from laravel_mcp_companion import build_rate_limiter, parse_arguments
+from laravel_mcp_companion.server import build_rate_limiter, parse_arguments
 
 
 def make_args(**overrides):

@@ -1,0 +1,89 @@
+# Spatie - Downloading Media/Downloading Multiple Files
+
+Source: https://spatie.be/docs/laravel-medialibrary/v11/downloading-media/downloading-multiple-files
+
+SPATIE
+
+Laravel Media Library
+=====================
+
+spatie.be/open-source
+
+Docs
+
+Laravel-medialibrary
+
+Downloading-media
+
+Downloading multiple files
+
+Downloading multiple files
+==========================
+
+### On this page
+
+1. Are you a visual learner?
+
+You might want to let users be able to download multiple files at once. Traditionally you'd have to create a zip archive that contains the requested files.
+
+The media library is able to zip stream multiple files on the fly. So you don't need to create a zip archive on your server.
+
+The provided `MediaStream` class that allows you to respond with a stream. Files will be zipped on the fly and you can even include files from multiple filesystems.
+
+Here's an example on how it can be used:
+
+```php
+use Spatie\MediaLibrary\Support\MediaStream;
+
+class DownloadMediaController
+{
+   public function download(YourModel $yourModel)
+   {
+        // Let's get some media.
+        $downloads = $yourModel->getMedia('downloads');
+
+        // Download the files associated with the media in a streamed way.
+        // No prob if your files are very large.
+        return MediaStream::create('my-files.zip')->addMedia($downloads);
+   }
+}
+```
+You can also pass any custom options to the `ZipStream` instance using the `useZipOptions` method.
+
+All the available options are listed on the ZipStream-PHP guide.
+
+Here's an example on how it can be used:
+
+```php
+use Spatie\MediaLibrary\Support\MediaStream;
+
+class DownloadMediaController
+{
+   public function download(YourModel $yourModel)
+   {
+        // Let's get some media.
+        $downloads = $yourModel->getMedia('downloads');
+
+        // Download the files associated with the media in a streamed way.
+        // No prob if your files are very large.
+        return MediaStream::create('my-files.zip')
+            ->useZipOptions(function (&$zipOptions) {
+                // ZipStream ^3.0 uses array
+                $zipOptions['defaultEnableZeroHeader'] = true;
+            })
+            ->addMedia($downloads);
+   }
+}
+```
+##Are you a visual learner?
+---------------------------
+
+Here's a video that shows how to download files.
+
+Want to see more videos like this? Check out our free video course on how to use Laravel Media Library.
+
+Downloading a single file
+
+Working with multiple filesystems
+
+Help us improve this page

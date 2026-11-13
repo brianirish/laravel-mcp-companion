@@ -1,16 +1,9 @@
 # Livewire - Troubleshooting
 
-Source: https://livewire.laravel.com/docs/troubleshooting
+Source: https://livewire.laravel.com/docs/4.x/troubleshooting
 
 Troubleshooting
 ===============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Here at Livewire HQ, we try to remove problems from your pathway before you hit them. However, sometimes, there are some problems that we can't solve without introducing new ones, and other times, there are problems we can't anticipate.

@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Artisan
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/artisan
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/artisan
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Basic-usage
 
 Artisan Commands
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Artisan Commands
 ================

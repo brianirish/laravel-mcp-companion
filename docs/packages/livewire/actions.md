@@ -1,16 +1,9 @@
 # Livewire - Actions
 
-Source: https://livewire.laravel.com/docs/actions
+Source: https://livewire.laravel.com/docs/4.x/actions
 
 Actions
 =======
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire actions are methods on your component that can be triggered by frontend interactions like clicking a button or submitting a form. They provide the developer experience of being able to call a PHP method directly from the browser, allowing you to focus on the logic of your application without getting bogged down writing boilerplate code connecting your application's frontend and backend.

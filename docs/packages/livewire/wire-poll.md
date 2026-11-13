@@ -1,16 +1,9 @@
 # Livewire - Wire Poll
 
-Source: https://livewire.laravel.com/docs/wire-poll
+Source: https://livewire.laravel.com/docs/4.x/wire-poll
 
 wire:poll
 =========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Polling is a technique used in web applications to "poll" the server (send requests on a regular interval) for updates. It's a simple way to keep a page up-to-date without the need for a more sophisticated technology like WebSockets.

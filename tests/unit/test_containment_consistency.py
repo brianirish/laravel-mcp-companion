@@ -11,12 +11,10 @@ import os
 
 import pytest
 
-from mcp_tools import (
-    SUPPORTED_VERSIONS,
-    list_laravel_docs_impl,
-    read_laravel_doc_content_impl,
-    search_laravel_docs_impl,
-)
+from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
+from laravel_mcp_companion.tools import ToolFailure
+from laravel_mcp_companion.tools.docs import list_docs, read_content
+from laravel_mcp_companion.tools.search import search
 
 # The term searched for. It is echoed back in "no results" messages, so it
 # cannot double as the leak canary.
@@ -44,44 +42,40 @@ def docs_with_escaping_symlink(tmp_path):
 
 def test_read_refuses_the_escaping_symlink(docs_with_escaping_symlink):
     """Baseline: this is the behavior the other paths must match."""
-    result = read_laravel_doc_content_impl(docs_with_escaping_symlink, "routing.md", VERSION)
+    with pytest.raises(ToolFailure) as raised:
+        read_content(docs_with_escaping_symlink, "routing.md", VERSION)
 
-    assert PAYLOAD not in result
-    assert "Access denied" in result
+    assert raised.value.code == "access_denied"
+    assert PAYLOAD not in str(raised.value.payload())
 
 
 def test_list_does_not_advertise_the_escaping_symlink(docs_with_escaping_symlink):
-    result = list_laravel_docs_impl(docs_with_escaping_symlink, version=VERSION)
+    files = list_docs(docs_with_escaping_symlink, name=VERSION)["collections"][0]["files"]
 
-    assert "routing.md" not in result, "listed a file that read refuses to serve"
-    assert "blade.md" in result, "legitimate files must still be listed"
+    assert f"{VERSION}/routing.md" not in files, "listed a file that read refuses to serve"
+    assert f"{VERSION}/blade.md" in files, "legitimate files must still be listed"
 
 
 def test_search_does_not_match_inside_the_escaping_symlink(docs_with_escaping_symlink):
-    result = search_laravel_docs_impl(
-        docs_with_escaping_symlink, QUERY, version=VERSION, include_external=False
-    )
+    result = search(docs_with_escaping_symlink, None, QUERY, version=VERSION, sources=["core"])
 
-    assert "routing.md" not in result, "match-counted a file that read refuses to serve"
+    assert "routing.md" not in str(result), "matched a file that read refuses to serve"
 
 
 def test_search_snippets_do_not_leak_the_escaping_symlink(docs_with_escaping_symlink):
-    """Search now returns content in snippets, so a leak here is a direct one."""
-    result = search_laravel_docs_impl(
-        docs_with_escaping_symlink, QUERY, version=VERSION, include_external=False
-    )
+    """Search returns content in snippets, so a leak here is a direct one."""
+    result = search(docs_with_escaping_symlink, None, QUERY, version=VERSION, sources=["core"])
 
-    assert PAYLOAD not in result, "leaked content that read refuses to serve"
-    assert "routing.md" not in result
+    serialized = str(result)
+    assert PAYLOAD not in serialized, "leaked content that read refuses to serve"
+    assert "routing.md" not in serialized
 
 
 def test_legitimate_search_still_works(docs_with_escaping_symlink):
     """The containment filter must not break ordinary searching."""
-    result = search_laravel_docs_impl(
-        docs_with_escaping_symlink, "Legitimate", version=VERSION, include_external=False
-    )
+    result = search(docs_with_escaping_symlink, None, "Legitimate", version=VERSION, sources=["core"])
 
-    assert "blade.md" in result
+    assert any("blade.md" in r["file"] for r in result["results"])
 
 
 class TestAllowedHostWildcard:
@@ -95,7 +89,7 @@ class TestAllowedHostWildcard:
 
     def _parse(self, monkeypatch, argv, env):
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         for var in ("CORS_ORIGINS", "ALLOWED_HOSTS"):
             monkeypatch.delenv(var, raising=False)
@@ -147,48 +141,47 @@ class TestLearningResourceSymlinkConsistency:
 
         return docs
 
+    def _listed(self, docs):
+        return {c["name"] for c in list_docs(docs, source="learning")["collections"]}
+
     def test_listing_a_source_agrees_with_listing_all(self, learning_with_symlinked_source):
-        from mcp_tools import list_laravel_learning_resources_impl
-
-        all_sources = list_laravel_learning_resources_impl(learning_with_symlinked_source)
-        scoped = list_laravel_learning_resources_impl(
-            learning_with_symlinked_source, source="bootcamp"
-        )
-
-        advertised = "bootcamp" in all_sources
-        readable = "not found" not in scoped
+        advertised = "bootcamp" in self._listed(learning_with_symlinked_source)
+        try:
+            list_docs(learning_with_symlinked_source, name="bootcamp")
+            readable = True
+        except ToolFailure:
+            readable = False
 
         assert advertised == readable, (
-            "a source listed as available must be readable, and vice versa; "
+            "a source listed as available must be listable by name, and vice versa; "
             f"advertised={advertised} readable={readable}"
         )
 
     def test_search_agrees_with_listing(self, learning_with_symlinked_source):
-        from mcp_tools import (
-            list_laravel_learning_resources_impl,
-            search_laravel_learning_resources_impl,
-        )
+        result = search(learning_with_symlinked_source, None, PAYLOAD, sources=["learning"])
 
-        all_sources = list_laravel_learning_resources_impl(learning_with_symlinked_source)
-        unscoped_search = search_laravel_learning_resources_impl(
-            learning_with_symlinked_source, PAYLOAD
-        )
-
-        advertised = "bootcamp" in all_sources
-        searched = "bootcamp" in unscoped_search
+        advertised = "bootcamp" in self._listed(learning_with_symlinked_source)
+        searched = any(r["file"].startswith("bootcamp/") for r in result["results"])
 
         assert advertised == searched, (
-            "unscoped search must cover exactly the sources that are listed; "
+            "search must cover exactly the sources that are listed; "
             f"advertised={advertised} searched={searched}"
         )
 
-    def test_real_sources_are_unaffected(self, learning_with_symlinked_source):
-        from mcp_tools import list_laravel_learning_resources_impl
+    def test_reading_agrees_with_listing(self, learning_with_symlinked_source):
+        advertised = "bootcamp" in self._listed(learning_with_symlinked_source)
+        try:
+            read_content(learning_with_symlinked_source, "bootcamp/guide.md")
+            readable = True
+        except ToolFailure:
+            readable = False
 
-        result = list_laravel_learning_resources_impl(
-            learning_with_symlinked_source, source="tutorials"
-        )
-        assert "intro.md" in result
+        assert advertised == readable
+
+    def test_real_sources_are_unaffected(self, learning_with_symlinked_source):
+        listing = list_docs(learning_with_symlinked_source, name="tutorials")
+
+        assert listing["collections"][0]["files"] == ["tutorials/intro.md"]
 
 
 class TestOpensThePathItValidated:
@@ -204,16 +197,14 @@ class TestOpensThePathItValidated:
     def test_read_opens_the_resolved_target_not_the_link(self, tmp_path):
         from unittest.mock import patch
 
-        from mcp_tools import read_laravel_doc_content_impl
-
         docs = tmp_path / "docs"
         version_dir = docs / VERSION
         version_dir.mkdir(parents=True)
         (version_dir / "real.md").write_text("# Real\n\ncontent")
         os.symlink(version_dir / "real.md", version_dir / "alias.md")
 
-        with patch("mcp_tools.get_file_content_cached", return_value="# Real") as reader:
-            read_laravel_doc_content_impl(docs, "alias.md", VERSION)
+        with patch("laravel_mcp_companion.mcp_tools.get_file_content_cached", return_value="# Real") as reader:
+            read_content(docs, "alias.md", VERSION)
 
         opened = os.path.basename(reader.call_args[0][0])
         assert opened == "real.md", (
@@ -222,7 +213,7 @@ class TestOpensThePathItValidated:
         )
 
     def test_resolved_contained_path_returns_the_resolution(self, tmp_path):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         base = tmp_path / "base"
         base.mkdir()
@@ -235,7 +226,7 @@ class TestOpensThePathItValidated:
         assert resolved.name == "real.md", "must return what the path resolves to"
 
     def test_resolved_contained_path_rejects_escapes(self, tmp_path):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         base = tmp_path / "base"
         base.mkdir()
@@ -247,7 +238,7 @@ class TestOpensThePathItValidated:
         assert resolve_contained_path(base, base / ".." / "outside.md") is None
 
     def test_resolved_contained_path_fails_closed(self):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         assert resolve_contained_path(None, None) is None
 
@@ -262,7 +253,7 @@ class TestReaderRefusesToFollowLinks:
     """
 
     def test_reader_refuses_a_symlink(self, tmp_path):
-        from mcp_tools import clear_caches, get_file_content_cached
+        from laravel_mcp_companion.mcp_tools import clear_caches, get_file_content_cached
 
         secret = tmp_path / "secret.md"
         secret.write_text("TOCTOU-CANARY-7712")
@@ -275,7 +266,7 @@ class TestReaderRefusesToFollowLinks:
         assert "TOCTOU-CANARY-7712" not in content, "followed a symlink at open time"
 
     def test_reader_still_reads_regular_files(self, tmp_path):
-        from mcp_tools import clear_caches, get_file_content_cached
+        from laravel_mcp_companion.mcp_tools import clear_caches, get_file_content_cached
 
         regular = tmp_path / "regular.md"
         regular.write_text("# Regular\n\nordinary content")

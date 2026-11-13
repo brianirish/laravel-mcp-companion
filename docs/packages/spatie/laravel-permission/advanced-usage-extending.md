@@ -1,6 +1,6 @@
 # Spatie - Advanced Usage/Extending
 
-Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/extending
+Source: https://spatie.be/docs/laravel-permission/v8/advanced-usage/extending
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Advanced-usage
 
 Extending
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Extending
 =========
@@ -134,6 +129,17 @@ In the rare case that you have need to REPLACE the existing `Role` or `Permissio
 * Your `Permission` model needs to implement the `Spatie\Permission\Contracts\Permission` contract
 * You need to update `config/permission.php` to specify your namespaced model
 
+### ##Tips
+
+If you override `findByName`, `findOrCreate`, or `create` on your model, you can use Laravel's `enum_value()` helper to resolve `BackedEnum` values:
+
+```php
+public static function findByName(BackedEnum|string $name, ?string $guardName = null): self
+{
+    $name = enum_value($name);
+    // ...
+}
+```
 Exceptions
 
 Cache

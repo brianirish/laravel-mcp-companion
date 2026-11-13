@@ -22,7 +22,7 @@ pipeline:
           # permanently IGNORE_FAILED, masking the status of the steps that matter.
           # To reinstate it, cache `~/.cache/uv` (which now holds both the wheel
           # cache and the managed CPython download) with a key derived from
-          # requirements*.txt, and confirm the stage reports SUCCEEDED afterwards.
+          # uv.lock, and confirm the stage reports SUCCEEDED afterwards.
           platform:
             os: Linux
             arch: Amd64
@@ -53,10 +53,11 @@ pipeline:
                       curl -LsSf --retry 3 --retry-delay 2 https://astral.sh/uv/install.sh | sh
                       export PATH="$UV_INSTALL_DIR:$PATH"
 
+                      # Install what uv.lock pins, development tools included,
+                      # into .venv. The image installs from the same lockfile, so
+                      # the versions tested here are the versions shipped.
                       uv python install 3.12
-                      uv venv --python 3.12 .venv
-                      uv pip install --python .venv/bin/python \
-                        -r requirements.txt -r requirements-dev.txt
+                      uv sync --frozen --python 3.12
 
                       # Later steps run in fresh shells, so they invoke the
                       # interpreter by path rather than activating the venv. That
@@ -105,7 +106,20 @@ pipeline:
                   type: Run
                   spec:
                     shell: Sh
-                    command: .venv/bin/pytest --cov --cov-branch --cov-report=xml --junitxml=results.xml
+                    command: |
+                      # The nightly documentation pull request changes only
+                      # docs/. The tests marked `corpus` compare hand-written
+                      # tables with docs/, so a page Laravel added or removed
+                      # fails them, and failing that pull request would hold
+                      # back the rest of the night's documentation. They are
+                      # left out for that one branch; the sync report raises
+                      # the same findings, and every other pull request runs
+                      # them and fails until the tables are updated.
+                      SELECT="not e2e and not bench"
+                      if [ "<+codebase.branch>" = "update-laravel-docs" ]; then
+                        SELECT="$SELECT and not corpus"
+                      fi
+                      .venv/bin/pytest -m "$SELECT" --cov --cov-branch --cov-report=xml --junitxml=results.xml
                     reports:
                       type: JUnit
                       spec:
@@ -177,5 +191,5 @@ pipeline:
                       fnm use 22
                       # Inspector 2.0 requires the server command before --method.
                       # Use the project venv, not the image's default interpreter.
-                      npx @modelcontextprotocol/inspector@2 --cli .venv/bin/python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
+                      npx @modelcontextprotocol/inspector@2 --cli .venv/bin/python -m laravel_mcp_companion --method tools/list | grep -q "search_laravel_docs"
 

@@ -1,16 +1,9 @@
 # Livewire - Lifecycle Hooks
 
-Source: https://livewire.laravel.com/docs/lifecycle-hooks
+Source: https://livewire.laravel.com/docs/4.x/lifecycle-hooks
 
 Lifecycle Hooks
 ===============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire provides a variety of lifecycle hooks that allow you to execute code at specific points during a component's lifecycle. These hooks enable you to perform actions before or after particular events, such as initializing the component, updating properties, or rendering the template.

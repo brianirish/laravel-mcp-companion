@@ -4,8 +4,8 @@ import pytest
 import sys
 from unittest.mock import patch, MagicMock
 
-from docs_updater import DEFAULT_VERSION
-from laravel_mcp_companion import main, parse_arguments
+from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
+from laravel_mcp_companion.server import main, parse_arguments
 
 
 class TestParseArguments:
@@ -76,10 +76,10 @@ class TestParseArguments:
 class TestMainFunction:
     """Test the main() function."""
     
-    @patch('laravel_mcp_companion.GracefulShutdown')
-    @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
+    @patch('laravel_mcp_companion.server.GracefulShutdown')
+    @patch('laravel_mcp_companion.server.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.server.FastMCP')
+    @patch('laravel_mcp_companion.server.setup_docs_path')
     def test_main_stdio_transport(self, mock_setup_docs, mock_fastmcp_class, 
                                   mock_updater_class, mock_shutdown_class, temp_dir):
         """Test main function with stdio transport."""
@@ -112,11 +112,11 @@ class TestMainFunction:
             # Verify server was started (stdio is default, no args needed)
             mock_mcp.run.assert_called_once_with()
     
-    @patch('laravel_mcp_companion.GracefulShutdown')
-    @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
-    @patch('laravel_mcp_companion.update_documentation')
+    @patch('laravel_mcp_companion.server.GracefulShutdown')
+    @patch('laravel_mcp_companion.server.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.server.FastMCP')
+    @patch('laravel_mcp_companion.server.setup_docs_path')
+    @patch('laravel_mcp_companion.server.update_documentation')
     def test_main_with_update_docs(self, mock_update_docs, mock_setup_docs, 
                                    mock_fastmcp_class, mock_updater_class, 
                                    mock_shutdown_class, temp_dir):
@@ -140,8 +140,8 @@ class TestMainFunction:
             # Verify documentation was updated
             mock_update_docs.assert_called_once_with(temp_dir, DEFAULT_VERSION, False)
     
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
+    @patch('laravel_mcp_companion.server.FastMCP')
+    @patch('laravel_mcp_companion.server.setup_docs_path')
     def test_main_invalid_version(self, mock_setup_docs, mock_fastmcp_class, temp_dir):
         """Test main function with invalid version."""
         # Setup mocks
@@ -156,10 +156,10 @@ class TestMainFunction:
             
         assert exc_info.value.code == 1
     
-    @patch('laravel_mcp_companion.GracefulShutdown')
-    @patch('laravel_mcp_companion.MultiSourceDocsUpdater')
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
+    @patch('laravel_mcp_companion.server.GracefulShutdown')
+    @patch('laravel_mcp_companion.server.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.server.FastMCP')
+    @patch('laravel_mcp_companion.server.setup_docs_path')
     def test_main_cleanup_registration(self, mock_setup_docs, mock_fastmcp_class, 
                                        mock_updater_class, mock_shutdown_class, temp_dir):
         """Test that cleanup is registered with shutdown handler."""
@@ -184,8 +184,8 @@ class TestMainFunction:
             cleanup_func = mock_shutdown.register.call_args[0][0]
             assert callable(cleanup_func)
     
-    @patch('laravel_mcp_companion.FastMCP')
-    @patch('laravel_mcp_companion.setup_docs_path')
+    @patch('laravel_mcp_companion.server.FastMCP')
+    @patch('laravel_mcp_companion.server.setup_docs_path')
     def test_main_server_error(self, mock_setup_docs, mock_fastmcp_class, temp_dir):
         """Test main function when server fails to start."""
         # Setup mocks
@@ -197,8 +197,8 @@ class TestMainFunction:
         test_args = ['laravel-mcp-companion']
         
         with patch.object(sys, 'argv', test_args), \
-             patch('laravel_mcp_companion.GracefulShutdown'), \
-             patch('laravel_mcp_companion.MultiSourceDocsUpdater'), \
+             patch('laravel_mcp_companion.server.GracefulShutdown'), \
+             patch('laravel_mcp_companion.server.MultiSourceDocsUpdater'), \
              pytest.raises(SystemExit) as exc_info:
             main()
             

@@ -41,13 +41,14 @@ Enhancement suggestions are welcome! Please include:
 
 - Update the README.md with details of changes if applicable
 - Update the example code if applicable
-- The PR should work for Python 3.8+
+- The PR should work on Python 3.12, the version the project requires
+- A change to a tool's arguments or output changes `tests/protocol/contract.json` and `API.md`; regenerate both and say so in the changelog
 - Include relevant tests if possible
 
 ## Development Setup
 
 1. Fork and clone the repository
-2. Install dependencies: `uv pip install -r requirements.txt`
+2. Install dependencies: `uv sync` (installs what `uv.lock` pins, development tools included)
 3. Create a test directory with some markdown files for testing
 
 ## Testing

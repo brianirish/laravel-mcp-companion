@@ -3,7 +3,7 @@
 import sys
 from unittest.mock import patch
 
-from laravel_mcp_companion import parse_arguments
+from laravel_mcp_companion.server import parse_arguments
 
 
 class TestDockerArgumentHandling:

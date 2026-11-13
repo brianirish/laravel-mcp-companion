@@ -1,6 +1,6 @@
 # Spatie - Installation Laravel
 
-Source: https://spatie.be/docs/laravel-permission/v6/installation-laravel
+Source: https://spatie.be/docs/laravel-permission/v8/installation-laravel
 
 SPATIE
 
@@ -14,11 +14,6 @@ Docs
 Laravel-permission
 
 Installation in Laravel
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Installation in Laravel
 =======================
@@ -44,7 +39,7 @@ See the "Prerequisites" documentation page for compatibility details.
    ```php
     composer require spatie/laravel-permission
    ```
-4. The Service Provider will automatically be registered; however, if you wish to manually register it, you can manually add the `Spatie\Permission\PermissionServiceProvider::class` service provider to the array in `bootstrap/providers.php` (`config/app.php` in Laravel 10 or older).
+4. The Service Provider will automatically be registered; however, if you wish to manually register it, you can manually add the `Spatie\Permission\PermissionServiceProvider::class` service provider to the array in `bootstrap/providers.php`.
 5. **You should publish** the migration and the `config/permission.php` config file with:
 
    ```php
@@ -57,7 +52,7 @@ See the "Prerequisites" documentation page for compatibility details.
 
      + must set `'teams' => true,`
      + and (optional) you may set `team_foreign_key` name in the config file if you want to use a custom foreign key in your database for teams
-   * **If you are using MySQL 8+**, look at the migration files for notes about MySQL 8+ to set/limit the index key length, and edit accordingly. If you get `ERROR: 1071 Specified key was too long` then you need to do this.
+   * **If you are using MySQL 8+**, look at the **Prerequisites** docs page for notes about MySQL 8+ to set/limit the index key length, and edit accordingly. If you get `ERROR: 1071 Specified key was too long` then you need to do this.
    * **If you are using CACHE\_STORE=database**, be sure to install Laravel's cache migration, else you will encounter cache errors.
 7. **Clear your config cache**. This package requires access to the `permission` config settings in order to run migrations. If you've been caching configurations locally, clear your config cache with either of these commands:
 
@@ -74,8 +69,15 @@ See the "Prerequisites" documentation page for compatibility details.
 9. **Add the necessary trait to your User model**:
 
    ```php
-    // The User model requires this trait
-    use HasRoles;
+   use Illuminate\Foundation\Auth\User as Authenticatable;
+   use Spatie\Permission\Traits\HasRoles;
+
+   class User extends Authenticatable
+   {
+       use HasRoles;
+
+       // ...
+   }
    ```
 10. Consult the **Basic Usage** section of the docs to get started using the features of this package.
 
@@ -90,6 +92,6 @@ https://github.com/spatie/laravel-permission/blob/main/config/permission.php
 
 Prerequisites
 
-Installation in Lumen
+Upgrading
 
 Help us improve this page

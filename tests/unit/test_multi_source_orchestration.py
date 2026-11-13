@@ -12,7 +12,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from docs_updater import MultiSourceDocsUpdater
+from laravel_mcp_companion.docs_updater import MultiSourceDocsUpdater
 
 
 @pytest.fixture
@@ -42,10 +42,10 @@ class TestUpdatePackageDocs:
 class TestUpdateLearningDocs:
     def test_named_sources_delegate(self, updater):
         updater.learning_fetcher.fetch_learning_source = Mock(return_value=True)
-        results = updater.update_learning_docs(sources=["laravel-blog"], force=True)
-        assert results == {"laravel-blog": True}
+        results = updater.update_learning_docs(sources=["laracasts-index"], force=True)
+        assert results == {"laracasts-index": True}
         updater.learning_fetcher.fetch_learning_source.assert_called_once_with(
-            "laravel-blog", force=True
+            "laracasts-index", force=True
         )
 
     def test_unknown_source_is_false(self, updater):
@@ -53,8 +53,8 @@ class TestUpdateLearningDocs:
         assert results == {"udemy": False}
 
     def test_no_sources_means_all(self, updater):
-        updater.learning_fetcher.fetch_all_sources = Mock(return_value={"laravel-blog": True})
-        assert updater.update_learning_docs() == {"laravel-blog": True}
+        updater.learning_fetcher.fetch_all_sources = Mock(return_value={"laracasts-index": True})
+        assert updater.update_learning_docs() == {"laracasts-index": True}
 
 
 class TestUpdateAll:
@@ -62,7 +62,7 @@ class TestUpdateAll:
         updater.update_core_docs = Mock(return_value=overrides.get("core", True))
         updater.update_external_docs = Mock(return_value=overrides.get("external", {"forge": True}))
         updater.update_package_docs = Mock(return_value=overrides.get("packages", {"livewire": True}))
-        updater.update_learning_docs = Mock(return_value=overrides.get("learning", {"laravel-blog": True}))
+        updater.update_learning_docs = Mock(return_value=overrides.get("learning", {"laracasts-index": True}))
 
     def test_all_sections_updated_and_reported(self, updater):
         self._stub_all(updater)
@@ -72,7 +72,7 @@ class TestUpdateAll:
             "core": True,
             "external": {"forge": True},
             "packages": {"livewire": True},
-            "learning": {"laravel-blog": True},
+            "learning": {"laracasts-index": True},
         }
         updater.update_core_docs.assert_called_once_with(force=True)
         updater.update_external_docs.assert_called_once_with(force=True)
@@ -120,14 +120,14 @@ class TestNeedsUpdate:
 
 class TestStatusLearningSection:
     def test_learning_status_reports_cached_source(self, updater):
-        meta_path = updater.learning_fetcher.get_cache_metadata_path("laravel-blog")
+        meta_path = updater.learning_fetcher.get_cache_metadata_path("laracasts-index")
         meta_path.write_text(json.dumps({
             "success_rate": 1.0, "cached_at": time.time(), "article_count": 4,
         }))
         status = updater.get_all_documentation_status()
-        blog = status["learning"]["laravel-blog"]
+        blog = status["learning"]["laracasts-index"]
         assert blog["cache_valid"] is True
         assert blog["success_rate"] == 1.0
         assert blog["last_fetched"] != "never"
         # uncached sources report never
-        assert status["learning"]["laravel-news"]["last_fetched"] == "never"
+        assert status["learning"]["laravel-bootcamp"]["last_fetched"] == "never"

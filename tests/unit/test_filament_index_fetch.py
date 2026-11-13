@@ -10,7 +10,7 @@ import json
 
 import pytest
 
-from docs_updater import CommunityPackageFetcher
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher
 from tests.conftest import urlopen_returning
 
 INDEX_5X = """# Filament 5.x
@@ -45,7 +45,7 @@ def _fetch(fetcher, monkeypatch, index=INDEX_5X, pages=None):
         "forms/text-input.md": _page("the text input"),
         "5.x/deployment.md": _page("deployment"),
     })
-    monkeypatch.setattr("docs_updater.urllib.request.urlopen", urlopen_returning(b"", url_map=url_map))
+    monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", urlopen_returning(b"", url_map=url_map))
     return fetcher.fetch_package_docs("filament", force=True)
 
 

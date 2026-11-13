@@ -11,7 +11,7 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from docs_updater import CommunityPackageFetcher, DocumentationSourceType
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher, DocumentationSourceType
 
 
 class TestCommunityPackageFetcher:
@@ -218,74 +218,6 @@ More content"""
             assert all(results.values())
             assert mock_fetch.call_count == 6
     
-    def test_process_jsx_to_markdown(self, fetcher):
-        """Test JSX content extraction to markdown."""
-        jsx_content = '''
-        import { H1, P, Code, Strong } from '@/Components'
-        
-        export const meta = {
-            title: 'How it works',
-        }
-        
-        export default function() {
-            return (
-                <>
-                    <H1>How it works</H1>
-                    <P>
-                        With Inertia you build applications just like you've always done with your 
-                        server-side web framework of choice. You use your framework's existing 
-                        functionality for routing, controllers, middleware, authentication, 
-                        authorization, data fetching, and more.
-                    </P>
-                    <P>
-                        However, Inertia replaces your application's view layer. Instead of using 
-                        server-side rendering via PHP or Ruby templates, the views returned by your 
-                        application are JavaScript page components.
-                    </P>
-                    <P>
-                        At its core, Inertia is essentially a client-side routing library. It allows 
-                        you to make page visits without forcing a full page reload. This is done using 
-                        the <Code>Link</Code> component.
-                    </P>
-                    <P>
-                        <Strong>The end result is a silky smooth single-page experience.</Strong>
-                    </P>
-                </>
-            )
-        }
-        '''
-        
-        result = fetcher._process_jsx_to_markdown(jsx_content, "how-it-works")
-        
-        assert result is not None
-        assert "# How it works" in result
-        assert "With Inertia you build applications" in result
-        assert "However, Inertia replaces" in result
-        assert "At its core, Inertia is essentially" in result
-        assert "`Link`" in result  # Code component
-        assert "**The end result is a silky smooth single-page experience.**" in result  # Strong component
-        # Should not contain JSX syntax
-        assert "import {" not in result
-        assert "export default" not in result
-        assert "return (" not in result
-    
-    def test_clean_jsx_text(self, fetcher):
-        """Test JSX text cleaning functionality."""
-        # Test basic text cleaning
-        jsx_text = "This is {some.variable} text with <span>HTML</span> tags"
-        result = fetcher._clean_jsx_text(jsx_text)
-        assert result == "This is text with HTML tags"
-        
-        # Test HTML entity decoding
-        jsx_text = "Text with &amp; entities &lt;and&gt; more"
-        result = fetcher._clean_jsx_text(jsx_text)
-        assert result == "Text with & entities <and> more"
-        
-        # Test whitespace cleanup
-        jsx_text = "  Multiple   spaces   and  \n  newlines  "
-        result = fetcher._clean_jsx_text(jsx_text)
-        assert result == "Multiple spaces and newlines"
-    
     def test_fetch_inertia_docs_from_llms_index(self, fetcher, monkeypatch):
         """The fetcher discovers pages from llms.txt and saves clean markdown.
 
@@ -295,7 +227,7 @@ More content"""
         from tests.conftest import load_fixture, urlopen_returning
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
                 ".md": load_fixture("inertia_routing.md").encode(),
@@ -333,7 +265,7 @@ More content"""
             "- [Routing](https://inertiajs.com/docs/v1/the-basics/routing.md)\n"
         )
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": index.encode(),
                 "docs/v3/": page("v3"),
@@ -360,7 +292,7 @@ More content"""
         stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
                 ".md": load_fixture("inertia_routing.md").encode(),
@@ -386,7 +318,7 @@ More content"""
             # Index and routing succeed; every other page 404s.
             return real(request)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"])
         assert stale.exists()
 
@@ -394,7 +326,7 @@ More content"""
         from tests.conftest import urlopen_returning
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"# No links here at all\n"),
         )
         config = fetcher.community_packages["inertia"]

@@ -20,12 +20,12 @@ htmlcov
 
 # Tests and development-only tooling
 tests
-requirements-dev.txt
 pytest.ini
 .python-version
 
-# CI/CD definitions
+# CI/CD definitions and build tooling
 .harness
+scripts
 
 # Working notes that ship no runtime value
 docs/superpowers
@@ -34,3 +34,21 @@ docs/superpowers
 .vscode
 .idea
 .DS_Store
+
+# Scratch fixture dirs used by some local test runs; never ship or track
+test_data/
+test_docs/
+
+# Caches and repo metadata that shouldn't bake into the image
+.channels_cache_v2.json
+.users_cache.json
+CHANGELOG.md
+ROADMAP.md
+API.md
+MIGRATING.md
+VERSIONING.md
+RELEASING.md
+hatch_build.py
+CONTRIBUTING.md
+test_docker_args.sh
+CLAUDE.md

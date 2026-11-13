@@ -1,16 +1,9 @@
 # Livewire - Properties
 
-Source: https://livewire.laravel.com/docs/properties
+Source: https://livewire.laravel.com/docs/4.x/properties
 
 Properties
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Properties store and manage state inside your Livewire components. They are defined as public properties on component classes and can be accessed and modified on both the server and client-side.

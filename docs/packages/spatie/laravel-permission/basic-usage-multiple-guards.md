@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Multiple Guards
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/multiple-guards
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/multiple-guards
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Basic-usage
 
 Using multiple guards
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Using multiple guards
 =====================

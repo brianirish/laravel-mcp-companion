@@ -42,17 +42,17 @@ jobs:
         
         # Run documentation update with auto-discovery enabled
         echo "Starting documentation update with auto-discovery..."
-        python docs_updater.py --all-versions --log-level INFO
+        python -m laravel_mcp_companion.docs_updater --all-versions --log-level INFO
         UPDATE_STATUS=$?
         
         # Update external services documentation
         echo "Updating external services documentation..."
-        python docs_updater.py --external-only --log-level INFO
+        python -m laravel_mcp_companion.docs_updater --external-only --log-level INFO
         EXTERNAL_STATUS=$?
         
         # Check external services status to report auto-discovery results
         echo "Checking external services status..."
-        python docs_updater.py --status --external-only
+        python -m laravel_mcp_companion.docs_updater --status --external-only
         
         # Check if any files were actually changed
         if git diff --quiet docs/; then

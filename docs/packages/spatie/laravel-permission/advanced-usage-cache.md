@@ -1,6 +1,6 @@
 # Spatie - Advanced Usage/Cache
 
-Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/cache
+Source: https://spatie.be/docs/laravel-permission/v8/advanced-usage/cache
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Advanced-usage
 
 Cache
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Cache
 =====
@@ -57,7 +52,8 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 
 Additionally, because the Role and Permission models are Eloquent models which implement the `RefreshesPermissionCache` trait, creating and deleting Roles and Permissions will automatically clear the cache. If you have created your own models which do not extend the default models then you will need to implement the trait yourself.
 
-**NOTE: User-specific role/permission assignments are kept in-memory since v4.4.0, so the cache-reset is no longer called since v5.1.0 when updating User-related assignments.**
+**NOTE: User-specific role/permission assignments are kept in-memory.**
+
 Examples:
 
 ```php
@@ -114,6 +110,8 @@ Tip: Most parts of your multitenancy app will relate to a single tenant during a
 ```php
 app()->make(\Spatie\Permission\PermissionRegistrar::class)->initializeCache();
 ```
+`initializeCache()` also discards the registrar's in-memory permissions/roles collection (equivalent to `clearPermissionsCollection()`), so the next permission check reloads from the newly-configured cache/tenant instead of reusing the previous tenant's already-loaded collection.
+
 ### ##Custom Cache Store
 
 You can configure the package to use any of the Cache Stores you've configured in Laravel's `config/cache.php`. This way you can point this package's caching to its own specified resource.

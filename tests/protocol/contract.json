@@ -1,0 +1,1252 @@
+{
+  "error_schema": {
+    "properties": {
+      "error": {
+        "properties": {
+          "code": {
+            "enum": [
+              "invalid_argument",
+              "unknown_version",
+              "not_found",
+              "access_denied",
+              "update_failed",
+              "internal"
+            ],
+            "type": "string"
+          },
+          "details": {
+            "description": "Whatever helps the caller recover: the supported versions, the sections a file does have.",
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object"
+      }
+    },
+    "required": [
+      "error"
+    ],
+    "type": "object"
+  },
+  "resource_templates": [
+    "laravel-external://{service}/{path*}",
+    "laravel-package://{package}/{path*}",
+    "laravel://{path*}"
+  ],
+  "tools": {
+    "browse_docs_by_category": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "A topic area (e.g. \"authentication\", \"database\"). Omit both filters to list the categories"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "\"beginner\", \"intermediate\" or \"advanced\"",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              null
+            ]
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Laravel version (e.g. \"12.x\"). Defaults to the server's configured version"
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "categories": {
+            "description": "Every category with its page count. Present when no filter was given",
+            "items": {
+              "properties": {
+                "doc_count": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "doc_count"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "category": {
+            "type": "string"
+          },
+          "count": {
+            "description": "How many pages matched. Present when a filter was given",
+            "type": "integer"
+          },
+          "difficulty": {
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ],
+            "type": "string"
+          },
+          "docs": {
+            "description": "The matching pages. Present when a filter was given",
+            "items": {
+              "properties": {
+                "categories": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "difficulty": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "file",
+                "title",
+                "difficulty",
+                "categories"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "type": "object"
+      },
+      "stable": false
+    },
+    "compare_laravel_versions": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "file_filter": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Keep only pages whose name contains this text (e.g. \"eloquent\")"
+          },
+          "from_version": {
+            "description": "The older version (e.g. \"11.x\")",
+            "type": "string"
+          },
+          "to_version": {
+            "description": "The newer version (e.g. \"12.x\")",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_version",
+          "to_version"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "added_files": {
+            "description": "Pages in to_version only",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "common_files": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "filter": {
+            "description": "The file_filter that was applied, if any",
+            "type": "string"
+          },
+          "from_version": {
+            "type": "string"
+          },
+          "removed_files": {
+            "description": "Pages in from_version only",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "to_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_version",
+          "to_version",
+          "added_files",
+          "removed_files",
+          "common_files"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "get_laravel_learning_path": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "path_name": {
+            "default": "",
+            "description": "The path's id (e.g. \"getting-started\"). Leave empty to list the paths",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "paths": {
+            "items": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "difficulty": {
+                  "enum": [
+                    "beginner",
+                    "intermediate",
+                    "advanced"
+                  ],
+                  "type": "string"
+                },
+                "doc_count": {
+                  "type": "integer"
+                },
+                "docs": {
+                  "description": "The pages to read, in order. Present when one path was asked for",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "estimated_hours": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "next_path": {
+                  "description": "The path that follows this one, if any",
+                  "type": "string"
+                },
+                "packages": {
+                  "description": "Catalog packages that go with this path; see get_laravel_package",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "prerequisites": {
+                  "description": "Paths worth doing first",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "services": {
+                  "description": "First-party services whose docs go with this path; see get_laravel_service_info",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "description",
+                "difficulty",
+                "estimated_hours",
+                "doc_count"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "paths"
+        ],
+        "type": "object"
+      },
+      "stable": false
+    },
+    "get_laravel_package": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "A category to list (e.g. \"payment\", \"authentication\")"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "A package, by Composer name (\"laravel/cashier\") or short name (\"cashier\")"
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "categories": {
+            "description": "Every category in the catalog. Present when the whole catalog was listed",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "category": {
+            "description": "The category asked for, when one was",
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "packages": {
+            "items": {
+              "properties": {
+                "categories": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "documentation_link": {
+                  "description": "A laravel://, laravel-external:// or laravel-package:// resource URI, or a URL",
+                  "type": "string"
+                },
+                "features": {
+                  "description": "What is typically built with it",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "description": "The Composer name, e.g. laravel/cashier",
+                  "type": "string"
+                },
+                "installation": {
+                  "description": "The command that installs it",
+                  "type": "string"
+                },
+                "legacy": {
+                  "description": "True for a package that newer projects no longer start with",
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "related": {
+                  "description": "Ids of packages often used alongside",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "superseded_by": {
+                  "type": "string"
+                },
+                "use_cases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "description"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "packages"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "get_laravel_service_info": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "service": {
+            "description": "forge, vapor, envoyer, nova, cloud, nightwatch or herd",
+            "type": "string"
+          }
+        },
+        "required": [
+          "service"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "documentation_url": {
+            "type": "string"
+          },
+          "id": {
+            "description": "Pass to list_laravel_docs as `name` to list its pages",
+            "type": "string"
+          },
+          "last_synced": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "pages_expected": {
+            "type": "integer"
+          },
+          "status": {
+            "description": "Whether this server holds its documentation",
+            "enum": [
+              "ok",
+              "partial",
+              "missing"
+            ],
+            "type": "string"
+          },
+          "version": {
+            "description": "The major version the pages describe, when the service has one",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "documentation_url",
+          "status"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "laravel_docs_info": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Report this Laravel version only (e.g. \"12.x\"). Default: every version"
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "copy_age_days": {
+            "description": "Days since that date. Absent when unknown",
+            "type": "integer"
+          },
+          "default_version": {
+            "type": "string"
+          },
+          "documentation_current_to": {
+            "description": "The date Laravel last changed any framework page in this copy, or \"unknown\"",
+            "type": "string"
+          },
+          "note": {
+            "description": "What to do about a stale copy. Present only when stale is true",
+            "type": "string"
+          },
+          "sources": {
+            "description": "Every service, package and learning source",
+            "items": {
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "service",
+                    "package",
+                    "learning"
+                  ],
+                  "type": "string"
+                },
+                "last_synced": {
+                  "description": "Date of the last successful sync",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "pages": {
+                  "type": "integer"
+                },
+                "pages_expected": {
+                  "type": "integer"
+                },
+                "problem": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "ok",
+                    "partial",
+                    "missing"
+                  ],
+                  "type": "string"
+                },
+                "version": {
+                  "description": "The major the source's docs are on, when it has one",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "kind",
+                "status"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "stale": {
+            "description": "True when no version has changed for long enough that this copy is probably behind",
+            "type": "boolean"
+          },
+          "versions": {
+            "items": {
+              "properties": {
+                "available": {
+                  "type": "boolean"
+                },
+                "commit": {
+                  "type": "string"
+                },
+                "commit_message": {
+                  "type": "string"
+                },
+                "commit_url": {
+                  "type": "string"
+                },
+                "documentation_date": {
+                  "description": "When Laravel last changed this version's docs",
+                  "type": "string"
+                },
+                "last_synced": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "version",
+                "available"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "documentation_current_to",
+          "default_version",
+          "versions",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "list_laravel_docs": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "One collection to list the files of: a Laravel version (\"12.x\") or a service, package or learning source (\"forge\", \"livewire\")"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Only this kind of collection: \"core\", \"services\", \"packages\" or \"learning\"",
+            "enum": [
+              "core",
+              "services",
+              "packages",
+              "learning",
+              null
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "collections": {
+            "items": {
+              "properties": {
+                "file_count": {
+                  "type": "integer"
+                },
+                "files": {
+                  "description": "File names ready for the read tools. Present when one collection was asked for",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "name": {
+                  "description": "A Laravel version, or a service, package or learning source",
+                  "type": "string"
+                },
+                "source": {
+                  "enum": [
+                    "core",
+                    "services",
+                    "packages",
+                    "learning"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "file_count"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "count": {
+            "description": "How many collections follow",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count",
+          "collections"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "read_laravel_doc_content": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "filename": {
+            "description": "The page: \"queues.md\", \"12.x/queues.md\" or \"forge/servers/php.md\"",
+            "type": "string"
+          },
+          "mode": {
+            "default": "full",
+            "description": "\"full\" for the whole page, \"outline\" for its headings only",
+            "enum": [
+              "full",
+              "outline"
+            ],
+            "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Laravel version for a framework page named without one"
+          }
+        },
+        "required": [
+          "filename"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "content": {
+            "description": "mode=full: the whole page as markdown",
+            "type": "string"
+          },
+          "corpus": {
+            "description": "The service, package or learning source, for any other page",
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "headings": {
+            "description": "mode=outline: every heading in order",
+            "items": {
+              "properties": {
+                "level": {
+                  "type": "integer"
+                },
+                "section": {
+                  "description": "For a level-2 heading, what to pass to read_laravel_doc_section; empty otherwise",
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "level",
+                "text",
+                "section"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "mode": {
+            "enum": [
+              "full",
+              "outline"
+            ],
+            "type": "string"
+          },
+          "version": {
+            "description": "Laravel version, for a framework page",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "mode"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "read_laravel_doc_section": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "filename": {
+            "description": "The page, as search returns it: \"queues.md\", \"12.x/queues.md\" or \"forge/servers/php.md\"",
+            "type": "string"
+          },
+          "section": {
+            "description": "The section's anchor or heading, as search returns it",
+            "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Laravel version for a framework page named without one. Ignored for service, package and learning pages"
+          }
+        },
+        "required": [
+          "filename",
+          "section"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "content": {
+            "description": "The section as markdown; the same text as the result's text content",
+            "type": "string"
+          },
+          "corpus": {
+            "description": "The service, package or learning source, for any other page",
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "heading": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "version": {
+            "description": "Laravel version, for a framework page",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "section",
+          "heading",
+          "content"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "recommend_laravel_packages": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "use_case": {
+            "description": "What the user wants to build or solve, in plain words",
+            "type": "string"
+          }
+        },
+        "required": [
+          "use_case"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "count": {
+            "description": "0 when nothing in the catalog fits",
+            "type": "integer"
+          },
+          "packages": {
+            "description": "Best match first",
+            "items": {
+              "properties": {
+                "categories": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "documentation_link": {
+                  "description": "A laravel://, laravel-external:// or laravel-package:// resource URI, or a URL",
+                  "type": "string"
+                },
+                "features": {
+                  "description": "What is typically built with it",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "description": "The Composer name, e.g. laravel/cashier",
+                  "type": "string"
+                },
+                "installation": {
+                  "description": "The command that installs it",
+                  "type": "string"
+                },
+                "legacy": {
+                  "description": "True for a package that newer projects no longer start with",
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "related": {
+                  "description": "Ids of packages often used alongside",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "superseded_by": {
+                  "type": "string"
+                },
+                "use_cases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "description"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "use_case": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "use_case",
+          "count",
+          "packages"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "search_laravel_docs": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "all_versions": {
+            "default": false,
+            "description": "Search every Laravel version instead of one",
+            "type": "boolean"
+          },
+          "limit": {
+            "default": 5,
+            "description": "How many results to return, 1 to 20. Default 5",
+            "maximum": 20,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "What to look for, as a question or as keywords",
+            "type": "string"
+          },
+          "sources": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Restrict the search to any of \"core\", \"services\", \"packages\", \"learning\". Default: all four",
+            "items": {
+              "enum": [
+                "core",
+                "services",
+                "packages",
+                "learning"
+              ],
+              "type": "string"
+            }
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Laravel version for the framework docs (e.g. \"12.x\"). Defaults to the server's configured version. Services, packages and learning resources are not Laravel-versioned."
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "count": {
+            "description": "How many results follow; 0 when nothing matched",
+            "type": "integer"
+          },
+          "matched_needs": {
+            "description": "Common tasks recognised in the query, whose usual documentation pages were favoured",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "query": {
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "file": {
+                  "description": "Pass as `filename` to read_laravel_doc_section or read_laravel_doc_content",
+                  "type": "string"
+                },
+                "heading": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "section": {
+                  "description": "Pass as `section` to read_laravel_doc_section, with `file` as its `filename`",
+                  "type": "string"
+                },
+                "snippet": {
+                  "type": "string"
+                },
+                "source": {
+                  "description": "core, service:<name>, package:<name> or learning:<name>",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "file",
+                "section",
+                "heading",
+                "score",
+                "snippet",
+                "source"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "The Laravel versions searched, comma-separated",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "enum": [
+                "core",
+                "services",
+                "packages",
+                "learning"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "query",
+          "scope",
+          "sources",
+          "count",
+          "results"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    },
+    "update_laravel_docs": {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "force": {
+            "default": false,
+            "description": "Refetch even if the copy is recent",
+            "type": "boolean"
+          },
+          "names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "With scope services, packages or learning: which ones (e.g. [\"forge\", \"nova\"]). Default: all of them"
+          },
+          "scope": {
+            "default": "core",
+            "description": "What to update: \"core\" (default), \"services\", \"packages\", \"learning\" or \"all\"",
+            "enum": [
+              "core",
+              "services",
+              "packages",
+              "learning",
+              "all"
+            ],
+            "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Laravel version for the framework docs (e.g. \"12.x\"). Defaults to the server's configured version"
+          }
+        },
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "results": {
+            "items": {
+              "properties": {
+                "commit": {
+                  "description": "For the framework docs, the commit now held",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "outcome": {
+                  "enum": [
+                    "updated",
+                    "unchanged",
+                    "failed"
+                  ],
+                  "type": "string"
+                },
+                "source": {
+                  "enum": [
+                    "core",
+                    "services",
+                    "packages",
+                    "learning"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "outcome"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "enum": [
+              "core",
+              "services",
+              "packages",
+              "learning",
+              "all"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "results"
+        ],
+        "type": "object"
+      },
+      "stable": true
+    }
+  }
+}

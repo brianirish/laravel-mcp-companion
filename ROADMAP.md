@@ -1,29 +1,34 @@
 # Laravel MCP Companion - Roadmap
 
-This roadmap outlines the planned development path toward v1.0.0.
+What has been built, and what is left before 1.0.0.
 
-## Mission Statement
+## Mission
 
-**Laravel MCP Companion** is a documentation aggregator and navigator designed specifically for **junior and intermediate Laravel developers**. We centralize and organize existing high-quality documentation from across the Laravel ecosystem, making it easily discoverable through MCP.
+**Every Laravel version, the whole ecosystem, fully local.**
 
-**We complement, not compete with, official Laravel tools.** Laravel's [Boost](https://github.com/laravel/boost) focuses on code generation context for active development. We focus on documentation navigation, learning paths, and reference material.
+Laravel MCP Companion is a reference library for anyone looking something up in Laravel: any
+version, any MCP client, no project required. It holds the documentation on the user's machine,
+so it works offline and the same way every time.
+
+It complements the official tools. [Laravel Boost](https://github.com/laravel/boost) is for writing
+code inside one Laravel project and knows what that project uses. Companion is for reference:
+several Laravel versions side by side, clients with no project open, and places where the
+documentation has to stay local. The learning paths and topic browsing are kept, as supporting
+features and not as the point of the project.
 
 ---
 
-## Current Version: v0.14.0
+## Current Version: v0.15.0
 
-### ✅ Completed Features
-- **Multi-version Laravel documentation** support (6.x through latest)
-- **Auto-Discovery System**: Automatically discovers Laravel service documentation (117+ sections)
-- **Community Package Documentation**: Spatie, Livewire, Inertia.js, Filament integration (42,000+ lines)
-- **Learning Resource Infrastructure**: Difficulty classification, 15 semantic categories
-- **8 New MCP Tools**: Learning paths, "I need X" finder, category browsing, difficulty filtering
-- **Package recommendation system** with 22 curated packages
-- **Ranked section search** with BM25 relevance, snippets, and section-level reads
-- **Documentation currency reporting** so the assistant knows what date its corpus covers
-- **Future-proof version detection** via GitHub API
-- **Automated daily documentation updates** with auto-discovery metrics
-- **Test suite** at 81% coverage of product code (branch coverage, tests excluded), with end-to-end tests over real stdio and HTTP transports
+### What it does today
+- **Framework documentation** for Laravel 6.x through 13.x, with version comparison
+- **First-party services:** Forge, Vapor, Envoyer, Nova, Cloud, Nightwatch and Herd
+- **Package documentation:** Livewire, Filament, Inertia and Spatie, each on its current major
+- **Ranked section search** across all of it, and section-level reads
+- **A curated catalog** of 42 packages, with legacy ones flagged
+- **Twelve tools** with declared output schemas, structured errors and a recorded contract
+- **A nightly sync** with a health report for every source
+- **An installable Python package** as well as the Docker image, both carrying the documentation
 
 ---
 
@@ -203,27 +208,41 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 
 ---
 
+## ✅ v0.15.0 - The surface for 1.0 (COMPLETED)
+**Released: Q4 2026. The one deliberately breaking release before 1.0; see [MIGRATING.md](MIGRATING.md)**
+
+- [x] 26 tools consolidated to 12, each with an output schema and structured content
+- [x] Structured errors with codes; finding nothing is no longer an error
+- [x] The surface recorded in `tests/protocol/contract.json` and enforced by a test
+- [x] One ranking across corpora, so the framework's own page is not crowded out by package docs
+- [x] Curated tables refreshed (catalog 22 to 42 entries, legacy flags) and audited in CI
+- [x] Laravel Cloud, Nightwatch and Herd added; Spatie and Livewire follow their current majors
+- [x] Installable as a Python package with the documentation in the wheel
+- [x] `:latest` carries released code only; the image installs from the lockfile and runs unprivileged
+- [x] API reference generated from the server; versioning policy and release checklist written
+
+---
+
 ## v1.0.0 - First Stable Release
-**Target: Q3 2027**
+**Timing: when the conditions below hold, not on a date**
 
-### Stability Commitments
-- [ ] Feature freeze and API stability
-- [ ] Breaking change policy documentation
-- [ ] LTS commitment (minimum 12 months support)
-- [ ] Semantic versioning guarantee
+1.0.0 freezes the surface that 0.15 introduced. No features are planned between the two.
 
-### Documentation & Support
-- [ ] Comprehensive user documentation
-- [ ] API reference and examples
-- [ ] Troubleshooting guides
-- [ ] Migration guides for future versions
+### Conditions
+The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In short:
 
-### Success Criteria
-- Documentation coverage for 95% of common Laravel development scenarios
-- Sub-100ms response times for documentation queries
-- 80%+ coverage of product code, with integration tests through a real MCP client
-- MCP Registry listing with verified status
-- Active community of users and contributors
+- [ ] 0.15 has been in use and nothing in the recorded contract needs to change
+- [ ] The nightly sync has run green for 14 consecutive nights, every source healthy
+- [ ] `docker run` works on amd64 and arm64, and `pip install` works from PyPI
+- [ ] The failure email and the stale-sync alarm have each been seen to fire
+- [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
+
+### Not yet done
+- [ ] Publish to PyPI (needs a one-time trusted-publisher setup) and list the PyPI package in the MCP Registry entry
+- [ ] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
+- [ ] Pest's own documentation as a source (its site publishes an index; the fetcher reads a different index format)
+- [ ] A persistent, user-writable location for documentation updates on a `pip` install
+- [ ] An evaluation set for search ranking; today it is checked against a handful of queries
 
 ---
 
@@ -237,7 +256,10 @@ To maintain focus and deliver quality, we've explicitly decided against:
 - **Mobile app** - Wrong direction for developer tooling
 - **ML-based topic clustering** - Overkill for our use case
 - **Real-time documentation change tracking** - Complex, low ROI
-- **Code generation** - That's what [laravel/boost](https://github.com/laravel/boost) does
+- **Code generation or project-aware context** - That's what [laravel/boost](https://github.com/laravel/boost) does
+- **Embeddings or semantic search** - Ranked keyword search over sections answers the questions asked of it, with nothing to host
+- **Original learning content** - The project organises other people's documentation; it does not write tutorials
+- **Per-client rate limiting** - There is no client identity without authentication
 
 ---
 
@@ -279,15 +301,8 @@ We welcome community input! If you have ideas, feature requests, or want to cont
 3. **Submit PRs**: Help implement features from this roadmap
 4. **Share Feedback**: Let us know how you use the MCP server
 
-## Versioning Strategy
+## Versioning
 
-We follow [Semantic Versioning](https://semver.org). While the project is on
-`0.x`, the public API is not yet stable and the **minor** version carries
-breaking changes:
-
-- **Patch releases (v0.x.y)**: Bug fixes, documentation updates
-- **Minor releases (v0.x.0)**: New features, and breaking changes where needed,
-  called out in the release notes
-- **v1.0.0 onward**: Breaking changes only in major releases, with migration guides
-
-Backward compatibility is guaranteed within a major version starting at v1.0.0.
+[VERSIONING.md](VERSIONING.md) says what a version number promises: what is covered from 1.0.0,
+what is not, and how deprecation works. Until 1.0.0, a minor release may contain breaking changes,
+and the changelog says so.

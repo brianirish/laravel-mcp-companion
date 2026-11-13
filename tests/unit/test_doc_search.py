@@ -1,8 +1,10 @@
 """Tests for section chunking, BM25 indexing and retrieval."""
 
+import pytest
+
 from pathlib import Path
 
-from doc_search import (
+from laravel_mcp_companion.doc_search import (
     BM25Index,
     DocIndex,
     MAX_RESIDENT_INDEXES,
@@ -192,7 +194,7 @@ def test_clear_indexes_empties_the_registry():
 
 def test_clear_caches_also_clears_indexes():
     """Documentation updates call clear_caches; a stale index must not survive."""
-    from mcp_tools import clear_caches
+    from laravel_mcp_companion.mcp_tools import clear_caches
 
     clear_indexes()
     get_index(Path("/unused"), "13.x", lambda: _sections("13.x", "content"))
@@ -203,7 +205,7 @@ def test_clear_caches_also_clears_indexes():
 
 
 def test_load_version_sections_reads_real_files(tmp_path):
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     version = SUPPORTED_VERSIONS[-1]
     docs = tmp_path / "docs"
@@ -222,7 +224,7 @@ def test_load_version_sections_skips_escaping_symlinks(tmp_path):
     """Containment behaviour must match the read path."""
     import os
 
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     version = SUPPORTED_VERSIONS[-1]
     docs = tmp_path / "docs"
@@ -238,13 +240,13 @@ def test_load_version_sections_skips_escaping_symlinks(tmp_path):
 
 
 def test_load_version_sections_of_missing_version_is_empty(tmp_path):
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     assert load_version_sections(tmp_path, SUPPORTED_VERSIONS[-1]) == []
 
 
 def test_load_service_sections_keys_by_service(tmp_path):
-    from mcp_tools import load_service_sections
+    from laravel_mcp_companion.mcp_tools import load_service_sections
 
     external = tmp_path / "external"
     (external / "forge").mkdir(parents=True)
@@ -275,3 +277,39 @@ def test_snippet_returns_body_text_not_just_the_heading():
     assert "failed_jobs" in snippet or "queue:retry" in snippet, (
         f"snippet carried no body: {snippet!r}"
     )
+
+
+class TestSingularAndPluralMatch:
+    """A question about "queue workers" should find a section that only says
+    "queues", and the reverse. The index used to treat them as unrelated words;
+    a per-corpus substring fallback hid the gap until searches ranked every
+    corpus together."""
+
+    def _matches(self, query, document):
+        from laravel_mcp_companion.doc_search import BM25Index
+
+        index = BM25Index()
+        index.build([document, "an unrelated sentence about nothing in particular"])
+        return [position for position, _score in index.query(query, top_k=2)] == [0]
+
+    @pytest.mark.parametrize("query,document", [
+        ("queue", "managed queues are announced"),
+        ("queues", "push a job onto the queue"),
+        ("uploads", "handle a file upload"),
+        ("query", "write database queries"),
+        ("queries", "build a query"),
+        ("class", "define your classes"),
+        ("indexes", "add an index to the column"),
+        ("policies", "write a policy"),
+    ])
+    def test_a_word_matches_its_other_number(self, query, document):
+        assert self._matches(query, document)
+
+    @pytest.mark.parametrize("word", ["status", "class", "process", "redis", "sanctum", "css", "s3", "cors"])
+    def test_words_that_only_look_plural_are_left_whole(self, word):
+        from laravel_mcp_companion.doc_search import tokenize
+
+        assert tokenize(word) == [word]
+
+    def test_folding_does_not_join_unrelated_words(self):
+        assert not self._matches("new", "the latest news")

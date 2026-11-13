@@ -4,8 +4,8 @@ list/status commands of main() (docs_updater.py:3683-3880)."""
 from unittest.mock import Mock, patch
 
 
-import docs_updater
-from docs_updater import handle_update_command, update_version
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion.docs_updater import handle_update_command, update_version
 
 
 class TestUpdateVersion:
@@ -42,8 +42,17 @@ class TestHandleUpdateCommand:
 
     def test_core_failure_exits_one(self):
         updater = Mock()
-        updater.update_all.return_value = {"core": False, "external": {}, "packages": {}}
+        updater.update_all.return_value = {
+            "core": False, "core_error": "github is unreachable", "external": {}, "packages": {},
+        }
         assert handle_update_command(self._args(), updater) == 1
+
+    def test_core_with_nothing_new_exits_zero(self):
+        """`core` is False when the docs were already current, which this
+        test used to assert was a failure."""
+        updater = Mock()
+        updater.update_all.return_value = {"core": False, "external": {}, "packages": {}}
+        assert handle_update_command(self._args(), updater) == 0
 
     def test_force_flag_fans_out(self):
         updater = Mock()

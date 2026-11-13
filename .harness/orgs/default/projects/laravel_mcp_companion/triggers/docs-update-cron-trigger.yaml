@@ -1,0 +1,30 @@
+# MIRROR ONLY -- Harness does not read this file. See README.md.
+#
+# Captured from Harness on 2026-11-12. This is the one scheduler for the whole
+# documentation pipeline: every night at 00:00 UTC it runs docs_update from
+# main. If it is ever deleted or disabled in the UI, nothing else starts a
+# sync, and this file is what to rebuild it from.
+#
+# A trigger that cannot start a run (an exhausted build allowance, a pipeline
+# the schema rejects) fails without creating an execution, so nothing emails.
+# .github/workflows/docs-sync-watch.yml watches for the result instead: it
+# raises an issue when the newest docs tag is more than two days old.
+trigger:
+  name: Docs Update Cron
+  identifier: Docs_Update_Cron
+  stagesToExecute: []
+  enabled: true
+  tags: {}
+  orgIdentifier: default
+  projectIdentifier: laravel_mcp_companion
+  pipelineIdentifier: docs_update
+  source:
+    type: Scheduled
+    spec:
+      type: Cron
+      spec:
+        type: UNIX
+        expression: 0 0 * * *
+  pipelineBranchName: main
+  inputSetRefs:
+    - docs_update_cron_input_set

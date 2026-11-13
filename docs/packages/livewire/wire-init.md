@@ -1,16 +1,9 @@
 # Livewire - Wire Init
 
-Source: https://livewire.laravel.com/docs/wire-init
+Source: https://livewire.laravel.com/docs/4.x/wire-init
 
 wire:init
 =========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire offers a `wire:init` directive to run an action as soon as the component is rendered. This can be helpful in cases where you don't want to hold up the entire page load, but want to load some data immediately after the page load.

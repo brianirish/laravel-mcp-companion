@@ -1,8 +1,8 @@
 """MCP tasks (SEP-1686, experimental in 2025-11-25).
 
-The two update tools are the only calls that legitimately take minutes, so
-they are the task-capable surface: task-aware clients poll instead of holding
-the connection open, and everyone else keeps the synchronous behavior.
+update_laravel_docs is the only call that legitimately takes minutes, so it
+is the task-capable surface: task-aware clients poll instead of holding the
+connection open, and everyone else keeps the synchronous behavior.
 """
 
 import asyncio
@@ -11,8 +11,8 @@ import pytest
 
 from fastmcp import Client
 
-import laravel_mcp_companion
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion.server import create_mcp_server
+from laravel_mcp_companion.tools import docs as docs_tools
 
 
 class FakeDocsUpdater:
@@ -28,7 +28,7 @@ class FakeDocsUpdater:
 
 @pytest.fixture
 def mcp_server(test_docs_dir, monkeypatch):
-    monkeypatch.setattr(laravel_mcp_companion, "DocsUpdater", FakeDocsUpdater)
+    monkeypatch.setattr(docs_tools, "DocsUpdater", FakeDocsUpdater)
     return create_mcp_server("TestServer", test_docs_dir, "12.x", transform_mode=None)
 
 
@@ -51,25 +51,36 @@ class TestTasks:
                 await asyncio.sleep(0.05)
             assert status.status == "completed"
             result = await client.get_task_result(task.task_id)
-            assert "up to date" in str(result)
+            assert "unchanged" in str(result)
 
     async def test_update_docs_still_works_synchronously(self, mcp_server):
         async with Client(mcp_server) as client:
             res = await client.call_tool("update_laravel_docs", {"version": "12.x"})
-            assert "up to date" in res.content[0].text
+            assert res.structured_content["results"] == [
+                {"source": "core", "name": "12.x", "outcome": "unchanged", "commit": "abc123x"},
+            ]
 
-    async def test_both_update_tools_declare_task_support(self, mcp_server):
-        """Both long-running tools advertise execution.taskSupport = optional.
+    async def test_the_update_tool_declares_task_support(self, mcp_server):
+        """It advertises execution.taskSupport = optional.
 
         "optional" is the non-breaking mode: task-aware clients poll, sync
         clients run the tool exactly as before.
         """
         async with Client(mcp_server) as client:
             tools = {t.name: t for t in await client.list_tools()}
-            for name in ("update_laravel_docs", "update_external_laravel_docs"):
-                execution = getattr(tools[name], "execution", None)
-                assert execution is not None, f"{name} should declare task execution"
-                assert execution.taskSupport == "optional"
+            execution = getattr(tools["update_laravel_docs"], "execution", None)
+            assert execution is not None, "update_laravel_docs should declare task execution"
+            assert execution.taskSupport == "optional"
+
+    async def test_no_other_tool_declares_task_support(self, mcp_server):
+        async with Client(mcp_server) as client:
+            tools = await client.list_tools()
+
+        task_capable = [
+            t.name for t in tools
+            if getattr(getattr(t, "execution", None), "taskSupport", None) not in (None, "forbidden")
+        ]
+        assert task_capable == ["update_laravel_docs"]
 
     async def test_short_tools_do_not_declare_task_support(self, mcp_server):
         """Fast tools stay plain; a task handle for a 5ms read is overhead."""
@@ -86,4 +97,5 @@ class TestTasks:
                 "update_laravel_docs", {"version": "../../etc"},
                 raise_on_error=False,
             )
-            assert "Invalid version" in res.content[0].text
+            assert res.is_error is True
+            assert res.structured_content["error"]["code"] == "unknown_version"

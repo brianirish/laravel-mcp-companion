@@ -12,11 +12,15 @@ from pathlib import Path
 import pytest
 from fastmcp import Client
 
-from laravel_mcp_companion import TOOL_DESCRIPTIONS, create_mcp_server
+from laravel_mcp_companion.server import build_server_instructions, create_mcp_server
+from laravel_mcp_companion.tools import REGISTRY
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-PRODUCT_MODULES = ["laravel_mcp_companion.py", "mcp_tools.py", "docs_updater.py"]
+PRODUCT_MODULES = sorted(
+    str(path.relative_to(Path(__file__).resolve().parents[2]))
+    for path in (Path(__file__).resolve().parents[2] / "laravel_mcp_companion").rglob("*.py")
+)
 
 
 @pytest.fixture
@@ -74,40 +78,60 @@ class TestPinnedTools:
         assert len(visible) <= 5, f"too many tools pinned: {sorted(visible)}"
 
 
+TOOL_NAME = re.compile(r"\b(?:[a-z]+_)*(?:laravel|docs)_[a-z_]+\b|\b(?:search|read|list|get|browse|compare|update|recommend|verify|find)_[a-z_]*laravel[a-z_]*\b")
+
+
 class TestToolDescriptions:
     @pytest.mark.asyncio
-    async def test_every_description_belongs_to_a_real_tool(self, tool_names):
-        """`search_laravel_docs_with_context` was removed in v0.11.0; its
-        description outlived it."""
-        orphaned = set(TOOL_DESCRIPTIONS) - tool_names
-        assert not orphaned, f"TOOL_DESCRIPTIONS describes tools that no longer exist: {sorted(orphaned)}"
-
-    @pytest.mark.asyncio
-    async def test_tools_use_the_description_written_for_them(self, tmp_path):
-        """Three tools were registered with one-line summaries while their real
-        descriptions sat unused. That is not cosmetic: BM25SearchTransform
-        indexes descriptions, so an unwired tool is harder to discover in the
-        default mode.
-        """
+    async def test_the_served_description_is_the_declared_one(self, tmp_path):
+        """BM25SearchTransform indexes descriptions, so a tool served with some
+        other text is harder to find in the default mode."""
         server = create_mcp_server("Test", tmp_path, "13.x", transform_mode=None)
         async with Client(server) as client:
-            registered = {tool.name: (tool.description or "") for tool in await client.list_tools()}
+            served = {tool.name: (tool.description or "") for tool in await client.list_tools()}
 
-        mismatched = [
-            name for name, expected in TOOL_DESCRIPTIONS.items()
-            if name in registered and registered[name].strip() != expected.strip()
-        ]
-        assert not mismatched, (
-            f"these tools have a description in TOOL_DESCRIPTIONS but do not use it: {sorted(mismatched)}"
-        )
+        assert {name: text.strip() for name, text in served.items()} == {
+            name: spec.description.strip() for name, spec in REGISTRY.items()
+        }
 
-    def test_no_description_claims_to_be_the_primary_read_path(self):
-        """`read_laravel_doc_content` called itself "the primary tool for
-        accessing actual documentation content". Since v0.11.0 that is
-        `read_laravel_doc_section`; whole-file reads cost roughly ten times as
-        much and are the fallback.
-        """
-        content = TOOL_DESCRIPTIONS.get("read_laravel_doc_content", "")
-        assert "primary tool" not in content.lower(), (
-            "read_laravel_doc_content is no longer the primary read path"
-        )
+    @pytest.mark.parametrize("name", sorted(REGISTRY))
+    def test_a_description_only_names_tools_that_exist(self, name):
+        """A description that sends the model to a tool that was renamed or
+        removed gets a failed call every time it is followed."""
+        mentioned = {match.group(0) for match in TOOL_NAME.finditer(REGISTRY[name].description)}
+
+        assert mentioned <= set(REGISTRY) | {"search_tools", "call_tool"}, mentioned - set(REGISTRY)
+
+    def test_the_whole_page_reader_points_at_the_cheaper_path(self):
+        """Whole-file reads cost roughly ten times a section read and are the
+        fallback; the description has to say so."""
+        description = REGISTRY["read_laravel_doc_content"].description
+
+        assert "primary tool" not in description.lower()
+        assert "read_laravel_doc_section" in description
+
+
+class TestInstructionsNameTheTools:
+    """In search mode only two tools are listed. The instructions are the one
+    place the model learns the other ten exist."""
+
+    @pytest.mark.parametrize("mode", ["search", None])
+    def test_every_tool_is_named(self, tmp_path, mode):
+        instructions = build_server_instructions(tmp_path, "13.x", mode)
+
+        assert [name for name in REGISTRY if name not in instructions] == []
+
+    @pytest.mark.parametrize("mode", ["search", "code", None])
+    def test_no_tool_that_does_not_exist_is_named(self, tmp_path, mode):
+        instructions = build_server_instructions(tmp_path, "13.x", mode)
+        mentioned = {match.group(0) for match in TOOL_NAME.finditer(instructions)}
+
+        assert mentioned <= set(REGISTRY) | {"search_tools", "call_tool", "get_schema"}, mentioned - set(REGISTRY)
+
+    @pytest.mark.parametrize("mode", ["search", "code", None])
+    def test_the_section_reader_is_the_recommended_way_to_read(self, tmp_path, mode):
+        """The instructions used to send the model to the whole-file reader,
+        against the advice of that tool's own description."""
+        instructions = build_server_instructions(tmp_path, "13.x", mode)
+
+        assert instructions.index("read_laravel_doc_section") < instructions.index("read_laravel_doc_content")

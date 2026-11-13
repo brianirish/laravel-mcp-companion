@@ -1,16 +1,9 @@
 # Livewire - Alpine
 
-Source: https://livewire.laravel.com/docs/alpine
+Source: https://livewire.laravel.com/docs/4.x/alpine
 
 Alpine
 ======
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 AlpineJS is a lightweight JavaScript library that makes it easy to add client-side interactivity to your web pages. It was originally built to complement tools like Livewire where a more JavaScript-centric utility is helpful for sprinkling interactivity around your app.

@@ -1,16 +1,9 @@
 # Livewire - Redirecting
 
-Source: https://livewire.laravel.com/docs/redirecting
+Source: https://livewire.laravel.com/docs/4.x/redirecting
 
 Redirecting
 ===========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 After a user performs some action — like submitting a form — you may want to redirect them to another page in your application.

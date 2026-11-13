@@ -14,7 +14,8 @@ import pytest
 
 from fastmcp import Client
 
-from laravel_mcp_companion import PACKAGE_CATALOG, create_mcp_server
+from laravel_mcp_companion.catalog import PACKAGE_CATALOG
+from laravel_mcp_companion.server import create_mcp_server
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
 
@@ -26,9 +27,12 @@ LINKED = {
 
 RESOURCE_SCHEMES = ("laravel://", "laravel-package://", "laravel-external://")
 
-pytestmark = pytest.mark.skipif(
-    not (REPO_DOCS / "12.x").is_dir(), reason="real corpus absent"
-)
+# Marked `corpus` as well: a page removed upstream breaks a link here, and the
+# nightly documentation pull request must not be held back by it.
+pytestmark = [
+    pytest.mark.skipif(not (REPO_DOCS / "12.x").is_dir(), reason="real corpus absent"),
+    pytest.mark.corpus,
+]
 
 
 @pytest.fixture(scope="module")

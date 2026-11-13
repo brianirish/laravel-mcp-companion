@@ -1,16 +1,9 @@
 # Livewire - Components
 
-Source: https://livewire.laravel.com/docs/components
+Source: https://livewire.laravel.com/docs/4.x/components
 
 Components
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire components are essentially PHP classes with properties and methods that can be called directly from a Blade template. This powerful combination allows you to create full-stack interactive interfaces with a fraction of the effort and complexity of modern JavaScript alternatives.

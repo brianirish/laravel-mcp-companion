@@ -1,16 +1,9 @@
 # Livewire - Security
 
-Source: https://livewire.laravel.com/docs/security
+Source: https://livewire.laravel.com/docs/4.x/security
 
 Security
 ========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 It's important to make sure your Livewire apps are secure and don't expose any application vulnerabilities. Livewire has internal security features to handle many cases, however, there are times when it's up to your application code to keep your components secure.

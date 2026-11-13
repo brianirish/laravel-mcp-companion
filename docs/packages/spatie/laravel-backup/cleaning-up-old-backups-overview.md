@@ -1,6 +1,6 @@
 # Spatie - Cleaning Up Old Backups/Overview
 
-Source: https://spatie.be/docs/laravel-backup/v9/cleaning-up-old-backups/overview
+Source: https://spatie.be/docs/laravel-backup/v10/cleaning-up-old-backups/overview
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-backup
 Cleaning-up-old-backups
 
 Cleaning up old backups
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-backup`
 
 Cleaning up old backups
 =======================

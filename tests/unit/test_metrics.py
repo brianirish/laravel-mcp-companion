@@ -3,8 +3,8 @@ and the FastMCP middleware that feeds them."""
 
 import pytest
 
-import metrics
-from metrics import MetricsMiddleware, MetricsRegistry, render_prometheus
+from laravel_mcp_companion import metrics
+from laravel_mcp_companion.metrics import MetricsMiddleware, MetricsRegistry, render_prometheus
 
 
 @pytest.fixture(autouse=True)

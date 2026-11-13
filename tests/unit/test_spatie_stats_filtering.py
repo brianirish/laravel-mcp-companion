@@ -3,7 +3,7 @@
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from docs_updater import CommunityPackageFetcher
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher
 
 
 class TestSpatieStatsFiltering:
@@ -29,7 +29,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self
@@ -62,7 +62,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self
@@ -92,7 +92,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self
@@ -128,7 +128,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self
@@ -159,7 +159,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self
@@ -197,7 +197,7 @@ class TestSpatieStatsFiltering:
         """
         
         fetcher = CommunityPackageFetcher(Path("/tmp/docs"))
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_response = Mock()
             mock_response.read.return_value = html_content.encode('utf-8')
             mock_response.__enter__ = lambda self: self

@@ -1,16 +1,9 @@
 # Livewire - Wire Model
 
-Source: https://livewire.laravel.com/docs/wire-model
+Source: https://livewire.laravel.com/docs/4.x/wire-model
 
 wire:model
 ==========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire makes it easy to bind a component property's value with form inputs using `wire:model`.

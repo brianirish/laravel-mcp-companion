@@ -1,16 +1,9 @@
 # Livewire - Downloads
 
-Source: https://livewire.laravel.com/docs/downloads
+Source: https://livewire.laravel.com/docs/4.x/downloads
 
 File Downloads
 ==============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 File downloads in Livewire work much the same as in Laravel itself. Typically, you can use any Laravel download utility inside a Livewire component, and it should work as expected.

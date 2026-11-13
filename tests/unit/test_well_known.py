@@ -8,8 +8,8 @@ stdio mode has nothing to serve and is untouched.
 import httpx
 import pytest
 
-import laravel_mcp_companion
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion.server import create_mcp_server
 
 
 @pytest.fixture
@@ -26,9 +26,9 @@ async def test_well_known_serves_stamped_server_json(http_app):
         assert res.headers["content-type"].startswith("application/json")
         data = res.json()
         assert data["name"] == "io.github.brianirish/laravel-mcp-companion"
-        assert data["version"] == laravel_mcp_companion.SERVER_VERSION
+        assert data["version"] == companion_server.SERVER_VERSION
         assert data["packages"][0]["identifier"].endswith(
-            f":v{laravel_mcp_companion.SERVER_VERSION}"
+            f":v{companion_server.SERVER_VERSION}"
         )
 
 
@@ -41,7 +41,7 @@ async def test_well_known_is_readable_without_auth(test_docs_dir, monkeypatch):
         transport="http", auth_jwks_uri=None, auth_issuer=None,
         auth_audience=None, auth_required_scope=[],
     )
-    provider = laravel_mcp_companion.build_auth_provider(args)
+    provider = companion_server.build_auth_provider(args)
     server = create_mcp_server(
         "TestServer", test_docs_dir, "12.x", transform_mode=None, auth=provider
     )

@@ -1,16 +1,9 @@
 # Livewire - Teleport
 
-Source: https://livewire.laravel.com/docs/teleport
+Source: https://livewire.laravel.com/docs/4.x/teleport
 
 Teleport
 ========
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire allows you to *teleport* part of your template to another part of the DOM on the page entirely.

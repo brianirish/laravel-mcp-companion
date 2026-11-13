@@ -18,6 +18,235 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-11-13
+
+The breaking release before 1.0. It replaces the 26 tools with 12 that have
+schemas, structured errors and a recorded contract; makes the project an
+installable Python package with the documentation inside; adds Laravel Cloud,
+Nightwatch and Herd; refreshes the hand-written catalog; and changes what the
+`:latest` image contains. [MIGRATING.md](MIGRATING.md) lists what to change
+when upgrading, and [API.md](API.md) documents the new surface.
+
+### Breaking: the tool surface is 12 tools, down from 26
+
+Every tool now declares an output schema and returns structured content that
+satisfies it, with text for a model to read beside it. Before, 5 of 26 did.
+`tests/protocol/contract.json` records every name, input schema and output
+schema, and a test fails when the served surface differs from it.
+
+| Before | Now |
+|--------|-----|
+| `search_laravel_docs` | `search_laravel_docs`. `include_external` is gone; use `sources`. `limit` (1 to 20) is new. Each result has a `section` in place of `anchor` |
+| `search_external_laravel_docs` | `search_laravel_docs` with `sources: ["services"]` |
+| `search_laravel_learning_resources` | `search_laravel_docs` with `sources: ["learning"]` |
+| `find_laravel_docs_for_need` | `search_laravel_docs`. The need table now informs the one search: a recognised task is reported in `matched_needs` and its pages are favoured |
+| `read_laravel_doc_section` | unchanged arguments; structured content is new |
+| `read_laravel_doc_content` | unchanged, plus `mode` |
+| `get_doc_structure` | `read_laravel_doc_content` with `mode: "outline"` |
+| `list_laravel_docs` | `list_laravel_docs`. `version` is now `name`, which also takes a service, package or learning source; `source` filters by kind |
+| `list_laravel_services` | `list_laravel_docs` with `source: "services"` |
+| `list_laravel_learning_resources` | `list_laravel_docs` with `source: "learning"` |
+| `laravel_docs_info` | same name; reports every service, package and learning source as well as the framework docs |
+| `compare_laravel_versions` | unchanged arguments; the per-version commit metadata is in `laravel_docs_info` now |
+| `update_laravel_docs` | `update_laravel_docs` with `scope: "core"` (the default) |
+| `update_external_laravel_docs` | `update_laravel_docs` with `scope: "services"` and `names` |
+| `get_laravel_package_info` | `get_laravel_package` with `name` |
+| `get_laravel_package_categories` | `get_laravel_package` with `category` |
+| `get_features_for_laravel_package` | `get_laravel_package` with `name`; see `features` |
+| `get_related_laravel_packages` | `get_laravel_package` with `name`; see `related` |
+| `get_laravel_package_recommendations` | `recommend_laravel_packages` |
+| `get_laravel_service_info` | same name; reports what this server holds for the service |
+| `get_laravel_learning_path` | unchanged |
+| `list_laravel_learning_paths` | `get_laravel_learning_path` with no `path_name` |
+| `browse_docs_by_category` | same name; `category` is optional and `difficulty` is new |
+| `list_laravel_categories` | `browse_docs_by_category` with no arguments |
+| `get_laravel_content_by_difficulty` | `browse_docs_by_category` with `difficulty` |
+| `verify_laravel_feature` | removed. It matched a feature name against file names and told the model to trust the answer over its own knowledge, so "websockets" came back as not found while Broadcasting and Reverb exist |
+
+The three prompts (`laravel-authentication-setup`, `find-payment-solution`,
+`laravel-forge-deployment`) are removed. They were fixed strings naming tools
+that did not exist.
+
+**Errors.** A tool that cannot do what was asked returns a result marked
+`isError` with `{"error": {"code", "message", "details"}}`, where `code` is one
+of `invalid_argument`, `unknown_version`, `not_found`, `access_denied`,
+`update_failed` or `internal`. Errors used to be an `error` key inside an
+ordinary result, or a line of prose. Finding nothing is not an error: a search
+with no hits returns `count: 0`.
+
+**Read tools return markdown.** The text of `read_laravel_doc_section` and
+`read_laravel_doc_content` is the page's markdown, as before. Their structured
+content carries the same text with the file, version and section named.
+
+**Two tools are experimental.** `get_laravel_learning_path` and
+`browse_docs_by_category` answer from hand-kept tables. They are shipped and
+tested, and tagged `experimental`: their shape may change in a minor release.
+
+### Curated content refreshed, and audited in CI
+
+The package catalog, need table, learning paths, difficulty map and categories
+are hand-written and had not been revised since they were first added.
+
+- **Catalog: 42 entries, up from 22.** Added Laravel Cloud, Nightwatch, Herd,
+  Sail, the starter kits, Pest, Dusk, Reverb, Pulse, Pennant, Folio, Pint,
+  Prompts, Filament, and the AI packages (AI SDK, Boost, MCP).
+- **Legacy flags.** Vapor, Envoyer, Homestead, Valet, Breeze, Jetstream and
+  Volt are kept for people maintaining older applications and marked `legacy`,
+  most with a `superseded_by`. A legacy package's match counts for half in
+  `recommend_laravel_packages`, so "deploy my application" leads with Cloud
+  and Forge.
+- **Corrections.** Octane names FrankenPHP beside RoadRunner and Swoole.
+  Socialite lists X and Slack, not Twitter. Scout names Typesense and the
+  database engine.
+- **Dead references repaired.** 23 need mappings, the `getting-started`
+  learning path, nine difficulty entries and eleven category keywords pointed
+  at pages that no longer exist. Five needs that pointed only at Nova are
+  removed; admin panels are found by searching services and packages.
+- **Category keywords match by name, not by substring.** "ai" selects `ai` and
+  `ai-sdk`; it used to select `mail` and `container` as well.
+- **A recognised task keeps a place in search results.** When the query names
+  a task from the need table, the best of the pages it points at is always on
+  the result page.
+- **Every framework page is mapped.** 35 pages were in no category, 20 had no
+  difficulty and 42 were reached by no need or learning path, among them `ai`,
+  `ai-sdk`, `boost`, `mcp`, `folio`, `concurrency`, `mongodb`, `search`,
+  `images`, `csrf`, `structure` and `urls`. Five categories are new: basics,
+  architecture, ai, communication and frontend-tooling.
+- **The audit.** `curation.audit` lists every disagreement between the tables
+  and the framework pages held: a need, learning path, difficulty entry or
+  category keyword naming a page that does not exist, and a page that no
+  table mentions. `tests/unit/test_curation_audit.py` fails on any of them,
+  and on a catalog entry without its feature list or relations row, a
+  learning path that recommends a legacy package, or catalog prose naming a
+  major version older than the documentation held.
+- **The nightly sync is not held back by it.** A page Laravel adds or removes
+  first appears in the nightly documentation pull request. The tests that
+  compare tables with `docs/` are marked `corpus` and left out of CI for that
+  one branch; the sync report lists the same findings under "Needs
+  attention", which opens the degraded-sync issue. Every other pull request
+  runs them and fails until the tables are updated.
+
+### Changed in search
+
+- **One ranking across corpora.** A search over several sources is ranked
+  from a single index. Each corpus used to be scored against its own word
+  statistics, so a word common in the framework docs and rare in a package's
+  ("cache", "authentication") put package pages first and left the
+  framework's own page off the list. Searches of a single source, and
+  `all_versions`, are ranked as before.
+- **No source takes the whole page.** When several sources match, one may take
+  at most three of five results. "assign roles" returned five Spatie pages.
+- **Singular and plural match.** "queue" finds a section that says "queues".
+- **Every result can be read.** Service and package pages have no anchors, so
+  their results had an empty `anchor` and could not be passed to
+  `read_laravel_doc_section`. `section` is always set, and a page with no
+  heading of its own is readable too.
+- Search results are cached per documentation path, so two servers in one
+  process no longer see each other's.
+
+### Added
+- [API.md](API.md), generated from the running server and checked by a test;
+  [MIGRATING.md](MIGRATING.md); [VERSIONING.md](VERSIONING.md), the
+  compatibility policy that takes effect at 1.0.0; and
+  [RELEASING.md](RELEASING.md), with the conditions for tagging 1.0.0.
+- Documentation for **Laravel Cloud, Nightwatch and Herd**. Each publishes an
+  `llms.txt` index, so each is one entry in the service table. Herd's macOS
+  and Windows guides are kept under separate paths. Cloud is read from the
+  site's single-file export (`llms-full.txt`) in two requests: fetching its
+  pages one at a time gets the client blocked by laravel.com, which also hosts
+  Forge and Laravel Learn. Cloud's API reference, about 130 pages of OpenAPI
+  YAML, is not included.
+- **Spatie and Livewire follow the site's current major and page list.** Both
+  were hand-kept lists against pinned or unversioned URLs. Laravel Permission
+  was two majors behind (v6; the site is on v8) and Livewire had 36 of the 80
+  pages Livewire 4 lists. The pinned lists remain as the fallback for a night
+  when a site's navigation cannot be read.
+- A scheduled GitHub workflow that opens an issue when the newest
+  `docs-YYYY-MM-DD` tag is more than four days old. It catches a sync that has
+  stopped starting, which no failure email can.
+- The project is an installable Python package. `uvx --from
+  git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-companion`
+  and `pip install git+...` both work, with the documentation bundled in the
+  wheel so no download is needed on first run. Two console scripts are
+  installed: `laravel-mcp-companion` and `laravel-mcp-companion-docs`. A
+  manual workflow for publishing to PyPI is included; publishing needs a
+  one-time PyPI setup first.
+- A container `HEALTHCHECK`. Over HTTP it asks the server's `/healthz`; over
+  stdio it passes, since there is no port to ask.
+
+### Changed
+- **Breaking for anyone running from a clone:** the modules moved into a
+  `laravel_mcp_companion/` package. `python laravel_mcp_companion.py` is now
+  `python -m laravel_mcp_companion`, and `python docs_updater.py` is
+  `python -m laravel_mcp_companion.docs_updater`. Docker users are unaffected.
+- `toon-format` comes from PyPI (1.2.0) instead of a pinned git commit of its
+  0.9 beta. Three details of the text output change with it: an empty list is
+  written `key: []` rather than `key[0]:`, a whole float loses its `.0`
+  (`score: 3`), and a string starting with `#` is quoted. Structured content
+  is unchanged.
+- The server version is written in one place, `pyproject.toml`. The
+  `SERVER_VERSION` constant is read from it.
+- **Breaking for Docker volumes:** the image runs as an unprivileged user (uid
+  10001) instead of root. A named volume mounted at `/app/docs` that an earlier
+  image created is owned by root, so `--update-docs` can no longer write to it.
+  Remove the volume and let the next run recreate it.
+- `:latest` no longer carries unreleased code. The nightly image was built from
+  `main` as it stood at the documentation sync, so anything merged since the
+  last release shipped to `latest` the same night. It is now the newest
+  release's code with that night's documentation. Release candidates and
+  patches to an older line no longer move `latest` either.
+- The image installs the versions pinned in `uv.lock`. It installed from
+  `requirements.txt`, six direct dependencies with open ranges, so two builds of
+  one tag could differ in every transitive dependency. CI and the documentation
+  pipeline install from the same lockfile. `requirements.txt` and
+  `requirements-dev.txt` are removed; `uv sync` replaces them.
+- The image is built in two stages, so the compiler toolchain and git are no
+  longer in it.
+
+### Internal
+- Importing the server no longer contacts GitHub. Version discovery used to run
+  at import whenever the versions cache had expired, and rewrote the checked-in
+  cache file as a side effect. The import now reads the cache only; the server
+  and `docs_updater.py` refresh the list once at startup, and keep the cached
+  list if GitHub is unreachable.
+- Path containment and the symlink-refusing file open live in one module,
+  `path_security.py`, used by both the server and the updater. The server's
+  duplicate cache, version parser and metadata reader are gone in favour of the
+  ones in `mcp_tools`.
+- The coverage gate measures every product module. It left out `doc_search`,
+  `metrics`, `tool_schemas` and `path_security`; with them included coverage is
+  85%.
+- The Docker image no longer contains repository metadata, caches or test
+  directories; `.dockerignore` now excludes them.
+
+### Fixed
+- `docs_updater --update` exits 0 when the framework docs were already
+  current. It treated "nothing changed" as a failure. A framework update that
+  does fail no longer stops the services and packages from being updated.
+- A `429 Too Many Requests` from a documentation site is retried after the
+  pause it asks for, or a growing backoff. It was raised at once, like a 404.
+- Spatie, Livewire and Debugbar pages that a site has dropped are removed
+  after a complete sync.
+- The advertisement at the top of every Livewire docs page is no longer saved.
+- `laravel://` resource reads go through the same symlink-refusing open as the
+  tools. They used a second file cache that checked a path and then opened it
+  in two steps.
+- Two servers created in one process no longer share configuration. A module
+  global held it, so creating a second server repointed the first one's
+  resource handlers.
+
+### Removed
+- `toon_encode` no longer falls back to a Python `repr` when encoding fails.
+  The failure is raised and reported as an `internal` error.
+- **The Laravel Blog and Laravel News sources.** Each was a list of a few
+  article titles with links, refetched nightly. They held no documentation,
+  and a changed headline was enough to publish a new image. Search and reads
+  against `laravel-blog` and `laravel-news` return nothing now.
+- The unused JSX-to-markdown converter in the updater.
+- Dead server-side code: the unused search and learning-resource formatters,
+  the `search_laravel_docs_impl` wrapper that no client could reach, and the
+  "requires server context" stubs.
+
 ### Security
 - `joserfc` 1.7.4 to 1.8.0 in `uv.lock`. It is a dependency of FastMCP and
   Authlib, not of this project directly. The upgrade closes two
@@ -355,7 +584,8 @@ failing without any signal, and CI itself had not run since 2026-08-04.
 - Startup reads the supported-version list from cache with a 24-hour TTL, and
   all network calls have timeouts.
 
-[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.11.0...v0.12.0

@@ -1,6 +1,6 @@
 # Spatie - Advanced Usage/Testing
 
-Source: https://spatie.be/docs/laravel-permission/v6/advanced-usage/testing
+Source: https://spatie.be/docs/laravel-permission/v8/advanced-usage/testing
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Advanced-usage
 
 Testing
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Testing
 =======

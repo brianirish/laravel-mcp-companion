@@ -4,11 +4,8 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch
 
-from laravel_mcp_companion import get_version_from_path
-from mcp_tools import is_safe_path
-import laravel_mcp_companion
-
-
+from laravel_mcp_companion.server import get_version_from_path
+from laravel_mcp_companion.mcp_tools import is_safe_path
 class TestPathSecurity:
     """Test path validation and security functions."""
 
@@ -125,7 +122,9 @@ class TestVersionParsing:
 
     def test_get_version_from_path_no_version(self):
         """Test version extraction when no version is specified."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its get_default_version lookup resolves in mcp_tools.
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("blade.md", "12.x", "blade.md"),
                 ("frontend/vite.md", "12.x", "frontend/vite.md"),
@@ -139,8 +138,10 @@ class TestVersionParsing:
 
     def test_get_version_from_path_invalid_versions(self):
         """Test version extraction with invalid version formats."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'), \
-             patch('laravel_mcp_companion.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its globals resolve in mcp_tools.
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'), \
+             patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
             
             # These should fall back to default version
             test_cases = [
@@ -156,7 +157,9 @@ class TestVersionParsing:
 
     def test_get_version_from_path_empty_input(self):
         """Test version extraction with empty or invalid input."""
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        # get_version_from_path is now mcp_tools.get_version_from_path
+        # (re-exported), so its get_default_version lookup resolves in mcp_tools.
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("", "12.x", ""),
                 ("/", "12.x", "/"),  # Path("/").parts is empty, so it returns "/" 
@@ -170,88 +173,56 @@ class TestVersionParsing:
 
 
 class TestInputValidation:
-    """Test input validation and sanitization."""
+    """Arguments that are empty, absent or absurd are refused with an error
+    code; none of them crashes a tool or reaches the filesystem."""
 
-    def test_search_query_validation(self):
-        """Test search query validation and sanitization."""
-        # Import the standalone implementation
-        from mcp_tools import search_laravel_docs_impl
-        
-        # Empty queries should be rejected
-        result = search_laravel_docs_impl(Path("/tmp"), "")
-        assert "Search query cannot be empty" in result
-        
-        result = search_laravel_docs_impl(Path("/tmp"), "   ")  # Whitespace only
-        assert "Search query cannot be empty" in result
+    @pytest.mark.parametrize("query", ["", "   "])
+    def test_an_empty_search_query_is_refused(self, query):
+        from laravel_mcp_companion.tools import ToolFailure
+        from laravel_mcp_companion.tools.search import search
 
-    def test_file_path_validation_in_resource_handlers(self, temp_dir):
-        """Test file path validation in resource handlers."""
-        # Import the standalone implementation
-        from mcp_tools import read_laravel_doc_content_impl
-        
-        base_docs_path = temp_dir / "docs"
-        base_docs_path.mkdir()
-        version_dir = base_docs_path / "12.x"
-        version_dir.mkdir()
-        
-        # Create a test file
-        test_file = version_dir / "test.md"
-        test_file.write_text("# Test")
-        
-        # Create file outside the version directory
-        outside_file = base_docs_path / "outside.md"
-        outside_file.write_text("# Outside")
-        
-        # Valid file should work
-        result = read_laravel_doc_content_impl(base_docs_path, "test.md", "12.x")
-        assert "# Test" in result
-        
-        # Directory traversal should be blocked - the implementation should handle this
-        # Check that accessing files outside the version directory fails or returns error
-        result = read_laravel_doc_content_impl(base_docs_path, "../outside.md", "12.x")
-        assert "Documentation file not found" in result or "# Outside" not in result
+        with pytest.raises(ToolFailure) as raised:
+            search(Path("/tmp"), None, query)
 
-    def test_package_name_validation(self):
-        """Test package name validation in package functions."""
-        from laravel_mcp_companion import get_laravel_package_info
-        
-        # Test with valid package names
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {'laravel/test': {'name': 'Test', 'description': 'Test package'}}):
-            result = get_laravel_package_info("laravel/test")
-            assert "not found" not in result
-            
-            # Test with invalid package names (should not crash)
-            # Empty string returns "not found" if it doesn't match any package
-            with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {}, clear=True):
-                result = get_laravel_package_info("")
-                assert "not found" in result
-            
-            result = get_laravel_package_info("invalid/package/name/with/too/many/parts")
-            assert "not found" in result
+        assert raised.value.code == "invalid_argument"
 
-    def test_version_parameter_validation(self):
-        """Test version parameter validation."""
-        from mcp_tools import read_laravel_doc_content_impl
-        
-        # Test with None version (should use default)
-        with patch('mcp_tools.DEFAULT_VERSION', '12.x'):
-            result = read_laravel_doc_content_impl(Path("/tmp"), "test.md", None)
-            # Should not crash and should handle gracefully
-            assert isinstance(result, str)
-            
-        # Test with empty version
-        result = read_laravel_doc_content_impl(Path("/tmp"), "test.md", "")
-        assert isinstance(result, str)
-        
-        # Test with very long version string - this should fail gracefully
-        long_version = "x" * 1000
-        try:
-            result = read_laravel_doc_content_impl(Path("/tmp"), "test.md", long_version)
-            # If it succeeds, it should return a string (likely an error message)
-            assert isinstance(result, str)
-        except OSError:
-            # OSError for file name too long is acceptable
-            pass
+    def test_a_file_outside_its_version_directory_is_not_served(self, temp_dir):
+        from laravel_mcp_companion.tools import ToolFailure
+        from laravel_mcp_companion.tools.docs import read_content
+
+        docs = temp_dir / "docs"
+        (docs / "12.x").mkdir(parents=True)
+        (docs / "12.x" / "test.md").write_text("# Test")
+        (docs / "outside.md").write_text("# Outside")
+
+        assert "# Test" in read_content(docs, "test.md", "12.x").text
+        with pytest.raises(ToolFailure) as raised:
+            read_content(docs, "../outside.md", "12.x")
+
+        assert raised.value.code == "access_denied"
+        assert "# Outside" not in str(raised.value.payload())
+
+    @pytest.mark.parametrize("name", ["invalid/package/name/with/too/many/parts", "../../etc/passwd", "x" * 5000])
+    def test_a_package_name_that_matches_nothing_is_not_found(self, name):
+        from laravel_mcp_companion.tools import ToolFailure
+        from laravel_mcp_companion.tools.catalog import get_package
+
+        with pytest.raises(ToolFailure) as raised:
+            get_package(name)
+
+        assert raised.value.code == "not_found"
+
+    @pytest.mark.parametrize("version", ["", "x" * 1000, "12.x; rm -rf /", "12.x\n13.x"])
+    def test_a_version_that_is_not_a_version_is_refused_or_defaulted(self, version):
+        """An empty string means "no version given"; anything else that is not
+        on the allowlist is refused."""
+        from laravel_mcp_companion.tools import ToolFailure
+        from laravel_mcp_companion.tools.docs import read_content
+
+        with pytest.raises(ToolFailure) as raised:
+            read_content(Path("/tmp/no-docs-here"), "test.md", version)
+
+        assert raised.value.code in ("unknown_version", "not_found")
 
 
 class TestErrorHandling:
@@ -313,7 +284,7 @@ class TestErrorHandling:
             "12.x/" + "a" * 1000,  # Very long filename
         ]
         
-        with patch('laravel_mcp_companion.DEFAULT_VERSION', '12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             for test_input in edge_cases:
                 try:
                     version, relative = get_version_from_path(test_input)

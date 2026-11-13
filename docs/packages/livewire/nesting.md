@@ -1,16 +1,9 @@
 # Livewire - Nesting
 
-Source: https://livewire.laravel.com/docs/nesting
+Source: https://livewire.laravel.com/docs/4.x/nesting
 
 Nesting Components
 ==================
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire allows you to nest additional Livewire components inside of a parent component. This feature is immensely powerful, as it allows you to re-use and encapsulate behavior within Livewire components that are shared across your application.

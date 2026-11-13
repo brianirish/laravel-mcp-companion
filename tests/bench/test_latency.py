@@ -15,7 +15,7 @@ import pytest
 
 from fastmcp import Client
 
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion.server import create_mcp_server
 
 pytestmark = pytest.mark.bench
 
@@ -87,8 +87,8 @@ class TestReadLatency:
             hit = (await client.call_tool(
                 "search_laravel_docs", {"query": "queue retry failed jobs"}
             )).structured_content["results"][0]
-            filename = hit["file"].split("/", 1)[1]
-            section = hit["anchor"] or hit["heading"]
+            filename = hit["file"]
+            section = hit["section"]
 
             samples = []
             for _ in range(30):
@@ -109,5 +109,5 @@ class TestInfoLatency:
                 started = time.perf_counter()
                 result = await client.call_tool("laravel_docs_info", {"version": "12.x"})
                 samples.append((time.perf_counter() - started) * 1000)
-                assert result.structured_content.get("version") == "12.x"
+                assert result.structured_content["versions"][0]["version"] == "12.x"
             report("laravel_docs_info", samples)

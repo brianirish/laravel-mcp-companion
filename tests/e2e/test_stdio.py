@@ -1,26 +1,28 @@
 """End-to-end over stdio: the transport Docker's ENTRYPOINT serves."""
 
+import sys
+
 import pytest
 
 from fastmcp import Client
-from fastmcp.client.transports import PythonStdioTransport
+from fastmcp.client.transports import StdioTransport
 
-import laravel_mcp_companion
-from .conftest import SERVER_SCRIPT, server_args
+from laravel_mcp_companion import server as companion_server
+from .conftest import REPO_ROOT, server_args
 
 pytestmark = [pytest.mark.e2e, pytest.mark.timeout(60)]
 
 
 def stdio_client(docs, *extra: str) -> Client:
-    args = server_args(docs, "--transport", "stdio", *extra)[1:]  # drop script path
-    return Client(PythonStdioTransport(str(SERVER_SCRIPT), args=args, cwd=str(SERVER_SCRIPT.parent)))
+    args = server_args(docs, "--transport", "stdio", *extra)
+    return Client(StdioTransport(sys.executable, args=args, cwd=str(REPO_ROOT)))
 
 
 class TestStdioRawSurface:
     async def test_initialize_flow_and_section_read(self, e2e_docs):
         async with stdio_client(e2e_docs, "--transform-mode", "none") as client:
             info = client.initialize_result.serverInfo
-            assert info.version == laravel_mcp_companion.SERVER_VERSION
+            assert info.version == companion_server.SERVER_VERSION
             caps = client.initialize_result.capabilities.model_dump(exclude_none=True)
             assert "tasks" in caps
 
@@ -30,7 +32,7 @@ class TestStdioRawSurface:
 
             search = await client.call_tool(
                 "search_laravel_docs",
-                {"query": "route parameters", "include_external": False},
+                {"query": "route parameters", "sources": ["core"]},
             )
             assert search.structured_content is not None
             results = search.structured_content.get("results", [])
@@ -40,7 +42,7 @@ class TestStdioRawSurface:
 
             section = await client.call_tool(
                 "read_laravel_doc_section",
-                {"filename": "routing.md", "section": top["anchor"] or top["heading"]},
+                {"filename": "routing.md", "section": top["section"]},
             )
             assert "Route" in section.content[0].text
 
@@ -59,7 +61,7 @@ class TestStdioRawSurface:
 
             section = await client.call_tool(
                 "read_laravel_doc_section",
-                {"filename": top["file"], "section": top["anchor"] or top["heading"]},
+                {"filename": top["file"], "section": top["section"]},
             )
             assert not section.is_error
             assert "not found" not in section.content[0].text.lower()
@@ -67,8 +69,8 @@ class TestStdioRawSurface:
     async def test_structured_content_and_resource_read(self, e2e_docs):
         async with stdio_client(e2e_docs, "--transform-mode", "none") as client:
             info = await client.call_tool("laravel_docs_info", {"version": "12.x"})
-            assert info.structured_content.get("version") == "12.x"
-            assert info.structured_content.get("commit_sha") == "e2efixture"
+            assert info.structured_content["versions"][0]["version"] == "12.x"
+            assert info.structured_content["versions"][0]["commit"] == "e2efixt"
 
             resource = await client.read_resource("laravel://12.x/installation.md")
             assert "# Installation" in resource[0].text
@@ -91,4 +93,4 @@ class TestStdioDefaultSurface:
                 "call_tool",
                 {"name": "laravel_docs_info", "arguments": {"version": "12.x"}},
             )
-            assert proxied.structured_content.get("version") == "12.x"
+            assert proxied.structured_content["versions"][0]["version"] == "12.x"

@@ -1,16 +1,9 @@
 # Livewire - Installation
 
-Source: https://livewire.laravel.com/docs/installation
+Source: https://livewire.laravel.com/docs/4.x/installation
 
 Installation
 ============
-
-The official Livewire UI kit
-
-Build polished Livewire apps faster.
-
-Explore Flux Pro
-→
 
 
 Livewire is a Laravel package, so you will need to have a Laravel application up and running before you can install and use Livewire. If you need help setting up a new Laravel application, please see the official Laravel documentation.

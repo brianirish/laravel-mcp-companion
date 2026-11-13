@@ -1,0 +1,136 @@
+# Spatie - Basic Usage/Enums
+
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/enums
+
+SPATIE
+
+Laravel Permission
+==================
+
+spatie.be/open-source
+
+Docs
+
+Laravel-permission
+
+Basic-usage
+
+Enums
+
+Enums
+=====
+
+### On this page
+
+1. Enum Prerequisites
+2. Code Requirements
+3. Creating Roles/Permissions using Enums
+4. Package methods supporting BackedEnums:
+
+##Enum Prerequisites
+--------------------
+
+Internally, Enums implicitly implement `\BackedEnum`, which is how this package recognizes that you're passing an Enum.
+
+NOTE: Presently (versions 6, 7) this package does not support using `$casts` to specify enums on the `Permission` model. You can still use enums to reference things as shown below, just without declaring it in a `$casts` property.
+
+##Code Requirements
+-------------------
+
+You can create your Enum object for use with Roles and/or Permissions. You will probably create separate Enums for Roles and for Permissions, although if your application needs are simple you might choose a single Enum for both.
+
+Usually the list of application Roles is much shorter than the list of Permissions, so having separate objects for them can make them easier to manage.
+
+Here is an example Enum for Roles. You would do similarly for Permissions.
+
+```php
+namespace App\Enums;
+
+enum RolesEnum: string
+{
+    // case NAMEINAPP = 'name-in-database';
+
+    case WRITER = 'writer';
+    case EDITOR = 'editor';
+    case USERMANAGER = 'user-manager';
+
+    // extra helper to allow for greater customization of displayed values, without disclosing the name/value data directly
+    public function label(): string
+    {
+        return match ($this) {
+            static::WRITER => 'Writers',
+            static::EDITOR => 'Editors',
+            static::USERMANAGER => 'User Managers',
+        };
+    }
+}
+```
+##Creating Roles/Permissions using Enums
+----------------------------------------
+
+You can pass a `BackedEnum` directly when creating, finding, or finding-or-creating roles and permissions.
+These use Laravel's `enum_value()` function under the hood.
+
+```php
+$role = app(Role::class)->create(['name' => RolesEnum::WRITER]);
+$role = app(Role::class)->findByName(RolesEnum::WRITER);
+$role = app(Role::class)->findOrCreate(RolesEnum::WRITER);
+
+$permission = app(Permission::class)->create(['name' => PermissionsEnum::EDITPOSTS]);
+$permission = app(Permission::class)->findByName(PermissionsEnum::EDITPOSTS);
+$permission = app(Permission::class)->findOrCreate(PermissionsEnum::EDITPOSTS);
+```
+### ##Authorizing using Enums
+
+In your application code, when checking for authorization using features of this package, you can use `MyEnum::NAME` directly in most cases, without passing `->value` to convert to a string.
+
+There may occasionally be times where you will need to manually fallback to adding `->value` (eg: `MyEnum::NAME->value`) when using features that aren't aware of Enum support, such as when you need to pass `string` values instead of an `Enum` to a function that doesn't recognize Enums. Again, wrap it with `enum_value()` as a simple workaround.
+
+Examples:
+
+```php
+// the following are identical because `hasPermissionTo` is aware of `BackedEnum` support:
+$user->hasPermissionTo(PermissionsEnum::VIEWPOSTS);
+$user->hasPermissionTo(PermissionsEnum::VIEWPOSTS->value);
+$user->hasPermissionTo(enum_value(PermissionsEnum::VIEWPOSTS));
+
+// Blade directives:
+@can(enum_value(PermissionsEnum::VIEWPOSTS))
+```
+##Package methods supporting BackedEnums:
+-----------------------------------------
+
+The following methods of this package support passing `BackedEnum` parameters directly:
+
+```php
+    // Creating
+    app(Role::class)->create(['name' => RolesEnum::WRITER]);
+    app(Role::class)->findByName(RolesEnum::WRITER);
+    app(Role::class)->findOrCreate(RolesEnum::WRITER);
+
+    app(Permission::class)->create(['name' => PermissionsEnum::EDITPOSTS]);
+    app(Permission::class)->findByName(PermissionsEnum::EDITPOSTS);
+    app(Permission::class)->findOrCreate(PermissionsEnum::EDITPOSTS);
+
+	$user->assignRole(RolesEnum::WRITER);
+	$user->removeRole(RolesEnum::EDITOR);
+
+    $role->givePermissionTo(PermissionsEnum::EDITPOSTS);
+    $role->revokePermissionTo(PermissionsEnum::EDITPOSTS);
+
+    $user->givePermissionTo(PermissionsEnum::EDITPOSTS);
+    $user->revokePermissionTo(PermissionsEnum::EDITPOSTS);
+
+	$user->hasPermissionTo(PermissionsEnum::EDITPOSTS);
+	$user->hasAnyPermission([PermissionsEnum::EDITPOSTS, PermissionsEnum::VIEWPOSTS]);
+	$user->hasDirectPermission(PermissionsEnum::EDITPOSTS);
+
+    $user->hasRole(RolesEnum::WRITER);
+    $user->hasAllRoles([RolesEnum::WRITER, RolesEnum::EDITOR]);
+    $user->hasExactRoles([RolesEnum::WRITER, RolesEnum::EDITOR, RolesEnum::MANAGER]);
+```
+Using Permissions via Roles
+
+Teams permissions
+
+Help us improve this page

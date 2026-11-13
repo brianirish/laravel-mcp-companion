@@ -7,22 +7,17 @@ used to read, enumerate, or write outside the documentation tree.
 
 import pytest
 
-from mcp_tools import (
-    is_safe_path,
-    validate_version,
-    validate_subdirectory,
-    read_laravel_doc_content_impl,
-    get_doc_structure_impl,
-    list_laravel_docs_impl,
-    verify_laravel_feature_impl,
-    browse_docs_by_category_impl,
-    search_laravel_docs_impl,
-    list_laravel_learning_resources_impl,
-    search_laravel_learning_resources_impl,
-)
-from docs_updater import is_safe_section_name, is_within_directory, DocsUpdater
+from laravel_mcp_companion.mcp_tools import is_safe_path
+from laravel_mcp_companion.docs_updater import is_safe_section_name, is_within_directory, DocsUpdater
+from laravel_mcp_companion.tools import ToolFailure
+from laravel_mcp_companion.tools.common import require_version
+from laravel_mcp_companion.tools.docs import compare_versions, docs_info, list_docs, read_content, read_section
+from laravel_mcp_companion.tools.learning import browse_docs
+from laravel_mcp_companion.tools.search import search
 
 SECRET = "TOPSECRET-api-key-sk-live-1234"
+
+BAD_VERSIONS = ["..", "../..", "/etc", "/", "12.x/../..", "\x00"]
 
 
 @pytest.fixture
@@ -46,80 +41,84 @@ def docs_tree(tmp_path):
     return docs
 
 
+def refused(call):
+    """Run a tool function that must refuse; return the ToolFailure it raised."""
+    with pytest.raises(ToolFailure) as raised:
+        call()
+    assert SECRET not in str(raised.value.payload())
+    return raised.value
+
+
 class TestVersionArgumentTraversal:
-    """The `version` argument is joined onto docs_path and must be allowlisted."""
+    """The `version` argument is joined onto docs_path and must be allowlisted.
 
-    @pytest.mark.parametrize("bad_version", ["..", "../..", "/etc", "/", "12.x/../..", "\x00"])
-    def test_read_doc_rejects_traversal_version(self, docs_tree, bad_version):
-        result = read_laravel_doc_content_impl(docs_tree, "secret_notes", version=bad_version)
-        assert SECRET not in result
-        assert "Invalid version" in result
+    Every tool that takes one is listed here. A tool added later that takes a
+    version belongs in this list."""
 
-    def test_get_doc_structure_rejects_traversal_version(self, docs_tree):
-        result = get_doc_structure_impl(docs_tree, "secret_notes", version="..")
-        assert SECRET not in result
-        assert "Invalid version" in result
+    VERSION_TAKING = {
+        "read_content": lambda docs, v: read_content(docs, "secret_notes", version=v),
+        "read_section": lambda docs, v: read_section(docs, "secret_notes", "intro", version=v),
+        "outline": lambda docs, v: read_content(docs, "secret_notes", version=v, mode="outline"),
+        "browse": lambda docs, v: browse_docs(docs, category="frontend", version=v),
+        "search": lambda docs, v: search(docs, None, "TOPSECRET", version=v, sources=["core"]),
+        "info": lambda docs, v: docs_info(docs, version=v),
+        "compare_from": lambda docs, v: compare_versions(docs, v, "12.x"),
+        "compare_to": lambda docs, v: compare_versions(docs, "12.x", v),
+    }
 
-    def test_list_docs_rejects_traversal_version(self, docs_tree):
-        result = list_laravel_docs_impl(docs_tree, version="..")
-        assert "secret_notes" not in result
-        assert "Invalid version" in result
+    @pytest.mark.parametrize("tool", sorted(VERSION_TAKING))
+    @pytest.mark.parametrize("bad_version", BAD_VERSIONS)
+    def test_a_traversal_version_is_refused(self, docs_tree, tool, bad_version):
+        failure = refused(lambda: self.VERSION_TAKING[tool](docs_tree, bad_version))
 
-    def test_verify_feature_rejects_traversal_version(self, docs_tree):
-        result = verify_laravel_feature_impl(docs_tree, "secret_notes", version="..")
-        assert "secret_notes" not in result
-        assert "Invalid version" in result
-
-    def test_browse_category_rejects_traversal_version(self, docs_tree):
-        result = browse_docs_by_category_impl(docs_tree, "frontend", version="..")
-        assert SECRET not in result
-        assert "Invalid version" in result
-
-    def test_search_rejects_traversal_version(self, docs_tree):
-        result = search_laravel_docs_impl(
-            docs_tree, "TOPSECRET", version="..", include_external=False
-        )
-        assert SECRET not in result
-        assert "Invalid version" in result
+        assert failure.code == "unknown_version"
 
     def test_legitimate_version_still_works(self, docs_tree):
-        result = read_laravel_doc_content_impl(docs_tree, "blade.md", version="12.x")
-        assert "Templating docs." in result
+        assert "Templating docs." in read_content(docs_tree, "blade.md", version="12.x").text
 
 
 class TestFilenameTraversal:
     """Traversal via the filename argument stays blocked."""
 
-    def test_filename_traversal_denied(self, docs_tree):
-        result = read_laravel_doc_content_impl(docs_tree, "../../secret_notes", version="12.x")
-        assert SECRET not in result
-        assert "Access denied" in result
+    @pytest.mark.parametrize("read", [
+        lambda docs, name: read_content(docs, name, version="12.x"),
+        lambda docs, name: read_content(docs, name, version="12.x", mode="outline"),
+        lambda docs, name: read_section(docs, name, "intro", version="12.x"),
+    ])
+    def test_filename_traversal_denied(self, docs_tree, read):
+        assert refused(lambda: read(docs_tree, "../../secret_notes")).code == "access_denied"
 
     def test_sibling_directory_prefix_not_treated_as_inside(self, docs_tree):
         """A string-prefix check would wrongly accept '12.x-backup' under '12.x'."""
-        result = read_laravel_doc_content_impl(docs_tree, "../12.x-backup/leak", version="12.x")
-        assert SECRET not in result
-        assert "Access denied" in result
+        failure = refused(lambda: read_content(docs_tree, "../12.x-backup/leak", version="12.x"))
+
+        assert failure.code == "access_denied"
+
+    def test_a_corpus_prefix_cannot_climb_out_of_its_family(self, docs_tree):
+        failure = refused(lambda: read_content(docs_tree, "tutorials/../../../private/notes"))
+
+        assert failure.code in ("access_denied", "not_found")
 
 
-class TestLearningResourceSources:
-    """`source`/`sources` name a subdirectory and must not escape it."""
+class TestCollectionNames:
+    """`name` in list_laravel_docs names a directory and must not escape it."""
 
-    def test_list_rejects_traversal_source(self, docs_tree):
-        result = list_laravel_learning_resources_impl(docs_tree, source="../../private")
-        assert "notes.md" not in result
-        assert "not found" in result
+    @pytest.mark.parametrize("bad", ["../../private", "..", "/etc", "tutorials/..", ""])
+    def test_listing_refuses_a_traversal_name(self, docs_tree, bad):
+        failure = refused(lambda: list_docs(docs_tree, name=bad) if bad else list_docs(docs_tree, name="."))
 
-    def test_search_rejects_traversal_source(self, docs_tree):
-        result = search_laravel_learning_resources_impl(
-            docs_tree, "TOPSECRET", sources=["../../private"]
-        )
-        assert "notes.md" not in result
-        assert "Invalid sources" in result
+        assert failure.code in ("invalid_argument", "not_found")
+        assert "notes.md" not in str(failure.payload())
 
-    def test_legitimate_source_still_works(self, docs_tree):
-        result = list_laravel_learning_resources_impl(docs_tree, source="tutorials")
-        assert "intro.md" in result
+    def test_search_refuses_an_unknown_source(self, docs_tree):
+        failure = refused(lambda: search(docs_tree, None, "TOPSECRET", sources=["../../private"]))
+
+        assert failure.code == "invalid_argument"
+
+    def test_legitimate_collection_still_lists(self, docs_tree):
+        listing = list_docs(docs_tree, name="tutorials")
+
+        assert listing["collections"][0]["files"] == ["tutorials/intro.md"]
 
 
 class TestIsSafePath:
@@ -145,27 +144,20 @@ class TestIsSafePath:
 
 
 class TestValidators:
-    def test_validate_version_accepts_supported(self):
-        from mcp_tools import SUPPORTED_VERSIONS
-        assert validate_version(SUPPORTED_VERSIONS[0]) is None
+    def test_a_supported_version_is_accepted(self):
+        from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
+        require_version(SUPPORTED_VERSIONS[0])
 
-    def test_validate_version_allows_none(self):
-        assert validate_version(None) is None
+    def test_no_version_is_accepted(self):
+        require_version(None)
 
     @pytest.mark.parametrize("bad", ["..", "/etc", "99.x", "12.x/..", "'; DROP TABLE"])
-    def test_validate_version_rejects_bad(self, bad):
-        result = validate_version(bad)
-        assert result is not None
-        assert "Invalid version" in result
+    def test_anything_else_is_refused_with_the_supported_list(self, bad):
+        with pytest.raises(ToolFailure) as raised:
+            require_version(bad)
 
-    def test_validate_subdirectory(self, tmp_path):
-        (tmp_path / "real").mkdir()
-        assert validate_subdirectory(tmp_path, "real") is True
-        assert validate_subdirectory(tmp_path, "..") is False
-        assert validate_subdirectory(tmp_path, "../etc") is False
-        assert validate_subdirectory(tmp_path, "/etc") is False
-        assert validate_subdirectory(tmp_path, "") is False
-        assert validate_subdirectory(tmp_path, "nonexistent") is False
+        assert raised.value.code == "unknown_version"
+        assert raised.value.details["supported_versions"]
 
 
 class TestSectionNameSanitization:
@@ -248,7 +240,7 @@ class TestAllowlistArgumentParsing:
 
     def _parse(self, monkeypatch, argv, env):
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         for var in ("CORS_ORIGINS", "ALLOWED_HOSTS"):
             monkeypatch.delenv(var, raising=False)
@@ -308,7 +300,7 @@ class TestDocsInfoTraversal:
     async def test_rejects_traversal_version(self, tmp_path, bad_version):
         import json
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         docs = tmp_path / "docs"
         (docs / "12.x" / ".metadata").mkdir(parents=True)
@@ -327,18 +319,19 @@ class TestDocsInfoTraversal:
 
         server = create_mcp_server("T", docs, "12.x", transform_mode=None)
         async with Client(server) as client:
-            result = await client.call_tool("laravel_docs_info", {"version": bad_version})
+            result = await client.call_tool("laravel_docs_info", {"version": bad_version}, raise_on_error=False)
             text = result.content[0].text if result.content else ""
 
         assert "PROXY-CANARY" not in text, f"leaked via version={bad_version!r}"
-        assert "Invalid version" in text
+        assert result.is_error
+        assert result.structured_content["error"]["code"] == "unknown_version"
 
     @pytest.mark.asyncio
     async def test_legitimate_version_still_works(self, tmp_path):
         import json
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
-        from mcp_tools import SUPPORTED_VERSIONS
+        from laravel_mcp_companion.server import create_mcp_server
+        from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
 
         version = SUPPORTED_VERSIONS[-1]
         docs = tmp_path / "docs"
@@ -369,7 +362,7 @@ class TestVersionsCacheIsTrustworthy:
     ])
     def test_malformed_cache_entries_are_discarded(self, tmp_path, poisoned):
         import json
-        from docs_updater import get_supported_versions
+        from laravel_mcp_companion.docs_updater import get_supported_versions
 
         cache = tmp_path / "versions.json"
         cache.write_text(json.dumps({
@@ -384,7 +377,7 @@ class TestVersionsCacheIsTrustworthy:
     def test_cache_of_only_bad_entries_falls_through(self, tmp_path):
         """A wholly malformed cache must not become the allowlist."""
         import json
-        from docs_updater import get_supported_versions
+        from laravel_mcp_companion.docs_updater import get_supported_versions
 
         cache = tmp_path / "versions.json"
         cache.write_text(json.dumps({
@@ -401,7 +394,7 @@ class TestSymlinkedVersionDirectory:
 
     def test_symlinked_version_dir_is_accepted(self, tmp_path):
         import os
-        from docs_updater import DocsUpdater
+        from laravel_mcp_companion.docs_updater import DocsUpdater
 
         docs = tmp_path / "docs"
         docs.mkdir()
@@ -415,7 +408,7 @@ class TestSymlinkedVersionDirectory:
     def test_server_starts_with_symlinked_version_dir(self, tmp_path):
         """This previously aborted startup, not merely the update path."""
         import os
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         docs = tmp_path / "docs"
         docs.mkdir()

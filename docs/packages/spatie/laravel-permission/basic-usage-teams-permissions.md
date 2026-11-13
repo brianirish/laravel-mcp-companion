@@ -1,6 +1,6 @@
 # Spatie - Basic Usage/Teams Permissions
 
-Source: https://spatie.be/docs/laravel-permission/v6/basic-usage/teams-permissions
+Source: https://spatie.be/docs/laravel-permission/v8/basic-usage/teams-permissions
 
 SPATIE
 
@@ -16,11 +16,6 @@ Laravel-permission
 Basic-usage
 
 Teams permissions
-
-You are viewing the documentation for **an older version** of this package.
-You can check the version you are using with the following command:
-
-`composer show spatie/laravel-permission`
 
 Teams permissions
 =================
@@ -41,7 +36,7 @@ When enabled, teams permissions offers you flexible control for a variety of sce
 
 NOTE: These configuration changes must be made **before** performing the migration when first installing the package.
 
-If you have already run the migration and want to upgrade your implementation, you can run the artisan console command `php artisan permission:setup-teams`, to create a new migration file named xxxx\_xx\_xx\_xx\_add\_teams\_fields.php and then run `php artisan migrate` to upgrade your database tables.
+If you have already run the migration and want to upgrade your implementation, you can run the artisan console command `php artisan permission:setup-teams`, to create a new migration file named `xxxx_xx_xx_xx_add_teams_fields.php` and then run `php artisan migrate` to upgrade your database tables.
 
 Teams permissions can be enabled in the permission config file:
 
@@ -69,7 +64,6 @@ namespace App\Http\Middleware;
 
 class TeamsPermission
 {
-
     public function handle($request, \Closure $next){
         if(!empty(auth()->user())){
             // session value set on login
@@ -87,7 +81,7 @@ class TeamsPermission
 ```
 **YOU MUST ALSO** set the `$middlewarePriority` array in `app/Http/Kernel.php` to include your custom middleware before the `SubstituteBindings` middleware, else you may get *404 Not Found* responses when a *403 Not Authorized* response might be expected.
 
-For example, in Laravel 11.27+ you can add something similiar to the `boot` method of your `AppServiceProvider`.
+For example you can add something similar to the `boot` method of your `AppServiceProvider`:
 
 ```php
 use App\Http\Middleware\YourCustomMiddlewareClass;

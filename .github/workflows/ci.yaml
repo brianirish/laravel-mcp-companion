@@ -25,9 +25,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-dev.txt
+        python -m pip install --upgrade pip uv
+        uv sync --frozen
+        echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
     - name: Lint with ruff
       run: ruff check --fix .
     - name: Type check with mypy
@@ -40,7 +40,7 @@ jobs:
         node-version: '20'
     - name: MCP Inspector smoke test
       run: |
-        npx @modelcontextprotocol/inspector@2 --cli python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
+        npx @modelcontextprotocol/inspector@2 --cli python -m laravel_mcp_companion --method tools/list | grep -q "search_laravel_docs"
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       if: success()

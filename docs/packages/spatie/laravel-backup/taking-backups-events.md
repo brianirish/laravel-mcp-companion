@@ -1,0 +1,89 @@
+# Spatie - Taking Backups/Events
+
+Source: https://spatie.be/docs/laravel-backup/v10/taking-backups/events
+
+SPATIE
+
+Laravel Backup
+==============
+
+spatie.be/open-source
+
+Docs
+
+Laravel-backup
+
+Taking-backups
+
+Events
+
+Events
+======
+
+### On this page
+
+1. BackupWasSuccessful
+2. BackupHasFailed
+3. BackupManifestWasCreated
+4. BackupZipWasCreated
+5. DumpingDatabase
+
+These events are fired during the backup process.
+
+##BackupWasSuccessful
+---------------------
+
+`Spatie\Backup\Events\BackupWasSuccessful`
+
+This event is fired when the zip file containing all files that should be backed up has successfully been copied to a destination filesystem.
+
+It has two public properties:
+
+* `$diskName`: a string containing the name of the destination disk.
+* `$backupName`: a string containing the name of the backup.
+
+##BackupHasFailed
+-----------------
+
+`Spatie\Backup\Events\BackupHasFailed`
+
+This event will be fired when something goes wrong while backing up.
+
+It has three public properties:
+
+* `$exception`: an object that extends PHP's `Exception` class. It is highly likely that `$exception->getMessage()` will return more information on what went wrong.
+* `$diskName`: a nullable string containing the name of the destination disk. If this is `null` then something probably went wrong before the backup could be copied to a destination.
+* `$backupName`: a nullable string containing the name of the backup.
+
+##BackupManifestWasCreated
+--------------------------
+
+`Spatie\Backup\Events\BackupManifestWasCreated`
+
+Internally the package will build up a manifest of files. This manifest contains the dumps of the databases and any files that are selected for backup. All the files in the manifest will be zipped.
+
+It has one public property `$manifest` which is an instance of `Spatie\Backup\Tasks\Backup\Manifest`
+
+##BackupZipWasCreated
+---------------------
+
+`Spatie\Backup\Events\BackupZipWasCreated`
+
+This event will be fired right after the zipfile - containing the dumps of the databases and any files that were selected for backup - is created, and before that zip will get copied over to the backup destination(s). You can use this event to do last minute manipulations on the created zip file.
+
+It has one public property `$pathToZip` which contains a path to the created zipfile.
+
+##DumpingDatabase
+-----------------
+
+`Spatie\Backup\Events\DumpingDatabase`
+
+This event will be fired before dumping the databases. You can use this event to do last minute manipulations on database dumper.
+
+It has one public property `$dbDumper` which is an instance of a dumper driver.
+
+Taking backups
+
+Cleaning up old backups
+
+Help us improve this page

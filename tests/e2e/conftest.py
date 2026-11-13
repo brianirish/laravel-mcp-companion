@@ -1,7 +1,7 @@
 """Fixtures for the e2e suite: a real docs tree and a real server process.
 
-Everything here spawns `laravel_mcp_companion.py` the way Docker's ENTRYPOINT
-does. No fixed sleeps: HTTP readiness is polled, and every test carries a
+Everything here spawns `python -m laravel_mcp_companion` the way Docker's
+ENTRYPOINT does. No fixed sleeps: HTTP readiness is polled, and every test carries a
 hard timeout so a wedged subprocess fails fast instead of hanging CI.
 """
 
@@ -16,7 +16,8 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SERVER_SCRIPT = REPO_ROOT / "laravel_mcp_companion.py"
+# What follows the interpreter on the command line, as in the image's ENTRYPOINT.
+SERVER_MODULE = ["-m", "laravel_mcp_companion"]
 
 
 def build_docs_tree(root: Path) -> Path:
@@ -60,7 +61,7 @@ def e2e_docs(tmp_path_factory):
 
 def server_args(docs: Path, *extra: str) -> list[str]:
     return [
-        str(SERVER_SCRIPT),
+        *SERVER_MODULE,
         "--docs-path", str(docs),
         "--version", "12.x",
         *extra,

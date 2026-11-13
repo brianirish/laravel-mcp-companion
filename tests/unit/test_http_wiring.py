@@ -10,7 +10,7 @@ import argparse
 import httpx
 import pytest
 
-from laravel_mcp_companion import build_auth_provider, build_http_app, create_mcp_server, parse_arguments
+from laravel_mcp_companion.server import build_auth_provider, build_http_app, create_mcp_server, parse_arguments
 
 
 def make_args(**overrides):
