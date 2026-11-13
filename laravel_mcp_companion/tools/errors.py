@@ -17,15 +17,16 @@ no documents, succeeds with `count: 0`.
 
 from typing import Any, Dict, Optional
 
-# What went wrong, for a client to branch on.
-ERROR_CODES = (
-    "invalid_argument",  # an argument was missing, empty or not one of the allowed values
-    "unknown_version",   # a Laravel version this server does not carry
-    "not_found",         # the named file, section, package, service or path does not exist
-    "access_denied",     # a path that resolves outside the documentation tree
-    "update_failed",     # a documentation update could not be completed
-    "internal",          # anything unexpected
-)
+# What went wrong, for a client to branch on, and what each code means.
+ERROR_MEANINGS: Dict[str, str] = {
+    "invalid_argument": "An argument was missing, empty or not one of the allowed values.",
+    "unknown_version": "A Laravel version this server does not carry.",
+    "not_found": "The named file, section, package, service, category or path does not exist.",
+    "access_denied": "A path that resolves outside the documentation tree.",
+    "update_failed": "A documentation update could not be completed.",
+    "internal": "Anything unexpected. The message says which tool failed.",
+}
+ERROR_CODES = tuple(ERROR_MEANINGS)
 
 ERROR_SCHEMA: Dict[str, Any] = {
     "type": "object",

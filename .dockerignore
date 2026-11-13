@@ -44,6 +44,11 @@ test_docs/
 .users_cache.json
 CHANGELOG.md
 ROADMAP.md
+API.md
+MIGRATING.md
+VERSIONING.md
+RELEASING.md
+hatch_build.py
 CONTRIBUTING.md
 test_docker_args.sh
 CLAUDE.md

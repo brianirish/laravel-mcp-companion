@@ -41,7 +41,8 @@ Enhancement suggestions are welcome! Please include:
 
 - Update the README.md with details of changes if applicable
 - Update the example code if applicable
-- The PR should work for Python 3.8+
+- The PR should work on Python 3.12, the version the project requires
+- A change to a tool's arguments or output changes `tests/protocol/contract.json` and `API.md`; regenerate both and say so in the changelog
 - Include relevant tests if possible
 
 ## Development Setup

@@ -18,6 +18,15 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-11-13
+
+The breaking release before 1.0. It replaces the 26 tools with 12 that have
+schemas, structured errors and a recorded contract; makes the project an
+installable Python package with the documentation inside; adds Laravel Cloud,
+Nightwatch and Herd; refreshes the hand-written catalog; and changes what the
+`:latest` image contains. [MIGRATING.md](MIGRATING.md) lists what to change
+when upgrading, and [API.md](API.md) documents the new surface.
+
 ### Breaking: the tool surface is 12 tools, down from 26
 
 Every tool now declares an output schema and returns structured content that
@@ -136,6 +145,10 @@ are hand-written and had not been revised since they were first added.
   process no longer see each other's.
 
 ### Added
+- [API.md](API.md), generated from the running server and checked by a test;
+  [MIGRATING.md](MIGRATING.md); [VERSIONING.md](VERSIONING.md), the
+  compatibility policy that takes effect at 1.0.0; and
+  [RELEASING.md](RELEASING.md), with the conditions for tagging 1.0.0.
 - Documentation for **Laravel Cloud, Nightwatch and Herd**. Each publishes an
   `llms.txt` index, so each is one entry in the service table. Herd's macOS
   and Windows guides are kept under separate paths. Cloud is read from the
@@ -571,7 +584,8 @@ failing without any signal, and CI itself had not run since 2026-08-04.
 - Startup reads the supported-version list from cache with a 24-hour TTL, and
   all network calls have timeouts.
 
-[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.11.0...v0.12.0
