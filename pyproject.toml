@@ -65,6 +65,10 @@ source = [
     "toon_helpers",
     "mcp_tools",
     "learning_resources",
+    "doc_search",
+    "metrics",
+    "tool_schemas",
+    "path_security",
 ]
 omit = [
     "tests/*",

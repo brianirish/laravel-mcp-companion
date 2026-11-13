@@ -12,15 +12,6 @@ import laravel_mcp_companion
 import docs_updater
 from shutdown_handler import GracefulShutdown
 
-# Register custom markers to avoid warnings
-def pytest_configure(config):
-    config.addinivalue_line("markers", "slow: marks tests as slow (deselect with '-m \"not slow\"')")
-    config.addinivalue_line("markers", "integration: marks tests as integration tests")
-    config.addinivalue_line("markers", "unit: marks tests as unit tests")
-    config.addinivalue_line("markers", "network: marks tests that require network access")
-    config.addinivalue_line("markers", "external: marks tests that interact with external services")
-
-
 @pytest.fixture(autouse=True)
 def _no_startup_version_refresh(request, monkeypatch):
     """Both entry points refresh the supported versions before parsing their
