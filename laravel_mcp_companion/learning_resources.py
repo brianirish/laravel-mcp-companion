@@ -23,7 +23,7 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
     # Beginner - Getting Started
     "installation": DifficultyLevel.BEGINNER,
     "configuration": DifficultyLevel.BEGINNER,
-    "directory-structure": DifficultyLevel.BEGINNER,
+    "structure": DifficultyLevel.BEGINNER,
     "frontend": DifficultyLevel.BEGINNER,
     "starter-kits": DifficultyLevel.BEGINNER,
     "deployment": DifficultyLevel.BEGINNER,
@@ -38,7 +38,7 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
     "views": DifficultyLevel.BEGINNER,
     "blade": DifficultyLevel.BEGINNER,
     "vite": DifficultyLevel.BEGINNER,
-    "url": DifficultyLevel.BEGINNER,
+    "urls": DifficultyLevel.BEGINNER,
     "session": DifficultyLevel.BEGINNER,
     "validation": DifficultyLevel.BEGINNER,
     "errors": DifficultyLevel.BEGINNER,
@@ -90,7 +90,6 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
     "testing": DifficultyLevel.INTERMEDIATE,
     "http-tests": DifficultyLevel.INTERMEDIATE,
     "console-tests": DifficultyLevel.INTERMEDIATE,
-    "browser-tests": DifficultyLevel.INTERMEDIATE,
     "database-testing": DifficultyLevel.INTERMEDIATE,
     "mocking": DifficultyLevel.INTERMEDIATE,
 
@@ -101,7 +100,6 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
 
     # Advanced - Packages
     "billing": DifficultyLevel.ADVANCED,
-    "cashier-stripe": DifficultyLevel.ADVANCED,
     "cashier-paddle": DifficultyLevel.ADVANCED,
     "dusk": DifficultyLevel.ADVANCED,
     "envoy": DifficultyLevel.ADVANCED,
@@ -120,7 +118,6 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
     "sanctum": DifficultyLevel.INTERMEDIATE,
     "scout": DifficultyLevel.ADVANCED,
     "socialite": DifficultyLevel.INTERMEDIATE,
-    "spark-billing": DifficultyLevel.ADVANCED,
     "telescope": DifficultyLevel.INTERMEDIATE,
     "valet": DifficultyLevel.BEGINNER,
 
@@ -129,10 +126,22 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
     "context": DifficultyLevel.ADVANCED,
 
     # External Services
-    "forge": DifficultyLevel.INTERMEDIATE,
-    "vapor": DifficultyLevel.ADVANCED,
-    "envoyer": DifficultyLevel.INTERMEDIATE,
-    "nova": DifficultyLevel.ADVANCED,
+
+    # Pages added to the framework docs since this map was first written
+    "releases": DifficultyLevel.BEGINNER,
+    "upgrade": DifficultyLevel.INTERMEDIATE,
+    "csrf": DifficultyLevel.BEGINNER,
+    "head": DifficultyLevel.BEGINNER,
+    "folio": DifficultyLevel.INTERMEDIATE,
+    "images": DifficultyLevel.INTERMEDIATE,
+    "search": DifficultyLevel.INTERMEDIATE,
+    "mongodb": DifficultyLevel.INTERMEDIATE,
+    "mix": DifficultyLevel.INTERMEDIATE,
+    "concurrency": DifficultyLevel.ADVANCED,
+    "ai": DifficultyLevel.BEGINNER,
+    "boost": DifficultyLevel.BEGINNER,
+    "ai-sdk": DifficultyLevel.INTERMEDIATE,
+    "mcp": DifficultyLevel.ADVANCED,
 }
 
 
@@ -140,17 +149,15 @@ TOPIC_DIFFICULTY_MAP: Dict[str, DifficultyLevel] = {
 EXPANDED_CATEGORIES: Dict[str, List[str]] = {
     # Original 8 categories
     "authentication": [
-        "authentication", "sanctum", "passport", "fortify", "breeze",
-        "jetstream", "passwords", "verification", "socialite"
+        "authentication", "sanctum", "passport", "fortify", "passwords", "verification", "socialite"
     ],
     "database": [
-        "database", "eloquent", "eloquent-relationships", "eloquent-collections",
+        "database", "mongodb", "eloquent", "eloquent-relationships", "eloquent-collections",
         "eloquent-mutators", "eloquent-resources", "eloquent-serialization",
         "eloquent-factories", "migrations", "seeding", "queries", "pagination", "redis"
     ],
     "frontend": [
-        "blade", "frontend", "vite", "views", "localization", "validation",
-        "livewire", "inertia", "precognition"
+        "blade", "frontend", "vite", "views", "localization", "validation", "precognition"
     ],
     "api": [
         "sanctum", "passport", "eloquent-resources", "routing", "rate-limiting",
@@ -158,16 +165,16 @@ EXPANDED_CATEGORIES: Dict[str, List[str]] = {
     ],
     "testing": [
         "testing", "dusk", "http-tests", "console-tests", "database-testing",
-        "mocking", "browser-tests"
+        "mocking"
     ],
     "deployment": [
-        "deployment", "octane", "sail", "homestead", "valet", "forge", "vapor",
-        "envoy", "envoyer"
+        "deployment", "octane", "sail", "homestead", "valet",
+        "envoy"
     ],
     "packages": [
         "packages", "cashier", "scout", "socialite", "telescope", "horizon",
-        "passport", "sanctum", "fortify", "breeze", "jetstream", "pennant",
-        "pulse", "pint", "prompts", "reverb", "spark-billing"
+        "passport", "sanctum", "fortify", "pennant",
+        "pulse", "pint", "prompts", "reverb"
     ],
     "security": [
         "authentication", "authorization", "encryption", "hashing", "passwords",
@@ -180,23 +187,41 @@ EXPANDED_CATEGORIES: Dict[str, List[str]] = {
         "eloquent", "rate-limiting", "pulse"
     ],
     "development": [
-        "artisan", "telescope", "logging", "errors", "debugging",
+        "artisan", "telescope", "logging", "errors",
         "pint", "sail", "valet", "homestead", "prompts"
     ],
     "realtime": [
         "broadcasting", "reverb", "events", "notifications", "queues"
     ],
     "payments": [
-        "billing", "cashier-stripe", "cashier-paddle", "spark-billing"
+        "billing", "cashier-paddle"
     ],
     "search": [
-        "scout", "database", "queries", "eloquent", "collections"
+        "search", "scout", "database", "queries", "eloquent", "collections"
     ],
     "files": [
-        "filesystem", "responses", "requests", "validation"
+        "filesystem", "images", "responses", "requests", "validation"
     ],
     "jobs": [
         "queues", "horizon", "scheduling", "events", "notifications"
+    ],
+    "basics": [
+        "installation", "configuration", "structure", "starter-kits", "routing", "controllers",
+        "middleware", "requests", "responses", "views", "session", "urls", "csrf", "errors",
+        "logging", "helpers", "strings", "collections", "upgrade", "releases"
+    ],
+    "architecture": [
+        "lifecycle", "container", "providers", "facades", "contracts", "context", "concurrency",
+        "processes", "packages"
+    ],
+    "ai": [
+        "ai", "boost", "mcp"
+    ],
+    "communication": [
+        "mail", "notifications", "broadcasting"
+    ],
+    "frontend-tooling": [
+        "vite", "mix", "folio", "head", "precognition", "starter-kits"
     ],
 }
 
@@ -222,19 +247,14 @@ NEED_MAPPINGS: Dict[str, List[str]] = {
     "sms notifications": ["notifications"],
 
     # Payments & Billing
-    "accept payments": ["billing", "cashier-stripe", "cashier-paddle"],
-    "payment processing": ["billing", "cashier-stripe", "cashier-paddle"],
-    "subscriptions": ["billing", "cashier-stripe", "cashier-paddle"],
-    "stripe integration": ["cashier-stripe", "billing"],
+    "accept payments": ["billing", "cashier-paddle"],
+    "payment processing": ["billing", "cashier-paddle"],
+    "subscriptions": ["billing", "cashier-paddle"],
+    "stripe integration": ["billing"],
     "paddle integration": ["cashier-paddle", "billing"],
-    "invoices": ["billing", "cashier-stripe", "cashier-paddle"],
+    "invoices": ["billing", "cashier-paddle"],
 
     # Admin & CMS
-    "build admin": ["nova"],
-    "admin panel": ["nova"],
-    "admin dashboard": ["nova"],
-    "cms": ["nova"],
-    "content management": ["nova"],
 
     # Search
     "add search": ["scout"],
@@ -247,9 +267,9 @@ NEED_MAPPINGS: Dict[str, List[str]] = {
 
     # Authentication
     "authenticate": ["authentication", "sanctum", "fortify"],
-    "login": ["authentication", "sanctum", "fortify", "breeze"],
-    "register users": ["authentication", "fortify", "breeze"],
-    "user registration": ["authentication", "fortify", "breeze"],
+    "login": ["authentication", "sanctum", "fortify", "starter-kits"],
+    "register users": ["authentication", "fortify", "starter-kits"],
+    "user registration": ["authentication", "fortify", "starter-kits"],
     "password reset": ["passwords", "authentication", "fortify"],
     "social login": ["socialite", "authentication"],
     "oauth": ["socialite", "passport"],
@@ -308,17 +328,17 @@ NEED_MAPPINGS: Dict[str, List[str]] = {
     "write tests": ["testing", "http-tests", "database-testing"],
     "unit tests": ["testing", "mocking"],
     "feature tests": ["http-tests", "testing"],
-    "browser tests": ["dusk", "browser-tests"],
+    "browser tests": ["dusk"],
     "test database": ["database-testing"],
     "mock services": ["mocking"],
 
     # Deployment
-    "deploy": ["deployment", "forge", "vapor", "envoyer"],
-    "hosting": ["deployment", "forge", "vapor"],
-    "server setup": ["deployment", "forge"],
-    "serverless": ["vapor", "deployment"],
-    "ci/cd": ["deployment", "envoyer"],
-    "zero downtime": ["envoyer", "deployment"],
+    "deploy": ["deployment"],
+    "hosting": ["deployment"],
+    "server setup": ["deployment"],
+    "serverless": ["deployment"],
+    "ci/cd": ["deployment", "envoy"],
+    "zero downtime": ["deployment", "envoy"],
 
     # Development Tools
     "debugging": ["telescope", "logging", "errors"],
@@ -336,9 +356,9 @@ NEED_MAPPINGS: Dict[str, List[str]] = {
     "css/js": ["vite", "frontend"],
 
     # Starter Kits
-    "starter kit": ["starter-kits", "breeze", "jetstream"],
-    "scaffolding": ["starter-kits", "breeze", "jetstream"],
-    "boilerplate": ["starter-kits", "breeze", "jetstream"],
+    "starter kit": ["starter-kits"],
+    "scaffolding": ["starter-kits"],
+    "boilerplate": ["starter-kits"],
 
     # Miscellaneous
     "feature flags": ["pennant"],
@@ -347,6 +367,49 @@ NEED_MAPPINGS: Dict[str, List[str]] = {
     "multi-language": ["localization"],
     "encryption": ["encryption", "hashing"],
     "security": ["encryption", "hashing", "authentication", "authorization"],
+
+    # Pages the table did not reach before the 2026 audit
+    "ai agents": ["ai-sdk", "ai"],
+    "call an llm": ["ai-sdk"],
+    "ai assisted development": ["ai", "boost"],
+    "coding agent": ["boost", "ai"],
+    "mcp server": ["mcp"],
+    "artisan commands": ["artisan", "prompts"],
+    "console commands": ["artisan", "prompts", "console-tests"],
+    "collections": ["collections"],
+    "run tasks concurrently": ["concurrency", "processes"],
+    "run shell commands": ["processes"],
+    "dependency injection": ["container", "providers", "contracts"],
+    "service container": ["container", "providers"],
+    "service providers": ["providers", "container"],
+    "facades": ["facades", "contracts"],
+    "request lifecycle": ["lifecycle"],
+    "share context": ["context"],
+    "csrf": ["csrf"],
+    "deployment scripts": ["envoy"],
+    "page based routing": ["folio"],
+    "meta tags": ["head"],
+    "seo": ["head"],
+    "helper functions": ["helpers", "strings"],
+    "string manipulation": ["strings", "helpers"],
+    "local development": ["sail", "valet", "homestead"],
+    "docker": ["sail"],
+    "resize images": ["images"],
+    "image manipulation": ["images", "filesystem"],
+    "mongodb": ["mongodb"],
+    "nosql": ["mongodb"],
+    "build a package": ["packages"],
+    "package development": ["packages"],
+    "pagination": ["pagination"],
+    "live validation": ["precognition", "validation"],
+    "monitor performance": ["pulse", "telescope"],
+    "semantic search": ["search", "scout"],
+    "sessions": ["session"],
+    "project structure": ["structure"],
+    "directory structure": ["structure"],
+    "upgrade laravel": ["upgrade", "releases"],
+    "generate urls": ["urls"],
+    "asset bundling": ["vite", "mix"],
 }
 
 
@@ -360,7 +423,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
         "docs": [
             "installation",
             "configuration",
-            "directory-structure",
+            "structure",
             "routing",
             "controllers",
             "views",
@@ -397,7 +460,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
             "middleware",
         ],
         "prerequisites": ["crud-basics"],
-        "packages": ["laravel/breeze", "laravel/fortify"],
+        "packages": ["laravel/starter-kits", "laravel/fortify"],
         "next_path": "api-development",
     },
     "api-development": {
@@ -419,7 +482,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
     },
     "testing-fundamentals": {
         "name": "Testing Your Application",
-        "description": "Write comprehensive tests for your Laravel application",
+        "description": "Write tests for your Laravel application, with Pest or PHPUnit",
         "difficulty": DifficultyLevel.INTERMEDIATE,
         "estimated_hours": 4,
         "docs": [
@@ -478,7 +541,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
     },
     "production-ready": {
         "name": "Production Deployment",
-        "description": "Deploy and scale your Laravel application",
+        "description": "Deploy and scale your Laravel application, on Laravel Cloud or on servers you manage",
         "difficulty": DifficultyLevel.ADVANCED,
         "estimated_hours": 5,
         "docs": [
@@ -489,7 +552,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
             "logging",
         ],
         "prerequisites": ["testing-fundamentals", "background-processing"],
-        "external_docs": ["forge", "vapor"],
+        "services": ["cloud", "forge"],
         "packages": ["laravel/octane"],
     },
     "full-stack-spa": {
@@ -504,7 +567,7 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
             "http-client",
         ],
         "prerequisites": ["api-development", "authentication-basics"],
-        "community_packages": ["inertia", "livewire"],
+        "packages": ["inertiajs/inertia-laravel", "livewire/livewire"],
     },
 }
 
@@ -512,11 +575,11 @@ LEARNING_PATHS: Dict[str, Dict[str, Any]] = {
 # Related packages - packages commonly used together
 RELATED_PACKAGES: Dict[str, List[str]] = {
     # Authentication ecosystem
-    "laravel/sanctum": ["laravel/breeze", "laravel/jetstream", "laravel/fortify"],
+    "laravel/sanctum": ["laravel/starter-kits", "laravel/fortify", "laravel/passport"],
     "laravel/passport": ["laravel/socialite"],
-    "laravel/fortify": ["laravel/breeze", "laravel/jetstream", "laravel/sanctum"],
-    "laravel/breeze": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"],
-    "laravel/jetstream": ["laravel/sanctum", "laravel/fortify", "livewire/livewire", "inertiajs/inertia-laravel"],
+    "laravel/fortify": ["laravel/starter-kits", "laravel/sanctum"],
+    "laravel/breeze": ["laravel/starter-kits", "laravel/sanctum", "laravel/fortify"],
+    "laravel/jetstream": ["laravel/starter-kits", "laravel/sanctum", "laravel/fortify"],
     "laravel/socialite": ["laravel/passport", "laravel/sanctum"],
 
     # Payment processing
@@ -530,28 +593,67 @@ RELATED_PACKAGES: Dict[str, List[str]] = {
     "laravel/scout": [],
 
     # Development tools
-    "laravel/telescope": ["laravel/horizon", "barryvdh/laravel-debugbar"],
+    "laravel/telescope": ["laravel/pulse", "laravel/nightwatch", "laravel/horizon", "barryvdh/laravel-debugbar"],
     "barryvdh/laravel-debugbar": ["laravel/telescope"],
 
     # Frontend frameworks
-    "livewire/livewire": ["laravel/breeze", "laravel/jetstream"],
-    "inertiajs/inertia-laravel": ["laravel/breeze", "laravel/jetstream"],
+    "livewire/livewire": ["laravel/starter-kits", "filament/filament", "livewire/volt"],
+    "inertiajs/inertia-laravel": ["laravel/starter-kits"],
 
     # Admin panels
-    "laravel/nova": ["spatie/laravel-permission"],
+    "laravel/nova": ["filament/filament", "spatie/laravel-permission"],
 
     # Spatie packages (commonly used together)
     "spatie/laravel-permission": ["laravel/nova", "spatie/laravel-medialibrary"],
     "spatie/laravel-medialibrary": ["spatie/laravel-permission"],
 
     # Performance
-    "laravel/octane": ["laravel/horizon"],
+    "laravel/octane": ["laravel/cloud", "laravel/horizon"],
 
     # Deployment
-    "laravel/forge": ["laravel/envoyer"],
-    "laravel/vapor": [],
+    "laravel/forge": ["laravel/cloud", "laravel/envoyer"],
+    "laravel/vapor": ["laravel/cloud"],
     "laravel/envoyer": ["laravel/forge"],
+
+    # Added with the 2026 catalog refresh
+    "laravel/excel": [],
+    "laravel/starter-kits": ["laravel/fortify", "laravel/sanctum", "livewire/livewire", "inertiajs/inertia-laravel"],
+    "laravel/cloud": ["laravel/forge", "laravel/nightwatch", "laravel/octane"],
+    "laravel/nightwatch": ["laravel/cloud", "laravel/pulse", "laravel/telescope"],
+    "laravel/herd": ["laravel/sail"],
+    "laravel/sail": ["laravel/herd"],
+    "laravel/homestead": ["laravel/sail"],
+    "laravel/valet": ["laravel/herd"],
+    "pestphp/pest": ["laravel/dusk"],
+    "laravel/dusk": ["pestphp/pest"],
+    "laravel/reverb": ["laravel/pulse"],
+    "laravel/pulse": ["laravel/nightwatch", "laravel/telescope", "laravel/horizon"],
+    "laravel/pennant": [],
+    "laravel/folio": [],
+    "livewire/volt": ["livewire/livewire"],
+    "filament/filament": ["livewire/livewire"],
+    "laravel/pint": [],
+    "laravel/prompts": [],
+    "laravel/ai": ["laravel/mcp", "laravel/boost"],
+    "laravel/boost": ["laravel/ai", "laravel/mcp"],
+    "laravel/mcp": ["laravel/ai", "laravel/boost"],
 }
+
+
+def keyword_selects(keyword: str, page: str) -> bool:
+    """Whether a category keyword selects a page, by the page's name without
+    ".md": the page of that name, or one whose name extends it with a hyphen.
+    "eloquent" selects eloquent and eloquent-relationships; "ai" selects ai
+    and ai-sdk and does not select mail."""
+    return page == keyword or page.startswith(f"{keyword}-")
+
+
+def categories_of(page: str) -> List[str]:
+    """Every category a page belongs to, sorted."""
+    return sorted(
+        category for category, keywords in EXPANDED_CATEGORIES.items()
+        if any(keyword_selects(keyword, page) for keyword in keywords)
+    )
 
 
 def get_difficulty_for_topic(topic: str) -> DifficultyLevel:

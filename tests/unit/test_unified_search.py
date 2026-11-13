@@ -13,7 +13,7 @@ from laravel_mcp_companion.doc_search import Section
 from laravel_mcp_companion.tools import ToolFailure
 from laravel_mcp_companion.tools.docs import read_section
 from laravel_mcp_companion.tools.search import (
-    MAX_LIMIT, matched_needs, rank_hits, search, spread_across_sources,
+    MAX_LIMIT, keep_need_page, matched_needs, rank_hits, search, spread_across_sources,
 )
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
@@ -300,3 +300,41 @@ class TestRealCorpusQuality:
             for found in self._find(query, limit=10)["results"]:
                 reply = read_section(REPO_DOCS, found["file"], found["section"], runtime_version="12.x")
                 assert reply.data["content"], (query, found)
+
+
+class TestARecognisedTaskKeepsAPlace:
+    """With Laravel Cloud in the corpus, "assign roles to a user" filled its
+    page with Spatie and Cloud pages, and the framework page the need table
+    names for roles was ranked sixth. A curated pointer that never shows is
+    no pointer."""
+
+    def test_the_best_page_a_task_points_at_is_on_the_page(self):
+        ranked = [hit("package:spatie", 20 - i) for i in range(4)] + [hit("service:cloud", 15), hit("service:cloud", 14)]
+        ranked.append(hit("core", 9.0, "authorization.md"))
+
+        page = keep_need_page(spread_across_sources(ranked, 5), ranked, {"authorization.md"})
+
+        assert "authorization.md" in [section.filename for section, _s, _f in page]
+        assert len(page) == 5
+
+    def test_it_takes_the_place_of_the_weakest_result(self):
+        ranked = [hit("package:spatie", 20 - i, f"p{i}.md") for i in range(5)] + [hit("core", 9.0, "authorization.md")]
+
+        page = keep_need_page(ranked[:5], ranked, {"authorization.md"})
+
+        assert [section.filename for section, _s, _f in page] == ["p0.md", "p1.md", "p2.md", "p3.md", "authorization.md"]
+
+    def test_a_page_already_holding_one_is_left_alone(self):
+        ranked = [hit("core", 20, "authorization.md")] + [hit("package:spatie", 19 - i, f"p{i}.md") for i in range(5)]
+
+        assert keep_need_page(ranked[:5], ranked, {"authorization.md"}) == ranked[:5]
+
+    def test_nothing_changes_when_no_task_was_recognised(self):
+        ranked = [hit("package:spatie", 20 - i, f"p{i}.md") for i in range(6)]
+
+        assert keep_need_page(ranked[:5], ranked, set()) == ranked[:5]
+
+    def test_nothing_changes_when_the_pointed_at_page_is_not_a_candidate(self):
+        ranked = [hit("package:spatie", 20 - i, f"p{i}.md") for i in range(6)]
+
+        assert keep_need_page(ranked[:5], ranked, {"authorization.md"}) == ranked[:5]

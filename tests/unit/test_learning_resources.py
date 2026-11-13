@@ -66,10 +66,6 @@ class TestTopicDifficultyMap:
 class TestExpandedCategories:
     """Tests for the EXPANDED_CATEGORIES."""
 
-    def test_expanded_categories_count(self):
-        """Test that we have 15 categories (8 original + 7 new)."""
-        assert len(EXPANDED_CATEGORIES) == 15
-
     def test_original_categories_exist(self):
         """Test that original 8 categories are present."""
         original_categories = [
@@ -148,4 +144,4 @@ class TestRelatedPackages:
     def test_key_packages_have_related(self):
         """Test that key packages have related packages."""
         assert "laravel/sanctum" in RELATED_PACKAGES
-        assert "laravel/breeze" in RELATED_PACKAGES.get("laravel/sanctum", [])
+        assert "laravel/fortify" in RELATED_PACKAGES.get("laravel/sanctum", [])

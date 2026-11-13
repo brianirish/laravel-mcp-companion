@@ -73,6 +73,44 @@ content carries the same text with the file, version and section named.
 `browse_docs_by_category` answer from hand-kept tables. They are shipped and
 tested, and tagged `experimental`: their shape may change in a minor release.
 
+### Curated content refreshed, and audited in CI
+
+The package catalog, need table, learning paths, difficulty map and categories
+are hand-written and had not been revised since they were first added.
+
+- **Catalog: 42 entries, up from 22.** Added Laravel Cloud, Nightwatch, Herd,
+  Sail, the starter kits, Pest, Dusk, Reverb, Pulse, Pennant, Folio, Pint,
+  Prompts, Filament, and the AI packages (AI SDK, Boost, MCP).
+- **Legacy flags.** Vapor, Envoyer, Homestead, Valet, Breeze, Jetstream and
+  Volt are kept for people maintaining older applications and marked `legacy`,
+  most with a `superseded_by`. A legacy package's match counts for half in
+  `recommend_laravel_packages`, so "deploy my application" leads with Cloud
+  and Forge.
+- **Corrections.** Octane names FrankenPHP beside RoadRunner and Swoole.
+  Socialite lists X and Slack, not Twitter. Scout names Typesense and the
+  database engine.
+- **Dead references repaired.** 23 need mappings, the `getting-started`
+  learning path, nine difficulty entries and eleven category keywords pointed
+  at pages that no longer exist. Five needs that pointed only at Nova are
+  removed; admin panels are found by searching services and packages.
+- **Every framework page is mapped.** Thirty-odd pages, among them `ai`,
+  `ai-sdk`, `boost`, `mcp`, `folio`, `concurrency`, `mongodb`, `search`,
+  `images`, `csrf`, `structure` and `urls`, were in no category, difficulty
+  or need. Five categories are new: basics, architecture, ai, communication
+  and frontend-tooling.
+- **Category keywords match by name, not by substring.** "ai" selects `ai` and
+  `ai-sdk`; it used to select `mail` and `container` as well.
+- **A recognised task keeps a place in search results.** When the query names
+  a task from the need table, the best of the pages it points at is always on
+  the result page.
+- **The audit.** `tests/unit/test_curation_audit.py` fails the build when a
+  curated reference names a page, package, service or path that does not
+  exist; when a framework page is in no category, difficulty or need; when a
+  catalog entry lacks its feature list or relations row; when a learning path
+  recommends a legacy package; or when catalog prose names a major version
+  older than the documentation held. A new page upstream fails the nightly
+  documentation pull request until the tables say where it belongs.
+
 ### Changed in search
 
 - **One ranking across corpora.** A search over several sources is ranked

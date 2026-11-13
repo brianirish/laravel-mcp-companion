@@ -7,7 +7,7 @@ content does.
 """
 
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, Optional
 
 from fastmcp import Context
 from pydantic import Field
@@ -17,6 +17,7 @@ from ..learning_resources import (
     EXPANDED_CATEGORIES,
     LEARNING_PATHS,
     DifficultyLevel,
+    categories_of,
     get_difficulty_for_topic,
 )
 from .common import default_version, require_version
@@ -48,6 +49,15 @@ PATH_SCHEMA: Dict[str, Any] = {
                     "docs": {
                         "type": "array", "items": {"type": "string"},
                         "description": "The pages to read, in order. Present when one path was asked for",
+                    },
+                    "prerequisites": {"type": "array", "items": {"type": "string"}, "description": "Paths worth doing first"},
+                    "services": {
+                        "type": "array", "items": {"type": "string"},
+                        "description": "First-party services whose docs go with this path; see get_laravel_service_info",
+                    },
+                    "packages": {
+                        "type": "array", "items": {"type": "string"},
+                        "description": "Catalog packages that go with this path; see get_laravel_package",
                     },
                     "next_path": {"type": "string", "description": "The path that follows this one, if any"},
                 },
@@ -82,8 +92,9 @@ def learning_paths(path_name: str = "") -> Dict[str, Any]:
     path = LEARNING_PATHS[wanted]
     entry = _summary(wanted)
     entry["docs"] = [f"{doc}.md" for doc in path.get("docs", [])]
-    if path.get("next_path"):
-        entry["next_path"] = path["next_path"]
+    for key in ("prerequisites", "services", "packages", "next_path"):
+        if path.get(key):
+            entry[key] = path[key]
     return {"count": 1, "paths": [entry]}
 
 
@@ -152,10 +163,6 @@ BROWSE_DESCRIPTION = """Browse the framework documentation by topic or by diffic
 With no arguments: the categories (authentication, database, testing and so on) and how many pages each holds for the selected Laravel version. With `category`, `difficulty` ("beginner", "intermediate" or "advanced") or both: the matching pages, each with its title, difficulty and categories. For a specific question, search is the better tool; this one is for seeing what exists in an area."""
 
 
-def _categories_of(stem: str) -> List[str]:
-    return sorted(category for category, keywords in EXPANDED_CATEGORIES.items() if any(keyword in stem for keyword in keywords))
-
-
 def _title(path: Path, fallback: str) -> str:
     for line in mcp_tools.get_file_content_cached(str(path)).split("\n", 20)[:20]:
         if line.startswith("# "):
@@ -189,7 +196,7 @@ def browse_docs(
     pages = []
     for name, path in sorted(mcp_tools.list_contained_markdown(version_dir)):
         stem = name[: -len(".md")].lower()
-        pages.append((name, path, _categories_of(stem), get_difficulty_for_topic(stem).value))
+        pages.append((name, path, categories_of(stem), get_difficulty_for_topic(stem).value))
 
     if wanted_category is None and wanted_difficulty is None:
         # Counted from the same pages a filtered call would return, so the

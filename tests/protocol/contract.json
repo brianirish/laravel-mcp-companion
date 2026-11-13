@@ -294,6 +294,27 @@
                 "next_path": {
                   "description": "The path that follows this one, if any",
                   "type": "string"
+                },
+                "packages": {
+                  "description": "Catalog packages that go with this path; see get_laravel_package",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "prerequisites": {
+                  "description": "Paths worth doing first",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "services": {
+                  "description": "First-party services whose docs go with this path; see get_laravel_service_info",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 }
               },
               "required": [

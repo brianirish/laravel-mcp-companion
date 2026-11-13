@@ -132,6 +132,29 @@ def spread_across_sources(ranked: List[Tuple[Section, float, str]], limit: int) 
     return sorted(chosen, key=lambda hit: order[id(hit)])
 
 
+def keep_need_page(
+    page: List[Tuple[Section, float, str]],
+    ranked: List[Tuple[Section, float, str]],
+    need_pages: Any,
+) -> List[Tuple[Section, float, str]]:
+    """Make sure a recognised task's page is among the results.
+
+    The need table is a person's judgement that a task is answered on certain
+    framework pages. If the query named such a task and none of its pages made
+    the page of results, the best-ranked of them takes the place of the
+    weakest result. Nothing changes when one is already there, or when none
+    is among the candidates.
+    """
+    def pointed_at(hit: Tuple[Section, float, str]) -> bool:
+        section, _score, family = hit
+        return family == "core" and section.filename in need_pages
+
+    if not need_pages or not page or any(pointed_at(hit) for hit in page):
+        return page
+    best = next((hit for hit in ranked if pointed_at(hit)), None)
+    return page if best is None else page[:-1] + [best]
+
+
 def search(
     docs_path: Path,
     external_dir: Optional[Path],
@@ -254,7 +277,8 @@ def search(
         if "learning" in chosen_sources and learning_dir.is_dir():
             collect("learning", lambda: mcp_tools.load_learning_sections(learning_dir), "learning")
 
-    page = spread_across_sources(rank_hits(hits, need_pages), limit)
+    ranked = rank_hits(hits, need_pages)
+    page = keep_need_page(spread_across_sources(ranked, limit), ranked, need_pages)
 
     result: Dict[str, Any] = {
         "query": query,
