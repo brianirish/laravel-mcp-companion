@@ -12,7 +12,8 @@ version:
   their arguments, and their output schemas. An argument is not removed or
   renamed, a required argument is not added, and a field marked *always* in
   [API.md](API.md) is not removed or retyped.
-- **The error object.** Its shape, and the meaning of each error code.
+- **The error object.** Its shape, and the meaning of each error code, as
+  given under [Errors in API.md](API.md#errors).
 - **The resource templates.** `laravel://`, `laravel-external://` and
   `laravel-package://`, and the kinds of path each accepts.
 - **The command line.** The flags and environment variables in the README's
@@ -30,11 +31,13 @@ codes they do not know.
 ## Not covered
 
 - **Experimental tools.** `get_laravel_learning_path` and
-  `browse_docs_by_category`, tagged `experimental`. They answer from
-  hand-written tables, and their shape may change in a minor release.
-- **The meta-tools.** In the default `search` mode, and in `code` mode, the
-  tools a client lists are provided by FastMCP (`search_tools`, `call_tool`
-  and the Code Mode set). Their schemas are FastMCP's to change.
+  `browse_docs_by_category`. Each carries the tag `experimental` in the tool
+  list a client receives, a note in [API.md](API.md), and `"stable": false`
+  in the contract file. They answer from the curated tables described below,
+  and their shape may change in a minor release.
+- **The meta-tools.** The server is built on the FastMCP framework. In the
+  default `search` mode, and in `code` mode, most of the tools a client lists
+  are FastMCP's own (`search_tools`, `call_tool` and the Code Mode set). Their schemas are FastMCP's to change.
   `search_laravel_docs` and `read_laravel_doc_section` are listed directly in
   search mode, and that is covered.
 - **Wording.** Tool descriptions, server instructions, error messages and the
@@ -43,8 +46,9 @@ codes they do not know.
 - **The documentation itself.** Pages are other people's work, fetched
   nightly. A page upstream renames or removes changes here too, including in a
   patch release or with no release at all.
-- **The curated tables.** Catalog entries, categories, difficulty levels and
-  learning paths are revised as the ecosystem changes.
+- **The curated tables.** The package catalog, the categories, the difficulty
+  levels, the learning paths and the table of common tasks are written by
+  hand, and are revised as the ecosystem changes.
 - **Python import paths.** The package is an application. Its modules may be
   renamed or reorganised in any release.
 

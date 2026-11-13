@@ -42,8 +42,8 @@ SCHEMA: Dict[str, Any] = {
                 "type": "object",
                 "required": ["file", "section", "heading", "score", "snippet", "source"],
                 "properties": {
-                    "file": {"type": "string", "description": "Pass to read_laravel_doc_section or read_laravel_doc_content"},
-                    "section": {"type": "string", "description": "Pass to read_laravel_doc_section with `file`"},
+                    "file": {"type": "string", "description": "Pass as `filename` to read_laravel_doc_section or read_laravel_doc_content"},
+                    "section": {"type": "string", "description": "Pass as `section` to read_laravel_doc_section, with `file` as its `filename`"},
                     "heading": {"type": "string"},
                     "score": {"type": "number"},
                     "snippet": {"type": "string"},
@@ -59,7 +59,7 @@ SCHEMA: Dict[str, Any] = {
 
 DESCRIPTION = """Search Laravel's documentation and get back the sections that answer the question.
 
-Covers every corpus on this server at once: the framework docs for the selected Laravel version, the first-party services (Forge, Vapor, Envoyer, Nova, Cloud, Nightwatch, Herd), fetched package docs (Livewire, Filament, Inertia, Spatie and others) and learning resources. Each result names a file and a section; pass both to read_laravel_doc_section to read just that section.
+Covers every corpus on this server at once: the framework docs for the selected Laravel version, the first-party services (Forge, Vapor, Envoyer, Nova, Cloud, Nightwatch, Herd), fetched package docs (Livewire, Filament, Inertia, Spatie and others) and learning resources. Each result names a `file` and a `section`; pass them to read_laravel_doc_section as `filename` and `section` to read just that section.
 
 Use it first for any Laravel question. Narrow with `sources` when you know the corpus, and set `version` for an older Laravel release. Results are ranked across corpora, and no single source takes the whole page when others match. Nothing found is a normal result with count 0."""
 

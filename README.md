@@ -13,7 +13,8 @@ documentation on your machine and lets an AI assistant search and read it. It ho
 docs for every version from 6.x to the newest, the first-party services, and widely used packages.
 Nothing is fetched while you work, so it answers without a network connection.
 
-> **Status:** 0.15 is a breaking release. It makes the tool surface what 1.0 will freeze.
+> **Status:** 0.15 is a breaking release. The tools it introduces, with their arguments and
+> results, are the ones 1.0 will promise not to break.
 > [MIGRATING.md](MIGRATING.md) lists what changed for anyone upgrading.
 
 ## A reference library
@@ -42,8 +43,10 @@ project open, or where the documentation has to stay on the machine.
 - **A hand-written catalog** of 42 curated packages: what each is for, how to install it, what goes
   with it, and which ones newer projects no longer start with.
 
-A nightly job refreshes all of it. Ask your assistant how current the documentation is, or call
-`laravel_docs_info`, to see the date and page count of every source.
+The project refetches all of it every night and publishes a new image, so you get newer
+documentation by pulling one; nothing is fetched on your machine unless you ask for an update.
+Ask your assistant how current its documentation is, or call `laravel_docs_info`, to see the date
+and page count of every source.
 
 ## Installation
 
@@ -105,12 +108,13 @@ laravel-mcp-companion
 
 In an MCP client config, use `uvx` as the command and
 `["--from", "git+https://github.com/brianirish/laravel-mcp-companion", "laravel-mcp-companion"]`
-as the arguments. The options below work the same way. An install carries the
-documentation as it was at that commit; `--update-docs` refreshes it in place.
+as the arguments. The options in the next section are passed the same way, after
+`laravel-mcp-companion`. An install carries the documentation as it was at that
+commit; `--update-docs` refreshes it in place.
 
 ### Configuration Options
 
-These options can be used with the Docker command. For example:
+Options go after the image name in the Docker command, or after `laravel-mcp-companion`. For example:
 
 ```bash
 # Pin to a specific older Laravel version
@@ -122,9 +126,12 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--version VERSION` | Laravel version (e.g., "11.x", "12.x") | Latest |
-| `--docs-path PATH` | Documentation directory | `./docs` |
-| `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL | INFO |
+| `--version VERSION` | Laravel version answered from by default, e.g. `11.x` (env: `VERSION`) | The newest |
+| `--docs-path PATH` | Documentation directory (env: `DOCS_PATH`) | The copy that ships with the image or package |
+| `--transport TRANSPORT` | `stdio`, or `http` to serve over HTTP (env: `TRANSPORT`) | `stdio` |
+| `--port PORT` | Port for the HTTP transport (env: `PORT`) | `8081` |
+| `--server-name NAME` | Name the server reports to clients (env: `SERVER_NAME`) | `LaravelMCPCompanion` |
+| `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL (env: `LOG_LEVEL`) | INFO |
 | `--update-docs` | Update documentation on startup | false |
 | `--force-update` | Force documentation update | false |
 | `--transform-mode MODE` | Tool exposure mode: `search`, `code`, or `none` (env: `TRANSFORM_MODE`) | search |
@@ -147,7 +154,7 @@ documentation is refreshed. Which documentation you get depends on the tag:
 |-----|------|---------------|
 | `:latest` | the newest release | refreshed nightly |
 | `:v0.15.0` and other version tags | that release | as it was on the release date |
-| `:docs-YYYY-MM-DD` | the newest release as of that date (`main`, for tags older than this scheme) | that night's sync |
+| `:docs-YYYY-MM-DD` | the newest release as of that date (tags from before 0.15 carry whatever was on `main`) | that night's sync |
 
 `:latest` never carries unreleased code: the nightly image is the newest
 release with that night's documentation.
@@ -188,8 +195,8 @@ docker run --rm -i -v laravel-mcp-docs:/app/docs \
 ```
 
 The server runs as an unprivileged user (uid 10001), which owns `/app/docs` in
-the image, so a new named volume is writable. A volume created by an image
-before this change is owned by root: remove it (`docker volume rm
+the image, so a new named volume is writable. Images before 0.15 ran as root,
+and a volume one of them created is owned by root: remove it (`docker volume rm
 laravel-mcp-docs`) and let the next run recreate it.
 
 > **A volume overrides the image's documentation.** Once populated it masks
@@ -200,15 +207,25 @@ laravel-mcp-docs`) and let the next run recreate it.
 
 ### Transform Modes
 
-By default the server no longer lists all of its tools. Instead it exposes a compact, search-first interface that keeps your AI client's context window lean:
+The server is built on [FastMCP](https://gofastmcp.com), which can put a small search interface in front of a server's tools so that their descriptions do not all sit in the client's context. That is the default here, so a client lists four tools, not twelve:
 
-- **`search`** (default) — Exposes `search_tools` (BM25 relevance search over the tool catalog) and `call_tool` (proxy to invoke any underlying tool). `search_laravel_docs` stays pinned and directly callable.
-- **`code`** (experimental) — Exposes Code Mode meta-tools (`tags`, `search`, `get_schema`, `execute`) that let the client discover tools and orchestrate them with sandboxed Python. Requires the `fastmcp[code-mode]` extra (included in `requirements.txt`). Avoid exposing this publicly over HTTP — `execute` is a code execution endpoint.
-- **`none`** — Pre-0.9 behavior: every tool listed directly. Use this if your MCP client doesn't handle the synthetic search tools well.
+- **`search`** (default) — Lists `search_tools`, which finds a tool from a description of what you need, and `call_tool`, which runs any tool by name. `search_laravel_docs` and `read_laravel_doc_section` are listed directly as well, since they are the two used for almost every question.
+- **`code`** (experimental) — Exposes Code Mode meta-tools (`tags`, `search`, `get_schema`, `execute`) that let the client discover tools and orchestrate them with sandboxed Python. The extra it needs, `fastmcp[code-mode]`, is among the project's dependencies. Avoid exposing this publicly over HTTP — `execute` is a code execution endpoint.
+- **`none`** — Every tool listed directly. Use this if your MCP client does not handle `search_tools` and `call_tool` well, or if you call tools from a program.
 
 ```bash
-# Restore the old flat tool listing
+# List all twelve tools directly
 docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --transform-mode none
+```
+
+### Running over HTTP
+
+By default the server speaks MCP over stdio: the client starts it and owns the process. To run it
+as a service instead, start it with `--transport http`. It listens on port 8081, and the MCP
+endpoint is `/mcp/`:
+
+```bash
+docker run --rm -p 127.0.0.1:8081:8081 ghcr.io/brianirish/laravel-mcp-companion:latest --transport http
 ```
 
 ### HTTP transport security
@@ -222,8 +239,9 @@ python -m laravel_mcp_companion --transport http \
   --auth-issuer https://auth.example \
   --auth-audience laravel-mcp-companion
 
-# Development only: fixed tokens from the environment (never a CLI flag,
-# so secrets stay out of process listings)
+# Development only: fixed tokens from the environment, written as
+# "token:client-id" pairs separated by commas (never a CLI flag, so secrets
+# stay out of process listings)
 AUTH_STATIC_TOKENS="my-token:my-client" python -m laravel_mcp_companion --transport http
 ```
 
@@ -283,7 +301,8 @@ and succeed again once the bucket refills.
 ### Tools
 
 Twelve tools. [API.md](API.md) documents every argument and result field, and is generated from
-the running server.
+the running server. In the default mode a client lists only the first two of these plus two
+meta-tools, and reaches the rest through them; see [Transform Modes](#transform-modes).
 
 | Tool | What it does |
 |------|--------------|
@@ -300,13 +319,15 @@ the running server.
 | `get_laravel_learning_path` | Returns a reading order for a goal *(experimental)* |
 | `browse_docs_by_category` | Lists pages by topic and difficulty *(experimental)* |
 
-Three resource templates serve the same pages: `laravel://`, `laravel-external://` and
-`laravel-package://`.
+Three resource templates serve the same pages as markdown, for clients that read resources:
+`laravel://queues.md`, `laravel-external://forge/servers/php` and
+`laravel-package://livewire/quickstart.md` are examples. [API.md](API.md#resources) describes them.
 
 ### Search
 
 - **Ranked sections, not files.** Ask in plain language ("how do I retry a failed queue job") and
-  get the sections that answer it, each with a snippet and the `file` and `section` to read next.
+  get the sections that answer it, each with a snippet, and a `file` and `section` to hand to
+  `read_laravel_doc_section`.
 - **Section reads.** A whole page such as `queues.md` runs to tens of thousands of tokens. A
   section is usually a few hundred, which leaves room for your code.
 - **Unified search** - One search covers the core framework docs, the services, the package docs
@@ -338,8 +359,8 @@ Three resource templates serve the same pages: `laravel://`, `laravel-external:/
 - **OAuth 2.1 resource server.** Optional bearer-token validation by JWKS. Misconfiguration fails
   at startup, and an outage of the key server fails closed.
 - **Rate limiting.** An opt-in token bucket over the MCP surface.
-- **Hardened by default.** Loopback bind, Host and Origin validation, no wildcard CORS, and the
-  same path containment for search, listing and reads.
+- **Hardened by default.** Loopback bind, Host and Origin validation, and no wildcard CORS. Search,
+  listing and reads all refuse a path that resolves outside the documentation directory.
 - **Container health check.** The image declares a `HEALTHCHECK` and runs as an unprivileged user.
 
 ### Tested

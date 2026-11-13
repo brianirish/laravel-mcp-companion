@@ -37,7 +37,7 @@ SECTION_SCHEMA: Dict[str, Any] = {
 
 SECTION_DESCRIPTION = """Read one section of a documentation page.
 
-Give it the `file` and `section` of a search result and it returns that section's markdown and nothing else. This is the cheap way to read: a whole page such as queues.md runs to tens of thousands of tokens, and an answer usually needs one section of it.
+Give it a search result's `file` (as `filename`) and `section`, and it returns that section's markdown and nothing else. This is the cheap way to read: a whole page such as queues.md runs to tens of thousands of tokens, and an answer usually needs one section of it.
 
 `section` may be an anchor ("dealing-with-failed-jobs"), a heading ("Dealing With Failed Jobs") or a heading written as a slug. If the section is not found, the error lists the sections the page does have."""
 

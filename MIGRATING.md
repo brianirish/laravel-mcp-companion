@@ -18,12 +18,12 @@ documentation in a Docker volume, recreate the volume (see below).
 | `get_doc_structure(filename)` | `read_laravel_doc_content(filename, mode="outline")` |
 | `list_laravel_docs(version="12.x")` | `list_laravel_docs(name="12.x")` |
 | `list_laravel_services()` | `list_laravel_docs(source="services")` |
-| `list_laravel_learning_resources(source)` | `list_laravel_docs(source="learning")`, or `name=` for one source |
+| `list_laravel_learning_resources(source)` | `list_laravel_docs(source="learning")` for all of them, or `list_laravel_docs(name=source)` for the files of one |
 | `update_external_laravel_docs(services)` | `update_laravel_docs(scope="services", names=services)` |
 | `get_laravel_package_info(package_name)` | `get_laravel_package(name=package_name)` |
 | `get_laravel_package_categories(category)` | `get_laravel_package(category=category)` |
-| `get_features_for_laravel_package(package)` | `get_laravel_package(name=package)`, field `features` |
-| `get_related_laravel_packages(package)` | `get_laravel_package(name=package)`, field `related` |
+| `get_features_for_laravel_package(package)` | `get_laravel_package(name=package)`, field `packages[0].features` |
+| `get_related_laravel_packages(package)` | `get_laravel_package(name=package)`, field `packages[0].related` |
 | `get_laravel_package_recommendations(use_case)` | `recommend_laravel_packages(use_case)` |
 | `list_laravel_learning_paths()` | `get_laravel_learning_path()` |
 | `list_laravel_categories()` | `browse_docs_by_category()` |
@@ -36,12 +36,16 @@ Unchanged in name and arguments: `read_laravel_doc_section`,
 `browse_docs_by_category`. Their results changed shape; see
 [API.md](API.md).
 
-The three prompts are gone and have no replacement.
+`update_laravel_docs(version, force)` still works as it did; `scope` and `names`
+are new and optional.
+
+The three prompts (`laravel-authentication-setup`, `find-payment-solution` and
+`laravel-forge-deployment`) are gone and have no replacement.
 
 ## Results
 
-- **Search results** have `section` where they had `anchor`. Pass `file` and
-  `section` to `read_laravel_doc_section`. A search that finds nothing returns
+- **Search results** have `section` where they had `anchor`. Pass a result's
+  `file` as `filename`, with its `section`, to `read_laravel_doc_section`. A search that finds nothing returns
   `count: 0` and an empty `results`; it used to return an error.
 - **`laravel_docs_info`** always returns `versions` (a list, of one when you
   pass `version`) and `sources`. The per-version fields that were at the top
@@ -70,7 +74,8 @@ branch on `error.code` instead. The codes are listed in [API.md](API.md).
 
 ## TOON text
 
-The text encoding follows toon-format 1.x. Against the 0.9 beta used before:
+The text encoding follows version 1.x of the `toon-format` library. Against
+the 0.9 beta of that library, which earlier releases used:
 an empty list is `key: []`, not `key[0]:`; a whole float is written without
 `.0`; a string that begins with `#` is quoted. If you parse the text, parse
 the structured content instead.
@@ -99,5 +104,7 @@ the structured content instead.
 - **Spatie** pages are for each package's current major (Laravel Permission
   v8, Laravel Backup v10), and there are more of them. Pages a package
   dropped are gone.
-- **Livewire** pages are for 4.x; `wire-*.md` and similar names follow the
-  site's current navigation.
+- **Livewire** pages are for 4.x, and there are 80 where there were 36. A
+  page name is the one in the Livewire site's navigation, so a page Livewire 4
+  renamed or dropped is gone under its old name. List the current ones with
+  `list_laravel_docs(name="livewire")`.

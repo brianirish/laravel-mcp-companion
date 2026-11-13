@@ -1078,7 +1078,7 @@
             "items": {
               "properties": {
                 "file": {
-                  "description": "Pass to read_laravel_doc_section or read_laravel_doc_content",
+                  "description": "Pass as `filename` to read_laravel_doc_section or read_laravel_doc_content",
                   "type": "string"
                 },
                 "heading": {
@@ -1088,7 +1088,7 @@
                   "type": "number"
                 },
                 "section": {
-                  "description": "Pass to read_laravel_doc_section with `file`",
+                  "description": "Pass as `section` to read_laravel_doc_section, with `file` as its `filename`",
                   "type": "string"
                 },
                 "snippet": {

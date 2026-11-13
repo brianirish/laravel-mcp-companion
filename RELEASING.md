@@ -2,6 +2,11 @@
 
 How a version gets from `main` to users, and the conditions for tagging 1.0.0.
 
+Builds run in [Harness](https://app.harness.io). The three pipelines (`ci`,
+`docs_update` and `release`) are defined in
+`.harness/orgs/default/projects/laravel_mcp_companion/pipelines/`, and are
+started by triggers or with the Run button on the pipeline's page in Harness.
+
 ## The image, the registry entry and the PyPI package
 
 Publishing a GitHub release creates a `vX.Y.Z` tag on `main`. The tag starts
@@ -20,7 +25,7 @@ The PyPI package is published separately, by running
 publisher configured on PyPI first; the workflow file says how.
 
 Between releases, the nightly documentation sync tags `docs-YYYY-MM-DD` on
-`main`. The same pipeline builds that tag as the newest release's code with
+`main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The same pipeline builds that tag as the newest release's code with
 that night's `docs/`, and pushes it as `:latest`. So `:latest` is always
 released code.
 
@@ -39,8 +44,12 @@ released code.
      empty `Unreleased`, and update the compare links at the bottom.
    - `API.md`: run `python scripts/generate_api_reference.py`.
 
-   `tests/unit/test_version_consistency.py` fails if these disagree, or if
+   `tests/unit/test_version_consistency.py` fails if `server.json`, the
+   README heading or the ROADMAP line disagrees with `pyproject.toml`, or if
    the version is more than one bump ahead of the newest tag.
+   `tests/unit/test_api_reference.py` fails if `API.md` is stale. Nothing
+   checks the changelog, the lockfile, or the two other places the README
+   names the version (the status note at the top and the image tag table).
 3. **Merge it** once CI passes.
 4. **Publish the GitHub release** for `vX.Y.Z` targeting `main`, with notes
    taken from the changelog.
@@ -49,9 +58,12 @@ released code.
    works, and that the registry workflow succeeded.
 6. **Publish to PyPI** by running the PyPI workflow with the tag.
 
-If the documentation tag and the version tag are pushed within a few minutes
-of each other, check afterwards that `:latest` and `:vX.Y.Z` are the same
-image. Both builds use the release's code, so they should be.
+Both the version build and a nightly docs build push `:latest`, and whichever
+finishes last keeps it. Both use the release's code, so the result should be
+the same either way. If the two tags were pushed within a few minutes of each
+other, check that `:latest` reports the new version (`/healthz` over HTTP, or
+the `initialize` response). If it does not, re-run the `release` pipeline for
+the version tag.
 
 ## Conditions for tagging 1.0.0
 
@@ -61,15 +73,20 @@ image. Both builds use the release's code, so they should be.
       `tests/protocol/contract.json` needs to change. A change after this
       point is a 2.0.
 - [ ] The nightly sync has run green for 14 consecutive nights: every source
-      `ok` in the sync report, and nothing under "Needs attention".
+      `ok` in the sync report, and nothing under "Needs attention". The
+      report is in the body of each night's documentation pull request, and
+      `python -m laravel_mcp_companion.docs_updater --sync-report` prints it.
 - [ ] `pytest`, `pytest -m e2e --no-cov` and `pytest -m bench --no-cov` pass
-      on `main`. The plain `pytest` run includes the tests marked `corpus`.
+      on `main`. The plain `pytest` run includes the tests marked `corpus`,
+      which compare the curated tables with the documentation in `docs/`.
 - [ ] `docker run` works on amd64 and arm64 from the published image, over
       stdio and over HTTP.
 - [ ] `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` work
       from PyPI, offline once installed.
-- [ ] The failure email has been seen to arrive from a failed Harness run, and
-      the stale-sync issue has been seen to open from the GitHub workflow.
+- [ ] Both alarms have been seen to work: the email Harness sends when a
+      `docs_update` or `release` run fails, and the issue
+      `.github/workflows/docs-sync-watch.yml` opens when no `docs-` tag has
+      appeared for four days.
 - [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
 - [ ] The README makes no claim a test or a command in this file does not
       back.
