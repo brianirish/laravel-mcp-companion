@@ -3,8 +3,8 @@
 import sys
 from unittest.mock import patch, MagicMock
 
-from docs_updater import DEFAULT_VERSION
-from mcp_tools import (
+from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
+from laravel_mcp_companion.mcp_tools import (
     get_version_from_path,
     read_laravel_doc_content_impl,
     browse_docs_by_category_impl,
@@ -60,7 +60,7 @@ class TestRuntimeVersion:
         version_dir.mkdir(parents=True, exist_ok=True)
         (version_dir / "blade.md").write_text("# Blade Templates")
 
-        with patch('mcp_tools.os.listdir', return_value=['blade.md']):
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md']):
             # Without runtime_version, should use DEFAULT_VERSION
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
             assert DEFAULT_VERSION in result
@@ -73,8 +73,8 @@ class TestRuntimeVersion:
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", version="11.x", runtime_version="10.x")
             assert "11.x" in result
     
-    @patch('mcp_tools.os.listdir')
-    @patch('mcp_tools.get_laravel_docs_metadata')
+    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
+    @patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata')
     def test_list_laravel_docs_with_runtime_version(self, mock_metadata, mock_listdir, test_docs_dir):
         """Test listing docs with runtime_version parameter returns TOON format."""
         # Create the version directory
@@ -93,8 +93,8 @@ class TestRuntimeVersion:
         result = list_laravel_docs_impl(test_docs_dir, "10.x", runtime_version="11.x")
         assert "10.x" in result
     
-    @patch('mcp_tools.get_file_content_cached')
-    @patch('mcp_tools.os.listdir')
+    @patch('laravel_mcp_companion.mcp_tools.get_file_content_cached')
+    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
     def test_search_laravel_docs_with_runtime_version(self, mock_listdir, mock_get_content, test_docs_dir):
         """Test searching docs with runtime_version parameter returns TOON format."""
         # Create version directories
@@ -104,7 +104,7 @@ class TestRuntimeVersion:
         mock_listdir.return_value = ['test.md']
         mock_get_content.return_value = "Test content with search term"
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['10.x', '11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['10.x', '11.x', '12.x']):
             # Without version or runtime_version, searches all versions
             result = search_laravel_docs_data(test_docs_dir, "search")
             assert "search" in str(result).lower()
@@ -161,7 +161,7 @@ class TestVersionArgumentIntegration:
         content = read_laravel_doc_content_impl(test_docs_dir, "test.md")
         assert "Default version content" in content
 
-        with patch('mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md', 'test.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
             assert DEFAULT_VERSION in result
 
@@ -178,16 +178,16 @@ class TestNewVersionSimulation:
 
     def test_version_parsing_accepts_future_version(self):
         """New version from API is recognized as valid."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             version, path = get_version_from_path("blade.md")
             assert version == self.FUTURE_VERSION
             assert path == "blade.md"
 
     def test_explicit_version_still_overrides(self):
         """Explicit version in path overrides the new default."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             version, path = get_version_from_path("12.x/blade.md")
             assert version == "12.x"
             assert path == "blade.md"
@@ -198,8 +198,8 @@ class TestNewVersionSimulation:
         future_dir.mkdir(parents=True, exist_ok=True)
         (future_dir / "routing.md").write_text("# Routing for 14.x")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION):
             content = read_laravel_doc_content_impl(test_docs_dir, "routing.md")
             assert "Routing for 14.x" in content
 
@@ -209,9 +209,9 @@ class TestNewVersionSimulation:
         future_dir.mkdir(parents=True, exist_ok=True)
         (future_dir / "blade.md").write_text("# Blade")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
-             patch('mcp_tools.os.listdir', return_value=['blade.md']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
+             patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['blade.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend")
             assert self.FUTURE_VERSION in result
 
@@ -220,10 +220,10 @@ class TestNewVersionSimulation:
         future_dir = test_docs_dir / self.FUTURE_VERSION
         future_dir.mkdir(parents=True, exist_ok=True)
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
-             patch('mcp_tools.os.listdir', return_value=['routing.md']), \
-             patch('mcp_tools.get_file_content_cached', return_value="New routing features"):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value=self.FUTURE_VERSION), \
+             patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['routing.md']), \
+             patch('laravel_mcp_companion.mcp_tools.get_file_content_cached', return_value="New routing features"):
             result = search_laravel_docs_data(test_docs_dir, "routing")
             assert "routing" in str(result).lower()
 
@@ -234,8 +234,8 @@ class TestNewVersionSimulation:
         which checks against mcp_tools.SUPPORTED_VERSIONS and returns None
         (not True) for a supported version.
         """
-        with patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
-            from laravel_mcp_companion import validate_version
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS):
+            from laravel_mcp_companion.server import validate_version
             assert validate_version(self.FUTURE_VERSION) is None
 
     def test_main_uses_future_default(self):
@@ -243,26 +243,26 @@ class TestNewVersionSimulation:
         # setup_server_environment's version check now runs through
         # mcp_tools.validate_version, which checks mcp_tools.SUPPORTED_VERSIONS
         # -- that must be patched too, or the future version is rejected.
-        with patch('laravel_mcp_companion.GracefulShutdown'), \
-             patch('laravel_mcp_companion.MultiSourceDocsUpdater') as mock_updater_class, \
-             patch('laravel_mcp_companion.FastMCP') as mock_fastmcp_class, \
-             patch('laravel_mcp_companion.setup_docs_path') as mock_setup_docs, \
-             patch('laravel_mcp_companion.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
-             patch('laravel_mcp_companion.get_default_version', return_value=self.FUTURE_VERSION), \
-             patch('mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+        with patch('laravel_mcp_companion.server.GracefulShutdown'), \
+             patch('laravel_mcp_companion.server.MultiSourceDocsUpdater') as mock_updater_class, \
+             patch('laravel_mcp_companion.server.FastMCP') as mock_fastmcp_class, \
+             patch('laravel_mcp_companion.server.setup_docs_path') as mock_setup_docs, \
+             patch('laravel_mcp_companion.server.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
+             patch('laravel_mcp_companion.server.get_default_version', return_value=self.FUTURE_VERSION), \
+             patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', self.FUTURE_VERSIONS), \
              patch.object(sys, 'argv', ['laravel-mcp-companion']):
             mock_setup_docs.return_value = "/tmp/test"
             mock_mcp = MagicMock()
             mock_fastmcp_class.return_value = mock_mcp
 
-            from laravel_mcp_companion import main
+            from laravel_mcp_companion.server import main
             main()
 
             mock_updater_class.assert_called_once_with("/tmp/test", self.FUTURE_VERSION)
 
     def test_cache_file_contains_current_default(self):
         """Committed cache file includes the current DEFAULT_VERSION."""
-        from docs_updater import DEFAULT_VERSION, VERSIONS_CACHE_FILE
+        from laravel_mcp_companion.docs_updater import DEFAULT_VERSION, VERSIONS_CACHE_FILE
         import json
         assert VERSIONS_CACHE_FILE.exists(), f"Cache file missing: {VERSIONS_CACHE_FILE}"
         data = json.loads(VERSIONS_CACHE_FILE.read_text())
@@ -273,14 +273,14 @@ class TestNewVersionSimulation:
     def test_api_failure_with_cache_returns_cached_versions(self, tmp_path):
         """When API fails, the cache file provides the fallback."""
         import json
-        from docs_updater import get_supported_versions
+        from laravel_mcp_companion.docs_updater import get_supported_versions
         cache_file = tmp_path / ".versions_cache.json"
         cache_file.write_text(json.dumps({
             "versions": self.FUTURE_VERSIONS,
             "updated_at": "2026-04-05T00:00:00Z"
         }))
 
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_urlopen.side_effect = Exception("API down")
             versions = get_supported_versions(cache_file=cache_file)
 

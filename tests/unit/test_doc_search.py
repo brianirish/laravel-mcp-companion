@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from doc_search import (
+from laravel_mcp_companion.doc_search import (
     BM25Index,
     DocIndex,
     MAX_RESIDENT_INDEXES,
@@ -192,7 +192,7 @@ def test_clear_indexes_empties_the_registry():
 
 def test_clear_caches_also_clears_indexes():
     """Documentation updates call clear_caches; a stale index must not survive."""
-    from mcp_tools import clear_caches
+    from laravel_mcp_companion.mcp_tools import clear_caches
 
     clear_indexes()
     get_index(Path("/unused"), "13.x", lambda: _sections("13.x", "content"))
@@ -203,7 +203,7 @@ def test_clear_caches_also_clears_indexes():
 
 
 def test_load_version_sections_reads_real_files(tmp_path):
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     version = SUPPORTED_VERSIONS[-1]
     docs = tmp_path / "docs"
@@ -222,7 +222,7 @@ def test_load_version_sections_skips_escaping_symlinks(tmp_path):
     """Containment behaviour must match the read path."""
     import os
 
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     version = SUPPORTED_VERSIONS[-1]
     docs = tmp_path / "docs"
@@ -238,13 +238,13 @@ def test_load_version_sections_skips_escaping_symlinks(tmp_path):
 
 
 def test_load_version_sections_of_missing_version_is_empty(tmp_path):
-    from mcp_tools import SUPPORTED_VERSIONS, load_version_sections
+    from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, load_version_sections
 
     assert load_version_sections(tmp_path, SUPPORTED_VERSIONS[-1]) == []
 
 
 def test_load_service_sections_keys_by_service(tmp_path):
-    from mcp_tools import load_service_sections
+    from laravel_mcp_companion.mcp_tools import load_service_sections
 
     external = tmp_path / "external"
     (external / "forge").mkdir(parents=True)

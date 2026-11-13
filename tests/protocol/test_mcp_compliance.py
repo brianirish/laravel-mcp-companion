@@ -9,8 +9,8 @@ import re
 
 from fastmcp import Client
 
-import laravel_mcp_companion
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion.server import create_mcp_server
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ class TestServerIdentity:
     async def test_initialize_reports_server_version(self, mcp_server):
         async with Client(mcp_server) as client:
             info = client.initialize_result.serverInfo
-            assert info.version == laravel_mcp_companion.SERVER_VERSION
+            assert info.version == companion_server.SERVER_VERSION
 
     async def test_server_declares_an_icon(self, mcp_server):
         icons = mcp_server.icons
@@ -124,14 +124,14 @@ class TestErrorResponses:
 
     def test_invalid_package_returns_error(self, mcp_server):
         """Requesting invalid package should return proper error."""
-        from laravel_mcp_companion import get_laravel_package_info
+        from laravel_mcp_companion.server import get_laravel_package_info
         result = get_laravel_package_info("nonexistent/package")
         # Should return TOON-encoded error
         assert "error" in result.lower() or "not found" in result.lower()
 
     def test_empty_search_query_handled(self, mcp_server, temp_dir):
         """Empty search queries should be handled gracefully."""
-        from mcp_tools import search_laravel_docs_data
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
         result = search_laravel_docs_data(temp_dir, "", None, False, None, runtime_version="12.x")
         # Should return error or empty results, not crash
         assert result is not None
@@ -143,7 +143,7 @@ class TestToolInvocationStructure:
 
     def test_package_recommendations_return_structured_data(self, mcp_server):
         """Package recommendations should return structured TOON data."""
-        from laravel_mcp_companion import get_laravel_package_recommendations
+        from laravel_mcp_companion.server import get_laravel_package_recommendations
         result = get_laravel_package_recommendations("authentication")
         # Should contain package data in TOON format
         assert result is not None
@@ -153,7 +153,7 @@ class TestToolInvocationStructure:
 
     def test_package_info_return_structure(self, mcp_server):
         """Package info should return expected fields."""
-        from laravel_mcp_companion import get_laravel_package_info
+        from laravel_mcp_companion.server import get_laravel_package_info
         result = get_laravel_package_info("laravel/sanctum")
         assert result is not None
         # Should contain key fields in TOON format
@@ -161,7 +161,7 @@ class TestToolInvocationStructure:
 
     def test_feature_map_returns_structured_data(self, mcp_server):
         """Feature lookup should return structured data."""
-        from laravel_mcp_companion import get_features_for_laravel_package
+        from laravel_mcp_companion.server import get_features_for_laravel_package
         result = get_features_for_laravel_package("laravel/sanctum")
         assert result is not None
         assert "features" in result.lower() or ":" in result

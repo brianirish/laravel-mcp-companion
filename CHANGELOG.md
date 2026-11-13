@@ -18,7 +18,29 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- The project is an installable Python package. `uvx --from
+  git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-companion`
+  and `pip install git+...` both work, with the documentation bundled in the
+  wheel so no download is needed on first run. Two console scripts are
+  installed: `laravel-mcp-companion` and `laravel-mcp-companion-docs`. A
+  manual workflow for publishing to PyPI is included; publishing needs a
+  one-time PyPI setup first.
+- A container `HEALTHCHECK`. Over HTTP it asks the server's `/healthz`; over
+  stdio it passes, since there is no port to ask.
+
 ### Changed
+- **Breaking for anyone running from a clone:** the modules moved into a
+  `laravel_mcp_companion/` package. `python laravel_mcp_companion.py` is now
+  `python -m laravel_mcp_companion`, and `python docs_updater.py` is
+  `python -m laravel_mcp_companion.docs_updater`. Docker users are unaffected.
+- `toon-format` comes from PyPI (1.2.0) instead of a pinned git commit of its
+  0.9 beta. Three details of the text output change with it: an empty list is
+  written `key: []` rather than `key[0]:`, a whole float loses its `.0`
+  (`score: 3`), and a string starting with `#` is quoted. Structured content
+  is unchanged.
+- The server version is written in one place, `pyproject.toml`. The
+  `SERVER_VERSION` constant is read from it.
 - **Breaking for Docker volumes:** the image runs as an unprivileged user (uid
   10001) instead of root. A named volume mounted at `/app/docs` that an earlier
   image created is owned by root, so `--update-docs` can no longer write to it.
@@ -35,10 +57,6 @@ docs-only commit and contains no code change.
   `requirements-dev.txt` are removed; `uv sync` replaces them.
 - The image is built in two stages, so the compiler toolchain and git are no
   longer in it.
-
-### Added
-- A container `HEALTHCHECK`. Over HTTP it asks the server's `/healthz`; over
-  stdio it passes, since there is no port to ask.
 
 ### Internal
 - Importing the server no longer contacts GitHub. Version discovery used to run

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from mcp_tools import search_laravel_docs_data
+from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
 
@@ -154,7 +154,7 @@ class TestCorePreferredOnNearTies:
     that small is noise; the framework's docs win it."""
 
     def _order(self, hits):
-        from mcp_tools import rank_hits
+        from laravel_mcp_companion.mcp_tools import rank_hits
         return [family for _section, _score, family in rank_hits(hits)]
 
     def test_core_wins_a_near_tie_against_a_package(self):
@@ -169,5 +169,5 @@ class TestCorePreferredOnNearTies:
         ]
 
     def test_reported_scores_are_left_as_computed(self):
-        from mcp_tools import rank_hits
+        from laravel_mcp_companion.mcp_tools import rank_hits
         assert [score for _s, score, _f in rank_hits([("a", 30.04, "package"), ("b", 29.52, "core")])] == [29.52, 30.04]

@@ -4,10 +4,10 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-import laravel_mcp_companion
-from mcp_tools import is_safe_path
-from docs_updater import DEFAULT_VERSION
-from laravel_mcp_companion import (
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion.mcp_tools import is_safe_path
+from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
+from laravel_mcp_companion.server import (
     search_by_use_case,
     format_package_recommendation,
     get_version_from_path,
@@ -25,7 +25,7 @@ class TestMCPTools:
 
     def test_search_by_use_case_authentication(self, sample_package_catalog):
         """Test package search for authentication use case."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog, clear=True):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog, clear=True):
             results = search_by_use_case("authentication for SPA")
             
             assert len(results) > 0
@@ -39,7 +39,7 @@ class TestMCPTools:
 
     def test_search_by_use_case_payment(self, sample_package_catalog):
         """Test package search for payment use case."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
             results = search_by_use_case("subscription billing payment")
             
             assert len(results) > 0
@@ -50,14 +50,14 @@ class TestMCPTools:
 
     def test_search_by_use_case_no_matches(self, sample_package_catalog):
         """Test package search with no matches."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
             results = search_by_use_case("quantum computing blockchain")
             
             assert len(results) == 0
 
     def test_search_by_use_case_empty_query(self, sample_package_catalog):
         """Test package search with empty query."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
             results = search_by_use_case("")
             
             assert len(results) == 0
@@ -170,8 +170,7 @@ class TestFileOperations:
 
     def test_clear_file_cache(self, temp_dir):
         """Test cache clearing functionality."""
-        import mcp_tools
-
+        from laravel_mcp_companion import mcp_tools
         test_file = temp_dir / "test.md"
         test_content = "# Test Content"
         test_file.write_text(test_content)
@@ -190,29 +189,25 @@ class TestFileOperations:
 class TestUtilityFunctions:
     """Test utility functions used by MCP tools."""
 
-    def test_setup_docs_path_default(self):
-        """Test docs path setup with default location."""
-        with patch('laravel_mcp_companion.Path') as mock_path:
-            mock_path_instance = MagicMock()
-            mock_path.return_value = mock_path_instance
-            mock_path_instance.parent = MagicMock()
-            mock_path_instance.parent.__truediv__ = MagicMock(return_value=mock_path_instance)
-            mock_path_instance.resolve.return_value = mock_path_instance
-            
-            laravel_mcp_companion.setup_docs_path()
-            
-            mock_path_instance.mkdir.assert_called_once_with(parents=True, exist_ok=True)
+    def test_setup_docs_path_default(self, temp_dir):
+        """With no path given, the corpus that ships with the project is used and created if absent."""
+        shipped = temp_dir / "shipped" / "docs"
+        with patch('laravel_mcp_companion.server.resource_path', return_value=shipped):
+            result = companion_server.setup_docs_path()
+
+        assert result == shipped.resolve()
+        assert shipped.is_dir()
 
     def test_setup_docs_path_custom(self):
         """Test docs path setup with custom location."""
         custom_path = "/custom/docs/path"
         
-        with patch('laravel_mcp_companion.Path') as mock_path:
+        with patch('laravel_mcp_companion.server.Path') as mock_path:
             mock_path_instance = MagicMock()
             mock_path.return_value = mock_path_instance
             mock_path_instance.resolve.return_value = mock_path_instance
             
-            laravel_mcp_companion.setup_docs_path(custom_path)
+            companion_server.setup_docs_path(custom_path)
             
             mock_path.assert_called_with(custom_path)
             mock_path_instance.mkdir.assert_called_once_with(parents=True, exist_ok=True)
@@ -220,7 +215,7 @@ class TestUtilityFunctions:
     def test_parse_arguments_default(self):
         """Test argument parsing with defaults."""
         with patch('sys.argv', ['laravel_mcp_companion.py']):
-            args = laravel_mcp_companion.parse_arguments()
+            args = companion_server.parse_arguments()
             
             assert args.docs_path is None
             assert args.server_name == "LaravelMCPCompanion"
@@ -243,7 +238,7 @@ class TestUtilityFunctions:
         ]
 
         with patch('sys.argv', test_args):
-            args = laravel_mcp_companion.parse_arguments()
+            args = companion_server.parse_arguments()
 
             assert args.docs_path == '/custom/docs'
             assert args.server_name == 'CustomServer'
@@ -334,8 +329,8 @@ class TestSetupDocsPath:
         with patch('pathlib.Path.mkdir') as mock_mkdir:
             result = setup_docs_path(None)
             
-            # Should use script directory + 'docs'
-            expected = (Path(laravel_mcp_companion.__file__).parent / "docs").resolve()
+            # In a checkout the corpus is docs/ at the repository root
+            expected = (Path(companion_server.__file__).parent.parent / "docs").resolve()
             assert result == expected
             mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
     
@@ -354,7 +349,7 @@ class TestSetupDocsPath:
 class TestUpdateDocumentation:
     """Test documentation update function."""
     
-    @patch('laravel_mcp_companion.DocsUpdater')
+    @patch('laravel_mcp_companion.server.DocsUpdater')
     def test_update_documentation_success(self, mock_updater_class, temp_dir):
         """Test successful documentation update."""
         mock_updater = MagicMock()
@@ -367,7 +362,7 @@ class TestUpdateDocumentation:
         mock_updater_class.assert_called_once_with(temp_dir, "12.x")
         mock_updater.update.assert_called_once_with(force=False)
     
-    @patch('laravel_mcp_companion.DocsUpdater')
+    @patch('laravel_mcp_companion.server.DocsUpdater')
     def test_update_documentation_no_changes(self, mock_updater_class, temp_dir):
         """Test documentation update with no changes."""
         mock_updater = MagicMock()
@@ -379,7 +374,7 @@ class TestUpdateDocumentation:
         assert result is False
         mock_updater.update.assert_called_once_with(force=True)
     
-    @patch('laravel_mcp_companion.DocsUpdater')
+    @patch('laravel_mcp_companion.server.DocsUpdater')
     def test_update_documentation_error(self, mock_updater_class, temp_dir):
         """Test documentation update with error."""
         mock_updater_class.side_effect = Exception("Update failed")

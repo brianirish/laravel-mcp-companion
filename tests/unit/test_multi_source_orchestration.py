@@ -12,7 +12,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from docs_updater import MultiSourceDocsUpdater
+from laravel_mcp_companion.docs_updater import MultiSourceDocsUpdater
 
 
 @pytest.fixture

@@ -7,7 +7,7 @@ used to read, enumerate, or write outside the documentation tree.
 
 import pytest
 
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     is_safe_path,
     validate_version,
     validate_subdirectory,
@@ -20,7 +20,7 @@ from mcp_tools import (
     list_laravel_learning_resources_impl,
     search_laravel_learning_resources_impl,
 )
-from docs_updater import is_safe_section_name, is_within_directory, DocsUpdater
+from laravel_mcp_companion.docs_updater import is_safe_section_name, is_within_directory, DocsUpdater
 
 SECRET = "TOPSECRET-api-key-sk-live-1234"
 
@@ -147,7 +147,7 @@ class TestIsSafePath:
 
 class TestValidators:
     def test_validate_version_accepts_supported(self):
-        from mcp_tools import SUPPORTED_VERSIONS
+        from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
         assert validate_version(SUPPORTED_VERSIONS[0]) is None
 
     def test_validate_version_allows_none(self):
@@ -249,7 +249,7 @@ class TestAllowlistArgumentParsing:
 
     def _parse(self, monkeypatch, argv, env):
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         for var in ("CORS_ORIGINS", "ALLOWED_HOSTS"):
             monkeypatch.delenv(var, raising=False)
@@ -309,7 +309,7 @@ class TestDocsInfoTraversal:
     async def test_rejects_traversal_version(self, tmp_path, bad_version):
         import json
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         docs = tmp_path / "docs"
         (docs / "12.x" / ".metadata").mkdir(parents=True)
@@ -338,8 +338,8 @@ class TestDocsInfoTraversal:
     async def test_legitimate_version_still_works(self, tmp_path):
         import json
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
-        from mcp_tools import SUPPORTED_VERSIONS
+        from laravel_mcp_companion.server import create_mcp_server
+        from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS
 
         version = SUPPORTED_VERSIONS[-1]
         docs = tmp_path / "docs"
@@ -370,7 +370,7 @@ class TestVersionsCacheIsTrustworthy:
     ])
     def test_malformed_cache_entries_are_discarded(self, tmp_path, poisoned):
         import json
-        from docs_updater import get_supported_versions
+        from laravel_mcp_companion.docs_updater import get_supported_versions
 
         cache = tmp_path / "versions.json"
         cache.write_text(json.dumps({
@@ -385,7 +385,7 @@ class TestVersionsCacheIsTrustworthy:
     def test_cache_of_only_bad_entries_falls_through(self, tmp_path):
         """A wholly malformed cache must not become the allowlist."""
         import json
-        from docs_updater import get_supported_versions
+        from laravel_mcp_companion.docs_updater import get_supported_versions
 
         cache = tmp_path / "versions.json"
         cache.write_text(json.dumps({
@@ -402,7 +402,7 @@ class TestSymlinkedVersionDirectory:
 
     def test_symlinked_version_dir_is_accepted(self, tmp_path):
         import os
-        from docs_updater import DocsUpdater
+        from laravel_mcp_companion.docs_updater import DocsUpdater
 
         docs = tmp_path / "docs"
         docs.mkdir()
@@ -416,7 +416,7 @@ class TestSymlinkedVersionDirectory:
     def test_server_starts_with_symlinked_version_dir(self, tmp_path):
         """This previously aborted startup, not merely the update path."""
         import os
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         docs = tmp_path / "docs"
         docs.mkdir()

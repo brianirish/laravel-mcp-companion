@@ -4,8 +4,8 @@ list/status commands of main() (docs_updater.py:3683-3880)."""
 from unittest.mock import Mock, patch
 
 
-import docs_updater
-from docs_updater import handle_update_command, update_version
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion.docs_updater import handle_update_command, update_version
 
 
 class TestUpdateVersion:

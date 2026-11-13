@@ -3,8 +3,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-import laravel_mcp_companion
-from docs_updater import DocsUpdater
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion.docs_updater import DocsUpdater
 
 
 @pytest.mark.integration
@@ -14,21 +14,21 @@ class TestDocumentationWorkflows:
     def test_full_documentation_update_and_search_workflow(self, test_docs_dir):
         """Test complete workflow: update docs, then search and read."""
         # Import standalone implementations
-        from mcp_tools import (
+        from laravel_mcp_companion.mcp_tools import (
             list_laravel_docs_impl,
             search_laravel_docs_data,
             read_laravel_doc_content_impl
         )
         
         # Setup: Mock the updater to simulate successful update
-        with patch('docs_updater.DocsUpdater') as mock_updater_class:
+        with patch('laravel_mcp_companion.docs_updater.DocsUpdater') as mock_updater_class:
             mock_updater = MagicMock()
             mock_updater.needs_update.return_value = True
             mock_updater.update.return_value = True
             mock_updater_class.return_value = mock_updater
             
             # Mock metadata after update
-            with patch('mcp_tools.get_laravel_docs_metadata') as mock_metadata:
+            with patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata') as mock_metadata:
                 mock_metadata.return_value = {
                     'commit_sha': 'abc123def456',
                     'commit_date': '2024-01-01T12:00:00Z',
@@ -41,14 +41,14 @@ class TestDocumentationWorkflows:
                 assert update_result is True
                 
                 # Step 2: List available documentation
-                with patch('mcp_tools.os.listdir', return_value=['routing.md', 'eloquent.md']):
+                with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['routing.md', 'eloquent.md']):
                     list_result = list_laravel_docs_impl(test_docs_dir, "12.x")
                     assert "routing.md" in list_result
                     assert "eloquent.md" in list_result
                 
                 # Step 3: Search documentation
-                with patch('mcp_tools.os.listdir', return_value=['routing.md']), \
-                     patch('mcp_tools.get_file_content_cached', return_value="# Routing\n\nLaravel routing documentation."):
+                with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['routing.md']), \
+                     patch('laravel_mcp_companion.mcp_tools.get_file_content_cached', return_value="# Routing\n\nLaravel routing documentation."):
                     
                     search_result = search_laravel_docs_data(test_docs_dir, "routing", "12.x")
                     # Data: query and file paths
@@ -65,9 +65,9 @@ class TestDocumentationWorkflows:
 
     def test_package_recommendation_workflow(self, sample_package_catalog):
         """Test complete package recommendation workflow."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
             # Step 1: Get recommendations for a use case
-            from laravel_mcp_companion import get_laravel_package_recommendations
+            from laravel_mcp_companion.server import get_laravel_package_recommendations
             recommendations = get_laravel_package_recommendations("authentication for single page applications")
             
             # TOON format: package name and install command
@@ -75,7 +75,7 @@ class TestDocumentationWorkflows:
             assert "laravel/sanctum" in recommendations
 
             # Step 2: Get detailed info about specific package
-            from laravel_mcp_companion import get_laravel_package_info
+            from laravel_mcp_companion.server import get_laravel_package_info
             package_info = get_laravel_package_info("laravel/sanctum")
 
             # TOON format: name and description fields
@@ -83,14 +83,14 @@ class TestDocumentationWorkflows:
             assert "authentication" in package_info.lower()
             
             # Step 3: Get packages by category
-            from laravel_mcp_companion import get_laravel_package_categories
+            from laravel_mcp_companion.server import get_laravel_package_categories
             category_packages = get_laravel_package_categories("authentication")
             
             assert "Laravel Sanctum" in category_packages
             
             # Step 4: Get implementation features
-            from laravel_mcp_companion import get_features_for_laravel_package
-            with patch.dict(laravel_mcp_companion.FEATURE_MAP, {'laravel/sanctum': ['spa-auth', 'api-tokens']}):
+            from laravel_mcp_companion.server import get_features_for_laravel_package
+            with patch.dict(companion_server.FEATURE_MAP, {'laravel/sanctum': ['spa-auth', 'api-tokens']}):
                 features = get_features_for_laravel_package("laravel/sanctum")
                 
                 assert "spa-auth" in features
@@ -98,7 +98,7 @@ class TestDocumentationWorkflows:
 
     def test_external_documentation_workflow(self, test_external_docs_dir):
         """Test external documentation fetching and reading workflow."""
-        from docs_updater import ExternalDocsFetcher
+        from laravel_mcp_companion.docs_updater import ExternalDocsFetcher
         
         # Create an external docs fetcher
         external_fetcher = ExternalDocsFetcher(test_external_docs_dir.parent)
@@ -131,7 +131,7 @@ class TestErrorRecoveryWorkflows:
 
     def test_documentation_update_failure_recovery(self, test_docs_dir):
         """Test recovery from documentation update failures."""
-        from docs_updater import DocsUpdater
+        from laravel_mcp_companion.docs_updater import DocsUpdater
         
         with patch.object(DocsUpdater, 'update') as mock_update:
             # First attempt fails
@@ -153,7 +153,7 @@ class TestErrorRecoveryWorkflows:
 
     def test_file_system_error_recovery(self, test_docs_dir):
         """Test recovery from file system errors."""
-        from mcp_tools import read_laravel_doc_content_impl, clear_caches
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl, clear_caches
         
         # Clear caches first
         clear_caches()
@@ -178,15 +178,15 @@ class TestErrorRecoveryWorkflows:
             assert "Documentation file not found" in result or "Error" in result
             
             # Other operations should still work
-            from laravel_mcp_companion import get_laravel_package_info
-            with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {'test/package': {'name': 'Test', 'description': 'Test package'}}):
+            from laravel_mcp_companion.server import get_laravel_package_info
+            with patch.dict(companion_server.PACKAGE_CATALOG, {'test/package': {'name': 'Test', 'description': 'Test package'}}):
                 package_result = get_laravel_package_info("test/package")
                 assert "Test" in package_result
 
     def test_network_error_resilience(self, test_docs_dir):
         """Test resilience to network errors."""
         # Test external service fetching with network issues
-        with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+        with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
             mock_urlopen.side_effect = Exception("Network timeout")
             
             fetcher = DocsUpdater(test_docs_dir, "12.x")
@@ -201,7 +201,7 @@ class TestErrorRecoveryWorkflows:
 
     def test_malformed_data_handling(self, test_docs_dir):
         """Test handling of malformed or corrupted data."""
-        from docs_updater import DocsUpdater
+        from laravel_mcp_companion.docs_updater import DocsUpdater
         
         # Create corrupted metadata file
         version_dir = test_docs_dir / "12.x"
@@ -225,7 +225,7 @@ class TestCachingWorkflows:
 
     def test_file_content_caching_workflow(self, test_docs_dir):
         """Test file content caching across multiple operations."""
-        from mcp_tools import get_file_content_cached, clear_caches, _file_content_cache
+        from laravel_mcp_companion.mcp_tools import get_file_content_cached, clear_caches, _file_content_cache
         
         # Clear caches first
         clear_caches()
@@ -256,7 +256,7 @@ class TestCachingWorkflows:
 
     def test_search_result_caching(self, test_docs_dir):
         """Test search result caching."""
-        from mcp_tools import search_laravel_docs_data, clear_caches, _search_result_cache
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data, clear_caches, _search_result_cache
 
         # Clear caches first
         clear_caches()
@@ -266,7 +266,7 @@ class TestCachingWorkflows:
         version_dir.mkdir(exist_ok=True)
         (version_dir / "test.md").write_text("test content with keyword")
 
-        with patch('mcp_tools.os.listdir', return_value=['test.md']):
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['test.md']):
             # First search - should cache result
             result1 = search_laravel_docs_data(test_docs_dir, "keyword", "12.x")
             # Data: query field present
@@ -288,7 +288,7 @@ class TestCachingWorkflows:
 
     def test_cache_invalidation_workflow(self, test_docs_dir):
         """Test cache invalidation during documentation updates."""
-        from mcp_tools import clear_caches, _file_content_cache, _search_result_cache
+        from laravel_mcp_companion.mcp_tools import clear_caches, _file_content_cache, _search_result_cache
         
         # Populate caches
         _file_content_cache["test"] = "cached_content"
@@ -312,7 +312,7 @@ class TestSecurityWorkflows:
 
     def test_path_traversal_protection_workflow(self, test_docs_dir):
         """Test path traversal protection across different operations."""
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
         
         # Setup safe file
         version_dir = test_docs_dir / "12.x"
@@ -344,7 +344,7 @@ class TestSecurityWorkflows:
 
     def test_input_validation_workflow(self, test_docs_dir):
         """Test input validation across different functions."""
-        from mcp_tools import search_laravel_docs_data
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
         # Test search input validation
         # Empty search should be rejected
@@ -356,10 +356,10 @@ class TestSecurityWorkflows:
         assert result["error"] == "Search query cannot be empty"
         
         # Package name validation
-        from laravel_mcp_companion import get_laravel_package_info
+        from laravel_mcp_companion.server import get_laravel_package_info
         
         # Empty package name should be handled
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {}, clear=True):
+        with patch.dict(companion_server.PACKAGE_CATALOG, {}, clear=True):
             result = get_laravel_package_info("")
             assert "not found" in result
         
@@ -375,7 +375,7 @@ class TestPerformanceWorkflows:
 
     def test_large_file_handling(self, test_docs_dir):
         """Test handling of large documentation files."""
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
         
         # Create a large test file
         version_dir = test_docs_dir / "12.x"
@@ -392,14 +392,14 @@ class TestPerformanceWorkflows:
         assert len(result) > 1000  # Should contain substantial content
         
         # Search should also work with large files
-        from mcp_tools import search_laravel_docs_data
-        with patch('mcp_tools.os.listdir', return_value=['large.md']):
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['large.md']):
             search_result = search_laravel_docs_data(test_docs_dir, "Large", "12.x")
             assert "12.x/large.md" in str(search_result)
 
     def test_multiple_version_handling(self, test_docs_dir):
         """Test performance with multiple Laravel versions."""
-        from mcp_tools import search_laravel_docs_data
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
         # Create multiple version directories with files
         versions = ["10.x", "11.x", "12.x"]
@@ -417,8 +417,8 @@ class TestPerformanceWorkflows:
         import time
         start_time = time.time()
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', versions), \
-             patch('mcp_tools.os.listdir', return_value=[f'file_{i}.md' for i in range(5)]):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', versions), \
+             patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=[f'file_{i}.md' for i in range(5)]):
             result = search_laravel_docs_data(test_docs_dir, "File", version=None)  # Search all versions
 
             end_time = time.time()
@@ -430,7 +430,7 @@ class TestPerformanceWorkflows:
 
     def test_concurrent_access_simulation(self, test_docs_dir):
         """Test behavior under simulated concurrent access."""
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
         
         # Setup test file
         version_dir = test_docs_dir / "12.x"

@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 import pytest
 
-from docs_updater import LearningResourceFetcher
+from laravel_mcp_companion.docs_updater import LearningResourceFetcher
 from tests.conftest import load_fixture
 
 LANDING = """

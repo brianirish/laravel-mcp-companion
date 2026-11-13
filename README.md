@@ -88,6 +88,26 @@ claude mcp add laravel-mcp-companion --scope project -- docker run --rm -i ghcr.
 
 The `--scope project` option creates a `.mcp.json` file in your project root that can be committed to version control.
 
+### Without Docker
+
+The project is also an ordinary Python package (3.12+), with the documentation
+bundled, so it runs without Docker and without a network connection. It is not
+on PyPI yet; install it from the repository:
+
+```bash
+# Run it without installing anything permanently
+uvx --from git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-companion
+
+# Or install it
+pip install git+https://github.com/brianirish/laravel-mcp-companion
+laravel-mcp-companion
+```
+
+In an MCP client config, use `uvx` as the command and
+`["--from", "git+https://github.com/brianirish/laravel-mcp-companion", "laravel-mcp-companion"]`
+as the arguments. The options below work the same way. An install carries the
+documentation as it was at that commit; `--update-docs` refreshes it in place.
+
 ### Configuration Options
 
 These options can be used with the Docker command. For example:
@@ -197,14 +217,14 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --transform-m
 
 ```bash
 # Validate tokens issued by a real OAuth 2.1 authorization server
-python laravel_mcp_companion.py --transport http \
+python -m laravel_mcp_companion --transport http \
   --auth-jwks-uri https://auth.example/.well-known/jwks.json \
   --auth-issuer https://auth.example \
   --auth-audience laravel-mcp-companion
 
 # Development only: fixed tokens from the environment (never a CLI flag,
 # so secrets stay out of process listings)
-AUTH_STATIC_TOKENS="my-token:my-client" python laravel_mcp_companion.py --transport http
+AUTH_STATIC_TOKENS="my-token:my-client" python -m laravel_mcp_companion --transport http
 ```
 
 The server is a *resource server*: it validates tokens, it never issues them.
@@ -224,7 +244,7 @@ Defaults are conservative:
 Only `localhost`, `127.0.0.1`, and `::1` are accepted as `Host` values out of the box. **If you bind a non-loopback interface you must add the hostname clients actually use**, or every request is rejected with `421`:
 
 ```bash
-python laravel_mcp_companion.py --transport http \
+python -m laravel_mcp_companion --transport http \
   --host 0.0.0.0 \
   --allowed-host mcp.internal.example \
   --cors-origin https://app.example
@@ -394,10 +414,10 @@ The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) provides 
 
 ```bash
 # Launch Inspector (opens browser at http://localhost:6274)
-npx @modelcontextprotocol/inspector python laravel_mcp_companion.py
+npx @modelcontextprotocol/inspector python -m laravel_mcp_companion
 
 # With specific version
-npx @modelcontextprotocol/inspector python laravel_mcp_companion.py --version 11.x
+npx @modelcontextprotocol/inspector python -m laravel_mcp_companion --version 11.x
 ```
 
 Use the Inspector to:
@@ -424,3 +444,5 @@ Contributions are welcome! See CONTRIBUTING.md for guidelines.
 
 - Laravel for their excellent documentation
 - Laravel package authors for their contributions to the ecosystem
+
+<!-- mcp-name: io.github.brianirish/laravel-mcp-companion -->

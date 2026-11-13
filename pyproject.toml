@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "laravel-mcp-companion"
 version = "0.14.0"
@@ -25,9 +29,32 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
+[project.scripts]
+laravel-mcp-companion = "laravel_mcp_companion.server:main"
+laravel-mcp-companion-docs = "laravel_mcp_companion.docs_updater:main"
+
 [project.urls]
 Repository = "https://github.com/brianirish/laravel-mcp-companion"
 Issues = "https://github.com/brianirish/laravel-mcp-companion/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["laravel_mcp_companion"]
+
+# hatch_build.py adds the documentation corpus and server.json to the wheel,
+# so an installed copy works offline with no first-run download.
+[tool.hatch.build.targets.wheel.hooks.custom]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/laravel_mcp_companion",
+    "/docs",
+    "/hatch_build.py",
+    "/server.json",
+    "/README.md",
+    "/LICENSE",
+    "/CHANGELOG.md",
+]
+exclude = ["/docs/superpowers"]
 
 [dependency-groups]
 dev = [
@@ -39,6 +66,7 @@ dev = [
     "black",
     "inline-snapshot",
     "pytest-timeout>=2.4.0",
+    "hatchling>=1.33.0",
 ]
 
 [tool.ruff.lint]
@@ -58,19 +86,7 @@ branch = true
 # Measure the product modules only. Without this, CI's bare `--cov` also
 # measured the test suite, whose near-total coverage inflated the number well
 # past the threshold while product coverage sat much lower.
-source = [
-    "laravel_mcp_companion",
-    "docs_updater",
-    "shutdown_handler",
-    "toon_helpers",
-    "mcp_tools",
-    "learning_resources",
-    "doc_search",
-    "metrics",
-    "tool_schemas",
-    "path_security",
-    "healthcheck",
-]
+source = ["laravel_mcp_companion"]
 omit = [
     "tests/*",
     "*/site-packages/*",

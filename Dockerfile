@@ -64,10 +64,11 @@ ENV HOST=0.0.0.0
 # Over HTTP this asks the server's own /healthz. Over stdio it passes: there is
 # no port to ask, and a stdio container lasts one client session.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD ["python", "healthcheck.py"]
+    CMD ["python", "-m", "laravel_mcp_companion.healthcheck"]
 
-# Set the entrypoint to the Python script
-ENTRYPOINT ["python", "laravel_mcp_companion.py"]
+# Run the package from /app. It is not installed into the environment: that
+# would put a second copy of the corpus in site-packages beside /app/docs.
+ENTRYPOINT ["python", "-m", "laravel_mcp_companion"]
 
 # Default command (no arguments) - can be overridden
 CMD []

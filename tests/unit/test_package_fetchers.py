@@ -6,7 +6,7 @@ import time
 from unittest.mock import patch, MagicMock
 import urllib.error
 
-from docs_updater import CommunityPackageFetcher
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher
 
 
 class TestPackageFetchers:

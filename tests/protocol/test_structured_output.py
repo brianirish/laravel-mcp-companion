@@ -9,7 +9,7 @@ import pytest
 
 from fastmcp import Client
 
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion.server import create_mcp_server
 
 STRUCTURED_TOOLS = (
     "search_laravel_docs",

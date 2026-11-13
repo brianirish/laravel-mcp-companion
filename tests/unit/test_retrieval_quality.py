@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from mcp_tools import SUPPORTED_VERSIONS, search_laravel_docs_data
-from toon_helpers import toon_encode
+from laravel_mcp_companion.mcp_tools import SUPPORTED_VERSIONS, search_laravel_docs_data
+from laravel_mcp_companion.toon_helpers import toon_encode
 
 VERSION = SUPPORTED_VERSIONS[-1]
 DOCS = Path("docs")
@@ -77,7 +77,7 @@ def test_invalid_version_is_rejected():
 
 
 def test_read_section_by_anchor(tmp_path):
-    from mcp_tools import read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
 
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
@@ -93,7 +93,7 @@ def test_read_section_by_anchor(tmp_path):
 
 
 def test_read_section_by_heading_case_insensitively(tmp_path):
-    from mcp_tools import read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
 
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
@@ -105,7 +105,7 @@ def test_read_section_by_heading_case_insensitively(tmp_path):
 
 
 def test_unknown_section_lists_available_ones(tmp_path):
-    from mcp_tools import read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
 
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
@@ -119,7 +119,7 @@ def test_unknown_section_lists_available_ones(tmp_path):
 
 
 def test_read_section_rejects_traversal(tmp_path):
-    from mcp_tools import read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
 
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)
@@ -131,7 +131,7 @@ def test_read_section_rejects_traversal(tmp_path):
 
 
 def test_read_section_rejects_invalid_version(tmp_path):
-    from mcp_tools import read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_section_impl
 
     result = read_laravel_doc_section_impl(tmp_path, "queues.md", "failed-jobs", "..")
 
@@ -140,7 +140,7 @@ def test_read_section_rejects_invalid_version(tmp_path):
 
 def test_read_section_costs_far_less_than_the_whole_file():
     """The point of the exercise: a section instead of 34,000 tokens."""
-    from mcp_tools import read_laravel_doc_content_impl, read_laravel_doc_section_impl
+    from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl, read_laravel_doc_section_impl
 
     whole = read_laravel_doc_content_impl(DOCS, "queues.md", VERSION)
     section = read_laravel_doc_section_impl(
@@ -157,7 +157,7 @@ def test_read_section_costs_far_less_than_the_whole_file():
 async def test_section_reader_is_exposed_and_context_search_retired(tmp_path):
     from fastmcp import Client
 
-    from laravel_mcp_companion import create_mcp_server
+    from laravel_mcp_companion.server import create_mcp_server
 
     docs = tmp_path / "docs"
     (docs / VERSION).mkdir(parents=True)

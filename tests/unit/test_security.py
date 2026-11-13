@@ -4,11 +4,9 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch
 
-from laravel_mcp_companion import get_version_from_path
-from mcp_tools import is_safe_path
-import laravel_mcp_companion
-
-
+from laravel_mcp_companion.server import get_version_from_path
+from laravel_mcp_companion.mcp_tools import is_safe_path
+from laravel_mcp_companion import server as companion_server
 class TestPathSecurity:
     """Test path validation and security functions."""
 
@@ -127,7 +125,7 @@ class TestVersionParsing:
         """Test version extraction when no version is specified."""
         # get_version_from_path is now mcp_tools.get_version_from_path
         # (re-exported), so its get_default_version lookup resolves in mcp_tools.
-        with patch('mcp_tools.get_default_version', return_value='12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("blade.md", "12.x", "blade.md"),
                 ("frontend/vite.md", "12.x", "frontend/vite.md"),
@@ -143,8 +141,8 @@ class TestVersionParsing:
         """Test version extraction with invalid version formats."""
         # get_version_from_path is now mcp_tools.get_version_from_path
         # (re-exported), so its globals resolve in mcp_tools.
-        with patch('mcp_tools.get_default_version', return_value='12.x'), \
-             patch('mcp_tools.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'), \
+             patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['6.x', '11.x', '12.x']):
             
             # These should fall back to default version
             test_cases = [
@@ -162,7 +160,7 @@ class TestVersionParsing:
         """Test version extraction with empty or invalid input."""
         # get_version_from_path is now mcp_tools.get_version_from_path
         # (re-exported), so its get_default_version lookup resolves in mcp_tools.
-        with patch('mcp_tools.get_default_version', return_value='12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             test_cases = [
                 ("", "12.x", ""),
                 ("/", "12.x", "/"),  # Path("/").parts is empty, so it returns "/" 
@@ -181,7 +179,7 @@ class TestInputValidation:
     def test_search_query_validation(self):
         """Test search query validation and sanitization."""
         # Import the standalone implementation
-        from mcp_tools import search_laravel_docs_data
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
         # Empty queries should be rejected
         result = search_laravel_docs_data(Path("/tmp"), "")
@@ -193,7 +191,7 @@ class TestInputValidation:
     def test_file_path_validation_in_resource_handlers(self, temp_dir):
         """Test file path validation in resource handlers."""
         # Import the standalone implementation
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
         
         base_docs_path = temp_dir / "docs"
         base_docs_path.mkdir()
@@ -219,16 +217,16 @@ class TestInputValidation:
 
     def test_package_name_validation(self):
         """Test package name validation in package functions."""
-        from laravel_mcp_companion import get_laravel_package_info
+        from laravel_mcp_companion.server import get_laravel_package_info
         
         # Test with valid package names
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {'laravel/test': {'name': 'Test', 'description': 'Test package'}}):
+        with patch.dict(companion_server.PACKAGE_CATALOG, {'laravel/test': {'name': 'Test', 'description': 'Test package'}}):
             result = get_laravel_package_info("laravel/test")
             assert "not found" not in result
             
             # Test with invalid package names (should not crash)
             # Empty string returns "not found" if it doesn't match any package
-            with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, {}, clear=True):
+            with patch.dict(companion_server.PACKAGE_CATALOG, {}, clear=True):
                 result = get_laravel_package_info("")
                 assert "not found" in result
             
@@ -237,10 +235,10 @@ class TestInputValidation:
 
     def test_version_parameter_validation(self):
         """Test version parameter validation."""
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
         
         # Test with None version (should use default)
-        with patch('mcp_tools.get_default_version', return_value='12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             result = read_laravel_doc_content_impl(Path("/tmp"), "test.md", None)
             # Should not crash and should handle gracefully
             assert isinstance(result, str)
@@ -319,7 +317,7 @@ class TestErrorHandling:
             "12.x/" + "a" * 1000,  # Very long filename
         ]
         
-        with patch('mcp_tools.get_default_version', return_value='12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
             for test_input in edge_cases:
                 try:
                     version, relative = get_version_from_path(test_input)

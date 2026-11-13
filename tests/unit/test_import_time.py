@@ -13,10 +13,8 @@ import sys
 
 import pytest
 
-import docs_updater
-import mcp_tools
-
-
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion import mcp_tools
 @pytest.fixture
 def restore_versions():
     saved = list(docs_updater.SUPPORTED_VERSIONS)
@@ -49,7 +47,7 @@ def test_import_opens_no_socket_even_when_the_cache_has_expired(tmp_path):
         "        data['updated_at'] = '2020-01-01T00:00:00+00:00'\n"
         "    return data\n"
         "json.loads = aged\n"
-        "import laravel_mcp_companion\n"
+        "import laravel_mcp_companion.server\n"
         "print('NETWORK-ATTEMPTS', len(attempts))\n"
     )
     result = subprocess.run(

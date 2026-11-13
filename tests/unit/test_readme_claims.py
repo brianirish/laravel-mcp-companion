@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from laravel_mcp_companion import PACKAGE_CATALOG, TOOL_DESCRIPTIONS
+from laravel_mcp_companion.server import PACKAGE_CATALOG, TOOL_DESCRIPTIONS
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 

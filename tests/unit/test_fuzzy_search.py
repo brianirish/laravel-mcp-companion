@@ -1,6 +1,6 @@
 """Tests for the fuzzy_search function."""
 
-from laravel_mcp_companion import fuzzy_search
+from laravel_mcp_companion.server import fuzzy_search
 
 
 class TestFuzzySearch:

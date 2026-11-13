@@ -12,9 +12,9 @@ import pytest
 
 from fastmcp import Client
 
-import metrics
-from laravel_mcp_companion import build_rate_limiter, create_mcp_server
-from mcp_tools import search_laravel_docs_data
+from laravel_mcp_companion import metrics
+from laravel_mcp_companion.server import build_rate_limiter, create_mcp_server
+from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
 
 @pytest.fixture(autouse=True)
@@ -84,7 +84,7 @@ class TestThrottleAndRecover:
                 if result.is_error:
                     break
 
-        from metrics import render_prometheus
+        from laravel_mcp_companion.metrics import render_prometheus
         out = render_prometheus(metrics.registry)
         assert f'laravel_mcp_requests_total{{method="tools/call"}} {attempts}' in out
 

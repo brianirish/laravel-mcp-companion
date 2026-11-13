@@ -4,7 +4,7 @@ import pytest
 import signal
 from unittest.mock import patch, MagicMock, call
 
-from shutdown_handler import GracefulShutdown
+from laravel_mcp_companion.shutdown_handler import GracefulShutdown
 
 
 class TestGracefulShutdown:
@@ -23,7 +23,7 @@ class TestGracefulShutdown:
         shutdown_custom = GracefulShutdown(logger=mock_logger)
         assert shutdown_custom.logger == mock_logger
 
-    @patch('shutdown_handler.signal.signal')
+    @patch('laravel_mcp_companion.shutdown_handler.signal.signal')
     def test_signal_handlers_registered(self, mock_signal):
         """Test that signal handlers are properly registered."""
         shutdown = GracefulShutdown()
@@ -70,7 +70,7 @@ class TestGracefulShutdown:
         
         assert len(shutdown.shutdown_callbacks) == 2
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_handle_shutdown_first_signal(self, mock_print, mock_exit):
         """Test handling first shutdown signal."""
@@ -98,7 +98,7 @@ class TestGracefulShutdown:
         # Check exit
         mock_exit.assert_called_once_with(0)
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_handle_shutdown_second_signal(self, mock_print, mock_exit):
         """Test handling second shutdown signal (force exit)."""
@@ -113,7 +113,7 @@ class TestGracefulShutdown:
         mock_exit.assert_any_call(1)
         mock_logger.warning.assert_called()
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_handle_shutdown_callback_error(self, mock_print, mock_exit):
         """Test handling shutdown when callback raises exception."""
@@ -138,7 +138,7 @@ class TestGracefulShutdown:
         # Should still exit normally
         mock_exit.assert_called_once_with(0)
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_handle_shutdown_callbacks_executed_in_reverse_order(self, mock_print, mock_exit):
         """Test that callbacks are executed in reverse registration order."""
@@ -166,7 +166,7 @@ class TestGracefulShutdown:
         # Should execute in reverse order: 3, 2, 1
         assert execution_order == [3, 2, 1]
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_handle_shutdown_with_callback_arguments(self, mock_print, mock_exit):
         """Test shutdown handling with callback arguments."""
@@ -184,8 +184,8 @@ class TestGracefulShutdown:
         
         assert callback_args == ["pos1", "pos2", "kw1", "kw2"]
 
-    @patch('shutdown_handler.signal.Signals')
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.signal.Signals')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_signal_name_handling(self, mock_print, mock_exit, mock_signals):
         """Test signal name extraction for logging."""
@@ -203,7 +203,7 @@ class TestGracefulShutdown:
         log_calls = mock_logger.info.call_args_list
         assert any("SIGINT" in str(call) for call in log_calls)
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_signal_name_fallback(self, mock_print, mock_exit):
         """Test signal name fallback when signal.Signals not available."""
@@ -243,7 +243,7 @@ class TestGracefulShutdown:
 
     def test_empty_shutdown(self):
         """Test shutdown with no registered callbacks."""
-        with patch('shutdown_handler.os._exit') as mock_exit, \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit') as mock_exit, \
              patch('builtins.print'):
             
             mock_logger = MagicMock()
@@ -255,7 +255,7 @@ class TestGracefulShutdown:
             mock_exit.assert_called_once_with(0)
             mock_logger.info.assert_called()
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_callback_with_side_effects(self, mock_print, mock_exit):
         """Test callback that has side effects."""
@@ -275,7 +275,7 @@ class TestGracefulShutdown:
         
         assert "cleanup_performed" in side_effects
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_multiple_callback_errors(self, mock_print, mock_exit):
         """Test handling multiple callback errors."""
@@ -310,7 +310,7 @@ class TestGracefulShutdown:
         
         assert shutdown.is_shutting_down is False
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             shutdown._handle_shutdown(signal.SIGINT, None)
@@ -339,7 +339,7 @@ class TestShutdownIntegration:
         shutdown_handler.register(cleanup_files)
         shutdown_handler.register(cleanup_network)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             # Simulate shutdown
@@ -366,7 +366,7 @@ class TestShutdownIntegration:
         shutdown_handler = GracefulShutdown()
         shutdown_handler.register(cleanup_resources)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             shutdown_handler._handle_shutdown(signal.SIGINT, None)
@@ -393,7 +393,7 @@ class TestShutdownIntegration:
         shutdown_handler.register(failing_cleanup)
         shutdown_handler.register(optional_cleanup)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             shutdown_handler._handle_shutdown(signal.SIGINT, None)
@@ -419,7 +419,7 @@ class TestShutdownHandlerEdgeCases:
         
         shutdown.register(modifying_callback)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             # Should not crash
@@ -439,7 +439,7 @@ class TestShutdownHandlerEdgeCases:
         
         shutdown.register(recursive_callback)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             shutdown._handle_shutdown(signal.SIGINT, None)
@@ -447,7 +447,7 @@ class TestShutdownHandlerEdgeCases:
             # Should complete without hanging
             assert call_count[0] > 0
 
-    @patch('shutdown_handler.os._exit')
+    @patch('laravel_mcp_companion.shutdown_handler.os._exit')
     @patch('builtins.print')
     def test_callback_with_complex_exception(self, mock_print, mock_exit):
         """Test callback with complex exception handling."""
@@ -481,7 +481,7 @@ class TestShutdownHandlerEdgeCases:
         for _ in range(100):
             shutdown.register(counting_callback)
         
-        with patch('shutdown_handler.os._exit'), \
+        with patch('laravel_mcp_companion.shutdown_handler.os._exit'), \
              patch('builtins.print'):
             
             shutdown._handle_shutdown(signal.SIGINT, None)

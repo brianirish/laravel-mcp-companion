@@ -11,8 +11,8 @@ import time
 
 import pytest
 
-import docs_updater
-from docs_updater import (
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion.docs_updater import (
     CommunityPackageFetcher,
     ExternalDocsFetcher,
     LearningResourceFetcher,

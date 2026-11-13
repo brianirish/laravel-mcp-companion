@@ -12,11 +12,11 @@ from pathlib import Path
 import pytest
 from fastmcp import Client
 
-from laravel_mcp_companion import TOOL_DESCRIPTIONS, create_mcp_server
+from laravel_mcp_companion.server import TOOL_DESCRIPTIONS, create_mcp_server
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-PRODUCT_MODULES = ["laravel_mcp_companion.py", "mcp_tools.py", "docs_updater.py"]
+PRODUCT_MODULES = ["laravel_mcp_companion/server.py", "laravel_mcp_companion/mcp_tools.py", "laravel_mcp_companion/docs_updater.py"]
 
 
 @pytest.fixture

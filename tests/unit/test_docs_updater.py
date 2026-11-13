@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock, Mock, mock_open
 import urllib.error
 
-from docs_updater import (
+from laravel_mcp_companion.docs_updater import (
     DocsUpdater,
     ExternalDocsFetcher,
     MultiSourceDocsUpdater,
@@ -35,7 +35,7 @@ class TestDocsUpdater:
         assert updater.version_dir.exists()
         assert updater.metadata_dir.exists()
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_latest_commit_success(self, mock_urlopen, docs_updater_instance):
         """Test successful GitHub API call for latest commit."""
         mock_response = MagicMock()
@@ -61,7 +61,7 @@ class TestDocsUpdater:
         assert result["message"] == "Update documentation"
         assert result["url"] == "https://github.com/laravel/docs/commit/abc123def456"
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_latest_commit_http_error(self, mock_urlopen, docs_updater_instance):
         """Test GitHub API call with HTTP error."""
         mock_urlopen.side_effect = urllib.error.HTTPError(
@@ -71,7 +71,7 @@ class TestDocsUpdater:
         with pytest.raises(urllib.error.HTTPError):
             docs_updater_instance.get_latest_commit()
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_latest_commit_rate_limit(self, mock_urlopen, docs_updater_instance):
         """Test GitHub API rate limiting handling."""
         # First call: rate limit error
@@ -99,7 +99,7 @@ class TestDocsUpdater:
         mock_urlopen.side_effect = mock_responses
         
         # Should retry and succeed
-        with patch('docs_updater.time.sleep'):  # Speed up test
+        with patch('laravel_mcp_companion.docs_updater.time.sleep'):  # Speed up test
             result = docs_updater_instance.get_latest_commit()
             assert result["sha"] == "abc123"
 
@@ -146,10 +146,10 @@ class TestDocsUpdater:
         written_data = json.loads(docs_updater_instance.metadata_file.read_text())
         assert written_data == metadata
 
-    @patch('docs_updater.shutil.copyfileobj')
-    @patch('docs_updater.urllib.request.urlopen')
-    @patch('docs_updater.tempfile.mkdtemp')
-    @patch('docs_updater.zipfile.ZipFile')
+    @patch('laravel_mcp_companion.docs_updater.shutil.copyfileobj')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.tempfile.mkdtemp')
+    @patch('laravel_mcp_companion.docs_updater.zipfile.ZipFile')
     def test_download_documentation_success(self, mock_zipfile, mock_mkdtemp, mock_urlopen, mock_copyfileobj, docs_updater_instance, temp_dir):
         """Test successful documentation download."""
         # Create a real temporary directory structure
@@ -247,10 +247,10 @@ class TestDocsUpdater:
         
         mock_download.return_value = source_dir
         
-        with patch('docs_updater.shutil.copytree'), \
-             patch('docs_updater.shutil.copy2'), \
-             patch('docs_updater.shutil.rmtree'), \
-             patch('docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
+        with patch('laravel_mcp_companion.docs_updater.shutil.copytree'), \
+             patch('laravel_mcp_companion.docs_updater.shutil.copy2'), \
+             patch('laravel_mcp_companion.docs_updater.shutil.rmtree'), \
+             patch('laravel_mcp_companion.docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
             
             result = docs_updater_instance.update(force=False)
             
@@ -286,15 +286,15 @@ class TestDocsUpdater:
             source_dir.iterdir.return_value = []
             mock_download.return_value = source_dir
             
-            with patch('docs_updater.shutil.copytree'), \
-                 patch('docs_updater.shutil.copy2'), \
-                 patch('docs_updater.shutil.rmtree'), \
-                 patch('docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
+            with patch('laravel_mcp_companion.docs_updater.shutil.copytree'), \
+                 patch('laravel_mcp_companion.docs_updater.shutil.copy2'), \
+                 patch('laravel_mcp_companion.docs_updater.shutil.rmtree'), \
+                 patch('laravel_mcp_companion.docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
                 
                 result = docs_updater_instance.update(force=True)
                 assert result is True
     
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_download_documentation_network_error(self, mock_urlopen, docs_updater_instance):
         """Test documentation download with network error."""
         mock_urlopen.side_effect = urllib.error.URLError("Network error")
@@ -302,9 +302,9 @@ class TestDocsUpdater:
         with pytest.raises(urllib.error.URLError):
             docs_updater_instance.download_documentation()
     
-    @patch('docs_updater.shutil.copyfileobj')
-    @patch('docs_updater.urllib.request.urlopen')
-    @patch('docs_updater.tempfile.TemporaryDirectory')
+    @patch('laravel_mcp_companion.docs_updater.shutil.copyfileobj')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.tempfile.TemporaryDirectory')
     def test_download_documentation_zip_error(self, mock_tempdir, mock_urlopen, mock_copyfileobj, docs_updater_instance, temp_dir):
         """Test documentation download with zip extraction error."""
         # Create a real temporary directory structure
@@ -370,9 +370,9 @@ class TestDocsUpdater:
             source_dir.iterdir.return_value = [mock_subdir]
             mock_download.return_value = source_dir
             
-            with patch('docs_updater.shutil.copytree') as mock_copytree, \
-                 patch('docs_updater.shutil.rmtree'), \
-                 patch('docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
+            with patch('laravel_mcp_companion.docs_updater.shutil.copytree') as mock_copytree, \
+                 patch('laravel_mcp_companion.docs_updater.shutil.rmtree'), \
+                 patch('laravel_mcp_companion.docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
                 
                 result = docs_updater_instance.update()
                 assert result is True
@@ -711,7 +711,7 @@ class TestMultiSourceDocsUpdater:
 class TestVersionSupport:
     """Test version support functionality."""
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_success(self, mock_urlopen, tmp_path):
         """Test successful version fetching from GitHub API."""
         mock_response_data = [
@@ -737,7 +737,7 @@ class TestVersionSupport:
         expected_versions = ["6.x", "7.x", "8.x", "9.x", "10.x", "11.x", "12.x"]
         assert versions == expected_versions
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_no_versions_found(self, mock_urlopen, tmp_path):
         """Test version fetching when no valid versions found."""
         mock_response_data = [
@@ -758,7 +758,7 @@ class TestVersionSupport:
         assert "12.x" in versions
         assert len(versions) > 0
     
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_old_versions_filtered(self, mock_urlopen, tmp_path):
         """Test that versions older than 6.x are filtered out."""
         mock_response_data = [
@@ -781,7 +781,7 @@ class TestVersionSupport:
         assert "6.x" in versions
         assert "7.x" in versions
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_api_error(self, mock_urlopen, tmp_path):
         """Test version fetching with API error (fallback to last resort)."""
         mock_urlopen.side_effect = Exception("API Error")
@@ -796,18 +796,18 @@ class TestVersionSupport:
 
     def test_get_cached_supported_versions_reads_the_cache_and_never_fetches(self, monkeypatch):
         """The import-time lookup is cache-only; the network path is refresh_supported_versions."""
-        import docs_updater
+        from laravel_mcp_companion import docs_updater
         monkeypatch.setattr(docs_updater, "_SUPPORTED_VERSIONS_CACHE", None)
         monkeypatch.setattr(docs_updater, "_read_versions_cache", lambda cache_file, max_age_seconds=None: ["11.x", "12.x"])
 
-        with patch('docs_updater.get_supported_versions') as fetch:
+        with patch('laravel_mcp_companion.docs_updater.get_supported_versions') as fetch:
             assert get_cached_supported_versions() == ["11.x", "12.x"]
             assert get_cached_supported_versions() == ["11.x", "12.x"]
 
         fetch.assert_not_called()
 
     def test_get_cached_supported_versions_without_a_cache_uses_the_last_resort(self, monkeypatch):
-        import docs_updater
+        from laravel_mcp_companion import docs_updater
         monkeypatch.setattr(docs_updater, "_SUPPORTED_VERSIONS_CACHE", None)
         monkeypatch.setattr(docs_updater, "_read_versions_cache", lambda cache_file, max_age_seconds=None: None)
 
@@ -818,7 +818,7 @@ class TestVersionSupport:
         # DEFAULT_VERSION should be the last item in SUPPORTED_VERSIONS
         assert DEFAULT_VERSION == SUPPORTED_VERSIONS[-1]
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_writes_cache_on_success(self, mock_urlopen, tmp_path):
         """Test that successful API fetch writes the cache file."""
         mock_response_data = [
@@ -840,7 +840,7 @@ class TestVersionSupport:
         assert cached["versions"] == ["6.x", "12.x", "13.x"]
         assert "updated_at" in cached
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_reads_cache_on_api_failure(self, mock_urlopen, tmp_path):
         """Test that API failure falls back to cache file."""
         cache_file = tmp_path / ".versions_cache.json"
@@ -854,7 +854,7 @@ class TestVersionSupport:
 
         assert versions == ["6.x", "11.x", "12.x", "13.x"]
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_corrupt_cache_uses_last_resort(self, mock_urlopen, tmp_path):
         """Test that corrupt cache file falls through to last resort."""
         cache_file = tmp_path / ".versions_cache.json"
@@ -865,7 +865,7 @@ class TestVersionSupport:
 
         assert versions == ["12.x"]
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_missing_cache_uses_last_resort(self, mock_urlopen, tmp_path):
         """Test that missing cache file falls through to last resort."""
         cache_file = tmp_path / "nonexistent" / ".versions_cache.json"
@@ -880,7 +880,7 @@ class TestVersionSupport:
 class TestNetworkOperations:
     """Test network operations (marked as slow)."""
 
-    @patch('docs_updater.urllib.request.urlopen')
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_download_with_network_issues(self, mock_urlopen, docs_updater_instance):
         """Test download handling with various network issues."""
         # Simulate network timeout, then success
@@ -897,9 +897,9 @@ class TestNetworkOperations:
         mock_urlopen.side_effect = responses
         
         # Should retry and handle the error gracefully
-        with patch('docs_updater.time.sleep'), \
-             patch('docs_updater.tempfile.TemporaryDirectory'), \
-             patch('docs_updater.zipfile.ZipFile'):
+        with patch('laravel_mcp_companion.docs_updater.time.sleep'), \
+             patch('laravel_mcp_companion.docs_updater.tempfile.TemporaryDirectory'), \
+             patch('laravel_mcp_companion.docs_updater.zipfile.ZipFile'):
             
             try:
                 docs_updater_instance.download_documentation()
@@ -917,7 +917,7 @@ class TestMainFunction:
         test_args = ['docs_updater.py']
         
         with patch.object(sys, 'argv', test_args):
-            from docs_updater import parse_arguments
+            from laravel_mcp_companion.docs_updater import parse_arguments
             args = parse_arguments()
             
             assert args.version == DEFAULT_VERSION
@@ -938,7 +938,7 @@ class TestMainFunction:
         ]
         
         with patch.object(sys, 'argv', test_args):
-            from docs_updater import parse_arguments
+            from laravel_mcp_companion.docs_updater import parse_arguments
             args = parse_arguments()
             
             assert args.version == '11.x'
@@ -952,7 +952,7 @@ class TestMainFunction:
         test_args = ['docs_updater.py', '--status']
         
         with patch.object(sys, 'argv', test_args):
-            from docs_updater import parse_arguments
+            from laravel_mcp_companion.docs_updater import parse_arguments
             args = parse_arguments()
             
             assert args.status is True
@@ -963,12 +963,12 @@ class TestMainFunction:
         test_args = ['docs_updater.py', '--list-services']
         
         with patch.object(sys, 'argv', test_args):
-            from docs_updater import parse_arguments
+            from laravel_mcp_companion.docs_updater import parse_arguments
             args = parse_arguments()
             
             assert args.list_services is True
     
-    @patch('docs_updater.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.docs_updater.MultiSourceDocsUpdater')
     def test_main_update_default(self, mock_updater_class):
         """Test main function with default update."""
         import sys
@@ -983,13 +983,13 @@ class TestMainFunction:
         
         with patch.object(sys, 'argv', test_args), \
              patch('builtins.print'):
-            from docs_updater import main
+            from laravel_mcp_companion.docs_updater import main
             result = main()
             
             assert result == 0
             mock_updater.update_all.assert_called_once_with(force_core=False, force_external=False, force_packages=False, force_learning=False)
     
-    @patch('docs_updater.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.docs_updater.MultiSourceDocsUpdater')
     def test_main_status_command(self, mock_updater_class):
         """Test main function with status command."""
         import sys
@@ -1017,13 +1017,13 @@ class TestMainFunction:
         
         with patch.object(sys, 'argv', test_args), \
              patch('builtins.print'):
-            from docs_updater import main
+            from laravel_mcp_companion.docs_updater import main
             result = main()
             
             assert result == 0
             mock_updater.get_all_documentation_status.assert_called()
     
-    @patch('docs_updater.ExternalDocsFetcher')
+    @patch('laravel_mcp_companion.docs_updater.ExternalDocsFetcher')
     def test_main_list_services_command(self, mock_fetcher_class):
         """Test main function with list-services command."""
         import sys
@@ -1035,13 +1035,13 @@ class TestMainFunction:
         
         with patch.object(sys, 'argv', test_args), \
              patch('builtins.print'):
-            from docs_updater import main
+            from laravel_mcp_companion.docs_updater import main
             result = main()
             
             assert result == 0
             mock_fetcher.list_available_services.assert_called_once()
     
-    @patch('docs_updater.MultiSourceDocsUpdater')
+    @patch('laravel_mcp_companion.docs_updater.MultiSourceDocsUpdater')
     def test_main_update_external_service(self, mock_updater_class):
         """Test main function updating external service."""
         import sys
@@ -1058,7 +1058,7 @@ class TestMainFunction:
         
         with patch.object(sys, 'argv', test_args), \
              patch('builtins.print'):
-            from docs_updater import main
+            from laravel_mcp_companion.docs_updater import main
             result = main()
             
             assert result == 0
@@ -1070,9 +1070,9 @@ class TestMainFunction:
         test_args = ['docs_updater.py']
         
         with patch.object(sys, 'argv', test_args), \
-             patch('docs_updater.MultiSourceDocsUpdater', side_effect=Exception("Test error")), \
+             patch('laravel_mcp_companion.docs_updater.MultiSourceDocsUpdater', side_effect=Exception("Test error")), \
              patch('builtins.print'):
-            from docs_updater import main
+            from laravel_mcp_companion.docs_updater import main
             try:
                 main()
                 # If main() doesn't catch the exception, it will propagate

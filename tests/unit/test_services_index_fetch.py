@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 import pytest
 
-from docs_updater import ExternalDocsFetcher
+from laravel_mcp_companion.docs_updater import ExternalDocsFetcher
 
 FORGE_INDEX = """# Laravel Forge
 

@@ -2,9 +2,9 @@
 
 from unittest.mock import patch
 
-import laravel_mcp_companion
+from laravel_mcp_companion import server as companion_server
 # Import the standalone functions from mcp_tools
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
     search_laravel_docs_data,
@@ -18,8 +18,8 @@ from mcp_tools import (
 class TestDocumentationTools:
     """Test documentation-related MCP tool functions."""
 
-    @patch('mcp_tools.os.listdir')
-    @patch('mcp_tools.get_laravel_docs_metadata')
+    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
+    @patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata')
     def test_list_laravel_docs_specific_version(self, mock_metadata, mock_listdir, test_docs_dir):
         """Test listing docs for a specific version returns TOON format."""
         mock_listdir.return_value = ['installation.md', 'routing.md', 'eloquent.md']
@@ -38,13 +38,13 @@ class TestDocumentationTools:
         assert "eloquent.md" in result
         assert "2024-01-01T12:00:00Z" in result
 
-    @patch('mcp_tools.os.listdir')
+    @patch('laravel_mcp_companion.mcp_tools.os.listdir')
     def test_list_laravel_docs_no_version_specified(self, mock_listdir, test_docs_dir):
         """Test listing docs when no version is specified returns TOON format."""
         # Directories already created by fixture, no need to create them
 
         # Set up proper mock for os.listdir and os.path.isfile checks
-        with patch('mcp_tools.os.path.isfile') as mock_isfile:
+        with patch('laravel_mcp_companion.mcp_tools.os.path.isfile') as mock_isfile:
             mock_isfile.return_value = True  # All files exist
 
             mock_listdir.side_effect = [
@@ -54,7 +54,7 @@ class TestDocumentationTools:
                 ['installation.md', 'routing.md', 'eloquent.md']  # 12.x files again for formatting
             ]
 
-            with patch('mcp_tools.get_laravel_docs_metadata') as mock_metadata:
+            with patch('laravel_mcp_companion.mcp_tools.get_laravel_docs_metadata') as mock_metadata:
                 mock_metadata.return_value = {'sync_time': '2024-01-01T12:00:00Z', 'commit_sha': 'abc123'}
 
                 result = list_laravel_docs_impl(test_docs_dir)
@@ -118,7 +118,7 @@ class TestDocumentationTools:
             "# Eloquent\n\nEloquent ORM for database routing"
         )
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
             result = search_laravel_docs_data(
                 test_docs_dir, "routing", "12.x", include_external=False
             )
@@ -139,9 +139,9 @@ class TestDocumentationTools:
         """Test searching with no matches."""
         # Directory already exists from fixture
 
-        with patch('mcp_tools.os.listdir', return_value=['routing.md']), \
-             patch('mcp_tools.get_file_content_cached', return_value="# Routing\n\nBasic routing info"), \
-             patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['routing.md']), \
+             patch('laravel_mcp_companion.mcp_tools.get_file_content_cached', return_value="# Routing\n\nBasic routing info"), \
+             patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
 
             result = search_laravel_docs_data(test_docs_dir, "nonexistent_term", "12.x")
 
@@ -166,7 +166,7 @@ Laravel provides methods for all HTTP verbs.
 You can capture segments of the URI within your route.
 """
 
-        with patch('mcp_tools.read_laravel_doc_content_impl', return_value=test_content):
+        with patch('laravel_mcp_companion.mcp_tools.read_laravel_doc_content_impl', return_value=test_content):
             result = get_doc_structure_impl(test_docs_dir, "routing.md", "12.x")
 
             # TOON format assertions - check for heading data
@@ -185,7 +185,7 @@ You can capture segments of the URI within your route.
         (version_dir / "blade.md").write_text("# Blade Templates\n\nTemplating engine.")
         (version_dir / "routing.md").write_text("# Routing\n\nNot frontend related.")
 
-        with patch('mcp_tools.os.listdir', return_value=['vite.md', 'blade.md', 'routing.md']):
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir', return_value=['vite.md', 'blade.md', 'routing.md']):
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", "12.x")
 
             # TOON format assertions
@@ -200,8 +200,8 @@ class TestPackageRecommendationTools:
 
     def test_get_laravel_package_recommendations_success(self, sample_package_catalog):
         """Test getting package recommendations successfully returns TOON format."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_recommendations
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_recommendations
             result = get_laravel_package_recommendations("authentication for SPA")
 
             # TOON format assertions
@@ -211,8 +211,8 @@ class TestPackageRecommendationTools:
 
     def test_get_laravel_package_recommendations_no_matches(self, sample_package_catalog):
         """Test getting package recommendations with no matches returns TOON error."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_recommendations
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_recommendations
             result = get_laravel_package_recommendations("quantum computing")
 
             # TOON error format
@@ -220,8 +220,8 @@ class TestPackageRecommendationTools:
 
     def test_get_laravel_package_info_success(self, sample_package_catalog):
         """Test getting specific package info successfully returns TOON format."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_info
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_info
             result = get_laravel_package_info("laravel/cashier")
 
             # TOON format assertions
@@ -231,16 +231,16 @@ class TestPackageRecommendationTools:
 
     def test_get_laravel_package_info_not_found(self, sample_package_catalog):
         """Test getting info for non-existent package returns TOON error."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_info
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_info
             result = get_laravel_package_info("nonexistent/package")
 
             assert "error" in result or "not found" in result.lower()
 
     def test_get_laravel_package_categories_success(self, sample_package_catalog):
         """Test getting packages by category successfully returns TOON format."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_categories
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_categories
             result = get_laravel_package_categories("authentication")
 
             # TOON format assertions
@@ -250,8 +250,8 @@ class TestPackageRecommendationTools:
 
     def test_get_laravel_package_categories_no_matches(self, sample_package_catalog):
         """Test getting packages by category with no matches returns TOON error."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_laravel_package_categories
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_laravel_package_categories
             result = get_laravel_package_categories("nonexistent_category")
 
             assert "error" in result or "No packages found" in result
@@ -260,10 +260,10 @@ class TestPackageRecommendationTools:
         """Test getting features for a package successfully returns TOON format."""
         test_features = ["spa-authentication", "api-tokens", "token-abilities"]
 
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog), \
-             patch.dict(laravel_mcp_companion.FEATURE_MAP, {'laravel/sanctum': test_features}):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog), \
+             patch.dict(companion_server.FEATURE_MAP, {'laravel/sanctum': test_features}):
 
-            from laravel_mcp_companion import get_features_for_laravel_package
+            from laravel_mcp_companion.server import get_features_for_laravel_package
             result = get_features_for_laravel_package("laravel/sanctum")
 
             # TOON format assertions
@@ -274,8 +274,8 @@ class TestPackageRecommendationTools:
 
     def test_get_features_for_laravel_package_not_found(self, sample_package_catalog):
         """Test getting features for non-existent package returns TOON error."""
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog):
-            from laravel_mcp_companion import get_features_for_laravel_package
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog):
+            from laravel_mcp_companion.server import get_features_for_laravel_package
             result = get_features_for_laravel_package("nonexistent/package")
 
             assert "error" in result or "not found" in result.lower()
@@ -285,10 +285,10 @@ class TestPackageRecommendationTools:
         # Patch FEATURE_MAP to be empty for this specific package
         empty_feature_map = {}
 
-        with patch.dict(laravel_mcp_companion.PACKAGE_CATALOG, sample_package_catalog), \
-             patch.dict(laravel_mcp_companion.FEATURE_MAP, empty_feature_map, clear=True):
+        with patch.dict(companion_server.PACKAGE_CATALOG, sample_package_catalog), \
+             patch.dict(companion_server.FEATURE_MAP, empty_feature_map, clear=True):
 
-            from laravel_mcp_companion import get_features_for_laravel_package
+            from laravel_mcp_companion.server import get_features_for_laravel_package
             result = get_features_for_laravel_package("laravel/sanctum")
 
             # TOON format - should still have package data with use_cases
@@ -300,10 +300,10 @@ class TestMcpToolsEdgeCases:
 
     def test_is_safe_path_exception_handling(self, test_docs_dir):
         """Test that is_safe_path handles exceptions gracefully."""
-        from mcp_tools import is_safe_path
+        from laravel_mcp_companion.mcp_tools import is_safe_path
 
         # Test with paths that cause exceptions (invalid paths)
-        with patch('mcp_tools.Path.resolve') as mock_resolve:
+        with patch('laravel_mcp_companion.mcp_tools.Path.resolve') as mock_resolve:
             mock_resolve.side_effect = Exception("Permission denied")
 
             # Should return False when exception occurs, not raise
@@ -312,7 +312,7 @@ class TestMcpToolsEdgeCases:
 
     def test_get_laravel_docs_metadata_json_error(self, test_docs_dir):
         """Test metadata reading handles malformed JSON."""
-        from mcp_tools import get_laravel_docs_metadata
+        from laravel_mcp_companion.mcp_tools import get_laravel_docs_metadata
 
         # Create malformed metadata file
         metadata_dir = test_docs_dir / "12.x" / ".metadata"
@@ -325,7 +325,7 @@ class TestMcpToolsEdgeCases:
 
     def test_list_laravel_docs_no_md_files(self, test_docs_dir):
         """Test listing docs when version exists but has no .md files."""
-        from mcp_tools import list_laravel_docs_impl
+        from laravel_mcp_companion.mcp_tools import list_laravel_docs_impl
 
         # Create empty version dir (no .md files)
         empty_version = test_docs_dir / "13.x"
@@ -338,7 +338,7 @@ class TestMcpToolsEdgeCases:
 
     def test_list_laravel_docs_all_versions_empty(self, test_docs_dir):
         """Test listing all docs when no versions have files."""
-        from mcp_tools import list_laravel_docs_impl
+        from laravel_mcp_companion.mcp_tools import list_laravel_docs_impl
 
         # Create completely empty docs dir
         empty_docs = test_docs_dir.parent / "empty_docs"
@@ -351,9 +351,9 @@ class TestMcpToolsEdgeCases:
 
     def test_list_laravel_docs_exception_handling(self, test_docs_dir):
         """Test list_laravel_docs handles exceptions gracefully."""
-        from mcp_tools import list_laravel_docs_impl
+        from laravel_mcp_companion.mcp_tools import list_laravel_docs_impl
 
-        with patch('mcp_tools.os.scandir') as mock_scandir:
+        with patch('laravel_mcp_companion.mcp_tools.os.scandir') as mock_scandir:
             mock_scandir.side_effect = OSError("Permission denied")
 
             result = list_laravel_docs_impl(test_docs_dir, "12.x")
@@ -363,7 +363,7 @@ class TestMcpToolsEdgeCases:
 
     def test_browse_docs_by_category_unknown_category(self, test_docs_dir):
         """Test browsing docs with unknown category."""
-        from mcp_tools import browse_docs_by_category_impl
+        from laravel_mcp_companion.mcp_tools import browse_docs_by_category_impl
 
         result = browse_docs_by_category_impl(test_docs_dir, "unknown_category", "12.x")
 
@@ -372,7 +372,7 @@ class TestMcpToolsEdgeCases:
 
     def test_browse_docs_by_category_version_not_found(self, test_docs_dir):
         """Unsupported versions are rejected before touching the filesystem."""
-        from mcp_tools import browse_docs_by_category_impl
+        from laravel_mcp_companion.mcp_tools import browse_docs_by_category_impl
 
         result = browse_docs_by_category_impl(test_docs_dir, "frontend", "99.x")
 
@@ -381,7 +381,7 @@ class TestMcpToolsEdgeCases:
 
     def test_browse_docs_by_category_no_matching_files(self, test_docs_dir):
         """Test browsing category with no matching files."""
-        from mcp_tools import browse_docs_by_category_impl
+        from laravel_mcp_companion.mcp_tools import browse_docs_by_category_impl
 
         # Create version with files that don't match any category
         version_dir = test_docs_dir / "12.x"
@@ -396,9 +396,9 @@ class TestMcpToolsEdgeCases:
 
     def test_browse_docs_by_category_exception(self, test_docs_dir):
         """Test browse_docs_by_category handles exceptions."""
-        from mcp_tools import browse_docs_by_category_impl
+        from laravel_mcp_companion.mcp_tools import browse_docs_by_category_impl
 
-        with patch('mcp_tools.os.listdir') as mock_listdir:
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir') as mock_listdir:
             mock_listdir.side_effect = OSError("Disk error")
 
             result = browse_docs_by_category_impl(test_docs_dir, "frontend", "12.x")
@@ -407,13 +407,13 @@ class TestMcpToolsEdgeCases:
 
     def test_search_laravel_docs_exception_handling(self, test_docs_dir):
         """Test search_laravel_docs handles exceptions gracefully."""
-        from mcp_tools import search_laravel_docs_data
+        from laravel_mcp_companion.mcp_tools import search_laravel_docs_data
 
-        with patch('mcp_tools.os.listdir') as mock_listdir:
+        with patch('laravel_mcp_companion.mcp_tools.os.listdir') as mock_listdir:
             mock_listdir.side_effect = Exception("Unexpected error")
 
             # Need to patch SUPPORTED_VERSIONS to include 12.x
-            with patch('mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
+            with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['12.x']):
                 result = search_laravel_docs_data(test_docs_dir, "test", "12.x")
 
                 # Should handle exception gracefully
@@ -426,7 +426,7 @@ class TestVersionComparisonTools:
     def test_verify_laravel_feature_exact_match(self, test_docs_dir):
         """Test verify_laravel_feature with exact filename match."""
         # test_docs_dir fixture already has routing.md
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = verify_laravel_feature_impl(test_docs_dir, "routing", "12.x")
 
             # TOON format assertions
@@ -442,7 +442,7 @@ class TestVersionComparisonTools:
         (version_dir / "authentication.md").write_text("# Authentication")
         (version_dir / "authorization.md").write_text("# Authorization")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = verify_laravel_feature_impl(test_docs_dir, "auth", "12.x")
 
             # Should find both auth files
@@ -453,7 +453,7 @@ class TestVersionComparisonTools:
 
     def test_verify_laravel_feature_not_found(self, test_docs_dir):
         """Test verify_laravel_feature when feature doesn't exist."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = verify_laravel_feature_impl(test_docs_dir, "nonexistent", "12.x")
 
             assert "nonexistent" in result
@@ -461,14 +461,14 @@ class TestVersionComparisonTools:
 
     def test_verify_laravel_feature_empty_feature(self, test_docs_dir):
         """Test verify_laravel_feature with empty feature name."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = verify_laravel_feature_impl(test_docs_dir, "", "12.x")
 
             assert "error" in result.lower() or "cannot be empty" in result
 
     def test_verify_laravel_feature_version_not_found(self, test_docs_dir):
         """Test verify_laravel_feature with non-existent version."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x', '99.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x', '99.x']):
             result = verify_laravel_feature_impl(test_docs_dir, "blade", "99.x")
 
             assert "error" in result.lower() or "not found" in result.lower()
@@ -478,7 +478,7 @@ class TestVersionComparisonTools:
         # Add a new file only in 12.x
         (test_docs_dir / "12.x" / "new-feature.md").write_text("# New Feature")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
 
             # TOON format assertions
@@ -492,7 +492,7 @@ class TestVersionComparisonTools:
         # Add a file only in 11.x
         (test_docs_dir / "11.x" / "deprecated.md").write_text("# Deprecated")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
 
             assert "deprecated.md" in result
@@ -505,7 +505,7 @@ class TestVersionComparisonTools:
         (test_docs_dir / "12.x" / "authentication.md").write_text("# Auth v12")
         (test_docs_dir / "12.x" / "authorization.md").write_text("# Authz v12")
 
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x", file_filter="auth")
 
             # Should only show auth-related files
@@ -516,21 +516,21 @@ class TestVersionComparisonTools:
 
     def test_compare_laravel_versions_same_version_error(self, test_docs_dir):
         """Test compare_laravel_versions with same source and target."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "12.x", "12.x")
 
             assert "error" in result.lower() or "cannot be the same" in result.lower()
 
     def test_compare_laravel_versions_invalid_version(self, test_docs_dir):
         """Test compare_laravel_versions with invalid version."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "99.x", "12.x")
 
             assert "error" in result.lower() or "invalid" in result.lower()
 
     def test_compare_laravel_versions_metadata_included(self, test_docs_dir):
         """Test compare_laravel_versions includes metadata from both versions."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
             result = compare_laravel_versions_impl(test_docs_dir, "11.x", "12.x")
 
             # Should include commit info from metadata
@@ -540,8 +540,8 @@ class TestVersionComparisonTools:
 
     def test_verify_laravel_feature_uses_default_version(self, test_docs_dir):
         """Test verify_laravel_feature uses default version when none specified."""
-        with patch('mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
-            with patch('mcp_tools.get_default_version', return_value='12.x'):
+        with patch('laravel_mcp_companion.mcp_tools.SUPPORTED_VERSIONS', ['11.x', '12.x']):
+            with patch('laravel_mcp_companion.mcp_tools.get_default_version', return_value='12.x'):
                 result = verify_laravel_feature_impl(test_docs_dir, "routing", runtime_version="12.x")
 
                 assert "routing" in result

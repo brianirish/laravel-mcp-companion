@@ -25,7 +25,8 @@ from enum import Enum
 import random
 import html
 
-from path_security import is_within_directory
+from . import resource_path
+from .path_security import is_within_directory
 
 # Configure logging
 logging.basicConfig(
@@ -133,7 +134,7 @@ LARAVEL_DOCS_REPO = "laravel/docs"
 USER_AGENT = "Laravel-MCP-Companion (+https://github.com/brianirish/laravel-mcp-companion)"
 
 # Default cache file path (relative to this script)
-VERSIONS_CACHE_FILE = Path(__file__).parent / "docs" / ".versions_cache.json"
+VERSIONS_CACHE_FILE = resource_path("docs") / ".versions_cache.json"
 
 LAST_RESORT_VERSIONS = ["12.x"]
 

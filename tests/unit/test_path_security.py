@@ -1,8 +1,6 @@
-import path_security
-import mcp_tools
-import docs_updater
-
-
+from laravel_mcp_companion import path_security
+from laravel_mcp_companion import mcp_tools
+from laravel_mcp_companion import docs_updater
 def test_single_containment_primitive():
     """Every module's containment check is literally the same function."""
     assert mcp_tools.resolve_contained_path is path_security.resolve_contained_path

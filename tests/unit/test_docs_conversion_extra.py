@@ -4,7 +4,7 @@ section-sanitization skip branches inside the service fetch loop."""
 
 import pytest
 
-from docs_updater import CommunityPackageFetcher, ExternalDocsFetcher
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher, ExternalDocsFetcher
 from tests.conftest import load_fixture
 
 GOOD_PAGE = "<html><body><main>" + "Documentation words here. " * 30 + "</main></body></html>"

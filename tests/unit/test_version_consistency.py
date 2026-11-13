@@ -174,8 +174,7 @@ def test_server_version_constant_matches_pyproject():
     is COPYed and run directly), so the version lives in a constant that this
     guard chains to the same source of truth as everything else.
     """
-    import laravel_mcp_companion as lmc
-
+    from laravel_mcp_companion import server as lmc
     assert lmc.SERVER_VERSION == project_version(), (
         f"SERVER_VERSION says {lmc.SERVER_VERSION} but pyproject.toml says "
         f"{project_version()}"

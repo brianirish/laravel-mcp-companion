@@ -8,9 +8,9 @@ from unittest.mock import MagicMock, patch
 from typing import Dict, Any, Generator
 
 # Import the modules we'll be testing
-import laravel_mcp_companion
-import docs_updater
-from shutdown_handler import GracefulShutdown
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion.shutdown_handler import GracefulShutdown
 
 @pytest.fixture(autouse=True)
 def _no_startup_version_refresh(request, monkeypatch):
@@ -21,7 +21,7 @@ def _no_startup_version_refresh(request, monkeypatch):
     if request.module.__name__.endswith("test_import_time"):
         return
     monkeypatch.setattr(docs_updater, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
-    monkeypatch.setattr(laravel_mcp_companion, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
+    monkeypatch.setattr(companion_server, "refresh_supported_versions", lambda: docs_updater.SUPPORTED_VERSIONS)
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -165,7 +165,7 @@ def sample_package_catalog() -> Dict[str, Any]:
 @pytest.fixture
 def mock_github_api() -> Generator[MagicMock, None, None]:
     """Mock GitHub API responses."""
-    with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+    with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
         # Mock successful API response
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps({
@@ -188,7 +188,7 @@ def mock_github_api() -> Generator[MagicMock, None, None]:
 @pytest.fixture
 def mock_file_download() -> Generator[MagicMock, None, None]:
     """Mock file downloads for testing."""
-    with patch('docs_updater.urllib.request.urlopen') as mock_urlopen:
+    with patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen') as mock_urlopen:
         # Mock successful download
         mock_response = MagicMock()
         mock_response.read.return_value = b"Mock file content"
@@ -202,7 +202,7 @@ def mock_file_download() -> Generator[MagicMock, None, None]:
 @pytest.fixture
 def mock_fastmcp():
     """Mock FastMCP for testing tool registration."""
-    with patch('laravel_mcp_companion.FastMCP') as mock_mcp:
+    with patch('laravel_mcp_companion.server.FastMCP') as mock_mcp:
         mock_instance = MagicMock()
         mock_mcp.return_value = mock_instance
         yield mock_instance
@@ -242,33 +242,32 @@ def mock_logger():
 def clear_caches():
     """Clear all caches before each test."""
     # Import mcp_tools for cache clearing
-    import mcp_tools
-    
+    from laravel_mcp_companion import mcp_tools
     # Clear mcp_tools caches
     mcp_tools.clear_caches()
     
     # Clear main module caches if they exist
-    if hasattr(laravel_mcp_companion, '_file_content_cache'):
-        laravel_mcp_companion._file_content_cache.clear()
-    if hasattr(laravel_mcp_companion, '_search_result_cache'):
-        laravel_mcp_companion._search_result_cache.clear()
+    if hasattr(companion_server, '_file_content_cache'):
+        companion_server._file_content_cache.clear()
+    if hasattr(companion_server, '_search_result_cache'):
+        companion_server._search_result_cache.clear()
     
     # Clear function cache if it exists
-    if hasattr(laravel_mcp_companion, 'get_file_content_cached') and hasattr(laravel_mcp_companion.get_file_content_cached, 'cache_clear'):
-        laravel_mcp_companion.get_file_content_cached.cache_clear()
+    if hasattr(companion_server, 'get_file_content_cached') and hasattr(companion_server.get_file_content_cached, 'cache_clear'):
+        companion_server.get_file_content_cached.cache_clear()
     
     yield
     
     # Clear caches after test
     mcp_tools.clear_caches()
     
-    if hasattr(laravel_mcp_companion, '_file_content_cache'):
-        laravel_mcp_companion._file_content_cache.clear()
-    if hasattr(laravel_mcp_companion, '_search_result_cache'):
-        laravel_mcp_companion._search_result_cache.clear()
+    if hasattr(companion_server, '_file_content_cache'):
+        companion_server._file_content_cache.clear()
+    if hasattr(companion_server, '_search_result_cache'):
+        companion_server._search_result_cache.clear()
     
-    if hasattr(laravel_mcp_companion, 'get_file_content_cached') and hasattr(laravel_mcp_companion.get_file_content_cached, 'cache_clear'):
-        laravel_mcp_companion.get_file_content_cached.cache_clear()
+    if hasattr(companion_server, 'get_file_content_cached') and hasattr(companion_server.get_file_content_cached, 'cache_clear'):
+        companion_server.get_file_content_cached.cache_clear()
 
 
 @pytest.fixture

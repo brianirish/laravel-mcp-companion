@@ -8,7 +8,7 @@ two servers were never actually independent.
 
 from fastmcp import Client
 
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion.server import create_mcp_server
 
 
 def _make_docs(tmp_path, name, marker):

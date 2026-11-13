@@ -2,9 +2,7 @@
 
 from unittest.mock import patch
 
-import toon_helpers
-
-
+from laravel_mcp_companion import toon_helpers
 class TestToonEncode:
     """Test the toon_encode function."""
 
@@ -31,7 +29,7 @@ class TestToonEncode:
                 return "UnserializableObject()"
 
         # Mock toon_format.encode to raise an exception
-        with patch('toon_helpers.encode') as mock_encode:
+        with patch('laravel_mcp_companion.toon_helpers.encode') as mock_encode:
             mock_encode.side_effect = Exception("Encoding failed")
 
             obj = UnserializableObject()

@@ -11,9 +11,7 @@ import threading
 
 import pytest
 
-import healthcheck
-
-
+from laravel_mcp_companion import healthcheck
 class TestWhereToAsk:
     def test_stdio_has_no_endpoint(self):
         assert healthcheck.target(["python", "laravel_mcp_companion.py"], {}) is None

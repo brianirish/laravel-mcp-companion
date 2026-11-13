@@ -11,7 +11,7 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from docs_updater import CommunityPackageFetcher, DocumentationSourceType
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher, DocumentationSourceType
 
 
 class TestCommunityPackageFetcher:
@@ -295,7 +295,7 @@ More content"""
         from tests.conftest import load_fixture, urlopen_returning
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
                 ".md": load_fixture("inertia_routing.md").encode(),
@@ -333,7 +333,7 @@ More content"""
             "- [Routing](https://inertiajs.com/docs/v1/the-basics/routing.md)\n"
         )
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": index.encode(),
                 "docs/v3/": page("v3"),
@@ -360,7 +360,7 @@ More content"""
         stale.write_text("Source: old\n\n# Removed\n\nStale content.\n")
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"", url_map={
                 "docs/llms.txt": load_fixture("inertia_llms.txt").encode(),
                 ".md": load_fixture("inertia_routing.md").encode(),
@@ -386,7 +386,7 @@ More content"""
             # Index and routing succeed; every other page 404s.
             return real(request)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         fetcher._fetch_inertia_docs(fetcher.community_packages["inertia"])
         assert stale.exists()
 
@@ -394,7 +394,7 @@ More content"""
         from tests.conftest import urlopen_returning
 
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(b"# No links here at all\n"),
         )
         config = fetcher.community_packages["inertia"]

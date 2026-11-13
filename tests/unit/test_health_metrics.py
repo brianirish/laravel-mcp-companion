@@ -11,9 +11,9 @@ import argparse
 import httpx
 import pytest
 
-import laravel_mcp_companion
-import metrics
-from laravel_mcp_companion import build_auth_provider, build_http_app, create_mcp_server
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion import metrics
+from laravel_mcp_companion.server import build_auth_provider, build_http_app, create_mcp_server
 
 
 @pytest.fixture(autouse=True)
@@ -68,13 +68,13 @@ class TestHealthz:
             assert res.status_code == 200
             data = res.json()
             assert data["status"] in ("ok", "degraded")  # staleness depends on fixture dates
-            assert data["version"] == laravel_mcp_companion.SERVER_VERSION
+            assert data["version"] == companion_server.SERVER_VERSION
             assert data["uptime_seconds"] > 0
             assert data["docs"]["versions_available"] >= 2
             assert isinstance(data["docs"]["stale"], bool)
 
     async def test_stale_corpus_reports_degraded_but_200(self, mcp_server, monkeypatch):
-        monkeypatch.setattr(laravel_mcp_companion, "copy_is_stale", lambda p: True)
+        monkeypatch.setattr(companion_server, "copy_is_stale", lambda p: True)
         async with client_for(app_for(mcp_server)) as client:
             res = await client.get("/healthz")
             assert res.status_code == 200
@@ -110,7 +110,7 @@ class TestMetricsEndpoint:
             assert res.status_code == 200
             assert res.headers["content-type"].startswith("text/plain")
             assert "# TYPE laravel_mcp_tool_calls_total counter" in res.text
-            version = laravel_mcp_companion.SERVER_VERSION
+            version = companion_server.SERVER_VERSION
             assert f'laravel_mcp_info{{version="{version}"}} 1' in res.text
             assert "laravel_mcp_uptime_seconds" in res.text
 
@@ -145,7 +145,7 @@ class TestMetricsEndpoint:
             raise ValueError("JWKS failed to fetch")
 
         monkeypatch.setattr(provider, "verify_token", explode)
-        laravel_mcp_companion.harden_verifier(provider)
+        companion_server.harden_verifier(provider)
         server = create_mcp_server(
             "TestServer", test_docs_dir, "12.x", transform_mode=None, auth=provider
         )

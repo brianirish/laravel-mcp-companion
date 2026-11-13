@@ -17,8 +17,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-import docs_updater
-from docs_updater import CommunityPackageFetcher, LearningResourceFetcher, build_sync_report
+from laravel_mcp_companion import docs_updater
+from laravel_mcp_companion.docs_updater import CommunityPackageFetcher, LearningResourceFetcher, build_sync_report
 
 
 class TestAllVersionsExitCode:

@@ -1,26 +1,28 @@
 """End-to-end over stdio: the transport Docker's ENTRYPOINT serves."""
 
+import sys
+
 import pytest
 
 from fastmcp import Client
-from fastmcp.client.transports import PythonStdioTransport
+from fastmcp.client.transports import StdioTransport
 
-import laravel_mcp_companion
-from .conftest import SERVER_SCRIPT, server_args
+from laravel_mcp_companion import server as companion_server
+from .conftest import REPO_ROOT, server_args
 
 pytestmark = [pytest.mark.e2e, pytest.mark.timeout(60)]
 
 
 def stdio_client(docs, *extra: str) -> Client:
-    args = server_args(docs, "--transport", "stdio", *extra)[1:]  # drop script path
-    return Client(PythonStdioTransport(str(SERVER_SCRIPT), args=args, cwd=str(SERVER_SCRIPT.parent)))
+    args = server_args(docs, "--transport", "stdio", *extra)
+    return Client(StdioTransport(sys.executable, args=args, cwd=str(REPO_ROOT)))
 
 
 class TestStdioRawSurface:
     async def test_initialize_flow_and_section_read(self, e2e_docs):
         async with stdio_client(e2e_docs, "--transform-mode", "none") as client:
             info = client.initialize_result.serverInfo
-            assert info.version == laravel_mcp_companion.SERVER_VERSION
+            assert info.version == companion_server.SERVER_VERSION
             caps = client.initialize_result.capabilities.model_dump(exclude_none=True)
             assert "tasks" in caps
 

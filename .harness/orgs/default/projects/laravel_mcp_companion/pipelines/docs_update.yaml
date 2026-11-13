@@ -73,7 +73,7 @@ pipeline:
                     command: |
                       set -euo pipefail
 
-                      # This job runs docs_updater.py daily in production, so it
+                      # This job runs the docs updater daily in production, so it
                       # needs the interpreter the project declares (>=3.12) rather
                       # than whatever the runner image ships, which is 3.10. CI was
                       # fixed for this; the pipeline that actually runs was not.
@@ -99,7 +99,7 @@ pipeline:
                       source .venv/bin/activate
 
                       echo "Updating Laravel framework docs for all versions..."
-                      python docs_updater.py --all-versions --log-level INFO
+                      python -m laravel_mcp_companion.docs_updater --all-versions --log-level INFO
                       CORE_STATUS=$?
 
                       # Services, community packages and learning resources.
@@ -113,14 +113,14 @@ pipeline:
                       # few seconds inside the window was skipped, and each one
                       # refreshed on alternate days at best.
                       echo "Updating services, packages and learning resources..."
-                      python docs_updater.py --update --force --log-level INFO
+                      python -m laravel_mcp_companion.docs_updater --update --force --log-level INFO
 
                       # Per-source health, from the metadata each fetch leaves
                       # behind. Exits non-zero if any source fetched too little
                       # or has not synced recently. This run used to discard
                       # every exit code: Forge fetching 18 of 39 pages, and
                       # sources whose sites had gone away, all passed as green.
-                      python docs_updater.py --sync-report > sync_report.md 2>/dev/null
+                      python -m laravel_mcp_companion.docs_updater --sync-report > sync_report.md 2>/dev/null
                       REPORT_STATUS=$?
 
                       DEGRADED="false"

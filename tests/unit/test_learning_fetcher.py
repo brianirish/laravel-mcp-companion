@@ -12,7 +12,7 @@ import urllib.error
 
 import pytest
 
-from docs_updater import LearningResourceFetcher
+from laravel_mcp_companion.docs_updater import LearningResourceFetcher
 from tests.conftest import load_fixture, urlopen_returning
 
 GOOD_PAGE = """
@@ -78,13 +78,13 @@ class TestFetchLearningSource:
         def explode(*a, **k):
             raise AssertionError("network hit despite valid cache")
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", explode)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", explode)
         assert fetcher.fetch_learning_source("laravel-blog") is True
 
     def test_force_bypasses_cache(self, fetcher, monkeypatch):
         write_metadata(fetcher, "laravel-blog")
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("blog_index.html").encode()),
         )
         assert fetcher.fetch_learning_source("laravel-blog", force=True) is True
@@ -93,15 +93,15 @@ class TestFetchLearningSource:
         def explode(*a, **k):
             raise OSError("socket down")
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", explode)
-        monkeypatch.setattr("docs_updater.time.sleep", lambda s: None)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", explode)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.time.sleep", lambda s: None)
         assert fetcher.fetch_learning_source("laravel-blog") is False
 
 
 class TestBlogAndNewsIndexes:
     def test_blog_index_written_from_recorded_page(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("blog_index.html").encode()),
         )
         assert fetcher._fetch_blog_index(fetcher.learning_sources["laravel-blog"]) is True
@@ -117,7 +117,7 @@ class TestBlogAndNewsIndexes:
 
     def test_news_index_written_from_recorded_page(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("news_index.html").encode()),
         )
         assert fetcher._fetch_news_index(fetcher.learning_sources["laravel-news"]) is True
@@ -130,7 +130,7 @@ class TestBlogAndNewsIndexes:
         (This test previously pinned the drift — extraction finding nothing —
         until the extractor learned the JSON shape.)"""
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("laracasts_index.html").encode()),
         )
         config = fetcher.learning_sources["laracasts-index"]
@@ -151,7 +151,7 @@ class TestBlogAndNewsIndexes:
 
     def test_blog_index_returns_false_on_unrecognized_page(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("moved_structure.html").encode()),
         )
         assert fetcher._fetch_blog_index(fetcher.learning_sources["laravel-blog"]) is False
@@ -184,7 +184,7 @@ class TestBootcampFetch:
         # Course discovery, partial syncs and pruning: test_learning_sources.py.
         config = dict(fetcher.learning_sources["laravel-bootcamp"])
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("moved_structure.html").encode()),
         )
         assert fetcher._fetch_bootcamp_docs(config) is False
@@ -193,7 +193,7 @@ class TestBootcampFetch:
 class TestFetchAndProcessHtml:
     def test_good_page_becomes_markdown(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(GOOD_PAGE.encode()),
         )
         result = fetcher._fetch_and_process_html("https://x.test/p", "laravel-bootcamp", "introduction")
@@ -206,7 +206,7 @@ class TestFetchAndProcessHtml:
 
     def test_thin_page_returns_none(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             urlopen_returning(load_fixture("moved_structure.html").encode()),
         )
         assert fetcher._fetch_and_process_html("https://x.test/p", "s", "sec") is None
@@ -223,7 +223,7 @@ class TestRetryRequest:
             calls.append(1)
             raise self._http_error(404)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", raise_404)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", raise_404)
         with pytest.raises(urllib.error.HTTPError):
             fetcher._retry_request("https://x.test/gone")
         assert len(calls) == 1
@@ -238,18 +238,18 @@ class TestRetryRequest:
                 raise self._http_error(503)
             return urlopen_returning(b"payload")(request)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
-        monkeypatch.setattr("docs_updater.time.sleep", sleeps.append)
-        monkeypatch.setattr("docs_updater.random.uniform", lambda a, b: 0)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.time.sleep", sleeps.append)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.random.uniform", lambda a, b: 0)
         assert fetcher._retry_request("https://x.test/flaky") == b"payload"
         # 2**attempt with no cap: attempt 0 -> 1s, attempt 1 -> 2s
         assert sleeps == [1, 2]
 
     def test_exhaustion_raises_last_error(self, fetcher, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: (_ for _ in ()).throw(self._http_error(500)),
         )
-        monkeypatch.setattr("docs_updater.time.sleep", lambda s: None)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.time.sleep", lambda s: None)
         with pytest.raises(urllib.error.HTTPError):
             fetcher._retry_request("https://x.test/dead")

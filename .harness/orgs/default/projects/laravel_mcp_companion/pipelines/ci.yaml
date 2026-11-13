@@ -178,5 +178,5 @@ pipeline:
                       fnm use 22
                       # Inspector 2.0 requires the server command before --method.
                       # Use the project venv, not the image's default interpreter.
-                      npx @modelcontextprotocol/inspector@2 --cli .venv/bin/python laravel_mcp_companion.py --method tools/list | grep -q "search_laravel_docs"
+                      npx @modelcontextprotocol/inspector@2 --cli .venv/bin/python -m laravel_mcp_companion --method tools/list | grep -q "search_laravel_docs"
 

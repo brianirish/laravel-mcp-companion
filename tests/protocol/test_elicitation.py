@@ -10,8 +10,8 @@ import pytest
 from fastmcp import Client
 from fastmcp.client.elicitation import ElicitResult
 
-from laravel_mcp_companion import create_mcp_server
-from learning_resources import LEARNING_PATHS
+from laravel_mcp_companion.server import create_mcp_server
+from laravel_mcp_companion.learning_resources import LEARNING_PATHS
 
 
 @pytest.fixture

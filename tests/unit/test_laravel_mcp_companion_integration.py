@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 
 from fastmcp import Client
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion.server import create_mcp_server
 
 
 @pytest.fixture
@@ -291,7 +291,7 @@ class TestTransformConfiguration:
     def test_parse_arguments_code_mode_flag(self, monkeypatch):
         """Test that --code-mode flag is parsed correctly."""
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         # Test default (no flag)
         monkeypatch.delenv("CODE_MODE", raising=False)
@@ -308,7 +308,7 @@ class TestTransformConfiguration:
     def test_parse_arguments_transform_mode(self, monkeypatch):
         """Test that --transform-mode flag and TRANSFORM_MODE env are parsed correctly."""
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         monkeypatch.delenv("TRANSFORM_MODE", raising=False)
         monkeypatch.delenv("CODE_MODE", raising=False)
@@ -336,7 +336,7 @@ class TestTransformConfiguration:
     @pytest.mark.asyncio
     async def test_search_transform_applied_by_default(self, temp_docs_dir):
         """Test that BM25SearchTransform is applied when code_mode=False."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
         async with Client(server) as client:
@@ -353,7 +353,7 @@ class TestTransformConfiguration:
     @pytest.mark.asyncio
     async def test_code_mode_transform_applied(self, temp_docs_dir):
         """Test that CodeMode is applied when code_mode=True."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="code")
         async with Client(server) as client:
@@ -368,7 +368,7 @@ class TestTransformConfiguration:
     @pytest.mark.asyncio
     async def test_no_transforms_mode(self, temp_docs_dir):
         """Test that transform_mode=None applies no transforms (for backward compat)."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode=None)
         async with Client(server) as client:
@@ -383,7 +383,7 @@ class TestTransformConfiguration:
     @pytest.mark.asyncio
     async def test_search_tools_finds_relevant_tools(self, temp_docs_dir):
         """Test that search_tools returns relevant results for a query."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
         async with Client(server) as client:
@@ -398,7 +398,7 @@ class TestTransformConfiguration:
     @pytest.mark.asyncio
     async def test_call_tool_proxy_works(self, temp_docs_dir):
         """Test that call_tool proxy can invoke underlying tools."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestMCP", temp_docs_dir, "12.x", transform_mode="search")
         async with Client(server) as client:

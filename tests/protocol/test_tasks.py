@@ -11,8 +11,8 @@ import pytest
 
 from fastmcp import Client
 
-import laravel_mcp_companion
-from laravel_mcp_companion import create_mcp_server
+from laravel_mcp_companion import server as companion_server
+from laravel_mcp_companion.server import create_mcp_server
 
 
 class FakeDocsUpdater:
@@ -28,7 +28,7 @@ class FakeDocsUpdater:
 
 @pytest.fixture
 def mcp_server(test_docs_dir, monkeypatch):
-    monkeypatch.setattr(laravel_mcp_companion, "DocsUpdater", FakeDocsUpdater)
+    monkeypatch.setattr(companion_server, "DocsUpdater", FakeDocsUpdater)
     return create_mcp_server("TestServer", test_docs_dir, "12.x", transform_mode=None)
 
 

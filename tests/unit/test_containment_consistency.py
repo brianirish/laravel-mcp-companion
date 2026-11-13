@@ -11,7 +11,7 @@ import os
 
 import pytest
 
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     SUPPORTED_VERSIONS,
     list_laravel_docs_impl,
     read_laravel_doc_content_impl,
@@ -97,7 +97,7 @@ class TestAllowedHostWildcard:
 
     def _parse(self, monkeypatch, argv, env):
         import sys
-        from laravel_mcp_companion import parse_arguments
+        from laravel_mcp_companion.server import parse_arguments
 
         for var in ("CORS_ORIGINS", "ALLOWED_HOSTS"):
             monkeypatch.delenv(var, raising=False)
@@ -150,7 +150,7 @@ class TestLearningResourceSymlinkConsistency:
         return docs
 
     def test_listing_a_source_agrees_with_listing_all(self, learning_with_symlinked_source):
-        from mcp_tools import list_laravel_learning_resources_impl
+        from laravel_mcp_companion.mcp_tools import list_laravel_learning_resources_impl
 
         all_sources = list_laravel_learning_resources_impl(learning_with_symlinked_source)
         scoped = list_laravel_learning_resources_impl(
@@ -166,7 +166,7 @@ class TestLearningResourceSymlinkConsistency:
         )
 
     def test_search_agrees_with_listing(self, learning_with_symlinked_source):
-        from mcp_tools import (
+        from laravel_mcp_companion.mcp_tools import (
             list_laravel_learning_resources_impl,
             search_laravel_learning_resources_impl,
         )
@@ -185,7 +185,7 @@ class TestLearningResourceSymlinkConsistency:
         )
 
     def test_real_sources_are_unaffected(self, learning_with_symlinked_source):
-        from mcp_tools import list_laravel_learning_resources_impl
+        from laravel_mcp_companion.mcp_tools import list_laravel_learning_resources_impl
 
         result = list_laravel_learning_resources_impl(
             learning_with_symlinked_source, source="tutorials"
@@ -206,7 +206,7 @@ class TestOpensThePathItValidated:
     def test_read_opens_the_resolved_target_not_the_link(self, tmp_path):
         from unittest.mock import patch
 
-        from mcp_tools import read_laravel_doc_content_impl
+        from laravel_mcp_companion.mcp_tools import read_laravel_doc_content_impl
 
         docs = tmp_path / "docs"
         version_dir = docs / VERSION
@@ -214,7 +214,7 @@ class TestOpensThePathItValidated:
         (version_dir / "real.md").write_text("# Real\n\ncontent")
         os.symlink(version_dir / "real.md", version_dir / "alias.md")
 
-        with patch("mcp_tools.get_file_content_cached", return_value="# Real") as reader:
+        with patch("laravel_mcp_companion.mcp_tools.get_file_content_cached", return_value="# Real") as reader:
             read_laravel_doc_content_impl(docs, "alias.md", VERSION)
 
         opened = os.path.basename(reader.call_args[0][0])
@@ -224,7 +224,7 @@ class TestOpensThePathItValidated:
         )
 
     def test_resolved_contained_path_returns_the_resolution(self, tmp_path):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         base = tmp_path / "base"
         base.mkdir()
@@ -237,7 +237,7 @@ class TestOpensThePathItValidated:
         assert resolved.name == "real.md", "must return what the path resolves to"
 
     def test_resolved_contained_path_rejects_escapes(self, tmp_path):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         base = tmp_path / "base"
         base.mkdir()
@@ -249,7 +249,7 @@ class TestOpensThePathItValidated:
         assert resolve_contained_path(base, base / ".." / "outside.md") is None
 
     def test_resolved_contained_path_fails_closed(self):
-        from mcp_tools import resolve_contained_path
+        from laravel_mcp_companion.mcp_tools import resolve_contained_path
 
         assert resolve_contained_path(None, None) is None
 
@@ -264,7 +264,7 @@ class TestReaderRefusesToFollowLinks:
     """
 
     def test_reader_refuses_a_symlink(self, tmp_path):
-        from mcp_tools import clear_caches, get_file_content_cached
+        from laravel_mcp_companion.mcp_tools import clear_caches, get_file_content_cached
 
         secret = tmp_path / "secret.md"
         secret.write_text("TOCTOU-CANARY-7712")
@@ -277,7 +277,7 @@ class TestReaderRefusesToFollowLinks:
         assert "TOCTOU-CANARY-7712" not in content, "followed a symlink at open time"
 
     def test_reader_still_reads_regular_files(self, tmp_path):
-        from mcp_tools import clear_caches, get_file_content_cached
+        from laravel_mcp_companion.mcp_tools import clear_caches, get_file_content_cached
 
         regular = tmp_path / "regular.md"
         regular.write_text("# Regular\n\nordinary content")

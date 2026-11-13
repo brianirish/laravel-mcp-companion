@@ -11,7 +11,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from docs_updater import DocsUpdater, ExternalDocsFetcher
+from laravel_mcp_companion.docs_updater import DocsUpdater, ExternalDocsFetcher
 
 
 def http_error(code, reason="err"):
@@ -30,8 +30,8 @@ def ok_response(body: bytes):
 @pytest.fixture
 def sleeps(monkeypatch):
     recorded = []
-    monkeypatch.setattr("docs_updater.time.sleep", recorded.append)
-    monkeypatch.setattr("docs_updater.random.uniform", lambda a, b: 0)
+    monkeypatch.setattr("laravel_mcp_companion.docs_updater.time.sleep", recorded.append)
+    monkeypatch.setattr("laravel_mcp_companion.docs_updater.random.uniform", lambda a, b: 0)
     return recorded
 
 
@@ -50,14 +50,14 @@ class TestExternalRetryRequest:
                 raise http_error(403, "API rate limit exceeded")
             return ok_response(b"done")
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         assert external._retry_request("https://x.test") == b"done"
         # min(300, 2**attempt * 5): attempt 0 -> 5, attempt 1 -> 10
         assert sleeps == [5, 10]
 
     def test_plain_403_raises_immediately(self, external, sleeps, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: (_ for _ in ()).throw(http_error(403, "Forbidden")),
         )
         with pytest.raises(urllib.error.HTTPError):
@@ -69,7 +69,7 @@ class TestExternalRetryRequest:
         the final attempt too and exhausts through the bottom
         `raise last_exception` (:1464) rather than an in-branch raise."""
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: (_ for _ in ()).throw(http_error(403, "rate limit hit")),
         )
         with pytest.raises(urllib.error.HTTPError):
@@ -78,7 +78,7 @@ class TestExternalRetryRequest:
 
     def test_url_error_retries_then_raises(self, external, sleeps, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: (_ for _ in ()).throw(urllib.error.URLError("dns down")),
         )
         with pytest.raises(urllib.error.URLError):
@@ -95,7 +95,7 @@ class TestExternalRetryRequest:
                 raise ValueError("weird payload")
             return ok_response(b"ok")
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         assert external._retry_request("https://x.test") == b"ok"
         assert sleeps == [1]
 
@@ -106,7 +106,7 @@ class TestExternalRetryRequest:
             attempts.append(1)
             raise urllib.error.URLError("down")
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", count)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", count)
         with pytest.raises(urllib.error.URLError):
             external._retry_request("https://x.test", max_retries=0)
         assert len(attempts) == 1
@@ -133,7 +133,7 @@ class TestGetLatestCommitRetries:
                 raise http_error(403, "API rate limit exceeded for 1.2.3.4")
             return ok_response(good)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         commit = updater.get_latest_commit()
         assert commit["sha"] == "abc"
         # min(300, 2**attempt * 30), no jitter term: 30, then 60 exactly
@@ -141,7 +141,7 @@ class TestGetLatestCommitRetries:
 
     def test_rate_limit_exhaustion_raises(self, updater, sleeps, monkeypatch):
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: (_ for _ in ()).throw(http_error(403, "rate limit")),
         )
         with pytest.raises(urllib.error.HTTPError):
@@ -162,7 +162,7 @@ class TestGetLatestCommitRetries:
                 raise http_error(502)
             return ok_response(good)
 
-        monkeypatch.setattr("docs_updater.urllib.request.urlopen", flaky)
+        monkeypatch.setattr("laravel_mcp_companion.docs_updater.urllib.request.urlopen", flaky)
         assert updater.get_latest_commit()["sha"] == "def"
         assert sleeps == [1]
 
@@ -171,7 +171,7 @@ class TestGetLatestCommitRetries:
         retry branch, retried, and finally raises KeyError to the caller —
         which needs_update() then swallows into 'needs update'."""
         monkeypatch.setattr(
-            "docs_updater.urllib.request.urlopen",
+            "laravel_mcp_companion.docs_updater.urllib.request.urlopen",
             lambda *a, **k: ok_response(b'{"unexpected": "shape"}'),
         )
         with pytest.raises(KeyError):

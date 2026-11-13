@@ -99,7 +99,7 @@ class TestRuntimeImage:
 
     def test_the_image_declares_a_health_check(self):
         check = runtime_stage()[runtime_index(r"^HEALTHCHECK ")]
-        assert "healthcheck.py" in check
+        assert "laravel_mcp_companion.healthcheck" in check
 
 
 class TestDockerignore:

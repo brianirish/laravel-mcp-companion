@@ -27,19 +27,20 @@ from starlette.responses import JSONResponse, Response
 
 import time
 
-from metrics import MetricsMiddleware, registry as metrics_registry, render_prometheus
+from . import __version__, resource_path
+from .metrics import MetricsMiddleware, registry as metrics_registry, render_prometheus
 from fastmcp.server.transforms.search import BM25SearchTransform
 from mcp.types import Icon
 
 # Import documentation updater
-from docs_updater import (
+from .docs_updater import (
     DocsUpdater, MultiSourceDocsUpdater, get_cached_supported_versions,
     get_default_version, refresh_supported_versions,
 )
-from shutdown_handler import GracefulShutdown
+from .shutdown_handler import GracefulShutdown
 from fastmcp.tools.tool import ToolResult
 
-from toon_helpers import (
+from .toon_helpers import (
     toon_encode,
     toon_result,
     error_data,
@@ -48,10 +49,10 @@ from toon_helpers import (
     format_service_list,
     format_error
 )
-from tool_schemas import OUTPUT_SCHEMAS
+from .tool_schemas import OUTPUT_SCHEMAS
 
 # Import standalone MCP tool implementations
-from mcp_tools import (
+from .mcp_tools import (
     list_laravel_docs_data,
     read_laravel_doc_content_impl,
     search_laravel_docs_data,
@@ -83,7 +84,7 @@ from mcp_tools import (
 )
 
 # Import learning resources
-from learning_resources import LEARNING_PATHS
+from .learning_resources import LEARNING_PATHS
 
 # Configure logging
 logging.basicConfig(
@@ -93,11 +94,9 @@ logging.basicConfig(
 logger = logging.getLogger("laravel-mcp-companion")
 
 # The server's own version, reported at initialize and stamped into the
-# .well-known registry metadata. The Docker image runs this file directly with
-# no installed package metadata, so importlib.metadata cannot supply it; a
-# guard in tests/unit/test_version_consistency.py keeps it equal to
-# pyproject.toml.
-SERVER_VERSION = "0.14.0"
+# .well-known registry metadata. pyproject.toml is the one place it is written;
+# see _read_version in the package __init__ for how it is found.
+SERVER_VERSION = __version__
 
 PROJECT_URL = "https://github.com/brianirish/laravel-mcp-companion"
 
@@ -870,8 +869,9 @@ def setup_docs_path(user_path: Optional[str] = None) -> Path:
     if user_path:
         docs_path = Path(user_path).resolve()
     else:
-        # Default to 'docs' directory in the same directory as the script
-        docs_path = (Path(__file__).parent / "docs").resolve()
+        # The corpus that ships with the project: inside the package in an
+        # installed wheel, at the repository root in a checkout.
+        docs_path = resource_path("docs").resolve()
     
     # Create directory if it doesn't exist
     docs_path.mkdir(parents=True, exist_ok=True)
@@ -1410,7 +1410,7 @@ def _registry_metadata() -> Dict[str, Any]:
     The checked-in file carries the last released version; a deployment built
     from a later commit should describe itself, not the file's snapshot.
     """
-    data = json.loads((Path(__file__).parent / "server.json").read_text(encoding="utf-8"))
+    data = json.loads(resource_path("server.json").read_text(encoding="utf-8"))
     data["version"] = SERVER_VERSION
     for package in data.get("packages", []):
         identifier = package.get("identifier", "")

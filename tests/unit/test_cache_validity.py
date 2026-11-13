@@ -13,7 +13,7 @@ import time
 
 import pytest
 
-from docs_updater import (
+from laravel_mcp_companion.docs_updater import (
     CommunityPackageFetcher,
     ExternalDocsFetcher,
     _read_versions_cache,

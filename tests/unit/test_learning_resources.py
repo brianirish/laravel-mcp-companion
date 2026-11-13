@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 import tempfile
 
-from learning_resources import (
+from laravel_mcp_companion.learning_resources import (
     DifficultyLevel,
     TOPIC_DIFFICULTY_MAP,
     EXPANDED_CATEGORIES,
@@ -22,7 +22,7 @@ from learning_resources import (
     list_categories
 )
 
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     find_laravel_docs_for_need_impl,
     get_laravel_learning_path_impl,
     list_laravel_learning_paths_impl,
@@ -377,47 +377,47 @@ class TestTOONFormatters:
 
     def test_format_learning_resources(self):
         """Test formatting learning resources."""
-        from toon_helpers import format_learning_resources
+        from laravel_mcp_companion.toon_helpers import format_learning_resources
         result = format_learning_resources("test-source", [{"file": "test.md"}])
         assert "test-source" in result
         assert "test.md" in result
 
     def test_format_learning_resources_with_count(self):
         """Test formatting learning resources with explicit count."""
-        from toon_helpers import format_learning_resources
+        from laravel_mcp_companion.toon_helpers import format_learning_resources
         result = format_learning_resources("test-source", [{"file": "test.md"}], 5)
         assert "test-source" in result
         assert "5" in result
 
     def test_format_learning_path(self):
         """Test formatting a learning path."""
-        from toon_helpers import format_learning_path
+        from laravel_mcp_companion.toon_helpers import format_learning_path
         result = format_learning_path({"name": "Test Path", "docs": ["a", "b"]})
         assert "Test Path" in result
 
     def test_format_learning_paths_list(self):
         """Test formatting list of learning paths."""
-        from toon_helpers import format_learning_paths_list
+        from laravel_mcp_companion.toon_helpers import format_learning_paths_list
         result = format_learning_paths_list([{"id": "test", "name": "Test"}])
         assert "test" in result or "Test" in result
 
     def test_format_need_docs(self):
         """Test formatting need docs."""
-        from toon_helpers import format_need_docs
+        from laravel_mcp_companion.toon_helpers import format_need_docs
         result = format_need_docs("upload files", ["filesystem.md"], "core")
         assert "upload files" in result
         assert "filesystem" in result
 
     def test_format_related_packages(self):
         """Test formatting related packages."""
-        from toon_helpers import format_related_packages
+        from laravel_mcp_companion.toon_helpers import format_related_packages
         result = format_related_packages("laravel/sanctum", ["breeze", "fortify"])
         assert "sanctum" in result
         assert "breeze" in result
 
     def test_format_difficulty_content(self):
         """Test formatting difficulty content."""
-        from toon_helpers import format_difficulty_content
+        from laravel_mcp_companion.toon_helpers import format_difficulty_content
         result = format_difficulty_content("beginner", ["installation.md"], 1)
         assert "beginner" in result
         assert "installation" in result

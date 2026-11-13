@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     read_laravel_doc_content_impl,
     read_laravel_doc_section_impl,
     search_laravel_docs_data,
@@ -111,7 +111,7 @@ class TestPackageResource:
         open in the resource handler. laravel-package://../12.x/routing.md
         must not serve core files through the package scheme."""
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestServer", corpus, "12.x", transform_mode=None)
         async with Client(server) as client:
@@ -133,14 +133,14 @@ class TestPackageResource:
         )
         os.symlink(outside, corpus / "packages" / "linked")
 
-        from mcp_tools import load_package_sections
+        from laravel_mcp_companion.mcp_tools import load_package_sections
 
         sections = load_package_sections(corpus / "packages")
         assert all(s.version != "linked" for s in sections)
         assert all("OUTSIDE-CONTENT" not in s.text for s in sections)
     async def test_package_resource_readable(self, corpus):
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestServer", corpus, "12.x", transform_mode=None)
         async with Client(server) as client:
@@ -151,7 +151,7 @@ class TestPackageResource:
 
     async def test_unknown_package_lists_available(self, corpus):
         from fastmcp import Client
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         server = create_mcp_server("TestServer", corpus, "12.x", transform_mode=None)
         async with Client(server) as client:

@@ -15,10 +15,10 @@ from typing import Any, Dict, List, Optional
 import json
 import threading
 
-from doc_search import Section, chunk_markdown
-from docs_updater import get_cached_supported_versions, get_default_version
-from path_security import no_follow_opener, resolve_contained_path, is_safe_path as is_safe_path
-from toon_helpers import (
+from .doc_search import Section, chunk_markdown
+from .docs_updater import get_cached_supported_versions, get_default_version
+from .path_security import no_follow_opener, resolve_contained_path, is_safe_path as is_safe_path
+from .toon_helpers import (
     toon_encode,
     error_data,
     format_version_list,
@@ -34,7 +34,7 @@ from toon_helpers import (
     format_related_packages,
     format_difficulty_content
 )
-from learning_resources import (
+from .learning_resources import (
     DifficultyLevel,
     EXPANDED_CATEGORIES,
     NEED_MAPPINGS,
@@ -781,7 +781,7 @@ def search_laravel_docs_data(
     narrowing the set. `include_external=False` is the historical core-only
     switch and is superseded by an explicit `sources`.
     """
-    from doc_search import extract_snippet, get_index
+    from .doc_search import extract_snippet, get_index
 
     version_error = validate_version_data(version)
     if version_error:
@@ -1537,7 +1537,7 @@ def clear_caches():
     Imported locally: doc_search does not import mcp_tools, but mcp_tools
     imports doc_search, and a module-level import here would be circular.
     """
-    from doc_search import clear_indexes
+    from .doc_search import clear_indexes
 
     with _cache_lock:
         _file_content_cache.clear()

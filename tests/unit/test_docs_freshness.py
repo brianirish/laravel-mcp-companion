@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from mcp_tools import (
+from laravel_mcp_companion.mcp_tools import (
     DOCS_STALE_AFTER_DAYS,
     copy_is_stale,
     describe_documentation_date,
@@ -149,7 +149,7 @@ class TestParseTimestamp:
 
 class TestServerInstructions:
     def test_instructions_state_the_documentation_date(self, tmp_path):
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         write_metadata(tmp_path, "13.x", changed_days_ago=2)
         instructions = build_server_instructions(tmp_path, "13.x")
@@ -158,7 +158,7 @@ class TestServerInstructions:
 
     def test_instructions_do_not_call_an_eol_version_stale(self, tmp_path):
         """8.x is byte-identical to upstream; the model must not be told to refresh."""
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         write_metadata(tmp_path, "8.x", changed_days_ago=425)
         instructions = build_server_instructions(tmp_path, "8.x")
@@ -167,7 +167,7 @@ class TestServerInstructions:
         assert "stale" not in instructions.lower()
 
     def test_instructions_report_the_served_version(self, tmp_path):
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         write_metadata(tmp_path, "8.x", changed_days_ago=425)
         write_metadata(tmp_path, "13.x", changed_days_ago=0)
@@ -178,7 +178,7 @@ class TestServerInstructions:
         assert eight in instructions
 
     def test_instructions_name_the_default_version_explicitly(self, tmp_path):
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         write_metadata(tmp_path, "11.x", changed_days_ago=1)
         instructions = build_server_instructions(tmp_path, "11.x")
@@ -197,7 +197,7 @@ class TestServerInstructions:
 
         Naming hidden tools invites calls the client cannot route.
         """
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         write_metadata(tmp_path, "13.x", changed_days_ago=1)
         instructions = build_server_instructions(tmp_path, "13.x", transform_mode=mode)
@@ -206,13 +206,13 @@ class TestServerInstructions:
         assert forbidden not in instructions
 
     def test_instructions_survive_missing_metadata(self, tmp_path):
-        from laravel_mcp_companion import build_server_instructions
+        from laravel_mcp_companion.server import build_server_instructions
 
         assert "unknown" in build_server_instructions(tmp_path, "13.x")
 
     def test_server_starts_with_corrupt_metadata(self, tmp_path):
         """Instructions are built during server construction, so this must not raise."""
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         metadata_dir = tmp_path / "13.x" / ".metadata"
         metadata_dir.mkdir(parents=True)
@@ -228,7 +228,7 @@ class TestDocsInfoTool:
         """The permanent-warning bug: 6.x can never get fresher."""
         from fastmcp import Client
 
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         write_metadata(tmp_path, "6.x", changed_days_ago=425)
         write_metadata(tmp_path, "13.x", changed_days_ago=1)
@@ -245,7 +245,7 @@ class TestDocsInfoTool:
     async def test_summary_warns_when_the_whole_copy_is_old(self, tmp_path):
         from fastmcp import Client
 
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         write_metadata(tmp_path, "6.x", changed_days_ago=425)
         write_metadata(tmp_path, "13.x", changed_days_ago=DOCS_STALE_AFTER_DAYS + 5)
@@ -263,7 +263,7 @@ class TestDocsInfoTool:
     async def test_per_version_reports_a_date_and_never_warns(self, tmp_path):
         from fastmcp import Client
 
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         write_metadata(tmp_path, "8.x", changed_days_ago=425)
 
@@ -282,7 +282,7 @@ class TestUpdateToolParameterName:
         """An assistant told to refresh guesses `version`; it used to hard-error."""
         from fastmcp import Client
 
-        from laravel_mcp_companion import create_mcp_server
+        from laravel_mcp_companion.server import create_mcp_server
 
         write_metadata(tmp_path, "13.x", changed_days_ago=1)
         server = create_mcp_server("T", tmp_path, "13.x", transform_mode=None)
