@@ -131,9 +131,8 @@ class TestImageIsBuiltInCI:
     """
 
     def ci_pipeline(self) -> str:
-        path = (REPO_ROOT / ".harness/orgs/default/projects/laravel_mcp_companion"
-                / "pipelines/ci.yaml")
-        assert path.exists(), f"CI pipeline definition not found at {path}"
+        path = REPO_ROOT / ".github/workflows/ci.yaml"
+        assert path.exists(), f"CI workflow not found at {path}"
         return path.read_text(encoding="utf-8")
 
     def test_ci_builds_the_image(self):
@@ -144,7 +143,8 @@ class TestImageIsBuiltInCI:
     def test_ci_does_not_push_from_a_pull_request(self):
         """Validation only. Publishing is the release pipeline's job."""
         ci = self.ci_pipeline()
-        assert "BuildAndPushDockerRegistry" not in ci
+        assert "build-push-action" not in ci
+        assert "packages: write" not in ci
         assert not re.search(r"docker\s+push", ci)
 
     def test_the_built_image_is_actually_started(self):

@@ -1,14 +1,12 @@
 # Raises an issue when the nightly documentation sync has stopped publishing.
 #
-# The sync runs in Harness. When a run fails, Harness emails. When a run never
-# starts, nothing does: an exhausted build allowance and a pipeline file the
-# schema rejected each stopped the sync that way, the first for five weeks.
-# This workflow looks at the result instead of the run. The sync pushes a
-# docs-YYYY-MM-DD tag whenever it publishes, and scripts/docs_sync_watch.py
-# reports when the newest one is more than a few days old.
-#
-# It runs here, not in Harness, so that it does not depend on the thing it is
-# watching.
+# The sync is .github/workflows/docs-update.yaml. When a run fails, GitHub
+# emails. When a run never starts, nothing does. That has stopped the sync
+# twice, the first time for five weeks, and GitHub itself disables scheduled
+# workflows in a repository with no activity for 60 days. This workflow looks
+# at the result instead of the run. The sync pushes a docs-YYYY-MM-DD tag
+# whenever it publishes, and scripts/docs_sync_watch.py reports when the
+# newest one is more than a few days old.
 
 name: Docs sync watch
 
@@ -57,9 +55,9 @@ jobs:
 
           Things to check, most likely first:
 
-          - The trigger's event history in Harness for \`Docs_Update_Cron\`. A trigger that cannot start a run fails there and nowhere else.
-          - The account's build credits. When they run out, every trigger fails with \"You have reached the account build limit\".
-          - Whether the last \`docs_update\` execution failed, and at which step.
+          - The runs of the \`Docs update\` workflow under the Actions tab. If there are none for recent nights, the workflow may be disabled; GitHub disables scheduled workflows after 60 days without repository activity.
+          - Whether the last run failed, and at which step. A rejected \`PAT_FOR_WORKFLOWS\` secret fails at \"Check the token used for pushing\".
+          - Whether the night's pull request is still open, waiting on a required check.
           - Whether the upstream documentation simply has not changed. The sync tags only when it publishes something."
             if [ -n "${EXISTING}" ]; then
               gh issue edit "${EXISTING}" --body "${BODY}"

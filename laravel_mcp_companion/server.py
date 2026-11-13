@@ -555,8 +555,8 @@ def _registry_metadata() -> Dict[str, Any]:
         identifier = package.get("identifier", "")
         if ":" in identifier:
             # OCI packages have no separate version field (the registry
-            # rejects one); the tag keeps its leading v because Harness tags
-            # images with the git tag verbatim.
+            # rejects one); the tag keeps its leading v because the image
+            # is tagged with the git tag verbatim.
             package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:v{SERVER_VERSION}"
     return data
 

@@ -1,13 +1,12 @@
 # Publishes the server to the official MCP Registry on version tags.
 #
-# This lives in GitHub Actions rather than Harness (the live CI) because
-# registry authentication uses GitHub Actions OIDC — that credential does not
-# exist anywhere else. Harness builds and pushes the Docker image on the same
-# tag; the wait step below covers the race between the two pipelines, since
-# the registry validates that the referenced image exists and carries the
+# Registry authentication uses GitHub Actions OIDC. The Release image workflow
+# builds and pushes the Docker image on the same tag; the wait step below
+# covers the race between the two, since the registry validates that the
+# referenced image exists and carries the
 # io.modelcontextprotocol.server.name label.
 #
-# Image tags carry the leading v: Harness tags images with the git tag
+# Image tags carry the leading v: the image is tagged with the git tag
 # verbatim (ghcr.io/...:v0.12.0), while server.json's semver version fields
 # are bare (0.12.0). The first publish run failed by conflating the two.
 #
@@ -57,7 +56,7 @@ jobs:
           esac
           echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
 
-      - name: Wait for the Docker image Harness builds on this tag
+      - name: Wait for the Docker image the Release image workflow builds on this tag
         env:
           TAG: ${{ steps.release.outputs.tag }}
         run: |
@@ -70,7 +69,7 @@ jobs:
             fi
             sleep 30
           done
-          echo "::error::${IMAGE} never appeared; is the Harness release pipeline green?"
+          echo "::error::${IMAGE} never appeared; did the Release image workflow succeed?"
           exit 1
 
       - name: Stamp the release into server.json

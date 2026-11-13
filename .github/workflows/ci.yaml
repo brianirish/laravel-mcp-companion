@@ -1,53 +1,104 @@
+# Lint, type check, tests, an image build and a protocol smoke test, on every
+# pull request and every push to main.
+#
+# The job is named ci-test because the ruleset on main requires a check of
+# that name. Rename the job without changing the ruleset and every pull request
+# waits on a check that never arrives.
+
 name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
 permissions:
   contents: read
 
-# Disabled - CI moved to Harness
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-on: workflow_dispatch
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  test:
+  ci-test:
+    name: ci-test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.12]
-
+    timeout-minutes: 20
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip uv
-        uv sync --frozen
-        echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
-    - name: Lint with ruff
-      run: ruff check --fix .
-    - name: Type check with mypy
-      run: mypy --ignore-missing-imports .
-    - name: Run tests with pytest
-      run: pytest --cov --cov-branch --cov-report=xml
-    - name: Setup Node.js for MCP Inspector
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - name: MCP Inspector smoke test
-      run: |
-        npx @modelcontextprotocol/inspector@2 --cli python -m laravel_mcp_companion --method tools/list | grep -q "search_laravel_docs"
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
-      if: success()
-      with:
-        files: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
-        slug: brianirish/laravel-mcp-companion
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          # Full history brings the tags. Without them the version-drift guard
+          # in test_version_consistency.py finds none and skips. It exists
+          # because the manifest once sat at 0.9.0 while tags reached v0.9.145.
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          # The same uv the Dockerfile pins, and what uv.lock pins, development
+          # tools included. The image installs from the same lockfile, so the
+          # versions tested here are the versions shipped.
+          pipx install uv==0.13.7
+          uv sync --frozen --python 3.12
+          .venv/bin/python --version
+          echo "${PWD}/.venv/bin" >> "${GITHUB_PATH}"
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Type check with mypy
+        run: mypy --ignore-missing-imports .
+
+      - name: Run tests
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          # The nightly documentation pull request changes only docs/. The
+          # tests marked `corpus` compare hand-written tables with docs/, so a
+          # page Laravel added or removed fails them, and failing that pull
+          # request would hold back the rest of the night's documentation.
+          # They are left out for that one branch; the sync report raises the
+          # same findings, and every other pull request runs them and fails
+          # until the tables are updated.
+          SELECT="not e2e and not bench"
+          if [ "${HEAD_REF}" = "update-laravel-docs" ]; then
+            SELECT="${SELECT} and not corpus"
+          fi
+          pytest -m "${SELECT}" --cov --cov-branch --cov-report=xml
+
+      - name: End-to-end tests over real transports
+        # Starts the real server as a subprocess over stdio and streamable
+        # HTTP. A separate step without coverage: a wedged subprocess fails
+        # here without masking the unit suite, and the coverage gate is judged
+        # on the suite above.
+        run: pytest -m e2e --no-cov -q
+
+      - name: Latency benchmarks, informational
+        # Prints p50 and p95 against the 100 ms target. Fails only if the
+        # benchmarks themselves break, never on timing: latency gates on
+        # shared runners are flaky.
+        run: pytest -m bench --no-cov -s -q
+
+      - name: Build and start the Docker image
+        run: |
+          # One platform, and no push. This checks that a Dockerfile change
+          # builds before it reaches a release; the release workflow builds
+          # both platforms and publishes.
+          docker build -t laravel-mcp-companion:ci .
+
+          # A build proves the image assembles, not that it runs. Starting it
+          # catches a broken entrypoint, a missing runtime dependency, and a
+          # .dockerignore that swallowed something the server needs.
+          docker run --rm laravel-mcp-companion:ci --help > /dev/null
+          echo "image builds and starts"
+
+      - name: Set up Node.js for the MCP Inspector
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: MCP Inspector smoke test
+        run: |
+          npx --yes @modelcontextprotocol/inspector@2 --cli .venv/bin/python -m laravel_mcp_companion --method tools/list \
+            | grep -q "search_laravel_docs"

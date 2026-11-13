@@ -1,229 +1,316 @@
-name: Laravel Docs Update
-permissions:
-  contents: write
-  pull-requests: write
+# The nightly documentation sync.
+#
+# Refetches every source. When the content has changed it opens a pull request,
+# lets GitHub merge it once the required checks pass, and tags the merge
+# docs-YYYY-MM-DD. The tag starts the Release image workflow, which publishes
+# the image as `latest`.
+#
+# It pushes, opens the pull request and tags as a user, with the
+# PAT_FOR_WORKFLOWS secret. Anything done with the workflow's own token starts
+# no other workflow, so the pull request would get no CI and the tag no image.
+#
+# When a run fails, GitHub emails whoever last changed the schedule below. A
+# run that never starts sends nothing; .github/workflows/docs-sync-watch.yml
+# covers that by looking for a recent docs tag.
+#
+# Run it by hand with "dry run" ticked to fetch and report without pushing,
+# opening a pull request or tagging.
 
-# Disabled - Docs update moved to Harness
-# on:
-#   schedule:
-#     - cron: '0 0 * * *'  # Daily at midnight UTC
-#   workflow_dispatch:  # Manual trigger
-on: workflow_dispatch
+name: Docs update
+
+on:
+  schedule:
+    # 00:17 UTC. Scheduled runs queued on the hour are the ones GitHub delays.
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: fetch and report only"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-update
+  cancel-in-progress: false
 
 jobs:
-  check-update:
+  sync:
+    name: Sync the documentation
     runs-on: ubuntu-latest
-    outputs:
-      updates_available: ${{ steps.check-updates.outputs.updates_available }}
-      pr_number: ${{ steps.create-pr.outputs.pull-request-number }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write # the degraded-sync issue
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+      BRANCH: update-laravel-docs
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Ensure we have latest main branch
-      run: |
-        git fetch origin main
-        git reset --hard origin/main
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-    - name: Install dependencies
-      run: |
-        python -m venv .venv
-        source .venv/bin/activate
-        pip install fastmcp mcp[cli,client] markdownify beautifulsoup4 feedparser
-    - name: Check for documentation updates
-      id: check-updates
-      continue-on-error: true
-      run: |
-        set +e
-        source .venv/bin/activate
-        
-        # Run documentation update with auto-discovery enabled
-        echo "Starting documentation update with auto-discovery..."
-        python -m laravel_mcp_companion.docs_updater --all-versions --log-level INFO
-        UPDATE_STATUS=$?
-        
-        # Update external services documentation
-        echo "Updating external services documentation..."
-        python -m laravel_mcp_companion.docs_updater --external-only --log-level INFO
-        EXTERNAL_STATUS=$?
-        
-        # Check external services status to report auto-discovery results
-        echo "Checking external services status..."
-        python -m laravel_mcp_companion.docs_updater --status --external-only
-        
-        # Check if any files were actually changed
-        if git diff --quiet docs/; then
-          echo "updates_available=false" >> $GITHUB_OUTPUT
-          echo "No file changes detected"
-        else
-          echo "updates_available=true" >> $GITHUB_OUTPUT
-          echo "File changes detected"
-          
-          # Count changes for reporting
-          CHANGED_FILES=$(git diff --name-only docs/ | wc -l)
-          echo "Found $CHANGED_FILES changed documentation files"
-          
-          # Check for new external docs
-          NEW_EXTERNAL_FILES=$(git diff --name-status docs/external/ | grep "^A" | wc -l)
-          if [ "$NEW_EXTERNAL_FILES" -gt 0 ]; then
-            echo "Auto-discovery found $NEW_EXTERNAL_FILES new external documentation files"
-          fi
-        fi
-    - name: Close existing pull requests
-      if: steps.check-updates.outputs.updates_available == 'true'
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const pulls = await github.rest.pulls.list({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            state: 'open',
-            head: 'update-laravel-docs'
-          });
-          
-          for (const pull of pulls.data) {
-            if (pull.title === 'Update Laravel documentation' || 
-                pull.title === 'Update Laravel and external services documentation') {
-              await github.rest.pulls.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pull.number,
-                state: 'closed'
-              });
-              console.log(`Closed existing PR #${pull.number}`);
-            }
-          }
-          
-          // Delete the remote branch if it exists
-          try {
-            await github.rest.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'heads/update-laravel-docs'
-            });
-            console.log('Deleted existing remote branch update-laravel-docs');
-          } catch (error) {
-            console.log('No existing remote branch to delete or error deleting:', error.message);
-          }
-    - name: Commit updated documentation
-      if: steps.check-updates.outputs.updates_available == 'true'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add docs/
-        git add docs/.metadata/
-        git commit -m "Update Laravel and external services documentation" || exit 0
-    - name: Create Pull Request
-      if: steps.check-updates.outputs.updates_available == 'true'
-      id: create-pr
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: 'Update Laravel and external services documentation'
-        title: 'Update Laravel and external services documentation'
-        body: |
-          Automated PR to update Laravel and external services documentation to the latest version.
-          
-          ## Auto-Discovery Status
-          This update includes enhancements with auto-discovery for external Laravel services:
-          - ✅ **Laravel Forge** - Auto-discovery enabled for comprehensive section detection
-          - ✅ **Laravel Vapor** - Auto-discovery enabled with Mintlify navigation parsing  
-          - ✅ **Laravel Envoyer** - Auto-discovery enabled with redirect validation
-          - ✅ **Laravel Nova** - Auto-discovery enabled with version detection
-          
-          ## Changes Included
-          - Core Laravel documentation updates for all supported versions
-          - External Laravel services documentation with auto-discovered sections
-          - Enhanced content validation and quality scoring
-          - Improved fallback mechanisms for manual configuration
-          
-          Auto-discovery system will automatically detect new documentation pages and adapt to structural changes in Laravel service documentation sites.
-        branch: update-laravel-docs
-    - name: Enable auto-merge and wait for checks
-      if: steps.check-updates.outputs.updates_available == 'true' && steps.create-pr.outputs.pull-request-number
-      run: |
-        # Enable auto-merge
-        gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
-        
-        # Check if there are any checks configured for this PR
-        echo "Checking for required status checks..."
-        CHECK_COUNT=$(gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --json state | jq '. | length')
-        
-        if [ "$CHECK_COUNT" -gt 0 ]; then
-          echo "Found $CHECK_COUNT checks. Waiting for all checks to complete..."
-          gh pr checks ${{ steps.create-pr.outputs.pull-request-number }} --watch
-        else
-          echo "No checks found. Auto-merge will proceed without waiting for checks."
-        fi
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          # Left in place, the workflow's own token would be used for every
+          # push below, whatever the remote URL says.
+          persist-credentials: false
 
-  auto-tag-after-merge:
-    runs-on: ubuntu-latest
-    needs: [check-update]
-    if: needs.check-update.outputs.updates_available == 'true'
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Wait for PR to be merged
-      id: wait-for-merge
-      run: |
-        PR_NUMBER="${{ needs.check-update.outputs.pr_number }}"
-        if [ -z "$PR_NUMBER" ]; then
-          echo "No PR number available"
+      - name: Install dependencies
+        run: |
+          # What uv.lock pins, the same versions CI tests and the image ships,
+          # without the development tools.
+          pipx install uv==0.13.7
+          uv sync --frozen --no-dev --python 3.12
+          .venv/bin/python --version
+
+      - name: Check the token used for pushing
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+        run: |
+          # Fail here, in a step that says why, and not twenty minutes later
+          # at the push.
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error::The PAT_FOR_WORKFLOWS secret is not set"
+            exit 1
+          fi
+          if ! LOGIN="$(gh api user --jq .login)"; then
+            echo "::error::PAT_FOR_WORKFLOWS was rejected by GitHub. It has probably expired; create a new one and update the secret"
+            exit 1
+          fi
+          echo "Pushing as ${LOGIN}"
+          if [ "$(gh api "repos/${GITHUB_REPOSITORY}" --jq .permissions.push)" != "true" ]; then
+            echo "::error::${LOGIN} cannot push to ${GITHUB_REPOSITORY}"
+            exit 1
+          fi
+
+      - name: Fetch the documentation and report on it
+        id: sync
+        run: |
+          set +e
+          source .venv/bin/activate
+
+          echo "Updating Laravel framework docs for all versions..."
+          python -m laravel_mcp_companion.docs_updater --all-versions --log-level INFO
+          CORE_STATUS=$?
+
+          # Services, community packages and learning resources. This exit
+          # code is not a health signal: it is non-zero whenever the framework
+          # docs were already up to date. Health is read from the report below.
+          #
+          # --force: every source is refetched on every run. The fetchers cache
+          # for 24 hours and this job runs every 24 hours, so without it a
+          # source whose last fetch landed a few seconds inside the window was
+          # skipped, and each one refreshed on alternate days at best.
+          echo "Updating services, packages and learning resources..."
+          python -m laravel_mcp_companion.docs_updater --update --force --log-level INFO
+
+          # Per-source health, from the metadata each fetch leaves behind.
+          # Exits non-zero if any source fetched too little or has not synced
+          # recently.
+          python -m laravel_mcp_companion.docs_updater --sync-report > sync_report.md 2>/dev/null
+          REPORT_STATUS=$?
+
+          DEGRADED="false"
+          if [ "${REPORT_STATUS}" -ne 0 ]; then
+            DEGRADED="true"
+          fi
+          if [ "${CORE_STATUS}" -ne 0 ]; then
+            DEGRADED="true"
+            printf '\n### Framework docs\n\n- The framework docs update exited with status %s.\n' "${CORE_STATUS}" >> sync_report.md
+          fi
+          cat sync_report.md
+          cat sync_report.md >> "${GITHUB_STEP_SUMMARY}"
+
+          # Add everything under docs/, new and deleted pages included, then
+          # judge the change by its content. Each run rewrites cache
+          # timestamps, so a diff made only of metadata is not an update.
+          # About a fifth of the pull requests this job once opened changed
+          # nothing else, and each still produced a tag and a Docker image.
+          git add -A docs/
+          METADATA='(^|/)\.cache_metadata\.json$|/\.metadata/[^/]+\.json$|(^|/)\.versions_cache\.json$'
+          CONTENT_CHANGES=$(git diff --cached --no-renames --name-status -- docs/ | grep -vE "${METADATA}" || true)
+
+          if [ -z "${CONTENT_CHANGES}" ]; then
+            echo "No documentation content changed"
+            UPDATES_AVAILABLE="false"
+          else
+            UPDATES_AVAILABLE="true"
+            echo "Documentation content changed:"
+            echo "${CONTENT_CHANGES}"
+
+            # The pull request body: what this run changed, then the health
+            # report.
+            {
+              echo "Automated documentation sync."
+              echo
+              echo "## What changed"
+              echo
+              echo "${CONTENT_CHANGES}" | awk -F'\t' '
+                {
+                  split($2, part, "/")
+                  if (part[2] == "external" || part[2] == "packages" || part[2] == "learning_resources")
+                    area = part[2] "/" part[3]
+                  else
+                    area = "Laravel " part[2]
+                  if ($1 == "A") added[area]++
+                  else if ($1 == "D") removed[area]++
+                  else changed[area]++
+                  seen[area] = 1
+                }
+                END {
+                  for (area in seen)
+                    printf "- %s: %d changed, %d added, %d removed\n", area, changed[area], added[area], removed[area]
+                }' | sort
+              echo
+              cat sync_report.md
+            } > pr_body.md
+          fi
+
+          # With nothing to publish there is no tag, so a degraded run has to
+          # fail on its own to be seen at all.
+          FAIL_WITHOUT_PUBLISHING="false"
+          if [ "${DEGRADED}" = "true" ] && [ "${UPDATES_AVAILABLE}" = "false" ]; then
+            FAIL_WITHOUT_PUBLISHING="true"
+          fi
+
+          {
+            echo "updates_available=${UPDATES_AVAILABLE}"
+            echo "degraded=${DEGRADED}"
+            echo "fail_without_publishing=${FAIL_WITHOUT_PUBLISHING}"
+          } >> "${GITHUB_OUTPUT}"
+          echo "updates_available=${UPDATES_AVAILABLE} degraded=${DEGRADED} dry_run=${DRY_RUN}"
+
+      - name: Report a degraded sync
+        if: steps.sync.outputs.degraded == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Keep one open issue current, not one a day. Never fails the run:
+          # the healthy sources still publish, and the run is failed
+          # explicitly further on.
+          EXISTING="$(gh issue list --state open --search "Docs sync degraded in:title" --json number -q '.[0].number' 2>/dev/null || true)"
+          if [ -n "${EXISTING}" ]; then
+            gh issue edit "${EXISTING}" --body-file sync_report.md || echo "Could not update issue #${EXISTING}"
+          else
+            gh issue create --title "Docs sync degraded" --body-file sync_report.md || echo "Could not open an issue"
+          fi
+
+      - name: Close any earlier sync pull request
+        if: steps.sync.outputs.updates_available == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+        run: |
+          for PR in $(gh pr list --state open --head "${BRANCH}" --json number -q '.[].number'); do
+            echo "Closing existing PR #${PR}"
+            gh pr close "${PR}"
+          done
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "${BRANCH}" 2>/dev/null \
+            || echo "No existing remote branch to delete"
+
+      - name: Commit and push the changes
+        if: steps.sync.outputs.updates_available == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout -b "${BRANCH}"
+          git add -A docs/
+          git commit -m "Update Laravel and external services documentation"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${BRANCH}" --force
+
+      - name: Open the pull request and let GitHub merge it
+        id: pr
+        if: steps.sync.outputs.updates_available == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+        run: |
+          PR_URL="$(gh pr create \
+            --title "Update Laravel and external services documentation" \
+            --body-file pr_body.md \
+            --head "${BRANCH}" \
+            --base main)"
+          PR_NUMBER="${PR_URL##*/}"
+          echo "Created PR #${PR_NUMBER}: ${PR_URL}"
+          echo "number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
+
+          # GitHub merges when the required checks pass. Do not wait on the
+          # checks here with a watch command: that returns only once every
+          # check has finished, required or not. From 2026-09-19 a review bot
+          # left a status pending on a pull request that had already merged,
+          # the wait ran to its timeout, and no image was published for six
+          # weeks. The step below polls for the merge with a bounded loop.
+          gh pr merge "${PR_NUMBER}" --auto --squash
+
+      - name: Fail when degraded with nothing to publish
+        if: steps.sync.outputs.fail_without_publishing == 'true' && env.DRY_RUN != 'true'
+        run: |
+          echo "::error::The docs sync is degraded and there was nothing to publish"
+          cat sync_report.md
           exit 1
-        fi
-        
-        # Wait up to 10 minutes for the PR to be merged
-        for i in {1..80}; do
-          PR_STATE=$(gh pr view $PR_NUMBER --json state,mergedAt -q '.state')
-          if [ "$PR_STATE" = "MERGED" ]; then
-            echo "PR $PR_NUMBER has been merged!"
-            # Get the merge commit SHA
-            MERGE_COMMIT=$(gh pr view $PR_NUMBER --json mergeCommit -q '.mergeCommit.oid')
-            echo "merge_commit=$MERGE_COMMIT" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          echo "PR state: $PR_STATE. Waiting... (attempt $i/80)"
-          sleep 15
-        done
-        echo "PR was not merged within timeout"
-        exit 1
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Checkout merge commit
-      run: |
-        git fetch origin
-        git checkout ${{ steps.wait-for-merge.outputs.merge_commit }}
-    - name: Create new patch version tag and release
-      run: |
-        # Get the latest tag, default to v0.0.0 if no tags exist
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-        echo "Latest tag: $LATEST_TAG"
-        
-        # Extract version numbers
-        VERSION=${LATEST_TAG#v}
-        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-        
-        # Increment patch version for docs updates
-        NEW_PATCH=$((PATCH + 1))
-        NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
-        
-        echo "Creating new tag: $NEW_VERSION"
-        git tag $NEW_VERSION
-        git push origin $NEW_VERSION
-        
-        echo "Creating GitHub release: $NEW_VERSION"
-        # Create GitHub release
-        gh release create $NEW_VERSION \
-          --title "$NEW_VERSION" \
-          --notes "Documentation Update - Updated Laravel and external services documentation to latest version" \
-          --latest
 
-      env:
-        GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+      - name: Wait for the pull request to merge
+        id: merge
+        if: steps.sync.outputs.updates_available == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          # Up to 20 minutes.
+          for ATTEMPT in $(seq 1 80); do
+            STATE="$(gh pr view "${PR_NUMBER}" --json state -q .state)"
+            if [ "${STATE}" = "MERGED" ]; then
+              COMMIT="$(gh pr view "${PR_NUMBER}" --json mergeCommit -q .mergeCommit.oid)"
+              echo "PR #${PR_NUMBER} merged as ${COMMIT}"
+              echo "commit=${COMMIT}" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+            if [ "${STATE}" = "CLOSED" ]; then
+              echo "::error::PR #${PR_NUMBER} was closed without merging"
+              exit 1
+            fi
+            echo "PR #${PR_NUMBER} is ${STATE}; waiting (${ATTEMPT}/80)"
+            sleep 15
+          done
+          echo "::error::PR #${PR_NUMBER} did not merge within 20 minutes. Check its required checks"
+          exit 1
+
+      - name: Create the docs tag
+        if: steps.sync.outputs.updates_available == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_FOR_WORKFLOWS }}
+          MERGE_COMMIT: ${{ steps.merge.outputs.commit }}
+        run: |
+          set -euo pipefail
+
+          # Documentation syncs are tagged by date, not by version. They once
+          # incremented the patch number on every run, so about 145
+          # consecutive releases were content refreshes. No GitHub release is
+          # published either: a sync is not a release. The tag names the
+          # snapshot and starts the image build.
+          TAG="docs-$(date -u +%Y-%m-%d)"
+
+          # A second sync on the same day would collide, so it gets a tag with
+          # the time in it. Asked of the remote: this clone is shallow and
+          # holds no tags, and fetching them all would fetch their history.
+          if [ -n "$(git ls-remote --tags origin "refs/tags/${TAG}")" ]; then
+            TAG="docs-$(date -u +%Y-%m-%d-%H%M)"
+            echo "Daily tag already exists, using ${TAG}"
+          fi
+
+          git fetch --quiet --depth=1 origin "${MERGE_COMMIT}"
+
+          echo "Tagging ${MERGE_COMMIT} as ${TAG}" | tee -a "${GITHUB_STEP_SUMMARY}"
+          git tag "${TAG}" "${MERGE_COMMIT}"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${TAG}"
+
+      - name: Fail when the sync is degraded
+        if: steps.sync.outputs.degraded == 'true' && env.DRY_RUN != 'true'
+        run: |
+          # The healthy sources were merged and tagged above. Fail last, so a
+          # degraded source turns the run red without holding back everything
+          # that did sync.
+          echo "::error::The docs sync published, but at least one source is degraded"
+          echo "See the open 'Docs sync degraded' issue, or the body of the merged pull request."
+          exit 1

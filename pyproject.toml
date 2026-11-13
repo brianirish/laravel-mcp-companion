@@ -67,6 +67,7 @@ dev = [
     "inline-snapshot",
     "pytest-timeout>=2.4.0",
     "hatchling>=1.33.0",
+    "pyyaml>=6.0",
 ]
 
 [tool.ruff.lint]

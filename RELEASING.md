@@ -2,18 +2,30 @@
 
 How a version gets from `main` to users, and the conditions for tagging 1.0.0.
 
-Builds run in [Harness](https://app.harness.io). The three pipelines (`ci`,
-`docs_update` and `release`) are defined in
-`.harness/orgs/default/projects/laravel_mcp_companion/pipelines/`, and are
-started by triggers or with the Run button on the pipeline's page in Harness.
+Builds run in GitHub Actions. The workflows are in `.github/workflows/`:
+
+| Workflow | File | Started by |
+|----------|------|------------|
+| CI | `ci.yaml` | every pull request and every push to `main` |
+| Docs update | `docs-update.yaml` | a schedule, nightly at 00:17 UTC |
+| Release image | `release.yaml` | a `vX.Y.Z` or `docs-*` tag |
+| Publish to MCP Registry | `publish-mcp.yml` | a `vX.Y.Z` tag |
+| Publish to PyPI | `publish-pypi.yml` | by hand |
+| Docs sync watch | `docs-sync-watch.yml` | a schedule, daily |
+
+Each can also be started from the Actions tab, or with `gh workflow run`.
+The nightly sync pushes with the `PAT_FOR_WORKFLOWS` repository secret, a
+personal access token. When that token expires the sync fails at its first
+step and says so.
 
 ## The image, the registry entry and the PyPI package
 
 Publishing a GitHub release creates a `vX.Y.Z` tag on `main`. The tag starts
 two things:
 
-- **The Docker image.** The Harness `release` pipeline builds
-  `ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z` for amd64 and arm64. If
+- **The Docker image.** The Release image workflow builds
+  `ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z` for amd64 and arm64, and
+  fails if the published image is missing either platform. If
   `vX.Y.Z` is the newest stable version, the same image is pushed as
   `:latest`. A release candidate (`v1.0.0-rc1`) or a patch to an older line
   does not move `:latest`.
@@ -25,14 +37,15 @@ The PyPI package is published separately, by running
 publisher configured on PyPI first; the workflow file says how.
 
 Between releases, the nightly documentation sync tags `docs-YYYY-MM-DD` on
-`main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The same pipeline builds that tag as the newest release's code with
-that night's `docs/`, and pushes it as `:latest`. So `:latest` is always
+`main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The
+Release image workflow builds that tag as the newest release's code with that
+night's `docs/`, and pushes it as `:latest`. So `:latest` is always
 released code.
 
 ## Steps
 
 1. **Bring the documentation up to date.** Let the nightly sync run, or run
-   the `docs_update` pipeline, so the release image does not carry stale docs.
+   the Docs update workflow, so the release image does not carry stale docs.
 2. **Open a release pull request** that changes:
    - `pyproject.toml`: `version`. This is the one place the version is
      written for the code; `SERVER_VERSION` is read from it.
@@ -53,7 +66,7 @@ released code.
 3. **Merge it** once CI passes.
 4. **Publish the GitHub release** for `vX.Y.Z` targeting `main`, with notes
    taken from the changelog.
-5. **Check** that the release pipeline succeeded, that
+5. **Check** that the Release image workflow succeeded, that
    `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z --help`
    works, and that the registry workflow succeeded.
 6. **Publish to PyPI** by running the PyPI workflow with the tag.
@@ -62,8 +75,8 @@ Both the version build and a nightly docs build push `:latest`, and whichever
 finishes last keeps it. Both use the release's code, so the result should be
 the same either way. If the two tags were pushed within a few minutes of each
 other, check that `:latest` reports the new version (`/healthz` over HTTP, or
-the `initialize` response). If it does not, re-run the `release` pipeline for
-the version tag.
+the `initialize` response). If it does not, run the Release image workflow by
+hand with the version tag.
 
 ## Conditions for tagging 1.0.0
 
@@ -83,8 +96,8 @@ the version tag.
       stdio and over HTTP.
 - [ ] `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` work
       from PyPI, offline once installed.
-- [ ] Both alarms have been seen to work: the email Harness sends when a
-      `docs_update` or `release` run fails, and the issue
+- [ ] Both alarms have been seen to work: the email GitHub sends when a
+      Docs update or Release image run fails, and the issue
       `.github/workflows/docs-sync-watch.yml` opens when no `docs-` tag has
       appeared for four days.
 - [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
