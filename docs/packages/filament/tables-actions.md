@@ -165,10 +165,8 @@ The function allows you to access the current table ` $records ` that are select
 
 Custom bulk actions need explicit authorization. See [authorizing bulk actions](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions) to check each selected record's policy before processing it.
 
-> **Info**
->
+> [!NOTE]
 > Bulk-action queries must return one row per selectable record key. Joins that repeat the same model key are not supported: use ` whereHas() ` or ` whereExists() ` when filtering by related records instead. Many-to-many relationships using [` allowDuplicates() `](https://filamentphp.com/docs/5.x/resources/managing-relationships.md#handling-duplicates) remain supported because each pivot row has its own primary key.
-
 
 
 
@@ -421,10 +419,8 @@ public function table(Table $table): Table
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > This only changes the selection controls, not which records a bulk-action request can select. Use [` maxSelectableRecords() `](https://filamentphp.com/docs/5.x/tables/actions.md#limiting-the-number-of-selectable-records) to enforce a maximum selection size. Selection controls do not replace [authorization](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions).
-
 
 ### Restricting bulk selection to groups only
 

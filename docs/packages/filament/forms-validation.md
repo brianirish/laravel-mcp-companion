@@ -15,10 +15,8 @@ Filament includes many [dedicated validation methods](https://filamentphp.com/do
 
 
 
-> **Warning**
->
+> [!WARNING]
 > Some default Laravel validation rules rely on the correct attribute names and won't work when passed via ` rule() `/` rules() `. Use the dedicated validation methods whenever you can.
-
 
 ## Available rules
 
@@ -706,10 +704,8 @@ TextInput::make('password')
     ->allowHtmlValidationMessages()
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Enabling this opts out of escaping for validation messages on this field. Make sure every message — including those from custom rules or translations — is safe to render. Untrusted content can lead to XSS.
-
 
 ## Disabling validation when fields are not saved
 

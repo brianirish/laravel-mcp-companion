@@ -84,10 +84,8 @@ class LocationPicker extends Field
 
 It will also create a view file at ` resources/views/filament/forms/components/location-picker.blade.php `.
 
-> **Info**
->
+> [!NOTE]
 > Filament form fields are **not** Livewire components. Defining public properties and methods on a form field class will not make them accessible in the Blade view.
-
 
 ### Binding a field to its state
 
@@ -125,10 +123,8 @@ Inside the Blade view, you may access the state of another component in the sche
 </x-dynamic-component>
 ```
 
-> **Tip**
->
+> [!TIP]
 > Unless a form field is [reactive](https://filamentphp.com/docs/5.x/forms/overview.md#the-basics-of-reactivity), the Blade view will not refresh when the value of the field changes, only when the next user interaction occurs that makes a request to the server. If you need to react to changes in a field's value, it should be ` live() `.
-
 
 ### Accessing the Eloquent record in the Blade view
 
@@ -318,10 +314,8 @@ JsField::make('location')
     ->default(['latitude' => 51.5, 'longitude' => -0.12])
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Only use trusted application URLs or ` RawJs ` code; never let user input choose executable modules or interpolate it into renderer expressions. Renderers are not sandboxed and must comply with your application's CSP and cross-origin policy. Validate and authorize submitted values in PHP, including for disabled or read-only fields.
-
 
 Filament loads the module when the field initializes, without a global registry or a script tag. Each field gets its own mounted instance, even when the browser has already loaded the module for another field.
 
@@ -836,12 +830,10 @@ class LocationPicker extends Field
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Only methods marked with ` #[Exposed] ` can be called from JavaScript. The attribute does not authorize access to the method's data or operations. Validate client-supplied arguments and [authorize sensitive operations](https://filamentphp.com/docs/5.x/advanced/security.md#authorization) inside the method.
 > 
 > Exposed methods remain callable when the field is [disabled](https://filamentphp.com/docs/5.x/forms/overview.md#disabling-a-field), since read methods may still be needed to display its value. If a method changes the field's value and should respect its disabled state, check ` $this->isDisabled() ` before making changes.
-
 
 Arguments must be a JSON-serializable object keyed by PHP parameter name. Filament binds each call to the current field, including nested repeater instances. The returned promise resolves to the method's return value, or ` null ` if the component or exposed method is missing. Calls make Livewire requests and can send pending deferred edits, regardless of ` live() `.
 

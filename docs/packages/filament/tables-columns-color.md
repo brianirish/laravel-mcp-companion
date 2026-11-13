@@ -69,6 +69,5 @@ ColorColumn::make('color')
 
 
 
-> **Tip**
->
+> [!TIP]
 > The "width" for wrapping is affected by the column label, so you may need to use a shorter or hidden label to wrap more tightly.

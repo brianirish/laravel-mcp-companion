@@ -154,10 +154,8 @@ TextColumn::make('users_exists')->exists('users')
 
 In this example, ` users ` is the name of the relationship to check for existence. The name of the column must be ` users_exists `, as this is the convention that [Laravel uses](https://laravel.com/docs/eloquent-relationships#other-aggregate-functions) for storing the result.
 
-> **Info**
->
+> [!NOTE]
 > ` exists() ` relies on Laravel's ` withExists() `, which does not support SQL Server. You can use [` counts() `](https://filamentphp.com/docs/5.x/tables/columns/overview.md#counting-relationships) instead to display the number of related records.
-
 
 If you'd like to scope the relationship before checking existence, you can pass an array to the method, where the key is the relationship name and the value is the function to scope the Eloquent query with:
 
@@ -611,10 +609,8 @@ TextColumn::make('title')
     ->splitIndividualSearchTerms(false)
 ```
 
-> **Info**
->
+> [!NOTE]
 > This method only affects the column's individual search. Search term splitting for the table's global search is controlled by the table's ` splitSearchTerms() ` method.
-
 
 ## Clickable cell content
 
@@ -645,12 +641,10 @@ The ` url() ` method also accepts a function to dynamically calculate the value.
 | Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
 
-> **Tip**
->
+> [!TIP]
 > You can also pick a URL for the entire row to open, not just a singular column. Please see the [Record URLs section](https://filamentphp.com/docs/5.x/tables/overview.md#record-urls-clickable-rows).
 > 
 > When using a record URL and a column URL, the column URL will override the record URL for those cells only.
-
 
 You may also choose to open the URL in a new tab:
 
@@ -662,10 +656,8 @@ TextColumn::make('title')
     ->openUrlInNewTab()
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` url() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
-
 
 ### Triggering actions
 

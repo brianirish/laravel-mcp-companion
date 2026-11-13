@@ -955,10 +955,8 @@ As well as allowing static values, the ` minItems() ` and ` maxItems() ` methods
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Info**
->
+> [!NOTE]
 > ` maxItems() ` is a validation rule. Filament can build and render item schemas before validation rejects excessive item counts. To avoid long processing times if your application accidentally creates too many items, you can [limit item processing](https://filamentphp.com/docs/5.x/forms/builder.md#limiting-item-processing) separately.
-
 
 ## Limiting item processing
 
@@ -977,10 +975,8 @@ Builder::make('content')
 
 The processing limit is independent of ` maxItems() ` validation and is disabled by default. It accepts an integer, or ` null ` to disable it. It limits the number of items in each builder, not the total number of nested items or fields in a request.
 
-> **Danger**
->
+> [!CAUTION]
 > The processing limit also applies to existing data loaded from your database. A record above the limit cannot be opened through that form until you raise the limit or correct its data elsewhere. Choose a limit that accommodates existing records you need to edit, including records above your validation limit.
-
 
 This is an opt-in performance safeguard, not a security boundary or a guarantee of request duration. See the shared [guidance on configuring processing limits globally](https://filamentphp.com/docs/5.x/forms/repeater.md#applying-processing-limits-globally) for repeaters, builders, and repeatable entries, including increasing, decreasing, or disabling the limit on individual components and the scope of the processing limit.
 
@@ -1079,10 +1075,8 @@ Builder::make('content')
     )
 ```
 
-> **Info**
->
+> [!NOTE]
 > The ` addAction() `, ` addBetweenAction() `, ` collapseAction() `, ` collapseAllAction() `, ` expandAction() ` and ` expandAllAction() ` methods do not support confirmation modals, as clicking their buttons does not make the network request that is required to show the modal.
-
 
 Completing a drag that changes the block order invokes ` reorderAction() `, which supports ` requiresConfirmation() `. Clicking the drag handle alone does not invoke the action.
 

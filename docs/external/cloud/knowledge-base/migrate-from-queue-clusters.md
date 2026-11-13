@@ -73,7 +73,7 @@ Click **Add compute** on the canvas toolbar, then **Managed queue**. Each manage
 
 For [memory](https://laravel.com/cloud/docs/queues#memory-allocation), start close to the queue cluster's compute size (256 MiB covers typical email, webhook, and record-update jobs) and adjust after watching the Memory chart on the Queues dashboard. For the [worker autoscaling range](https://laravel.com/cloud/docs/queues#worker-autoscaling), set the maximum by how much parallelism your database and third-party APIs can absorb, not by the queue cluster's worker count. The two scale differently, so that number does not carry over. Queue and worker allowances vary by plan. See [Managed queues](https://laravel.com/cloud/docs/queues#managed-queues) for the current limits.
 
-**3. Decide what happens to QUEUE\_CONNECTION**
+**3. Decide what happens to QUEUE_CONNECTION**
 
 Deploying a managed queue sets `QUEUE_CONNECTION=cloud` for the environment. From that deployment on, every job dispatched without an explicit connection, including the jobs your queue cluster processes today, goes to managed queues. This is usually exactly what you want. If some jobs must stay on your previous driver, set `QUEUE_CONNECTION` back to it as a custom environment variable and dispatch managed-queue jobs on the `cloud` connection explicitly:
 

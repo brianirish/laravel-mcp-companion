@@ -5,8 +5,7 @@ Source: https://filamentphp.com/docs/5.x/components/schema.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/components/schema.md
 
-> **Warning**
->
+> [!WARNING]
 > Before proceeding, make sure ` filament/schemas ` is installed in your project. You can check by running:
 > 
 > ```bash
@@ -14,7 +13,6 @@ Source: https://filamentphp.com/docs/5.x/components/schema.md
 > ```
 > 
 > If it's not installed, consult the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and configure the **individual components** according to the instructions.
-
 
 ## Setting up the Livewire component
 
@@ -78,8 +76,7 @@ Finally, render the schema in the Livewire component's view:
 {{ $this->productSchema }}
 ```
 
-> **Info**
->
+> [!NOTE]
 > ` filament/schemas ` also includes the following packages:
 > 
 > - ` filament/actions `
@@ -89,7 +86,6 @@ Finally, render the schema in the Livewire component's view:
 > For example, if your schema uses [Actions](https://filamentphp.com/docs/5.x/actions), remember to implement the ` HasActions ` interface and use the ` InteractsWithActions ` trait on your Livewire component class.
 > 
 > If you are using any other [Filament components](https://filamentphp.com/docs/5.x/components/overview.md#package-components) in your schema, make sure to install and integrate the corresponding package as well.
-
 
 ## Security considerations for file uploads
 

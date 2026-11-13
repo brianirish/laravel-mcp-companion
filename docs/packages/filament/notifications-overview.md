@@ -47,10 +47,8 @@ Notification::make()
 
 The title text can contain basic, safe HTML elements. To generate safe HTML with Markdown, you can use the [` Str::markdown() ` helper](https://laravel.com/docs/strings#method-str-markdown): ` title(Str::markdown('Saved **successfully**')) `
 
-> **Danger**
->
+> [!CAUTION]
 > Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
-
 
 Or with JavaScript:
 
@@ -311,10 +309,8 @@ new FilamentNotification()
     .send()
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` url() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
-
 
 ### Dispatching Livewire events from notification actions
 

@@ -185,10 +185,8 @@ protected function getData(): array
 
 
 
-> **Danger**
->
+> [!CAUTION]
 > The ` $filter ` property is user-controllable. Although the ` <select> ` element only offers the keys returned from ` getFilters() `, a crafted request can set ` $this->filter ` to any string, so it is not limited to those keys. You must ensure the value is valid before using it in a query — for example, by checking it against the keys of ` getFilters() `, or by using a ` match ` expression with a safe default. Never interpolate ` $this->filter ` directly into a raw query.
-
 
 ### Custom filters
 
@@ -237,10 +235,8 @@ The ` $this->filters ` array will always reflect the current form data. Please n
 
 
 
-> **Info**
->
+> [!NOTE]
 > If you want to add filters that apply to multiple widgets at once, see [filtering widget data](https://filamentphp.com/docs/5.x/widgets/overview.md#filtering-widget-data) in the dashboard.
-
 
 #### Deferring filter updates
 
@@ -508,10 +504,8 @@ To style the canvas-rendered chart from a [custom theme](https://filamentphp.com
 
 Use unitless numbers and the supported keywords, not CSS lengths such as ` 3px `. You may set different values for light and dark mode.
 
-> **Info**
->
+> [!NOTE]
 > To configure an individual chart, use [` getOptions() `](https://filamentphp.com/docs/5.x/widgets/charts.md#setting-chart-configuration-options). Explicit options for these settings take precedence over the CSS custom properties.
-
 
 ### Styling the chart legend
 

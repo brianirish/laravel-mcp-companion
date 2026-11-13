@@ -115,10 +115,8 @@ TextInput::make('name')
     ->label(__('fields.name'))
 ```
 
-> **Tip**
->
+> [!TIP]
 > You can also [use a JavaScript expression](https://filamentphp.com/docs/5.x/forms/overview.md#using-javascript-to-determine-text-content) to determine the content of the label, which can read the current values of fields in the form.
-
 
 ### Hiding a field's label
 
@@ -276,10 +274,8 @@ Toggle::make('is_admin')
     ->saved()
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > If you choose to save the field when disabled, a skilled user could still edit the field's value by manipulating Livewire's JavaScript.
-
 
 Optionally, you may pass a boolean value to control if the field should be saved or not:
 
@@ -340,10 +336,8 @@ Toggle::make('is_admin')
     ->disabled(fn (string $operation): bool => in_array($operation, ['edit', 'view']))
 ```
 
-> **Warning**
->
+> [!WARNING]
 > The ` disabledOn() ` method will overwrite any previous calls to the ` disabled() ` method, and vice versa.
-
 
 ## Hiding a field
 
@@ -408,10 +402,8 @@ As well as allowing a static value, the ` visible() ` method also accepts a func
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Info**
->
+> [!NOTE]
 > If both ` hidden() ` and ` visible() ` are used, they both need to indicate that the field should be visible for it to be shown.
-
 
 ### Hiding a field using JavaScript
 
@@ -456,10 +448,8 @@ Toggle::make('is_admin')
 
 Although the code passed to ` hiddenJs() ` looks very similar to PHP, it is actually JavaScript. Filament provides the ` $get() ` utility function to JavaScript that behaves very similar to its PHP equivalent, but without requiring the depended-on field to be ` live() `.
 
-> **Danger**
->
+> [!CAUTION]
 > Any JavaScript string passed to the ` hiddenJs() ` method will be executed in the browser, so you should never add user input directly into the string, as it could lead to cross-site scripting (XSS) vulnerabilities. User input from ` $state ` or ` $get() ` should never be evaluated as JavaScript code, but is safe to use as a string value, like in the example above.
-
 
 The ` visibleJs() ` method is also available, which works in the same way as ` hiddenJs() `, but controls if the field should be visible or not:
 
@@ -479,15 +469,11 @@ Toggle::make('is_admin')
         JS)
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Any JavaScript string passed to the ` visibleJs() ` method will be executed in the browser, so you should never add user input directly into the string, as it could lead to cross-site scripting (XSS) vulnerabilities. User input from ` $state ` or ` $get() ` should never be evaluated as JavaScript code, but is safe to use as a string value, like in the example above.
 
-
-> **Info**
->
+> [!NOTE]
 > If both ` hiddenJs() ` and ` visibleJs() ` are used, they both need to indicate that the field should be visible for it to be shown.
-
 
 ### Hiding a field based on the current operation
 
@@ -521,10 +507,8 @@ Toggle::make('is_admin')
     ->hidden(fn (string $operation): bool => in_array($operation, ['edit', 'view']))
 ```
 
-> **Warning**
->
+> [!WARNING]
 > The ` hiddenOn() ` method will overwrite any previous calls to the ` hidden() ` method, and vice versa.
-
 
 Alternatively, you may use the ` visibleOn() ` method to control if the field should be hidden or not. In some situations, this may help to make your code more readable:
 
@@ -538,10 +522,8 @@ Toggle::make('is_admin')
     ->visibleOn(['create', 'edit'])
 ```
 
-> **Info**
->
+> [!NOTE]
 > The ` visibleOn() ` method will overwrite any previous calls to the ` visible() ` method, and vice versa.
-
 
 ## Inline labels
 
@@ -852,10 +834,8 @@ TextInput::make('name')
 
 
 
-> **Tip**
->
+> [!TIP]
 > If you need a simple action that runs JavaScript without making a network request, you can use the [` actionJs() ` method](https://filamentphp.com/docs/5.x/actions/overview.md#running-javascript-when-an-action-is-clicked). This is useful for simple interactions like updating form field values using ` $get() ` and ` $set() `. Actions using ` actionJs() ` cannot open modals.
-
 
 You can insert any combination of content into the slots by passing an array of content to the method:
 
@@ -910,10 +890,8 @@ TextInput::make('name')
     ]))
 ```
 
-> **Tip**
->
+> [!TIP]
 > As you can see in the above example for ` Schema::between() `, a [` Flex ` component](https://filamentphp.com/docs/5.x/schemas/layouts.md#flex-component) is used to group the icon and text together so they do not have space between them. The icon uses ` grow(false) ` to prevent it from taking up half of the horizontal space, allowing the text to consume the remaining space.
-
 
 
 
@@ -1088,10 +1066,8 @@ As well as allowing a static value, the ` belowLabel() ` method also accepts a f
 
 
 
-> **Info**
->
+> [!NOTE]
 > This may seem like the same as the [` aboveContent() ` method](https://filamentphp.com/docs/5.x/forms/overview.md#adding-extra-content-above-a-fields-content). However, when using [inline labels](https://filamentphp.com/docs/5.x/forms/overview.md#inline-labels), the ` aboveContent() ` method will place the content above the field, not below the label, since the label is displayed in a separate column to the field content.
-
 
 ### Adding extra content above a field's content
 
@@ -1128,10 +1104,8 @@ As well as allowing a static value, the ` aboveContent() ` method also accepts a
 
 
 
-> **Info**
->
+> [!NOTE]
 > This may seem like the same as the [` belowLabel() ` method](https://filamentphp.com/docs/5.x/forms/overview.md#adding-extra-content-below-a-fields-label). However, when using [inline labels](https://filamentphp.com/docs/5.x/forms/overview.md#inline-labels), the ` belowLabel() ` method will place the content below the label, not above the field's content, since the label is displayed in a separate column to the field content.
-
 
 ### Adding extra content before a field's content
 
@@ -1165,12 +1139,11 @@ As well as allowing a static value, the ` beforeContent() ` method also accepts 
 
 
 
-> **Tip**
->
+> [!TIP]
 > Some fields, such as the [text input](https://filamentphp.com/docs/5.x/forms/text-input.md#adding-affix-text-aside-the-field), [select](https://filamentphp.com/docs/5.x/forms/select.md#adding-affix-text-aside-the-field), and [date-time picker](https://filamentphp.com/docs/5.x/forms/date-time-picker.md#adding-affix-text-aside-the-field) fields, have a ` prefix() ` method to insert content before the field's content, adjoined to the field itself. This is often a better UI choice than using ` beforeContent() `.
 > 
 > 
-
+> 
 
 ### Adding extra content after a field's content
 
@@ -1204,12 +1177,11 @@ As well as allowing a static value, the ` afterContent() ` method also accepts a
 
 
 
-> **Tip**
->
+> [!TIP]
 > Some fields, such as the [text input](https://filamentphp.com/docs/5.x/forms/text-input.md#adding-affix-text-aside-the-field), [select](https://filamentphp.com/docs/5.x/forms/select.md#adding-affix-text-aside-the-field), and [date-time picker](https://filamentphp.com/docs/5.x/forms/date-time-picker.md#adding-affix-text-aside-the-field) fields, have a ` suffix() ` method to insert content after the field's content, adjoined to the field itself. This is often a better UI choice than using ` beforeContent() `.
 > 
 > 
-
+> 
 
 ### Adding extra content above a field's error message
 
@@ -1311,10 +1283,8 @@ As well as allowing a static value, the ` extraAttributes() ` method also accept
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
-
 
 ### Adding extra HTML attributes to the input element of a field
 
@@ -1344,10 +1314,8 @@ As well as allowing a static value, the ` extraInputAttributes() ` method also a
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraInputAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
-
 
 #### Associating instructions and validation errors with inputs
 
@@ -1417,10 +1385,8 @@ As well as allowing a static value, the ` extraFieldWrapperAttributes() ` method
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraFieldWrapperAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
-
 
 ## Field utility injection
 
@@ -1489,10 +1455,8 @@ function (Get $get) {
 }
 ```
 
-> **Tip**
->
+> [!TIP]
 > Unless a form field is [reactive](https://filamentphp.com/docs/5.x/forms/overview.md#the-basics-of-reactivity), the schema will not refresh when the value of the field changes, only when the next user interaction occurs that makes a request to the server. If you need to react to changes in a field's value, it should be ` live() `.
-
 
 #### Type-safe retrieval of another field's state
 
@@ -1542,10 +1506,8 @@ function (string $operation) {
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > You can manually set a schema's operation using the ` $schema->operation() ` method.
-
 
 ### Injecting the current Livewire component instance
 
@@ -1615,10 +1577,8 @@ TextInput::make('greetingResponse')
 
 The [` $state `](https://filamentphp.com/docs/5.x/forms/overview.md#injecting-the-current-state-of-the-field) and [` $get `](https://filamentphp.com/docs/5.x/forms/overview.md#injecting-the-state-of-another-field) utilities are available in this JavaScript context, so you can use them to access the state of the field and other fields in the schema.
 
-> **Danger**
->
+> [!CAUTION]
 > The string passed to ` JsContent ` is evaluated in the browser, so you should never concatenate user input into it — that would lead to XSS. Values read at runtime via ` $state ` or ` $get() ` are safe to use as string values inside the expression, but should never be evaluated as JavaScript code themselves.
-
 
 ## The basics of reactivity
 
@@ -1728,10 +1688,8 @@ The ` afterStateUpdated() ` method injects various utilities into the function a
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Tip**
->
+> [!TIP]
 > When using ` afterStateUpdated() ` on a reactive field, interactions will not feel instant since a network request is made. There are a few ways you can [optimize and avoid rendering](https://filamentphp.com/docs/5.x/forms/overview.md#field-rendering) which will make the interaction feel faster.
-
 
 #### Setting the state of another field
 
@@ -1787,10 +1745,8 @@ TextInput::make('password_confirmation')
 
 If your schema auto-saves data to the database, like in a [resource](https://filamentphp.com/docs/5.x/resources), this is useful to prevent a field from being saved to the database if it is purely used for presentational purposes.
 
-> **Info**
->
+> [!NOTE]
 > Even when a field is not saved, it is still validated. To learn more about this behavior, see the [validation](https://filamentphp.com/docs/5.x/forms/validation.md#disabling-validation-when-fields-are-not-saved) section.
-
 
 ### Field rendering
 
@@ -1861,10 +1817,8 @@ TextInput::make('email')
     ->label('Email address')
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Any JavaScript string passed to the ` afterStateUpdatedJs() ` method will be executed in the browser, so you should never add user input directly into the string, as it could lead to cross-site scripting (XSS) vulnerabilities. User input from ` $state ` or ` $get() ` should never be evaluated as JavaScript code, but is safe to use as a string value, like in the example above.
-
 
 ## Reactive forms cookbook
 
@@ -1902,11 +1856,9 @@ TextInput::make('company_name')
     ->visible(fn (Get $get): bool => $get('is_company'))
 ```
 
-> **Tip**
->
+> [!TIP]
 > Using ` live() ` means the schema reloads every time the field changes, triggering a network request.
 > Alternatively, you can use [JavaScript to hide the field based on another field's value](https://filamentphp.com/docs/5.x/forms/overview.md#hiding-a-field-using-javascript).
-
 
 ### Conditionally making a field required
 
@@ -2113,10 +2065,8 @@ TextInput::make('password')
     ->required(fn (string $operation): bool => $operation === 'create')
 ```
 
-> **Info**
->
+> [!NOTE]
 > In this example, ` Hash::make($state) ` shows how to use a [dehydration function](https://filamentphp.com/docs/5.x/forms/overview.md#field-dehydration). However, you don't need to do this if your Model uses ` 'password' => 'hashed' ` in its [casts function — Laravel will handle hashing automatically](https://laravel.com/docs/eloquent-mutators#attribute-casting).
-
 
 ## Saving data to relationships
 
@@ -2244,10 +2194,8 @@ Group::make()
     ])
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Combining ` saveRelationshipsWhenHidden() ` with a ` condition ` that returns ` false ` while the component is hidden will cause any existing related record to be deleted when the form is submitted. If you only want to skip saving when the component is hidden, omit ` saveRelationshipsWhenHidden() ` and rely on the default behavior instead.
-
 
 ## Global settings
 

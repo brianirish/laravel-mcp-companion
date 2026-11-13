@@ -5,8 +5,7 @@ Source: https://filamentphp.com/docs/5.x/components/widget.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/components/widget.md
 
-> **Warning**
->
+> [!WARNING]
 > Before proceeding, make sure ` filament/widgets ` is installed in your project. You can check by running:
 > 
 > ```bash
@@ -14,7 +13,6 @@ Source: https://filamentphp.com/docs/5.x/components/widget.md
 > ```
 > 
 > If it's not installed, consult the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and configure the **individual components** according to the instructions.
-
 
 ## Creating a widget
 
@@ -30,7 +28,6 @@ Since widgets are Livewire components, you can easily render a widget in any Bla
 </div>
 ```
 
-> **Info**
->
+> [!NOTE]
 > If you're using a [table widget](https://filamentphp.com/docs/5.x/widgets/overview.md#table-widgets), make sure to install ` filament/tables ` as well.  
 > Refer to the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and follow the steps to configure the **individual components** properly.

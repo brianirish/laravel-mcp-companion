@@ -30,10 +30,8 @@ By default, a button's underlying HTML tag is ` <button> `. You can change it to
 </x-filament::button>
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` href ` attribute, validate its scheme using [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) before rendering it. HTML escaping alone does not prevent a ` javascript: ` URL from executing code when clicked.
-
 
 ## Setting the size of a button
 

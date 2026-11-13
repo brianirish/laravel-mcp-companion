@@ -65,8 +65,7 @@ public function panel(Panel $panel): Panel
 
 
 
-> **Info**
->
+> [!NOTE]
 > The ` logout ` item is added to the last group by default. To place it yourself, register it explicitly in any group using the ` logout ` array key. Since its default ` sort() ` puts it at the end of its group, adjust the sort if you want it elsewhere within the group:
 > 
 > ```php
@@ -77,7 +76,6 @@ public function panel(Panel $panel): Panel
 >     ],
 > ])
 > ```
-
 
 ## Moving the user menu to the sidebar
 

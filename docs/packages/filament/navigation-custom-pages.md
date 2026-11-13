@@ -59,10 +59,8 @@ protected function getHeaderActions(): array
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > If ` $post ` is stored in a public Livewire property, the page's ` canAccess() ` method does not authorize it, and Filament does not re-query it on later requests. Re-query and authorize the post before using it in an action, including any tenant or ownership restrictions your application requires. Authorize access to the edit route separately. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 #### Aligning header actions
 

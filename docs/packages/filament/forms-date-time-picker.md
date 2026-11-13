@@ -162,10 +162,8 @@ As well as allowing a static value, the ` native() ` method also accepts a funct
 
 
 
-> **Info**
->
+> [!NOTE]
 > The JavaScript date picker does not allow direct date entry. Use the native date picker if users need to type dates.
-
 
 ### Customizing the display format
 

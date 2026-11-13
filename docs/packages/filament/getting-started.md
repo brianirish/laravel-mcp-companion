@@ -7,10 +7,8 @@ Source: https://filamentphp.com/docs/5.x/getting-started.md
 
 Once you have [installed Filament](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-panel-builder), you can start building your application.
 
-> **Info**
->
+> [!NOTE]
 > This guide is for the Filament panel builder. If you are looking to use the Filament UI components outside of a panel, visit the [Components](https://filamentphp.com/docs/5.x/components) documentation.
-
 
 To start, visit ` /admin ` and sign in with a user account. You will be redirected to the default dashboard of the panel.
 

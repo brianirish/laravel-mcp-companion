@@ -146,10 +146,10 @@ To connect to your bucket from your local machine using a Cloudflare R2-compatib
 
 3. To connect to the bucket with Cyberduck:
    * Open Cyberduck, select "+" in the bottom left-hand corner to create a new bookmark, and select "Cloudflare R2 Storage (S3)" as the connection type. If this is your first time using the Cloudflare R2 Storage connection, you may need to add it from `Settings > Profiles`.  [Learn more](https://docs.cyberduck.io/protocols/s3/cloudflare/)
-   * Enter the "AWS\_ENDPOINT" bucket credentials value into the Cyberduck "Server" field
-   * Enter the "AWS\_ACCESS\_KEY\_ID" bucket credentials value into the Cyberduck "Access Key ID" field
-   * Enter the "AWS\_SECRET\_ACCESS\_KEY" bucket credentials value into the Cyberduck "Access Key Secret" field
-   * Enter the "AWS\_BUCKET" value into the Cyberduck "Path" field, under "More Options"
+   * Enter the "AWS_ENDPOINT" bucket credentials value into the Cyberduck "Server" field
+   * Enter the "AWS_ACCESS_KEY_ID" bucket credentials value into the Cyberduck "Access Key ID" field
+   * Enter the "AWS_SECRET_ACCESS_KEY" bucket credentials value into the Cyberduck "Access Key Secret" field
+   * Enter the "AWS_BUCKET" value into the Cyberduck "Path" field, under "More Options"
      * If you do not see "More Options", you likely clicked "Open Connection" instead of creating a new bookmark from the first step.
    * Optionally, give your bookmark a "Nickname"
 4. When you finish, your new Cyberduck connection should look like the following screenshot. You can now close the "Open connection" modal and connect to your bucket.

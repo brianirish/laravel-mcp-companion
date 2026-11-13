@@ -5,8 +5,7 @@ Source: https://filamentphp.com/docs/5.x/components/infolist.md
 > Filament 5.x documentation
 > Source: https://filamentphp.com/docs/5.x/components/infolist.md
 
-> **Warning**
->
+> [!WARNING]
 > Before proceeding, make sure ` filament/infolists ` is installed in your project. You can check by running:
 > 
 > ```bash
@@ -14,7 +13,6 @@ Source: https://filamentphp.com/docs/5.x/components/infolist.md
 > ```
 > 
 > If it's not installed, consult the [installation guide](https://filamentphp.com/docs/5.x/introduction/installation.md#installing-the-individual-components) and configure the **individual components** according to the instructions.
-
 
 ## Setting up the Livewire component
 
@@ -73,10 +71,8 @@ public function productInfolist(Schema $schema): Schema
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > ` $product ` is a model property on a regular Livewire component. Filament does not re-query or authorize it on later requests. Re-query and authorize the product before passing it to the infolist, including any tenant or ownership restrictions your application requires. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
-
 
 Finally, render the infolist in the Livewire component's view:
 
@@ -84,8 +80,7 @@ Finally, render the infolist in the Livewire component's view:
 {{ $this->productInfolist }}
 ```
 
-> **Info**
->
+> [!NOTE]
 > ` filament/infolists ` also includes the following packages:
 > 
 > - ` filament/actions `
@@ -96,7 +91,6 @@ Finally, render the infolist in the Livewire component's view:
 > For example, if your infolist uses [Actions](https://filamentphp.com/docs/5.x/actions), remember to implement the ` HasActions ` interface and use the ` InteractsWithActions ` trait on your Livewire component class.
 > 
 > If you are using any other [Filament components](https://filamentphp.com/docs/5.x/components/overview.md#package-components) in your infolist, make sure to install and integrate the corresponding package as well.
-
 
 ## Passing data to the infolist
 

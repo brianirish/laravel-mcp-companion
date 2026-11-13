@@ -246,10 +246,8 @@ When ` excludeWhenResolvingRecord() ` is used:
 - The filter's ` query() ` callback is not applied when resolving records
 - The filter's ` baseQuery() ` callback is still applied when resolving records
 
-> **Danger**
->
+> [!CAUTION]
 > Filters are controlled by the client and must not be your only tenant or ownership restriction. Apply mandatory restrictions to the resource's ` getEloquentQuery() ` or the table's ` modifyQueryUsing() `, and authorize operations separately. ` excludeWhenResolvingRecord() ` only changes record resolution; it must not remove your application's authorization boundary.
-
 
 ## Customizing the filters trigger action
 

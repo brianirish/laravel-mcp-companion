@@ -529,10 +529,8 @@ class OrderProduct extends Pivot
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > Please ensure that your pivot model has a primary key column, like ` id `, to allow Filament to keep track of which repeater items have been created, updated and deleted. To make sure that Filament keeps track of the primary key, the pivot model needs to have the ` $incrementing ` property set to ` true `.
-
 
 Now you can use the ` orderProducts ` relationship with the repeater, and it will save the data to the ` order_product ` pivot table:
 
@@ -868,10 +866,8 @@ Repeater::make('members')
     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null),
 ```
 
-> **Tip**
->
+> [!TIP]
 > Any fields that you use from ` $state ` should be ` live() ` if you wish to see the item label update live as you use the form.
-
 
 You can inject various utilities into the function passed to ` itemLabel() ` as parameters.
 
@@ -1150,10 +1146,8 @@ As well as allowing static values, the ` minItems() ` and ` maxItems() ` methods
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
-> **Info**
->
+> [!NOTE]
 > ` maxItems() ` is a validation rule. Filament builds item schemas before evaluating the rule, and Livewire requests can render items without running form validation. To avoid long processing times if your application accidentally creates too many items, you can [limit item processing](https://filamentphp.com/docs/5.x/forms/repeater.md#limiting-item-processing) separately.
-
 
 ### Distinct state validation
 
@@ -1276,8 +1270,7 @@ Repeater::make('members')
 
 This method will automatically enable the ` distinct() ` and ` live() ` methods on the field.
 
-> **Warning**
->
+> [!WARNING]
 > In case you want to add another condition to [disable options](https://filamentphp.com/docs/5.x/forms/select.md#disabling-specific-options) with, you can chain ` disableOptionWhen() ` with the ` merge: true ` argument:
 > 
 > ```php
@@ -1294,7 +1287,6 @@ This method will automatically enable the ` distinct() ` and ` live() ` methods 
 >             ->disableOptionWhen(fn (string $value): bool => $value === 'super_admin', merge: true),
 >     ])
 > ```
-
 
 ## Limiting item processing
 
@@ -1313,10 +1305,8 @@ Repeater::make('members')
 
 In this example, up to 100 items can be processed, but the form will only pass validation with at most 5 items. If the raw state contains more than 100 items, Filament aborts with an HTTP 413 response before building the repeater's item schemas. It does not truncate the data. This limit is disabled by default and accepts an integer, or ` null ` to disable it.
 
-> **Danger**
->
+> [!CAUTION]
 > The processing limit also applies to existing data loaded from your database. A record above the limit cannot be opened through that form until you raise the limit or correct its data elsewhere. Choose a limit that accommodates existing records you need to edit, including records above your validation limit.
-
 
 ### Applying processing limits globally
 
@@ -1452,10 +1442,8 @@ Repeater::make('members')
     )
 ```
 
-> **Info**
->
+> [!NOTE]
 > The ` collapseAction() `, ` collapseAllAction() `, ` expandAction() ` and ` expandAllAction() ` methods do not support confirmation modals, as clicking their buttons does not make the network request that is required to show the modal.
-
 
 Completing a drag that changes the item order invokes ` reorderAction() `, which supports ` requiresConfirmation() `. Clicking the drag handle alone does not invoke the action.
 

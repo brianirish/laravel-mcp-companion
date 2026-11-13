@@ -35,12 +35,10 @@ As well as allowing a static value, the ` options() ` method also accepts a func
 | Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
 
-> **Danger**
->
+> [!CAUTION]
 > ` options() ` is a UI affordance, not an authorization boundary. The list constrains what the dropdown displays, but the submitted value is not checked against it before the filter runs. A user tampering with the Livewire request can submit any value to the filter's state — ` apply() ` will pass it straight into ` whereIn `/` where ` on the query.
 > 
 > If you are using ` options() ` to hide certain values from a group of users (for example, hiding ` archived ` from non-admins), scope the table query itself instead — for example with [` modifyQueryUsing() `](https://filamentphp.com/docs/5.x/resources/listing-records.md#customizing-the-table-eloquent-query) or a global scope on the resource — so the restricted rows are never reachable regardless of what the filter submits.
-
 
 ## Customizing the column used by a select filter
 

@@ -220,12 +220,10 @@ SelectConstraint::make('creator.department') // Filter the `department` column o
     ])
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > ` options() ` controls the available filter values, but it does not restrict access to records. Users can remove the rule, and rules that fail validation are ignored.
 > 
 > If you are using ` options() ` to hide certain values from a group of users (for example, hiding ` archived ` from non-admins), apply the mandatory restriction to the table's underlying query using the resource's [` getEloquentQuery() `](https://filamentphp.com/docs/5.x/resources/overview.md#customizing-the-resource-eloquent-query), the table's [` modifyQueryUsing() `](https://filamentphp.com/docs/5.x/resources/listing-records.md#customizing-the-table-eloquent-query), or a global scope on the model. [` modifyRelationshipQueryUsing() `](https://filamentphp.com/docs/5.x/tables/filters/query-builder.md#scoping-relationships) only scopes the relationship query for that individual rule, which the user can omit. Authorization for operations on records must be handled separately.
-
 
 #### Searchable select constraints
 
@@ -371,8 +369,7 @@ The ` maxRules() ` limit counts individual conditions only. "OR" groups are stru
 
 When a limit is set, the UI enforces it: once the maximum number of rules is reached, the "add rule" and clone buttons are disabled with a tooltip explaining why, and the "OR" grouping option is hidden once the maximum nesting depth is reached. As a safeguard against a tampered request that bypasses the UI, a submitted rule tree that still exceeds either limit is safely ignored, applying no constraints instead of filtering the table.
 
-> **Tip**
->
+> [!TIP]
 > Since these limits are the same for every query builder, you will usually want to apply them globally rather than repeating them on each filter. You can do this using ` configureUsing() ` in the ` boot() ` method of a service provider, so that every query builder in your app is bounded:
 > 
 > ```php
@@ -384,7 +381,6 @@ When a limit is set, the UI enforces it: once the maximum number of rules is rea
 >         ->maxNestingDepth(10);
 > });
 > ```
-
 
 ## Scoping relationships
 

@@ -17,10 +17,8 @@ Action::make('delete')
     ->action(fn () => $this->client->delete())
 ```
 
-> **Warning**
->
+> [!WARNING]
 > If ` $client ` or ` $post ` in these examples is stored in a public Livewire property, Filament does not re-query or authorize it on later requests. Re-query and authorize the model before using it in an action, including any tenant or ownership restrictions your application requires. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information. For URL actions, authorize access in the destination route or page.
-
 
 To collect input before running an action, define its modal's schema. The submitted data is available in the ` action() ` function:
 
@@ -105,10 +103,8 @@ As well as allowing a static value, the ` url() ` method also accepts a function
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` url() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
-
 
 The entire look of the action's trigger button and the modal is customizable using fluent PHP methods. We provide a sensible and consistent styling for the UI, but all of this is customizable with CSS.
 
@@ -443,10 +439,8 @@ Action::make('edit')
     ->authorize('update')
 ```
 
-> **Info**
->
+> [!NOTE]
 > In a panel resource or relation manager, policy-backed CRUD actions such as ` CreateAction `, ` EditAction `, and ` DeleteAction ` use the resource or related model's policy. By default, missing policies or policy methods allow access, and skipping resource authorization bypasses the resource's policy checks. Built-in bulk delete, force-delete, and restore actions check their ` *Any() ` abilities rather than each record's policy unless you enable [individual record authorization](https://filamentphp.com/docs/5.x/tables/actions.md#authorizing-bulk-actions). These defaults do not apply to custom actions or standalone Livewire components. Attach, associate, detach, dissociate, and [Select option actions](https://filamentphp.com/docs/5.x/forms/select.md#authorizing-option-actions) also need explicit authorization when access must be restricted. See [resource authorization](https://filamentphp.com/docs/5.x/resources/overview.md#authorization).
-
 
 If your policy method returns a [response message](https://laravel.com/docs/authorization#policy-responses), you can disable the action instead of hiding it, and add a tooltip containing the message, using the ` authorizationTooltip() ` method:
 
@@ -736,10 +730,8 @@ As well as allowing a static value, the ` extraAttributes() ` method also accept
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Tip**
->
+> [!TIP]
 > By default, calling ` extraAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
-
 
 ## Using actions in schemas
 
@@ -882,15 +874,11 @@ As well as allowing a static value, the ` actionJs() ` method also accepts a fun
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Warning**
->
+> [!WARNING]
 > When using ` actionJs() `, the action cannot open a modal or perform any server-side processing. It is intended for simple client-side interactions only. If you need to run PHP code, use the ` action() ` method instead.
 
-
-> **Danger**
->
+> [!CAUTION]
 > Any JavaScript string passed to the ` actionJs() ` method will be executed in the browser, so you should never add user input directly into the string, as it could lead to cross-site scripting (XSS) vulnerabilities. User input from ` $get() ` should never be evaluated as JavaScript code, but is safe to use as a string value.
-
 
 ## Opening an action from a URL
 
@@ -898,10 +886,8 @@ You can link to an action modal on a Filament page using ` ?action=sendEmail `. 
 
 You may pass arguments using ` actionArguments[source]=email ` or ` tableActionArguments[source]=email `, and ordinary action context using ` actionContext[...] `.
 
-> **Danger**
->
+> [!CAUTION]
 > Targeting routes the link; it does not authorize access. Keep route, page, component, and action authorization in place. Table records are resolved through the target component's table query or relationship, not a global model lookup. Arguments and context are user-controlled input: validate and authorize their use in your action. URL mounting forces ` mountedFromUrl ` to ` true ` and does not execute modal-less actions automatically, but modal initialization hooks still run, so do not put unconfirmed mutations in them.
-
 
 ### Targeting an embedded Livewire component
 

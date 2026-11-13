@@ -44,16 +44,12 @@ Laravel Cloud distributes compute clusters across multiple availability zones (A
 >
 > The additional security checks in Under Attack Mode may temporarily affect the experience of legitimate visitors. Use this mode only when necessary.## IP addressesLaravel Cloud applications may make outbound requests from any of the following IP addresses. Use these addresses when you configure firewalls, security groups, or allowlists for external services that your application needs to access.> [!WARNING]
 >
-> If your organization has dedicated compute available from [Private Cloud](https://laravel.com/cloud/docs/private-cloud), make sure to use the dedicated IP addresses provided during your onboarding instead of the ranges listed on this page.
-
-\<table role="table" aria-label="Laravel Cloud IP Addresses by Region"><thead><tr><th scope="col">Region</th>
-\<th scope="col">IPv4 Addresses</th>
-\<th scope="col">IPv6 CIDR</th></tr></thead>
-\<tbody /></table>
-
-### Programmatic accessThe IP addresses are also available through the API:```bash theme={null}
+> If your organization has dedicated compute available from [Private Cloud](https://laravel.com/cloud/docs/private-cloud), make sure to use the dedicated IP addresses provided during your onboarding instead of the ranges listed on this page.&#xA;&#xA;\<table role="table" aria-label="Laravel Cloud IP Addresses by Region">\<thead>\<tr>\<th scope="col">Region\</th>
+&#x20;                       \<th scope="col">IPv4 Addresses\</th>
+&#x20;                       \<th scope="col">IPv6 CIDR\</th>\</tr>\</thead>
+&#x20;               \<tbody />\</table>&#xA;&#xA;### Programmatic accessThe IP addresses are also available through the API:```bash theme=\{null}
 curl https://laravel.com/api/ip
-```This endpoint returns a JSON object with IP addresses organized by region:```json theme={null}
+```This endpoint returns a JSON object with IP addresses organized by region:```json theme=\{null}
 {
   "us-east-2": {
     "ipv4": ["3.140.62.214", "3.139.253.68", ...],

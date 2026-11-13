@@ -27,10 +27,8 @@ When Filament outputs raw HTML from the database in components such as ` TextCol
 {!! str($record->content)->markdown()->sanitizeHtml() !!}
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
-
 
 ## Customizing the toolbar buttons
 

@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "da6fca26b4cb1d548f09cb6c4e531bfabbfd0a7e",
-  "commit_date": "2026-11-12T15:03:20Z",
-  "commit_message": "[13.x] Document insertBefore and insertAfter middleware methods (#11454)\n\n* Document insertBefore and insertAfter middleware methods\n\n* Use a warning admonition for the missing middleware note",
-  "commit_url": "https://github.com/laravel/docs/commit/da6fca26b4cb1d548f09cb6c4e531bfabbfd0a7e",
-  "sync_time": "2026-11-13T00:10:32Z"
+  "commit_sha": "eabbe57992fe98875329b546b2a13c7bfb707cc4",
+  "commit_date": "2026-11-13T15:42:10Z",
+  "commit_message": "docs: correct bearerToken null return behavior (#11458)",
+  "commit_url": "https://github.com/laravel/docs/commit/eabbe57992fe98875329b546b2a13c7bfb707cc4",
+  "sync_time": "2026-11-13T22:10:28Z"
 }

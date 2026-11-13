@@ -155,10 +155,8 @@ TextEntry::make('name')
 
 ### Hiding an entry's label
 
-> **Tip**
->
+> [!TIP]
 > If you need arbitrary text or UI rather than a labelled data entry, consider a [prime component](https://filamentphp.com/docs/5.x/schemas/primes.md), such as text, an image, or a button (action).
-
 
 It may be tempting to set the label to an empty string to hide it, but this is not recommended. Setting the label to an empty string will not communicate the purpose of the entry to screen readers, even if the purpose is clear visually. Instead, you should use the ` hiddenLabel() ` method, so it is hidden visually but still accessible to screen readers:
 
@@ -278,10 +276,8 @@ As well as allowing a static value, the ` openUrlInNewTab() ` method also accept
 | State | ` mixed ` | ` $state ` | The current value of the entry. |
 
 
-> **Danger**
->
+> [!CAUTION]
 > If you are passing user-controlled data to the ` url() ` method, you should validate that the URL does not use a dangerous scheme such as ` javascript: ` or ` data: `. Failing to do so could expose your application to XSS attacks. The simplest way to guard against this is to wrap the value in Filament's [` Str::sanitizeUrl() `](https://filamentphp.com/docs/5.x/advanced/security.md#validating-user-input) helper, which returns ` null ` for any URL that does not use ` http `/` https ` (or a relative path).
-
 
 ## Hiding an entry
 
@@ -344,10 +340,8 @@ As well as allowing a static value, the ` visible() ` method also accepts a func
 | State | ` mixed ` | ` $state ` | The current value of the entry. |
 
 
-> **Info**
->
+> [!NOTE]
 > If both ` hidden() ` and ` visible() ` are used, they both need to indicate that the entry should be visible for it to be shown.
-
 
 ### Hiding an entry using JavaScript
 
@@ -414,10 +408,8 @@ IconEntry::make('is_admin')
         JS)
 ```
 
-> **Info**
->
+> [!NOTE]
 > If both ` hiddenJs() ` and ` visibleJs() ` are used, they both need to indicate that the entry should be visible for it to be shown.
-
 
 ### Hiding an entry based on the current operation
 
@@ -455,10 +447,8 @@ IconEntry::make('is_admin')
     ->hidden(fn (string $operation): bool => in_array($operation, ['edit', 'view']))
 ```
 
-> **Warning**
->
+> [!WARNING]
 > The ` hiddenOn() ` method will overwrite any previous calls to the ` hidden() ` method, and vice versa.
-
 
 Alternatively, you may use the ` visibleOn() ` method to control if the entry should be hidden or not. In some situations, this may help to make your code more readable:
 
@@ -474,10 +464,8 @@ IconEntry::make('is_admin')
     ->visibleOn(['create', 'edit'])
 ```
 
-> **Info**
->
+> [!NOTE]
 > The ` visibleOn() ` method will overwrite any previous calls to the ` visible() ` method, and vice versa.
-
 
 ## Inline labels
 
@@ -765,10 +753,8 @@ TextEntry::make('name')
     ]))
 ```
 
-> **Tip**
->
+> [!TIP]
 > As you can see in the above example for ` Schema::between() `, a [` Flex ` component](https://filamentphp.com/docs/5.x/schemas/layouts.md#flex-component) is used to group the icon and text together so they do not have space between them. The icon uses ` grow(false) ` to prevent it from taking up half of the horizontal space, allowing the text to consume the remaining space.
-
 
 
 
@@ -938,10 +924,8 @@ As well as allowing a static value, the ` belowLabel() ` method also accepts a f
 
 
 
-> **Info**
->
+> [!NOTE]
 > This may seem like the same as the [` aboveContent() ` method](https://filamentphp.com/docs/5.x/infolists/overview.md#adding-extra-content-above-an-entrys-content). However, when using [inline labels](https://filamentphp.com/docs/5.x/infolists/overview.md#inline-labels), the ` aboveContent() ` method will place the content above the entry, not below the label, since the label is displayed in a separate column to the entry content.
-
 
 ### Adding extra content above an entry's content
 
@@ -977,10 +961,8 @@ As well as allowing a static value, the ` aboveContent() ` method also accepts a
 
 
 
-> **Info**
->
+> [!NOTE]
 > This may seem like the same as the [` belowLabel() ` method](https://filamentphp.com/docs/5.x/infolists/overview.md#adding-extra-content-below-an-entrys-label). However, when using [inline labels](https://filamentphp.com/docs/5.x/infolists/overview.md#inline-labels), the ` belowLabel() ` method will place the content below the label, not above the entry's content, since the label is displayed in a separate column to the entry content.
-
 
 ### Adding extra content before an entry's content
 
@@ -1149,10 +1131,8 @@ function (Get $get) {
 }
 ```
 
-> **Tip**
->
+> [!TIP]
 > Unless a form field is [reactive](https://filamentphp.com/docs/5.x/forms/overview.md#the-basics-of-reactivity), the schema will not refresh when the value of the field changes, only when the next user interaction occurs that makes a request to the server. If you need to react to changes in a field's value, it should be ` live() `.
-
 
 ### Injecting the current Eloquent record
 
@@ -1191,10 +1171,8 @@ function (string $operation) {
 }
 ```
 
-> **Info**
->
+> [!NOTE]
 > You can manually set a schema's operation using the ` $schema->operation() ` method.
-
 
 ### Injecting the current Livewire component instance
 

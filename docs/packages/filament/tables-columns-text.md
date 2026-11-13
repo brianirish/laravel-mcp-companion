@@ -400,10 +400,8 @@ public function boot(): void
 
 This is useful if you want to set a default timezone for all text columns in your application. It is also used in other places where timezones are used in Filament.
 
-> **Warning**
->
+> [!WARNING]
 > Filament's default timezone will only apply when the column stores a time. If the column stores a date only (` date() ` instead of ` dateTime() `), the timezone will not be applied. This is to prevent timezone shifts when storing dates without times.
-
 
 ### Number formatting
 
@@ -638,10 +636,8 @@ As well as allowing a static value, the ` html() ` method also accepts a functio
 | Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
 
-> **Danger**
->
+> [!CAUTION]
 > Filament's built-in HTML sanitizer permits inline ` style ` attributes in order to support rich text formatting features such as font colors, text highlighting, and image sizing. This means that CSS properties like ` background: url(...) ` or ` position: fixed ` will not be stripped from sanitized HTML. If your content comes from untrusted users, you should consider restricting the default configuration. See the [security documentation](https://filamentphp.com/docs/5.x/advanced/security.md#customizing-the-sanitizer) for details on how to customize the sanitizer.
-
 
 #### Rendering raw HTML without sanitization
 
@@ -655,10 +651,8 @@ TextColumn::make('description')
     ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state))
 ```
 
-> **Danger**
->
+> [!CAUTION]
 > Be cautious when rendering raw HTML, as it may contain malicious content, which can lead to security vulnerabilities in your app such as cross-site scripting (XSS) attacks. Always ensure that the HTML you are rendering is safe before using this method.
-
 
 Alternatively, you can return a ` view() ` object from the ` formatStateUsing() ` method, which will also not be sanitized:
 
@@ -824,10 +818,8 @@ TextColumn::make('authors.name')
     ->expandableLimitedList()
 ```
 
-> **Info**
->
+> [!NOTE]
 > This is only a feature for ` listWithLineBreaks() ` or ` bulleted() `, where each item is on its own line.
-
 
 Optionally, you may pass a boolean value to control if the text should be expandable or not:
 
@@ -1190,6 +1182,5 @@ As well as allowing static values, the ` copyable() `, ` copyMessage() `, and ` 
 | Table | ` Filament\Tables\Table ` | ` $table ` | The current table instance. |
 
 
-> **Warning**
->
+> [!WARNING]
 > This feature only works when SSL is enabled for the app.

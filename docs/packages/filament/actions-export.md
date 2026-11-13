@@ -18,15 +18,11 @@ php artisan migrate
 
 If you'd like to receive export notifications in a panel, you can enable them in the [panel configuration](https://filamentphp.com/docs/5.x/notifications/database-notifications.md#enabling-database-notifications-in-a-panel).
 
-> **Info**
->
+> [!NOTE]
 > If you're using PostgreSQL, make sure that the ` data ` column in the notifications migration is using ` json() `: ` $table->json('data') `.
 
-
-> **Info**
->
+> [!NOTE]
 > If you're using UUIDs for your ` User ` model, make sure that your ` notifiable ` column in the notifications migration is using ` uuidMorphs() `: ` $table->uuidMorphs('notifiable') `.
-
 
 You may use the ` ExportAction ` like so:
 
@@ -171,12 +167,10 @@ ExportColumn::make('cost_price')
     ->visible(fn (): bool => auth()->user()->isAdmin())
 ```
 
-> **Info**
->
+> [!NOTE]
 > Unlike table columns, export columns are resolved without a record, so a ` hidden() ` or ` visible() ` closure cannot depend on row data. Use it for schema-level conditions such as the authenticated user, feature flags, or configuration.
 > 
 > To keep a column selectable but unchecked by default instead of hiding it entirely, use [` enabledByDefault(false) `](https://filamentphp.com/docs/5.x/actions/export.md#configuring-the-default-column-selection).
-
 
 ### Configuring the column selection form layout
 
@@ -530,10 +524,8 @@ public static function modifyQuery(Builder $query): Builder
 
 Exports use the storage disk defined in the [configuration file](https://filamentphp.com/docs/5.x/introduction/installation.md#publishing-configuration), which defaults to ` local `. You can change it using the ` FILESYSTEM_DISK ` environment variable. If the configured disk is ` public ` and a ` local ` disk exists, exports use ` local ` instead. Explicitly setting ` fileDisk('public') ` overrides that fallback.
 
-> **Warning**
->
+> [!WARNING]
 > Use private storage for exports, such as a non-public ` local ` disk or ` s3 ` with a private access policy. Filament's [download authorization](https://filamentphp.com/docs/5.x/actions/export.md#authorization) does not protect files exposed directly by your storage disk or web server.
-
 
 To use a different disk for a specific export, pass its name to ` fileDisk() ` on the action:
 
@@ -755,10 +747,8 @@ As well as allowing a static value, the ` chunkSize() ` method also accepts a fu
 | Table | ` Filament\Tables\Table ` | ` $table ` | \[Actions in tables only\] The table object that this action belongs to. |
 
 
-> **Tip**
->
+> [!TIP]
 > If you are encountering memory or timeout issues when importing large CSV files, you may wish to reduce the chunk size.
-
 
 ## Changing the CSV delimiter
 
@@ -902,10 +892,8 @@ public function configureXlsxWriterAfterOpen(Writer $writer): Writer
 }
 ```
 
-> **Warning**
->
+> [!WARNING]
 > Any rows you add here appear above the header row, shifting the exported table down. If you also use ` configureXlsxWriterBeforeClose() ` to freeze rows, remember to account for the extra rows in ` setFreezeRow() `.
-
 
 If you want to customize the XLSX writer before it is closed, you can override the ` configureXlsxWriterBeforeClose() ` method on the exporter class. This method receives the ` Writer ` instance as a parameter, and you can modify it before it is closed:
 
@@ -1134,10 +1122,8 @@ ExportAction::make()
 
 You could also apply [global scopes](https://laravel.com/docs/eloquent#global-scopes) to your model to ensure that only authorized records are ever queried.
 
-> **Danger**
->
+> [!CAUTION]
 > If your application has per-record visibility rules, you should scope the export query to ensure users only receive records they are authorized to view.
-
 
 ### CSV formula injection
 
@@ -1166,6 +1152,5 @@ ExportColumn::make('temperature')
     ->preventFormulaInjection(false)
 ```
 
-> **Warning**
->
+> [!WARNING]
 > This protection is **opt in** and disabled by default, because prefixing a single quote alters legitimate data. For example, a phone number like ` +44 1234 567890 ` begins with a formula trigger and would be rewritten to ` '+44 1234 567890 `. Only enable it when you are exporting untrusted or user-submitted content, and make sure the transformation is acceptable for the columns you enable it on.
