@@ -27,9 +27,12 @@ LINKED = {
 
 RESOURCE_SCHEMES = ("laravel://", "laravel-package://", "laravel-external://")
 
-pytestmark = pytest.mark.skipif(
-    not (REPO_DOCS / "12.x").is_dir(), reason="real corpus absent"
-)
+# Marked `corpus` as well: a page removed upstream breaks a link here, and the
+# nightly documentation pull request must not be held back by it.
+pytestmark = [
+    pytest.mark.skipif(not (REPO_DOCS / "12.x").is_dir(), reason="real corpus absent"),
+    pytest.mark.corpus,
+]
 
 
 @pytest.fixture(scope="module")

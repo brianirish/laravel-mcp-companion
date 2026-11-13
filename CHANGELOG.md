@@ -93,23 +93,29 @@ are hand-written and had not been revised since they were first added.
   learning path, nine difficulty entries and eleven category keywords pointed
   at pages that no longer exist. Five needs that pointed only at Nova are
   removed; admin panels are found by searching services and packages.
-- **Every framework page is mapped.** Thirty-odd pages, among them `ai`,
-  `ai-sdk`, `boost`, `mcp`, `folio`, `concurrency`, `mongodb`, `search`,
-  `images`, `csrf`, `structure` and `urls`, were in no category, difficulty
-  or need. Five categories are new: basics, architecture, ai, communication
-  and frontend-tooling.
 - **Category keywords match by name, not by substring.** "ai" selects `ai` and
   `ai-sdk`; it used to select `mail` and `container` as well.
 - **A recognised task keeps a place in search results.** When the query names
   a task from the need table, the best of the pages it points at is always on
   the result page.
-- **The audit.** `tests/unit/test_curation_audit.py` fails the build when a
-  curated reference names a page, package, service or path that does not
-  exist; when a framework page is in no category, difficulty or need; when a
-  catalog entry lacks its feature list or relations row; when a learning path
-  recommends a legacy package; or when catalog prose names a major version
-  older than the documentation held. A new page upstream fails the nightly
-  documentation pull request until the tables say where it belongs.
+- **Every framework page is mapped.** 35 pages were in no category, 20 had no
+  difficulty and 42 were reached by no need or learning path, among them `ai`,
+  `ai-sdk`, `boost`, `mcp`, `folio`, `concurrency`, `mongodb`, `search`,
+  `images`, `csrf`, `structure` and `urls`. Five categories are new: basics,
+  architecture, ai, communication and frontend-tooling.
+- **The audit.** `curation.audit` lists every disagreement between the tables
+  and the framework pages held: a need, learning path, difficulty entry or
+  category keyword naming a page that does not exist, and a page that no
+  table mentions. `tests/unit/test_curation_audit.py` fails on any of them,
+  and on a catalog entry without its feature list or relations row, a
+  learning path that recommends a legacy package, or catalog prose naming a
+  major version older than the documentation held.
+- **The nightly sync is not held back by it.** A page Laravel adds or removes
+  first appears in the nightly documentation pull request. The tests that
+  compare tables with `docs/` are marked `corpus` and left out of CI for that
+  one branch; the sync report lists the same findings under "Needs
+  attention", which opens the degraded-sync issue. Every other pull request
+  runs them and fails until the tables are updated.
 
 ### Changed in search
 

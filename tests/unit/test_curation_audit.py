@@ -7,11 +7,15 @@ pointed at pages that no longer existed, nine difficulty entries named no
 page, and Laravel Cloud, Nightwatch, Herd, Pest, Reverb and Pulse appeared
 nowhere while two retired starter kits were recommended.
 
-These tests make that kind of drift a failing build. They compare every
-reference in the tables with the corpus in `docs/`, for the newest Laravel
-version, and the tables with each other. When Laravel adds or removes a page,
-the nightly documentation pull request fails here until the tables say where
-the page belongs.
+These tests make that kind of drift a failing build. They compare the tables
+with each other, and, in the tests marked `corpus`, with the documentation in
+`docs/` for the newest Laravel version.
+
+The `corpus` tests are left out of CI for the nightly documentation pull
+request. That pull request is where a page Laravel added or removed first
+shows up, and failing it would hold back every other page of that night's
+documentation. The sync report raises the same findings there, and every
+later pull request fails here until the tables are brought up to date.
 """
 
 import json
@@ -20,58 +24,28 @@ from pathlib import Path
 
 import pytest
 
-from laravel_mcp_companion import catalog
+from laravel_mcp_companion import catalog, curation
 from laravel_mcp_companion.docs_updater import DEFAULT_VERSION
 from laravel_mcp_companion.learning_resources import (
-    EXPANDED_CATEGORIES,
     LEARNING_PATHS,
     NEED_MAPPINGS,
     RELATED_PACKAGES,
-    TOPIC_DIFFICULTY_MAP,
     categories_of,
-    keyword_selects,
 )
 
 REPO_DOCS = Path(__file__).resolve().parents[2] / "docs"
-NEWEST = REPO_DOCS / DEFAULT_VERSION
-
-pytestmark = pytest.mark.skipif(not NEWEST.is_dir(), reason="shipped corpus absent")
-
-# Pages about the documentation itself, not about Laravel.
-NOT_CONTENT = {"readme", "license", "documentation", "contributions"}
 
 
-def pages() -> set:
-    return {path.stem for path in NEWEST.glob("*.md")}
+@pytest.mark.corpus
+class TestTheTablesAgreeWithTheCorpus:
+    """Each kind of disagreement `curation.audit` reports, against the corpus
+    this repository ships. Marked `corpus`: CI leaves these out for the
+    nightly documentation pull request, whose whole content is a change to
+    the corpus, and the sync report raises them there instead."""
 
-
-def content_pages() -> set:
-    return pages() - NOT_CONTENT
-
-
-class TestEveryReferenceResolves:
-    def test_every_need_points_at_pages_that_exist(self):
-        dead = {need: sorted(set(targets) - pages()) for need, targets in NEED_MAPPINGS.items() if set(targets) - pages()}
-
-        assert dead == {}
-
-    def test_no_need_is_left_pointing_at_nothing(self):
-        assert [need for need, targets in NEED_MAPPINGS.items() if not targets] == []
-
-    def test_every_learning_path_lists_pages_that_exist(self):
-        dead = {
-            path_id: sorted(set(path["docs"]) - pages())
-            for path_id, path in LEARNING_PATHS.items() if set(path["docs"]) - pages()
-        }
-
-        assert dead == {}
-
-    def test_every_prerequisite_is_a_path(self):
-        assert [
-            (path_id, sorted(set(path["prerequisites"]) - set(LEARNING_PATHS)))
-            for path_id, path in LEARNING_PATHS.items()
-            if set(path.get("prerequisites", [])) - set(LEARNING_PATHS)
-        ] == []
+    @pytest.mark.parametrize("kind", sorted(curation.DESCRIPTIONS))
+    def test_nothing_of_this_kind(self, kind):
+        assert curation.audit(REPO_DOCS)[kind] == [], curation.DESCRIPTIONS[kind]
 
     def test_every_service_a_path_names_has_documentation_held(self):
         held = {path.name for path in (REPO_DOCS / "external").iterdir() if path.is_dir()}
@@ -79,6 +53,75 @@ class TestEveryReferenceResolves:
         assert [
             (path_id, sorted(set(path["services"]) - held))
             for path_id, path in LEARNING_PATHS.items() if set(path.get("services", [])) - held
+        ] == []
+
+
+@pytest.fixture
+def small_corpus(tmp_path):
+    """A version directory holding only the pages named."""
+    def build(*pages):
+        version_dir = tmp_path / DEFAULT_VERSION
+        version_dir.mkdir(exist_ok=True)
+        for page in pages:
+            (version_dir / f"{page}.md").write_text(f"# {page}\n")
+        return tmp_path
+    return build
+
+
+class TestWhatTheAuditNotices:
+    def test_a_need_pointing_at_a_page_that_was_removed(self, small_corpus):
+        problems = curation.audit(small_corpus("routing"))
+
+        assert "send emails -> mail" in problems["dead_need_targets"]
+
+    def test_a_learning_path_listing_a_page_that_was_removed(self, small_corpus):
+        problems = curation.audit(small_corpus("routing"))
+
+        assert "getting-started -> installation" in problems["dead_path_docs"]
+
+    def test_a_page_laravel_added_that_no_table_mentions(self, small_corpus):
+        problems = curation.audit(small_corpus("routing", "teleportation"))
+
+        assert "teleportation" in problems["uncategorised_pages"]
+        assert "teleportation" in problems["pages_without_difficulty"]
+        assert "teleportation" in problems["unreached_pages"]
+
+    def test_pages_about_the_documentation_itself_need_no_mapping(self, small_corpus):
+        problems = curation.audit(small_corpus("routing", "readme", "license"))
+
+        assert not {"readme", "license"} & set(problems["uncategorised_pages"])
+
+    def test_a_version_with_no_pages_is_not_audited(self, tmp_path):
+        assert curation.audit(tmp_path) == {}
+
+    def test_the_sync_report_raises_what_the_audit_finds(self, small_corpus):
+        from laravel_mcp_companion.docs_updater import build_sync_report
+
+        report, problems = build_sync_report(small_corpus("routing", "teleportation"))
+        raised = [problem for problem in problems if problem.startswith("curated tables:")]
+
+        assert any("framework pages in no category (teleportation)" in problem for problem in raised)
+        assert "- curated tables:" in report
+
+    def test_a_short_keyword_does_not_select_pages_that_merely_contain_it(self):
+        """Matching by substring put mail and container in the "ai" category."""
+        assert "ai" in categories_of("ai-sdk")
+        assert "ai" not in categories_of("mail")
+        assert "ai" not in categories_of("container")
+
+
+class TestLearningPathsAreWellFormed:
+    def test_every_prerequisite_is_a_path(self):
+        assert [
+            (path_id, sorted(set(path["prerequisites"]) - set(LEARNING_PATHS)))
+            for path_id, path in LEARNING_PATHS.items()
+            if set(path.get("prerequisites", [])) - set(LEARNING_PATHS)
+        ] == []
+
+    def test_every_next_path_is_a_path(self):
+        assert [
+            (path_id, path["next_path"]) for path_id, path in LEARNING_PATHS.items()
+            if path.get("next_path") and path["next_path"] not in LEARNING_PATHS
         ] == []
 
     def test_every_package_a_path_names_is_catalogued(self):
@@ -101,48 +144,8 @@ class TestEveryReferenceResolves:
 
         assert {path_id: sorted(set(path) - known) for path_id, path in LEARNING_PATHS.items() if set(path) - known} == {}
 
-    def test_every_next_path_is_a_path(self):
-        assert [
-            (path_id, path["next_path"]) for path_id, path in LEARNING_PATHS.items()
-            if path.get("next_path") and path["next_path"] not in LEARNING_PATHS
-        ] == []
-
-    def test_every_difficulty_entry_names_a_page(self):
-        assert sorted(set(TOPIC_DIFFICULTY_MAP) - pages()) == []
-
-    def test_every_category_keyword_matches_a_page(self):
-        """A keyword selects the page of that name and any page whose name
-        extends it with a hyphen. One that selects nothing is a leftover from
-        a page that was renamed or removed."""
-        dead = {
-            category: [keyword for keyword in keywords if not any(keyword_selects(keyword, page) for page in pages())]
-            for category, keywords in EXPANDED_CATEGORIES.items()
-        }
-
-        assert {category: keywords for category, keywords in dead.items() if keywords} == {}
-
-
-class TestEveryPageIsReachable:
-    """A page nobody mapped can still be found by searching, but it is missing
-    from every browse, every reading order and every difficulty filter."""
-
-    def test_every_page_is_in_a_category(self):
-        assert sorted(page for page in content_pages() if not categories_of(page)) == []
-
-    def test_a_short_keyword_does_not_select_pages_that_merely_contain_it(self):
-        """Matching by substring put mail and container in the "ai" category."""
-        assert "ai" in categories_of("ai-sdk")
-        assert "ai" not in categories_of("mail")
-        assert "ai" not in categories_of("container")
-
-    def test_every_page_has_a_difficulty(self):
-        assert sorted(content_pages() - set(TOPIC_DIFFICULTY_MAP)) == []
-
-    def test_every_page_is_reached_by_a_need_or_a_learning_path(self):
-        reached = {target for targets in NEED_MAPPINGS.values() for target in targets}
-        reached |= {doc for path in LEARNING_PATHS.values() for doc in path["docs"]}
-
-        assert sorted(content_pages() - reached) == []
+    def test_no_need_is_left_pointing_at_nothing(self):
+        assert [need for need, targets in NEED_MAPPINGS.items() if not targets] == []
 
 
 class TestTheCatalogIsWhole:
@@ -235,6 +238,7 @@ class TestTheCatalogIsCurrent:
         assert all(engine in text.lower() for engine in ("algolia", "meilisearch", "typesense", "database"))
 
 
+@pytest.mark.corpus
 class TestNoVersionOlderThanTheDocsHeld:
     """The fetchers follow each package's current major. Catalog prose that
     names an older one describes software the shipped docs no longer cover."""

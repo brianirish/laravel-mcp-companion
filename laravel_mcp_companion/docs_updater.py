@@ -3091,6 +3091,11 @@ def build_sync_report(
             f"| {status['discovery'] or '-'} | {synced} |"
         )
 
+    # The hand-written tables against tonight's framework pages. Imported
+    # here because curation imports this module.
+    from .curation import report_lines
+    problems += [f"curated tables: {line}" for line in report_lines(target_dir)]
+
     lines = [
         "## Sync health",
         "",
