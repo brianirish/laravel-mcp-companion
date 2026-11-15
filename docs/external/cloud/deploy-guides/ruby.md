@@ -4,7 +4,7 @@ Source: https://laravel.com/cloud/docs/deploy-guides/ruby.md
 
 Configure your Ruby or Ruby on Rails application for production on Laravel Cloud.
 
-The [Ruby and Rails quickstart](https://laravel.com/cloud/docs/quickstart#ruby-and-rails) walks you through your first deployment to Laravel Cloud. Once your application is up and running, this guide will help you get it ready for production. We'll cover preparing your repository, running Puma, connecting your databases, and handling assets, uploads, and background jobs. Most of the guide focuses on Ruby on Rails, but if you are deploying another Ruby or Rack application, be sure to read [Other Ruby and Rack applications](#other-ruby-and-rack-applications) as well.
+The [Ruby and Rails quickstart](https://laravel.com/cloud/docs/quickstart#ruby-and-rails) walks you through your first deployment to Laravel Cloud. Once your application is up and running, this guide will help you get it ready for production. We'll cover preparing your repository, running Puma, connecting your databases, and handling assets, uploads, and background jobs. Most of the guide focuses on Ruby on Rails, but if you are deploying another Ruby or Rack application, be sure to read [Other Ruby and Rack applications](#other-ruby-and-rack-applications) as well. If you are moving an existing Rails application from another host, follow [Migrate Rails to Cloud](https://laravel.com/cloud/docs/knowledge-base/migrating-rails-to-cloud) alongside this guide.
 
 ## Prepare your repository
 
@@ -20,7 +20,9 @@ Cloud accepts lockfiles that include the `aarch64-linux`, `aarch64-linux-gnu`, o
 
 If your application lives in a [monorepo](https://laravel.com/cloud/docs/monorepos), select the directory that contains your `Gemfile`. Cloud keeps the surrounding repository available, so dependencies such as sibling path gems continue to work.
 
-## Choose a Ruby version
+## Build your application
+
+### Choose a Ruby version
 
 Cloud supports Ruby 3.3, 3.4, and 4.0, with Ruby 4.0 as the default. The simplest way to choose your version is with a `.ruby-version` file:
 
@@ -34,7 +36,7 @@ If your repository doesn't declare a version, you may select one from your envir
 
 Keep your Ruby declarations consistent with one another. For example, if your `Gemfile` requires exactly `3.4.7`, use the same patch in `.ruby-version`. Bundler rejects a runtime that doesn't satisfy the `Gemfile`, even when another declaration takes precedence in Cloud's version detection.
 
-## Install dependencies
+### Install dependencies
 
 Cloud installs your gems automatically before running your [build commands](https://laravel.com/cloud/docs/environments#build-commands). It uses the Bundler version recorded under `BUNDLED WITH` in your `Gemfile.lock`, or the Bundler version that ships with the runtime if that section is missing.
 
@@ -49,9 +51,23 @@ BUNDLE_WITH=production
 
 If you need every ordinary group installed, set `BUNDLE_WITHOUT` to an empty value. Cloud applies these settings while installing your gems and keeps the same group configuration at runtime. Remember to redeploy after changing them.
 
-## Run a production server
+### Build and serve assets
 
-### Rails
+When Cloud detects Propshaft or Sprockets in a Rails application that isn't configured as API-only, it pre-fills the following build command:
+
+```sh theme={null}
+SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+```
+
+If Cloud also detects a JavaScript package manager, it adds a step to install your JavaScript dependencies. Ruby runtimes include Node.js, npm, and Yarn. Be sure to keep the dependencies your asset build needs, including any development dependencies used by your JavaScript build tools.
+
+If you use a custom asset pipeline, review the pre-filled command and adjust it as needed. API-only Rails applications don't receive this default asset build. Cloud's Nginx server serves files from your application's `public` directory, including the compiled assets in `public/assets`.
+
+The `SECRET_KEY_BASE_DUMMY=1` setting only applies to asset compilation. Your real `SECRET_KEY_BASE` is still used at runtime, so don't add the dummy setting as an environment variable. Also, keep in mind that initializers that access your credentials or database may still require those resources while your assets compile.
+
+## Run your application
+
+### Start the Rails server
 
 Cloud pre-fills your Rails start command using your application's binstub, when it exists:
 
@@ -105,6 +121,18 @@ worker_shutdown_timeout 25
 ```
 
 Setting `WEB_CONCURRENCY=0` runs a single server process without clustered workers. Setting it to `1` starts a Puma master and one worker, so it uses an additional process. Avoid automatically matching the host CPU count on small instances. Keep in mind that each clustered worker has its own thread pool and its own database connection pools. Set the pool for each database large enough to accommodate every thread that uses it, including any background or asynchronous work.
+
+### Shut down gracefully
+
+When an instance stops, whether during a deployment or while scaling down, Cloud sends a `SIGTERM` signal to your application's process. Puma handles this signal gracefully by letting active requests finish before exiting.
+
+You should keep Puma's shutdown limits, such as the `force_shutdown_after` and `worker_shutdown_timeout` settings shown in [Configure Puma concurrency](#configure-puma-concurrency), shorter than your environment's **graceful shutdown timeout**. This leaves time for the proxy and the rest of the instance to stop cleanly. If your requests or jobs need more time to finish, increase the environment's timeout as well. Puma's [configuration documentation](https://puma.io/puma/Puma/DSL.html) describes the available shutdown and concurrency options.
+
+### Running behind the proxy
+
+Cloud handles TLS for you before forwarding requests to your application, so Puma only needs to speak plain HTTP. Cloud's proxy passes the original request scheme in the `X-Forwarded-Proto` header, so Rails can recognize HTTPS requests. You should keep your production HTTPS configuration, such as `config.force_ssl = true`, in place.
+
+If you restrict hosts using `config.hosts`, be sure to allow your Cloud domain and any custom domains. You should also configure the hostnames used in URLs generated outside of a request, such as links in your mailers. Cloud provides an `APP_URL` variable, but Rails doesn't apply it to these settings automatically.
 
 ## Rails environment variables
 
@@ -229,20 +257,6 @@ New Rails environments start with this command commented out. When you attach a 
 
 You should avoid running migrations from your start command. The start command runs every time an instance starts, including during deployments, autoscaling, and wake-ups after scaling to zero. Since your previous deployment keeps running while the new one rolls out, you should also write your migrations so they remain compatible with both.
 
-## Build and serve assets
-
-When Cloud detects Propshaft or Sprockets in a Rails application that isn't configured as API-only, it pre-fills the following build command:
-
-```sh theme={null}
-SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
-```
-
-If Cloud also detects a JavaScript package manager, it adds a step to install your JavaScript dependencies. Ruby runtimes include Node.js, npm, and Yarn. Be sure to keep the dependencies your asset build needs, including any development dependencies used by your JavaScript build tools.
-
-If you use a custom asset pipeline, review the pre-filled command and adjust it as needed. API-only Rails applications don't receive this default asset build. Cloud's Nginx server serves files from your application's `public` directory, including the compiled assets in `public/assets`.
-
-The `SECRET_KEY_BASE_DUMMY=1` setting only applies to asset compilation. Your real `SECRET_KEY_BASE` is still used at runtime, so don't add the dummy setting as an environment variable. Also, keep in mind that initializers that access your credentials or database may still require those resources while your assets compile.
-
 ## Caches and background jobs
 
 When you attach a [Laravel Valkey](https://laravel.com/cloud/docs/resources/caches/valkey) or [Redis](https://laravel.com/cloud/docs/resources/caches/redis) cache, Cloud provides a `REDIS_URL` variable. You should configure your cache library or Rails cache store to use this URL, and make sure it supports TLS when the URL uses the `rediss://` scheme.
@@ -254,6 +268,20 @@ config.cache_store = :redis_cache_store, { url: ENV.fetch("REDIS_URL") }
 ```
 
 If your application uses Solid Cache, you may keep your existing database cache configuration instead. Either way, choose the backing store your application is configured to use.
+
+### Managed queues
+
+If Rails managed queues are enabled for your organization, Rails applications can run Active Job on Cloud [managed queues](https://laravel.com/cloud/docs/queues) with the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem. Install the gem and set its adapter in `config/environments/production.rb`:
+
+```sh theme={null}
+bundle add laravel-cloud-rails
+```
+
+```ruby theme={null}
+config.active_job.queue_adapter = :cloud
+```
+
+Cloud runs and scales the queue workers, so you don't configure a background process for them. The [Rails section of the managed queues documentation](https://laravel.com/cloud/docs/queues#connect-your-application) explains how `queue_as` selects a managed queue, how to order and deduplicate jobs on FIFO queues, and how long delays and retry waits can be.
 
 ### Jobs on small instances
 
@@ -455,13 +483,26 @@ Video previews require FFmpeg, and PDF previews require Poppler or a suitable Im
 
 ### Cloud WebSockets
 
-You can attach [Cloud WebSockets](https://laravel.com/cloud/docs/resources/websockets#ruby) to your Rails environment to use a managed Laravel Reverb cluster. Cloud provides `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_HOST`, `PUSHER_PORT`, and `PUSHER_SCHEME`. Configure the `pusher` gem with these values to publish events, and use a Pusher-compatible browser client to receive them. See the [Ruby publishing example](https://laravel.com/cloud/docs/resources/websockets/pusher#ruby) and [JavaScript client configuration](https://laravel.com/cloud/docs/resources/websockets/pusher#javascript-websocket-client).
+You can attach [Cloud WebSockets](https://laravel.com/cloud/docs/resources/websockets#ruby) to your Rails environment to run Action Cable on a managed Laravel Reverb cluster. Install the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem and set its `cloud` adapter in `config/cable.yml`:
 
-Reverb uses the Pusher protocol. Rails' Action Cable and `turbo_stream_from` use the Action Cable protocol, so switching those subscriptions to Reverb requires changes to your application's publishing and browser subscription code. Keep the Action Cable setup described in the next section if you use Rails' built-in broadcasting.
+```sh theme={null}
+bundle add laravel-cloud-rails
+```
+
+```yaml theme={null}
+production:
+  adapter: cloud
+```
+
+The adapter reads the `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_HOST`, `PUSHER_PORT`, and `PUSHER_SCHEME` variables that Cloud provides. The gem adds its browser transport to your HTML pages. Your existing channels, `@rails/actioncable` client code, and `turbo_stream_from` subscriptions work without changes, and broadcasts reach every Puma worker and replica.
+
+If a WebSocket application is attached and `Gemfile.lock` doesn't include `laravel-cloud-rails`, the deployment fails.
+
+Each message sent to a browser must be smaller than about 9.5 KB. The adapter doesn't replay messages broadcast while a client reconnects. The [`laravel-cloud-rails` WebSockets documentation](https://github.com/laravel/laravel-cloud-rails#websockets) lists the adapter's other limitations and explains how to set up local development.
 
 ### Action Cable and Turbo Streams
 
-Rails can serve Action Cable WebSockets through the same Puma server as HTTP requests. Keep the default `/cable` mount, or mount `ActionCable.server` at that path in `config/routes.rb` if your application removed it. Configure the public URL and allowed browser origins in `config/environments/production.rb`:
+Without an attached WebSocket application, Rails can serve Action Cable WebSockets through the same Puma server as HTTP requests. Keep the default `/cable` mount, or mount `ActionCable.server` at that path in `config/routes.rb` if your application removed it. Configure the public URL and allowed browser origins in `config/environments/production.rb`:
 
 ```ruby theme={null}
 app_url = ENV.fetch("APP_URL").delete_suffix("/")
@@ -485,9 +526,64 @@ Attach a Redis-compatible cache and keep TLS enabled for `rediss://` connections
 
 Turbo Streams uses Action Cable's connection, so you can keep your existing `turbo_stream_from` subscriptions. Test a broadcast between two browser sessions after deployment. See the [Rails Action Cable guide](https://guides.rubyonrails.org/action_cable_overview.html) for authentication and subscription setup.
 
-## Monitoring
+## Email with Resend
 
-Cloud captures stdout and stderr in [Logs](https://laravel.com/cloud/docs/logs). Keep the stdout logger described in [Logging](#logging) enabled even when using an external monitoring service. Cloud injects `LARAVEL_CLOUD_COMMIT_SHA`, `LARAVEL_CLOUD_DEPLOY_UUID`, `LARAVEL_CLOUD_ENV_NAME`, and `LARAVEL_CLOUD_ENV_UUID` so you can identify the release and environment in reports.
+Attach a [Cloud email resource](https://laravel.com/cloud/docs/resources/email) to provide `RESEND_API_KEY` and sender variables. Add the `resend` gem to your production bundle and configure its Rails adapter in `config/environments/production.rb`:
+
+```ruby theme={null}
+Resend.api_key = ENV.fetch("RESEND_API_KEY")
+config.action_mailer.delivery_method = :resend
+```
+
+Rails doesn't automatically select a mail adapter from Cloud's `MAIL_MAILER` variable. The Resend adapter sends through the provider's API and uses the injected `RESEND_API_KEY`.
+
+Set the URL used for links in messages:
+
+```ruby theme={null}
+require "uri"
+
+app_uri = URI.parse(ENV.fetch("APP_URL"))
+config.action_mailer.default_url_options = {
+  host: app_uri.host,
+  protocol: app_uri.scheme,
+  port: app_uri.port
+}
+config.action_mailer.raise_delivery_errors = true
+```
+
+Set your verified sender in `app/mailers/application_mailer.rb`:
+
+```ruby theme={null}
+class ApplicationMailer < ActionMailer::Base
+  default from: ENV.fetch("MAIL_FROM_ADDRESS", "notifications@example.com")
+  layout "mailer"
+end
+```
+
+Replace the example address with a sender verified by your provider. For `deliver_later`, run a worker that consumes your application's mail queue as described in [Caches and background jobs](#caches-and-background-jobs).
+
+Verify your sending domain and send a test message using the [Resend Rails integration](https://resend.com/docs/send-with-rails).
+
+## Logging and monitoring
+
+Cloud captures everything your application writes to stdout and stderr and displays it in the [Logs](https://laravel.com/cloud/docs/logs) dashboard. Keep logging to stdout even when you use an external monitoring service such as Sentry or Datadog. Cloud injects `LARAVEL_CLOUD_COMMIT_SHA`, `LARAVEL_CLOUD_DEPLOY_UUID`, `LARAVEL_CLOUD_ENV_NAME`, and `LARAVEL_CLOUD_ENV_UUID` so you can identify the release and environment in your logs and error reports.
+
+### Logging
+
+Recent Rails applications already log to stdout. If you are deploying an older application that only writes to a log file, configure its logger in your `config/environments/production.rb` file:
+
+```ruby theme={null}
+config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new($stdout))
+config.log_tags = [
+  :request_id,
+  ->(_request) { ENV.fetch("LARAVEL_CLOUD_ENV_NAME", Rails.env) },
+  ->(_request) { ENV.fetch("LARAVEL_CLOUD_COMMIT_SHA", "local") }
+]
+```
+
+Keep in mind that the injected `RAILS_LOG_TO_STDOUT` variable only has an effect when your application's configuration reads it. The [Rails configuration guide](https://guides.rubyonrails.org/configuring.html) is a helpful reference when adapting an older application.
+
+Cloud also provides `LARAVEL_CLOUD_DEPLOY_UUID` for the deployment and `LARAVEL_CLOUD_ENV_UUID` for the environment. Use these values in structured logs or error reports to distinguish deployments of the same commit. Avoid logging credentials or sensitive request data.
 
 ### Sentry
 
@@ -530,75 +626,6 @@ end
 ```
 
 Configure Agent connectivity and transport security using the [Datadog Ruby tracer settings](https://docs.datadoghq.com/tracing/trace_collection/library_config/ruby/). Verify that a test request produces a trace with the expected service, environment, and version before enabling production traffic.
-
-## Email with Resend
-
-Attach a [Cloud email resource](https://laravel.com/cloud/docs/resources/email) to provide `RESEND_API_KEY` and sender variables. Add the `resend` gem to your production bundle and configure its Rails adapter in `config/environments/production.rb`:
-
-```ruby theme={null}
-Resend.api_key = ENV.fetch("RESEND_API_KEY")
-config.action_mailer.delivery_method = :resend
-```
-
-Rails doesn't automatically select a mail adapter from Cloud's `MAIL_MAILER` variable. The Resend adapter sends through the provider's API and uses the injected `RESEND_API_KEY`.
-
-Set the URL used for links in messages:
-
-```ruby theme={null}
-require "uri"
-
-app_uri = URI.parse(ENV.fetch("APP_URL"))
-config.action_mailer.default_url_options = {
-  host: app_uri.host,
-  protocol: app_uri.scheme,
-  port: app_uri.port
-}
-config.action_mailer.raise_delivery_errors = true
-```
-
-Set your verified sender in `app/mailers/application_mailer.rb`:
-
-```ruby theme={null}
-class ApplicationMailer < ActionMailer::Base
-  default from: ENV.fetch("MAIL_FROM_ADDRESS", "notifications@example.com")
-  layout "mailer"
-end
-```
-
-Replace the example address with a sender verified by your provider. For `deliver_later`, run a worker that consumes your application's mail queue as described in [Caches and background jobs](#caches-and-background-jobs).
-
-Verify your sending domain and send a test message using the [Resend Rails integration](https://resend.com/docs/send-with-rails).
-
-## Shut down gracefully
-
-When an instance stops, whether during a deployment or while scaling down, Cloud sends a `SIGTERM` signal to your application's process. Puma handles this signal gracefully by letting active requests finish before exiting.
-
-You should keep Puma's shutdown limits, such as the `force_shutdown_after` and `worker_shutdown_timeout` settings shown in [Configure Puma concurrency](#configure-puma-concurrency), shorter than your environment's **graceful shutdown timeout**. This leaves time for the proxy and the rest of the instance to stop cleanly. If your requests or jobs need more time to finish, increase the environment's timeout as well. Puma's [configuration documentation](https://puma.io/puma/Puma/DSL.html) describes the available shutdown and concurrency options.
-
-## Running behind the proxy
-
-Cloud handles TLS for you before forwarding requests to your application, so Puma only needs to speak plain HTTP. Cloud's proxy passes the original request scheme in the `X-Forwarded-Proto` header, so Rails can recognize HTTPS requests. You should keep your production HTTPS configuration, such as `config.force_ssl = true`, in place.
-
-If you restrict hosts using `config.hosts`, be sure to allow your Cloud domain and any custom domains. You should also configure the hostnames used in URLs generated outside of a request, such as links in your mailers. Cloud provides an `APP_URL` variable, but Rails doesn't apply it to these settings automatically.
-
-## Logging
-
-Cloud captures everything your application writes to stdout and stderr and displays it in the [Logs](https://laravel.com/cloud/docs/logs) dashboard. Recent Rails applications already log to stdout. If you are deploying an older application that only writes to a log file, configure its logger in your `config/environments/production.rb` file:
-
-```ruby theme={null}
-config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new($stdout))
-config.log_tags = [
-  :request_id,
-  ->(_request) { ENV.fetch("LARAVEL_CLOUD_ENV_NAME", Rails.env) },
-  ->(_request) { ENV.fetch("LARAVEL_CLOUD_COMMIT_SHA", "local") }
-]
-```
-
-Keep in mind that the injected `RAILS_LOG_TO_STDOUT` variable only has an effect when your application's configuration reads it. The [Rails configuration guide](https://guides.rubyonrails.org/configuring.html) is a helpful reference when adapting an older application.
-
-Cloud also provides `LARAVEL_CLOUD_DEPLOY_UUID` for the deployment and `LARAVEL_CLOUD_ENV_UUID` for the environment. Use these values in structured logs or error reports to distinguish deployments of the same commit. Avoid logging credentials or sensitive request data. See [Monitoring](#monitoring) for Sentry and Datadog release configuration examples.
-
-If you are moving an existing application, follow [Migrate Rails to Cloud](https://laravel.com/cloud/docs/knowledge-base/migrating-rails-to-cloud).
 
 ## Other Ruby and Rack applications
 

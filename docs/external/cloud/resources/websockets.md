@@ -212,7 +212,9 @@ After you attach the WebSocket application to the environment, redeploy your app
 
 > [tab] Ruby
 >
-> Make sure your application's `Gemfile` includes Pusher's [Ruby HTTP SDK](https://github.com/pusher/pusher-http-ruby), then run `bundle install`:
+> Rails applications use the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem to run Action Cable on Cloud WebSockets. If a WebSocket application is attached and the gem is missing, the deployment fails. The [Cloud WebSockets section of the Ruby deployment guide](https://laravel.com/cloud/docs/deploy-guides/ruby#cloud-websockets) shows how to install the gem and configure its Action Cable adapter.
+>
+> Other Ruby applications can use Pusher's [Ruby HTTP SDK](https://github.com/pusher/pusher-http-ruby). Make sure your application's `Gemfile` includes it, then run `bundle install`:
 >
 > ```ruby theme={null}
 > gem "pusher"

@@ -20,7 +20,9 @@ Cloud installs your application's dependencies automatically during the build. T
 
 You should list your production server, such as Gunicorn or Uvicorn, among these dependencies. When Cloud exports dependencies from a lockfile, it leaves out your development groups, so it installs only what your application needs in production. Cloud installs packages into a shared Python user directory and adds their executables to your `PATH`, so you can call `gunicorn` or `uvicorn` directly from your start command.
 
-## Run a production server
+## Run your application
+
+### Choose a production server
 
 Django and Flask applications use the Web Server Gateway Interface (WSGI) by default, while FastAPI applications use the Asynchronous Server Gateway Interface (ASGI). Cloud discovers your application's entrypoint and pre-fills a start command using a compatible server from your dependencies. Cloud knows how to generate commands for each of the following servers:
 
@@ -40,7 +42,7 @@ If none of these servers appear in your dependencies, Cloud falls back to Gunico
 
 Your start command should always use a production server. Django's `runserver`, `flask run`, and reload modes such as `fastapi dev` or `uvicorn --reload` are great for development, but don't use them to run your application in production.
 
-## Bind to the right interface
+### Bind to the right interface
 
 Your server must listen on the port set by the `PORT` environment variable, which is `3000` by default. It must also accept IPv6 connections, since that is how Cloud's proxy and startup probes reach your application. The pre-filled Gunicorn command already takes care of this with `--bind [::]:$PORT`. If you are using Uvicorn, your start command should look like this:
 
@@ -56,19 +58,19 @@ Replace `main:app` with your own application's entrypoint. If a factory creates 
 
 If you are using a different server, make sure your start command still listens on IPv6. Listening only on the loopback interface, or on a hardcoded port, will also prevent Cloud from reaching your application. If your application deploys successfully but still isn't reachable, take a look at the [deployment troubleshooting](https://laravel.com/cloud/docs/deployments#deployment-succeeds-but-serves-no-traffic) guide.
 
-## Worker count
+### Set the worker count
 
 Cloud sets the `WEB_CONCURRENCY` environment variable based on the resources allocated to your app instance. Django and Flask applications receive `(2 × whole CPU cores) + 1` workers, capped so that each worker has a 150 MiB memory budget. FastAPI applications receive one worker per whole CPU core. Either way, your application always receives at least one worker.
 
 Gunicorn and Uvicorn read `WEB_CONCURRENCY` automatically. If you are using another server, you will need to set its worker count option yourself. To change the number of workers, you may override `WEB_CONCURRENCY` in your [environment variables](https://laravel.com/cloud/docs/environments#environment-variables) or pass your server's worker count flag directly. If your application uses a lot of memory per worker, you may want to lower the count.
 
-## Shut down gracefully
+### Shut down gracefully
 
 When an instance stops, whether during a deployment or while scaling down, Cloud sends a `SIGTERM` signal to your server. Gunicorn and Uvicorn both handle this signal gracefully by letting active requests finish before exiting.
 
 You should keep your server's shutdown deadline shorter than your environment's **graceful shutdown timeout** so the rest of the instance has time to stop cleanly. Gunicorn's `--graceful-timeout` option defaults to 30 seconds, while Uvicorn provides a `--timeout-graceful-shutdown` option. If your requests need more time to complete, adjust both your server's deadline and your environment's timeout.
 
-## Running behind the proxy
+### Running behind the proxy
 
 Cloud handles TLS for you before forwarding requests to your application, so your server only needs to speak plain HTTP. Cloud's proxy passes the original request scheme in the `X-Forwarded-Proto` header and the client's address chain in the `X-Forwarded-For` header. Before relying on these headers, you should configure your server's or framework's trusted proxy settings.
 
@@ -151,7 +153,7 @@ import redis
 cache = redis.from_url(os.environ["REDIS_URL"])
 ```
 
-## Migrations
+### Run migrations
 
 Database migrations belong in your environment's [deploy commands](https://laravel.com/cloud/docs/environments#deploy-commands). Cloud runs these commands just before your new deployment goes live. If one of them fails, Cloud cancels the rollout.
 

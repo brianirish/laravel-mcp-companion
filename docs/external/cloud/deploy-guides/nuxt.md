@@ -49,6 +49,16 @@ When you attach a [database](https://laravel.com/cloud/docs/resources/databases/
 
 Cloud resets your environment's [filesystem](https://laravel.com/cloud/docs/environments#filesystem) each time you deploy, and each replica of your application has its own disk. Because of this, anything your application needs to share or keep, such as sessions or cached data, should live in an attached database or cache rather than on disk. If you use Nitro's storage layer, you may configure it with a [Redis driver](https://nitro.build/docs/storage) that points at your cache.
 
+## Run migrations
+
+Database migrations belong in your environment's [deploy commands](https://laravel.com/cloud/docs/environments#deploy-commands). Cloud runs these commands just before your new deployment goes live. If one of them fails, Cloud cancels the rollout. For example, if you are using Prisma, your deploy command might look like this:
+
+```sh theme={null}
+npx prisma migrate deploy
+```
+
+Keep in mind that deploy commands must finish within 15 minutes, and Cloud does not keep any changes they make to the filesystem.
+
 ## Store files in object storage
 
 For user uploads and any other files your application needs to keep, attach a [bucket](https://laravel.com/cloud/docs/resources/object-storage) to your environment as its default disk. Cloud injects the `AWS_BUCKET`, `AWS_ENDPOINT_URL`, `AWS_REGION`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY` variables. When you create your S3 client with the AWS SDK for JavaScript, pass the endpoint explicitly:
@@ -61,13 +71,3 @@ const s3 = new S3Client({
   endpoint: process.env.AWS_ENDPOINT_URL,
 });
 ```
-
-## Run migrations
-
-Database migrations belong in your environment's [deploy commands](https://laravel.com/cloud/docs/environments#deploy-commands). Cloud runs these commands just before your new deployment goes live. If one of them fails, Cloud cancels the rollout. For example, if you are using Prisma, your deploy command might look like this:
-
-```sh theme={null}
-npx prisma migrate deploy
-```
-
-Keep in mind that deploy commands must finish within 15 minutes, and Cloud does not keep any changes they make to the filesystem.

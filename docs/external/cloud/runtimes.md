@@ -127,4 +127,4 @@ channel = "1.90.0"
 | Scheduled tasks | | | — | — | — | — | — | — | — | — | — |
 | Runtime extensions | PHP extensions | PHP extensions | npm packages | npm packages | npm packages | npm packages | Go modules | pip, uv, Pipenv, or Poetry packages | Bundler gems | Bundler gems | Cargo crates |
 
-For Rails job backends such as Solid Queue, Sidekiq, and GoodJob, use [custom background processes](https://laravel.com/cloud/docs/deploy-guides/ruby#caches-and-background-jobs). Rails managed queues require access enabled for your organization. Rails recurring tasks use your job backend's scheduler rather than Laravel Cloud's Laravel or Symfony scheduler controls.
+For Rails job backends such as Solid Queue, Sidekiq, and GoodJob, use [custom background processes](https://laravel.com/cloud/docs/deploy-guides/ruby#caches-and-background-jobs). Rails [managed queues](https://laravel.com/cloud/docs/queues) use the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem and must be enabled for your organization. Rails recurring tasks use your job backend's scheduler rather than Laravel Cloud's Laravel or Symfony scheduler controls.

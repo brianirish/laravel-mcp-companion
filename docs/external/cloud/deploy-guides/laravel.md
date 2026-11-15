@@ -21,6 +21,12 @@ You should run `php artisan optimize` as part of your build rather than in your 
 
 If your application installs private Composer packages, configure your credentials before you run `composer install`. The [build commands](https://laravel.com/cloud/docs/environments#build-commands) documentation shows how. And, if you prefer Yarn, pnpm, or Bun over npm, take a look at [Using Yarn, PNPM, or Bun](https://laravel.com/cloud/docs/knowledge-base/using-yarn-bun-pnpm).
 
+## Environment variables
+
+Cloud writes your environment variables to a `.env` file before your application starts, so Laravel reads them exactly the way it does on your local machine. You can manage these values from your environment's [settings](https://laravel.com/cloud/docs/environments#environment-variables).
+
+In addition to the variables Cloud injects for your attached resources, you may define any variables your application needs. If you define a variable that Cloud also injects, your value takes precedence. Remember to redeploy after changing your environment variables so your application picks up the new values.
+
 ## Attach a database
 
 Nearly every Laravel application needs a database. To add one, click **Add database** on your environment's infrastructure canvas, then create or attach a [Laravel MySQL](https://laravel.com/cloud/docs/resources/databases/laravel-mysql) or [Laravel Serverless Postgres](https://laravel.com/cloud/docs/resources/databases/postgres) database. The database must be in the same region as your environment.
@@ -38,7 +44,7 @@ CACHE_STORE=database
 SESSION_DRIVER=database
 ```
 
-If your application grows to the point where it needs a dedicated cache, you may attach a [Laravel Valkey](https://laravel.com/cloud/docs/resources/caches/valkey) cache by clicking **Cache** on your environment's canvas. Cloud injects the connection details and set `CACHE_STORE` for you, so Laravel starts using the cache right away.
+If your application grows to the point where it needs a dedicated cache, you may attach a [Laravel Valkey](https://laravel.com/cloud/docs/resources/caches/valkey) cache by clicking **Cache** on your environment's canvas. Cloud injects the connection details and sets `CACHE_STORE` for you, so Laravel starts using the cache right away.
 
 ## Run migrations
 
@@ -51,12 +57,6 @@ php artisan migrate --force
 Deploy commands must finish within 15 minutes. Cloud doesn't keep any changes they make to the filesystem, so deploy commands are best suited to tasks like migrations that write to external resources.
 
 You do not need to run `queue:restart` or `horizon:terminate` yourself, since Cloud restarts your queue workers and manages Horizon for you after every deployment. You should also avoid running `optimize:clear` and `storage:link` during deployment. The [unnecessary build and deploy commands](https://laravel.com/cloud/docs/environments#unnecessary-build-and-deploy-commands) documentation explains why.
-
-## Environment variables
-
-Cloud writes your environment variables to a `.env` file before your application starts, so Laravel reads them exactly the way it does on your local machine. You can manage these values from your environment's [settings](https://laravel.com/cloud/docs/environments#environment-variables).
-
-In addition to the variables Cloud injects for your attached resources, you may define any variables your application needs. If you define a variable that Cloud also injects, your value takes precedence. Remember to redeploy after changing your environment variables so your application picks up the new values.
 
 ## Store files in object storage
 
@@ -81,4 +81,5 @@ If you would rather keep using your own queue driver, you may run `queue:work` p
 To run your application's [scheduled tasks](https://laravel.com/cloud/docs/scheduled-tasks), enable the **Scheduler** toggle on your App cluster or on a worker cluster. Cloud then invokes `schedule:run` every minute, just like a traditional cron entry.
 
 If your App cluster runs multiple replicas, you should use Laravel's `onOneServer` method for any task that should run only once. Otherwise, the task runs on every replica.
+
 And, if your environment [scales to zero](https://laravel.com/cloud/docs/compute#scale-to-zero), don't worry: Cloud automatically wakes your environment so your scheduled tasks keep running on time.
