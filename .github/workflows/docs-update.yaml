@@ -20,7 +20,8 @@ name: Docs update
 
 on:
   schedule:
-    # 00:17 UTC. Scheduled runs queued on the hour are the ones GitHub delays.
+    # 00:17 UTC is when it is queued, not when it runs. GitHub starts scheduled
+    # workflows late; the first run here began at 06:18 UTC.
     - cron: "17 0 * * *"
   workflow_dispatch:
     inputs:
