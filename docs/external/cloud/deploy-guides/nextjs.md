@@ -45,6 +45,16 @@ Cloud resets your environment's [filesystem](https://laravel.com/cloud/docs/envi
 
 The same applies to Next.js's own data cache and incremental static regeneration. By default, Next.js stores these on the local filesystem, so each replica keeps its own copy and every deployment clears the cache. If your application relies on revalidated pages staying consistent across replicas, configure a [custom cache handler](https://nextjs.org/docs/app/api-reference/config/next-config-js/incrementalCacheHandlerPath) backed by your cache.
 
+## Run migrations
+
+Database migrations belong in your environment's [deploy commands](https://laravel.com/cloud/docs/environments#deploy-commands). Cloud runs these commands just before your new deployment goes live. If one of them fails, Cloud cancels the rollout. For example, if you are using Prisma, your deploy command might look like this:
+
+```sh theme={null}
+npx prisma migrate deploy
+```
+
+Keep in mind that deploy commands must finish within 15 minutes, and Cloud does not keep any changes they make to the filesystem.
+
 ## Store files in object storage
 
 For user uploads and any other files your application needs to keep, attach a [bucket](https://laravel.com/cloud/docs/resources/object-storage) to your environment as its default disk. Cloud injects the `AWS_BUCKET`, `AWS_ENDPOINT_URL`, `AWS_REGION`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY` variables. When you create your S3 client with the AWS SDK for JavaScript, pass the endpoint explicitly:
@@ -57,13 +67,3 @@ const s3 = new S3Client({
   endpoint: process.env.AWS_ENDPOINT_URL,
 });
 ```
-
-## Run migrations
-
-Database migrations belong in your environment's [deploy commands](https://laravel.com/cloud/docs/environments#deploy-commands). Cloud runs these commands just before your new deployment goes live. If one of them fails, Cloud cancels the rollout. For example, if you are using Prisma, your deploy command might look like this:
-
-```sh theme={null}
-npx prisma migrate deploy
-```
-
-Keep in mind that deploy commands must finish within 15 minutes, and Cloud does not keep any changes they make to the filesystem.

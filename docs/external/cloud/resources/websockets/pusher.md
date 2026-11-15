@@ -173,7 +173,9 @@ func main() {
 
 ### Ruby
 
-To publish events from Ruby, add Pusher's [Ruby HTTP SDK](https://github.com/pusher/pusher-http-ruby) to your application's `Gemfile` and run `bundle install`:
+Rails applications use the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem instead of the Pusher SDK. To install the gem and configure its Action Cable adapter, see the [Cloud WebSockets section of the Ruby deployment guide](https://laravel.com/cloud/docs/deploy-guides/ruby#cloud-websockets).
+
+To publish events from other Ruby applications, add Pusher's [Ruby HTTP SDK](https://github.com/pusher/pusher-http-ruby) to your application's `Gemfile` and run `bundle install`:
 
 ```ruby theme={null}
 gem "pusher"

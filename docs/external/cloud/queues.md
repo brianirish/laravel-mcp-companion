@@ -2,19 +2,19 @@ Source: https://laravel.com/cloud/docs/queues.md
 
 # Managed Queues
 
-Process Laravel and Symfony jobs with fully managed queues.
+Process Laravel, Symfony, and Rails jobs with fully managed queues.
 
 ## Introduction
 
 Background jobs allow your application to defer slow or expensive work, such as sending email, generating PDFs, calling external APIs, or processing media, so that it can respond to web requests quickly.
 
-Managed queues are available for Laravel and Symfony applications. To run custom background processes on any supported runtime, see [Workers](https://laravel.com/cloud/docs/workers).
+Managed queues are available for Laravel, Symfony, and Rails applications. To run custom background processes on any supported runtime, see [Workers](https://laravel.com/cloud/docs/workers).
 
 Managed queues isolate background jobs from your web traffic and run them on dedicated workers that scale with the work waiting to be processed. Flex workers scale to zero when idle, so you pay for compute only while jobs run. The Queues dashboard provides metrics, failed-job visibility, and retry controls.
 
 ## Managed queues vs. workers
 
-Managed queues are the preferred choice for all new and existing Laravel and Symfony applications. Laravel Cloud provisions and operates the queue infrastructure, so you do not need to manage queue workers or drivers yourself.
+Managed queues are the preferred choice for all new and existing Laravel, Symfony, and Rails applications. Laravel Cloud provisions and operates the queue infrastructure, so you do not need to manage queue workers or drivers yourself.
 
 Use [Workers](https://laravel.com/cloud/docs/workers) when your application needs a custom long-running process or must continue using a self-managed queue driver, such as Redis or a database queue. Workers are available for every supported runtime, but you configure the command, process count, autoscaling, and operational behavior yourself.
 
@@ -239,6 +239,76 @@ Laravel Cloud measures queue depth and job duration to add and remove workers. A
 > ```
 >
 > See the [`laravel/laravel-cloud-symfony` documentation](https://github.com/laravel/laravel-cloud-symfony) for all stamps and configuration options.
+
+> [tab] Rails
+>
+> ### Requirements
+>
+> Rails applications use the [`laravel-cloud-rails`](https://github.com/laravel/laravel-cloud-rails) gem, which provides a `:cloud` Active Job adapter for Rails 7.1 or newer:
+>
+> ```sh theme={null}
+> bundle add laravel-cloud-rails
+> ```
+>
+> > [!NOTE]
+> >
+> > Rails managed queues must be enabled for your organization.
+>
+> ### Queue adapter
+>
+> Set the `:cloud` adapter in `config/environments/production.rb`:
+>
+> ```ruby theme={null}
+> config.active_job.queue_adapter = :cloud
+> ```
+>
+> Laravel Cloud provides the queue configuration and runs the `bundle exec laravel-cloud queue:work` workers.
+>
+> ### Dispatching jobs
+>
+> Laravel Cloud sends each job to the managed queue that matches its queue name. Jobs on Active Job's default queue go to the environment's default managed queue:
+>
+> ```ruby theme={null}
+> class ProcessReportJob < ApplicationJob
+>   queue_as :critical
+> end
+>
+> ProcessReportJob.perform_later(report)
+> ProcessReportJob.set(wait: 5.minutes).perform_later(report)
+> ```
+>
+> On a standard queue, a `wait` or `wait_until` delay can be at most 15 minutes. Longer delays raise `LaravelCloud::Queue::InvalidDispatch`. FIFO queues don't support delays. The adapter ignores Active Job's `priority`.
+>
+> ### FIFO and fair queues
+>
+> To set a message group ID or a deduplication ID, include `LaravelCloud::Queue::MessageAttributes`. On a `.fifo` queue, the message group ID controls ordering and the deduplication ID prevents duplicate jobs:
+>
+> ```ruby theme={null}
+> class ProcessOrderJob < ApplicationJob
+>   include LaravelCloud::Queue::MessageAttributes
+>
+>   queue_as "orders.fifo"
+>
+>   message_group_id { "customer-#{arguments.first.customer_id}" }
+>   message_deduplication_id { "order-#{arguments.first.id}" }
+> end
+> ```
+>
+> On a standard queue, `message_group_id` enables [SQS fair queues](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues.html), so a message group with a large backlog doesn't delay jobs in other groups. Deduplication IDs require a FIFO queue.
+>
+> ### Retries
+>
+> `retry_on` and `discard_on` work as they do with other adapters. A retry wait can be at most 12 hours. All of a job's `retry_on` rules share one attempt count. When a job raises an exception that it doesn't handle, Laravel Cloud records the job as failed in the dashboard.
+>
+> ### Local development
+>
+> Managed queues exist only on Laravel Cloud, so use another adapter in `config/environments/development.rb`:
+>
+> ```ruby theme={null}
+> config.active_job.queue_adapter = :async
+> ```
+>
+> See the [`laravel-cloud-rails` documentation](https://github.com/laravel/laravel-cloud-rails) for all configuration options.
 
 ## Operate managed queues
 

@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "eabbe57992fe98875329b546b2a13c7bfb707cc4",
-  "commit_date": "2026-11-13T15:42:10Z",
-  "commit_message": "docs: correct bearerToken null return behavior (#11458)",
-  "commit_url": "https://github.com/laravel/docs/commit/eabbe57992fe98875329b546b2a13c7bfb707cc4",
-  "sync_time": "2026-11-13T22:10:28Z"
+  "commit_sha": "b6c6fc10d6904feec3081664ce82c6c936bdf730",
+  "commit_date": "2026-11-14T20:01:30Z",
+  "commit_message": "Document HTTP assertions to test HTML (#11459)\n\nAdd documentation for :\r\n\r\n- `assertDontSeeHtml`\r\n- `assertSeeHtml`\r\n- `assertSeeHtmlInOrder`",
+  "commit_url": "https://github.com/laravel/docs/commit/b6c6fc10d6904feec3081664ce82c6c936bdf730",
+  "sync_time": "2026-11-15T06:27:00Z"
 }
