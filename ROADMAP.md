@@ -241,7 +241,7 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 - [ ] Publish to PyPI (needs a one-time trusted-publisher setup) and list the PyPI package in the MCP Registry entry
 - [ ] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
 - [ ] Pest's own documentation as a source (its site publishes an index; the fetcher reads a different index format)
-- [ ] A persistent, user-writable location for documentation updates on a `pip` install
+- [x] A persistent, user-writable location for documentation updates on a `pip` install
 - [ ] An evaluation set for search ranking; today it is checked against a handful of queries
 
 ---

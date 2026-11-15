@@ -18,6 +18,8 @@ class TestSetupServerEnvironment:
         args = argparse.Namespace(
             log_level="INFO",
             docs_path=str(temp_dir),
+            update_docs=False,
+            force_update=False,
             version="12.x",
             transport="stdio"
         )
@@ -32,6 +34,8 @@ class TestSetupServerEnvironment:
         args = argparse.Namespace(
             log_level="DEBUG",
             docs_path=str(temp_dir),
+            update_docs=False,
+            force_update=False,
             version="12.x",
             transport="http",
             host="localhost",
@@ -48,6 +52,8 @@ class TestSetupServerEnvironment:
         args = argparse.Namespace(
             log_level="INFO",
             docs_path=str(temp_dir),
+            update_docs=False,
+            force_update=False,
             version="invalid",
             transport="stdio"
         )

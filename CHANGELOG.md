@@ -18,6 +18,20 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- **Documentation updates on an installed package are kept.** `--update-docs`
+  used to write into the package directory, where a reinstall or an upgrade
+  replaced it and some environments could not write at all. On an install
+  from a wheel (`pip`, `uvx`) the update now goes to a per-user directory:
+  `~/Library/Application Support/laravel-mcp-companion/docs` on macOS,
+  `~/.local/share/laravel-mcp-companion/docs` on Linux and
+  `%LOCALAPPDATA%\laravel-mcp-companion\docs` on Windows, or wherever
+  `LARAVEL_MCP_COMPANION_HOME` points. The server reads whichever copy is
+  newer, the user's or the one the installed version shipped with. An explicit
+  `--docs-path`, the Docker image and a clone behave as before.
+  `platformdirs` is now a declared dependency; it was already installed
+  through FastMCP.
+
 ### Fixed
 - **The Docker image is published for arm64 again.** Every image from the end
   of January 2026 through v0.15.0 was linux/amd64 only, so it ran under

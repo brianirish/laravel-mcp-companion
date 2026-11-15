@@ -109,8 +109,27 @@ laravel-mcp-companion
 In an MCP client config, use `uvx` as the command and
 `["--from", "git+https://github.com/brianirish/laravel-mcp-companion", "laravel-mcp-companion"]`
 as the arguments. The options in the next section are passed the same way, after
-`laravel-mcp-companion`. An install carries the documentation as it was at that
-commit; `--update-docs` refreshes it in place.
+`laravel-mcp-companion`.
+
+An install made this way (with `uvx` or `pip`) carries the documentation as it
+was on the day you installed it. Starting the server with `--update-docs`
+fetches the current documentation and stores it in a per-user directory, where
+a reinstall or an upgrade does not touch it:
+
+| System | Directory |
+|--------|-----------|
+| macOS | `~/Library/Application Support/laravel-mcp-companion/docs` |
+| Linux | `~/.local/share/laravel-mcp-companion/docs` (or under `$XDG_DATA_HOME`) |
+| Windows | `%LOCALAPPDATA%\laravel-mcp-companion\docs` |
+
+To keep it elsewhere, set `LARAVEL_MCP_COMPANION_HOME` to a directory; the
+documentation goes in `docs` inside it. The server compares that directory
+with the documentation that came with the installed version and reads the
+newer of the two. Delete the directory to return to the documentation that
+came with the install.
+
+The Docker image, and a clone of this repository, hold one copy of the
+documentation and update it in place.
 
 ### Configuration Options
 
@@ -127,7 +146,7 @@ docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest --force-updat
 | Option | Description | Default |
 |--------|-------------|---------|
 | `--version VERSION` | Laravel version answered from by default, e.g. `11.x` (env: `VERSION`) | The newest |
-| `--docs-path PATH` | Documentation directory (env: `DOCS_PATH`) | The copy that ships with the image or package |
+| `--docs-path PATH` | Documentation directory (env: `DOCS_PATH`) | The copy that ships with the image or package, or your updated copy if it is newer |
 | `--transport TRANSPORT` | `stdio`, or `http` to serve over HTTP (env: `TRANSPORT`) | `stdio` |
 | `--port PORT` | Port for the HTTP transport (env: `PORT`) | `8081` |
 | `--server-name NAME` | Name the server reports to clients (env: `SERVER_NAME`) | `LaravelMCPCompanion` |
