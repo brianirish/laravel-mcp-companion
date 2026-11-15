@@ -14,8 +14,8 @@ Builds run in GitHub Actions. The workflows are in `.github/workflows/`:
 | Docs sync watch | `docs-sync-watch.yml` | a schedule, daily |
 
 Each can also be started from the Actions tab, or with `gh workflow run`.
-GitHub starts scheduled workflows late: the sync is scheduled for 00:17 UTC,
-and its first run started six hours after that.
+GitHub may start a scheduled workflow late: the sync is scheduled for 00:17
+UTC, and its first run began six hours after that.
 The nightly sync pushes with the `PAT_FOR_WORKFLOWS` repository secret, a
 personal access token. When that token expires the sync fails at its first
 step and says so.
