@@ -7,13 +7,15 @@ Builds run in GitHub Actions. The workflows are in `.github/workflows/`:
 | Workflow | File | Started by |
 |----------|------|------------|
 | CI | `ci.yaml` | every pull request and every push to `main` |
-| Docs update | `docs-update.yaml` | a schedule, nightly at 00:17 UTC |
+| Docs update | `docs-update.yaml` | a schedule, nightly |
 | Release image | `release.yaml` | a `vX.Y.Z` or `docs-*` tag |
 | Publish to MCP Registry | `publish-mcp.yml` | a `vX.Y.Z` tag |
 | Publish to PyPI | `publish-pypi.yml` | by hand |
 | Docs sync watch | `docs-sync-watch.yml` | a schedule, daily |
 
 Each can also be started from the Actions tab, or with `gh workflow run`.
+GitHub may start a scheduled workflow late: the sync is scheduled for 00:17
+UTC, and its first run began six hours after that.
 The nightly sync pushes with the `PAT_FOR_WORKFLOWS` repository secret, a
 personal access token. When that token expires the sync fails at its first
 step and says so.
