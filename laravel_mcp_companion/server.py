@@ -26,7 +26,7 @@ from starlette.responses import JSONResponse, Response
 
 import time
 
-from . import __version__, resource_path
+from . import __version__, docs_location, resource_path
 from .tools import ToolContext, register_all
 from .metrics import MetricsMiddleware, registry as metrics_registry, render_prometheus
 from fastmcp.server.transforms.search import BM25SearchTransform
@@ -87,7 +87,7 @@ def parse_arguments():
         "--docs-path",
         type=str,
         default=os.environ.get("DOCS_PATH"),
-        help="Path to Laravel documentation directory (default: ./docs, env: DOCS_PATH)"
+        help="Path to Laravel documentation directory (default: the copy that ships with the project, or the user's updated copy; env: DOCS_PATH)"
     )
     parser.add_argument(
         "--server-name",
@@ -262,18 +262,23 @@ def parse_arguments():
 
     return args
 
-def setup_docs_path(user_path: Optional[str] = None) -> Path:
-    """Set up and validate the docs directory path."""
+def setup_docs_path(user_path: Optional[str] = None, for_update: bool = False) -> Path:
+    """The documentation directory to serve, created if it is missing.
+
+    A path the caller gives is used as it is. Without one, docs_location
+    decides: a checkout or the Docker image has one copy; an installed wheel
+    reads the newer of its bundled copy and the user's own, and an update
+    always goes to the user's own.
+    """
     if user_path:
         docs_path = Path(user_path).resolve()
+    elif for_update:
+        docs_path = docs_location.updating_path().resolve()
     else:
-        # The corpus that ships with the project: inside the package in an
-        # installed wheel, at the repository root in a checkout.
-        docs_path = resource_path("docs").resolve()
-    
-    # Create directory if it doesn't exist
+        docs_path = docs_location.reading_path().resolve()
+
     docs_path.mkdir(parents=True, exist_ok=True)
-    
+
     return docs_path
 
 def clear_file_cache():
@@ -377,7 +382,7 @@ def setup_server_environment(args: argparse.Namespace) -> Path:
     logger.setLevel(getattr(logging, args.log_level))
 
     # Setup docs path
-    docs_path = setup_docs_path(args.docs_path)
+    docs_path = setup_docs_path(args.docs_path, for_update=bool(args.update_docs or args.force_update))
     logger.info(f"Using docs path: {docs_path}")
 
     if args.version not in SUPPORTED_VERSIONS:

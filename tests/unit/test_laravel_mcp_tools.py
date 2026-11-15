@@ -123,7 +123,7 @@ class TestUtilityFunctions:
     def test_setup_docs_path_default(self, temp_dir):
         """With no path given, the corpus that ships with the project is used and created if absent."""
         shipped = temp_dir / "shipped" / "docs"
-        with patch('laravel_mcp_companion.server.resource_path', return_value=shipped):
+        with patch('laravel_mcp_companion.server.docs_location.reading_path', return_value=shipped):
             result = companion_server.setup_docs_path()
 
         assert result == shipped.resolve()

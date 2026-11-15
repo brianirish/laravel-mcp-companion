@@ -17,6 +17,7 @@ dependencies = [
     "uvicorn>=0.38.0",
     "starlette>=1.3.1",
     "toon-format>=1.2.0,<2",
+    "platformdirs>=4",
 ]
 keywords = ["laravel", "mcp", "documentation", "ai", "modelcontextprotocol", "php", "companion"]
 classifiers = [
