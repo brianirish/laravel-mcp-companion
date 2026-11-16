@@ -54,6 +54,7 @@ released code.
    - `uv.lock`: run `uv lock`.
    - `server.json`: `version`, and the tag in the image `identifier`.
    - `README.md`: the `## Features (vX.Y.Z)` heading.
+   - `OPERATIONS.md`: the version tag in the image tag table.
    - `ROADMAP.md`: the `## Current Version: vX.Y.Z` line.
    - `CHANGELOG.md`: rename `Unreleased` to the version and date, add a new
      empty `Unreleased`, and update the compare links at the bottom.
@@ -63,8 +64,8 @@ released code.
    README heading or the ROADMAP line disagrees with `pyproject.toml`, or if
    the version is more than one bump ahead of the newest tag.
    `tests/unit/test_api_reference.py` fails if `API.md` is stale. Nothing
-   checks the changelog, the lockfile, or the two other places the README
-   names the version (the status note at the top and the image tag table).
+   checks the changelog, the lockfile, or the image tag table in
+   `OPERATIONS.md`, which names the version in one row.
 3. **Merge it** once CI passes.
 4. **Publish the GitHub release** for `vX.Y.Z` targeting `main`, with notes
    taken from the changelog.

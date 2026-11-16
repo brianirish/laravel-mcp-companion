@@ -35,6 +35,13 @@ docs-only commit and contains no code change.
   `platformdirs` is now a declared dependency; it was already installed
   through FastMCP.
 
+### Documentation
+- The README is cut to what the server is, what it holds, how to install it
+  and what its tools do. Options, tool listing modes, keeping the
+  documentation current, running over HTTP and the output format are in the
+  new [OPERATIONS.md](OPERATIONS.md); development setup is in
+  CONTRIBUTING.md.
+
 ### Fixed
 - **The Docker image is published for arm64 again.** Every image from the end
   of January 2026 through v0.15.0 was linux/amd64 only, so it ran under

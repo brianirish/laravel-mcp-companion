@@ -39,21 +39,67 @@ Enhancement suggestions are welcome! Please include:
 
 #### Pull Request Guidelines
 
-- Update the README.md with details of changes if applicable
+- Update README.md or OPERATIONS.md with details of changes if applicable
 - Update the example code if applicable
 - The PR should work on Python 3.12, the version the project requires
 - A change to a tool's arguments or output changes `tests/protocol/contract.json` and `API.md`; regenerate both and say so in the changelog
 - Include relevant tests if possible
 
-## Development Setup
+## Development
 
-1. Fork and clone the repository
-2. Install dependencies: `uv sync` (installs what `uv.lock` pins, development tools included)
-3. Create a test directory with some markdown files for testing
+### Prerequisites
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/)
+- Node.js 22+ (for the MCP Inspector)
 
-## Testing
+### Setup
+```bash
+git clone https://github.com/brianirish/laravel-mcp-companion
+cd laravel-mcp-companion
+uv sync                    # creates .venv from uv.lock, development tools included
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```
 
-Please ensure your changes are tested before submitting a pull request.
+### Running Tests
+```bash
+# The default suite, with coverage
+pytest --cov --cov-report=html
+
+# Unit tests only
+pytest tests/unit/
+
+# Integration tests only
+pytest tests/integration/
+
+# Protocol compliance tests
+pytest tests/protocol/ -m protocol
+
+# End-to-end and benchmark suites (not run by default)
+pytest -m e2e --no-cov
+pytest -m bench --no-cov -s
+```
+
+### Manual Testing with MCP Inspector
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) provides a visual UI for testing MCP servers.
+
+```bash
+# Launch Inspector (opens browser at http://localhost:6274)
+npx @modelcontextprotocol/inspector python -m laravel_mcp_companion --transform-mode none
+
+# With specific version
+npx @modelcontextprotocol/inspector python -m laravel_mcp_companion --transform-mode none --version 11.x
+```
+
+Use the Inspector to:
+- **Tools tab**: Test all tools with auto-generated input forms
+- **Resources tab**: Browse `laravel://`, `laravel-external://` and `laravel-package://` resources
+
+### Code Quality
+```bash
+ruff check --fix .     # Linting
+mypy --ignore-missing-imports .  # Type checking
+black .                # Formatting
+```
 
 ## Documentation
 
