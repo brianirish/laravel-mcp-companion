@@ -246,7 +246,7 @@ As well as allowing a static value, the ` badgeColor() ` method also accepts a f
 
 ### Lazy loading tab badges
 
-If you have expensive queries powering your tab badges, the initial page load may be slow. You can lazy load tab badges using the ` lazyLoadedBadge() ` method, which will load the badge values asynchronously after the page has rendered:
+If you have expensive queries powering your tab badges, the initial page load may be slow. You can lazy load tab badges using the ` lazyLoadedBadge() ` method, which loads the badge values in a separate request when the tab bar enters the viewport:
 
 ```php
 use Filament\Schemas\Components\Tabs;
