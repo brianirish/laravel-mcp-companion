@@ -47,6 +47,7 @@ API.md
 MIGRATING.md
 VERSIONING.md
 RELEASING.md
+OPERATIONS.md
 hatch_build.py
 CONTRIBUTING.md
 test_docker_args.sh

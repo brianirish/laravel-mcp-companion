@@ -16,8 +16,8 @@ version:
   given under [Errors in API.md](API.md#errors).
 - **The resource templates.** `laravel://`, `laravel-external://` and
   `laravel-package://`, and the kinds of path each accepts.
-- **The command line.** The flags and environment variables in the README's
-  configuration table.
+- **The command line.** The flags and environment variables in the options
+  table of [OPERATIONS.md](OPERATIONS.md#options).
 - **The image tags.** What `:latest`, a version tag and a `docs-` tag mean.
 
 `tests/protocol/contract.json` is the machine-readable record of the first
