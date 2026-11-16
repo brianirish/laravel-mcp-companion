@@ -3,8 +3,9 @@
 A checkout and the Docker image hold one copy of the documentation, beside
 the package, and update it in place. An installed wheel holds its copy inside
 the package directory: a reinstall replaces it, and some environments cannot
-write there. So on a wheel install an update goes to a directory of the
-user's own, and the server reads whichever copy is newer.
+write there. So a wheel install serves and updates a copy in a directory of
+the user's own, made from the bundled one and remade when a newer package
+ships newer documentation.
 """
 
 import json
@@ -64,33 +65,56 @@ class TestTheUserDirectory:
 
 
 class TestReading:
-    def test_a_wheel_install_reads_its_bundled_copy_by_default(self, wheel):
-        bundled, _ = wheel
-        assert docs_location.reading_path() == bundled
+    def test_a_wheel_install_reads_a_user_copy_made_from_the_bundled_one(self, wheel):
+        """The server reads the directory updates are written to. Read from the
+        package directory, a later update_laravel_docs call would write there:
+        lost on reinstall, and refused where the package cannot be written."""
+        bundled, user = wheel
+        assert docs_location.reading_path() == user
+        assert "bundled" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
 
-    def test_a_newer_user_copy_is_read_instead(self, wheel):
+    def test_a_newer_user_copy_is_kept(self, wheel):
         bundled, user = wheel
         make_docs(user, "2026-07-01", "updated")
         assert docs_location.reading_path() == user
+        assert "updated" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
 
-    def test_a_user_copy_as_new_as_the_bundled_one_is_read(self, wheel):
+    def test_a_user_copy_as_new_as_the_bundled_one_is_kept(self, wheel):
         """It was fetched after the package was built, so its services and
         packages are at least as new even when the framework date ties."""
         bundled, user = wheel
         make_docs(user, "2026-06-01", "updated")
         assert docs_location.reading_path() == user
+        assert "updated" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
 
-    def test_an_older_user_copy_does_not_shadow_a_newer_package(self, wheel):
+    def test_an_older_user_copy_is_replaced_by_a_newer_package(self, wheel):
         """Upgrading the package must not leave the user on last year's
         update."""
         bundled, user = wheel
         make_docs(user, "2026-01-01", "old update")
-        assert docs_location.reading_path() == bundled
+        assert docs_location.reading_path() == user
+        assert "bundled" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
 
-    def test_an_empty_user_directory_is_not_a_copy(self, wheel):
+    def test_an_empty_user_directory_is_filled(self, wheel):
         bundled, user = wheel
         user.mkdir(parents=True)
-        assert docs_location.reading_path() == bundled
+        assert docs_location.reading_path() == user
+        assert (user / "12.x" / "queues.md").is_file()
+
+    def test_where_the_user_directory_cannot_be_written_the_bundled_copy_is_read(
+        self, wheel, monkeypatch, caplog
+    ):
+        """A read-only home must not stop the server from starting."""
+        bundled, user = wheel
+
+        def refused(src, dst, **kwargs):
+            raise PermissionError("read-only file system")
+
+        monkeypatch.setattr(docs_location.shutil, "copytree", refused)
+        with caplog.at_level("WARNING", logger=docs_location.logger.name):
+            assert docs_location.reading_path() == bundled
+        assert str(user) in caplog.text
+        assert not user.exists()
 
     def test_a_checkout_reads_the_docs_beside_it_whatever_the_user_holds(self, checkout):
         beside, user = checkout
@@ -132,6 +156,19 @@ class TestUpdating:
         assert "bundled" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
         assert not (user / "12.x" / "dropped.md").exists()
 
+    def test_losing_a_race_to_another_server_is_not_a_failure(self, wheel, monkeypatch):
+        """Two clients start a server each at the same moment. Both copy; the
+        slower finds the directory already in place."""
+        bundled, user = wheel
+
+        def other_server_finished_first(src, dst, **kwargs):
+            make_docs(user, "2026-06-01", "the other server's copy")
+            raise OSError("Directory not empty")
+
+        monkeypatch.setattr(docs_location.shutil, "copytree", other_server_finished_first)
+        assert docs_location.updating_path() == user
+        assert "other server" in (user / "12.x" / "queues.md").read_text(encoding="utf-8")
+
     def test_a_failed_copy_leaves_no_half_written_user_directory(self, wheel, monkeypatch):
         bundled, user = wheel
 
@@ -154,14 +191,12 @@ class TestTheServerUsesIt:
         assert server.setup_docs_path(str(given)) == given.resolve()
         assert server.setup_docs_path(str(given), for_update=True) == given.resolve()
 
-    def test_serving_reads_and_updating_writes_the_user_copy(self, wheel):
+    def test_serving_and_updating_use_the_same_user_copy(self, wheel):
         from laravel_mcp_companion import server
 
         bundled, user = wheel
-        assert server.setup_docs_path() == bundled.resolve()
-        assert server.setup_docs_path(for_update=True) == user.resolve()
-        # The update wrote there, so the next start reads there.
         assert server.setup_docs_path() == user.resolve()
+        assert server.setup_docs_path(for_update=True) == user.resolve()
 
     @pytest.mark.parametrize("flags, expected", [
         ([], False), (["--update-docs"], True), (["--force-update"], True),

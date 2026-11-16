@@ -5,10 +5,10 @@ beside the package, and update it in place.
 
 An installed wheel holds its copy inside the package directory. Updating it
 there does not last: a reinstall or an upgrade replaces the directory, and
-some environments cannot write to it at all. So on a wheel install an update
-goes to a directory of the user's own, and the server reads whichever of the
-two copies is newer. An upgrade that ships newer documentation than the
-user's last update is therefore not hidden behind it.
+some environments cannot write to it at all. So a wheel install serves and
+updates a copy in a directory of the user's own. The copy is made from the
+bundled one at first start, and made again when an upgrade ships newer
+documentation than the copy holds.
 """
 
 import logging
@@ -79,28 +79,36 @@ def _user_copy_is_current(bundled: Path, user: Path) -> bool:
 
 
 def reading_path() -> Path:
-    """The documentation directory the server reads when none is given."""
-    bundled = bundled_docs_path()
-    if not is_wheel_install():
-        return bundled
+    """The documentation directory the server serves when none is given.
 
-    user = user_docs_path()
-    if _user_copy_is_current(bundled, user):
-        return user
-    if user.is_dir() and any(user.iterdir()):
-        logger.info(
-            "The documentation in %s is older than the copy this version ships with; "
-            "reading the shipped copy. --update-docs refreshes it.", user
+    On a wheel install this is the user's copy, the same directory an update
+    writes to. The server keeps the path it starts with, and the
+    update_laravel_docs tool writes to that path while the server runs, so
+    serving the bundled copy would send those updates into the package
+    directory.
+
+    Where the user's directory cannot be written, the bundled copy is served.
+    A read-only home should not stop the server from starting.
+    """
+    try:
+        return updating_path()
+    except OSError as error:
+        bundled = bundled_docs_path()
+        logger.warning(
+            "Could not prepare the documentation directory %s (%s). Serving the copy "
+            "that ships with this version from %s; documentation updates will not "
+            "outlast a reinstall.", user_docs_path(), error, bundled,
         )
-    return bundled
+        return bundled
 
 
 def updating_path() -> Path:
     """The documentation directory an update writes to when none is given.
 
     On a wheel install this is the user's copy, created from the bundled one
-    when it is missing or older. Starting from an older copy would keep pages
-    the newer package has since dropped.
+    when it is missing or older. An older copy is replaced, not updated: a
+    newer package is otherwise hidden behind last year's fetch, and updating
+    from the old copy would keep pages the newer package has dropped.
     """
     bundled = bundled_docs_path()
     if not is_wheel_install():
@@ -108,7 +116,13 @@ def updating_path() -> Path:
 
     user = user_docs_path()
     if not _user_copy_is_current(bundled, user):
-        _replace_with_copy(bundled, user)
+        try:
+            _replace_with_copy(bundled, user)
+        except OSError:
+            # Two servers started together both make the copy, and the slower
+            # one cannot move its own into place. The copy it wanted is there.
+            if not _user_copy_is_current(bundled, user):
+                raise
     return user
 
 
