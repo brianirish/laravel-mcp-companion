@@ -267,8 +267,9 @@ def setup_docs_path(user_path: Optional[str] = None, for_update: bool = False) -
 
     A path the caller gives is used as it is. Without one, docs_location
     decides: a checkout or the Docker image has one copy; an installed wheel
-    reads the newer of its bundled copy and the user's own, and an update
-    always goes to the user's own.
+    serves and updates a copy in the user's own directory. An update asked
+    for at startup fails if that directory cannot be written; serving falls
+    back to the bundled copy.
     """
     if user_path:
         docs_path = Path(user_path).resolve()
