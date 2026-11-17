@@ -96,5 +96,5 @@
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://laravel.com/cloud/docs/llms.txt",
-  "cached_at": 1794810338.246285
+  "cached_at": 1794901995.0050573
 }

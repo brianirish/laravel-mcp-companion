@@ -1,6 +1,6 @@
 Source: https://laravel.com/forge/docs/sites/network.md
 
-# Network
+# Sites Network
 
 > Learn how Laravel Forge can manage your site’s redirect and security rules.
 

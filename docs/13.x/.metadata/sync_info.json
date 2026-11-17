@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "623f59945b4db18566fcb6a10bdc1a7b17242daf",
-  "commit_date": "2026-11-15T15:00:36Z",
-  "commit_message": "Add getScoutKeyType to the Scout custom key example (#11461)",
-  "commit_url": "https://github.com/laravel/docs/commit/623f59945b4db18566fcb6a10bdc1a7b17242daf",
-  "sync_time": "2026-11-16T06:25:15Z"
+  "commit_sha": "4dc3b34cb19e04cd3ab9468119c7fbf554c680d2",
+  "commit_date": "2026-11-16T21:49:48Z",
+  "commit_message": "[13.x] Document value, valueOrFail, and soleValue methods (missing docs) (#11469)\n\n* [13.x] Document value, valueOrFail, and soleValue Eloquent methods\n\n* [13.x] Document soleValue query builder method",
+  "commit_url": "https://github.com/laravel/docs/commit/4dc3b34cb19e04cd3ab9468119c7fbf554c680d2",
+  "sync_time": "2026-11-17T07:52:53Z"
 }
