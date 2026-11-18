@@ -18,6 +18,13 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+## [1.0.0-rc1] - 2026-11-18
+
+The first release candidate for 1.0.0. It changes no tool, argument or result
+field from 0.15. `:latest`, `pip install laravel-mcp-companion` and
+`uvx laravel-mcp-companion` stay on 0.15.1; ask for the candidate by name:
+`uvx laravel-mcp-companion@1.0.0rc1`, or the image tag `:v1.0.0-rc1`.
+
 ### Added
 - **The package is on PyPI**, from 0.15.1: `uvx laravel-mcp-companion` or
   `pip install laravel-mcp-companion`. The README gives both the `uvx` and the
@@ -667,7 +674,8 @@ failing without any signal, and CI itself had not run since 2026-08-04.
 - Startup reads the supported-version list from cache with a 24-hour TTL, and
   all network calls have timeouts.
 
-[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.15.1...HEAD
+[Unreleased]: https://github.com/brianirish/laravel-mcp-companion/compare/v1.0.0-rc1...HEAD
+[1.0.0-rc1]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.15.1...v1.0.0-rc1
 [0.15.1]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/brianirish/laravel-mcp-companion/compare/v0.13.0...v0.14.0

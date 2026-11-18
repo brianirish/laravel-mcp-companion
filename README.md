@@ -111,7 +111,7 @@ With Docker:
 Then ask your assistant *"how current are your Laravel docs?"*. It should answer with a date and a
 list of sources.
 
-## Features (v0.15.1)
+## Features (v1.0.0-rc1)
 
 Twelve tools. [API.md](API.md) documents every argument and result field.
 

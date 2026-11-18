@@ -848,7 +848,7 @@ wheels = [
 
 [[package]]
 name = "laravel-mcp-companion"
-version = "0.15.1"
+version = "1.0.0rc1"
 source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
