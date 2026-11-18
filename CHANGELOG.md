@@ -22,6 +22,9 @@ docs-only commit and contains no code change.
 - **The package is on PyPI**, from 0.15.1: `uvx laravel-mcp-companion` or
   `pip install laravel-mcp-companion`. The README gives both the `uvx` and the
   Docker way to add the server to a client.
+- **Install links in the README** for Cursor, VS Code and VS Code Insiders. Each
+  adds the `uvx` server. `scripts/install_links.py` produces them, and a test
+  decodes the ones in the README and checks the configuration they carry.
 
 ### Changed
 - A `vX.Y.Z` tag now publishes to PyPI as well as building the image; the
