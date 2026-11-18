@@ -47,7 +47,7 @@ three things:
 
 Between releases, the nightly documentation sync tags `docs-YYYY-MM-DD` on
 `main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The
-Release image workflow builds that tag as the newest release's code with that
+Release image workflow builds that tag as the newest stable release's code with that
 night's `docs/`, and pushes it as `:latest`. So `:latest` is always
 released code. Nightly documentation is not published to PyPI: a `pip`
 or `uvx` install has the documentation of its release until its user updates
