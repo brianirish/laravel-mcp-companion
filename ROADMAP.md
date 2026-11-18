@@ -28,7 +28,9 @@ features and not as the point of the project.
 - **A curated catalog** of 42 packages, with legacy ones flagged
 - **Twelve tools** with declared output schemas, structured errors and a recorded contract
 - **A nightly sync** with a health report for every source
-- **An installable Python package** as well as the Docker image, both carrying the documentation
+- **A Python package on PyPI** (`uvx laravel-mcp-companion`) as well as the Docker image, both
+  carrying the documentation; the image is built for amd64 and arm64
+- **Install links** for Cursor and VS Code in the README
 
 ---
 
@@ -223,10 +225,22 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 
 ---
 
+## ✅ v0.15.1 - On PyPI (COMPLETED)
+**Released: November 2026. No change to the tools**
+
+- [x] Published to PyPI; a release tag now publishes the image, the PyPI package and the MCP Registry entry
+- [x] A `pip` or `uvx` install keeps documentation updates in a per-user directory, where an upgrade does not remove them
+- [x] The Docker image is built for arm64 again; every image from January 2026 to v0.15.0 was amd64 only
+- [x] CI, the nightly sync and the image build moved back to GitHub Actions
+- [x] README cut to the essentials, with the operating detail in [OPERATIONS.md](OPERATIONS.md)
+
+---
+
 ## v1.0.0 - First Stable Release
 **Timing: when the conditions below hold, not on a date**
 
 1.0.0 freezes the surface that 0.15 introduced. No features are planned between the two.
+`v1.0.0-rc1` is the release candidate: the same tools as 0.15, with what has merged since 0.15.1.
 
 ### Conditions
 The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In short:
@@ -238,8 +252,11 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 - [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
 
 ### Not yet done
-- [x] Publish to PyPI. 0.15.1 is the first version there. The MCP Registry entry lists the PyPI package from the release after it
-- [ ] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
+- [x] Publish to PyPI. 0.15.1 is the first version there. The MCP Registry entry lists the PyPI package from 1.0.0-rc1
+- [x] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
+- [x] Install links for Cursor and VS Code
+- [x] Version checks and the release steps carry a release candidate
+- [ ] A patch release on an older line once a newer tag exists; the version check rejects it today. Needed for the first security fix to 1.x after a 2.0
 - [ ] Pest's own documentation as a source (its site publishes an index; the fetcher reads a different index format)
 - [x] A persistent, user-writable location for documentation updates on a `pip` install
 - [ ] An evaluation set for search ranking; today it is checked against a handful of queries
