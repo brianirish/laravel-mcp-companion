@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "laravel-mcp-companion"
 version = "0.15.1"
-description = "A Laravel developer's MCP companion. Get the absolute best advice, recommendations, and up-to-date documentation for the entire Laravel ecosystem."
+description = "MCP server that keeps the Laravel docs for every version from 6.x to 13.x on your machine, with first-party services and popular packages. Works offline."
 authors = [{name = "Brian Irish", email = "irishb@gmail.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}

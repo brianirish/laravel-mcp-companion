@@ -24,6 +24,8 @@ def test_server_json_exists_and_names_the_server():
     # Reverse-DNS with exactly one slash, per the registry schema
     assert re.fullmatch(r"[a-zA-Z0-9.-]+/[a-zA-Z0-9._-]+", data["name"])
     assert data["description"]
+    # The registry rejects a description longer than this.
+    assert len(data["description"]) <= 100
     assert data["$schema"].endswith("/server.schema.json")
 
 

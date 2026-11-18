@@ -27,6 +27,9 @@ docs-only commit and contains no code change.
   decodes the ones in the README and checks the configuration they carry.
 
 ### Changed
+- The one-line description in the MCP Registry entry and on PyPI says what the
+  server holds: every Laravel version from 6.x to 13.x, kept on the machine.
+  Both take effect at the next release.
 - A `vX.Y.Z` tag now publishes to PyPI as well as building the image; the
   PyPI workflow was run by hand before. The MCP Registry entry lists the PyPI
   package beside the image, starting with the next release, and the registry
