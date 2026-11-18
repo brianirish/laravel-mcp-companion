@@ -99,7 +99,11 @@ class TestDocsUpdater:
         mock_urlopen.side_effect = mock_responses
         
         # Should retry and succeed
-        with patch('laravel_mcp_companion.docs_updater.time.sleep'):  # Speed up test
+        import time
+        clock = MagicMock(wraps=time)
+        clock.sleep = Mock()
+        # Replace the updater's view of `time`, not `time.sleep` for every thread.
+        with patch('laravel_mcp_companion.docs_updater.time', clock):
             result = docs_updater_instance.get_latest_commit()
             assert result["sha"] == "abc123"
 
@@ -875,36 +879,62 @@ class TestVersionSupport:
         assert versions == ["12.x"]
 
 
-@pytest.mark.slow
-class TestNetworkOperations:
-    """Test network operations (marked as slow)."""
+def _archive(top_level: str) -> bytes:
+    """A zip like the one GitHub serves for a branch: one directory of pages."""
+    import io
+    import zipfile
 
-    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
-    def test_download_with_network_issues(self, mock_urlopen, docs_updater_instance):
-        """Test download handling with various network issues."""
-        # Simulate network timeout, then success
-        responses = [
-            Exception("Network timeout"),
-            MagicMock()
-        ]
-        
-        success_response = MagicMock()
-        success_response.__enter__ = lambda self: self
-        success_response.__exit__ = lambda self, *args: None
-        responses[1] = success_response
-        
-        mock_urlopen.side_effect = responses
-        
-        # Should retry and handle the error gracefully
-        with patch('laravel_mcp_companion.docs_updater.time.sleep'), \
-             patch('laravel_mcp_companion.docs_updater.tempfile.TemporaryDirectory'), \
-             patch('laravel_mcp_companion.docs_updater.zipfile.ZipFile'):
-            
-            try:
-                docs_updater_instance.download_documentation()
-            except Exception:
-                # Expected to fail after retries, but shouldn't crash the application
-                pass
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr(f"{top_level}/installation.md", "# Installation\n")
+    return buffer.getvalue()
+
+
+def _response(body: bytes) -> MagicMock:
+    import io
+
+    response = MagicMock()
+    response.__enter__.return_value = io.BytesIO(body)
+    return response
+
+
+class TestDownloadRetries:
+    """download_documentation retries a failed download.
+
+    Only the updater's own view of `time` is replaced. Patching `time.sleep`
+    itself replaces it for every thread in the process for as long as the
+    test runs.
+    """
+
+    @pytest.fixture
+    def no_waiting(self):
+        import time
+
+        clock = MagicMock(wraps=time)
+        clock.sleep = Mock()
+        with patch("laravel_mcp_companion.docs_updater.time", clock):
+            yield clock.sleep
+
+    @patch("laravel_mcp_companion.docs_updater.urllib.request.urlopen")
+    def test_a_download_that_fails_once_is_retried(self, mock_urlopen, docs_updater_instance, no_waiting):
+        mock_urlopen.side_effect = [Exception("Network timeout"), _response(_archive("docs-12.x"))]
+
+        extracted = docs_updater_instance.download_documentation()
+
+        assert extracted.name == "docs-12.x"
+        assert (extracted / "installation.md").read_text() == "# Installation\n"
+        assert mock_urlopen.call_count == 2
+        assert no_waiting.call_count == 1
+
+    @patch("laravel_mcp_companion.docs_updater.urllib.request.urlopen")
+    def test_a_download_that_keeps_failing_raises_after_four_attempts(self, mock_urlopen, docs_updater_instance, no_waiting):
+        mock_urlopen.side_effect = Exception("Network timeout")
+
+        with pytest.raises(Exception, match="Network timeout"):
+            docs_updater_instance.download_documentation()
+
+        assert mock_urlopen.call_count == 4
+        assert no_waiting.call_count == 3
 
 
 class TestMainFunction:
