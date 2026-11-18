@@ -87,7 +87,7 @@ uvx --from git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-c
 Then ask your assistant *"how current are your Laravel docs?"*. It should answer with a date and a
 list of sources.
 
-## Features (v0.15.0)
+## Features (v0.15.1)
 
 Twelve tools. [API.md](API.md) documents every argument and result field.
 
