@@ -141,15 +141,23 @@ find and run the rest. That keeps tool descriptions out of the model's context.
 
 ## Keeping the documentation current
 
-The project refetches every source each night and publishes a new image. To get it:
+The project refetches every source each night.
 
-```bash
-docker pull ghcr.io/brianirish/laravel-mcp-companion:latest
-```
+- **Docker:** each night's documentation is published as a new image. Pull it:
 
-Or ask your assistant to update its Laravel docs, and it will fetch them itself.
-[OPERATIONS.md](OPERATIONS.md#keeping-the-documentation-current) covers image tags, keeping
-fetched documentation in a Docker volume, and where a `pip` or `uvx` install stores it.
+  ```bash
+  docker pull ghcr.io/brianirish/laravel-mcp-companion:latest
+  ```
+
+- **`uvx` or `pip`:** the package carries the documentation as it was on its release date, and
+  the nightly documentation is not published to PyPI. Ask your assistant to update its Laravel
+  docs and the server fetches them from their sources. The update is kept in a directory of your
+  own, so it outlasts an upgrade.
+
+Asking the assistant works with Docker too, but a container started with `--rm` loses the update
+when it stops. [OPERATIONS.md](OPERATIONS.md#keeping-the-documentation-current) covers image
+tags, keeping fetched documentation in a Docker volume, and where a `pip` or `uvx` install
+stores it.
 
 ## More
 
