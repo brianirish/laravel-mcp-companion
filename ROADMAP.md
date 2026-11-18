@@ -18,7 +18,7 @@ features and not as the point of the project.
 
 ---
 
-## Current Version: v0.15.0
+## Current Version: v0.15.1
 
 ### What it does today
 - **Framework documentation** for Laravel 6.x through 13.x, with version comparison

@@ -95,7 +95,7 @@ Which documentation an image holds depends on its tag:
 | Tag | Code | Documentation |
 |-----|------|---------------|
 | `:latest` | the newest release | refreshed nightly |
-| `:v0.15.0` and other version tags | that release | as it was on the release date |
+| `:v0.15.1` and other version tags | that release | as it was on the release date |
 | `:docs-YYYY-MM-DD` | the newest release as of that date | that night's sync |
 
 ### Fetching without a new image
