@@ -549,6 +549,16 @@ def build_auth_provider(args) -> Optional["TokenVerifier"]:
     return harden_verifier(StaticTokenVerifier(tokens=tokens, required_scopes=args.auth_required_scope or None))
 
 
+def _semver(version: str) -> str:
+    """The project version as semver.
+
+    A release candidate is 1.0.0rc1 in pyproject.toml and on PyPI, and
+    1.0.0-rc1 in the git tag, the image tag and the registry. A final version
+    is the same in both and is returned as it is.
+    """
+    return re.sub(r"(?<=\d)rc(\d+)$", r"-rc\1", version)
+
+
 def _registry_metadata() -> Dict[str, Any]:
     """The repo's server.json with the running server's version stamped in.
 
@@ -556,14 +566,17 @@ def _registry_metadata() -> Dict[str, Any]:
     from a later commit should describe itself, not the file's snapshot.
     """
     data = json.loads(resource_path("server.json").read_text(encoding="utf-8"))
-    data["version"] = SERVER_VERSION
+    data["version"] = _semver(SERVER_VERSION)
     for package in data.get("packages", []):
         identifier = package.get("identifier", "")
         if ":" in identifier:
             # OCI packages have no separate version field (the registry
             # rejects one); the tag keeps its leading v because the image
             # is tagged with the git tag verbatim.
-            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:v{SERVER_VERSION}"
+            package["identifier"] = f"{identifier.rsplit(':', 1)[0]}:v{_semver(SERVER_VERSION)}"
+        elif package.get("registryType") == "pypi":
+            # PyPI lists the package under the project version as written.
+            package["version"] = SERVER_VERSION
     return data
 
 
