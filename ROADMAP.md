@@ -238,7 +238,7 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 - [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
 
 ### Not yet done
-- [ ] Publish to PyPI (needs a one-time trusted-publisher setup) and list the PyPI package in the MCP Registry entry
+- [x] Publish to PyPI. 0.15.1 is the first version there. The MCP Registry entry lists the PyPI package from the release after it
 - [ ] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
 - [ ] Pest's own documentation as a source (its site publishes an index; the fetcher reads a different index format)
 - [x] A persistent, user-writable location for documentation updates on a `pip` install

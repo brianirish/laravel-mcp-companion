@@ -64,6 +64,26 @@ def parse_version(value: str) -> tuple[int, int, int] | None:
     return tuple(int(part) for part in match.groups())  # type: ignore[return-value]
 
 
+def release_tag(version: str) -> str:
+    """The git tag, and so the image tag, a project version is released under.
+
+    A release candidate is versioned 1.0.0rc1 in pyproject.toml, the form PyPI
+    takes, and tagged v1.0.0-rc1.
+    """
+    return "v" + re.sub(r"(?<=\d)(a|b|rc)(\d+)$", r"-\1\2", version)
+
+
+@pytest.mark.parametrize("version,tag", [
+    ("0.15.1", "v0.15.1"),
+    ("1.0.0", "v1.0.0"),
+    ("1.0.0rc1", "v1.0.0-rc1"),
+    ("1.0.0rc12", "v1.0.0-rc12"),
+    ("1.1.0b2", "v1.1.0-b2"),
+])
+def test_release_tag_keeps_the_hyphen_a_prerelease_is_tagged_with(version, tag):
+    assert release_tag(version) == tag
+
+
 def is_release_successor(tag: str, manifest: str) -> bool:
     """Whether `manifest` is the tag's version or the next release after it.
 
@@ -192,12 +212,22 @@ def test_server_json_version_matches_pyproject():
 
     data = json.loads((REPO_ROOT / "server.json").read_text(encoding="utf-8"))
     assert data["version"] == project_version()
-    pkg = data["packages"][0]
+    packages = {pkg["registryType"]: pkg for pkg in data["packages"]}
+    assert set(packages) == {"oci", "pypi"}
+
     # OCI packages carry no separate version field (the live registry rejects
     # one); the canonical identifier is the whole reference. Its tag keeps the
     # leading v because the image is tagged with the git tag verbatim.
-    assert "version" not in pkg
-    assert pkg["identifier"].endswith(f":v{project_version()}")
+    image = packages["oci"]
+    assert "version" not in image
+    assert image["identifier"].endswith(f":{release_tag(project_version())}")
+
+    # The PyPI package is named by the project name and an exact version.
+    wheel = packages["pypi"]
+    assert wheel["identifier"] == "laravel-mcp-companion"
+    assert wheel["version"] == project_version()
+    assert wheel["runtimeHint"] == "uvx"
+    assert wheel["transport"] == {"type": "stdio"}
 
 
 def test_package_json_is_gone():

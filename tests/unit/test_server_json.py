@@ -27,15 +27,34 @@ def test_server_json_exists_and_names_the_server():
     assert data["$schema"].endswith("/server.schema.json")
 
 
+def package(registry_type: str) -> dict:
+    found = [pkg for pkg in server_json()["packages"] if pkg["registryType"] == registry_type]
+    assert len(found) == 1, f"expected one {registry_type} package"
+    return found[0]
+
+
+def test_server_json_declares_the_image_and_the_pypi_package_and_nothing_else():
+    assert sorted(pkg["registryType"] for pkg in server_json()["packages"]) == ["oci", "pypi"]
+
+
 def test_server_json_declares_the_oci_package():
-    data = server_json()
-    packages = data["packages"]
-    assert len(packages) == 1
-    pkg = packages[0]
-    assert pkg["registryType"] == "oci"
+    pkg = package("oci")
     assert pkg["identifier"].startswith("ghcr.io/brianirish/laravel-mcp-companion:")
     assert pkg["transport"]["type"] == "stdio"
     assert pkg["runtimeHint"] == "docker"
+
+
+def test_server_json_declares_the_pypi_package():
+    pkg = package("pypi")
+    assert pkg["identifier"] == "laravel-mcp-companion"
+    assert pkg["transport"]["type"] == "stdio"
+    assert pkg["runtimeHint"] == "uvx"
+
+
+def test_readme_carries_the_line_the_registry_checks_pypi_ownership_by():
+    # The registry reads the package's README from PyPI, which is this file.
+    text = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    assert f"mcp-name: {SERVER_NAME}" in text
 
 
 def test_dockerfile_carries_registry_ownership_label():
