@@ -27,6 +27,9 @@ docs-only commit and contains no code change.
   decodes the ones in the README and checks the configuration they carry.
 
 ### Changed
+- The support window in `VERSIONING.md` is confirmed and no longer marked as
+  a proposal: the newest release gets fixes, and after a new major the
+  previous one gets security fixes for six months.
 - The one-line description in the MCP Registry entry and on PyPI says what the
   server holds: every Laravel version from 6.x to 13.x, kept on the machine.
   Both take effect at the next release.

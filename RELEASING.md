@@ -167,7 +167,8 @@ The final release after a candidate is an ordinary release: `1.0.0` in
       Docs update or Release image run fails, and the issue
       `.github/workflows/docs-sync-watch.yml` opens when no `docs-` tag has
       appeared for four days.
-- [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
+- [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
+      Confirmed on 2026-11-18.
 - [ ] The README makes no claim a test or a command in this file does not
       back.
 

@@ -235,7 +235,7 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 - [ ] The nightly sync has run green for 14 consecutive nights, every source healthy
 - [ ] `docker run` works on amd64 and arm64, and `pip install` works from PyPI
 - [ ] The failure email and the stale-sync alarm have each been seen to fire
-- [ ] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
+- [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
 
 ### Not yet done
 - [x] Publish to PyPI. 0.15.1 is the first version there. The MCP Registry entry lists the PyPI package from the release after it
