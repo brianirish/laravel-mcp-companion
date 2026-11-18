@@ -72,7 +72,7 @@ it.
 
    `tests/unit/test_version_consistency.py` fails if `server.json`, the
    README heading or the ROADMAP line disagrees with `pyproject.toml`, or if
-   the version is more than one bump ahead of the newest tag.
+   the version is behind the newest tag or more than one release ahead of it.
    `tests/unit/test_api_reference.py` fails if `API.md` is stale. Nothing
    checks the changelog, the lockfile, or the image tag table in
    `OPERATIONS.md`, which names the version in one row.
@@ -89,6 +89,61 @@ the same either way. If the two tags were pushed within a few minutes of each
 other, check that `:latest` reports the new version (`/healthz` over HTTP, or
 the `initialize` response). If it does not, run the Release image workflow by
 hand with the version tag.
+
+## Cutting a release candidate
+
+A release candidate goes through the steps above. Only `rcN` is supported;
+the version test rejects alpha, beta, dev and post versions. Two things
+differ from a final release.
+
+**The version is written in two forms.** PyPI takes `1.0.0rc1`. The git tag,
+the image tag and the MCP Registry take the hyphenated form.
+
+| Where | What it holds for 1.0.0 rc1 |
+|-------|-----------------------------|
+| `pyproject.toml` `version` (and so `uv.lock`, `SERVER_VERSION`, `/healthz`, the `initialize` response) | `1.0.0rc1` |
+| `server.json` `version` | `1.0.0-rc1` |
+| `server.json` image `identifier` | `ghcr.io/brianirish/laravel-mcp-companion:v1.0.0-rc1` |
+| `server.json` PyPI package `version` | `1.0.0rc1` |
+| `README.md` heading | `## Features (v1.0.0-rc1)` |
+| `ROADMAP.md` line | `## Current Version: v1.0.0-rc1` |
+| `OPERATIONS.md` image tag table | `:v1.0.0-rc1` |
+| `CHANGELOG.md` heading | `## [1.0.0-rc1] - YYYY-MM-DD` |
+| The git tag and the GitHub release | `v1.0.0-rc1` |
+
+`tests/unit/test_version_consistency.py` checks the `pyproject.toml`,
+`server.json`, README and ROADMAP rows. From a final release it accepts the
+first candidate of the next patch, minor or major version (`0.15.1` to
+`0.15.2rc1`, `0.16.0rc1` or `1.0.0rc1`). From a candidate it accepts the next
+candidate or the final version (`1.0.0rc1` to `1.0.0rc2` or `1.0.0`). It
+fails on a skipped candidate, and on a `v*` tag that is neither `vX.Y.Z` nor
+`vX.Y.Z-rcN`.
+
+The PyPI workflow compares the tag with `pyproject.toml` after removing the
+hyphen, and the registry workflow writes each form into `server.json` from
+the tag, so both accept `v1.0.0-rc1` as it is.
+
+**Tick "Set as a pre-release" when publishing the GitHub release.** No
+workflow reads that box. It keeps GitHub's "Latest" label on the last final
+release.
+
+What a candidate does not change:
+
+- `:latest` stays on the newest final release. The candidate's image is
+  pushed as `:v1.0.0-rc1` only, and the nightly `docs-` builds keep using the
+  newest final release's code (`scripts/release_tree.sh`, tested in
+  `tests/unit/test_release_tree.py`).
+- `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` keep
+  installing the newest final release. pip and uv leave a pre-release out
+  unless it is asked for: `uvx laravel-mcp-companion@1.0.0rc1`, or
+  `pip install laravel-mcp-companion==1.0.0rc1`.
+
+In step 5, check `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:v1.0.0-rc1 --help`
+and `uvx laravel-mcp-companion@1.0.0rc1 --help`, and that `:latest` still
+reports the last final version.
+
+The final release after a candidate is an ordinary release: `1.0.0` in
+`pyproject.toml`, `v1.0.0` as the tag.
 
 ## Conditions for tagging 1.0.0
 

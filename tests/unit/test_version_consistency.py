@@ -11,6 +11,7 @@ declares `requires-python = ">=3.12"`, so it is always available on a supported
 interpreter; CI installs 3.12 explicitly rather than inheriting the runner's.
 """
 
+import os
 import re
 import subprocess
 import tomllib
@@ -40,28 +41,83 @@ def project_version() -> str:
     return pyproject()["project"]["version"]
 
 
-def newest_release_tag() -> str | None:
-    """The highest v* tag that represents an actual software release."""
+def version_tags(repo: Path = REPO_ROOT) -> list[str] | None:
+    """Every v* tag, in no particular order. None when git cannot say."""
     try:
         result = subprocess.run(
-            ["git", "tag", "--list", "v*", "--sort=-v:refname"],
-            cwd=REPO_ROOT, capture_output=True, text=True, timeout=10,
+            ["git", "tag", "--list", "v*"],
+            cwd=repo, capture_output=True, text=True, timeout=10,
         )
     except (OSError, subprocess.SubprocessError):
         return None
     if result.returncode != 0:
         return None
-    for tag in (line.strip() for line in result.stdout.splitlines()):
-        if tag and tag not in NON_RELEASE_TAGS:
-            return tag
-    return None
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
-def parse_version(value: str) -> tuple[int, int, int] | None:
-    match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)", value.strip())
+# (major, minor, patch, candidate). The candidate is None for a final release.
+Version = tuple[int, int, int, int | None]
+
+_NUMBER = r"(0|[1-9]\d*)"
+_CORE = rf"{_NUMBER}\.{_NUMBER}\.{_NUMBER}"
+PROJECT_VERSION = re.compile(rf"{_CORE}(?:rc([1-9]\d*))?")   # 1.0.0, 1.0.0rc1
+TAG = re.compile(rf"v{_CORE}(?:-rc([1-9]\d*))?")             # v1.0.0, v1.0.0-rc1
+
+
+def _parsed(pattern: re.Pattern[str], value: str) -> Version | None:
+    match = pattern.fullmatch(value)
     if not match:
         return None
-    return tuple(int(part) for part in match.groups())  # type: ignore[return-value]
+    major, minor, patch, candidate = match.groups()
+    return int(major), int(minor), int(patch), int(candidate) if candidate else None
+
+
+def parse_project_version(value: str) -> Version | None:
+    """Reads the form pyproject.toml and PyPI use: X.Y.Z or X.Y.ZrcN.
+
+    Release candidates are the only pre-release read. Alpha, beta, dev, post
+    and local versions are not versions this project releases.
+    """
+    return _parsed(PROJECT_VERSION, value)
+
+
+def parse_tag(value: str) -> Version | None:
+    """Reads the form a release tag uses: vX.Y.Z or vX.Y.Z-rcN."""
+    return _parsed(TAG, value)
+
+
+def is_project_version(value: str) -> bool:
+    return parse_project_version(value) is not None
+
+
+def release_order(version: Version) -> tuple[int, int, int, int, int]:
+    """Sort key: candidates of X.Y.Z in number order, then X.Y.Z itself."""
+    major, minor, patch, candidate = version
+    return (major, minor, patch, 1 if candidate is None else 0, candidate or 0)
+
+
+def newest_release_tag(repo: Path = REPO_ROOT) -> str | None:
+    """The highest v* tag that represents an actual software release.
+
+    Ordered here, not by git: `git tag --sort=-v:refname` lists v1.0.0-rc1
+    above v1.0.0 unless `versionsort.suffix` is configured.
+    """
+    releases = [
+        (release_order(parsed), tag)
+        for tag in version_tags(repo) or []
+        if tag not in NON_RELEASE_TAGS and (parsed := parse_tag(tag)) is not None
+    ]
+    return max(releases)[1] if releases else None
+
+
+def unreadable_version_tags(repo: Path = REPO_ROOT) -> list[str] | None:
+    """v* tags that `newest_release_tag` passes over without being told to."""
+    tags = version_tags(repo)
+    if tags is None:
+        return None
+    return sorted(
+        tag for tag in tags if tag not in NON_RELEASE_TAGS and parse_tag(tag) is None
+    )
 
 
 def release_tag(version: str) -> str:
@@ -84,25 +140,56 @@ def test_release_tag_keeps_the_hyphen_a_prerelease_is_tagged_with(version, tag):
     assert release_tag(version) == tag
 
 
+def registry_version(version: str) -> str:
+    """The semver form the MCP Registry is given: the tag without its v."""
+    return release_tag(version).removeprefix("v")
+
+
+def roadmap_version(text: str) -> str | None:
+    match = re.search(r"^## Current Version:[ \t]*(v\S+)[ \t]*$", text, re.MULTILINE)
+    return match.group(1) if match else None
+
+
+def readme_version(text: str) -> str | None:
+    match = re.search(r"^## Features \((v[^)\s]+)\)[ \t]*$", text, re.MULTILINE)
+    return match.group(1) if match else None
+
+
 def is_release_successor(tag: str, manifest: str) -> bool:
     """Whether `manifest` is the tag's version or the next release after it.
 
-    "Next release" means exactly one bump in exactly one slot, with the lower
-    slots reset -- 0.10.0 may become 0.10.1, 0.11.0 or 1.0.0 and nothing else.
+    From a final release, "next release" means exactly one bump in exactly one
+    slot, with the lower slots reset -- 0.10.0 may become 0.10.1, 0.11.0 or
+    1.0.0 -- or the first release candidate of one of those: 0.10.1rc1,
+    0.11.0rc1 or 1.0.0rc1.
+
+    From a release candidate, the next release is the next candidate of the
+    same version or that version itself: 1.0.0rc1 may become 1.0.0rc2 or 1.0.0.
+
     Anything further ahead skipped a release; anything behind is the drift this
     guard exists to catch.
+
+    `tag` is read as a tag (v1.0.0-rc1) and `manifest` as a project version
+    (1.0.0rc1). Either one written in the other's form is not a successor.
     """
-    current = parse_version(tag)
-    proposed = parse_version(manifest)
+    current = parse_tag(tag)
+    proposed = parse_project_version(manifest)
     if current is None or proposed is None:
         return False
 
-    major, minor, patch = current
+    major, minor, patch, candidate = current
+    if candidate is not None:
+        return proposed in {
+            current,
+            (major, minor, patch, candidate + 1),
+            (major, minor, patch, None),
+        }
+
+    bumps = [(major, minor, patch + 1), (major, minor + 1, 0), (major + 1, 0, 0)]
     return proposed in {
         current,
-        (major, minor, patch + 1),
-        (major, minor + 1, 0),
-        (major + 1, 0, 0),
+        *((*bump, None) for bump in bumps),
+        *((*bump, 1) for bump in bumps),
     }
 
 
@@ -142,26 +229,191 @@ class TestReleaseSuccessor:
         assert not is_release_successor("v0.10.0", "not-a-version")
         assert not is_release_successor("vlatest", "0.11.0")
 
+    @pytest.mark.parametrize("tag,manifest", [
+        ("v0.15.1", "1.0.0rc1"),      # first candidate of the next major
+        ("v0.15.1", "0.16.0rc1"),     # first candidate of the next minor
+        ("v0.15.1", "0.15.2rc1"),     # first candidate of the next patch
+        ("v1.0.0-rc1", "1.0.0rc1"),   # steady state, the candidate is out
+        ("v1.0.0-rc1", "1.0.0rc2"),   # next candidate in flight
+        ("v1.0.0-rc1", "1.0.0"),      # the final release in flight
+        ("v1.0.0-rc12", "1.0.0rc13"),
+        ("v1.0.0", "1.0.1rc1"),
+    ])
+    def test_a_release_candidate_is_one_step_like_any_release(self, tag, manifest):
+        assert is_release_successor(tag, manifest)
 
-def test_pyproject_version_is_valid_semver():
+    @pytest.mark.parametrize("tag,manifest", [
+        ("v0.15.1", "1.0.0rc2"),      # the first candidate is rc1
+        ("v0.15.1", "2.0.0rc1"),      # candidate of a version that skips a major
+        ("v0.15.1", "0.17.0rc1"),     # candidate of a version that skips a minor
+        ("v0.15.1", "1.1.0rc1"),      # major bump must reset minor
+        ("v0.15.1", "0.15.1rc1"),     # candidate of a version already released
+        ("v1.0.0-rc1", "1.0.0rc3"),   # skipped a candidate
+        ("v1.0.0-rc2", "1.0.0rc1"),   # behind by a candidate
+        ("v1.0.0-rc1", "0.15.1"),     # behind: the manifest never left the last stable
+        ("v1.0.0-rc1", "0.15.2"),
+        ("v1.0.0-rc1", "0.16.0"),
+        ("v1.0.0-rc1", "1.0.1"),      # skipped the final release
+        ("v1.0.0-rc1", "1.1.0"),
+        ("v1.0.0-rc1", "1.1.0rc1"),   # candidate of another version
+        ("v1.0.0-rc1", "2.0.0"),
+        ("v1.0.0", "1.0.0rc1"),       # behind: the final is out
+        ("v1.0.0", "1.0.0rc2"),
+    ])
+    def test_a_release_candidate_out_of_step_is_drift(self, tag, manifest):
+        assert not is_release_successor(tag, manifest)
+
+    @pytest.mark.parametrize("tag,manifest", [
+        ("v1.0.0rc1", "1.0.0rc1"),    # a tag carries the hyphen
+        ("v1.0.0-rc1", "1.0.0-rc1"),  # the manifest does not
+        ("v0.15.1", "v0.15.1"),       # the manifest has no leading v
+        ("0.15.1", "0.15.1"),         # a tag does
+        ("v1.0.0-rc0", "1.0.0rc1"),   # candidates count from 1
+        ("v0.15.1", "1.0.0rc0"),
+        ("v0.15.1", "1.0.0rc01"),
+        ("v0.15.1", "1.0.0b1"),       # only rc is supported
+        ("v0.15.1", "1.0.0a1"),
+        ("v1.0.0-beta1", "1.0.0"),
+        ("v0.15.1", "1.0.0.dev1"),
+        ("v0.15.1", "1.0.0rc1.post1"),
+    ])
+    def test_each_side_is_read_in_its_own_form_only(self, tag, manifest):
+        assert not is_release_successor(tag, manifest)
+
+
+def git(cwd, *args):
+    subprocess.run(
+        ["git", *args], cwd=cwd, check=True, capture_output=True, text=True,
+        env={**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.test",
+             "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.test"},
+    )
+
+
+@pytest.fixture
+def tagged_repo(tmp_path):
+    """Returns a function that makes a repository carrying the given tags."""
+    def make(*tags):
+        git(tmp_path, "init", "-q", "-b", "main")
+        git(tmp_path, "commit", "-q", "--allow-empty", "-m", "a commit to tag")
+        for tag in tags:
+            git(tmp_path, "tag", tag)
+        return tmp_path
+    return make
+
+
+class TestNewestReleaseTag:
+    """Ordering is done here and not by `git tag --sort=-v:refname`.
+
+    Without `versionsort.suffix` configured, git's version sort puts
+    v1.0.0-rc1 after v1.0.0, so it would report a candidate as newer than the
+    final release it preceded.
+    """
+
+    @pytest.mark.parametrize("tags,newest", [
+        (["v0.15.0", "v0.15.1"], "v0.15.1"),
+        (["v0.9.9", "v0.10.0", "v0.9.145"], "v0.10.0"),          # numeric, not text
+        (["v0.15.1", "v1.0.0-rc1"], "v1.0.0-rc1"),               # a candidate is newer than the last stable
+        (["v0.15.1", "v1.0.0-rc1", "v1.0.0-rc2"], "v1.0.0-rc2"),
+        (["v1.0.0-rc2", "v1.0.0-rc10"], "v1.0.0-rc10"),
+        (["v0.15.1", "v1.0.0-rc1", "v1.0.0-rc2", "v1.0.0"], "v1.0.0"),  # the final wins
+        (["v1.0.0", "v1.0.0-rc2", "v1.0.1-rc1"], "v1.0.1-rc1"),
+        (["v0.10.0", "v0.10.1"], "v0.10.0"),                     # NON_RELEASE_TAGS
+        (["v0.15.1", "docs-2026-11-17"], "v0.15.1"),             # a docs tag is not a release
+        (["v0.15.1", "v1.0.0-beta1", "vlatest"], "v0.15.1"),     # not understood, so not chosen
+    ])
+    def test_picks_the_newest_release(self, tagged_repo, tags, newest):
+        assert newest_release_tag(tagged_repo(*tags)) == newest
+
+    def test_no_tags_is_none(self, tagged_repo):
+        assert newest_release_tag(tagged_repo()) is None
+
+    def test_not_a_repository_is_none(self, tmp_path):
+        # Stop git from walking up into whatever repository holds tmp_path.
+        (tmp_path / ".git").write_text("not a git directory")
+        assert newest_release_tag(tmp_path) is None
+
+    def test_tags_this_guard_cannot_read_are_reported(self, tagged_repo):
+        repo = tagged_repo("v0.10.1", "v0.15.1", "v1.0.0-rc1", "v1.0.0-beta1", "vlatest", "docs-2026-11-17")
+        assert unreadable_version_tags(repo) == ["v1.0.0-beta1", "vlatest"]
+
+
+def test_every_version_tag_is_one_this_guard_can_read():
+    """`newest_release_tag` passes over a v* tag it cannot parse.
+
+    Such a tag (v2.0.0-beta1, say) would otherwise be invisible to the drift
+    check below, so its existence fails here instead.
+    """
+    unreadable = unreadable_version_tags()
+    if unreadable is None:
+        pytest.skip("no git tags available (shallow clone or non-git checkout)")
+    assert unreadable == [], (
+        f"These v* tags are neither vX.Y.Z nor vX.Y.Z-rcN: {unreadable}. Teach "
+        "parse_tag the form, or add the tag to NON_RELEASE_TAGS if it is not a "
+        "software release."
+    )
+
+
+@pytest.mark.parametrize("version,registry", [
+    ("0.15.1", "0.15.1"),
+    ("1.0.0", "1.0.0"),
+    ("1.0.0rc1", "1.0.0-rc1"),
+    ("1.0.0rc12", "1.0.0-rc12"),
+])
+def test_registry_version_is_the_tag_without_its_v(version, registry):
+    assert registry_version(version) == registry
+
+
+@pytest.mark.parametrize("version", ["0.15.1", "1.0.0", "10.20.30", "1.0.0rc1", "1.0.0rc12"])
+def test_versions_the_project_may_carry(version):
+    assert is_project_version(version)
+
+
+@pytest.mark.parametrize("version", [
+    "1.0", "1.0.0.0", "v1.0.0", "01.0.0",
+    "1.0.0-rc1",   # the tag form; PyPI and __version__ would then disagree
+    "1.0.0rc0", "1.0.0rc", "1.0.0rc01", "1.0.0.rc1", "1.0.0RC1",
+    "1.0.0a1", "1.0.0b1", "1.0.0.dev1", "1.0.0.post1", "1.0.0+local", "1.0.0rc1 ",
+])
+def test_versions_the_project_may_not_carry(version):
+    assert not is_project_version(version)
+
+
+def test_pyproject_version_is_a_release_or_a_release_candidate():
     version = project_version()
-    assert re.fullmatch(r"\d+\.\d+\.\d+", version), f"Not a semver version: {version!r}"
+    assert is_project_version(version), (
+        f"pyproject.toml version {version!r} is neither X.Y.Z nor X.Y.ZrcN"
+    )
 
 
 def test_roadmap_current_version_matches_pyproject():
-    match = re.search(r"^## Current Version:\s*v(\S+)", read("ROADMAP.md"), re.MULTILINE)
-    assert match, "ROADMAP.md is missing a '## Current Version: vX.Y.Z' line"
-    assert match.group(1) == project_version(), (
-        f"ROADMAP.md says v{match.group(1)} but pyproject.toml says {project_version()}"
+    """The line shows the tag, so a release candidate reads v1.0.0-rc1."""
+    assert roadmap_version(read("ROADMAP.md")) == release_tag(project_version()), (
+        f"ROADMAP.md says {roadmap_version(read('ROADMAP.md'))} but pyproject.toml "
+        f"says {project_version()}, which is tagged {release_tag(project_version())}"
     )
+
+
+def test_roadmap_line_is_read_whole():
+    assert roadmap_version("# Roadmap\n\n## Current Version: v0.15.1\n") == "v0.15.1"
+    assert roadmap_version("## Current Version: v1.0.0-rc1\n") == "v1.0.0-rc1"
+    assert roadmap_version("## Current Version: v1.0.0rc1\n") == "v1.0.0rc1"
+    assert roadmap_version("## Current Version: 1.0.0\n") is None
+    assert roadmap_version("no such line") is None
 
 
 def test_readme_features_heading_matches_pyproject():
-    match = re.search(r"^## Features \(v(\S+?)\)", read("README.md"), re.MULTILINE)
-    assert match, "README.md is missing a '## Features (vX.Y.Z)' heading"
-    assert match.group(1) == project_version(), (
-        f"README.md says v{match.group(1)} but pyproject.toml says {project_version()}"
+    """The heading shows the tag, so a release candidate reads v1.0.0-rc1."""
+    assert readme_version(read("README.md")) == release_tag(project_version()), (
+        f"README.md says {readme_version(read('README.md'))} but pyproject.toml "
+        f"says {project_version()}, which is tagged {release_tag(project_version())}"
     )
+
+
+def test_readme_heading_is_read_whole():
+    assert readme_version("## Features (v0.15.1)\n") == "v0.15.1"
+    assert readme_version("intro\n\n## Features (v1.0.0-rc1)\n\ntext") == "v1.0.0-rc1"
+    assert readme_version("## Features (v1.0.0rc1)\n") == "v1.0.0rc1"
+    assert readme_version("## Features\n") is None
 
 
 def test_pyproject_version_tracks_the_newest_release_tag():
@@ -211,7 +463,8 @@ def test_server_json_version_matches_pyproject():
     import json
 
     data = json.loads((REPO_ROOT / "server.json").read_text(encoding="utf-8"))
-    assert data["version"] == project_version()
+    # The registry's own version is semver: 1.0.0-rc1 for a release candidate.
+    assert data["version"] == registry_version(project_version())
     packages = {pkg["registryType"]: pkg for pkg in data["packages"]}
     assert set(packages) == {"oci", "pypi"}
 
@@ -222,7 +475,8 @@ def test_server_json_version_matches_pyproject():
     assert "version" not in image
     assert image["identifier"].endswith(f":{release_tag(project_version())}")
 
-    # The PyPI package is named by the project name and an exact version.
+    # The PyPI package is named by the project name and an exact version, in
+    # the form PyPI lists it under: 1.0.0rc1 for a release candidate.
     wheel = packages["pypi"]
     assert wheel["identifier"] == "laravel-mcp-companion"
     assert wheel["version"] == project_version()

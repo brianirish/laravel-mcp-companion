@@ -26,10 +26,10 @@ async def test_well_known_serves_stamped_server_json(http_app):
         assert res.headers["content-type"].startswith("application/json")
         data = res.json()
         assert data["name"] == "io.github.brianirish/laravel-mcp-companion"
-        assert data["version"] == companion_server.SERVER_VERSION
-        assert data["packages"][0]["identifier"].endswith(
-            f":v{companion_server.SERVER_VERSION}"
-        )
+        # Stamped from SERVER_VERSION. The form each field takes is checked
+        # in the parametrized test at the end of this file.
+        assert data["version"] == companion_server._semver(companion_server.SERVER_VERSION)
+        assert data["packages"][0]["identifier"].endswith(f":v{data['version']}")
 
 
 async def test_well_known_is_readable_without_auth(test_docs_dir, monkeypatch):
@@ -50,3 +50,23 @@ async def test_well_known_is_readable_without_auth(test_docs_dir, monkeypatch):
     async with httpx.AsyncClient(transport=transport, base_url="http://localhost") as client:
         res = await client.get("/.well-known/mcp/server.json")
         assert res.status_code == 200
+
+
+@pytest.mark.parametrize("version,registry,image_tag", [
+    ("0.15.1", "0.15.1", "v0.15.1"),
+    ("1.0.0", "1.0.0", "v1.0.0"),
+    ("1.0.0rc1", "1.0.0-rc1", "v1.0.0-rc1"),
+    ("1.0.0rc12", "1.0.0-rc12", "v1.0.0-rc12"),
+])
+def test_a_release_candidate_is_stamped_in_the_form_each_field_takes(
+    monkeypatch, version, registry, image_tag
+):
+    """SERVER_VERSION is the PyPI form, 1.0.0rc1. The registry version is
+    semver, 1.0.0-rc1, and the image is tagged with the git tag, v1.0.0-rc1."""
+    monkeypatch.setattr(companion_server, "SERVER_VERSION", version)
+    data = companion_server._registry_metadata()
+    assert data["version"] == registry
+    packages = {package["registryType"]: package for package in data["packages"]}
+    assert packages["oci"]["identifier"] == f"ghcr.io/brianirish/laravel-mcp-companion:{image_tag}"
+    assert packages["pypi"]["identifier"] == "laravel-mcp-companion"
+    assert packages["pypi"]["version"] == version

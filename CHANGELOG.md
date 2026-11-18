@@ -28,6 +28,15 @@ docs-only commit and contains no code change.
   PyPI workflow was run by hand before. The MCP Registry entry lists the PyPI
   package beside the image, starting with the next release, and the registry
   workflow waits for both before it publishes.
+- The version checks accept a release candidate: `X.Y.ZrcN` in
+  `pyproject.toml`, tagged `vX.Y.Z-rcN`. `RELEASING.md` says which form each
+  file holds.
+
+### Fixed
+- `/.well-known/mcp/server.json` wrote the project version into the image tag
+  and the registry version as it stood. For a release candidate that gave
+  `:v1.0.0rc1`, a tag no image has. It now gives `1.0.0-rc1` and
+  `:v1.0.0-rc1`, and sets the PyPI package's version to the running version.
 
 ## [0.15.1] - 2026-11-17
 
