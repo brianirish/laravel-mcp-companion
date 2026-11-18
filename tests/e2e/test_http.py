@@ -30,7 +30,9 @@ class TestHttpTransport:
             assert res.status_code == 200
             data = res.json()
             assert data["name"] == "io.github.brianirish/laravel-mcp-companion"
-            assert data["version"] == companion_server.SERVER_VERSION
+            # The registry entry carries the tag form of the version, which
+            # differs from the package version for a release candidate.
+            assert data["version"] == companion_server._semver(companion_server.SERVER_VERSION)
 
     async def test_bad_host_header_rejected(self, http_server):
         base = http_server()
