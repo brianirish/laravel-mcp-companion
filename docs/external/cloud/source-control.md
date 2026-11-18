@@ -17,6 +17,12 @@ Select a provider and go through the OAuth flow to authorize the connection.
 
 For GitHub, you may need to install the Laravel Cloud App on the GitHub account or organization that owns your repositories. The app installation controls which repositories Cloud can access. GitLab and Bitbucket do not require this step.
 
+### GitHub app permissions
+
+The Laravel Cloud GitHub app requests the **Repository creation** permission so Cloud can create new repositories when you create an application from a [starter kit](https://laravel.com/cloud/docs/applications#creating-from-starter-kits). This permission replaces the broader **Administration** permission, which also allowed deleting and transferring repositories.
+
+If you installed the app before this change, GitHub emails your account or organization owner a request to accept the updated permissions. An owner can also accept the request from the app's installation settings on GitHub. Your applications keep deploying while the request is pending, and Cloud reminds you to accept it when you create an application from a starter kit.
+
 ### Connecting the same Git to multiple Cloud accounts
 
 You can connect the same Git account to more than one Laravel Cloud user.
