@@ -60,8 +60,6 @@ such release.
 
 ## Which versions get fixes
 
-Proposed, and the maintainer's to confirm before 1.0.0:
-
 - The newest release gets bug fixes and documentation updates.
 - When a new major is released, the previous major gets security fixes for
   six months.
