@@ -46,7 +46,7 @@ To create an application from a starter kit:
 5. Assign an application name.
 6. Select your deployment region.
 
-Laravel Cloud creates a new repository in your connected GitHub account, clones the official Laravel starter kit code into it, and sets up your application for deployment.
+Laravel Cloud creates a new repository in your connected GitHub account from the starter kit's template and sets up your application for deployment.
 
 > [!NOTE]
 >

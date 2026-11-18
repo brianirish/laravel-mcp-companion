@@ -4,6 +4,14 @@ Source: https://laravel.com/cloud/docs/changelog.md
 
 See the latest Laravel Cloud updates, improvements, and platform changes.
 
+**November 16, 2026**
+
+## Updated GitHub app permissions
+
+The Laravel Cloud GitHub app now requests GitHub's new **Repository creation** permission in place of the broader **Administration** permission. Cloud only needed **Administration** to create repositories for starter kits, and **Repository creation** does exactly that without allowing repository deletion or transfer. GitHub will email your account or organization owner to accept the updated permissions. Nothing breaks while the request is pending, and Cloud reminds you to accept it when you create an application from a starter kit. Laravel starter kits are now created from template repositories, the same way as every other starter kit.
+
+[Read the GitHub app permissions documentation](https://laravel.com/cloud/docs/source-control#github-app-permissions) to learn more.
+
 **October 27, 2026**
 
 ## Cloud Scheduler
