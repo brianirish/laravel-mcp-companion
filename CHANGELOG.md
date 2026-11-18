@@ -18,6 +18,17 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+### Added
+- **The package is on PyPI**, from 0.15.1: `uvx laravel-mcp-companion` or
+  `pip install laravel-mcp-companion`. The README gives both the `uvx` and the
+  Docker way to add the server to a client.
+
+### Changed
+- A `vX.Y.Z` tag now publishes to PyPI as well as building the image; the
+  PyPI workflow was run by hand before. The MCP Registry entry lists the PyPI
+  package beside the image, starting with the next release, and the registry
+  workflow waits for both before it publishes.
+
 ## [0.15.1] - 2026-11-17
 
 ### Added

@@ -192,12 +192,22 @@ def test_server_json_version_matches_pyproject():
 
     data = json.loads((REPO_ROOT / "server.json").read_text(encoding="utf-8"))
     assert data["version"] == project_version()
-    pkg = data["packages"][0]
+    packages = {pkg["registryType"]: pkg for pkg in data["packages"]}
+    assert set(packages) == {"oci", "pypi"}
+
     # OCI packages carry no separate version field (the live registry rejects
     # one); the canonical identifier is the whole reference. Its tag keeps the
     # leading v because the image is tagged with the git tag verbatim.
-    assert "version" not in pkg
-    assert pkg["identifier"].endswith(f":v{project_version()}")
+    image = packages["oci"]
+    assert "version" not in image
+    assert image["identifier"].endswith(f":v{project_version()}")
+
+    # The PyPI package is named by the project name and an exact version.
+    wheel = packages["pypi"]
+    assert wheel["identifier"] == "laravel-mcp-companion"
+    assert wheel["version"] == project_version()
+    assert wheel["runtimeHint"] == "uvx"
+    assert wheel["transport"] == {"type": "stdio"}
 
 
 def test_package_json_is_gone():

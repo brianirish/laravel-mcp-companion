@@ -3,6 +3,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/releases)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/github/license/brianirish/laravel-mcp-companion)](https://github.com/brianirish/laravel-mcp-companion/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/laravel-mcp-companion)](https://pypi.org/project/laravel-mcp-companion/)
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/brianirish/laravel-mcp-companion/pkgs/container/laravel-mcp-companion)
 [![GitHub Stars](https://img.shields.io/github/stars/brianirish/laravel-mcp-companion?style=social)](https://github.com/brianirish/laravel-mcp-companion)
 
@@ -51,19 +52,40 @@ The catalog is revised by hand. Ask your assistant how current its documentation
 
 ## Installation
 
-The server runs as a Docker image, so [Docker](https://docs.docker.com/get-docker/) has to be
-installed and running. It is also in the
+Run it with [`uvx`](https://docs.astral.sh/uv/) or with
+[Docker](https://docs.docker.com/get-docker/), whichever you already have. Both carry the
+documentation with them. The server is on [PyPI](https://pypi.org/project/laravel-mcp-companion/)
+and in the
 [official MCP Registry](https://registry.modelcontextprotocol.io/?search=laravel-mcp-companion)
 as `io.github.brianirish/laravel-mcp-companion`.
 
 **Claude Code:**
 
 ```bash
+# with uv
+claude mcp add laravel-mcp-companion -- uvx laravel-mcp-companion
+
+# with Docker
 claude mcp add laravel-mcp-companion -- docker run --rm -i ghcr.io/brianirish/laravel-mcp-companion:latest
 ```
 
-**Claude Desktop, and most other MCP clients:** add this to the client's MCP configuration
-(Settings → Developer → Edit Config in Claude Desktop), then restart it:
+**Claude Desktop, and most other MCP clients:** add one of these to the client's MCP
+configuration (Settings → Developer → Edit Config in Claude Desktop), then restart it.
+
+With uv:
+
+```json
+{
+  "mcpServers": {
+    "laravel-mcp-companion": {
+      "command": "uvx",
+      "args": ["laravel-mcp-companion"]
+    }
+  }
+}
+```
+
+With Docker:
 
 ```json
 {
@@ -76,13 +98,8 @@ claude mcp add laravel-mcp-companion -- docker run --rm -i ghcr.io/brianirish/la
 }
 ```
 
-**Without Docker:** the project is also a Python package (3.12 or newer) with the documentation
-bundled. It is not on PyPI yet, so install it from the repository with
-[`uvx`](https://docs.astral.sh/uv/) or `pip`:
-
-```bash
-uvx --from git+https://github.com/brianirish/laravel-mcp-companion laravel-mcp-companion
-```
+`pip install laravel-mcp-companion` works too, on Python 3.12 or newer, and installs a
+`laravel-mcp-companion` command.
 
 Then ask your assistant *"how current are your Laravel docs?"*. It should answer with a date and a
 list of sources.

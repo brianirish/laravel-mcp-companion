@@ -143,6 +143,42 @@ class TestDocsUpdate:
         assert fail > tag
 
 
+class TestPyPIPublish:
+    def test_a_version_tag_publishes_and_it_can_be_run_by_hand(self):
+        found = triggers(load("publish-pypi.yml"))
+        assert found["push"]["tags"] == ["v*"]
+        assert "tag" in found["workflow_dispatch"]["inputs"]
+
+    def test_a_docs_tag_does_not_publish(self):
+        # A docs tag is main as it stands, not a release. `v*` cannot match
+        # `docs-2026-11-17`; this fails if the pattern is ever widened.
+        for pattern in triggers(load("publish-pypi.yml"))["push"]["tags"]:
+            assert pattern.startswith("v")
+
+    def test_refuses_a_tag_that_is_not_the_project_version(self):
+        assert "does not match pyproject.toml version" in text("publish-pypi.yml")
+
+    def test_authenticates_without_a_stored_token(self):
+        job = load("publish-pypi.yml")["jobs"]["publish"]
+        assert job["environment"] == "pypi"
+        assert job["permissions"]["id-token"] == "write"
+        assert "password" not in text("publish-pypi.yml")
+
+
+class TestRegistryPublish:
+    def test_waits_for_the_pypi_package_it_lists(self):
+        # The registry checks that each package it is given exists. The PyPI
+        # workflow starts on the same tag and may finish later.
+        body = text("publish-mcp.yml")
+        assert "https://pypi.org/pypi/laravel-mcp-companion/" in body
+
+    def test_stamps_each_package_by_its_registry_and_not_its_position(self):
+        body = text("publish-mcp.yml")
+        assert ".packages[0]" not in body
+        assert 'registryType == "oci"' in body
+        assert 'registryType == "pypi"' in body
+
+
 def test_no_workflow_still_points_at_harness():
     for path in WORKFLOWS.glob("*.y*ml"):
         assert "harness" not in path.read_text(encoding="utf-8").lower(), path.name

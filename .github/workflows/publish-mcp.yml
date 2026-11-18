@@ -1,10 +1,11 @@
 # Publishes the server to the official MCP Registry on version tags.
 #
 # Registry authentication uses GitHub Actions OIDC. The Release image workflow
-# builds and pushes the Docker image on the same tag; the wait step below
-# covers the race between the two, since the registry validates that the
-# referenced image exists and carries the
-# io.modelcontextprotocol.server.name label.
+# builds and pushes the Docker image on the same tag, and the PyPI workflow
+# uploads the Python package on it. The two wait steps below cover the race
+# with each, since the registry checks what it is given: that the image
+# exists and carries the io.modelcontextprotocol.server.name label, and that
+# the PyPI package exists and has the `mcp-name:` line in its README.
 #
 # Image tags carry the leading v: the image is tagged with the git tag
 # verbatim (ghcr.io/...:v0.12.0), while server.json's semver version fields
@@ -72,14 +73,33 @@ jobs:
           echo "::error::${IMAGE} never appeared; did the Release image workflow succeed?"
           exit 1
 
+      - name: Wait for the package the PyPI workflow uploads on this tag
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          # PyPI writes a release candidate as 1.0.0rc1, the tag as v1.0.0-rc1.
+          VERSION="${TAG#v}"
+          URL="https://pypi.org/pypi/laravel-mcp-companion/${VERSION/-/}/json"
+          echo "Waiting for ${URL}"
+          for attempt in $(seq 1 60); do
+            if curl -fsS -o /dev/null "${URL}" 2>/dev/null; then
+              echo "Package found after ${attempt} checks"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::${URL} never appeared; did the PyPI workflow succeed?"
+          exit 1
+
       - name: Stamp the release into server.json
         env:
           TAG: ${{ steps.release.outputs.tag }}
         run: |
           VERSION="${TAG#v}"
-          jq --arg v "${VERSION}" --arg t "${TAG}" '
+          jq --arg v "${VERSION}" --arg t "${TAG}" --arg p "${VERSION/-/}" '
             .version = $v
-            | .packages[0].identifier = (.packages[0].identifier | sub(":[^:]*$"; ":" + $t))
+            | (.packages[] | select(.registryType == "oci") | .identifier) |= sub(":[^:]*$"; ":" + $t)
+            | (.packages[] | select(.registryType == "pypi") | .version) = $p
           ' server.json > server.json.tmp
           mv server.json.tmp server.json
           cat server.json

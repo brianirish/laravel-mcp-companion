@@ -10,7 +10,7 @@ Builds run in GitHub Actions. The workflows are in `.github/workflows/`:
 | Docs update | `docs-update.yaml` | a schedule, nightly |
 | Release image | `release.yaml` | a `vX.Y.Z` or `docs-*` tag |
 | Publish to MCP Registry | `publish-mcp.yml` | a `vX.Y.Z` tag |
-| Publish to PyPI | `publish-pypi.yml` | by hand |
+| Publish to PyPI | `publish-pypi.yml` | a `vX.Y.Z` tag |
 | Docs sync watch | `docs-sync-watch.yml` | a schedule, daily |
 
 Each can also be started from the Actions tab, or with `gh workflow run`.
@@ -23,7 +23,7 @@ step and says so.
 ## The image, the registry entry and the PyPI package
 
 Publishing a GitHub release creates a `vX.Y.Z` tag on `main`. The tag starts
-two things:
+three things:
 
 - **The Docker image.** The Release image workflow builds
   `ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z` for amd64 and arm64, and
@@ -31,12 +31,14 @@ two things:
   `vX.Y.Z` is the newest stable version, the same image is pushed as
   `:latest`. A release candidate (`v1.0.0-rc1`) or a patch to an older line
   does not move `:latest`.
+- **The PyPI package.** `.github/workflows/publish-pypi.yml` builds the wheel,
+  checks that it runs from a clean environment, and uploads it. It signs in
+  through a trusted publisher on pypi.org that names this repository, that
+  workflow file and the `pypi` environment, so no token is stored. PyPI never
+  accepts a version twice: a failed run can be started again by hand with the
+  tag, but a published version cannot be replaced.
 - **The MCP Registry entry.** `.github/workflows/publish-mcp.yml` waits for
-  that image and publishes `server.json`.
-
-The PyPI package is published separately, by running
-`.github/workflows/publish-pypi.yml` by hand with the tag. It needs a trusted
-publisher configured on PyPI first; the workflow file says how.
+  that image and that package, and publishes `server.json`, which lists both.
 
 Between releases, the nightly documentation sync tags `docs-YYYY-MM-DD` on
 `main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The
@@ -52,7 +54,8 @@ released code.
    - `pyproject.toml`: `version`. This is the one place the version is
      written for the code; `SERVER_VERSION` is read from it.
    - `uv.lock`: run `uv lock`.
-   - `server.json`: `version`, and the tag in the image `identifier`.
+   - `server.json`: `version`, the tag in the image `identifier`, and the
+     `version` of the PyPI package.
    - `README.md`: the `## Features (vX.Y.Z)` heading.
    - `OPERATIONS.md`: the version tag in the image tag table.
    - `ROADMAP.md`: the `## Current Version: vX.Y.Z` line.
@@ -69,10 +72,9 @@ released code.
 3. **Merge it** once CI passes.
 4. **Publish the GitHub release** for `vX.Y.Z` targeting `main`, with notes
    taken from the changelog.
-5. **Check** that the Release image workflow succeeded, that
-   `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z --help`
-   works, and that the registry workflow succeeded.
-6. **Publish to PyPI** by running the PyPI workflow with the tag.
+5. **Check** that the Release image, PyPI and registry workflows succeeded,
+   and that `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z --help`
+   and `uvx laravel-mcp-companion@X.Y.Z --help` work.
 
 Both the version build and a nightly docs build push `:latest`, and whichever
 finishes last keeps it. Both use the release's code, so the result should be

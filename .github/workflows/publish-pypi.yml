@@ -1,28 +1,28 @@
-# Publishes a tagged release to PyPI.
+# Publishes a release to PyPI when its vX.Y.Z tag is pushed.
 #
-# Manual only, for now. PyPI trusted publishing has to be set up once by the
-# project owner before any run can succeed:
+# Authentication is GitHub Actions OIDC, through a trusted publisher set up on
+# pypi.org for this repository, this workflow file and the `pypi` environment.
+# No API token is stored anywhere. Renaming this file or the environment
+# breaks publishing until the publisher on pypi.org is changed to match.
 #
-#   1. On pypi.org, add a "pending publisher" for the project
-#      `laravel-mcp-companion`: owner `brianirish`, repository
-#      `laravel-mcp-companion`, workflow `publish-pypi.yml`, environment `pypi`.
-#   2. In this repository's settings, create an environment named `pypi`.
+# PyPI never accepts the same version twice, so a failed run can be started
+# again by hand with the tag, but a published version cannot be replaced.
 #
-# After the first successful run, add `push: tags: ["v*"]` under `on:` so a
-# release publishes itself, and add a `pypi` package to server.json so the MCP
-# Registry lists it beside the Docker image. The registry verifies ownership
-# of a PyPI package through the `mcp-name:` line in the README, which is
-# already there.
+# docs-YYYY-MM-DD tags are documentation syncs, not releases; "v*" never
+# matches them.
 #
-# Authentication is GitHub Actions OIDC. No API token is stored anywhere.
+# The MCP Registry workflow starts on the same tag and waits for the package
+# this one uploads.
 
 name: Publish to PyPI
 
 on:
+  push:
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing release tag to publish (e.g. v0.15.0)"
+        description: "Existing release tag to publish (e.g. v0.15.1)"
         required: true
         type: string
 
@@ -38,7 +38,7 @@ jobs:
       - name: Checkout the release
         uses: actions/checkout@v5
         with:
-          ref: ${{ inputs.tag }}
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -47,10 +47,11 @@ jobs:
 
       - name: Check the tag matches the project version
         env:
-          TAG: ${{ inputs.tag }}
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           VERSION="$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
-          if [ "v${VERSION}" != "${TAG}" ]; then
+          # A release candidate is tagged v1.0.0-rc1 and versioned 1.0.0rc1.
+          if [ "v${VERSION}" != "${TAG/-/}" ]; then
             echo "::error::tag ${TAG} does not match pyproject.toml version ${VERSION}"
             exit 1
           fi
