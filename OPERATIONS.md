@@ -94,9 +94,9 @@ Which documentation an image holds depends on its tag:
 
 | Tag | Code | Documentation |
 |-----|------|---------------|
-| `:latest` | the newest release | refreshed nightly |
-| `:v0.15.1` and other version tags | that release | as it was on the release date |
-| `:docs-YYYY-MM-DD` | the newest release as of that date | that night's sync |
+| `:latest` | the newest stable release | refreshed nightly |
+| `:v1.0.0-rc1` and other version tags | that release | as it was on the release date |
+| `:docs-YYYY-MM-DD` | the newest stable release as of that date | that night's sync |
 
 ### Fetching without a new image
 
@@ -151,7 +151,7 @@ This part is for the curious and for contributors.
   completely. A partial fetch removes nothing.
 
 When content has changed, the workflow opens a pull request that merges once the tests pass, tags
-the merge `docs-YYYY-MM-DD`, and builds the image from the newest release's code with that night's
+the merge `docs-YYYY-MM-DD`, and builds the image from the newest stable release's code with that night's
 documentation. `:latest` is therefore always released code. Each pull request carries a report of
 every source: how many pages were fetched, of how many, and when. A source that fetched far fewer
 pages than it should have is flagged in that report and in an issue.

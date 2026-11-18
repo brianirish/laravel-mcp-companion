@@ -63,7 +63,7 @@ such release.
 - The newest release gets bug fixes and documentation updates.
 - When a new major is released, the previous major gets security fixes for
   six months.
-- A `docs-` image is built nightly for the newest release only.
+- A `docs-` image is built nightly for the newest stable release only.
 
 ## Deprecation
 
