@@ -5,8 +5,9 @@
 # No API token is stored anywhere. Renaming this file or the environment
 # breaks publishing until the publisher on pypi.org is changed to match.
 #
-# PyPI never accepts the same version twice, so a failed run can be started
-# again by hand with the tag, but a published version cannot be replaced.
+# PyPI never accepts the same file twice, so a published version cannot be
+# replaced. A failed run can be started again by hand with the tag: that run
+# uploads whichever of the wheel and the source distribution is missing.
 #
 # docs-YYYY-MM-DD tags are documentation syncs, not releases; "v*" never
 # matches them.
@@ -75,5 +76,11 @@ jobs:
           PY
           /tmp/wheel-check/bin/laravel-mcp-companion --help > /dev/null
 
+      # PyPI refuses a file it already has. A run started by a tag fails on
+      # one, so nothing is skipped unnoticed. A run started by hand skips the
+      # files that are there and uploads the rest, which finishes an upload
+      # that stopped between the wheel and the source distribution.
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: ${{ github.event_name == 'workflow_dispatch' }}

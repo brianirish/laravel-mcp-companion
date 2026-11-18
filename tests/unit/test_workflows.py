@@ -165,6 +165,14 @@ class TestPyPIPublish:
         assert "password" not in text("publish-pypi.yml")
 
 
+    def test_a_run_by_hand_finishes_an_upload_that_stopped_part_way(self):
+        # PyPI refuses a file it already has. A tag's run stays strict; the
+        # retry by hand skips what is there and uploads what is missing.
+        steps = load("publish-pypi.yml")["jobs"]["publish"]["steps"]
+        publish = next(step for step in steps if "pypi-publish" in step.get("uses", ""))
+        assert publish["with"]["skip-existing"] == "${{ github.event_name == 'workflow_dispatch' }}"
+
+
 class TestRegistryPublish:
     def test_waits_for_the_pypi_package_it_lists(self):
         # The registry checks that each package it is given exists. The PyPI

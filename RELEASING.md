@@ -35,8 +35,13 @@ three things:
   checks that it runs from a clean environment, and uploads it. It signs in
   through a trusted publisher on pypi.org that names this repository, that
   workflow file and the `pypi` environment, so no token is stored. PyPI never
-  accepts a version twice: a failed run can be started again by hand with the
-  tag, but a published version cannot be replaced.
+  accepts the same file twice, so a published version cannot be replaced. If
+  the run fails, start the workflow by hand with the tag
+  (`gh workflow run publish-pypi.yml -f tag=vX.Y.Z`). A run started by hand
+  uploads whichever of the wheel and the source distribution PyPI does not
+  have, so it also finishes an upload that stopped after the first file.
+  "Re-run failed jobs" on the tag's own run does not: it fails on the file
+  that is already there.
 - **The MCP Registry entry.** `.github/workflows/publish-mcp.yml` waits for
   that image and that package, and publishes `server.json`, which lists both.
 
