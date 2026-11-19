@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "c82442406dec2e960d9c7b77dc74829e1edc2553",
-  "commit_date": "2026-11-17T15:43:56Z",
-  "commit_message": "[13.x] Document the JsonSchema::rules method (#11466)\n\n* [13.x] Document the JsonSchema::rules method\n\n* formatting\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/c82442406dec2e960d9c7b77dc74829e1edc2553",
-  "sync_time": "2026-11-18T07:25:17Z"
+  "commit_sha": "8395f2aa9fbc716b64e65846daf634b6c17ea97f",
+  "commit_date": "2026-11-18T13:24:37Z",
+  "commit_message": "Remove the Scout note that custom keys have no effect on the database engine (#11478)",
+  "commit_url": "https://github.com/laravel/docs/commit/8395f2aa9fbc716b64e65846daf634b6c17ea97f",
+  "sync_time": "2026-11-19T07:22:31Z"
 }
