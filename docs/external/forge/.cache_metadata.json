@@ -55,6 +55,7 @@
     "knowledge-base/networks",
     "knowledge-base/scheduled-jobs",
     "knowledge-base/source-control",
+    "knowledge-base/nginx-to-root",
     "knowledge-base/php-security-release-october-2026",
     "knowledge-base/cve-2026-31431",
     "api-reference/introduction",
@@ -63,9 +64,9 @@
     "api-reference/filtering",
     "api-reference/relationships"
   ],
-  "total_sections": 61,
+  "total_sections": 62,
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://laravel.com/forge/docs/llms.txt",
-  "cached_at": 1794986724.315406
+  "cached_at": 1795072970.2057362
 }
