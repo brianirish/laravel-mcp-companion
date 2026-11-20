@@ -144,6 +144,12 @@ DEFAULT_REQUEST_TIMEOUT = 30
 # How long a cached version list stays fresh before we ask GitHub again.
 VERSIONS_CACHE_TTL_SECONDS = 24 * 60 * 60
 
+# The versions request runs at startup, before the server reads its first
+# message, and the server carries on with the cached list when it fails. A
+# network that drops traffic without refusing it would otherwise hold the
+# client's first request for DEFAULT_REQUEST_TIMEOUT.
+VERSIONS_REQUEST_TIMEOUT = 5
+
 # Section/version names become filesystem paths, so they are restricted to a
 # conservative character set: alphanumerics, dot, dash, underscore, and single
 # forward slashes for nesting. No leading slash, no '..', no backslash, no NUL.
@@ -583,7 +589,7 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
             }
         )
 
-        with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
+        with urllib.request.urlopen(request, timeout=VERSIONS_REQUEST_TIMEOUT) as response:
             branches = json.loads(response.read().decode())
 
             version_branches = []
