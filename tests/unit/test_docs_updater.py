@@ -843,6 +843,33 @@ class TestVersionSupport:
         assert cached["versions"] == ["6.x", "12.x", "13.x"]
         assert "updated_at" in cached
 
+    @staticmethod
+    def _cache_aged(tmp_path, hours):
+        from datetime import datetime, timedelta, timezone
+        cache_file = tmp_path / ".versions_cache.json"
+        cache_file.write_text(json.dumps({
+            "versions": ["6.x", "12.x", "13.x"],
+            "updated_at": (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat(),
+        }))
+        return cache_file
+
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    def test_a_cache_under_a_day_old_is_used_without_asking_github(self, mock_urlopen, tmp_path):
+        versions = get_supported_versions(cache_file=self._cache_aged(tmp_path, 23))
+
+        assert versions == ["6.x", "12.x", "13.x"]
+        mock_urlopen.assert_not_called()
+
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    def test_a_cache_over_a_day_old_sends_one_request_to_github(self, mock_urlopen, tmp_path):
+        mock_urlopen.side_effect = OSError("offline")
+
+        versions = get_supported_versions(cache_file=self._cache_aged(tmp_path, 25))
+
+        assert versions == ["6.x", "12.x", "13.x"]
+        mock_urlopen.assert_called_once()
+        assert mock_urlopen.call_args.args[0].full_url.startswith("https://api.github.com/")
+
     @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_reads_cache_on_api_failure(self, mock_urlopen, tmp_path):
         """Test that API failure falls back to cache file."""
