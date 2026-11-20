@@ -110,7 +110,7 @@ class TestMainFunction:
             mock_updater_class.assert_called_once_with(temp_dir, DEFAULT_VERSION)
             
             # Verify server was started (stdio is default, no args needed)
-            mock_mcp.run.assert_called_once_with()
+            mock_mcp.run.assert_called_once_with(show_banner=False)
     
     @patch('laravel_mcp_companion.server.GracefulShutdown')
     @patch('laravel_mcp_companion.server.MultiSourceDocsUpdater')

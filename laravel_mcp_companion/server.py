@@ -1041,7 +1041,10 @@ def main():
             uvicorn.run(app, host=host, port=port, log_level="info")
         else:
             logger.info("Server ready. Press Ctrl+C to stop.")
-            mcp.run()
+            # FastMCP's banner asks PyPI whether a newer FastMCP exists, on
+            # every start that has no fresh cache of the answer. The README
+            # promises that the versions list is the only startup request.
+            mcp.run(show_banner=False)
     except Exception as e:
         logger.critical(f"Server error: {str(e)}")
         sys.exit(1)
