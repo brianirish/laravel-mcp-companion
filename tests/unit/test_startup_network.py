@@ -101,5 +101,5 @@ async def test_a_stdio_session_reaches_only_github(tmp_path):
         assert section.content[0].text
 
     hosts = set(log.read_text().split()) if log.exists() else set()
-    assert "api.github.com" in hosts, "the probe recorded nothing; it is not catching requests"
+    assert hosts, "the probe recorded nothing; it is not catching requests"
     assert hosts == {"api.github.com"}
