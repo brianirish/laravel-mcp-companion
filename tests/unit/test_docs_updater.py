@@ -871,6 +871,17 @@ class TestVersionSupport:
         assert mock_urlopen.call_args.args[0].full_url.startswith("https://api.github.com/")
 
     @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    def test_the_startup_request_to_github_waits_five_seconds_at_most(self, mock_urlopen, tmp_path):
+        # It runs before the server reads its first message. A network that
+        # drops traffic without refusing it would otherwise hold a client's
+        # first request for the full documentation-fetch timeout.
+        mock_urlopen.side_effect = OSError("offline")
+
+        get_supported_versions(cache_file=self._cache_aged(tmp_path, 25))
+
+        assert mock_urlopen.call_args.kwargs["timeout"] <= 5
+
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
     def test_get_supported_versions_reads_cache_on_api_failure(self, mock_urlopen, tmp_path):
         """Test that API failure falls back to cache file."""
         cache_file = tmp_path / ".versions_cache.json"
