@@ -2,6 +2,31 @@ Source: https://herd.laravel.com/docs/windows/changelog/index.md
 
 # Changelog
 
+**2.2.0**
+
+2026-11-19
+
+## New features
+
+### Clone a repository
+
+In the [Applications](https://herd.laravel.com/windows/getting-started/applications) window, click "+" and "Clone Repository", paste a URL or `owner/repo` and pick a branch. Herd clones it and walks you through the setup, pre-filled from the repository and its [`herd.yml`](https://herd.laravel.com/windows/sites/herd-yaml): PHP version, Composer and npm dependencies, `.env`, database and services. Herd uses your installed Git, so private repositories work with your SSH keys or Git Credential Manager.
+
+### Deployment details in the inspector
+
+A new Deployment row under the Deploy button in the site inspector shows the site on [Laravel Forge](https://herd.laravel.com/windows/integrations/laravel-forge) or [Laravel Cloud](https://herd.laravel.com/windows/integrations/laravel-cloud), whichever you pick. Every value copies with a click.
+
+## Fixes and Improvements
+
+* Updated the bundled Nginx to 1.30.7, which fixes the [NGINX2Root](https://laravel.com/forge/docs/knowledge-base/nginx-to-root) vulnerability
+* Expose now runs on the new 4.x client and no longer needs PHP
+* Added Node.js 26 and marked end-of-life Node versions in Settings
+* Enter opens the selected application in the Applications window
+* `herd://activate` links work when a mail client or link tracker encoded the email address
+* Unlinking a Forge site no longer needs a connected Forge account
+* Settings → AI recognizes OpenCode's built-in Claude provider as Claude Code
+* Updated OpenCode to 2.3.2, the Laravel installer to 5.33.0, Composer and the bundled CA certificates
+
 **2.1.1**
 
 2026-11-06
