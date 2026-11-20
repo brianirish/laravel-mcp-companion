@@ -61,8 +61,7 @@ and in the
 [official MCP Registry](https://registry.modelcontextprotocol.io/?search=laravel-mcp-companion)
 as `io.github.brianirish/laravel-mcp-companion`.
 
-**Cursor and VS Code** add it from a link, using `uvx`. Each shows the configuration before
-it installs anything.
+**Cursor and VS Code** add it from a link, using `uvx`.
 
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/link/mcp/install?name=laravel-mcp-companion&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJsYXJhdmVsLW1jcC1jb21wYW5pb24iXX0=)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=for-the-badge)](https://vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522laravel-mcp-companion%2522%252C%2522command%2522%253A%2522uvx%2522%252C%2522args%2522%253A%255B%2522laravel-mcp-companion%2522%255D%257D)
@@ -79,7 +78,7 @@ claude mcp add laravel-mcp-companion -- docker run --rm -i ghcr.io/brianirish/la
 ```
 
 **Claude Desktop, and most other MCP clients:** add one of these to the client's MCP
-configuration (Settings → Developer → Edit Config in Claude Desktop), then restart it.
+configuration, then restart it.
 
 With uv:
 

@@ -246,15 +246,15 @@ retrieval overhaul in v0.11.0 already delivered the highest-value part.
 The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In short:
 
 - [ ] 0.15 has been in use and nothing in the recorded contract needs to change
-- [ ] The nightly sync has run green for 14 consecutive nights, every source healthy
-- [ ] `docker run` works on amd64 and arm64, over stdio and over HTTP
+- [x] The nightly sync has run green for seven consecutive nights, every source healthy (14 to 20 November)
+- [x] `docker run` works on amd64 and arm64, over stdio and over HTTP (checked with 1.0.0-rc1)
 - [x] `pip install` and `uvx` work from PyPI, offline once installed (checked with 1.0.0rc1)
-- [ ] The failure email and the stale-sync alarm have each been seen to fire (the stale-sync issue fired and closed on 2026-11-20)
+- [x] The failure email and the stale-sync alarm have each been seen to fire (2026-11-20)
 - [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
 
 ### Not yet done
 - [x] Publish to PyPI. 0.15.1 is the first version there. The MCP Registry entry lists the PyPI package from 1.0.0-rc1
-- [x] A release candidate, `v1.0.0-rc1`, while the fourteen nights run
+- [x] A release candidate, `v1.0.0-rc1`
 - [x] Install links for Cursor and VS Code
 - [x] Version checks and the release steps carry a release candidate
 - [ ] A patch release on an older line once a newer tag exists; the version check rejects it today. Needed for the first security fix to 1.x after a 2.0

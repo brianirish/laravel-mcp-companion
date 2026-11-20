@@ -71,6 +71,23 @@ class TestCI:
     def test_can_only_read_the_repository(self):
         assert load("ci.yaml")["permissions"] == {"contents": "read"}
 
+    def test_tests_the_oldest_and_the_newest_python_the_readme_names(self):
+        """The README says Python 3.12 or newer. ci-test runs the oldest
+        version pyproject.toml allows; a second job, which the ruleset does
+        not require, runs the tests on the newest."""
+        jobs = load("ci.yaml")["jobs"]
+        pyproject = (Path(__file__).resolve().parents[2] / "pyproject.toml").read_text(encoding="utf-8")
+        oldest = re.search(r'requires-python = ">=(3\.\d+)"', pyproject).group(1)
+
+        def pythons(job: dict) -> list[str]:
+            script = "\n".join(step.get("run", "") for step in job["steps"])
+            return re.findall(r"--python (3\.\d+)", script)
+
+        assert pythons(jobs["ci-test"]) == [oldest]
+        newest = pythons(jobs["newest-python"])
+        assert newest and all(tuple(map(int, v.split("."))) > tuple(map(int, oldest.split("."))) for v in newest)
+        assert "pytest" in "\n".join(step.get("run", "") for step in jobs["newest-python"]["steps"])
+
 
 class TestReleaseImage:
     def test_builds_on_version_tags_and_docs_tags(self):

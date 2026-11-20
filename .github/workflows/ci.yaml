@@ -102,3 +102,32 @@ jobs:
         run: |
           npx --yes @modelcontextprotocol/inspector@2 --cli .venv/bin/python -m laravel_mcp_companion --method tools/list \
             | grep -q "search_laravel_docs"
+
+  newest-python:
+    # The README says Python 3.12 or newer. ci-test runs 3.12, the oldest
+    # pyproject.toml allows, from the lockfile. This runs the newest, with
+    # dependencies resolved the way `pip install laravel-mcp-companion`
+    # resolves them, since the lockfile can pin versions that predate it
+    # (beartype 0.22.9 does not import on 3.15). Raise the version when a new
+    # Python is released. The ruleset does not require this job.
+    name: newest-python
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install the package and the test tools
+        run: |
+          pipx install uv==0.13.7
+          uv venv --python 3.15
+          uv pip install -e . --group dev
+          .venv/bin/python --version
+          echo "${PWD}/.venv/bin" >> "${GITHUB_PATH}"
+
+      - name: Run tests
+        # The corpus tests check docs/ against hand-written tables, which
+        # does not depend on the Python version.
+        run: |
+          pytest -m "not e2e and not bench and not corpus" --no-cov -q
+          pytest -m e2e --no-cov -q

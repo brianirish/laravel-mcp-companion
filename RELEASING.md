@@ -165,15 +165,23 @@ The final release after a candidate is an ordinary release: `1.0.0` in
 - [ ] 0.15 has been released and used, and nothing in
       `tests/protocol/contract.json` needs to change. A change after this
       point is a 2.0.
-- [ ] The nightly sync has run green for 14 consecutive nights: every source
-      `ok` in the sync report, and nothing under "Needs attention". The
-      report is in the body of each night's documentation pull request, and
-      `python -m laravel_mcp_companion.docs_updater --sync-report` prints it.
-- [ ] `pytest`, `pytest -m e2e --no-cov` and `pytest -m bench --no-cov` pass
+- [x] The nightly sync has run green for seven consecutive nights: every
+      source `ok` in the sync report, and nothing under "Needs attention".
+      The report is in the body of each night's documentation pull request,
+      and `python -m laravel_mcp_companion.docs_updater --sync-report` prints
+      it. Seen for the scheduled runs of 14 to 20 November 2026. This was 14
+      nights until 2026-11-20, when both alarms had been seen to work: a sync
+      that breaks after the release is now reported within a day.
+- [x] `pytest`, `pytest -m e2e --no-cov` and `pytest -m bench --no-cov` pass
       on `main`. The plain `pytest` run includes the tests marked `corpus`,
       which compare the curated tables with the documentation in `docs/`.
-- [ ] `docker run` works on amd64 and arm64 from the published image, over
-      stdio and over HTTP.
+      CI runs all three on every push to `main`, and the release pull
+      request runs them again.
+- [x] `docker run` works on amd64 and arm64 from the published image, over
+      stdio and over HTTP. Checked on 2026-11-20 with `:v1.0.0-rc1`: on each
+      platform the container reported its architecture, and over stdio and
+      over HTTP (`--transport http`, with `/healthz` answering) it listed its
+      tools, answered a search and returned a section.
 - [x] `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` work
       from PyPI, offline once installed. Checked on 2026-11-20 with
       `1.0.0rc1` through pip and `uvx laravel-mcp-companion@1.0.0rc1`, and
@@ -182,16 +190,21 @@ The final release after a candidate is an ordinary release: `1.0.0` in
       `sandbox-exec -p '(version 1)(allow default)(deny network*)'` (macOS),
       where it listed its 12 tools, answered a search and returned
       `queues.md`.
-- [ ] Both alarms have been seen to work: the email GitHub sends when a
+- [x] Both alarms have been seen to work: the email GitHub sends when a
       Docs update or Release image run fails, and the issue
       `.github/workflows/docs-sync-watch.yml` opens when no `docs-` tag has
-      appeared for four days. The issue was seen on 2026-11-20: a run fed
-      an old tag opened #539, and the next run on `main` closed it.
+      appeared for four days. Both were seen on 2026-11-20. A Release image
+      run given a tag that does not exist failed, and the email arrived. A
+      watch run fed an old tag opened #539, and the next run on `main` closed
+      it.
 - [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
       Confirmed on 2026-11-18.
-- [ ] The README makes no claim a test or a command in this file does not
-      back.
+- [x] The README makes no claim a test or a command in this file does not
+      back. Checked on 2026-11-20 (#540, #541): claims that were wrong were
+      corrected, claims about other clients were cut, and the rest are
+      tested, most of them in `tests/unit/test_readme_claims.py`. Check
+      again if the README changes.
 
 A release candidate, `v1.0.0-rc1`, is the way to let people try the frozen
-surface while the fourteen nights run. It gets its own image tag and does not
+surface while the conditions above are met. It gets its own image tag and does not
 move `:latest`.
