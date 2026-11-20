@@ -79,6 +79,10 @@ async def test_a_stdio_session_reaches_only_github(tmp_path):
         **os.environ,
         "PYTHONPATH": f"{tmp_path}{os.pathsep}{REPO_ROOT}",
         "NETWORK_PROBE_LOG": str(log),
+        # A proxy taken from the environment would be recorded in place of
+        # the host it was asked for.
+        "no_proxy": "*",
+        "NO_PROXY": "*",
         # Empty homes, so nothing either library cached earlier hides a request.
         "FASTMCP_HOME": str(tmp_path / "fastmcp"),
         "LARAVEL_MCP_COMPANION_HOME": str(tmp_path / "companion"),
