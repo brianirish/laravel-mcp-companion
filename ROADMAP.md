@@ -247,8 +247,9 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 
 - [ ] 0.15 has been in use and nothing in the recorded contract needs to change
 - [ ] The nightly sync has run green for 14 consecutive nights, every source healthy
-- [ ] `docker run` works on amd64 and arm64, and `pip install` works from PyPI
-- [ ] The failure email and the stale-sync alarm have each been seen to fire
+- [ ] `docker run` works on amd64 and arm64, over stdio and over HTTP
+- [x] `pip install` and `uvx` work from PyPI, offline once installed (checked with 1.0.0rc1)
+- [ ] The failure email and the stale-sync alarm have each been seen to fire (the stale-sync issue fired and closed on 2026-11-20)
 - [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed
 
 ### Not yet done

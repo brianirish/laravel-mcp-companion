@@ -25,9 +25,10 @@ Every version stays available whatever `--version` says; it sets the default.
 |--------|-------------|---------|
 | `--version VERSION` | Laravel version answered from by default, e.g. `11.x` (env: `VERSION`) | The newest |
 | `--docs-path PATH` | Read and update the documentation in this directory (env: `DOCS_PATH`) | The copy that ships with the image or package; see [Fetching without a new image](#fetching-without-a-new-image) |
-| `--update-docs` | On startup, fetch the framework docs for the default version if Laravel has changed them | false |
-| `--force-update` | On startup, fetch them whether or not they have changed | false |
+| `--update-docs` | On startup, fetch the framework docs for the default version if Laravel has changed them (env: `UPDATE_DOCS=true`) | false |
+| `--force-update` | On startup, fetch them whether or not they have changed (env: `FORCE_UPDATE=true`) | false |
 | `--transform-mode MODE` | How tools are listed: `search`, `code`, or `none`; see [Tool listing modes](#tool-listing-modes) (env: `TRANSFORM_MODE`) | `search` |
+| `--code-mode` | Deprecated; the same as `--transform-mode code` (env: `CODE_MODE=true`) | false |
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL (env: `LOG_LEVEL`) | INFO |
 | `--server-name NAME` | Name the server reports to clients (env: `SERVER_NAME`) | `LaravelMCPCompanion` |
 | `--transport TRANSPORT` | `stdio`, or `http`; see [Running over HTTP](#running-over-http) (env: `TRANSPORT`) | `stdio` |
@@ -122,7 +123,7 @@ docker run --rm -i -v laravel-mcp-docs:/app/docs \
 
 **`uvx` or `pip`.** An install made this way keeps its documentation in a per-user directory,
 created from the bundled copy the first time the server starts. Updates go there, where a
-reinstall or an upgrade does not touch them:
+reinstall does not touch them:
 
 | System | Directory |
 |--------|-----------|

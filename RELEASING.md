@@ -81,7 +81,13 @@ it.
    taken from the changelog.
 5. **Check** that the Release image, PyPI and registry workflows succeeded,
    and that `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:vX.Y.Z --help`
-   and `uvx laravel-mcp-companion@X.Y.Z --help` work.
+   and `uvx laravel-mcp-companion@X.Y.Z --help` work. The registry lists the
+   new version as its latest when this prints it:
+
+   ```bash
+   curl -s 'https://registry.modelcontextprotocol.io/v0/servers?search=laravel-mcp-companion&version=latest' \
+     | python3 -c 'import json,sys; print(*[s["server"]["version"] for s in json.load(sys.stdin)["servers"]])'
+   ```
 
 Both the version build and a nightly docs build push `:latest`, and whichever
 finishes last keeps it. Both use the release's code, so the result should be
@@ -138,6 +144,13 @@ What a candidate does not change:
   unless it is asked for: `uvx laravel-mcp-companion@1.0.0rc1`, or
   `pip install laravel-mcp-companion==1.0.0rc1`.
 
+The MCP Registry is the exception. It has no notion of a pre-release and
+marks the candidate as the server's latest version, so anything that reads
+the latest registry entry gets the `:v1.0.0-rc1` image and the `1.0.0rc1`
+PyPI package until the final release is published. A version cannot be
+published to the registry twice, so the only way past a candidate with a
+broken entry is the next candidate.
+
 In step 5, check `docker run --rm ghcr.io/brianirish/laravel-mcp-companion:v1.0.0-rc1 --help`
 and `uvx laravel-mcp-companion@1.0.0rc1 --help`, and that `:latest` still
 reports the last final version.
@@ -161,12 +174,19 @@ The final release after a candidate is an ordinary release: `1.0.0` in
       which compare the curated tables with the documentation in `docs/`.
 - [ ] `docker run` works on amd64 and arm64 from the published image, over
       stdio and over HTTP.
-- [ ] `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` work
-      from PyPI, offline once installed.
+- [x] `pip install laravel-mcp-companion` and `uvx laravel-mcp-companion` work
+      from PyPI, offline once installed. Checked on 2026-11-20 with
+      `1.0.0rc1` through pip and `uvx laravel-mcp-companion@1.0.0rc1`, and
+      with `0.15.1` through plain `uvx`. Each was installed while online,
+      then started under
+      `sandbox-exec -p '(version 1)(allow default)(deny network*)'` (macOS),
+      where it listed its 12 tools, answered a search and returned
+      `queues.md`.
 - [ ] Both alarms have been seen to work: the email GitHub sends when a
       Docs update or Release image run fails, and the issue
       `.github/workflows/docs-sync-watch.yml` opens when no `docs-` tag has
-      appeared for four days.
+      appeared for four days. The issue was seen on 2026-11-20: a run fed
+      an old tag opened #539, and the next run on `main` closed it.
 - [x] The support window in [VERSIONING.md](VERSIONING.md) is confirmed.
       Confirmed on 2026-11-18.
 - [ ] The README makes no claim a test or a command in this file does not
