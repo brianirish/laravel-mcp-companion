@@ -2,6 +2,33 @@ Source: https://herd.laravel.com/docs/macos/changelog/index.md
 
 # Changelog
 
+**2.2.1**
+
+2026-11-19
+
+## New features
+
+### Clone a repository
+
+In the [Applications](https://herd.laravel.com/macos/getting-started/applications) window, click "+" and "Clone Repository", paste a URL or `owner/repo` and pick a branch. Herd clones it and walks you through the setup, pre-filled from the repository and its [`herd.yml`](https://herd.laravel.com/macos/sites/herd-yaml): PHP version, Composer and npm dependencies, `.env`, database and services. Private repositories work with your existing SSH keys or Git credentials.
+
+### Laravel Forge is back
+
+[Laravel Forge](https://herd.laravel.com/macos/integrations/laravel-forge) is back in the site inspector, next to [Laravel Cloud](https://herd.laravel.com/macos/integrations/laravel-cloud). A new Deployment row shows the site on the selected provider, and every value copies with a click.
+
+## Fixes and Improvements
+
+* Updated the bundled Nginx to 1.30.7, which fixes the [NGINX2Root](https://laravel.com/forge/docs/knowledge-base/nginx-to-root) vulnerability
+* Updated the Expose binary to the new major version 4.x
+* `herd restart` now restarts PHP versions that only isolated sites use, so `php.ini` changes apply to them, and `herd unisolate` stops a PHP version no site uses anymore
+* Herd no longer crashes when one of its folders can't be created
+* Fixed crashes in the PHP update check and the AI model picker
+* `herd://activate` links work when a mail client or link tracker encoded the email address
+* The mailbox picker in the Mail window shows the selected mailbox and is no longer clipped
+* Settings → AI recognizes OpenCode's built-in Claude provider as Claude Code
+* A Claude model picked before this update carries over to the matching model of the built-in Claude provider instead of being replaced by another model
+* Updated OpenCode to 2.3.2, the Laravel installer to 5.33.0, Composer and the bundled CA certificates
+
 **2.1.0**
 
 2026-11-05
