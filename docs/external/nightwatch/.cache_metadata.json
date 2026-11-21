@@ -42,5 +42,5 @@
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://nightwatch.laravel.com/docs/llms.txt",
-  "cached_at": 1795158785.0037072
+  "cached_at": 1795244665.8247344
 }
