@@ -1,11 +1,11 @@
 {
   "package": "livewire",
   "name": "Livewire",
-  "sections_count": 80,
-  "total_sections": 80,
+  "sections_count": 81,
+  "total_sections": 81,
   "success_rate": 1.0,
   "base_url": "https://livewire.laravel.com/docs/4.x",
   "source_type": "site_navigation",
   "version": "4.x",
-  "cached_at": 1795158890.4771645
+  "cached_at": 1795244808.1704626
 }

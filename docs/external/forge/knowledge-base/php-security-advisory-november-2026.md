@@ -74,12 +74,12 @@ Patched packages usually reach these repositories shortly after the upstream rel
 
 ### Patch status by Ubuntu version
 
-Patched PHP packages are published separately for each Ubuntu version and processor architecture, so availability depends on your server:
+Patched PHP packages are now available for every supported Ubuntu version on both x86 and ARM servers:
 
 | Ubuntu Version | x86 (amd64) | ARM (arm64) |
 | - | - | - |
-| 26.04 LTS | **Patched** | **Patched**, except PHP 8.3 and 8.5 (not yet available) |
-| 24.04 LTS | **Patched** | **Patched**, except PHP 8.3, 8.4, and 8.5 (not yet available) |
+| 26.04 LTS | **Patched** | **Patched** |
+| 24.04 LTS | **Patched** | **Patched** |
 | 22.04 LTS | **Patched** | **Patched** |
 | 20.04 LTS and earlier | **Not patched** | **Not patched** |
 
@@ -89,7 +89,7 @@ To check your server's architecture, run:
 dpkg --print-architecture
 ```
 
-We will update this page as soon as the remaining ARM packages are available. Until then, updating an affected PHP version on an ARM server completes without installing the fix. If your server runs Ubuntu 20.04 or earlier, these versions have reached end of life and will not receive a fix, so we recommend [creating a new server](https://forge.laravel.com/docs/servers/the-basics.md) on a supported Ubuntu version and migrating your sites to it.
+If your server runs Ubuntu 20.04 or earlier, these versions have reached end of life and will not receive a fix, so we recommend [creating a new server](https://forge.laravel.com/docs/servers/the-basics.md) on a supported Ubuntu version and migrating your sites to it.
 
 ## Checking your exposure
 
@@ -149,7 +149,7 @@ Make a note of the versions displayed so that you can verify the upgrade afterwa
 
 You may update PHP from the Forge dashboard or manually via SSH. We recommend the Forge dashboard because it also repairs the server's PHP package source before upgrading.
 
-Check the [Patch status by Ubuntu version](#patch-status-by-ubuntu-version) table first, as fixed packages are not yet available for every Ubuntu version and architecture. If the update does not install the fixed version listed in the [Affected PHP versions](#affected-php-versions) table, the fixed package is not available for your server yet: wait a little while and try again.
+If the update does not install the fixed version listed in the [Affected PHP versions](#affected-php-versions) table, run the update again. If it still does not install the fixed version, contact support.
 
 > [!NOTE]
 >

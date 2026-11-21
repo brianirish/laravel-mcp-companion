@@ -324,6 +324,7 @@ See also¶
 * **Properties** — How properties are preserved between requests
 * **Morphing** — How Livewire updates the DOM
 * **Synthesizers** — Customize property serialization
+* **Release Tokens** — Expire snapshots a deployment has made incompatible
 
 Ecosystem sponsor
 
@@ -337,4 +338,4 @@ Morphing
 
 Continue to
 
-Nesting
+Release Tokens
