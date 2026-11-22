@@ -783,6 +783,50 @@ As well as allowing a static value, the ` panelLayout() ` method also accepts a 
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
+### Customizing the loading placeholder
+
+The file upload field displays a loading placeholder while its JavaScript is loaded and initialized. You may customize it using ` loadingPlaceholder() `, passing a Blade view or an ` Htmlable ` instance, such as an ` HtmlString ` containing trusted HTML:
+
+```php
+use Filament\Forms\Components\FileUpload;
+
+FileUpload::make('attachment')
+    ->loadingPlaceholder(fn () => view('forms.file-upload-loading-placeholder'))
+```
+
+As well as allowing a static value, the ` loadingPlaceholder() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+This placeholder is separate from the upload progress indicators and the [` uploadingMessage() `](https://filamentphp.com/docs/5.x/forms/file-upload.md#customizing-the-uploading-message) shown in the form's submit button.
+
+Keep your placeholder HTML decorative and noninteractive. Filament hides it from assistive technologies and supplies an accessible loading status in the surrounding wrapper. If the JavaScript fails to load or initialize, the placeholder remains visible.
+
+To customize the placeholder for all file upload fields, use [` FileUpload::configureUsing() `](https://filamentphp.com/docs/5.x/forms/overview.md#global-settings) in a service provider's ` boot() ` method:
+
+```php
+use Filament\Forms\Components\FileUpload;
+
+FileUpload::configureUsing(function (FileUpload $fileUpload): void {
+    $fileUpload->loadingPlaceholder(fn () => view('forms.file-upload-loading-placeholder'));
+});
+```
+
+You may call ` loadingPlaceholder(null) ` on an individual file upload field to restore the default loading placeholder.
+
 ## Reordering files
 
 You can also allow users to re-order uploaded files using the ` reorderable() ` method:

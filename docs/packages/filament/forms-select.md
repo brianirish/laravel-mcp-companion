@@ -74,6 +74,55 @@ As well as allowing a static value, the ` native() ` method also accepts a funct
 
 
 
+### Customizing the loading placeholder
+
+The JavaScript select displays a loading placeholder while its JavaScript is loaded and initialized. Native selects do not display this placeholder. You may customize it using ` loadingPlaceholder() `, passing a Blade view or an ` Htmlable ` instance, such as an ` HtmlString ` containing trusted HTML:
+
+```php
+use Filament\Forms\Components\Select;
+
+Select::make('status')
+    ->options([
+        'draft' => 'Draft',
+        'published' => 'Published',
+    ])
+    ->native(false)
+    ->loadingPlaceholder(fn () => view('forms.select-loading-placeholder'))
+```
+
+As well as allowing a static value, the ` loadingPlaceholder() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+This placeholder is separate from the [` loadingMessage() `](https://filamentphp.com/docs/5.x/forms/select.md#setting-a-custom-loading-message) shown while the select's options are loading.
+
+Keep your placeholder HTML decorative and noninteractive. Filament hides it from assistive technologies and supplies an accessible loading status in the surrounding wrapper. If the JavaScript fails to load or initialize, the placeholder remains visible.
+
+To customize the placeholder for all JavaScript selects, use [` Select::configureUsing() `](https://filamentphp.com/docs/5.x/forms/overview.md#global-settings) in a service provider's ` boot() ` method:
+
+```php
+use Filament\Forms\Components\Select;
+
+Select::configureUsing(function (Select $select): void {
+    $select->loadingPlaceholder(fn () => view('forms.select-loading-placeholder'));
+});
+```
+
+You may call ` loadingPlaceholder(null) ` on an individual select to restore the default loading placeholder.
+
 ## Searching options
 
 You may enable a search input to allow easier access to many options, using the ` searchable() ` method:
@@ -954,7 +1003,7 @@ When customizing persistence with ` createOptionUsing() ` or ` updateOptionUsing
 
 The selected ID is client-controlled form state. Use the [` relationship() ` query's ` modifyQueryUsing ` argument](https://filamentphp.com/docs/5.x/forms/select.md#customizing-the-relationship-query) to apply tenant or ownership restrictions when resolving the record for editing. A parent resource's query restrictions do not automatically scope the related model, and allowing a record to be selected does not authorize editing it.
 
-Relationship queries retain the related model's global scopes. However, without ` modifyQueryUsing `, an already-loaded selected relationship may be reused without querying its current scopes again. Use ` modifyQueryUsing ` if these restrictions must be reapplied. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
+Relationship queries retain the related model's global scopes. Filament queries the selected relationship again when validating the field or when a mounted action belonging to the field resolves the selected record, so current global scopes are applied at those boundaries. This includes the edit option action and custom prefix or suffix actions. Other label lookups may reuse an already-loaded relationship for display. See [Eloquent model restoration in Livewire](https://filamentphp.com/docs/5.x/advanced/security.md#understanding-eloquent-model-restoration-in-livewire) for more information.
 
 ### Handling ` MorphTo ` relationships
 

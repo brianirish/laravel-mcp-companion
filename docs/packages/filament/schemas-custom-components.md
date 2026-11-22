@@ -665,6 +665,7 @@ Create ` resources/js/components/sales-summary.jsx `:
 
 ```jsx
 import React from 'react'
+import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 
 function SalesSummary(props) {
@@ -675,7 +676,12 @@ export default function mountSalesSummary({ host, props: initialProps }) {
     const root = createRoot(host)
     const update = (props) => root.render(<SalesSummary {...props} />)
 
-    update(initialProps)
+    try {
+        flushSync(() => update(initialProps))
+    } catch (error) {
+        root.unmount()
+        throw error
+    }
 
     return { update, destroy: () => root.unmount() }
 }
@@ -878,7 +884,40 @@ Declare PHP method signatures yourself. ` $wire ` includes ` $call() `, ` $get()
 
 The mount function may return its lifecycle methods directly or through a promise. Configuration changes call ` update(props) `; renderer URL or ID changes remount the component. Removal calls ` destroy() `, including when mounting finishes after removal.
 
+Filament awaits your mount function before revealing the renderer. Ensure your initial UI exists at that handoff. The React example flushes the initial render before returning; later updates retain their normal asynchronous scheduling. Filament does not wait for all effects, asynchronous descendants, data fetching, or Suspense to finish: a rendered fallback counts as initial UI. You own resources created before returning lifecycle methods, including cleanup if initialization fails.
+
 Clean up subscriptions, event listeners, and framework roots in ` destroy() `, including when the host is already detached. Stop DOM work synchronously even if cleanup returns a promise. Filament does not serialize updates or wait for asynchronous cleanup before remounting; order or cancel asynchronous work inside your renderer.
+
+#### Customizing loading placeholders
+
+` JsComponent ` and custom components using ` HasJsRenderer ` display a server-rendered loading placeholder while Async Alpine downloads, the renderer module imports, and the mount function completes. Customize it with ` loadingPlaceholder() `, passing a Blade view or an ` Htmlable ` instance containing trusted HTML:
+
+```php
+use App\Filament\Schemas\Components\Chart;
+
+Chart::make()
+    ->key('chart')
+    ->loadingPlaceholder(fn () => view('schemas.chart-loading'))
+```
+
+As well as allowing a static value, the ` loadingPlaceholder() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/schemas/overview.md#component-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Component | ` Filament\Schemas\Components\Component ` | ` $component ` | The current component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current schema data. Validation is not run on form fields. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+
+
+Use ` configureUsing() ` in a service provider's ` boot() ` method to set a placeholder globally for your component class. Call ` loadingPlaceholder(null) ` on an instance to restore the default placeholder.
+
+Keep placeholder HTML decorative and noninteractive. Filament renders it outside the Livewire-ignored ` host `, hides it from assistive technologies, and supplies an accessible loading status. Pending renderer content remains measurable but inert and hidden from assistive technologies until mounting completes. Successful mounting removes the loading UI; renderer import, mount, or update failures show the [accessible error](https://filamentphp.com/docs/5.x/schemas/custom-components.md#handling-renderer-errors) instead. If the Async Alpine download fails, the placeholder remains visible.
 
 #### Understanding the boundary with Blade and Alpine
 
