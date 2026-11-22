@@ -341,6 +341,48 @@ As well as allowing static values, the ` stickyToolbar() `, ` stickyPanels() `, 
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
+## Customizing the loading placeholder
+
+The rich editor displays a loading placeholder while its JavaScript is loaded and initialized, including when the editor is disabled. You may customize it using ` loadingPlaceholder() `, passing a Blade view or an ` Htmlable ` instance, such as an ` HtmlString ` containing trusted HTML:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::make('content')
+    ->loadingPlaceholder(fn () => view('forms.rich-editor-loading-placeholder'))
+```
+
+As well as allowing a static value, the ` loadingPlaceholder() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+Keep your placeholder HTML decorative and noninteractive. Filament hides it from assistive technologies and supplies an accessible loading status in the surrounding wrapper. If the JavaScript fails to load or initialize, the placeholder remains visible.
+
+To customize the placeholder for all rich editors, use [` RichEditor::configureUsing() `](https://filamentphp.com/docs/5.x/forms/overview.md#global-settings) in a service provider's ` boot() ` method:
+
+```php
+use Filament\Forms\Components\RichEditor;
+
+RichEditor::configureUsing(function (RichEditor $richEditor): void {
+    $richEditor->loadingPlaceholder(fn () => view('forms.rich-editor-loading-placeholder'));
+});
+```
+
+You may call ` loadingPlaceholder(null) ` on an individual rich editor to restore the default loading placeholder.
+
 ## Customizing text colors
 
 The rich editor includes a text color tool for styling inline text. By default, it uses the [Tailwind CSS color palette](https://tailwindcss.com/docs/colors). In light mode, the 600 shades are applied to text, and in dark mode, the 400 shades are used.

@@ -353,6 +353,49 @@ As well as allowing a static value, the ` closeOnDateSelection() ` method also a
 | State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
 
 
+### Customizing the loading placeholder
+
+When using ` native(false) `, date-time pickers, date pickers, and time pickers display a loading placeholder while their JavaScript is loaded and initialized. Native pickers do not display this placeholder. You may customize it using ` loadingPlaceholder() `, passing a Blade view or an ` Htmlable ` instance, such as an ` HtmlString ` containing trusted HTML:
+
+```php
+use Filament\Forms\Components\DateTimePicker;
+
+DateTimePicker::make('published_at')
+    ->native(false)
+    ->loadingPlaceholder(fn () => view('forms.date-time-picker-loading-placeholder'))
+```
+
+As well as allowing a static value, the ` loadingPlaceholder() ` method also accepts a function to dynamically calculate it. You can inject various utilities into the function as parameters.
+
+[Utility injection guide](https://filamentphp.com/docs/5.x/forms/overview.md#field-utility-injection)
+
+| Utility | Type | Parameter | Description |
+| --- | --- | --- | --- |
+| Field | ` Filament\Forms\Components\Field ` | ` $component ` | The current field component instance. |
+| Get function | ` Filament\Schemas\Components\Utilities\Get ` | ` $get ` | A function for retrieving values from the current form data. Validation is not run. |
+| Livewire | ` Livewire\Component ` | ` $livewire ` | The Livewire component instance. |
+| Eloquent model FQN | ` ?string<Illuminate\Database\Eloquent\Model> ` | ` $model ` | The Eloquent model FQN for the current schema. |
+| Operation | ` string ` | ` $operation ` | The current operation being performed by the schema. Usually ` create `, ` edit `, or ` view `. |
+| Parent repeater item index | ` int ` | ` $parentRepeaterItemIndex ` | The zero-based index of the nearest containing repeater item or builder block, or ` 0 ` when neither exists. |
+| Raw state | ` mixed ` | ` $rawState ` | The current value of the field, before state casts were applied. Validation is not run. |
+| Record | ` Illuminate\Database\Eloquent\Model\|array<string, mixed>\|null ` | ` $record ` | The Eloquent record or custom data array for the current schema. |
+| State | ` mixed ` | ` $state ` | The current value of the field. Validation is not run. |
+
+
+Keep your placeholder HTML decorative and noninteractive. Filament hides it from assistive technologies and supplies an accessible loading status in the surrounding wrapper. If the JavaScript fails to load or initialize, the placeholder remains visible.
+
+To customize the placeholder globally, use [` configureUsing() `](https://filamentphp.com/docs/5.x/forms/overview.md#global-settings) on the picker class you use (` DateTimePicker `, ` DatePicker `, or ` TimePicker `) in a service provider's ` boot() ` method. For example, to configure all JavaScript date-time pickers:
+
+```php
+use Filament\Forms\Components\DateTimePicker;
+
+DateTimePicker::configureUsing(function (DateTimePicker $dateTimePicker): void {
+    $dateTimePicker->loadingPlaceholder(fn () => view('forms.date-time-picker-loading-placeholder'));
+});
+```
+
+You may call ` loadingPlaceholder(null) ` on an individual picker to restore the default loading placeholder.
+
 ## Autocompleting dates with a datalist
 
 Unless you're using the [JavaScript date picker](https://filamentphp.com/docs/5.x/forms/date-time-picker.md#enabling-the-javascript-date-picker), you may specify [datalist](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist) options for a date picker using the ` datalist() ` method:

@@ -733,6 +733,8 @@ As well as allowing a static value, the ` extraAttributes() ` method also accept
 > [!TIP]
 > By default, calling ` extraAttributes() ` multiple times will overwrite the previous attributes. If you wish to merge the attributes instead, you can pass ` merge: true ` to the method.
 
+When merging attributes, each callback registration is evaluated separately, even if the same callback is registered more than once.
+
 ## Using actions in schemas
 
 Action objects can be inserted anywhere in a [schema](https://filamentphp.com/docs/5.x/schemas/overview.md), such as in [form field slots](https://filamentphp.com/docs/5.x/forms/overview.md#adding-extra-content-to-a-field), [section headers and footers](https://filamentphp.com/docs/5.x/schemas/sections.md), or alongside [prime components](https://filamentphp.com/docs/5.x/schemas/primes.md). When an action is used in a schema, it has access to the schema's state via [utility injection](https://filamentphp.com/docs/5.x/actions/overview.md#injecting-utilities-from-a-schema) - you can use ` $schemaGet ` and ` $schemaSet ` in closures to read and modify form field values.

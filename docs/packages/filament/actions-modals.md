@@ -254,6 +254,8 @@ Action::make('approvePost')
     })
 ```
 
+The form is still validated when submitted, but its fields are not passed to the action's ` $data ` and its relationships are not automatically saved, even if fields use ` saved() ` or ` dehydrated() `. The action itself still runs. Read any values it needs from the ` $record `, as in the example above.
+
 
 
 #### Rendering a wizard in a modal
@@ -631,7 +633,7 @@ Action::make('updateAuthor')
 
 
 
-This is useful when the action trigger sits near the start of the viewport — for example, a row action at the beginning of a table row — so the slide-over opens adjacent to its trigger instead of across the screen.
+This is useful when the action trigger sits near the start of the viewport — for example, a record action at the beginning of a table row — so the slide-over opens adjacent to its trigger instead of across the screen.
 
 ## Changing the modal width
 
