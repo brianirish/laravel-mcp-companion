@@ -67,8 +67,9 @@ jobs:
           echo "push=${PUSH}" >> "${GITHUB_OUTPUT}"
 
       - name: Checkout the tag
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
+          persist-credentials: false
           ref: refs/tags/${{ steps.tag.outputs.tag }}
 
       - name: Prepare the tree to build
@@ -94,23 +95,23 @@ jobs:
           echo "Building ${TAG}, also tagged ${MOVING_TAG}" | tee -a "${GITHUB_STEP_SUMMARY}"
 
       - name: Set up QEMU for the arm64 build
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
         with:
           platforms: arm64
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
 
       - name: Log in to the GitHub Container Registry
         if: steps.tag.outputs.push == 'true'
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the image for both platforms
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -121,6 +122,11 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ steps.tree.outputs.revision }}
+          # The Dockerfile upgrades Alpine's packages. A value that differs
+          # on every run keeps that step out of the build cache, so each
+          # image has the fixes published by the day it was built.
+          build-args: |
+            OS_PACKAGES_REFRESH=${{ github.run_id }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -204,6 +204,58 @@ class TestRegistryPublish:
         assert 'registryType == "pypi"' in body
 
 
+ALL_WORKFLOWS = sorted(p.name for p in WORKFLOWS.glob("*.y*ml"))
+
+
+class TestSupplyChain:
+    """What a workflow runs with its tokens is whatever its `uses:` lines
+    name. A tag such as v5 can be moved to different code by whoever controls
+    the action's repository; a commit cannot."""
+
+    @pytest.mark.parametrize("name", ALL_WORKFLOWS)
+    def test_every_action_is_pinned_to_a_commit(self, name):
+        uses = re.findall(r"^\s*(?:- )?uses:\s*(\S+)(.*)$", text(name), re.MULTILINE)
+        for reference, rest in uses:
+            action, _, ref = reference.partition("@")
+            assert re.fullmatch(r"[0-9a-f]{40}", ref), f"{name}: {action} is pinned to {ref!r}, not a commit"
+            assert re.search(r"#\s*v?\d", rest), f"{name}: {action} has no comment naming the version its commit is"
+
+    @pytest.mark.parametrize("name", ALL_WORKFLOWS)
+    def test_no_checkout_leaves_its_token_on_disk(self, name):
+        for job in load(name)["jobs"].values():
+            for step in job["steps"]:
+                if "actions/checkout@" in step.get("uses", ""):
+                    assert step.get("with", {}).get("persist-credentials") is False, f"{name}: {step.get('name')}"
+
+    def test_dependabot_keeps_the_pins_current(self):
+        """A pinned commit never moves, so something has to propose the next one."""
+        config = yaml.safe_load((WORKFLOWS.parent / "dependabot.yml").read_text(encoding="utf-8"))
+        ecosystems = {update["package-ecosystem"] for update in config["updates"]}
+        assert {"github-actions", "docker"} <= ecosystems
+
+    def test_the_registry_publisher_is_a_named_release_with_a_checked_digest(self):
+        install = next(
+            step for step in load("publish-mcp.yml")["jobs"]["publish"]["steps"]
+            if step.get("name") == "Install mcp-publisher"
+        )
+        script = install["run"]
+        assert re.fullmatch(r"v\d+\.\d+\.\d+", install["env"]["PUBLISHER_VERSION"])
+        assert re.fullmatch(r"[0-9a-f]{64}", install["env"]["PUBLISHER_SHA256"])
+        assert "releases/download/${PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz" in script
+        assert "releases/latest/" not in script
+        assert "| tar" not in script, "the archive must be checked before it is unpacked"
+        assert script.index("sha256sum --check") < script.index("tar x")
+
+    def test_the_image_build_refreshes_the_os_packages_on_every_run(self):
+        """The Dockerfile upgrades Alpine's packages. With the build cache,
+        that step would run once and be reused until the base image changed."""
+        build = next(
+            step for step in load("release.yaml")["jobs"]["image"]["steps"]
+            if "docker/build-push-action" in step.get("uses", "")
+        )
+        assert "OS_PACKAGES_REFRESH=${{ github.run_id }}" in build["with"]["build-args"]
+
+
 def test_no_workflow_still_points_at_harness():
     for path in WORKFLOWS.glob("*.y*ml"):
         assert "harness" not in path.read_text(encoding="utf-8").lower(), path.name

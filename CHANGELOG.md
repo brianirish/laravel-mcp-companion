@@ -18,6 +18,53 @@ docs-only commit and contains no code change.
 
 ## [Unreleased]
 
+A security review before 1.0. Nothing below changes a tool's arguments or
+results. Three things a client can now be told that it could not before are
+called out under Changed.
+
+### Security
+- **A redirect during an update is followed only over https, and only to GitHub
+  or a documentation site.** A compromised site could redirect a page fetch to
+  an address only the server can reach, such as a cloud metadata service, and
+  the answer was stored as a documentation page and returned by the read and
+  search tools.
+- **Fetched pages and archives have size limits**: 20 MB for a page, 100 MB for
+  an archive, and 200 MB for what an archive unpacks to. A 300 KB archive could
+  unpack to 300 MB.
+- **An update of a Laravel version replaces its pages in one step.** The old
+  pages were deleted before the new ones were copied, so a copy that failed
+  left the version empty. A failed update also left its download in the
+  temporary directory.
+- **`/metrics` counts a call to a tool that does not exist as
+  `tool="unknown"`**, and escapes label values. Each invented name was kept for
+  the life of the process, and a name containing a quote and a newline could
+  write its own metric lines.
+- **Patterns that fetched text and tool arguments are matched against no longer
+  take quadratic or cubic time.** Six kilobytes of unclosed brackets held one
+  of them for 51 seconds, and `re` holds the interpreter lock while it matches,
+  so the whole server stopped answering.
+- **The `laravel-external://` resource refuses a service directory that is a
+  symlink**, as the tools, search and the other resources already did.
+- **Starting the server no longer deletes a `docs` folder it did not make.**
+  With `LARAVEL_MCP_COMPANION_HOME` pointed at a project directory, the
+  project's own `docs` folder was replaced by the Laravel documentation.
+- **The Docker image upgrades Alpine's packages when it is built** and no longer
+  carries the base image's pip. A fresh build had 35 known vulnerabilities in
+  zlib, OpenSSL and krb5; it now has two, neither with a fix published.
+- **The workflows name every action by commit**, and the MCP Registry publisher
+  by release and checksum. Dependabot proposes updates to the pins and to the
+  base image.
+
+### Changed
+- **`update_laravel_docs` is off on an HTTP server with no authentication.** It
+  stays listed and answers with `update_failed`. Start the server with
+  `--allow-updates` (or `ALLOW_UPDATES=true`), or configure authentication, to
+  turn it on. Over stdio nothing changes.
+- **One update runs at a time.** A second call while one is running gets
+  `update_failed`.
+- **A string argument longer than 1,000 characters, or a list longer than 100
+  items, is refused with `invalid_argument`.**
+
 ## [1.0.0-rc1] - 2026-11-18
 
 The first release candidate for 1.0.0. It changes no tool, argument or result

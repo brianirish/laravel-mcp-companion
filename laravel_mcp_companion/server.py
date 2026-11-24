@@ -42,6 +42,7 @@ from .shutdown_handler import GracefulShutdown
 
 # Import standalone MCP tool implementations
 from .mcp_tools import (
+    contained_subdirectories,
     resolve_contained_path,
     clear_caches as clear_mcp_tools_caches,
     describe_documentation_date,
@@ -138,6 +139,14 @@ def parse_arguments():
         action="store_true",
         default=os.environ.get("FORCE_UPDATE", "").lower() == "true",
         help="Force update of documentation even if already up to date (env: FORCE_UPDATE=true)"
+    )
+    parser.add_argument(
+        "--allow-updates",
+        action="store_true",
+        default=os.environ.get("ALLOW_UPDATES", "").lower() == "true",
+        help="Let clients call update_laravel_docs on an HTTP server that has no "
+             "authentication. Over stdio, or with authentication, the tool always works "
+             "(env: ALLOW_UPDATES=true)"
     )
     # These default to None rather than the env list: argparse's "append" action
     # appends to the default, so a non-empty default would union env values with
@@ -593,7 +602,18 @@ def _server_icon() -> "Icon":
     return Icon(src=f"data:image/svg+xml;base64,{encoded}", mimeType="image/svg+xml")
 
 
-def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None, rate_limiter: Optional["RateLimitingMiddleware"] = None) -> FastMCP:
+def updates_allowed(args: argparse.Namespace, auth: Optional["TokenVerifier"]) -> bool:
+    """Whether clients of this server may call update_laravel_docs.
+
+    Over stdio the client is the person who started the server. Over HTTP
+    with no authentication it is anyone who can reach the port, and an update
+    is hundreds of requests to other people's sites and a rewrite of this
+    server's documentation, so there it needs the operator to ask for it.
+    """
+    return args.transport != "http" or auth is not None or bool(getattr(args, "allow_updates", False))
+
+
+def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, transform_mode: Optional[str] = "search", auth: Optional["TokenVerifier"] = None, rate_limiter: Optional["RateLimitingMiddleware"] = None, allow_updates: bool = True) -> FastMCP:
     """Create and configure the MCP server with all tools and resources.
 
     Args:
@@ -605,6 +625,8 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
                        None for no transforms
         auth: Optional token verifier for the HTTP transport (see
               build_auth_provider); None leaves the server unauthenticated
+        allow_updates: False makes update_laravel_docs refuse (see
+              updates_allowed)
 
     Returns:
         Configured FastMCP server instance
@@ -751,7 +773,14 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
             
             # Get service directory
             service_dir = multi_updater.external_fetcher.get_service_cache_path(service)
-            
+
+            # The containment check below is made against the service's own
+            # directory. If that directory is a symlink, everything in the
+            # link's target counts as contained, so the directory is held to
+            # the same rule the tools, search and the listing apply.
+            if service_dir.exists() and service not in contained_subdirectories(service_dir.parent):
+                return f"Access denied: {service}/{path} (the service directory is not inside the documentation tree)"
+
             # Make sure the path ends with .md
             if not path.endswith('.md'):
                 path = f"{path}.md"
@@ -823,7 +852,7 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     
     
     # Configure all tools
-    configure_mcp_server(mcp, docs_path, runtime_version, multi_updater)
+    configure_mcp_server(mcp, docs_path, runtime_version, multi_updater, allow_updates)
 
     # Apply transforms
     apply_transforms(mcp, transform_mode)
@@ -831,10 +860,13 @@ def create_mcp_server(server_name: str, docs_path: Path, runtime_version: str, t
     return mcp
 
 
-def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, multi_updater: MultiSourceDocsUpdater) -> None:
+def configure_mcp_server(mcp: FastMCP, docs_path: Path, runtime_version: str, multi_updater: MultiSourceDocsUpdater, allow_updates: bool = True) -> None:
     """Register the tools. They are declared in the `tools` package; this
     gives them the server they run in."""
-    register_all(mcp, ToolContext(docs_path=Path(docs_path), runtime_version=runtime_version, updater=multi_updater))
+    register_all(mcp, ToolContext(
+        docs_path=Path(docs_path), runtime_version=runtime_version, updater=multi_updater,
+        updates_enabled=allow_updates,
+    ))
 
 
 def apply_transforms(mcp: FastMCP, transform_mode: Optional[str] = "search") -> None:
@@ -993,11 +1025,19 @@ def main():
         )
 
     # Create and configure the MCP server
+    auth = build_auth_provider(args)
+    allow_updates = updates_allowed(args, auth)
+    if not allow_updates:
+        logger.warning(
+            "update_laravel_docs is turned off: this server runs over HTTP without authentication. "
+            "Start it with --allow-updates to let any client that can reach it fetch documentation."
+        )
     mcp = create_mcp_server(
         args.server_name, docs_path, args.version,
         transform_mode=None if mode == "none" else mode,
-        auth=build_auth_provider(args),
-        rate_limiter=build_rate_limiter(args)
+        auth=auth,
+        rate_limiter=build_rate_limiter(args),
+        allow_updates=allow_updates,
     )
 
     # Log server startup

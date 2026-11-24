@@ -325,3 +325,63 @@ class TestUpdateOtherSources:
             update_docs(server, scope="everything")
 
         assert raised.value.details["valid_scopes"] == ["core", "services", "packages", "learning", "all"]
+
+
+class TestUpdatesCanBeTurnedOff:
+    """An HTTP server with no authentication lets anyone who can reach it
+    call its tools. An update is hundreds of requests to other people's sites
+    and a rewrite of the server's own documentation, so on such a server it
+    is off unless the operator asks for it."""
+
+    def test_an_update_is_refused_and_nothing_is_fetched(self, server):
+        server.updates_enabled = False
+
+        with framework_update(True) as updater, pytest.raises(ToolFailure) as raised:
+            update_docs(server, scope="all")
+
+        assert raised.value.code == "update_failed"
+        assert "--allow-updates" in raised.value.message
+        updater.assert_not_called()
+        server.updater.external_fetcher.fetch_laravel_service_docs.assert_not_called()
+
+
+class TestOneUpdateAtATime:
+    """Two updates of the same version delete each other's files, and forty
+    at once take every worker thread the server has."""
+
+    def test_a_second_update_is_refused_while_the_first_is_running(self, server):
+        import threading
+
+        started, release = threading.Event(), threading.Event()
+
+        def slow_fetch(name, force=False):
+            started.set()
+            assert release.wait(10)
+            return True
+
+        server.updater.external_fetcher.fetch_laravel_service_docs.side_effect = slow_fetch
+        first = threading.Thread(target=update_docs, args=(server,), kwargs={"scope": "services", "names": ["forge"]})
+        first.start()
+        try:
+            assert started.wait(10)
+            with pytest.raises(ToolFailure) as raised:
+                update_docs(server, scope="packages")
+        finally:
+            release.set()
+            first.join(10)
+
+        assert raised.value.code == "update_failed"
+        assert "already running" in raised.value.message
+        server.updater.package_fetcher.fetch_package_docs.assert_not_called()
+
+    def test_an_update_can_run_once_the_last_one_has_finished(self, server):
+        update_docs(server, scope="services", names=["forge"])
+
+        assert update_docs(server, scope="packages")["results"][0]["outcome"] == "updated"
+
+    def test_an_update_that_fails_does_not_block_the_next(self, server):
+        with framework_update(error=urllib.error.URLError("offline")), pytest.raises(ToolFailure):
+            update_docs(server)
+
+        with framework_update(True):
+            assert update_docs(server)["results"][0]["outcome"] == "updated"

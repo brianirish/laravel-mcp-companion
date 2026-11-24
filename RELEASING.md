@@ -44,6 +44,12 @@ three things:
   that is already there.
 - **The MCP Registry entry.** `.github/workflows/publish-mcp.yml` waits for
   that image and that package, and publishes `server.json`, which lists both.
+  It runs a named release of the registry's `mcp-publisher`, checked against
+  a digest. If the registry stops accepting that release, the workflow file
+  says how to move to a newer one.
+
+The workflows name every action by commit. Dependabot opens a pull request,
+weekly, when an action or the Docker base image has a newer version.
 
 Between releases, the nightly documentation sync tags `docs-YYYY-MM-DD` on
 `main` (a second sync on the same day is tagged `docs-YYYY-MM-DD-HHMM`). The

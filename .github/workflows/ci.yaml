@@ -27,8 +27,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
+          persist-credentials: false
           # Full history brings the tags. Without them the version-drift guard
           # in test_version_consistency.py finds none and skips. It exists
           # because the manifest once sat at 0.9.0 while tags reached v0.9.145.
@@ -94,7 +95,7 @@ jobs:
           echo "image builds and starts"
 
       - name: Set up Node.js for the MCP Inspector
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
 
@@ -115,7 +116,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
 
       - name: Install the package and the test tools
         run: |

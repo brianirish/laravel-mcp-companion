@@ -10,6 +10,7 @@ import argparse
 import httpx
 import pytest
 
+from laravel_mcp_companion import server as companion
 from laravel_mcp_companion.server import build_auth_provider, build_http_app, create_mcp_server, parse_arguments
 
 
@@ -198,3 +199,43 @@ class TestResourceHandlers:
         async with Client(mcp_server) as client:
             content = await client.read_resource("laravel-external://nope/intro.md")
             assert "not found" in content[0].text.lower()
+
+
+class TestUpdatesOverHttp:
+    """Without authentication, anyone who can reach an HTTP server can call
+    its tools, so the one tool that fetches and writes is off there unless
+    the operator turns it on."""
+
+    def test_stdio_allows_updates(self):
+        assert companion.updates_allowed(make_args(transport="stdio", allow_updates=False), auth=None)
+
+    def test_http_without_authentication_does_not(self):
+        assert not companion.updates_allowed(make_args(transport="http", allow_updates=False), auth=None)
+
+    def test_http_with_authentication_does(self):
+        assert companion.updates_allowed(make_args(transport="http", allow_updates=False), auth=object())
+
+    def test_the_operator_can_turn_them_on(self):
+        assert companion.updates_allowed(make_args(transport="http", allow_updates=True), auth=None)
+
+    def test_the_flag_and_its_environment_variable_are_read(self, monkeypatch):
+        monkeypatch.setattr("sys.argv", ["laravel-mcp-companion", "--allow-updates"])
+        assert companion.parse_arguments().allow_updates is True
+
+        monkeypatch.setattr("sys.argv", ["laravel-mcp-companion"])
+        assert companion.parse_arguments().allow_updates is False
+
+        monkeypatch.setenv("ALLOW_UPDATES", "true")
+        assert companion.parse_arguments().allow_updates is True
+
+    async def test_a_server_built_without_updates_refuses_the_tool_and_keeps_it_listed(self, tmp_path):
+        from fastmcp import Client
+
+        server = companion.create_mcp_server("t", tmp_path, "12.x", transform_mode=None, allow_updates=False)
+        async with Client(server) as client:
+            names = {tool.name for tool in await client.list_tools()}
+            result = await client.call_tool("update_laravel_docs", {"scope": "services"}, raise_on_error=False)
+
+        assert "update_laravel_docs" in names
+        assert result.is_error
+        assert result.structured_content["error"]["code"] == "update_failed"

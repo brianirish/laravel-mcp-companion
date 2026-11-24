@@ -1,0 +1,25 @@
+# Proposes the next commit for each pinned action and the next base image.
+#
+# The workflows name every action by commit, because a tag can be moved to
+# different code. A commit never moves, so without this the pins would stay
+# where they are while fixes are published.
+#
+# Python dependencies are not listed. Security updates for them are already
+# on in the repository settings and open a pull request when an advisory is
+# published; version updates for the ninety packages in uv.lock would be
+# several pull requests a week.
+
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly

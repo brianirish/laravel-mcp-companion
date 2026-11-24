@@ -227,7 +227,7 @@ class TestDocsUpdater:
     @patch.object(DocsUpdater, 'needs_update')
     @patch.object(DocsUpdater, 'get_latest_commit')
     @patch.object(DocsUpdater, 'download_documentation')
-    def test_update_success(self, mock_download, mock_get_latest_commit, mock_needs_update, docs_updater_instance):
+    def test_update_success(self, mock_download, mock_get_latest_commit, mock_needs_update, docs_updater_instance, tmp_path):
         """Test successful documentation update."""
         mock_needs_update.return_value = True
         mock_get_latest_commit.return_value = {
@@ -236,32 +236,19 @@ class TestDocsUpdater:
             "message": "Update docs",
             "url": "https://github.com/laravel/docs/commit/abc123"
         }
-        
-        # Mock downloaded directory with files
-        source_dir = MagicMock(spec=Path)
-        source_dir.parent = MagicMock(spec=Path)
-        
-        # Create mock file
-        mock_file = MagicMock(spec=Path)
-        mock_file.name = "file.md"
-        mock_file.is_dir.return_value = False
-        
-        # Setup source_dir.iterdir to return mock files
-        source_dir.iterdir.return_value = [mock_file]
-        
+
+        # What a download leaves: a temporary directory holding the pages.
+        source_dir = tmp_path / "download" / "docs-12.x"
+        source_dir.mkdir(parents=True)
+        (source_dir / "file.md").write_text("# File\n")
         mock_download.return_value = source_dir
-        
-        with patch('laravel_mcp_companion.docs_updater.shutil.copytree'), \
-             patch('laravel_mcp_companion.docs_updater.shutil.copy2'), \
-             patch('laravel_mcp_companion.docs_updater.shutil.rmtree'), \
-             patch('laravel_mcp_companion.docs_updater.time.strftime', return_value="2024-01-01T12:00:00Z"):
-            
-            result = docs_updater_instance.update(force=False)
-            
-            assert result is True
-            # Should write metadata
-            metadata = docs_updater_instance.read_local_metadata()
-            assert metadata["commit_sha"] == "abc123"
+
+        result = docs_updater_instance.update(force=False)
+
+        assert result is True
+        assert (docs_updater_instance.version_dir / "file.md").read_text() == "# File\n"
+        assert docs_updater_instance.read_local_metadata()["commit_sha"] == "abc123"
+        assert not source_dir.parent.exists()
 
     @patch.object(DocsUpdater, 'needs_update')
     def test_update_not_needed(self, mock_needs_update, docs_updater_instance):
@@ -842,6 +829,24 @@ class TestVersionSupport:
         cached = json.loads(cache_file.read_text())
         assert cached["versions"] == ["6.x", "12.x", "13.x"]
         assert "updated_at" in cached
+
+    @patch('laravel_mcp_companion.docs_updater.urllib.request.urlopen')
+    def test_a_branch_name_that_only_looks_like_a_version_is_left_out(self, mock_urlopen, tmp_path):
+        """A version becomes a directory name. `$` matches before a trailing
+        newline and `\\d` matches digits of other scripts, so both are spelled out."""
+        names = [{"name": "12.x"}, {"name": "13.x\n"}, {"name": "\uff11\uff14.x"}]
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps(names).encode()
+        mock_response.__enter__ = lambda self: self
+        mock_response.__exit__ = lambda self, *args: None
+        mock_urlopen.return_value = mock_response
+
+        assert get_supported_versions(cache_file=tmp_path / ".versions_cache.json") == ["12.x"]
+
+        cache = tmp_path / ".versions_cache.json"
+        cache.write_text(json.dumps({"versions": ["12.x", "\uff11\uff14.x"], "updated_at": "2020-01-01T00:00:00+00:00"}))
+        mock_urlopen.side_effect = OSError("offline")
+        assert get_supported_versions(cache_file=cache) == ["12.x"]
 
     @staticmethod
     def _cache_aged(tmp_path, hours):

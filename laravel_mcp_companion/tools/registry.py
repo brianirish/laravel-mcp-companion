@@ -37,6 +37,9 @@ class ToolContext:
     docs_path: Path
     runtime_version: str
     updater: MultiSourceDocsUpdater
+    # False on an HTTP server with no authentication, unless its operator
+    # asked for updates: there, anyone who can reach the port can call a tool.
+    updates_enabled: bool = True
 
     @property
     def external_dir(self) -> Path:
@@ -92,9 +95,37 @@ def failure(error: ToolFailure) -> ToolResult:
     )
 
 
+# The longest string, and the longest list, a tool accepts as an argument. A
+# string argument is matched against headings and scored against every
+# section, and over HTTP a request body can be megabytes: one overlong
+# `section` held the whole process for seconds. Checked here, for every tool at
+# once, so that a tool added later is covered without remembering to.
+MAX_ARGUMENT_LENGTH = 1000
+MAX_LIST_ITEMS = 100
+
+
+def _require_bounded(arguments: Dict[str, Any]) -> None:
+    for key, value in arguments.items():
+        items = value if isinstance(value, (list, tuple)) else [value]
+        if len(items) > MAX_LIST_ITEMS:
+            raise ToolFailure(
+                "invalid_argument", f"{key} has {len(items)} items; the limit is {MAX_LIST_ITEMS}",
+            )
+        for item in items:
+            if isinstance(item, str) and len(item) > MAX_ARGUMENT_LENGTH:
+                raise ToolFailure(
+                    "invalid_argument",
+                    f"{key} is {len(item)} characters long; the limit is {MAX_ARGUMENT_LENGTH}",
+                )
+
+
 def _reporting_failures(name: str, fn: Callable[..., Any]) -> Callable[..., Any]:
     """Wrap a tool so a ToolFailure, or anything unexpected, becomes an error
-    result instead of an exception the framework would render as prose."""
+    result instead of an exception the framework would render as prose. An
+    argument over the length limit is refused here, before the tool runs."""
+
+    def bounded(args: Any, kwargs: Dict[str, Any]) -> None:
+        _require_bounded({**{f"argument {i + 1}": value for i, value in enumerate(args)}, **kwargs})
 
     def unexpected(exc: Exception) -> ToolResult:
         logger.exception(f"{name} failed unexpectedly")
@@ -104,6 +135,7 @@ def _reporting_failures(name: str, fn: Callable[..., Any]) -> Callable[..., Any]
         @functools.wraps(fn)
         async def async_wrapper(*args: Any, **kwargs: Any) -> ToolResult:
             try:
+                bounded(args, kwargs)
                 return success(await fn(*args, **kwargs))
             except ToolFailure as error:
                 return failure(error)
@@ -115,6 +147,7 @@ def _reporting_failures(name: str, fn: Callable[..., Any]) -> Callable[..., Any]
     @functools.wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> ToolResult:
         try:
+            bounded(args, kwargs)
             return success(fn(*args, **kwargs))
         except ToolFailure as error:
             return failure(error)

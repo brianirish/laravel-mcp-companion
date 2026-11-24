@@ -19,7 +19,7 @@ from typing import Any, Dict, Optional
 
 # What went wrong, for a client to branch on, and what each code means.
 ERROR_MEANINGS: Dict[str, str] = {
-    "invalid_argument": "An argument was missing, empty or not one of the allowed values.",
+    "invalid_argument": "An argument was missing, empty, too long or not one of the allowed values.",
     "unknown_version": "A Laravel version this server does not carry.",
     "not_found": "The named file, section, package, service, category or path does not exist.",
     "access_denied": "A path that resolves outside the documentation tree.",

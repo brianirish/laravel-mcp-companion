@@ -33,6 +33,18 @@ WORKDIR /app
 COPY --from=build /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
+# Alpine publishes fixes to its packages before the python image is rebuilt
+# with them, so take them here. Below the dependencies, because this layer
+# changes whenever a fix is published and they should not be downloaded again
+# for it. OS_PACKAGES_REFRESH is given a new value by every release build;
+# without it the build cache would reuse the first upgrade it ever ran.
+# The base image's pip goes too: nothing here uses it, and the dependencies
+# are in the virtualenv, which has none.
+ARG OS_PACKAGES_REFRESH=unset
+RUN echo "OS packages refreshed for build ${OS_PACKAGES_REFRESH}" && \
+    apk upgrade --no-cache && \
+    /usr/local/bin/python -m pip uninstall -y pip
+
 # Now the source and the documentation corpus. Owned by the app user because
 # --update-docs writes into docs/.
 COPY --chown=app:app . .
@@ -55,9 +67,9 @@ ENV LOG_LEVEL="INFO"
 
 # Bind all interfaces inside the container; the container network boundary and
 # explicit port publishing are the access control. Outside Docker the server
-# defaults to loopback. The server has no built-in authentication, so only
-# publish this port to networks you trust, and set ALLOWED_HOSTS when serving
-# under a hostname other than localhost.
+# defaults to loopback. Authentication is off unless it is configured (see
+# OPERATIONS.md), so only publish this port to networks you trust, and set
+# ALLOWED_HOSTS when serving under a hostname other than localhost.
 ENV HOST=0.0.0.0
 
 
