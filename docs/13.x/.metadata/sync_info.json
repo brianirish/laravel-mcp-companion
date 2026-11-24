@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "2c2cdcd98a912b027f6c3bed2fd19749cd99d206",
-  "commit_date": "2026-11-19T14:09:30Z",
-  "commit_message": "[13.x] Document og:url canonical fallback (#11479)\n\n* docs(head): document og:url canonical fallback\n\n* Update head.md\n\n* Group Open Graph fallback notes together\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Taylor Otwell <taylor@laravel.com>\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/2c2cdcd98a912b027f6c3bed2fd19749cd99d206",
-  "sync_time": "2026-11-22T06:45:06Z"
+  "commit_sha": "91e8831934e4f40186acb06a6aebec1535a48b8a",
+  "commit_date": "2026-11-23T14:40:01Z",
+  "commit_message": "[13.x] Document the route constraint helper methods (#11484)",
+  "commit_url": "https://github.com/laravel/docs/commit/91e8831934e4f40186acb06a6aebec1535a48b8a",
+  "sync_time": "2026-11-24T09:52:09Z"
 }

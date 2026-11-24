@@ -16,5 +16,5 @@
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://docs.envoyer.io/llms.txt",
-  "cached_at": 1795329918.5261722
+  "cached_at": 1795513948.0501094
 }

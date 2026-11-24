@@ -4,6 +4,16 @@ Source: https://laravel.com/cloud/docs/changelog.md
 
 See the latest Laravel Cloud updates, improvements, and platform changes.
 
+**November 23, 2026**
+
+## Read-only repository access
+
+Environments that deploy from GitHub can now build with a read-only GitHub token. With the new **Read-only repository access** setting enabled, each deployment receives its own token that can read code from the repository being deployed and other repositories in the same GitHub account or organization, but can't push commits or reach repositories owned by anyone else. Laravel Cloud revokes the token as soon as the deployment finishes.
+
+Read-only repository access is enabled by default for new environments. Existing environments keep their current setting, and you can enable it from the **Git** section of your environment's **General Settings** page. If GitHub can't issue a read-only token, the deployment fails with a clear reason instead of falling back to a full-access token.
+
+[Read the read-only repository access documentation](https://laravel.com/cloud/docs/environments#read-only-repository-access) to learn more.
+
 **November 16, 2026**
 
 ## Updated GitHub app permissions
