@@ -253,7 +253,8 @@ class TestSupplyChain:
             step for step in load("release.yaml")["jobs"]["image"]["steps"]
             if "docker/build-push-action" in step.get("uses", "")
         )
-        assert "OS_PACKAGES_REFRESH=${{ github.run_id }}" in build["with"]["build-args"]
+        # The run id alone is the same when a failed run is run again.
+        assert "OS_PACKAGES_REFRESH=${{ github.run_id }}-${{ github.run_attempt }}" in build["with"]["build-args"]
 
 
 def test_no_workflow_still_points_at_harness():

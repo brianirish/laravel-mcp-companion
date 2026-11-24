@@ -123,10 +123,11 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ steps.tree.outputs.revision }}
           # The Dockerfile upgrades Alpine's packages. A value that differs
-          # on every run keeps that step out of the build cache, so each
-          # image has the fixes published by the day it was built.
+          # on every run, and on every attempt of a run, keeps that step out
+          # of the build cache, so each image has the fixes published by the
+          # day it was built.
           build-args: |
-            OS_PACKAGES_REFRESH=${{ github.run_id }}
+            OS_PACKAGES_REFRESH=${{ github.run_id }}-${{ github.run_attempt }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
