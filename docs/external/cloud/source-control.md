@@ -23,6 +23,8 @@ The Laravel Cloud GitHub app requests the **Repository creation** permission so 
 
 If you installed the app before this change, GitHub emails your account or organization owner a request to accept the updated permissions. An owner can also accept the request from the app's installation settings on GitHub. Your applications keep deploying while the request is pending, and Cloud reminds you to accept it when you create an application from a starter kit.
 
+Each deployment clones your repository with a GitHub token. To limit that token to read-only access, see [read-only repository access](https://laravel.com/cloud/docs/environments#read-only-repository-access).
+
 ### Connecting the same Git to multiple Cloud accounts
 
 You can connect the same Git account to more than one Laravel Cloud user.

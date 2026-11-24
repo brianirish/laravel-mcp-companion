@@ -269,6 +269,14 @@ You may enable HTTP basic authentication in the Security section of your environ
 
 HTTP basic authentication is available on the [Growth plan](https://laravel.com/cloud/docs/pricing) or higher. After you enable it, disable it, or change the password, redeploy the environment for the changes to take effect.
 
+### Read-only repository access
+
+When an environment deploys from GitHub, Laravel Cloud clones your repository with a GitHub token. With **Read-only repository access** enabled in the **Git** section of your environment's **General Settings** page, each deployment gets its own read-only token, which Cloud revokes when the deployment finishes. The token can read repositories owned by the same GitHub account or organization, but it can't push commits or read repositories owned by other accounts.
+
+The setting is enabled by default for new environments. If your build pushes to a repository or reads one owned by another GitHub account, store a [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-secure/managing-your-personal-access-tokens) as a [secret](https://laravel.com/cloud/docs/secrets) and use it in your build commands, or disable the setting.
+
+If GitHub can't issue a read-only token, such as when the [Laravel Cloud GitHub app installation](https://github.com/apps/laravel-cloud-app/installations/select_target) is suspended or waiting for approval, the deployment fails instead of falling back to a full-access token.
+
 ### Runtime
 
 #### PHP runtime
