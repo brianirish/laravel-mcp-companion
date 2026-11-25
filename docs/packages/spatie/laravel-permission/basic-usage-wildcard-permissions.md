@@ -53,7 +53,7 @@ $permission = 'posts.create.1';
 The meaning of each part of the string depends on the application layer.
 
 > You can use as many parts as you like. So you are not limited to the three-tiered structure, even though
-> this is the common use-case, representing `.{action}.{target}`.
+> this is the common use-case, representing `{resource}.{action}.{target}`.
 
 > **NOTE: You must actually create the wildcarded permissions** (eg: `posts.create.1`) before you can assign them or check for them.
 

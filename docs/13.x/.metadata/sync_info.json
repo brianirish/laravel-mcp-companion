@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "91e8831934e4f40186acb06a6aebec1535a48b8a",
-  "commit_date": "2026-11-23T14:40:01Z",
-  "commit_message": "[13.x] Document the route constraint helper methods (#11484)",
-  "commit_url": "https://github.com/laravel/docs/commit/91e8831934e4f40186acb06a6aebec1535a48b8a",
-  "sync_time": "2026-11-24T09:52:09Z"
+  "commit_sha": "56a449c8133b0ffc0242caa74c4301eae7740453",
+  "commit_date": "2026-11-24T15:46:51Z",
+  "commit_message": "Document form request model retrieval helpers\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/56a449c8133b0ffc0242caa74c4301eae7740453",
+  "sync_time": "2026-11-25T08:29:33Z"
 }

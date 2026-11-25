@@ -11,7 +11,7 @@ An **Organization** is the top-level container for everything in Nightwatch, inc
 An application represents a single Laravel application, such as your web app, API, or internal tool. When creating an application, you'll choose a **data region**, which determines where all telemetry data for that application is stored.
 We currently support the following regions:
 
-* **US** (Northern Virginia)
+* **US** (Ohio)
 * **EU** (Frankfurt)
 * **Australia** (Sydney)
 

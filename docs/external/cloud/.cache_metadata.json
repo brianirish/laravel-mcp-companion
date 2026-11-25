@@ -50,6 +50,7 @@
     "private-cloud/data-transfer",
     "services/log-drains/overview",
     "services/log-drains/pricing",
+    "observability",
     "metrics/overview",
     "metrics/traffic",
     "requests",
@@ -92,9 +93,9 @@
     "knowledge-base/command-failed-prod-app",
     "knowledge-base/sqlite"
   ],
-  "total_sections": 90,
+  "total_sections": 91,
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://laravel.com/cloud/docs/llms.txt",
-  "cached_at": 1795513962.5851967
+  "cached_at": 1795595401.8430855
 }
