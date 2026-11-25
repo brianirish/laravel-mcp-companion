@@ -1,7 +1,7 @@
 # ---- Build stage -------------------------------------------------------------
 # The compiler toolchain and git are needed to install the dependencies and
 # for nothing after that, so they stay in this stage.
-FROM python:3.12-alpine AS build
+FROM python:3.15-alpine AS build
 
 RUN apk add --no-cache build-base libffi-dev openssl-dev git && \
     pip install --no-cache-dir uv==0.13.7
@@ -19,7 +19,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 # ---- Runtime stage -----------------------------------------------------------
-FROM python:3.12-alpine
+FROM python:3.15-alpine
 
 # Run as an unprivileged user with a fixed id, so volume ownership is
 # predictable across image versions.
