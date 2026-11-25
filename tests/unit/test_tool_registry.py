@@ -88,6 +88,71 @@ class TestToolsNeverRaise:
         assert asyncio.run(_reporting_failures("example", tool)()).structured_content == {"scope": "core"}
 
 
+class TestArgumentsAreBounded:
+    """A string argument is matched against headings and scored against every
+    section. Over HTTP it can be megabytes long, and one such request held the
+    whole process for seconds. No real filename, section or question is close
+    to the limit."""
+
+    def test_a_string_argument_over_the_limit_is_refused_before_the_tool_runs(self):
+        from laravel_mcp_companion.tools.registry import MAX_ARGUMENT_LENGTH
+        ran = []
+        wrapped = _reporting_failures("example", lambda **kwargs: ran.append(kwargs) or {})
+
+        result = wrapped(section="[" * (MAX_ARGUMENT_LENGTH + 1))
+
+        assert result.is_error
+        error = result.structured_content["error"]
+        assert error["code"] == "invalid_argument"
+        assert "section" in error["message"]
+        assert not ran
+
+    def test_an_argument_at_the_limit_is_passed_through(self):
+        from laravel_mcp_companion.tools.registry import MAX_ARGUMENT_LENGTH
+        wrapped = _reporting_failures("example", lambda **kwargs: {"length": len(kwargs["query"])})
+
+        assert wrapped(query="a" * MAX_ARGUMENT_LENGTH).structured_content == {"length": MAX_ARGUMENT_LENGTH}
+
+    def test_a_string_inside_a_list_is_bounded_too(self):
+        from laravel_mcp_companion.tools.registry import MAX_ARGUMENT_LENGTH
+        wrapped = _reporting_failures("example", lambda **kwargs: {})
+
+        assert wrapped(names=["forge", "x" * (MAX_ARGUMENT_LENGTH + 1)]).is_error
+
+    def test_a_list_with_too_many_items_is_refused(self):
+        from laravel_mcp_companion.tools.registry import MAX_LIST_ITEMS
+        wrapped = _reporting_failures("example", lambda **kwargs: {})
+
+        assert wrapped(names=["a"] * (MAX_LIST_ITEMS + 1)).is_error
+        assert not wrapped(names=["a"] * MAX_LIST_ITEMS).is_error
+
+    def test_an_async_tool_is_bounded_the_same_way(self):
+        from laravel_mcp_companion.tools.registry import MAX_ARGUMENT_LENGTH
+
+        async def tool(**kwargs):
+            return {}
+
+        result = asyncio.run(_reporting_failures("example", tool)(query="a" * (MAX_ARGUMENT_LENGTH + 1)))
+
+        assert result.structured_content["error"]["code"] == "invalid_argument"
+
+    async def test_a_real_tool_refuses_an_overlong_section_over_the_protocol(self, tmp_path):
+        from fastmcp import Client
+        from laravel_mcp_companion.server import create_mcp_server
+        from laravel_mcp_companion.tools.registry import MAX_ARGUMENT_LENGTH
+
+        server = create_mcp_server("t", tmp_path, "12.x", transform_mode=None)
+        async with Client(server) as client:
+            result = await client.call_tool(
+                "read_laravel_doc_section",
+                {"filename": "queues.md", "section": "[" * (MAX_ARGUMENT_LENGTH + 1)},
+                raise_on_error=False,
+            )
+
+        assert result.is_error
+        assert result.structured_content["error"]["code"] == "invalid_argument"
+
+
 class TestWhatIsDeclared:
     def test_there_are_twelve_tools(self):
         assert len(REGISTRY) == 12

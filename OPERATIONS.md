@@ -27,6 +27,7 @@ Every version stays available whatever `--version` says; it sets the default.
 | `--docs-path PATH` | Read and update the documentation in this directory (env: `DOCS_PATH`) | The copy that ships with the image or package; see [Fetching without a new image](#fetching-without-a-new-image) |
 | `--update-docs` | On startup, fetch the framework docs for the default version if Laravel has changed them (env: `UPDATE_DOCS=true`) | false |
 | `--force-update` | On startup, fetch them whether or not they have changed (env: `FORCE_UPDATE=true`) | false |
+| `--allow-updates` | Let clients call `update_laravel_docs` on an HTTP server with no authentication; see [Network defaults](#network-defaults) (env: `ALLOW_UPDATES=true`) | false |
 | `--transform-mode MODE` | How tools are listed: `search`, `code`, or `none`; see [Tool listing modes](#tool-listing-modes) (env: `TRANSFORM_MODE`) | `search` |
 | `--code-mode` | Deprecated; the same as `--transform-mode code` (env: `CODE_MODE=true`) | false |
 | `--log-level LEVEL` | DEBUG, INFO, WARNING, ERROR, CRITICAL (env: `LOG_LEVEL`) | INFO |
@@ -105,6 +106,16 @@ Which documentation an image holds depends on its tag:
   selects the framework docs, the services, the packages or all of them.
 - **At startup,** `--update-docs` fetches the framework docs for the default Laravel version. It
   does not fetch services or packages.
+
+One update runs at a time; a second call while one is running is refused with `update_failed`.
+An update of a Laravel version replaces its pages in one step, so a download that fails leaves the
+pages that were there. Over HTTP without authentication the tool is off unless you start the
+server with `--allow-updates`; see [Network defaults](#network-defaults).
+
+An update fetches only from GitHub and the documentation sites named in
+[What the nightly sync does](#what-the-nightly-sync-does). A redirect to any other host, or to
+plain `http`, is refused. A page over 20 MB is refused, and so is an archive over 100 MB or one
+that would unpack to more than 200 MB.
 
 Where the fetched documentation is kept depends on how you run the server.
 
@@ -205,6 +216,13 @@ An authenticating reverse proxy in front of the server does the same job, if you
 - **`Host` and `Origin` headers are checked**, which blocks DNS-rebinding and requests made from a
   web page in the user's browser.
 - **CORS is off** unless you pass `--cors-origin`. Wildcard origins are rejected.
+- **`update_laravel_docs` is off without authentication.** With no authentication, anyone who can
+  reach the port can call any tool, and an update is hundreds of requests to other sites and a
+  rewrite of the server's documentation. The tool stays listed and answers with `update_failed`.
+  Configure [authentication](#authentication), or pass `--allow-updates` if everyone who can
+  reach the port may update. `--update-docs` at startup is not affected.
+- **A string argument is at most 1,000 characters**, and a list at most 100 items. A longer one is
+  refused with `invalid_argument`, over stdio as well.
 
 Only `localhost`, `127.0.0.1` and `::1` are accepted as `Host` values, which is what a client on
 the same machine sends, including to the Docker command above. **If clients reach the server by
@@ -239,7 +257,7 @@ connecting at once.
   no documentation is readable.
 - **`GET /metrics`** returns Prometheus text: per-tool call counters, a latency histogram, request
   counts, uptime and the age of the documentation. It requires a token whenever authentication is
-  on.
+  on. Calls to a tool that does not exist are counted together, as `tool="unknown"`.
 - **`GET /.well-known/mcp/server.json`** returns the server's MCP Registry entry.
 
 The Docker image declares a `HEALTHCHECK` and runs as an unprivileged user.

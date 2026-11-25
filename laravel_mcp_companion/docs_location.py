@@ -126,13 +126,30 @@ def updating_path() -> Path:
     return user
 
 
+class NotADocumentationCopy(OSError):
+    """The directory the user's copy belongs in holds something else."""
+
+
+def _is_a_copy_of_ours(directory: Path) -> bool:
+    """Whether a directory holds documentation this project put there: the
+    versions list, or a version with the updater's metadata."""
+    return (directory / ".versions_cache.json").is_file() or any(directory.glob("*/.metadata"))
+
+
 def _replace_with_copy(source: Path, destination: Path) -> None:
     """Copy `source` to `destination`, replacing what is there.
 
     The copy is made beside the destination and moved into place, so a copy
     that fails part-way leaves the old directory, or none, and never half of
-    a new one.
+    a new one. A directory that holds files but none of this project's is
+    left alone: with the home variable pointed at a project, `docs` under it
+    is that project's own documentation.
     """
+    if destination.is_dir() and any(destination.iterdir()) and not _is_a_copy_of_ours(destination):
+        raise NotADocumentationCopy(
+            f"{destination} holds files and was not made by this server, so it will not be "
+            f"replaced. Point {ENV_HOME} at a directory with no docs folder of its own."
+        )
     destination.parent.mkdir(parents=True, exist_ok=True)
     staging = destination.with_name(f"{destination.name}.{uuid.uuid4().hex}.partial")
     try:

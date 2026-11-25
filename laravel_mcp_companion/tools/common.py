@@ -29,7 +29,11 @@ def default_version(runtime_version: Optional[str]) -> str:
 
 
 _ZERO_WIDTH = re.compile("[​‌‍⁠﻿]")
-_MARKDOWN_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+# The link text excludes an opening bracket and the address an opening
+# parenthesis, so a failed match stops at the next candidate. Without that, a
+# `section` argument or a fetched heading made of unclosed brackets took time
+# quadratic in its length.
+_MARKDOWN_LINK = re.compile(r"\[([^\[\]]*)\]\([^()]*\)")
 
 
 def slugify(heading: str) -> str:

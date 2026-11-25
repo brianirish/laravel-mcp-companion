@@ -257,6 +257,7 @@ The full list is in [RELEASING.md](RELEASING.md#conditions-for-tagging-100). In 
 - [x] A release candidate, `v1.0.0-rc1`
 - [x] Install links for Cursor and VS Code
 - [x] Version checks and the release steps carry a release candidate
+- [x] A security review of the code, the dependencies, the image and the workflows (2026-11-23); what it found is fixed and listed in the changelog
 - [ ] A patch release on an older line once a newer tag exists; the version check rejects it today. Needed for the first security fix to 1.x after a 2.0
 - [ ] Pest's own documentation as a source (its site publishes an index; the fetcher reads a different index format)
 - [x] A persistent, user-writable location for documentation updates on a `pip` install

@@ -1,6 +1,7 @@
 """The tools that read, list, describe, compare and update documentation."""
 
 import re
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Optional
@@ -518,13 +519,35 @@ def _refetch(fetch: Any, known: List[str], names: Optional[List[str]], source: s
     ]
 
 
+# One update at a time in this process. Two updates of the same version
+# replace each other's files, and each one holds a worker thread for as long
+# as its fetches take, so a burst of calls starved every other tool.
+_UPDATE_LOCK = threading.Lock()
+
+
 def update_docs(tc: Any, scope: str = "core", version: Optional[str] = None, names: Optional[List[str]] = None, force: bool = False) -> Dict[str, Any]:
+    if not getattr(tc, "updates_enabled", True):
+        raise ToolFailure(
+            "update_failed",
+            "Updating is turned off on this server, because it is reachable over HTTP without "
+            "authentication. Its operator can turn it on with --allow-updates, or configure "
+            "authentication. Pulling a newer image or package is the other way to get newer pages.",
+        )
     if scope not in UPDATE_SCOPES:
         raise ToolFailure("invalid_argument", f"Unknown scope {scope!r}", {"valid_scopes": list(UPDATE_SCOPES)})
     require_version(version)
     if names and scope in ("core", "all"):
         raise ToolFailure("invalid_argument", f"names applies to services, packages or learning, not scope={scope!r}")
 
+    if not _UPDATE_LOCK.acquire(blocking=False):
+        raise ToolFailure("update_failed", "Another documentation update is already running. Try again when it has finished.")
+    try:
+        return _update_docs(tc, scope, version, names, force)
+    finally:
+        _UPDATE_LOCK.release()
+
+
+def _update_docs(tc: Any, scope: str, version: Optional[str], names: Optional[List[str]], force: bool) -> Dict[str, Any]:
     results: List[Dict[str, Any]] = []
 
     if scope in ("core", "all"):

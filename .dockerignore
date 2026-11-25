@@ -29,6 +29,13 @@ scripts
 # Working notes that ship no runtime value
 docs/superpowers
 
+# Local settings, agent working files and anything holding secrets. CI
+# builds from a clean checkout; a build on a developer's machine does not.
+.claude
+.superpowers
+.env
+.env.*
+
 # Editor and OS noise
 .vscode
 .idea

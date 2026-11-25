@@ -102,8 +102,33 @@ class TestRuntimeImage:
         assert "laravel_mcp_companion.healthcheck" in check
 
 
+class TestOperatingSystemPackages:
+    """The python image is rebuilt less often than Alpine publishes fixes. In
+    November 2026 a fresh pull carried 35 known vulnerabilities in zlib,
+    OpenSSL, krb5 and the base image's own pip; upgrading the packages and
+    removing pip left two with no fix published."""
+
+    def test_the_runtime_image_upgrades_its_os_packages(self):
+        upgrade = runtime_stage()[runtime_index(r"apk upgrade")]
+        assert "--no-cache" in upgrade
+
+    def test_the_upgrade_is_not_served_from_the_build_cache(self):
+        assert runtime_index(r"^ARG OS_PACKAGES_REFRESH") < runtime_index(r"apk upgrade")
+        assert "OS_PACKAGES_REFRESH" in runtime_stage()[runtime_index(r"apk upgrade")]
+
+    def test_the_upgrade_comes_after_the_dependency_layer(self):
+        """It changes whenever Alpine publishes a fix. Above the
+        dependencies, it would make everyone download them again."""
+        assert runtime_index(r"^COPY --from=build .*\.venv") < runtime_index(r"apk upgrade")
+
+    def test_the_base_images_pip_is_removed(self):
+        """Nothing in the image uses it: the dependencies are in the
+        virtualenv, which has no pip of its own."""
+        assert any(re.search(r"/usr/local/bin/python -m pip uninstall", line) for line in runtime_stage())
+
+
 class TestDockerignore:
-    @pytest.mark.parametrize("unwanted", [".git", ".venv", "htmlcov", "__pycache__"])
+    @pytest.mark.parametrize("unwanted", [".git", ".venv", "htmlcov", "__pycache__", ".claude", ".superpowers", ".env", ".env.*"])
     def test_build_context_excludes_local_only_directories(self, unwanted):
         """.venv alone is 219MB, and none of these belong in a published image."""
         path = REPO_ROOT / ".dockerignore"

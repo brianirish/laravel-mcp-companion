@@ -207,3 +207,31 @@ class TestRealCorpusFlow:
         assert result["count"], result
         top = result["results"][0]
         assert read_section(REPO_DOCS, top["file"], top["section"]).data["content"]
+
+
+class TestASymlinkedServiceDirectory:
+    async def test_the_external_resource_does_not_read_through_it(self, corpus, temp_dir):
+        """The tools, the listing, search and the package resource all leave
+        out a collection directory that is a symlink. The service resource
+        took the directory as its own root, so everything inside the link's
+        target counted as contained."""
+        import os
+
+        from fastmcp import Client
+        from laravel_mcp_companion.server import create_mcp_server
+
+        outside = temp_dir.parent / "outside-service"
+        outside.mkdir(exist_ok=True)
+        (outside / "secret.md").write_text("# Secret\n\nOUTSIDE-CONTENT that must never be served.\n")
+        external = corpus / "external"
+        external.mkdir(exist_ok=True)
+        if (external / "vapor").exists():
+            import shutil
+            shutil.rmtree(external / "vapor")
+        os.symlink(outside, external / "vapor")
+
+        server = create_mcp_server("TestServer", corpus, "12.x", transform_mode=None)
+        async with Client(server) as client:
+            content = await client.read_resource("laravel-external://vapor/secret.md")
+
+        assert "OUTSIDE-CONTENT" not in content[0].text

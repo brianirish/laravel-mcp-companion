@@ -35,6 +35,25 @@ logging.basicConfig(
 logger = logging.getLogger("laravel-docs-updater")
 
 
+# Patterns for markdown links and images in fetched pages. The text between
+# the brackets excludes an opening bracket, and the address excludes an
+# opening parenthesis, so a failed match stops at the next candidate instead
+# of scanning to the end of the text. Written as `\[[^\]]*\]\([^)]*\)`,
+# these went quadratic on a page of unclosed brackets, and `re` holds the
+# interpreter lock while it matches: one such page stopped the server.
+_MARKDOWN_LINK = re.compile(r'\[([^\[\]]*)\]\(([^()]*)\)')
+_MARKDOWN_IMAGE = re.compile(r'!\[[^\[\]]*\]\([^()]*\)')
+# Cloudflare replaces an address in a page with a link whose text is the
+# literal "[email protected]". markdownify keeps those brackets, so the link
+# arrives as [[email protected]](/cdn-cgi/l/email-protection#...).
+_PROTECTED_EMAIL = re.compile(r'\[{1,3}[^\[\]]*\]{1,3}\(/cdn-cgi/l/email-protection[^()]*\)')
+
+
+def replace_protected_emails(content: str) -> str:
+    """Replace every Cloudflare email-protection link with a plain placeholder."""
+    return _PROTECTED_EMAIL.sub('[email protected]', content)
+
+
 # Utility functions for content filtering
 def remove_social_media_lines(content: str) -> str:
     """
@@ -61,7 +80,7 @@ def remove_social_media_lines(content: str) -> str:
             continue
 
         # Count links in the line
-        all_links = re.findall(r'\[([^\]]*)\]\(([^)]*)\)', stripped)
+        all_links = _MARKDOWN_LINK.findall(stripped)
         if len(all_links) >= 3:  # If line has 3+ links, check if most are social
             social_link_count = sum(1 for text, url in all_links if any(domain in url for domain in social_domains))
             # If 50% or more of the links are social media, remove the line
@@ -70,7 +89,7 @@ def remove_social_media_lines(content: str) -> str:
 
         # Check if line is entirely composed of social media links
         # Remove all markdown links from the line to see what remains
-        text_without_links = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', stripped)
+        text_without_links = _MARKDOWN_LINK.sub(r'\1', stripped)
 
         # If after removing links we have substantial text, keep the line
         # But if it's only link text that are domain names or social network names, skip it
@@ -109,7 +128,7 @@ def remove_image_references(content: str) -> str:
 
         if not in_code_block:
             # Remove image references from the line
-            cleaned = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', line)
+            cleaned = _MARKDOWN_IMAGE.sub('', line)
 
             # Skip a line only when removing an image is what emptied it (or
             # left a bare bullet). A line that was blank to begin with is a
@@ -140,6 +159,86 @@ LAST_RESORT_VERSIONS = ["12.x"]
 # Network timeout for documentation fetches. Without this, urllib blocks
 # indefinitely and a stalled connection hangs startup or pins a worker thread.
 DEFAULT_REQUEST_TIMEOUT = 30
+
+# What is fetched is stored where the read and search tools return it, so the
+# limits below are on what an upstream site can make this process do.
+
+# The hosts a redirect may lead to: every site a source is fetched from, and
+# the host GitHub serves archives from. Where a request starts is fixed in
+# this file; where it ends was not, and a compromised site could redirect a
+# page fetch to an address only this machine can reach, such as a cloud
+# metadata service, and have the answer stored as a documentation page.
+# tests/unit/test_fetch_limits.py fails when a site named in this file is
+# missing here.
+ALLOWED_FETCH_HOSTS = frozenset({
+    "api.github.com", "github.com", "codeload.github.com", "raw.githubusercontent.com",
+    "laravel.com", "docs.vapor.build", "docs.envoyer.io", "nova.laravel.com",
+    "nightwatch.laravel.com", "herd.laravel.com",
+    "spatie.be", "livewire.laravel.com", "inertiajs.com", "filamentphp.com",
+    "laraveldebugbar.com", "laracasts.com",
+})
+
+# The largest page or index read into memory. The largest fetched today, a
+# service's llms-full.txt, is under two megabytes.
+MAX_RESPONSE_BYTES = 20 * 1024 * 1024
+# The largest archive of a Laravel version downloaded, and the most it may
+# unpack to. A version's archive is a few megabytes either way.
+MAX_ARCHIVE_BYTES = 100 * 1024 * 1024
+MAX_EXTRACTED_BYTES = 200 * 1024 * 1024
+MAX_ARCHIVE_ENTRIES = 20_000
+
+
+class ResponseTooLarge(Exception):
+    """An upstream response, or an archive, was larger than this server accepts."""
+
+
+class RefusedRedirect(urllib.error.HTTPError):
+    """A redirect to somewhere documentation is not fetched from."""
+
+
+class RedirectGuard(urllib.request.HTTPRedirectHandler):
+    """Follow a redirect only over https and only to a documentation host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # type: ignore[no-untyped-def]
+        target = urllib.parse.urlsplit(newurl)
+        if target.scheme != "https" or target.hostname not in ALLOWED_FETCH_HOSTS:
+            raise RefusedRedirect(
+                req.full_url, code,
+                f"refused a redirect to {target.scheme}://{target.hostname}, which is not a documentation host",
+                headers, fp,
+            )
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+# Every request in this module goes through urllib.request.urlopen, which uses
+# the process-wide opener, so the guard is installed there. Nothing else in the
+# server uses urllib to fetch; the HTTP transport and its JWKS client use httpx.
+urllib.request.install_opener(urllib.request.build_opener(RedirectGuard))
+
+
+def read_limited(response: Any, limit: Optional[int] = None) -> bytes:
+    """Read a response, refusing one larger than `limit` bytes."""
+    if limit is None:
+        limit = MAX_RESPONSE_BYTES
+    data: bytes = response.read(limit + 1)
+    if len(data) > limit:
+        raise ResponseTooLarge(f"the response is larger than {limit} bytes")
+    return data
+
+
+class _LimitedReader:
+    """A response that raises once more than `limit` bytes have been read from it."""
+
+    def __init__(self, response: Any, limit: int) -> None:
+        self._response = response
+        self._left = limit
+
+    def read(self, size: int = -1) -> bytes:
+        chunk: bytes = self._response.read(size)
+        self._left -= len(chunk)
+        if self._left < 0:
+            raise ResponseTooLarge("the archive is larger than this server accepts")
+        return chunk
 
 # How long a cached version list stays fresh before we ask GitHub again.
 VERSIONS_CACHE_TTL_SECONDS = 24 * 60 * 60
@@ -526,7 +625,7 @@ def _read_versions_cache(cache_file: Path, max_age_seconds: float | None = None)
         # directory users bind-mount and the server itself writes to. The API
         # response is filtered to this shape already; the cache never was, so a
         # single edited JSON value could smuggle "../.." past every check.
-        versions = [v for v in versions if isinstance(v, str) and re.fullmatch(r"\d+\.x", v)]
+        versions = [v for v in versions if isinstance(v, str) and re.fullmatch(r"[0-9]+\.x", v)]
         if not versions:
             logger.warning("Versions cache contained no well-formed version strings")
             return None
@@ -590,12 +689,14 @@ def get_supported_versions(cache_file: Path | None = None) -> list[str]:
         )
 
         with urllib.request.urlopen(request, timeout=VERSIONS_REQUEST_TIMEOUT) as response:
-            branches = json.loads(response.read().decode())
+            branches = json.loads(read_limited(response).decode())
 
             version_branches = []
             for branch in branches:
                 name = branch["name"]
-                if re.match(r'^\d+\.x$', name):
+                # fullmatch and [0-9]: `$` also matches before a trailing
+                # newline, and \d matches digits from other scripts.
+                if re.fullmatch(r'[0-9]+\.x', name):
                     major_version = int(name.split('.')[0])
                     if major_version >= 6:
                         version_branches.append(name)
@@ -961,7 +1062,9 @@ class ExternalDocsFetcher:
             try:
                 request = urllib.request.Request(url, headers=headers)
                 with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    return response.read()
+                    return read_limited(response)
+            except ResponseTooLarge:
+                raise
             except urllib.error.HTTPError as e:
                 last_exception = e
                 if e.code == 404:
@@ -1074,7 +1177,7 @@ class DocsUpdater:
                 )
                 
                 with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    data = json.loads(response.read().decode())
+                    data = json.loads(read_limited(response).decode())
                     return {
                         "sha": data["commit"]["sha"],
                         "date": data["commit"]["commit"]["committer"]["date"],
@@ -1174,8 +1277,11 @@ class DocsUpdater:
                     )
 
                     with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response, open(zip_path, 'wb') as out_file:
-                        shutil.copyfileobj(response, out_file)
+                        shutil.copyfileobj(_LimitedReader(response, MAX_ARCHIVE_BYTES), out_file)
                     break  # Success, exit retry loop
+                except (ResponseTooLarge, RefusedRedirect):
+                    # Asking again gets the same answer.
+                    raise
                 except Exception as e:
                     if attempt < max_retries:
                         wait_time = min(30, (2 ** attempt) + random.uniform(0, 2))
@@ -1188,6 +1294,15 @@ class DocsUpdater:
             # Extract the zip file
             logger.debug(f"Extracting archive to {temp_path}")
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                # A few hundred kilobytes of archive can declare gigabytes of
+                # content. The declared sizes are checked before anything is
+                # written; zipfile reads no more of a member than it declares.
+                members = zip_ref.infolist()
+                unpacked = sum(member.file_size for member in members)
+                if len(members) > MAX_ARCHIVE_ENTRIES or unpacked > MAX_EXTRACTED_BYTES:
+                    raise ResponseTooLarge(
+                        f"the archive holds {len(members)} files that unpack to {unpacked} bytes"
+                    )
                 zip_ref.extractall(temp_path)
 
             # Find the extracted directory (should be named like "docs-12.x")
@@ -1203,6 +1318,7 @@ class DocsUpdater:
             return extracted_dir
         except Exception as e:
             logger.error(f"Error downloading documentation: {str(e)}")
+            shutil.rmtree(temp_path, ignore_errors=True)
             raise
     
     def needs_update(self, latest_commit: Optional[Dict[str, str]] = None) -> bool:
@@ -1255,6 +1371,7 @@ class DocsUpdater:
             if latest_commit is not None and not self.needs_update(latest_commit):
                 return False
 
+        source_dir: Optional[Path] = None
         try:
             # Get the latest commit info for metadata
             if latest_commit is None:
@@ -1262,22 +1379,9 @@ class DocsUpdater:
 
             # Download the documentation
             source_dir = self.download_documentation()
-            
-            # Clear the version directory (except .metadata)
-            for item in self.version_dir.iterdir():
-                if item.name != ".metadata":
-                    if item.is_dir():
-                        shutil.rmtree(item)
-                    else:
-                        item.unlink()
-            
-            # Copy files to the version directory
-            for item in source_dir.iterdir():
-                if item.is_dir():
-                    shutil.copytree(item, self.version_dir / item.name)
-                else:
-                    shutil.copy2(item, self.version_dir / item.name)
-            
+
+            self._replace_pages(source_dir)
+
             # Update metadata
             metadata = {
                 "version": self.version,
@@ -1289,14 +1393,54 @@ class DocsUpdater:
             }
             self.write_local_metadata(metadata)
 
-            shutil.rmtree(source_dir.parent)  # Remove the temporary directory
-            logger.debug(f"Removed temporary directory: {source_dir.parent}")
-            
             logger.info(f"Documentation updated successfully to {self.version} ({latest_commit['sha'][:7]})")
             return True
         except Exception as e:
             logger.error(f"Error updating documentation: {str(e)}")
             raise
+        finally:
+            # The download is a temporary directory of its own. It goes
+            # whether or not the update worked; left behind, every failed
+            # update kept a copy of the archive and its contents.
+            if source_dir is not None:
+                shutil.rmtree(source_dir.parent, ignore_errors=True)
+
+    def _replace_pages(self, source_dir: Path) -> None:
+        """Replace this version's pages with those in `source_dir`, all or nothing.
+
+        The new pages are copied to a directory beside the version's own, and
+        the two are swapped by renaming. A copy that fails part way leaves the
+        old pages as they were; deleting them first, as this once did, left
+        the version empty. `.metadata` is this updater's own and is carried
+        over, never taken from the download.
+        """
+        # The version directory may be a symlink to wherever the pages are
+        # kept. The swap happens there, so that the link still points at them.
+        current = self.version_dir.resolve()
+        staging = Path(tempfile.mkdtemp(prefix=f".{current.name}.new-", dir=current.parent))
+        retired = current.parent / f".{current.name}.old-{staging.name.rsplit('-', 1)[-1]}"
+        try:
+            for item in source_dir.iterdir():
+                if item.name == ".metadata" or item.is_symlink():
+                    continue
+                if item.is_dir():
+                    shutil.copytree(item, staging / item.name)
+                else:
+                    shutil.copy2(item, staging / item.name)
+            if self.metadata_dir.is_dir():
+                shutil.copytree(self.metadata_dir, staging / ".metadata")
+            shutil.copystat(current, staging)
+
+            current.rename(retired)
+            try:
+                staging.rename(current)
+            except OSError:
+                retired.rename(current)
+                raise
+        except Exception:
+            shutil.rmtree(staging, ignore_errors=True)
+            raise
+        shutil.rmtree(retired, ignore_errors=True)
 
 
 class CommunityPackageFetcher:
@@ -1527,7 +1671,7 @@ class CommunityPackageFetcher:
         """One GET, following redirects, with the project's user agent."""
         request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-            return response.read()
+            return read_limited(response)
 
     def _discover_pages(self, landing_url: str, link_pattern: str, name: str) -> Optional[tuple[str, List[str]]]:
         """The major version a package's docs are on, and its pages, read
@@ -1744,7 +1888,7 @@ class CommunityPackageFetcher:
         def fetch(url: str) -> bytes:
             request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                return response.read()
+                return read_limited(response)
 
         name = config["name"]
         result = fetch_llms_index_docs(
@@ -1842,7 +1986,7 @@ class CommunityPackageFetcher:
             )
             
             with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                content = response.read().decode('utf-8')
+                content = read_limited(response).decode('utf-8')
             
             # Process the README content
             if content:
@@ -1899,7 +2043,7 @@ class CommunityPackageFetcher:
             )
             
             with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                content_bytes = response.read()
+                content_bytes = read_limited(response)
                 content = content_bytes.decode('utf-8')
             
             # Parse with BeautifulSoup
@@ -2019,14 +2163,7 @@ class CommunityPackageFetcher:
         # Fix code blocks
         content = re.sub(r'```\s*\n', '```\n', content)
         
-        # Remove CloudFlare email protection links
-        # Catch all CloudFlare email protection links regardless of link text
-        # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
-        content = re.sub(
-            r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
-            '[email protected]',
-            content
-        )
+        content = replace_protected_emails(content)
         
         # Remove trailing whitespace
         content = '\n'.join(line.rstrip() for line in content.split('\n'))
@@ -2901,13 +3038,7 @@ class LearningResourceFetcher:
                     # Clean up
                     markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
 
-                    # Remove CloudFlare email protection links
-                    # Note: markdownify escapes @ as \@, creating patterns like [[email protected]]
-                    markdown_content = re.sub(
-                        r'\[+[^\]]*\]+\(/cdn-cgi/l/email-protection[^)]*\)',
-                        '[email protected]',
-                        markdown_content
-                    )
+                    markdown_content = replace_protected_emails(markdown_content)
 
                     # Remove social media links
                     markdown_content = remove_social_media_lines(markdown_content)
@@ -2942,7 +3073,9 @@ class LearningResourceFetcher:
             try:
                 request = urllib.request.Request(url, headers=headers)
                 with urllib.request.urlopen(request, timeout=DEFAULT_REQUEST_TIMEOUT) as response:
-                    return response.read()
+                    return read_limited(response)
+            except ResponseTooLarge:
+                raise
             except urllib.error.HTTPError as e:
                 last_exception = e
                 if e.code == 404:

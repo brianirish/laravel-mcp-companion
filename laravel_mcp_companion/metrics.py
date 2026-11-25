@@ -13,6 +13,7 @@ import threading
 import time
 from typing import Any, Callable, Dict, Optional, Tuple
 
+from fastmcp.exceptions import NotFoundError
 from fastmcp.server.middleware import Middleware
 
 # Latency buckets in seconds. One histogram overall rather than per tool:
@@ -91,6 +92,12 @@ def _fmt(value: float) -> str:
     return str(as_int) if value == as_int and "e" not in repr(value) else repr(value)
 
 
+def _label(value: str) -> str:
+    """A label value as the exposition format wants it: backslash, double
+    quote and newline escaped, so a value cannot end its own line."""
+    return str(value).replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+
 def render_prometheus(reg: MetricsRegistry) -> str:
     """Exposition-format output with stable ordering."""
     snap = reg.snapshot()
@@ -99,12 +106,12 @@ def render_prometheus(reg: MetricsRegistry) -> str:
     lines.append("# TYPE laravel_mcp_tool_calls_total counter")
     for (tool, status), count in sorted(snap["tool_calls"].items()):
         lines.append(
-            f'laravel_mcp_tool_calls_total{{status="{status}",tool="{tool}"}} {count}'
+            f'laravel_mcp_tool_calls_total{{status="{status}",tool="{_label(tool)}"}} {count}'
         )
 
     lines.append("# TYPE laravel_mcp_requests_total counter")
     for method, count in sorted(snap["requests"].items()):
-        lines.append(f'laravel_mcp_requests_total{{method="{method}"}} {count}')
+        lines.append(f'laravel_mcp_requests_total{{method="{_label(method)}"}} {count}')
 
     lines.append("# TYPE laravel_mcp_tool_call_seconds histogram")
     cumulative = 0
@@ -139,6 +146,10 @@ def render_prometheus(reg: MetricsRegistry) -> str:
 registry = MetricsRegistry()
 
 
+# The label every call to a tool that does not exist is counted under.
+UNKNOWN_TOOL = "unknown"
+
+
 class MetricsMiddleware(Middleware):
     """Counts and times every tool call at the protocol layer."""
 
@@ -150,6 +161,12 @@ class MetricsMiddleware(Middleware):
         started = time.perf_counter()
         try:
             result = await call_next(context)
+        except NotFoundError:
+            # The name of a tool that does not exist is whatever the client
+            # sent. Counting each one under its own name would let a client
+            # grow this registry, and the /metrics page, without limit.
+            registry.record_tool_call(UNKNOWN_TOOL, time.perf_counter() - started, ok=False)
+            raise
         except Exception:
             registry.record_tool_call(
                 context.message.name, time.perf_counter() - started, ok=False

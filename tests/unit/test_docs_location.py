@@ -101,6 +101,31 @@ class TestReading:
         assert docs_location.reading_path() == user
         assert (user / "12.x" / "queues.md").is_file()
 
+    def test_a_docs_folder_that_is_not_this_servers_is_left_alone(self, wheel, caplog):
+        """LARAVEL_MCP_COMPANION_HOME pointed at a project has that project's
+        own docs folder under it. Starting the server used to delete it."""
+        bundled, user = wheel
+        user.mkdir(parents=True)
+        (user / "architecture.md").write_text("# Ours, not Laravel's\n", encoding="utf-8")
+        (user / "guides").mkdir()
+
+        with caplog.at_level("WARNING", logger=docs_location.logger.name):
+            assert docs_location.reading_path() == bundled
+
+        assert (user / "architecture.md").read_text(encoding="utf-8") == "# Ours, not Laravel's\n"
+        assert (user / "guides").is_dir()
+        assert "was not made by this server" in caplog.text
+
+    def test_an_update_refuses_such_a_folder_too(self, wheel):
+        bundled, user = wheel
+        user.mkdir(parents=True)
+        (user / "architecture.md").write_text("# Ours\n", encoding="utf-8")
+
+        with pytest.raises(OSError, match="was not made by this server"):
+            docs_location.updating_path()
+
+        assert (user / "architecture.md").is_file()
+
     def test_where_the_user_directory_cannot_be_written_the_bundled_copy_is_read(
         self, wheel, monkeypatch, caplog
     ):

@@ -118,3 +118,32 @@ class TestMiddleware:
         assert 'laravel_mcp_tool_calls_total{status="error",tool="explodes"} 1' in out
         assert 'laravel_mcp_requests_total{method="tools/call"} 2' in out
         assert "laravel_mcp_tool_call_seconds_count 2" in out
+
+    async def test_a_tool_that_does_not_exist_is_counted_under_one_label(self):
+        """The name of a tool that does not exist is whatever the client sent.
+        Counted under its own name, every invented name would stay in memory
+        and in /metrics for the life of the process."""
+        from fastmcp import Client, FastMCP
+
+        server = FastMCP("t", middleware=[MetricsMiddleware()])
+
+        async with Client(server) as client:
+            for name in ("invented-1", "invented-2", 'x"} 1\nforged_metric{a="b'):
+                result = await client.call_tool(name, {}, raise_on_error=False)
+                assert result.is_error
+
+        out = render_prometheus(metrics.registry)
+        assert 'laravel_mcp_tool_calls_total{status="error",tool="unknown"} 3' in out
+        assert "invented" not in out
+        assert "forged_metric" not in out
+
+
+class TestLabelEscaping:
+    def test_a_label_value_cannot_end_its_own_line(self):
+        reg = MetricsRegistry()
+        reg.record_tool_call('a"b\\c\nd', 0.01, ok=True)
+
+        out = render_prometheus(reg)
+
+        assert 'tool="a\\"b\\\\c\\nd"' in out
+        assert all(line.startswith(("#", "laravel_mcp_")) for line in out.splitlines())
