@@ -2,9 +2,9 @@ Source: https://laravel.com/cloud/docs/deploy-guides/nodejs.md
 
 # Node.js deploy guide
 
-Configure your Express, Hono, or other Node.js application for production on Laravel Cloud.
+Configure your Express, Hono, NestJS, or other Node.js application for production on Laravel Cloud.
 
-The [Node.js quickstart](https://laravel.com/cloud/docs/quickstart#node-js) walks you through your first deployment to Laravel Cloud. Once your application is up and running, this guide will help you get it ready for production. We'll cover how to build, start, and configure your Express, Hono, or other Node.js application for Cloud.
+The [Node.js](https://laravel.com/cloud/docs/quickstart#node-js) and [NestJS](https://laravel.com/cloud/docs/quickstart#nestjs) quickstarts walk you through your first deployment to Laravel Cloud. Once your application is up and running, this guide will help you get it ready for production. We'll cover how to build, start, and configure your Express, Hono, NestJS, or other Node.js application for Cloud.
 
 ## Build your application
 
@@ -43,6 +43,8 @@ Prefer Yarn, pnpm, or Bun? You may swap these commands out by following the [Usi
 
 Cloud pre-fills a start command based on the `start` script or `main` entry in your `package.json`, such as `node server.js`. If neither of these points to a file, the start command falls back to `npm start`, `bun run start`, or `deno task start`, depending on your runtime.
 
+NestJS applications get one extra step. Since the Nest CLI's `start` script runs `nest start` rather than naming a file, Cloud reads the `start:prod` script next. For an application created with the Nest CLI, whose `start:prod` script is `node dist/main`, Cloud pre-fills `node dist/main.js`. If no script names a file, the start command falls back to `npm run start:prod`, `bun run start:prod`, or `deno task start:prod`. In every case, Cloud uses the `web` process from your Procfile instead if your repository has one.
+
 Your start command should run your compiled output directly with `node`, such as `node dist/server.js`. When you keep compilation in your build commands, your application starts quickly when a new instance boots or when your environment wakes up after [scaling to zero](https://laravel.com/cloud/docs/compute#scale-to-zero), since there's nothing left to compile. Tools such as `nodemon`, `tsx watch`, and `ts-node` are great for development, but don't use them to run your application in production.
 
 ### Listen on the right port
@@ -61,6 +63,12 @@ If you are using Hono on Node.js, you will start your server through `@hono/node
 import { serve } from "@hono/node-server";
 
 serve({ fetch: app.fetch, port: Number(process.env.PORT) || 3000 });
+```
+
+The `main.ts` file that the Nest CLI generates already reads `PORT` and leaves out the host. If you have changed it, make sure your NestJS application still listens like this:
+
+```ts theme={null}
+await app.listen(process.env.PORT ?? 3000);
 ```
 
 If your application deploys successfully but still isn't reachable, take a look at the [deployment troubleshooting](https://laravel.com/cloud/docs/deployments#deployment-succeeds-but-serves-no-traffic) guide.
@@ -93,6 +101,16 @@ process.on("SIGTERM", () => {
 
 Here, `server.close` stops accepting new connections and invokes its callback once all of the active connections have ended. The fallback timer makes sure your process exits even if a connection lingers. Keep this timer shorter than your environment's **graceful shutdown timeout** so the rest of the instance has time to stop cleanly. Once that timeout passes, Cloud terminates any process that is still running.
 
+NestJS doesn't listen for shutdown signals by default. Call `enableShutdownHooks` in your `main.ts` file, and Nest will close its HTTP server and run your modules' `onModuleDestroy` and `onApplicationShutdown` hooks when it receives `SIGTERM`:
+
+```ts theme={null}
+const app = await NestFactory.create(AppModule);
+
+app.enableShutdownHooks();
+
+await app.listen(process.env.PORT ?? 3000);
+```
+
 ### Running behind the proxy
 
 Cloud handles TLS for you before forwarding requests to your application, so your server only needs to speak plain HTTP. Cloud's proxy passes the original request scheme in the `X-Forwarded-Proto` header and the client's address chain in the `X-Forwarded-For` header.
@@ -100,6 +118,16 @@ Cloud handles TLS for you before forwarding requests to your application, so you
 Before relying on these headers to determine the request scheme or client IP address, you should configure your framework's trusted proxy settings. In Express, you may tell your application to trust the proxy running alongside it, which allows `req.protocol` and `req.secure` to reflect the original scheme:
 
 ```js theme={null}
+app.set("trust proxy", 1);
+```
+
+NestJS applications use Express by default, so you may apply the same setting through `NestExpressApplication`:
+
+```ts theme={null}
+import { NestExpressApplication } from "@nestjs/platform-express";
+
+const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
 app.set("trust proxy", 1);
 ```
 

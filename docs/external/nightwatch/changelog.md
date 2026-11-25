@@ -4,6 +4,14 @@ Source: https://nightwatch.laravel.com/docs/changelog.md
 
 > New updates and improvements to Laravel Nightwatch
 
+**November 25, 2026**
+
+## Execution Timelines in MCP
+
+The Nightwatch MCP server now lets your AI assistant retrieve execution timelines for requests, job attempts, commands, and scheduled task runs. Your assistant can inspect SQL queries alongside their timings, database connections, and source locations to investigate errors and performance bottlenecks.
+
+Learn more about our [MCP server](https://nightwatch.laravel.com/docs/mcp-server.md).
+
 **May 26, 2026**
 
 ## Investigate Performance Issues with MCP

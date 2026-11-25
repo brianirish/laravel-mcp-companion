@@ -6,7 +6,7 @@ Laravel Cloud supports PHP, Node.js, Bun, Deno, Go, Python, Ruby, and Rust runti
 
 ## Overview
 
-Laravel Cloud supports **PHP** for Laravel and Symfony applications, **JavaScript** (Node.js, Bun, or Deno) for Next.js, Nuxt, TanStack Start, Express, and Hono applications, **Go** for Go applications, **Python** for Django, FastAPI, Flask, and other Python applications, **Ruby** for Rails and other Ruby applications, and **Rust** for axum, Actix Web, Rocket, warp, and other Rust applications. Each runtime determines which versions, extensions, and platform features are available to your application.
+Laravel Cloud supports **PHP** for Laravel and Symfony applications, **JavaScript** (Node.js, Bun, or Deno) for Next.js, Nuxt, TanStack Start, Express, Hono, NestJS, and other Node.js applications, **Go** for Go applications, **Python** for Django, FastAPI, Flask, and other Python applications, **Ruby** for Rails and other Ruby applications, and **Rust** for axum, Actix Web, Rocket, warp, and other Rust applications. Each runtime determines which versions, extensions, and platform features are available to your application.
 
 See the [base image reference](https://laravel.com/cloud/docs/base-images) for the system packages and bundled tools included with each runtime.
 
@@ -24,7 +24,7 @@ To select your PHP version, open your environment's **General Settings** page an
 
 ## Node.js, Bun, and Deno
 
-Next.js, Nuxt, TanStack Start, Express, and Hono applications can run on the Node.js, Bun, or Deno runtime. Laravel Cloud infers which one to use by analyzing the configuration files present in your repository:
+Next.js, Nuxt, TanStack Start, Express, Hono, and NestJS applications can run on the Node.js, Bun, or Deno runtime. Laravel Cloud infers which one to use by analyzing the configuration files present in your repository:
 
 | Runtime | Detected by |
 | - | - |

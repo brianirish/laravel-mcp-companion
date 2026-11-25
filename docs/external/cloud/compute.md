@@ -40,17 +40,27 @@ Review the [Laravel Octane documentation](https://laravel.com/docs/octane) to le
 
 > [!NOTE]
 >
-> Inertia SSR is available for Laravel applications only.
+> Inertia SSR is available for Laravel and Rails applications.
 
 Laravel Cloud can also serve your [Inertia](https://inertiajs.com)-based pages using [server-side rendering](https://inertiajs.com/server-side-rendering). Inertia SSR pre-renders your HTML server-side before sending it to the client, which can improve your application's SEO.
 
-When editing your App cluster, toggle on the "Use Inertia SSR" option. Then, save and deploy your environment. Laravel Cloud renders your Laravel application's templates using Inertia's SSR engine.
+When editing your App cluster, toggle on the "Use Inertia SSR" option. Then, save and deploy your environment. Laravel Cloud renders your application's pages using Inertia's SSR engine.
 
 In addition, if you are using one of Laravel's official [starter kits](https://laravel.com/docs/starter-kits), you should update your environment's build commands to use the `npm run build:ssr` command instead of `npm run build`:
 
 ```bash theme={null}
 npm run build:ssr
 ```
+
+#### Rails
+
+Rails applications need the [`inertia_rails`](https://inertia-rails.dev) gem, version 3.20.0 or later, and its [Puma plugin](https://inertia-rails.dev/guide/server-side-rendering#puma-plugin), which starts the SSR server alongside Puma. Add the plugin to your `config/puma.rb` file:
+
+```ruby theme={null}
+plugin :inertia_ssr
+```
+
+When Inertia SSR is on, Cloud sets `INERTIA_SSR_ENABLED=true`. Make sure your build commands also build your SSR bundle, such as by enabling `ssrBuildEnabled` in `config/vite.json` so `assets:precompile` builds it.
 
 ## Worker clusters
 

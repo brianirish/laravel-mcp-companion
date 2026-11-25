@@ -260,6 +260,77 @@ Select your framework to get started:
 >
 > Congratulations! Your Nuxt application is live on Laravel Cloud! Continue with the [Nuxt deploy guide](https://laravel.com/cloud/docs/deploy-guides/nuxt) to make it production-ready, or read about [environments](https://laravel.com/cloud/docs/environments), [databases](https://laravel.com/cloud/docs/resources/databases/laravel-mysql), and [more](https://laravel.com/cloud/docs/organizations).
 
+> [tab] NestJS
+>
+> ## Prerequisites
+>
+> * A [supported Node.js, Bun, or Deno version](https://laravel.com/cloud/docs/runtimes#node-js-bun-and-deno)
+> * A NestJS application with a `package.json` file at the root of your repository
+> * A GitHub, GitLab, or Bitbucket account
+>
+> **1. Go to your main Laravel Cloud dashboard page and select + New application.**
+>
+> 
+>
+> **2. Connect your Git provider**
+>
+> Select Continue with GitHub, GitLab, or Bitbucket. A new tab or window opens. Sign in to your Git provider and select the user or organization and the repositories you want to give Laravel Cloud access to.
+>
+> 
+>
+> After you complete the Git provider authentication flow, your Git provider redirects you back to Laravel Cloud.
+>
+> **3. Create a new application**
+>
+> Select the repository you want to use, name your Laravel Cloud application, and select a Region where your application will deploy. You can also choose the Port to serve on from the Advanced settings. Then, click Create Application.
+>
+> 
+>
+> Laravel Cloud creates your application along with a default environment. It then takes you to your application's default environment overview page.
+>
+> 
+>
+> Laravel Cloud detects NestJS applications automatically from the dependencies in your `package.json` file.
+>
+> **4. Adjust the runtime version**
+>
+> In your environment settings, set the Node.js, Bun, or Deno version your application requires.
+>
+> **5. Set the build and start commands**
+>
+> NestJS applications are written in TypeScript, so your **build command** should install your dependencies and compile your application to the `dist` directory:
+>
+> ```sh theme={null}
+> npm ci --audit false
+> npm run build
+> ```
+>
+> Laravel Cloud pre-fills a **start command** that runs your compiled output directly. For an application created with the Nest CLI, whose `start:prod` script is `node dist/main`, that command is:
+>
+> ```sh theme={null}
+> node dist/main.js
+> ```
+>
+> Cloud uses the `web` process from your Procfile if your repository has one. Otherwise, it resolves the file named by the `start` script in your `package.json`, then by the `start:prod` script, then by the `main` entry, and runs it with `node`, `bun run`, or `deno run -A`, depending on your runtime. When none of these name a file, the start command falls back to `npm run start:prod` (or `bun run start:prod` or `deno task start:prod`). You can override it from your deployment settings if needed.
+>
+> **6. Add environment variables**
+>
+> Add any environment variables your application requires in the Laravel Cloud dashboard. Laravel Cloud sets these variables on your application process rather than writing a `.env` file, so you may read them from `process.env` or through `@nestjs/config`'s `ConfigService`.
+>
+> Laravel Cloud automatically sets `NODE_ENV=production` and `APP_URL` (your application's URL) on every deployment. If your application uses a database or cache, connect a resource from the infrastructure canvas. Laravel Cloud automatically injects the `DATABASE_URL` or `REDIS_URL` connection string.
+>
+> Your application must listen on the port Laravel Cloud provides through the `PORT` environment variable (`3000` by default). The `main.ts` file that the Nest CLI generates already does this. Leave the host out of the `listen` call so your application accepts the IPv6 connections Cloud uses to reach it:
+>
+> ```ts theme={null}
+> await app.listen(process.env.PORT ?? 3000);
+> ```
+>
+> **7. Deploy**
+>
+> Click the **Deploy** button. Laravel Cloud builds your application and routes traffic to the new instance.
+>
+> Congratulations! Your NestJS application is live on Laravel Cloud! Continue with the [Node.js deploy guide](https://laravel.com/cloud/docs/deploy-guides/nodejs) to make it production-ready, or read about [environments](https://laravel.com/cloud/docs/environments), [databases](https://laravel.com/cloud/docs/resources/databases/laravel-mysql), and [more](https://laravel.com/cloud/docs/organizations).
+
 > [tab] Node.js
 >
 > ## Prerequisites
