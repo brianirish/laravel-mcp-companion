@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "56a449c8133b0ffc0242caa74c4301eae7740453",
-  "commit_date": "2026-11-24T15:46:51Z",
-  "commit_message": "Document form request model retrieval helpers\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/56a449c8133b0ffc0242caa74c4301eae7740453",
-  "sync_time": "2026-11-25T08:29:33Z"
+  "commit_sha": "7af733c0bc3491bcaa41efe25cf5a0cc535ac6e1",
+  "commit_date": "2026-11-25T14:23:33Z",
+  "commit_message": "Document MCP skills, client capabilities, and progress notifications (#11489)\n\nAmp-Thread-ID: https://ampcode.com/threads/T-01a20e86-43e4-755d-aa88-4a006e1c678c\n\nCo-authored-by: Amp <amp@ampcode.com>",
+  "commit_url": "https://github.com/laravel/docs/commit/7af733c0bc3491bcaa41efe25cf5a0cc535ac6e1",
+  "sync_time": "2026-11-26T08:13:22Z"
 }
