@@ -39,7 +39,7 @@ If you decide you need a UI, even if it's not for creating/editing role/permissi
 * Laravel Nova package by @vyuldashev for managing Roles and Permissions
 * Laravel Nova package by @paras-malhotra for managing Roles and Permissions and permissions based authorization for Nova Resources
 * How to create a UI for managing the permissions and roles
-* Laravel User Management for managing users, roles, permissions, departments and authorization by Mekaeil
+* Laravel User Management for managing users, roles, permissions, departments and authorization by MichaelAndish
 * Generating UI boilerplate using InfyOm video tutorial by Shailesh
 * LiveWire Base Admin Panel User management by AliQasemzadeh
 * JetAdmin JetAdmin use laravel livewire starter kit and manage permissions. AliQasemzadeh

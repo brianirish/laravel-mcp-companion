@@ -22,15 +22,36 @@ Cache
 
 ### On this page
 
-1. Automatic Cache Refresh Using Built-In Functions
-2. Manual cache reset
-3. Octane cache reset
-4. Cache Configuration Settings
-5. Disabling Cache
-6. File cache Store
-7. Database cache Store
+1. Global scopes and multitenancy
+2. Automatic Cache Refresh Using Built-In Functions
+3. Manual cache reset
+4. Octane cache reset
+5. Cache Configuration Settings
+6. Disabling Cache
+7. File cache Store
+8. Database cache Store
 
 Role and Permission data are cached to speed up performance.
+
+##Global scopes and multitenancy
+--------------------------------
+
+The permission cache contains permissions and their associated roles. When rebuilding it, the package queries the configured Permission model and eager-loads its `roles` relationship. Eloquent global scopes on either model apply to these queries.
+
+By default, this snapshot is shared between requests. A request-specific scope can therefore affect permission checks in later requests. For example, if a tenant-A request rebuilds the cache while a global scope filters Role to tenant A, tenant B's roles will be missing from the cache. A later tenant-B request can deny permissions that its roles should grant. The same problem occurs with request-specific scopes on Permission.
+
+Enabling the package's teams feature does not create a separate cache for each team. Calling `setPermissionsTeamId()` alone does not isolate snapshots built under different global scopes.
+
+Choose an approach that matches what the scope is intended to do:
+
+* If the scope only filters an administration UI, apply it to that UI's queries instead of registering it globally on Role or Permission. Check whether your integration, such as a tenant-scoped Filament resource, registers a global scope on these models.
+* If the scope must restrict authorization to the current tenant, use a separate permission cache namespace for each tenant. Every code path that reads or rebuilds the cache must select the matching tenant and cache context, including queue jobs and Artisan commands. Keep unscoped queries in a separate cache context too. See Cache Identifier / Prefix below for reinitializing the registrar when switching contexts. When switching teams, also unset the user's loaded `roles` and `permissions` relationships before the next permission check.
+
+For an application that needs to keep a shared registry and cannot change its integration's UI-only scope, a custom `PermissionRegistrar` can override `getPermissionsWithRoles()` and use Eloquent's `withoutGlobalScope()` to exclude only that known scope. Review the Permission query and the eager-loaded Role query separately. This is an application-specific opt-in: bypass a scope only if it must not constrain authorization, and leave all other scopes in place.
+
+Do not use `withoutGlobalScopes()` as a blanket workaround. It also removes intentional visibility restrictions and Laravel's `SoftDeletingScope` when your custom models use soft deletes. A soft-deleted permission can then still grant access through an assigned role. Preserving only `SoftDeletingScope` is not enough if your application has other authorization scopes.
+
+After correcting the scope or cache setup, reset the affected permission cache in each affected cache context. Clearing the cache on every request does not solve this problem: the next rebuild still uses whichever scopes are active at that time.
 
 ##Automatic Cache Refresh Using Built-In Functions
 --------------------------------------------------
@@ -96,6 +117,24 @@ If you wish to alter the expiration time you may do so in the `config/permission
 
 The default cache key is `spatie.permission.cache`.
 We recommend not changing the cache "key" name. Usually changing it is a bad idea. More likely setting the cache `prefix` is better, as mentioned below.
+
+### ##Columns Excluded From The Cache
+
+To keep the cache small, some columns of the `permissions` and `roles` tables are left out of it. By default these are `created_at`, `updated_at` and `deleted_at`.
+
+You can change the list by adding `column_names_except` to the `cache` array in `config/permission.php`. For example, to also leave out a large `description` column you added to your tables:
+
+```php
+'cache' => [
+    // ...
+    'column_names_except' => ['created_at', 'updated_at', 'deleted_at', 'description'],
+],
+```
+Permission models returned by `findByName()`, `findById()` and permission checks are loaded from the cache, so they will not have the excluded attributes. If you need those values, query the model from the database instead.
+
+Never exclude the primary key, `name`, `guard_name`, or (when using teams) the team foreign key: the package needs them to look up permissions and roles.
+
+After changing this setting, reset the cache so it is rebuilt with the new columns.
 
 ### ##Cache Identifier / Prefix
 
