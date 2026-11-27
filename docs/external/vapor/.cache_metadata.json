@@ -22,5 +22,5 @@
   "success_rate": 1.0,
   "discovery_method": "llms-index",
   "index_url": "https://docs.vapor.build/llms.txt",
-  "cached_at": 1795680813.2243433
+  "cached_at": 1795768032.6699207
 }
