@@ -6,6 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/v/laravel-mcp-companion)](https://pypi.org/project/laravel-mcp-companion/)
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/brianirish/laravel-mcp-companion/pkgs/container/laravel-mcp-companion)
 [![GitHub Stars](https://img.shields.io/github/stars/brianirish/laravel-mcp-companion?style=social)](https://github.com/brianirish/laravel-mcp-companion)
+[![brianirish/laravel-mcp-companion MCP server](https://glama.ai/mcp/servers/brianirish/laravel-mcp-companion/badges/score.svg)](https://glama.ai/mcp/servers/brianirish/laravel-mcp-companion)
 
 **Every Laravel version since 6.x, its first-party services and popular packages, fully local.**
 
