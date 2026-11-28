@@ -25,6 +25,43 @@ def _no_startup_version_refresh(request, monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def _no_real_network(monkeypatch):
+    """A unit test that reaches a real host passes or fails with the state
+    of that host. One did for months: it asked GitHub for a commit, and
+    failed in CI on the day the runner's address was rate limited. Anything
+    but this machine is refused here, by name and by address, with an error
+    that says which test did it. Subprocesses a test starts are not covered."""
+    import ipaddress
+    import socket
+
+    def is_local(host) -> bool:
+        if host in (None, "", "localhost") or not isinstance(host, str):
+            return True
+        try:
+            return ipaddress.ip_address(host.split("%")[0]).is_loopback
+        except ValueError:
+            return False
+
+    real_connect = socket.socket.connect
+    real_getaddrinfo = socket.getaddrinfo
+
+    def guarded_connect(self, address):
+        if isinstance(address, tuple) and not is_local(address[0]):
+            raise OSError(f"a unit test tried to connect to {address[0]}; tests must not reach the network")
+        return real_connect(self, address)
+
+    def guarded_getaddrinfo(host, *args, **kwargs):
+        if isinstance(host, bytes):
+            host = host.decode()
+        if not is_local(host):
+            raise socket.gaierror(f"a unit test tried to look up {host}; tests must not reach the network")
+        return real_getaddrinfo(host, *args, **kwargs)
+
+    monkeypatch.setattr(socket.socket, "connect", guarded_connect)
+    monkeypatch.setattr(socket, "getaddrinfo", guarded_getaddrinfo)
+
+
+@pytest.fixture(autouse=True)
 def _no_live_package_discovery(monkeypatch):
     """Spatie's version and page list are discovered from spatie.be. A test
     that fetches Spatie docs without saying what the site returns must not

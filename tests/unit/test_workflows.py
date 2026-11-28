@@ -233,6 +233,14 @@ class TestSupplyChain:
         ecosystems = {update["package-ecosystem"] for update in config["updates"]}
         assert {"github-actions", "docker"} <= ecosystems
 
+    def test_dependabot_does_not_propose_a_different_python_for_the_image(self):
+        """Its first proposal was 3.12 to 3.15, which cannot build from the
+        lockfile. The Python version changes with uv.lock and CI, by hand."""
+        config = yaml.safe_load((WORKFLOWS.parent / "dependabot.yml").read_text(encoding="utf-8"))
+        docker = next(update for update in config["updates"] if update["package-ecosystem"] == "docker")
+        python = next(rule for rule in docker["ignore"] if rule["dependency-name"] == "python")
+        assert set(python["update-types"]) == {"version-update:semver-major", "version-update:semver-minor"}
+
     def test_the_registry_publisher_is_a_named_release_with_a_checked_digest(self):
         install = next(
             step for step in load("publish-mcp.yml")["jobs"]["publish"]["steps"]
