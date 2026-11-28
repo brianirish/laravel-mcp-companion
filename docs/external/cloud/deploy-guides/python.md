@@ -54,7 +54,7 @@ Replace `main:app` with your own application's entrypoint. If a factory creates 
 
 > [!NOTE]
 >
-> Cloud may pre-fill Uvicorn's host as `--host ''`. When Uvicorn runs multiple workers, it uses an IPv4 socket for this value, which Cloud can't reach. Change it to `--host ::` so your application stays reachable as your worker count grows.
+> Environments created before Cloud started pre-filling `--host ::` may still use `--host ''`. When Uvicorn runs multiple workers, it uses an IPv4 socket for this value, which Cloud can't reach. Change it to `--host ::` so your application stays reachable as your worker count grows.
 
 If you are using a different server, make sure your start command still listens on IPv6. Listening only on the loopback interface, or on a hardcoded port, will also prevent Cloud from reaching your application. If your application deploys successfully but still isn't reachable, take a look at the [deployment troubleshooting](https://laravel.com/cloud/docs/deployments#deployment-succeeds-but-serves-no-traffic) guide.
 

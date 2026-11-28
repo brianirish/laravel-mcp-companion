@@ -38,11 +38,11 @@ If you do not configure any health checks, Laravel Cloud uses these defaults.
 
 ## Configuring health checks
 
-To configure your health checks, navigate to your environment's **Settings > Deployments** page and click **Configure** next to **Health checks**. Each check accepts an endpoint. To adjust a check's port and timing, click **Edit** within the check's advanced settings:
+To configure your health checks, navigate to your environment's **Settings > Deployments** page and click **Configure** next to **Health checks**. For each check, choose **Default check**, **Custom endpoint**, which requests a path in your application, or **Custom TCP check**, which only confirms that a connection to a port succeeds. To adjust a check's timing, or a custom endpoint's port, click **Edit** within the check's advanced settings:
 
 | Setting | Description | Allowed values |
 | - | - | - |
-| **Endpoint** | The path Laravel Cloud requests, such as `/up`. A response with a `2xx` or `3xx` status code passes. | Must start with a single `/`, may not contain spaces, and may be at most 255 characters. |
+| **Endpoint** | The path Laravel Cloud requests, such as `/up`. A response with a `2xx` or `3xx` status code passes. | Must start with a single `/`, may not contain spaces or `#`, and may be at most 255 characters. |
 | **Port** | The port the check connects to. | 1 to 65535. Defaults to `8080`. |
 | **Timeout** | How long a single check may take before it counts as a failure. | 1 to 120 seconds |
 | **Delay** | How long to wait before the first check runs. | 0 to 600 seconds |
@@ -53,13 +53,15 @@ Any setting you leave untouched keeps its [default value](#default-health-checks
 
 A startup check's `delay + interval × tries` may be at most 600 seconds. If your application needs a long time to boot, raise the startup check's tries or interval rather than its delay. A delay makes every deployment wait for its full length, while extra tries let the check pass as soon as your application is ready.
 
+A liveness check's `delay + interval × tries + timeout` may be at most 295 seconds, so that a deployment's liveness wait, which lasts at most five minutes, always covers the whole check.
+
 ### How health checks affect deployments
 
 Each check you configure changes how long a deployment may take:
 
 * **Startup:** The deployment waits until the check passes, for up to its `delay + interval × tries`.
 * **Readiness:** If the readiness check keeps failing after your application has started, the deployment fails after three minutes. If the check's `delay + interval × tries` is longer than three minutes, the deployment fails after that time instead. If your application needs more time to become ready after it starts listening, configure a startup check that covers its boot time.
-* **Liveness:** Once your new release is ready, the deployment waits for up to `delay + interval × tries + timeout` before sending it traffic. As a result, a liveness check that can never pass fails the deployment and does not restart your live application. A liveness check with the default timing adds up to 45 seconds to each deployment.
+* **Liveness:** Once your new release is ready, the deployment waits for one full liveness window before sending it traffic. The window is the check's `interval × tries + timeout`, plus any of its delay that hasn't passed yet, plus a five-second buffer. A passing check doesn't end the wait early, so a liveness check with the default timing adds about 50 seconds to every deployment. If the check fails during the wait, the deployment fails and your live application isn't restarted. The wait lasts at most five minutes, which is why a liveness check's window is limited to 295 seconds.
 
 When a deployment fails because of a health check, your previous release keeps serving traffic.
 
@@ -81,7 +83,7 @@ uvicorn main:app --host :: --port 9090
 bundle exec puma -b 'tcp://[::]:9090'
 ```
 
-If you set a port without an endpoint using the [Laravel Cloud API](#api), the check becomes a TCP check that passes as soon as a connection to that port succeeds.
+A **Custom TCP check** connects to the port you choose and passes as soon as the connection succeeds, without sending an HTTP request. As with an endpoint on its own port, your application must listen on `::` for that port. Through the [Laravel Cloud API](#api), a check with a `port` and no `path` is a TCP check.
 
 ## Framework detection
 
