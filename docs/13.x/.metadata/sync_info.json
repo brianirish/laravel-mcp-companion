@@ -1,8 +1,8 @@
 {
   "version": "13.x",
-  "commit_sha": "7af733c0bc3491bcaa41efe25cf5a0cc535ac6e1",
-  "commit_date": "2026-11-25T14:23:33Z",
-  "commit_message": "Document MCP skills, client capabilities, and progress notifications (#11489)\n\nAmp-Thread-ID: https://ampcode.com/threads/T-01a20e86-43e4-755d-aa88-4a006e1c678c\n\nCo-authored-by: Amp <amp@ampcode.com>",
-  "commit_url": "https://github.com/laravel/docs/commit/7af733c0bc3491bcaa41efe25cf5a0cc535ac6e1",
-  "sync_time": "2026-11-27T08:27:03Z"
+  "commit_sha": "820a08b0f0d4618bb5b0c0f164bbe5f10341fe15",
+  "commit_date": "2026-11-27T13:53:41Z",
+  "commit_message": "Fix typo in eloquent-resources.md (#11493)",
+  "commit_url": "https://github.com/laravel/docs/commit/820a08b0f0d4618bb5b0c0f164bbe5f10341fe15",
+  "sync_time": "2026-11-28T07:44:51Z"
 }

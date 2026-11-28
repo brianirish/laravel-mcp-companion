@@ -506,7 +506,7 @@ Select your framework to get started:
 >
 > > [!NOTE]
 > >
-> > Replace the example entrypoint with your application's module or callable. If your Django start command still contains `<project>`, Cloud requires you to replace it before deploying. Keep the server in your dependencies to control its version. For Uvicorn, use `--host ::` even if the pre-filled command uses `--host ''`. See the [Python deploy guide](https://laravel.com/cloud/docs/deploy-guides/python#bind-to-the-right-interface).
+> > Replace the example entrypoint with your application's module or callable. If your Django start command still contains `<project>`, Cloud requires you to replace it before deploying. Keep the server in your dependencies to control its version. For Uvicorn, use `--host ::`. If an older environment's start command uses `--host ''`, change it to `--host ::`. See the [Python deploy guide](https://laravel.com/cloud/docs/deploy-guides/python#bind-to-the-right-interface).
 >
 > **6. Add environment variables**
 >
