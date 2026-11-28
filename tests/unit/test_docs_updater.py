@@ -250,13 +250,18 @@ class TestDocsUpdater:
         assert docs_updater_instance.read_local_metadata()["commit_sha"] == "abc123"
         assert not source_dir.parent.exists()
 
+    @patch.object(DocsUpdater, 'get_latest_commit')
     @patch.object(DocsUpdater, 'needs_update')
-    def test_update_not_needed(self, mock_needs_update, docs_updater_instance):
+    def test_update_not_needed(self, mock_needs_update, mock_get_latest_commit, docs_updater_instance):
         """Test update when not needed."""
+        # Without this the test asked GitHub for the commit, and failed
+        # whenever GitHub refused the runner.
+        mock_get_latest_commit.return_value = {"sha": "abc123", "date": "", "message": "", "url": ""}
         mock_needs_update.return_value = False
-        
+
         result = docs_updater_instance.update(force=False)
         assert result is False
+        mock_needs_update.assert_called_once_with(mock_get_latest_commit.return_value)
 
     @patch.object(DocsUpdater, 'needs_update')
     def test_update_force(self, mock_needs_update, docs_updater_instance):

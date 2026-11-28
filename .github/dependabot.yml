@@ -23,3 +23,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # The image runs the Python that uv.lock was resolved for and that
+      # ci-test runs. Moving to a newer Python is a decision made here, with
+      # the lockfile, and not a base image bump: on 3.15 the locked
+      # pydantic-core has no wheel for Alpine and the build fails. Patch
+      # releases of the same Python still arrive under the 3.12-alpine tag.
+      - dependency-name: python
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
